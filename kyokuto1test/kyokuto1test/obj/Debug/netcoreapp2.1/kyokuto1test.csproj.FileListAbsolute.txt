@@ -1,0 +1,12 @@
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\bin\Debug\netcoreapp2.1\kyokuto1test.deps.json
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\bin\Debug\netcoreapp2.1\kyokuto1test.runtimeconfig.json
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\bin\Debug\netcoreapp2.1\kyokuto1test.runtimeconfig.dev.json
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\bin\Debug\netcoreapp2.1\kyokuto1test.dll
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\obj\Debug\netcoreapp2.1\kyokuto1test.csprojAssemblyReference.cache
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\obj\Debug\netcoreapp2.1\kyokuto1test.csproj.CoreCompileInputs.cache
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\obj\Debug\netcoreapp2.1\kyokuto1test.AssemblyInfoInputs.cache
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\obj\Debug\netcoreapp2.1\kyokuto1test.AssemblyInfo.cs
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\bin\Debug\netcoreapp2.1\kyokuto1test.pdb
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\obj\Debug\netcoreapp2.1\kyokuto1test.dll
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\obj\Debug\netcoreapp2.1\kyokuto1test.pdb
+C:\work\2020\kyokuto\001Googleドライブ連携\test\kyokuto1test\kyokuto1test\bin\Debug\netcoreapp2.1\client.json
