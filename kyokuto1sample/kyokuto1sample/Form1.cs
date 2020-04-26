@@ -21,11 +21,11 @@ namespace kyokuto1sample {
 	public partial class Form1 : Form {
 		public UserCredential MyCredential;
 		public DriveService MyDriveService;        // Drive API service
+		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
+		public IDictionary<string, Google.Apis.Drive.v3.Data.File> folders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 		static string[] Scopes = { DriveService.Scope.DriveReadonly };
 
 		public String parentFolderId;
-		public IList<Google.Apis.Drive.v3.Data.File> files;
-		public IDictionary<string, Google.Apis.Drive.v3.Data.File> folders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 		public Form1()
 		{
 			string TAG = "Form1";
@@ -115,14 +115,14 @@ namespace kyokuto1sample {
 				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
 				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
 				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
-				files = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				GDriveFiles = listRequest.Execute().Files;            // ドライブ内容のリストアップ
 
-				if (files != null && files.Count > 0) {
+				if (GDriveFiles != null && GDriveFiles.Count > 0) {
 					// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
-					parentFolderId = files.First().Id;
-					String folderName = files.First().Name;
+					parentFolderId = GDriveFiles.First().Id;
+					String folderName = GDriveFiles.First().Name;
 					//フォルダ階層の取得
-					foreach (var file in files) {
+					foreach (var file in GDriveFiles) {
 						String fName = file.Name;
 						String fId = file.Id;
 						String PId = file.Parents[0];
@@ -148,7 +148,7 @@ namespace kyokuto1sample {
 						dbMsg += ":" + folder.Value.Parents[0];
 						if (folder.Value.Parents[0].Equals(Constant.TopFolderID)) {
 							google_drive_tree.Nodes.Add(folder.Value.Name);
-							foreach (var file in files) {
+							foreach (var file in GDriveFiles) {
 								String PId = file.Parents[0];
 								if(folder.Key.Equals(PId)) {
 									String fName = file.Name;
@@ -190,7 +190,7 @@ namespace kyokuto1sample {
 
 		//https://stackoverrun.com/ja/q/10041674	//////////////////////////////////////////
 		/*
-	static Dictionary<string, Google.Apis.Drive.v3.Data.File> files = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+	static Dictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFiles = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 
 			private static object AbsPath(Google.Apis.Drive.v3.Data.File file)
 			{
@@ -224,8 +224,8 @@ namespace kyokuto1sample {
 			private static Google.Apis.Drive.v3.Data.File GetParent(string id)
 			{
 				// Check cache
-				if (files.ContainsKey( id )) {
-					return files[id];
+				if (GDriveFiles.ContainsKey( id )) {
+					return GDriveFiles[id];
 				}
 
 				// Fetch file from drive
@@ -234,7 +234,7 @@ namespace kyokuto1sample {
 				var parent = request.Execute();
 
 				// Save in cache
-				files[id] = parent;
+				GDriveFiles[id] = parent;
 
 				return parent;
 			}
