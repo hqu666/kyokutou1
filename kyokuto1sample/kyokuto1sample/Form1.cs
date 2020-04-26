@@ -22,7 +22,7 @@ namespace kyokuto1sample {
 		public UserCredential MyCredential;
 		public DriveService MyDriveService;        // Drive API service
 		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
-		public IDictionary<string, Google.Apis.Drive.v3.Data.File> folders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		static string[] Scopes = { DriveService.Scope.DriveReadonly };
 
 		public String parentFolderId;
@@ -116,6 +116,7 @@ namespace kyokuto1sample {
 				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
 				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
 				GDriveFiles = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 
 				if (GDriveFiles != null && GDriveFiles.Count > 0) {
 					// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
@@ -134,15 +135,15 @@ namespace kyokuto1sample {
 							Constant.RootFolderID = PId;
 							info_lb.Text = fName;											//照合が合っているか確認の為
 						} else if(fMimeType.Equals("application/vnd.google-apps.folder")) {
-							folders.Add(fId, file);											//最上位以外のフォルダを格納
+							GDriveFolders.Add(fId, file);											//最上位以外のフォルダを格納
 						}
 					}
 					dbMsg += "[top=" + Constant.TopFolderID + "]";
 					dbMsg += "[root=" + Constant.RootFolderID + "]";
-					dbMsg += ",folders" + folders.Count() + "件";
+					dbMsg += ",folders" + GDriveFolders.Count() + "件";
 					int nodeCount = 0;
 					google_drive_tree.BeginUpdate();
-					foreach (var folder in folders) {
+					foreach (var folder in GDriveFolders) {
 						dbMsg += "\r\nfolder=" + folder.Key;
 						dbMsg += ":" + folder.Value.Name;
 						dbMsg += ":" + folder.Value.Parents[0];
