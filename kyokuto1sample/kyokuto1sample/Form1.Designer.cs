@@ -33,7 +33,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.pass_lv = new System.Windows.Forms.Label();
-			this.conect_bt = new System.Windows.Forms.Button();
 			this.files_tb = new System.Windows.Forms.TextBox();
 			this.update_bt = new System.Windows.Forms.Button();
 			this.google_drive_tree = new System.Windows.Forms.TreeView();
@@ -41,7 +40,7 @@
 			// 
 			// select_bt
 			// 
-			this.select_bt.Location = new System.Drawing.Point(807, 347);
+			this.select_bt.Location = new System.Drawing.Point(817, 347);
 			this.select_bt.Margin = new System.Windows.Forms.Padding(4);
 			this.select_bt.Name = "select_bt";
 			this.select_bt.Size = new System.Drawing.Size(100, 29);
@@ -101,17 +100,6 @@
 			this.pass_lv.Text = "ファイルを選択するとそのフォルダの全ファイルを読み込みます";
 			this.pass_lv.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
-			// conect_bt
-			// 
-			this.conect_bt.Location = new System.Drawing.Point(693, 13);
-			this.conect_bt.Margin = new System.Windows.Forms.Padding(4);
-			this.conect_bt.Name = "conect_bt";
-			this.conect_bt.Size = new System.Drawing.Size(100, 29);
-			this.conect_bt.TabIndex = 10;
-			this.conect_bt.Text = "接続";
-			this.conect_bt.UseVisualStyleBackColor = true;
-			this.conect_bt.Click += new System.EventHandler(this.Conect_bt_Click);
-			// 
 			// files_tb
 			// 
 			this.files_tb.Location = new System.Drawing.Point(19, 384);
@@ -132,12 +120,13 @@
 			this.update_bt.TabIndex = 13;
 			this.update_bt.Text = "更新";
 			this.update_bt.UseVisualStyleBackColor = true;
+			this.update_bt.Click += new System.EventHandler(this.Update_bt_Click);
 			// 
 			// google_drive_tree
 			// 
 			this.google_drive_tree.Location = new System.Drawing.Point(19, 57);
 			this.google_drive_tree.Name = "google_drive_tree";
-			this.google_drive_tree.Size = new System.Drawing.Size(909, 289);
+			this.google_drive_tree.Size = new System.Drawing.Size(898, 289);
 			this.google_drive_tree.TabIndex = 14;
 			// 
 			// Form1
@@ -148,7 +137,6 @@
 			this.Controls.Add(this.google_drive_tree);
 			this.Controls.Add(this.update_bt);
 			this.Controls.Add(this.files_tb);
-			this.Controls.Add(this.conect_bt);
 			this.Controls.Add(this.pass_lv);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.info_lb);
@@ -171,7 +159,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		private System.Windows.Forms.Label pass_lv;
-		private System.Windows.Forms.Button conect_bt;
 		private System.Windows.Forms.TextBox files_tb;
 		private System.Windows.Forms.Button update_bt;
 		private System.Windows.Forms.TreeView google_drive_tree;

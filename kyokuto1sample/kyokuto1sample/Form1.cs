@@ -19,10 +19,10 @@ using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
 	public partial class Form1 : Form {
-
-		static string[] Scopes = { DriveService.Scope.DriveReadonly };
-		//static string ApplicationName = "kyokuto1sample";
+		public UserCredential credential;
 		public DriveService service;        // Drive API service
+		static string[] Scopes = { DriveService.Scope.DriveReadonly };
+
 		public String parentFolderId;
 		public IList<Google.Apis.Drive.v3.Data.File> files;
 		public IDictionary<string, Google.Apis.Drive.v3.Data.File> folders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
@@ -44,20 +44,19 @@ namespace kyokuto1sample {
 			string TAG = "Form1_Load";
 			string dbMsg = "[Form1]";
 			try {
+				Conect2Drive();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
 
-		// 接続ボタン
-		private void Conect_bt_Click(object sender, EventArgs e)
+		// 接続
+		private void Conect2Drive()
 		{
-			string TAG = "Conect_bt_Click";
+			string TAG = "Conect2Drive";
 			string dbMsg = "[Form1]";
 			try {
-				UserCredential credential;
-
 				using (FileStream stream =
 					new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
 					string credPath = "token.json";
@@ -77,9 +76,8 @@ namespace kyokuto1sample {
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,
 				});
-				//GDFileListUpAsync();
 				MyLog(TAG, dbMsg);
-				GoogleFileSarch();
+				GoogleFileListUp();
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -91,15 +89,23 @@ namespace kyokuto1sample {
 			string TAG = "Update_bt_Click";
 			string dbMsg = "[Form1]";
 			try {
+				if(credential == null || service == null) {
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "まだ接続されていません";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+				}
 				MyLog(TAG, dbMsg);
-				GoogleFileSarch();
+				GoogleFileListUp();
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
 
-
-		private void GoogleFileSarch()
+		private void GoogleFileListUp()
 		{
 			string TAG = "GoogleFileSarch";
 			string dbMsg = "[Form1]";
@@ -115,7 +121,6 @@ namespace kyokuto1sample {
 					// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
 					parentFolderId = files.First().Id;
 					String folderName = files.First().Name;
-			//		drives_tb.Text = "";
 					//フォルダ階層の取得
 					foreach (var file in files) {
 						String fName = file.Name;
@@ -135,15 +140,14 @@ namespace kyokuto1sample {
 					dbMsg += "[top=" + Constant.TopFolderID + "]";
 					dbMsg += "[root=" + Constant.RootFolderID + "]";
 					dbMsg += ",folders" + folders.Count() + "件";
-
+					int nodeCount = 0;
 					google_drive_tree.BeginUpdate();
-					google_drive_tree.Nodes.Add(Constant.TopFolderName);
 					foreach (var folder in folders) {
 						dbMsg += "\r\nfolder=" + folder.Key;
 						dbMsg += ":" + folder.Value.Name;
 						dbMsg += ":" + folder.Value.Parents[0];
 						if (folder.Value.Parents[0].Equals(Constant.TopFolderID)) {
-							google_drive_tree.Nodes[0].Nodes.Add(folder.Value.Name);
+							google_drive_tree.Nodes.Add(folder.Value.Name);
 							foreach (var file in files) {
 								String PId = file.Parents[0];
 								if(folder.Key.Equals(PId)) {
@@ -157,55 +161,17 @@ namespace kyokuto1sample {
 									} else if (file.Size == null) {
 									} else {
 										DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-
-										long fSize = (long)file.Size; google_drive_tree.Nodes[0].Nodes.Add(fName + "\t\t: " + fModifiedTime + "   \t: " + file.Size);
+										long fSize = (long)file.Size;
+										google_drive_tree.Nodes[nodeCount].Nodes.Add(fName + "                          \t\t\t\t: " + fModifiedTime + "       \t\t\t: " + file.Size);
 									}
 								}
 							}
+							nodeCount++;
 						} else{
 							dbMsg += ">>除外" ;
 						}
 					}
 					google_drive_tree.EndUpdate();
-
-					//foreach (var file in files) {
-					//	//GDInf( file );
-					//	String fName = file.Name;
-					//	String fId = file.Id;
-					//	String PId = file.Parents[0];
-					//	String fMimeType = file.MimeType;
-					//	DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-					//	if (fName.Equals(Constant.TopFolderName)) {
-					//			//最上位にするフォルダと
-					//		Constant.TopFolderID = fId;
-					//		Constant.RootFolderID = PId;
-					//	} else {
-					//		//		String fInfo = "::" + file.ModifiedByMe.ToString() + "," + file.ModifiedTime.ToString() + "," + file.Trashed.ToString() + "," + file.Size;
-					//		if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-					//		} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
-					//		} else if (file.Trashed == true) {
-					//		} else if (file.Size == null) {
-					//		} else {
-					//			long fSize = (long)file.Size;
-					//			drives_tb.Text += fName + "\t\t\t: " + fModifiedTime + " \t \t: " + fSize + " \r\n";
-					//		}
-					//		//var absP = AbsPath( file );
-					//		//drives_tb.Text += AbsPath( file ) + " \r\n" + " \r\n";
-					//	}
-					//}
-					//drives_tb.Text += " \r\n";
-					//foreach (var file in files) {           //サブフォルダ
-					//	String fMimeType = file.MimeType;
-					//	String fName = file.Name;
-					//	if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-					//		if (fName.Equals("MPChartExample")) {
-					//		} else if (fName.Equals(folderName)) {
-					//		} else {
-					//			String fInfo = file.MimeType + "::;" + file.Name;
-					//			drives_tb.Text += fName + " \r\n ";
-					//		}
-					//	}
-					//}
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -221,59 +187,6 @@ namespace kyokuto1sample {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
-
-
-		//public async void GDFileListUpAsync()
-		//{
-		//	string TAG = "GDFileListUpAsync";
-		//	string dbMsg = "[Form1]";
-		//	try {
-		//		string nextPageToken = null;
-		//		drives_tb.Text = " ";
-		//		do {
-		//			FilesResource.ListRequest request = service.Files.List();
-		//			request.PageToken = nextPageToken;
-		//			request.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
-		//			request.Fields = "nextPageToken, files(id, name)";
-		//			var result = await request.ExecuteAsync();
-		//			if (result.Files.Count > 0)
-		//				drives_tb.Text += result.Files[0] + " \r\n";
-		//			nextPageToken = result.NextPageToken;
-		//		} while (!string.IsNullOrEmpty(nextPageToken));
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-		//	}
-		//}
-
-		//public void GDInf(Google.Apis.Drive.v3.Data.File file)
-		//{
-		//	string TAG = "GDInf";
-		//	string dbMsg = "[Form1]";
-		//	try {
-		//		String fMimeType = file.MimeType;
-		//		String fName = file.Name;
-		//		//String fInfo = "::" + file.ModifiedByMe.ToString() + "," + file.ModifiedTime.ToString() + "," + file.Trashed.ToString() + "," + file.Size;
-
-		//		if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-		//			//GDInf( file );
-		//		} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
-		//		} else {
-		//			drives_tb.Text += fName + " \r\n";
-		//		}
-		//		//var absP = AbsPath( file );
-		//		//drives_tb.Text += AbsPath( file ) + " \r\n" + " \r\n";
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-		//	}
-		//}
-		/**
-		 常に　Kind ; folder,drive , file.GetType() ：Google.Apis.Drive.v3.Data.File
-		取得できない　Trashed , TrashedTime , Parents
-			 
-		 */
 
 		//https://stackoverrun.com/ja/q/10041674	//////////////////////////////////////////
 		/*
