@@ -17,135 +17,258 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
-namespace kyokuto1sample
-{
-	public partial class Form1 : Form
-	{
+namespace kyokuto1sample {
+	public partial class Form1 : Form {
+
 		static string[] Scopes = { DriveService.Scope.DriveReadonly };
-		static string ApplicationName = "kyokuto1sample";
-		//	クライアント ID					1015531776934-6lgfgndk2o2lp5iu29ddaabqrfn1ibp2.apps.googleusercontent.com
-		// クライアント シークレット	A_rjdDTUrpxgWbPTDDUMq_7K
-		// 自分の API キー						AIzaSyBgQfaxlfQXP32-W8rRmGfj8nDf8vlSCxs
-		public DriveService service ;        // Drive API service
+		//static string ApplicationName = "kyokuto1sample";
+		public DriveService service;        // Drive API service
 		public String parentFolderId;
 		public IList<Google.Apis.Drive.v3.Data.File> files;
-	
+		public IDictionary<string, Google.Apis.Drive.v3.Data.File> folders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 		public Form1()
 		{
-			InitializeComponent();
+			string TAG = "Form1";
+			string dbMsg = "[Form1]";
+			try {
+				InitializeComponent();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-
+			string TAG = "Form1_Load";
+			string dbMsg = "[Form1]";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
 		}
-		//接続ボタン
+
+		// 接続ボタン
 		private void Conect_bt_Click(object sender, EventArgs e)
 		{
-			UserCredential credential;
+			string TAG = "Conect_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				UserCredential credential;
 
-			using (FileStream stream =
-				new FileStream( "client1sampl.json", FileMode.Open, FileAccess.Read )) {
-				string credPath = "token.json";
-				credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-					GoogleClientSecrets.Load( stream ).Secrets,
-					Scopes,
-					"user",
-					CancellationToken.None,
-					new FileDataStore( credPath, true ) ).Result;
-			}
-
-			// Drive API serviceを作成
-			service = new DriveService( new BaseClientService.Initializer() {
-				HttpClientInitializer = credential,
-				ApplicationName = ApplicationName,
-			} );
-
-			//GDFileListUpAsync();
-
-			// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
-			FilesResource.ListRequest listRequest = service.Files.List();
-			listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
-			listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
-			listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
-			files = listRequest.Execute().Files;            // ドライブ内容のリストアップ
-
-			if (files != null && files.Count > 0) {
-				// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
-				parentFolderId = files.First().Id;
-				String folderName = files.First().Name;
-				info_lb.Text = folderName;
-				drives_tb.Text = "";
-				foreach (var file in files) {
-					//GDInf( file );
-					String fMimeType = file.MimeType;
-					String fName = file.Name;
-					DateTime fModifiedTime =  ( DateTime ) file.ModifiedTime;
-			//		String fInfo = "::" + file.ModifiedByMe.ToString() + "," + file.ModifiedTime.ToString() + "," + file.Trashed.ToString() + "," + file.Size;
-					if (fMimeType.Equals( "application/vnd.google-apps.folder" )) {
-					} else if (fMimeType.Equals( "application/vnd.android.package-archive" )) {
-					} else if (file.Trashed == true) {
-					} else if (file.Size == null) {
-					} else {
-						long fSize = ( long ) file.Size;
-						drives_tb.Text += fName  + "\t\t\t: " + fModifiedTime + " \t \t: " + fSize + " \r\n";
-					}
-					//var absP = AbsPath( file );
-					//drives_tb.Text += AbsPath( file ) + " \r\n" + " \r\n";
+				using (FileStream stream =
+					new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
+					string credPath = "token.json";
+					credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+						GoogleClientSecrets.Load(stream).Secrets,
+						Scopes,
+						"user",
+						CancellationToken.None,
+						new FileDataStore(credPath, true)).Result;
 				}
+				string UserId = credential.UserId;          //"usre"
+				dbMsg += ",UserId=" + UserId;
 
-				drives_tb.Text += " \r\n";
-				foreach (var file in files) {           //サブフォルダ
-					String fMimeType = file.MimeType;
-					String fName = file.Name;
-					if (fMimeType.Equals( "application/vnd.google-apps.folder" )) {
-						if (fName.Equals( "MPChartExample" )) {
-						} else if (fName.Equals( folderName )) {
-						} else {
-							String fInfo = file.MimeType + "::;" + file.Name;
-							drives_tb.Text += fName + " \r\n ";
+				// Drive API serviceを作成
+				service = new DriveService(new BaseClientService.Initializer() {
+					HttpClientInitializer = credential,
+					ApplicationName = Constant.ApplicationName,
+					ApiKey = Constant.APIKey,
+				});
+				//GDFileListUpAsync();
+				MyLog(TAG, dbMsg);
+				GoogleFileSarch();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		// 更新ボタン
+		private void Update_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "Update_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				MyLog(TAG, dbMsg);
+				GoogleFileSarch();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+
+		private void GoogleFileSarch()
+		{
+			string TAG = "GoogleFileSarch";
+			string dbMsg = "[Form1]";
+			try {
+				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
+				FilesResource.ListRequest listRequest = service.Files.List();
+				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
+				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
+				files = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+
+				if (files != null && files.Count > 0) {
+					// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
+					parentFolderId = files.First().Id;
+					String folderName = files.First().Name;
+			//		drives_tb.Text = "";
+					//フォルダ階層の取得
+					foreach (var file in files) {
+						String fName = file.Name;
+						String fId = file.Id;
+						String PId = file.Parents[0];
+						String fMimeType = file.MimeType;
+						DateTime fModifiedTime = (DateTime)file.ModifiedTime;
+						if (fName.Equals(Constant.TopFolderName)) {
+							//最上位にするフォルダと
+							Constant.TopFolderID = fId;
+							Constant.RootFolderID = PId;
+							info_lb.Text = fName;											//照合が合っているか確認の為
+						} else if(fMimeType.Equals("application/vnd.google-apps.folder")) {
+							folders.Add(fId, file);											//最上位以外のフォルダを格納
 						}
 					}
-				}
-			} else {
-				drives_tb.Text = "送信先ドライブには未だファイルが登録されていません";
-			}
-			
-		}
+					dbMsg += "[top=" + Constant.TopFolderID + "]";
+					dbMsg += "[root=" + Constant.RootFolderID + "]";
+					dbMsg += ",folders" + folders.Count() + "件";
 
-		public async void GDFileListUpAsync()
-		{
-			string nextPageToken = null;
-			drives_tb.Text = " ";
-			do {
-				FilesResource.ListRequest request = service.Files.List();
-				request.PageToken = nextPageToken;
-				request.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
-				request.Fields = "nextPageToken, files(id, name)";
-				var result = await request.ExecuteAsync();
-				if (result.Files.Count > 0)
-					drives_tb.Text += result.Files[0] + " \r\n";
-				nextPageToken = result.NextPageToken;
-			} while (!string.IsNullOrEmpty( nextPageToken ));
-		}
+					google_drive_tree.BeginUpdate();
+					google_drive_tree.Nodes.Add(Constant.TopFolderName);
+					foreach (var folder in folders) {
+						dbMsg += "\r\nfolder=" + folder.Key;
+						dbMsg += ":" + folder.Value.Name;
+						dbMsg += ":" + folder.Value.Parents[0];
+						if (folder.Value.Parents[0].Equals(Constant.TopFolderID)) {
+							google_drive_tree.Nodes[0].Nodes.Add(folder.Value.Name);
+							foreach (var file in files) {
+								String PId = file.Parents[0];
+								if(folder.Key.Equals(PId)) {
+									String fName = file.Name;
+									String fId = file.Id;
+									String fMimeType = file.MimeType;
 
-		public void GDInf(Google.Apis.Drive.v3.Data.File file)
-		{
-				String fMimeType = file.MimeType;
-				String fName = file.Name;
-				//String fInfo = "::" + file.ModifiedByMe.ToString() + "," + file.ModifiedTime.ToString() + "," + file.Trashed.ToString() + "," + file.Size;
+									if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+									} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
+									} else if (file.Trashed == true) {
+									} else if (file.Size == null) {
+									} else {
+										DateTime fModifiedTime = (DateTime)file.ModifiedTime;
 
-				if (fMimeType.Equals( "application/vnd.google-apps.folder" )) {
-					//GDInf( file );
-				} else if (fMimeType.Equals( "application/vnd.android.package-archive" )) {
+										long fSize = (long)file.Size; google_drive_tree.Nodes[0].Nodes.Add(fName + "\t\t: " + fModifiedTime + "   \t: " + file.Size);
+									}
+								}
+							}
+						} else{
+							dbMsg += ">>除外" ;
+						}
+					}
+					google_drive_tree.EndUpdate();
+
+					//foreach (var file in files) {
+					//	//GDInf( file );
+					//	String fName = file.Name;
+					//	String fId = file.Id;
+					//	String PId = file.Parents[0];
+					//	String fMimeType = file.MimeType;
+					//	DateTime fModifiedTime = (DateTime)file.ModifiedTime;
+					//	if (fName.Equals(Constant.TopFolderName)) {
+					//			//最上位にするフォルダと
+					//		Constant.TopFolderID = fId;
+					//		Constant.RootFolderID = PId;
+					//	} else {
+					//		//		String fInfo = "::" + file.ModifiedByMe.ToString() + "," + file.ModifiedTime.ToString() + "," + file.Trashed.ToString() + "," + file.Size;
+					//		if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+					//		} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
+					//		} else if (file.Trashed == true) {
+					//		} else if (file.Size == null) {
+					//		} else {
+					//			long fSize = (long)file.Size;
+					//			drives_tb.Text += fName + "\t\t\t: " + fModifiedTime + " \t \t: " + fSize + " \r\n";
+					//		}
+					//		//var absP = AbsPath( file );
+					//		//drives_tb.Text += AbsPath( file ) + " \r\n" + " \r\n";
+					//	}
+					//}
+					//drives_tb.Text += " \r\n";
+					//foreach (var file in files) {           //サブフォルダ
+					//	String fMimeType = file.MimeType;
+					//	String fName = file.Name;
+					//	if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+					//		if (fName.Equals("MPChartExample")) {
+					//		} else if (fName.Equals(folderName)) {
+					//		} else {
+					//			String fInfo = file.MimeType + "::;" + file.Name;
+					//			drives_tb.Text += fName + " \r\n ";
+					//		}
+					//	}
+					//}
 				} else {
-					drives_tb.Text += fName + " \r\n";
+					//メッセージボックスを表示する
+					String titolStr = Constant.ApplicationName;
+					 String msgStr = "送信先ドライブには未だファイルが登録されていません";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
 				}
-
-				//var absP = AbsPath( file );
-				//drives_tb.Text += AbsPath( file ) + " \r\n" + " \r\n";
-
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
 		}
+
+
+
+		//public async void GDFileListUpAsync()
+		//{
+		//	string TAG = "GDFileListUpAsync";
+		//	string dbMsg = "[Form1]";
+		//	try {
+		//		string nextPageToken = null;
+		//		drives_tb.Text = " ";
+		//		do {
+		//			FilesResource.ListRequest request = service.Files.List();
+		//			request.PageToken = nextPageToken;
+		//			request.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
+		//			request.Fields = "nextPageToken, files(id, name)";
+		//			var result = await request.ExecuteAsync();
+		//			if (result.Files.Count > 0)
+		//				drives_tb.Text += result.Files[0] + " \r\n";
+		//			nextPageToken = result.NextPageToken;
+		//		} while (!string.IsNullOrEmpty(nextPageToken));
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+		//	}
+		//}
+
+		//public void GDInf(Google.Apis.Drive.v3.Data.File file)
+		//{
+		//	string TAG = "GDInf";
+		//	string dbMsg = "[Form1]";
+		//	try {
+		//		String fMimeType = file.MimeType;
+		//		String fName = file.Name;
+		//		//String fInfo = "::" + file.ModifiedByMe.ToString() + "," + file.ModifiedTime.ToString() + "," + file.Trashed.ToString() + "," + file.Size;
+
+		//		if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+		//			//GDInf( file );
+		//		} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
+		//		} else {
+		//			drives_tb.Text += fName + " \r\n";
+		//		}
+		//		//var absP = AbsPath( file );
+		//		//drives_tb.Text += AbsPath( file ) + " \r\n" + " \r\n";
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+		//	}
+		//}
 		/**
 		 常に　Kind ; folder,drive , file.GetType() ：Google.Apis.Drive.v3.Data.File
 		取得できない　Trashed , TrashedTime , Parents
@@ -204,106 +327,141 @@ namespace kyokuto1sample
 			}
 				*/
 		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
-
 		public String MakeFolderName = null;
 		public String[] selectFiles = null;
 
 		//ファイル選択ボタン
 		private void Serect_bt_Click(object sender, EventArgs e)
 		{
-			DialogResult dr = openFileDialog1.ShowDialog();
-			if (dr == System.Windows.Forms.DialogResult.OK) {
-				String FolderPath = System.IO.Path.GetDirectoryName( openFileDialog1.FileName );
-				System.IO.DirectoryInfo dirInfo = System.IO.Directory.GetParent( openFileDialog1.FileName );
-				MakeFolderName = dirInfo.Name;
-				pass_lv.Text = MakeFolderName;
-				selectFiles = Directory.GetFiles( @FolderPath, "*" );
-	//			foreach (string str in selectFiles) {
-	//				string filePath = Path.GetFileName( @str );
-	//				fileNames = fileNames.a;
-	//			}
-				files_tb.Text = "";
-				foreach (string str in selectFiles) {
-					string fileName = Path.GetFileName( @str );
-					files_tb.Text += fileName + "\r\n";
+			string TAG = "Serect_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				DialogResult dr = openFileDialog1.ShowDialog();
+				if (dr == System.Windows.Forms.DialogResult.OK) {
+					String FolderPath = System.IO.Path.GetDirectoryName(openFileDialog1.FileName);
+					System.IO.DirectoryInfo dirInfo = System.IO.Directory.GetParent(openFileDialog1.FileName);
+					MakeFolderName = dirInfo.Name;
+					pass_lv.Text = MakeFolderName;
+					selectFiles = Directory.GetFiles(@FolderPath, "*");
+					//			foreach (string str in selectFiles) {
+					//				string filePath = Path.GetFileName( @str );
+					//				fileNames = fileNames.a;
+					//			}
+					files_tb.Text = "";
+					foreach (string str in selectFiles) {
+						string fileName = Path.GetFileName(@str);
+						files_tb.Text += fileName + "\r\n";
+					}
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
 		//		files_lb.Text = files_lb.Text + "\r\n" + "\r\n" + (selectFiles.Count().ToString) + "件";
 
-
 		//送信ボタン
 		private void Send_bt_Click(object sender, EventArgs e)
 		{
-			GFilePutAsync();
+			string TAG = "Send_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				GFilePutAsync();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
 		}
 
 		public async void GFilePutAsync()
 		{
-			if(MakeFolderName == null || selectFiles == null) {
-				files_tb.Text = "送信するファイルを選択して下さい";
-				return;
+			string TAG = "GFilePutAsync";
+			string dbMsg = "[Form1]";
+			try {
+				dbMsg += "書込むフォルダ＝" + MakeFolderName;
+				dbMsg += "、" + selectFiles.Count() + "件";
+				if (MakeFolderName == null || selectFiles == null) {
+					files_tb.Text = "送信するファイルを選択して下さい";
+					return;
+				}
+				if (info_lb.Text.Equals("まずは接続ボタンをクリックして下さい")) {
+					files_tb.Text = "接続ボタンをクリックしてGoogleドライブに接続して下さい";
+					return;
+				}
+				/*https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
+				//フォルダを作る
+				Google.Apis.Drive.v3.Data.File folder = new Google.Apis.Drive.v3.Data.File();
+				folder.Name = MakeFolderName;
+				folder.Description = "極東産機案件";
+				//フォルダなのでMimeTypeはこれ
+				folder.MimeType = "application/vnd.google-apps.folder";
+				//アップロード
+				folder.Parents = new List<string> { parentFolderId }; // 特定のフォルダのサブフォルダとして作成する場合
+				var request = service.Files.Create(folder);
+				request.Fields = "id, name"; // ただ作るだけならこの行不要
+				var file = await request.ExecuteAsync();
+				/*
+								Console.WriteLine("folder id : " + file.Id);
+
+								foreach (string str in selectFiles) {
+									//ファイルのひな形を作る感じ
+									Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
+									string fileName = Path.GetFileName( @str );
+									body.Name = fileName;
+									body.Description = "A test document";
+									body.MimeType = "text/plain";                       // MimeMapping.GetMimeMapping( fileName );
+									if (fileName.Contains( ".xls" )) {
+										body.MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+									} else if (fileName.Contains( ".ppt" )) {
+										body.MimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+									} else if(fileName.Contains( ".doc" )) {
+										body.MimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+									} else if (fileName.Contains( ".pdf" )) {
+										body.MimeType = "application / pdf";
+									}
+									//	https://webbibouroku.com/Blog/Article/asp-mimetype
+
+									//ファイルの中身を書き込む…？
+									byte[] byteArray = System.IO.File.ReadAllBytes( fileName );
+									System.IO.MemoryStream stream = new System.IO.MemoryStream( byteArray );
+
+									//アップロードする
+									FilesResource.InsertMediaUpload request =service.Files.Insert( body, stream, body.MimeType );
+									request.Upload();
+
+									//アップロードされたファイルのIdを取得しておく
+									Google.Apis.Drive.v3.Data.File file = request.ResponseBody;
+									Console.WriteLine( "File id: " + file.Id );
+
+									*/
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
-			if(info_lb.Text.Equals( "まずは接続ボタンをクリックして下さい" )){
-				files_tb.Text = "接続ボタンをクリックしてGoogleドライブに接続して下さい";
-				return;
-			}
-
-			/*https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
-			//フォルダを作る
-			Google.Apis.Drive.v3.Data.File folder = new Google.Apis.Drive.v3.Data.File();
-			folder.Name = MakeFolderName;
-			folder.Description = "my folder description";
-			//フォルダなのでMimeTypeはこれ
-			folder.MimeType = "application/vnd.google-apps.folder";
-			//アップロード
-			folder.Parents = new List<string> { parentFolderId }; // 特定のフォルダのサブフォルダとして作成する場合
-			var request = service.Files.Create( folder );
-			request.Fields = "id, name"; // ただ作るだけならこの行不要
-			var file = await request.ExecuteAsync();
-
-
-		/*
-						Console.WriteLine("folder id : " + file.Id);
-
-						foreach (string str in selectFiles) {
-							//ファイルのひな形を作る感じ
-							Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-							string fileName = Path.GetFileName( @str );
-							body.Name = fileName;
-							body.Description = "A test document";
-							body.MimeType = "text/plain";                       // MimeMapping.GetMimeMapping( fileName );
-							if (fileName.Contains( ".xls" )) {
-								body.MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-							} else if (fileName.Contains( ".ppt" )) {
-								body.MimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-							} else if(fileName.Contains( ".doc" )) {
-								body.MimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-							} else if (fileName.Contains( ".pdf" )) {
-								body.MimeType = "application / pdf";
-							}
-							//	https://webbibouroku.com/Blog/Article/asp-mimetype
-
-							//ファイルの中身を書き込む…？
-							byte[] byteArray = System.IO.File.ReadAllBytes( fileName );
-							System.IO.MemoryStream stream = new System.IO.MemoryStream( byteArray );
-
-							//アップロードする
-							FilesResource.InsertMediaUpload request =service.Files.Insert( body, stream, body.MimeType );
-							request.Upload();
-
-							//アップロードされたファイルのIdを取得しておく
-							Google.Apis.Drive.v3.Data.File file = request.ResponseBody;
-							Console.WriteLine( "File id: " + file.Id );
-
-							*/
+		}
+		////////////////////////////////////////////////////
+		public void MyLog(string TAG, string dbMsg)
+		{
+			CS_Util Util = new CS_Util();
+			Util.MyLog(TAG, dbMsg);
 		}
 
+		public void MyErrorLog(string TAG, string dbMsg)
+		{
+			CS_Util Util = new CS_Util();
+			Util.MyErrorLog(TAG, dbMsg);
+
+		}
+
+		private void info_lb_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 
 
 
-	
+
 
 	/*
 	 画面に表示されているデータに対して、自分のPCにあるファイルを添付するのですが、
