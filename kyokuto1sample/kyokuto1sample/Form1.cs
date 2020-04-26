@@ -19,7 +19,7 @@ using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
 	public partial class Form1 : Form {
-		public UserCredential credential;
+		public UserCredential MyCredential;
 		public DriveService service;        // Drive API service
 		static string[] Scopes = { DriveService.Scope.DriveReadonly };
 
@@ -60,19 +60,19 @@ namespace kyokuto1sample {
 				using (FileStream stream =
 					new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
 					string credPath = "token.json";
-					credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+					MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
 						GoogleClientSecrets.Load(stream).Secrets,
 						Scopes,
 						"user",
 						CancellationToken.None,
 						new FileDataStore(credPath, true)).Result;
 				}
-				string UserId = credential.UserId;          //"usre"
+				string UserId = MyCredential.UserId;          //"usre"
 				dbMsg += ",UserId=" + UserId;
 
 				// Drive API serviceを作成
 				service = new DriveService(new BaseClientService.Initializer() {
-					HttpClientInitializer = credential,
+					HttpClientInitializer = MyCredential,
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,
 				});
@@ -89,7 +89,7 @@ namespace kyokuto1sample {
 			string TAG = "Update_bt_Click";
 			string dbMsg = "[Form1]";
 			try {
-				if(credential == null || service == null) {
+				if(MyCredential == null || service == null) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "まだ接続されていません";
 					MessageBoxButtons buttns = MessageBoxButtons.OK;
