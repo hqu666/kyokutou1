@@ -20,7 +20,7 @@ using Google.Apis.Util.Store;
 namespace kyokuto1sample {
 	public partial class Form1 : Form {
 		public UserCredential MyCredential;
-		public DriveService service;        // Drive API service
+		public DriveService MyDriveService;        // Drive API service
 		static string[] Scopes = { DriveService.Scope.DriveReadonly };
 
 		public String parentFolderId;
@@ -71,7 +71,7 @@ namespace kyokuto1sample {
 				dbMsg += ",UserId=" + UserId;
 
 				// Drive API serviceを作成
-				service = new DriveService(new BaseClientService.Initializer() {
+				MyDriveService = new DriveService(new BaseClientService.Initializer() {
 					HttpClientInitializer = MyCredential,
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,
@@ -89,7 +89,7 @@ namespace kyokuto1sample {
 			string TAG = "Update_bt_Click";
 			string dbMsg = "[Form1]";
 			try {
-				if(MyCredential == null || service == null) {
+				if(MyCredential == null || MyDriveService == null) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "まだ接続されていません";
 					MessageBoxButtons buttns = MessageBoxButtons.OK;
@@ -111,7 +111,7 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
-				FilesResource.ListRequest listRequest = service.Files.List();
+				FilesResource.ListRequest listRequest = MyDriveService.Files.List();
 				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
 				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
 				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
@@ -229,7 +229,7 @@ namespace kyokuto1sample {
 				}
 
 				// Fetch file from drive
-				var request = service.Files.Get( id );
+				var request = MyDriveService.Files.Get( id );
 				request.Fields = "name,parents";
 				var parent = request.Execute();
 
@@ -310,7 +310,7 @@ namespace kyokuto1sample {
 				folder.MimeType = "application/vnd.google-apps.folder";
 				//アップロード
 				folder.Parents = new List<string> { parentFolderId }; // 特定のフォルダのサブフォルダとして作成する場合
-				var request = service.Files.Create(folder);
+				var request = MyDriveService.Files.Create(folder);
 				request.Fields = "id, name"; // ただ作るだけならこの行不要
 				var file = await request.ExecuteAsync();
 				/*
@@ -339,7 +339,7 @@ namespace kyokuto1sample {
 									System.IO.MemoryStream stream = new System.IO.MemoryStream( byteArray );
 
 									//アップロードする
-									FilesResource.InsertMediaUpload request =service.Files.Insert( body, stream, body.MimeType );
+									FilesResource.InsertMediaUpload request =MyDriveService.Files.Insert( body, stream, body.MimeType );
 									request.Upload();
 
 									//アップロードされたファイルのIdを取得しておく
