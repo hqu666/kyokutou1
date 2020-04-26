@@ -23,7 +23,7 @@ namespace kyokuto1sample {
 		public DriveService MyDriveService;        // Drive API service
 		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
-		static string[] Scopes = { DriveService.Scope.DriveReadonly };
+		static string[] MyScopes = { DriveService.Scope.DriveReadonly };
 
 		public String parentFolderId;
 		public Form1()
@@ -62,7 +62,7 @@ namespace kyokuto1sample {
 					string credPath = "token.json";
 					MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
 						GoogleClientSecrets.Load(stream).Secrets,
-						Scopes,
+						MyScopes,
 						"user",
 						CancellationToken.None,
 						new FileDataStore(credPath, true)).Result;
