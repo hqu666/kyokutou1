@@ -319,50 +319,58 @@ namespace kyokuto1sample {
 				wrFolder.MimeType = "application/vnd.google-apps.folder";
 				dbMsg += "、DriveId=" + Constant.RootFolderID;
 				//アップロード
-				wrFolder.Parents = new List<string> { Constant.RootFolderID }; // 特定のフォルダのサブフォルダとして作成する場合
+				wrFolder.Parents = new List<string> { Constant.TopFolderID }; // 特定のフォルダのサブフォルダとして作成する場合
 				var wrRequest = MyDriveService.Files.Create(wrFolder);
-				//		wrRequest.Fields = "id, name"; // ただ作るだけならこの行不要
-				//			File file = 
-		//		MyDriveService.Files.Insert(wrFolder).Fetch();		v2の場合
-				var file = await wrRequest.ExecuteAsync();
+				wrRequest.Fields = "id, name";                      // ただ作るだけならこの行不要,,v2ではTitle
+				var newFolder = wrRequest.Execute();
+				dbMsg += ">>[" + newFolder.Id + "]" + newFolder.Name;
+				//		MyDriveService.Files.Insert(wrFolder).Fetch();		v2の場合
+				//	var file = await wrRequest.ExecuteAsync();
 
 				//	The service drive has thrown an exception: Google.GoogleApiException: Google.Apis.Requests.RequestError
 				//	Insufficient Permission: Request had insufficient authentication scopes. [403]
 
-				/*
-								Console.WriteLine("folder id : " + file.Id);
+				foreach (string str in selectFiles) {
+					//ファイルのひな形を作る感じ
+					Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
+					string fileName = Path.GetFileName(@str);
+					body.Name = fileName;
+					body.Description = "A test document";
+					body.MimeType = "text/plain";                       // MimeMapping.GetMimeMapping( fileName );
+					if (fileName.Contains(".xls")) {
+						body.MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					} else if (fileName.Contains(".ppt")) {
+						body.MimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					} else if (fileName.Contains(".doc")) {
+						body.MimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					} else if (fileName.Contains(".pdf")) {
+						body.MimeType = "application / pdf";
+					}
+					//	https://webbibouroku.com/Blog/Article/asp-mimetype
+					var fileMetadata = new Google.Apis.Drive.v3.Data.File() {
+						Name = fileName
+					};
+					FilesResource.CreateMediaUpload request;
+					using (var stream = new System.IO.FileStream(body.MimeType, System.IO.FileMode.Open)) {
+						request = MyDriveService.Files.Create(fileMetadata, stream, body.MimeType);
+						request.Fields = "id";
+						request.Upload();
+					}
+					var wrfile = request.ResponseBody;
+					String wrfileId = wrfile.Id;
+					dbMsg += ">>[" + wrfileId + "]" + wrfile.Name;
+					////ファイルの中身を書き込む…？
+					//byte[] byteArray = System.IO.File.ReadAllBytes(fileName);
+					//System.IO.MemoryStream stream = new System.IO.MemoryStream(byteArray);
 
-								foreach (string str in selectFiles) {
-									//ファイルのひな形を作る感じ
-									Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-									string fileName = Path.GetFileName( @str );
-									body.Name = fileName;
-									body.Description = "A test document";
-									body.MimeType = "text/plain";                       // MimeMapping.GetMimeMapping( fileName );
-									if (fileName.Contains( ".xls" )) {
-										body.MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-									} else if (fileName.Contains( ".ppt" )) {
-										body.MimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-									} else if(fileName.Contains( ".doc" )) {
-										body.MimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-									} else if (fileName.Contains( ".pdf" )) {
-										body.MimeType = "application / pdf";
-									}
-									//	https://webbibouroku.com/Blog/Article/asp-mimetype
+					////アップロードする
+					//FilesResource.InsertMediaUpload request = MyDriveService.Files.Insert(body, stream, body.MimeType);
+					//request.Upload();
 
-									//ファイルの中身を書き込む…？
-									byte[] byteArray = System.IO.File.ReadAllBytes( fileName );
-									System.IO.MemoryStream stream = new System.IO.MemoryStream( byteArray );
-
-									//アップロードする
-									FilesResource.InsertMediaUpload request =MyDriveService.Files.Insert( body, stream, body.MimeType );
-									request.Upload();
-
-									//アップロードされたファイルのIdを取得しておく
-									Google.Apis.Drive.v3.Data.File file = request.ResponseBody;
-									Console.WriteLine( "File id: " + file.Id );
-
-									*/
+					////アップロードされたファイルのIdを取得しておく
+					//Google.Apis.Drive.v3.Data.File file = request.ResponseBody;
+					//Console.WriteLine("File id: " + file.Id);
+				}
 				MyLog(TAG, dbMsg);
 				GoogleFileListUp();						//更新状態を再描画
 			} catch (Exception er) {
