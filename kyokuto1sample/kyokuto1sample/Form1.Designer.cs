@@ -69,7 +69,6 @@
 			this.info_lb.Size = new System.Drawing.Size(216, 15);
 			this.info_lb.TabIndex = 5;
 			this.info_lb.Text = "まずは接続ボタンをクリックして下さい";
-			this.info_lb.Click += new System.EventHandler(this.info_lb_Click);
 			// 
 			// label1
 			// 

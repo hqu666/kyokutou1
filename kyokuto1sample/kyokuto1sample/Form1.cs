@@ -23,7 +23,13 @@ namespace kyokuto1sample {
 		public DriveService MyDriveService;        // Drive API service
 		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
-		static string[] MyScopes = { DriveService.Scope.DriveReadonly };
+		static string[] MyScopes = {DriveService.Scope.DriveFile
+							//DriveService.Scope.Drive,
+							// DriveService.Scope.DriveAppdata,
+							//		  DriveService.Scope.DriveMetadataReadonly,
+							//		  DriveService.Scope.DriveReadonly,
+							//DriveService.Scope.DriveScripts
+							};
 
 		public String parentFolderId;
 		public Form1()
@@ -115,7 +121,8 @@ namespace kyokuto1sample {
 				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
 				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
 				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
-				GDriveFiles = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				//		GDriveFiles.Clear();						//newが使えない？
+						GDriveFiles = listRequest.Execute().Files;            // ドライブ内容のリストアップ
 				GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 
 				if (GDriveFiles != null && GDriveFiles.Count > 0) {
@@ -142,7 +149,8 @@ namespace kyokuto1sample {
 					dbMsg += "[root=" + Constant.RootFolderID + "]";
 					dbMsg += ",folders" + GDriveFolders.Count() + "件";
 					int nodeCount = 0;
-					google_drive_tree.BeginUpdate();
+					google_drive_tree.Nodes.Clear();					//viewを初期化して
+					google_drive_tree.BeginUpdate();					//	更新開始
 					foreach (var folder in GDriveFolders) {
 						dbMsg += "\r\nfolder=" + folder.Key;
 						dbMsg += ":" + folder.Value.Name;
@@ -304,16 +312,23 @@ namespace kyokuto1sample {
 				}
 				/*https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
 				//フォルダを作る
-				Google.Apis.Drive.v3.Data.File folder = new Google.Apis.Drive.v3.Data.File();
-				folder.Name = MakeFolderName;
-				folder.Description = "極東産機案件";
+				Google.Apis.Drive.v3.Data.File wrFolder = new Google.Apis.Drive.v3.Data.File();
+				wrFolder.Name = MakeFolderName;
+				wrFolder.Description = "極東産機案件";
 				//フォルダなのでMimeTypeはこれ
-				folder.MimeType = "application/vnd.google-apps.folder";
+				wrFolder.MimeType = "application/vnd.google-apps.folder";
+				dbMsg += "、DriveId=" + Constant.RootFolderID;
 				//アップロード
-				folder.Parents = new List<string> { parentFolderId }; // 特定のフォルダのサブフォルダとして作成する場合
-				var request = MyDriveService.Files.Create(folder);
-				request.Fields = "id, name"; // ただ作るだけならこの行不要
-				var file = await request.ExecuteAsync();
+				wrFolder.Parents = new List<string> { Constant.RootFolderID }; // 特定のフォルダのサブフォルダとして作成する場合
+				var wrRequest = MyDriveService.Files.Create(wrFolder);
+				//		wrRequest.Fields = "id, name"; // ただ作るだけならこの行不要
+				//			File file = 
+		//		MyDriveService.Files.Insert(wrFolder).Fetch();		v2の場合
+				var file = await wrRequest.ExecuteAsync();
+
+				//	The service drive has thrown an exception: Google.GoogleApiException: Google.Apis.Requests.RequestError
+				//	Insufficient Permission: Request had insufficient authentication scopes. [403]
+
 				/*
 								Console.WriteLine("folder id : " + file.Id);
 
@@ -349,6 +364,7 @@ namespace kyokuto1sample {
 
 									*/
 				MyLog(TAG, dbMsg);
+				GoogleFileListUp();						//更新状態を再描画
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -366,15 +382,7 @@ namespace kyokuto1sample {
 			Util.MyErrorLog(TAG, dbMsg);
 
 		}
-
-		private void info_lb_Click(object sender, EventArgs e)
-		{
-
-		}
 	}
-
-
-
 
 
 	/*
