@@ -23,13 +23,21 @@ namespace kyokuto1sample {
 		public DriveService MyDriveService;        // Drive API service
 		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
-		static string[] MyScopes = {DriveService.Scope.DriveFile,
+		static string[] MyScopes = {
 							DriveService.Scope.Drive,
 							 DriveService.Scope.DriveAppdata,
-							//		  DriveService.Scope.DriveMetadataReadonly,
-								  DriveService.Scope.DriveReadonly,
-							DriveService.Scope.DriveScripts
+								 DriveService.Scope.DrivePhotosReadonly,
+						 DriveService.Scope.DriveFile
+				//			DriveService.Scope.DriveScripts		//追加
 							};
+		//	削除			DriveService.Scope.DriveMetadataReadonly,
+		//									DriveService.Scope.DriveReadonly,
+		//static string[] writescopes = {
+		//					driveservice.scope.drive,
+		//					 driveservice.scope.driveappdata,
+		//				 driveservice.scope.drivefile
+		//		//			driveservice.scope.drivescripts		//追加
+		//					};
 
 		public String parentFolderId;
 		public Form1()
@@ -64,7 +72,8 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				using (FileStream stream =
-					new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
+			//			new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
+				new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
 					string credPath = "token.json";
 					MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
 						GoogleClientSecrets.Load(stream).Secrets,
@@ -305,12 +314,32 @@ namespace kyokuto1sample {
 					files_tb.Text = "送信するファイルを選択して下さい";
 					return;
 				}
-				if (info_lb.Text.Equals("まずは接続ボタンをクリックして下さい")) {
-					files_tb.Text = "接続ボタンをクリックしてGoogleドライブに接続して下さい";
-					return;
-				}
+				//using (FileStream stream =
+				//	new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
+				//	string credPath = "token.json";
+				//	MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+				//		GoogleClientSecrets.Load(stream).Secrets,
+				//		WriteScopes,
+				//		"user",
+				//		CancellationToken.None,
+				//		new FileDataStore(credPath, true)).Result;
+				//}
+				//string UserId = MyCredential.UserId;          //"usre"
+				//dbMsg += ",UserId=" + UserId;
+
+				//// Drive API serviceを作成
+				//MyDriveService = new DriveService(new BaseClientService.Initializer() {
+				//	HttpClientInitializer = MyCredential,
+				//	ApplicationName = Constant.ApplicationName,
+				//	ApiKey = Constant.APIKey,
+				//});
+
+				//if (info_lb.Text.Equals("まずは接続ボタンをクリックして下さい")) {
+				//	files_tb.Text = "接続ボタンをクリックしてGoogleドライブに接続して下さい";
+				//	return;
+				//}
 				/*		https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
-				
+
 				//フォルダを作る
 				Google.Apis.Drive.v3.Data.File wrFolder = new Google.Apis.Drive.v3.Data.File();
 				wrFolder.Name = MakeFolderName;
@@ -318,13 +347,12 @@ namespace kyokuto1sample {
 				//フォルダなのでMimeTypeはこれ
 				wrFolder.MimeType = "application/vnd.google-apps.folder";
 				dbMsg += "、DriveId=" + Constant.RootFolderID;
-				wrFolder.DriveId = Constant.RootFolderID;
+		//		wrFolder.DriveId = Constant.RootFolderID;		//追加
 				//アップロード
 				wrFolder.Parents = new List<string> { Constant.TopFolderID }; // 特定のフォルダのサブフォルダとして作成する場合
-				var wrRequest = MyDriveService.Files.Create(wrFolder);
+				var wrRequest = MyDriveService.Files.Create(wrFolder);              //		v2の場合		MyDriveService.Files.Insert(wrFolder).Fetch();
 				wrRequest.Fields = "id, name";                      // ただ作るだけならこの行不要,,v2ではTitle
 				dbMsg += ",wrRequest=" + wrRequest.MethodName;
-				//		MyDriveService.Files.Insert(wrFolder).Fetch();		v2の場合
 				//var newFolder = wrRequest.Execute();
 				var newFolder = await wrRequest.ExecuteAsync();
 				dbMsg += ">>[" + newFolder.Id + "]" + newFolder.Name;
