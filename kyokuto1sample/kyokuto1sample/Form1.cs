@@ -23,12 +23,12 @@ namespace kyokuto1sample {
 		public DriveService MyDriveService;        // Drive API service
 		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
-		static string[] MyScopes = {DriveService.Scope.DriveFile
-							//DriveService.Scope.Drive,
-							// DriveService.Scope.DriveAppdata,
+		static string[] MyScopes = {DriveService.Scope.DriveFile,
+							DriveService.Scope.Drive,
+							 DriveService.Scope.DriveAppdata,
 							//		  DriveService.Scope.DriveMetadataReadonly,
-							//		  DriveService.Scope.DriveReadonly,
-							//DriveService.Scope.DriveScripts
+								  DriveService.Scope.DriveReadonly,
+							DriveService.Scope.DriveScripts
 							};
 
 		public String parentFolderId;
@@ -301,7 +301,6 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				dbMsg += "書込むフォルダ＝" + MakeFolderName;
-				dbMsg += "、" + selectFiles.Count() + "件";
 				if (MakeFolderName == null || selectFiles == null) {
 					files_tb.Text = "送信するファイルを選択して下さい";
 					return;
@@ -310,7 +309,8 @@ namespace kyokuto1sample {
 					files_tb.Text = "接続ボタンをクリックしてGoogleドライブに接続して下さい";
 					return;
 				}
-				/*https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
+				/*		https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
+				
 				//フォルダを作る
 				Google.Apis.Drive.v3.Data.File wrFolder = new Google.Apis.Drive.v3.Data.File();
 				wrFolder.Name = MakeFolderName;
@@ -318,19 +318,24 @@ namespace kyokuto1sample {
 				//フォルダなのでMimeTypeはこれ
 				wrFolder.MimeType = "application/vnd.google-apps.folder";
 				dbMsg += "、DriveId=" + Constant.RootFolderID;
+				wrFolder.DriveId = Constant.RootFolderID;
 				//アップロード
 				wrFolder.Parents = new List<string> { Constant.TopFolderID }; // 特定のフォルダのサブフォルダとして作成する場合
 				var wrRequest = MyDriveService.Files.Create(wrFolder);
 				wrRequest.Fields = "id, name";                      // ただ作るだけならこの行不要,,v2ではTitle
-				var newFolder = wrRequest.Execute();
-				dbMsg += ">>[" + newFolder.Id + "]" + newFolder.Name;
+				dbMsg += ",wrRequest=" + wrRequest.MethodName;
 				//		MyDriveService.Files.Insert(wrFolder).Fetch();		v2の場合
-				//	var file = await wrRequest.ExecuteAsync();
+				//var newFolder = wrRequest.Execute();
+				var newFolder = await wrRequest.ExecuteAsync();
+				dbMsg += ">>[" + newFolder.Id + "]" + newFolder.Name;
 
 				//	The service drive has thrown an exception: Google.GoogleApiException: Google.Apis.Requests.RequestError
 				//	Insufficient Permission: Request had insufficient authentication scopes. [403]
-
+				
+				dbMsg += "、" + selectFiles.Count() + "件";
 				foreach (string str in selectFiles) {
+					dbMsg += "\r\n" + str;
+
 					//ファイルのひな形を作る感じ
 					Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
 					string fileName = Path.GetFileName(@str);
@@ -356,6 +361,7 @@ namespace kyokuto1sample {
 						request.Fields = "id";
 						request.Upload();
 					}
+					//System.IO.DirectoryNotFoundException: パス 'H:\develop\testBuild\kyokuto1sample\kyokuto1sample\bin\Debug\text\plain' の一部が見つかりませんでした。
 					var wrfile = request.ResponseBody;
 					String wrfileId = wrfile.Id;
 					dbMsg += ">>[" + wrfileId + "]" + wrfile.Name;
