@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+//using System.ComponentModel;
+//using System.Data;
+//using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -84,6 +84,7 @@ namespace kyokuto1sample {
 				}
 				string UserId = MyCredential.UserId;          //"usre"
 				dbMsg += ",UserId=" + UserId;
+				dbMsg += ",Token=" + MyCredential.Token;
 
 				// Drive API serviceを作成
 				MyDriveService = new DriveService(new BaseClientService.Initializer() {
@@ -258,8 +259,7 @@ namespace kyokuto1sample {
 			}
 				*/
 		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
-		public String MakeFolderName = null;
-		public String[] selectFiles = null;
+
 
 		//ファイル選択ボタン
 		private void Serect_bt_Click(object sender, EventArgs e)
@@ -269,17 +269,15 @@ namespace kyokuto1sample {
 			try {
 				DialogResult dr = openFileDialog1.ShowDialog();
 				if (dr == System.Windows.Forms.DialogResult.OK) {
-					String FolderPath = System.IO.Path.GetDirectoryName(openFileDialog1.FileName);
-					System.IO.DirectoryInfo dirInfo = System.IO.Directory.GetParent(openFileDialog1.FileName);
-					MakeFolderName = dirInfo.Name;
-					pass_lv.Text = MakeFolderName;
-					selectFiles = Directory.GetFiles(@FolderPath, "*");
-					//			foreach (string str in selectFiles) {
-					//				string filePath = Path.GetFileName( @str );
-					//				fileNames = fileNames.a;
-					//			}
+					LocalFileUtil LFUtil = new LocalFileUtil();
+					LFUtil.ListUpFolderFiles(openFileDialog1);
+					//String FolderPath = System.IO.Path.GetDirectoryName(openFileDialog1.FileName);
+					//System.IO.DirectoryInfo dirInfo = System.IO.Directory.GetParent(openFileDialog1.FileName);
+					//MakeFolderName = dirInfo.Name;
+					//selectFiles = Directory.GetFiles(@FolderPath, "*");
+					pass_lv.Text = Constant.MakeFolderName;
 					files_tb.Text = "";
-					foreach (string str in selectFiles) {
+					foreach (string str in Constant.selectFiles) {
 						string fileName = Path.GetFileName(@str);
 						files_tb.Text += fileName + "\r\n";
 					}
@@ -309,8 +307,8 @@ namespace kyokuto1sample {
 			string TAG = "GFilePutAsync";
 			string dbMsg = "[Form1]";
 			try {
-				dbMsg += "書込むフォルダ＝" + MakeFolderName;
-				if (MakeFolderName == null || selectFiles == null) {
+				dbMsg += "書込むフォルダ＝" + Constant.MakeFolderName;
+				if (Constant.MakeFolderName == null || Constant.selectFiles == null) {
 					files_tb.Text = "送信するファイルを選択して下さい";
 					return;
 				}
@@ -342,7 +340,7 @@ namespace kyokuto1sample {
 
 				//フォルダを作る
 				Google.Apis.Drive.v3.Data.File wrFolder = new Google.Apis.Drive.v3.Data.File();
-				wrFolder.Name = MakeFolderName;
+				wrFolder.Name = Constant.MakeFolderName;
 				wrFolder.Description = "極東産機案件";
 				//フォルダなのでMimeTypeはこれ
 				wrFolder.MimeType = "application/vnd.google-apps.folder";
@@ -360,8 +358,8 @@ namespace kyokuto1sample {
 				//	The service drive has thrown an exception: Google.GoogleApiException: Google.Apis.Requests.RequestError
 				//	Insufficient Permission: Request had insufficient authentication scopes. [403]
 				
-				dbMsg += "、" + selectFiles.Count() + "件";
-				foreach (string str in selectFiles) {
+				dbMsg += "、" + Constant.selectFiles.Count() + "件";
+				foreach (string str in Constant.selectFiles) {
 					dbMsg += "\r\n" + str;
 
 					//ファイルのひな形を作る感じ

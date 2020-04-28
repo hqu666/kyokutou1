@@ -25,6 +25,7 @@ namespace kyokuto1sample
 		public static string ServiceAcountEmail = "hkuwayama@kyokuto-1.iam.gserviceaccount.com";       //	必要？
 		public static string ServiceAcountEmailID = "c7501858467a3f670e9c8266be2be7e1c3e25949";       //	必要？
 
-		
+		public static string MakeFolderName = null;
+		public static string[] selectFiles = null;
 	}
 }
