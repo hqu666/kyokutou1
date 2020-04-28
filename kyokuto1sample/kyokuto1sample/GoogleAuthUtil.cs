@@ -10,9 +10,9 @@ using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
 	class GoogleAuthUtil {
-		public static async Task<string> Authentication(string jsonPath, string tokenFolderPath){
+		public  async Task<string> Authentication(string jsonPath, string tokenFolderPath){
 			string TAG = "Authentication";
-			string dbMsg = "[Form1]";
+			string dbMsg = "[GoogleAuthUtil]";
 			string retStr = "";
 			try {
 				Constant.MyCredential = await GetUserCredential(jsonPath, tokenFolderPath);

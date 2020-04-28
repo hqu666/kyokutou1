@@ -36,7 +36,7 @@ namespace kyokuto1sample {
 			string TAG = "Form1_Load";
 			string dbMsg = "[Form1]";
 			try {
-				Conect2Drive();
+				Conect2DriveAsync();
 				GoogleFileListUp();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -45,22 +45,32 @@ namespace kyokuto1sample {
 		}
 
 		// 接続
-		private void Conect2Drive()
+		private async void Conect2DriveAsync()
 		{
 			string TAG = "Conect2Drive";
 			string dbMsg = "[Form1]";
 			try {
-				using (FileStream stream =
-				new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
-					string credPath = "token.json";
-					Constant.MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-						GoogleClientSecrets.Load(stream).Secrets,
-						Constant.DriveScopes,
-						"user",
-						CancellationToken.None,
-						new FileDataStore(credPath, true)).Result;
-				}
-				string UserId = Constant.MyCredential.UserId;          //"usre"
+				GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
+				await GAuthUtil.Authentication("client1sampl.json", "token.json");
+
+				// Drive API serviceを作成
+				//Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+				//	HttpClientInitializer = Constant.MyCredential,
+				//	ApplicationName = Constant.ApplicationName,
+				//	ApiKey = Constant.APIKey,
+				//});
+
+				//using (FileStream stream =
+				//new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
+				//	string credPath = "token.json";
+				//	Constant.MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+				//		GoogleClientSecrets.Load(stream).Secrets,
+				//		Constant.DriveScopes,
+				//		"user",
+				//		CancellationToken.None,
+				//		new FileDataStore(credPath, true)).Result;
+				//}
+				string UserId = Constant.MyCredential.UserId; 
 				dbMsg += ",UserId=" + UserId;
 				Constant.MyTokenType = Constant.MyCredential.Token.TokenType;
 				Constant.MyRefreshToken = Constant.MyCredential.Token.RefreshToken;
@@ -69,13 +79,6 @@ namespace kyokuto1sample {
 				dbMsg += ",TokenType=" + Constant.MyTokenType;
 				dbMsg += ",RefreshToken=" + Constant.MyRefreshToken;
 				dbMsg += ",AccessToken=" + Constant.MyAccessToken;
-
-				// Drive API serviceを作成
-				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
-					HttpClientInitializer = Constant.MyCredential,
-					ApplicationName = Constant.ApplicationName,
-					ApiKey = Constant.APIKey,
-				});
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
