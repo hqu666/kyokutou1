@@ -1,11 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Data;
-//using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,12 +13,12 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
+
 namespace kyokuto1sample {
 	public partial class Form1 : Form {
-		public UserCredential MyCredential;
-		public DriveService MyDriveService;        // Drive API service
-		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
-		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
+		//public String parentFolderId;
+		//public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
+		//public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		static string[] MyScopes = {
 							DriveService.Scope.Drive,
 							 DriveService.Scope.DriveAppdata,
@@ -39,7 +35,6 @@ namespace kyokuto1sample {
 		//		//			driveservice.scope.drivescripts		//追加
 		//					};
 
-		public String parentFolderId;
 		public Form1()
 		{
 			string TAG = "Form1";
@@ -72,23 +67,28 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				using (FileStream stream =
-			//			new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
 				new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
 					string credPath = "token.json";
-					MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+					Constant.MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
 						GoogleClientSecrets.Load(stream).Secrets,
 						MyScopes,
 						"user",
 						CancellationToken.None,
 						new FileDataStore(credPath, true)).Result;
 				}
-				string UserId = MyCredential.UserId;          //"usre"
+				string UserId = Constant.MyCredential.UserId;          //"usre"
 				dbMsg += ",UserId=" + UserId;
-				dbMsg += ",Token=" + MyCredential.Token;
+				Constant.MyTokenType = Constant.MyCredential.Token.TokenType;
+				Constant.MyRefreshToken = Constant.MyCredential.Token.RefreshToken;
+				Constant.MyAccessToken = Constant.MyCredential.Token.RefreshToken;
+
+				dbMsg += ",TokenType=" + Constant.MyTokenType;
+				dbMsg += ",RefreshToken=" + Constant.MyRefreshToken;
+				dbMsg += ",AccessToken=" + Constant.MyAccessToken;
 
 				// Drive API serviceを作成
-				MyDriveService = new DriveService(new BaseClientService.Initializer() {
-					HttpClientInitializer = MyCredential,
+				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyCredential,
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,
 				});
@@ -99,48 +99,30 @@ namespace kyokuto1sample {
 			}
 		}
 
-		// 更新ボタン
-		private void Update_bt_Click(object sender, EventArgs e)
-		{
-			string TAG = "Update_bt_Click";
-			string dbMsg = "[Form1]";
-			try {
-				if(MyCredential == null || MyDriveService == null) {
-					String titolStr = Constant.ApplicationName;
-					String msgStr = "まだ接続されていません";
-					MessageBoxButtons buttns = MessageBoxButtons.OK;
-					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
-					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
-					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
-					dbMsg += ",result=" + result;
-				}
-				MyLog(TAG, dbMsg);
-				GoogleFileListUp();
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-			}
-		}
-
-		private void GoogleFileListUp()
+		public void GoogleFileListUp()
 		{
 			string TAG = "GoogleFileSarch";
-			string dbMsg = "[Form1]";
+			string dbMsg = "[GoogleUtil]";
 			try {
-				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
-				FilesResource.ListRequest listRequest = MyDriveService.Files.List();
-				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
-				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
-				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
-				//		GDriveFiles.Clear();						//newが使えない？
-						GDriveFiles = listRequest.Execute().Files;            // ドライブ内容のリストアップ
-				GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+				GoogleUtil GUtil = new GoogleUtil();
 
-				if (GDriveFiles != null && GDriveFiles.Count > 0) {
+
+				//// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
+				//FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
+				//listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+				//listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
+				//listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
+				//		GDriveFiles.Clear();						//newが使えない？
+				Constant.GDriveFiles = GDFileListUp();
+				//listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+
+				if (Constant.GDriveFiles != null && Constant.GDriveFiles.Count > 0) {
 					// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
-					parentFolderId = GDriveFiles.First().Id;
-					String folderName = GDriveFiles.First().Name;
+					Constant.parentFolderId = Constant.GDriveFiles.First().Id;
+					String folderName = Constant.GDriveFiles.First().Name;
 					//フォルダ階層の取得
-					foreach (var file in GDriveFiles) {
+					foreach (var file in Constant.GDriveFiles) {
 						String fName = file.Name;
 						String fId = file.Id;
 						String PId = file.Parents[0];
@@ -150,26 +132,26 @@ namespace kyokuto1sample {
 							//最上位にするフォルダと
 							Constant.TopFolderID = fId;
 							Constant.RootFolderID = PId;
-							info_lb.Text = fName;											//照合が合っているか確認の為
-						} else if(fMimeType.Equals("application/vnd.google-apps.folder")) {
-							GDriveFolders.Add(fId, file);											//最上位以外のフォルダを格納
+							info_lb.Text = fName;                                           //照合が合っているか確認の為
+						} else if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+							Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
 						}
 					}
 					dbMsg += "[top=" + Constant.TopFolderID + "]";
 					dbMsg += "[root=" + Constant.RootFolderID + "]";
-					dbMsg += ",folders" + GDriveFolders.Count() + "件";
+					dbMsg += ",folders" + Constant.GDriveFolders.Count() + "件";
 					int nodeCount = 0;
-					google_drive_tree.Nodes.Clear();					//viewを初期化して
-					google_drive_tree.BeginUpdate();					//	更新開始
-					foreach (var folder in GDriveFolders) {
+					google_drive_tree.Nodes.Clear();                    //viewを初期化して
+					google_drive_tree.BeginUpdate();                    //	更新開始
+					foreach (var folder in Constant.GDriveFolders) {
 						dbMsg += "\r\nfolder=" + folder.Key;
 						dbMsg += ":" + folder.Value.Name;
 						dbMsg += ":" + folder.Value.Parents[0];
 						if (folder.Value.Parents[0].Equals(Constant.TopFolderID)) {
 							google_drive_tree.Nodes.Add(folder.Value.Name);
-							foreach (var file in GDriveFiles) {
+							foreach (var file in Constant.GDriveFiles) {
 								String PId = file.Parents[0];
-								if(folder.Key.Equals(PId)) {
+								if (folder.Key.Equals(PId)) {
 									String fName = file.Name;
 									String fId = file.Id;
 									String fMimeType = file.MimeType;
@@ -186,15 +168,15 @@ namespace kyokuto1sample {
 								}
 							}
 							nodeCount++;
-						} else{
-							dbMsg += ">>除外" ;
+						} else {
+							dbMsg += ">>除外";
 						}
 					}
 					google_drive_tree.EndUpdate();
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
-					 String msgStr = "送信先ドライブには未だファイルが登録されていません";
+					String msgStr = "送信先ドライブには未だファイルが登録されていません";
 					MessageBoxButtons buttns = MessageBoxButtons.OK;
 					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
 					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
@@ -207,59 +189,53 @@ namespace kyokuto1sample {
 			}
 		}
 
+		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp()
+		{
+			string TAG = "GDFileListUp";
+			string dbMsg = "[GoogleUtil]";
+			IList<Google.Apis.Drive.v3.Data.File> retList = null;  
+			try {
+				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
+				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
+				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
+				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
+				//		GDriveFiles.Clear();						//newが使えない？
+				retList = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retList;
+		}
+
+
+		// 更新ボタン
+		private void Update_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "Update_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				if(Constant.MyCredential == null || Constant.MyDriveService == null) {
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "まだ接続されていません";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+				}
+				MyLog(TAG, dbMsg);
+				GoogleFileListUp();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+
 		//https://stackoverrun.com/ja/q/10041674	//////////////////////////////////////////
-		/*
-	static Dictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFiles = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
-
-			private static object AbsPath(Google.Apis.Drive.v3.Data.File file)
-			{
-				var name = file.Name;
-				if(file.Parents != null) {
-					if (file.Parents.Count() == 0) {
-						return name;
-					}
-				}else{
-					return name;
-				}
-
-				var path = new List<string>();
-
-				while (true) {
-					var parent = GetParent( file.Parents[0] );
-
-					// Stop when we find the root dir
-					if (parent.Parents == null || parent.Parents.Count() == 0) {
-						break;
-					}
-
-					path.Insert( 0, parent.Name );
-					file = parent;
-				}
-
-				path.Add( name );
-				return path.Aggregate( (current, next) => Path.Combine( current, next ) );
-			}
-
-			private static Google.Apis.Drive.v3.Data.File GetParent(string id)
-			{
-				// Check cache
-				if (GDriveFiles.ContainsKey( id )) {
-					return GDriveFiles[id];
-				}
-
-				// Fetch file from drive
-				var request = MyDriveService.Files.Get( id );
-				request.Fields = "name,parents";
-				var parent = request.Execute();
-
-				// Save in cache
-				GDriveFiles[id] = parent;
-
-				return parent;
-			}
-				*/
+	
 		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
-
 
 		//ファイル選択ボタン
 		private void Serect_bt_Click(object sender, EventArgs e)
@@ -271,10 +247,6 @@ namespace kyokuto1sample {
 				if (dr == System.Windows.Forms.DialogResult.OK) {
 					LocalFileUtil LFUtil = new LocalFileUtil();
 					LFUtil.ListUpFolderFiles(openFileDialog1);
-					//String FolderPath = System.IO.Path.GetDirectoryName(openFileDialog1.FileName);
-					//System.IO.DirectoryInfo dirInfo = System.IO.Directory.GetParent(openFileDialog1.FileName);
-					//MakeFolderName = dirInfo.Name;
-					//selectFiles = Directory.GetFiles(@FolderPath, "*");
 					pass_lv.Text = Constant.MakeFolderName;
 					files_tb.Text = "";
 					foreach (string str in Constant.selectFiles) {
@@ -287,6 +259,7 @@ namespace kyokuto1sample {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
 		//		files_lb.Text = files_lb.Text + "\r\n" + "\r\n" + (selectFiles.Count().ToString) + "件";
 
 		//送信ボタン
@@ -301,7 +274,8 @@ namespace kyokuto1sample {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
+	
+		//　GoogleDriveへ書き込み
 		public async void GFilePutAsync()
 		{
 			string TAG = "GFilePutAsync";
@@ -337,26 +311,9 @@ namespace kyokuto1sample {
 				//	return;
 				//}
 				/*		https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
-
-				//フォルダを作る
-				Google.Apis.Drive.v3.Data.File wrFolder = new Google.Apis.Drive.v3.Data.File();
-				wrFolder.Name = Constant.MakeFolderName;
-				wrFolder.Description = "極東産機案件";
-				//フォルダなのでMimeTypeはこれ
-				wrFolder.MimeType = "application/vnd.google-apps.folder";
-				dbMsg += "、DriveId=" + Constant.RootFolderID;
-		//		wrFolder.DriveId = Constant.RootFolderID;		//追加
-				//アップロード
-				wrFolder.Parents = new List<string> { Constant.TopFolderID }; // 特定のフォルダのサブフォルダとして作成する場合
-				var wrRequest = MyDriveService.Files.Create(wrFolder);              //		v2の場合		MyDriveService.Files.Insert(wrFolder).Fetch();
-				wrRequest.Fields = "id, name";                      // ただ作るだけならこの行不要,,v2ではTitle
-				dbMsg += ",wrRequest=" + wrRequest.MethodName;
-				//var newFolder = wrRequest.Execute();
-				var newFolder = await wrRequest.ExecuteAsync();
-				dbMsg += ">>[" + newFolder.Id + "]" + newFolder.Name;
-
-				//	The service drive has thrown an exception: Google.GoogleApiException: Google.Apis.Requests.RequestError
-				//	Insufficient Permission: Request had insufficient authentication scopes. [403]
+				GoogleUtil GUtil = new GoogleUtil();
+				var newFolder = GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID);	//フォルダを作る
+				dbMsg += ">>[" + newFolder.Id + "]";			// + newFolder.Name;
 				
 				dbMsg += "、" + Constant.selectFiles.Count() + "件";
 				foreach (string str in Constant.selectFiles) {
@@ -383,7 +340,7 @@ namespace kyokuto1sample {
 					};
 					FilesResource.CreateMediaUpload request;
 					using (var stream = new System.IO.FileStream(body.MimeType, System.IO.FileMode.Open)) {
-						request = MyDriveService.Files.Create(fileMetadata, stream, body.MimeType);
+						request = Constant.MyDriveService.Files.Create(fileMetadata, stream, body.MimeType);
 						request.Fields = "id";
 						request.Upload();
 					}
@@ -409,14 +366,15 @@ namespace kyokuto1sample {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
 		////////////////////////////////////////////////////
-		public void MyLog(string TAG, string dbMsg)
+		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
 			Util.MyLog(TAG, dbMsg);
 		}
 
-		public void MyErrorLog(string TAG, string dbMsg)
+		public static void MyErrorLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
