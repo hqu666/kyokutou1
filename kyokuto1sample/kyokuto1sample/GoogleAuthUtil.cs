@@ -9,7 +9,11 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
+
+	//GoogleDriveクラスにSystem.IO.を混在させない為、jsonファイルを読み込ませるメソッドを別にする
 	class GoogleAuthUtil {
+
+		//認証情報を作る
 		public  async Task<string> Authentication(string jsonPath, string tokenFolderPath){
 			string TAG = "Authentication";
 			string dbMsg = "[GoogleAuthUtil]";
@@ -29,6 +33,7 @@ namespace kyokuto1sample {
 			return retStr;
 		}
 
+		// DriveServiceを作る
 		static Task<UserCredential> GetUserCredential(string jsonPath, string tokenFolderPath){
 			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 				return GoogleWebAuthorizationBroker.AuthorizeAsync(

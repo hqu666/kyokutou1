@@ -17,7 +17,7 @@ namespace kyokuto1sample
 	class Constant
 	{
 		public static string ApplicationName = "kyokuto1sample";                                        //	アプリケーション名
-		public static string TopFolderName = "KSクラウド";                                        //	最上位フォルダ
+		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
 		public static string RootFolderID = "";            //保存先サーバのルートフォルダID
 
@@ -26,21 +26,13 @@ namespace kyokuto1sample
 		public static String parentFolderId;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
-		public static string[] DriveScopes = { DriveService.Scope.DriveFile };
-		//DriveService.Scope.Drive,
-		//					 DriveService.Scope.DriveAppdata,
-		//						 DriveService.Scope.DrivePhotosReadonly,
-
-		//			DriveService.Scope.DriveScripts,		//追加
-
+		public static string[] DriveScopes = { DriveService.Scope.DriveFile,
+																	DriveService.Scope.DriveAppdata,			//追加
+																	DriveService.Scope.Drive
+															};
+		//			DriveService.Scope.DriveScripts,	
 		//	削除			DriveService.Scope.DriveMetadataReadonly,
 		//									DriveService.Scope.DriveReadonly,
-		//static string[] writescopes = {
-		//					driveservice.scope.drive,
-		//					 driveservice.scope.driveappdata,
-		//				 driveservice.scope.drivefile
-		//		//			driveservice.scope.drivescripts		//追加
-		//					};
 		public static string APIKey = "AIzaSyBgQfaxlfQXP32-W8rRmGfj8nDf8vlSCxs";
 		public static string CliantId = "1015531776934-6lgfgndk2o2lp5iu29ddaabqrfn1ibp2.apps.googleusercontent.com";    //クライアント ID
 		public static string CliantSeacret = "u-eNFbgl4c9yM2fMkusalRfG";    //クライアント シークレット

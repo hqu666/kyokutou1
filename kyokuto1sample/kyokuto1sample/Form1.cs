@@ -5,19 +5,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Web;
-
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Drive.v3;
-using Google.Apis.Drive.v3.Data;
-using Google.Apis.Services;
-using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
 	public partial class Form1 : Form {
-	//	static string[] MyScopes = { DriveService.Scope.DriveFile };
-
-
 		public Form1()
 		{
 			string TAG = "Form1";
@@ -36,8 +26,7 @@ namespace kyokuto1sample {
 			string TAG = "Form1_Load";
 			string dbMsg = "[Form1]";
 			try {
-				Conect2DriveAsync();
-				GoogleFileListUp();
+				Conect2DriveAsync(true);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -45,46 +34,43 @@ namespace kyokuto1sample {
 		}
 
 		// 接続
-		private async void Conect2DriveAsync()
+		private async void Conect2DriveAsync(Boolean isListUp)
 		{
 			string TAG = "Conect2Drive";
 			string dbMsg = "[Form1]";
 			try {
 				GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
-				await GAuthUtil.Authentication("client1sampl.json", "token.json");
+				String retStr = await GAuthUtil.Authentication("client1sampl.json", "token.json");
+				if(retStr.Equals("")) {
+					//メッセージボックスを表示する
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+				} else {
+					string UserId = Constant.MyCredential.UserId;
+					dbMsg += ",UserId=" + UserId;
+					Constant.MyTokenType = Constant.MyCredential.Token.TokenType;
+					Constant.MyRefreshToken = Constant.MyCredential.Token.RefreshToken;
+					Constant.MyAccessToken = Constant.MyCredential.Token.RefreshToken;
 
-				// Drive API serviceを作成
-				//Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
-				//	HttpClientInitializer = Constant.MyCredential,
-				//	ApplicationName = Constant.ApplicationName,
-				//	ApiKey = Constant.APIKey,
-				//});
-
-				//using (FileStream stream =
-				//new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
-				//	string credPath = "token.json";
-				//	Constant.MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-				//		GoogleClientSecrets.Load(stream).Secrets,
-				//		Constant.DriveScopes,
-				//		"user",
-				//		CancellationToken.None,
-				//		new FileDataStore(credPath, true)).Result;
-				//}
-				string UserId = Constant.MyCredential.UserId; 
-				dbMsg += ",UserId=" + UserId;
-				Constant.MyTokenType = Constant.MyCredential.Token.TokenType;
-				Constant.MyRefreshToken = Constant.MyCredential.Token.RefreshToken;
-				Constant.MyAccessToken = Constant.MyCredential.Token.RefreshToken;
-
-				dbMsg += ",TokenType=" + Constant.MyTokenType;
-				dbMsg += ",RefreshToken=" + Constant.MyRefreshToken;
-				dbMsg += ",AccessToken=" + Constant.MyAccessToken;
-				MyLog(TAG, dbMsg);
+					dbMsg += "\r\nTokenType=" + Constant.MyTokenType;
+					dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
+					dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
+					MyLog(TAG, dbMsg);
+					if(isListUp) {
+						GoogleFileListUp();
+					}
+				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
 
+		//treeViewへGoogleDriveの登録状態表示
 		public void GoogleFileListUp()
 		{
 			string TAG = "GoogleFileSarch";
@@ -182,13 +168,12 @@ namespace kyokuto1sample {
 					dbMsg += ",result=" + result;
 				}
 				MyLog(TAG, dbMsg);
-				GoogleFileListUp();
+				Conect2DriveAsync(true);
+				//		GoogleFileListUp();
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
-
 		//https://stackoverrun.com/ja/q/10041674	//////////////////////////////////////////
 	
 		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
@@ -242,6 +227,8 @@ namespace kyokuto1sample {
 					files_tb.Text = "送信するファイルを選択して下さい";
 					return;
 				}
+				Conect2DriveAsync(false);
+
 				//using (FileStream stream =
 				//	new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
 				//	string credPath = "token.json";

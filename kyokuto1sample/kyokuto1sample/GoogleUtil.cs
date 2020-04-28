@@ -12,9 +12,9 @@ using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
 	class GoogleUtil {
-		public String parentFolderId;
-		public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
-		public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
+		//public String parentFolderId;
+		//public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
+		//public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 
 		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp()
 		{
@@ -47,7 +47,7 @@ namespace kyokuto1sample {
 				File meta = new File();
 				meta.Name = name;
 				meta.MimeType = "application/vnd.google-apps.folder";
-				if (driveId != null) meta.DriveId = driveId;
+	//			if (driveId != null) meta.DriveId = driveId;
 				if (parentFolderId != null) meta.Parents = new List<string> { parentFolderId };
 				dbMsg += ",meta=" + meta.Parents[0];
 				var request = Constant.MyDriveService.Files.Create(meta);
@@ -109,7 +109,7 @@ namespace kyokuto1sample {
 /*
  https://toconakis.tech/google-drive-rest-api-v3-for-android/
  https://csharp.hotexamples.com/examples/Google.Apis.Drive.v3.Data/File/-/php-file-class-examples.html
- 
+ https://developers.google.com/drive/api/v3/quickstart/dotnet
  
  
  */
