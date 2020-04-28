@@ -178,7 +178,7 @@ namespace kyokuto1sample {
 	
 		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
 
-		//ファイル選択ボタン
+		//ファイル選択ダイアログをボタンで表示させる場合
 		private void Serect_bt_Click(object sender, EventArgs e)
 		{
 			string TAG = "Serect_bt_Click";
@@ -188,12 +188,62 @@ namespace kyokuto1sample {
 				if (dr == System.Windows.Forms.DialogResult.OK) {
 					LocalFileUtil LFUtil = new LocalFileUtil();
 					LFUtil.ListUpFolderFiles(openFileDialog1);
-					pass_lv.Text = Constant.MakeFolderName;
-					files_tb.Text = "";
+					int fCount = 0;
 					foreach (string str in Constant.selectFiles) {
 						string fileName = Path.GetFileName(@str);
-						files_tb.Text += fileName + "\r\n";
+						Constant.selectFiles[fCount] = fileName;
+						fCount++;
 					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		private void FormMain_DragDrop(object sender, DragEventArgs e)
+		{
+			string TAG = "FormMain_DragDrop";
+			string dbMsg = "[Form1]";
+			try {
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+				int fileCount = files.Length;
+				dbMsg += fileCount + "件" ;
+				String titolStr = Constant.ApplicationName;
+				String msgStr = "ファイルを取得できませんでした。\r\n" +
+											"もう一度、送信したいファイルをドロップしてください";
+				MessageBoxButtons buttns = MessageBoxButtons.OK;
+				MessageBoxIcon icon = MessageBoxIcon.Warning;
+				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+				if (0< fileCount) {
+					msgStr = "";
+					Constant.selectFiles = new string[fileCount];
+					for (int i = 0; i < files.Length; i++) {
+						string fileName = files[i];
+						Constant.selectFiles[i] = fileName;
+						msgStr += fileName + "\r\n";
+					}
+					buttns = MessageBoxButtons.OKCancel;
+					icon = MessageBoxIcon.Information;
+				}
+				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+				dbMsg += ",result=" + result;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		private void FormMain_DragEnter(object sender, DragEventArgs e)
+		{
+			string TAG = "FormMain_DragEnter";
+			string dbMsg = "[Form1]";
+			try {
+				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					e.Effect = DragDropEffects.All;
+				} else {
+					e.Effect = DragDropEffects.None;
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -224,36 +274,16 @@ namespace kyokuto1sample {
 			try {
 				dbMsg += "書込むフォルダ＝" + Constant.MakeFolderName;
 				if (Constant.MakeFolderName == null || Constant.selectFiles == null) {
-					files_tb.Text = "送信するファイルを選択して下さい";
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "送信するファイルを選択して下さい";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Warning;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
 					return;
 				}
 				Conect2DriveAsync(false);
-
-				//using (FileStream stream =
-				//	new FileStream("client1sampl.json", FileMode.Open, FileAccess.Read)) {
-				//	string credPath = "token.json";
-				//	MyCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-				//		GoogleClientSecrets.Load(stream).Secrets,
-				//		WriteScopes,
-				//		"user",
-				//		CancellationToken.None,
-				//		new FileDataStore(credPath, true)).Result;
-				//}
-				//string UserId = MyCredential.UserId;          //"usre"
-				//dbMsg += ",UserId=" + UserId;
-
-				//// Drive API serviceを作成
-				//MyDriveService = new DriveService(new BaseClientService.Initializer() {
-				//	HttpClientInitializer = MyCredential,
-				//	ApplicationName = Constant.ApplicationName,
-				//	ApiKey = Constant.APIKey,
-				//});
-
-				//if (info_lb.Text.Equals("まずは接続ボタンをクリックして下さい")) {
-				//	files_tb.Text = "接続ボタンをクリックしてGoogleドライブに接続して下さい";
-				//	return;
-				//}
-				/*		https://karlsnautr.blogspot.com/2013/01/cgoogle-drive.html	*/
 				GoogleUtil GUtil = new GoogleUtil();
 				var newFolder = GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);  //フォルダを作る
 				string parentId = newFolder.Id.ToString();
