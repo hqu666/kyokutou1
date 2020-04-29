@@ -28,6 +28,7 @@ namespace kyokuto1sample
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
 		public static string RootFolderID = "";            //保存先サーバのルートフォルダID
+		public static string LocalPass = "";            //送信元フォルダ
 
 		public static UserCredential MyCredential;
 		public static DriveService MyDriveService;        // Drive API service

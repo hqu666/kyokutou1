@@ -28,7 +28,14 @@ namespace kyokuto1sample {
 			}
 		}
 
-		//rootName以下で一つ上のフォルダ名を返す
+		/// <summary>
+		/// rootName以下で一つ上のフォルダ名を返す
+		/// フルパス名はConstantに記録する
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <param name="rootName"></param>
+		/// <returns></returns>
+		//
 		public string GetPearentPass(string fileName , string rootName)
 		{
 			string TAG = "GetPearentPass";
@@ -36,11 +43,12 @@ namespace kyokuto1sample {
 			string retStr = "";
 			dbMsg += "," + fileName;
 			try {
-				retStr = System.IO.Path.GetDirectoryName(fileName);
-				dbMsg += "," + retStr;
+				Constant.LocalPass = System.IO.Path.GetDirectoryName(fileName);
+				dbMsg += "," + Constant.LocalPass;
 				string[] delimiter = { rootName };
-				string[] strs = retStr.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+				string[] strs = Constant.LocalPass.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
 				retStr = strs[1];
+				retStr = retStr.Substring(1, retStr.Length-1);
 				dbMsg += ">>" + retStr;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -49,7 +57,11 @@ namespace kyokuto1sample {
 			return retStr;
 		}
 
-		//一つ上のフォルダ名を返す
+		/// <summary>
+		/// パスを抜いてファイル名を返す
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <returns></returns>
 		public string GetFileNameExt(string fileName)
 		{
 			string TAG = "GetFileName";

@@ -90,6 +90,7 @@ namespace kyokuto1sample {
 					MimeType = MimeStr,
 					Parents = new List<string> { parentId }
 				};
+				MyLog(TAG, dbMsg);
 				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
 					// 新規追加
 					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
@@ -97,7 +98,7 @@ namespace kyokuto1sample {
 					var result = await request.UploadAsync();
 					return request.Body;
 				}
-				MyLog(TAG, dbMsg);
+				//
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 				return null;

@@ -11,7 +11,7 @@ namespace kyokuto1sample {
 		LocalFileUtil LFUtil = new LocalFileUtil();
 		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
 		GoogleUtil GUtil = new GoogleUtil();
-		private ContextMenuStrip docMenu;
+
 		public  string selectedItemText = "";
 		public string selectedItemId= "";
 		public static string ItemsSeparator = "                          \t\t\t\t: ";
@@ -297,6 +297,7 @@ namespace kyokuto1sample {
 							msgStr += Constant.TopFolderName + "の" + Constant.MakeFolderName + "に\r\n";
 						}
 						string fileName = LFUtil.GetFileNameExt(rStr);
+						dbMsg += "\r\n" + i+ ")" + fileName ;
 						Constant.selectFiles[i] = fileName;
 						msgStr += fileName + "\r\n";
 					}
@@ -368,44 +369,16 @@ namespace kyokuto1sample {
 					return;
 				}
 				Conect2DriveAsync(false);
-				GoogleUtil GUtil = new GoogleUtil();
 				var newFolder = GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);  //フォルダを作る
 				string parentId = newFolder.Id.ToString();
-				dbMsg += ">>[" + parentId + "]";			// + newFolder.Name;
-				
+				dbMsg += ">>[" + newFolder.Id + "；" + parentId + "]";           // + newFolder.Name;
+
 				dbMsg += "、" + Constant.selectFiles.Count() + "件";
 				foreach (string str in Constant.selectFiles) {
 					dbMsg += "\r\n" + str;
-					var wrfile = await GUtil.UploadFile(str, parentId);
-					/*
-					//ファイルのひな形を作る感じ
-					Google.Apis.Drive.v3.Data.File body = new Google.Apis.Drive.v3.Data.File();
-					string fileName = Path.GetFileName(@str);
-					body.Name = fileName;
-					body.Description = "A test document";
-					body.MimeType = "text/plain";                       // MimeMapping.GetMimeMapping( fileName );
-					if (fileName.Contains(".xls")) {
-						body.MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-					} else if (fileName.Contains(".ppt")) {
-						body.MimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-					} else if (fileName.Contains(".doc")) {
-						body.MimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-					} else if (fileName.Contains(".pdf")) {
-						body.MimeType = "application / pdf";
-					}
-					//	https://webbibouroku.com/Blog/Article/asp-mimetype
-					var fileMetadata = new Google.Apis.Drive.v3.Data.File() {
-						Name = fileName
-					};
-					FilesResource.CreateMediaUpload request;
-					using (var stream = new System.IO.FileStream(body.MimeType, System.IO.FileMode.Open)) {
-						request = Constant.MyDriveService.Files.Create(fileMetadata, stream, body.MimeType);
-						request.Fields = "id";
-						request.Upload();
-					}
-					//System.IO.DirectoryNotFoundException: パス 'H:\develop\testBuild\kyokuto1sample\kyokuto1sample\bin\Debug\text\plain' の一部が見つかりませんでした。
-					var wrfile = request.ResponseBody;
-					*/
+					string fullName =   System.IO.Path.Combine(Constant.LocalPass, str); 
+					dbMsg += ">>" + fullName;
+					var wrfile = await GUtil.UploadFile(fullName, parentId);
 					String wrfileId = wrfile.Id;
 					dbMsg += ">>[" + wrfileId + "]" + wrfile.Name;
 				}
