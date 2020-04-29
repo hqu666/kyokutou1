@@ -27,12 +27,16 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.info_lb = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.pass_lv = new System.Windows.Forms.Label();
 			this.update_bt = new System.Windows.Forms.Button();
 			this.google_drive_tree = new System.Windows.Forms.TreeView();
+			this.fileContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.削除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fileContextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// info_lb
@@ -88,12 +92,30 @@
 			// google_drive_tree
 			// 
 			this.google_drive_tree.AllowDrop = true;
+			this.google_drive_tree.ContextMenuStrip = this.fileContextMenuStrip;
 			this.google_drive_tree.Location = new System.Drawing.Point(19, 57);
 			this.google_drive_tree.Name = "google_drive_tree";
 			this.google_drive_tree.Size = new System.Drawing.Size(642, 289);
 			this.google_drive_tree.TabIndex = 14;
+			this.google_drive_tree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.Tree_AfterSelect);
 			this.google_drive_tree.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
 			this.google_drive_tree.DragEnter += new System.Windows.Forms.DragEventHandler(this.FormMain_DragEnter);
+			// 
+			// fileContextMenuStrip
+			// 
+			this.fileContextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+			this.fileContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.削除ToolStripMenuItem});
+			this.fileContextMenuStrip.Name = "fileContextMenuStrip";
+			this.fileContextMenuStrip.Size = new System.Drawing.Size(109, 28);
+			this.fileContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+			// 
+			// 削除ToolStripMenuItem
+			// 
+			this.削除ToolStripMenuItem.Name = "削除ToolStripMenuItem";
+			this.削除ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
+			this.削除ToolStripMenuItem.Text = "削除";
+			this.削除ToolStripMenuItem.Click += new System.EventHandler(this.FileContexit_Click);
 			// 
 			// Form1
 			// 
@@ -109,6 +131,7 @@
 			this.Name = "Form1";
 			this.Text = "Googleドライブとの連携";
 			this.Load += new System.EventHandler(this.Form1_Load);
+			this.fileContextMenuStrip.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -121,6 +144,8 @@
 		private System.Windows.Forms.Label pass_lv;
 		private System.Windows.Forms.Button update_bt;
 		private System.Windows.Forms.TreeView google_drive_tree;
+		private System.Windows.Forms.ContextMenuStrip fileContextMenuStrip;
+		private System.Windows.Forms.ToolStripMenuItem 削除ToolStripMenuItem;
 	}
 }
 

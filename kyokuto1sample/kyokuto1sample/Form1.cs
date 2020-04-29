@@ -11,6 +11,10 @@ namespace kyokuto1sample {
 		LocalFileUtil LFUtil = new LocalFileUtil();
 		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
 		GoogleUtil GUtil = new GoogleUtil();
+		private ContextMenuStrip docMenu;
+		public  string selectedItemText = "";
+		public string selectedItemId= "";
+		public static string ItemsSeparator = "                          \t\t\t\t: ";
 
 		public Form1()
 		{
@@ -43,8 +47,9 @@ namespace kyokuto1sample {
 			string TAG = "Conect2Drive";
 			string dbMsg = "[Form1]";
 			try {
+			//	String retStr = await GAuthUtil.Authentication("credentials0429.json", "token.json");   //.NET Quickstart>>認証されない
 				String retStr = await GAuthUtil.Authentication("client1sampl.json", "token.json");
-				if(retStr.Equals("")) {
+				if (retStr.Equals("")) {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
@@ -77,7 +82,7 @@ namespace kyokuto1sample {
 		public void GoogleFileListUp()
 		{
 			string TAG = "GoogleFileSarch";
-			string dbMsg = "[GoogleUtil]";
+			string dbMsg = "[Form1]";
 			try {
 				Constant.GDriveFiles = GUtil.GDFileListUp();
 				Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
@@ -90,16 +95,18 @@ namespace kyokuto1sample {
 					foreach (var file in Constant.GDriveFiles) {
 						String fName = file.Name;
 						String fId = file.Id;
-						String PId = file.Parents[0];
-						String fMimeType = file.MimeType;
-						DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-						if (fName.Equals(Constant.TopFolderName)) {
-							//最上位にするフォルダと
-							Constant.TopFolderID = fId;
-							Constant.RootFolderID = PId;
-							info_lb.Text = fName;                                           //照合が合っているか確認の為
-						} else if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-							Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
+						if (file.Parents != null) {
+							String PId = file.Parents[0];
+							String fMimeType = file.MimeType;
+							DateTime fModifiedTime = (DateTime)file.ModifiedTime;
+							if (fName.Equals(Constant.TopFolderName)) {
+								//最上位にするフォルダと
+								Constant.TopFolderID = fId;
+								Constant.RootFolderID = PId;
+								info_lb.Text = fName;                                           //照合が合っているか確認の為
+							} else if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+								Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
+							}
 						}
 					}
 					dbMsg += "[top=" + Constant.TopFolderID + "]";
@@ -128,7 +135,7 @@ namespace kyokuto1sample {
 									} else {
 										DateTime fModifiedTime = (DateTime)file.ModifiedTime;
 										long fSize = (long)file.Size;
-										google_drive_tree.Nodes[nodeCount].Nodes.Add(fName + "                          \t\t\t\t: " + fModifiedTime + "       \t\t\t: " + file.Size);
+										google_drive_tree.Nodes[nodeCount].Nodes.Add(fName + ItemsSeparator + fModifiedTime + "       \t\t\t: " + file.Size);
 									}
 								}
 							}
@@ -155,7 +162,61 @@ namespace kyokuto1sample {
 			}
 		}
 
-		// 更新ボタン
+		/// <summary>
+		/// 選択された時点でアイテムを保持
+		/// nameとid
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void Tree_AfterSelect(object sender,System.Windows.Forms.TreeViewEventArgs e)
+		{
+			string TAG = "Tree_AfterSelect";
+			string dbMsg = "[Form1]";
+			try {
+				selectedItemText = e.Node.Text;
+				dbMsg += ",selectedItemText=" + selectedItemText;
+				string[] del = { ItemsSeparator };
+				string[] arr = selectedItemText.Split(del, StringSplitOptions.None);
+				selectedItemText = arr[0];
+				dbMsg += ">>" + selectedItemText;
+				//idの取得は/////
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// コンテキストメニューで削除を選んだ場合
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void FileContexit_Click(object sender, EventArgs e)
+		{
+			string TAG = "FileContexit_Click";
+			string dbMsg = "[Form1]";
+			try {
+				System.Windows.Forms.ToolStripMenuItem item = (System.Windows.Forms.ToolStripMenuItem)sender;
+			//	string message = item.Text + " が押されました";		//削除が入る
+				String titolStr = Constant.ApplicationName;
+				String msgStr = selectedItemText + " を削除しますか";
+				MessageBoxButtons buttns = MessageBoxButtons.YesNo;
+				MessageBoxIcon icon = MessageBoxIcon.Question;
+				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+				dbMsg += ",result=" + result;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// 更新ボタンのクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Update_bt_Click(object sender, EventArgs e)
 		{
 			string TAG = "Update_bt_Click";
@@ -178,10 +239,13 @@ namespace kyokuto1sample {
 			}
 		}
 		//https://stackoverrun.com/ja/q/10041674	//////////////////////////////////////////
-	
-		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
 
-		//ファイル選択ダイアログをボタンで表示させる場合
+		//////////////////////////////////////////   https://stackoverrun.com/ja/q/10041674	   //
+		/// <summary>
+		/// ファイル選択ダイアログをボタンで表示させる場合
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Serect_bt_Click(object sender, EventArgs e)
 		{
 			string TAG = "Serect_bt_Click";
@@ -202,7 +266,12 @@ namespace kyokuto1sample {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
+		
+		/// <summary>
+		/// ドロップされたファイルの処理
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FormMain_DragDrop(object sender, DragEventArgs e)
 		{
 			string TAG = "FormMain_DragDrop";
@@ -235,7 +304,8 @@ namespace kyokuto1sample {
 					icon = MessageBoxIcon.Information;
 				}
 				if(1 == Constant.selectFiles.Count()) {
-					msgStr = Constant.TopFolderName + "に\r\n" + Constant.MakeFolderName + " を作成します";
+					Constant.MakeFolderName = Constant.selectFiles[0];
+						msgStr = Constant.TopFolderName + "に\r\n" + Constant.MakeFolderName + " を作成します";
 				}else{
 					msgStr += "\r\nを登録します";
 				}
@@ -357,6 +427,10 @@ namespace kyokuto1sample {
 		{
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
+		}
+
+		private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
 
 		}
 	}
@@ -370,71 +444,6 @@ Googleドライブ上に「KSクラウド/案件/PR0001」と言うフォルダ�
 そこに添付したいファイルをドラッグ＆ドロップしたら、Googleドライブ上にも同期をされてアップされると言った感じです。
 Windows用のGoogleドライブアプリをインストールしたら、エクスプローラーに追加されるので、そのイメージが近いです。
 	 
-
-		AppProperties	null	System.Collections.Generic.IDictionary<string, string>
-		Capabilities	null	Google.Apis.Drive.v3.Data.File.CapabilitiesData
-		ContentHints	null	Google.Apis.Drive.v3.Data.File.ContentHintsData
-		CopyRequiresWriterPermission	null	bool?
-+		CreatedTime	{2020/04/23 9:35:45}	System.DateTime?
-		CreatedTimeRaw	"2020-04-23T00:35:45.391Z"	string
-		Description	null	string
-		DriveId	null	string
-		ETag	null	string
-		ExplicitlyTrashed	null	bool?
-		ExportLinks	null	System.Collections.Generic.IDictionary<string, string>
-		FileExtension	null	string
-		FolderColorRgb	null	string
-		FullFileExtension	null	string
-		HasAugmentedPermissions	null	bool?
-		HasThumbnail	null	bool?
-		HeadRevisionId	null	string
-		IconLink	null	string
-		Id	"1ufcBIbtN8OhA3Ho6mODw5MVS90u7O8QD"	string
-		ImageMediaMetadata	null	Google.Apis.Drive.v3.Data.File.ImageMediaMetadataData
-		IsAppAuthorized	null	bool?
-		Kind	null	string
-		LastModifyingUser	null	Google.Apis.Drive.v3.Data.User
-		Md5Checksum	null	string
-		MimeType	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"	string
-		ModifiedByMe	null	bool?
-		ModifiedByMeTime	null	System.DateTime?
-		ModifiedByMeTimeRaw	null	string
-+		ModifiedTime	{2020/04/22 15:53:21}	System.DateTime?
-		ModifiedTimeRaw	"2020-04-22T06:53:21.000Z"	string
-		Name	"Googleドライブ連携.xlsx"	string
-		OriginalFilename	null	string
-		OwnedByMe	null	bool?
-		Owners	null	System.Collections.Generic.IList<Google.Apis.Drive.v3.Data.User>
-		Parents	null	System.Collections.Generic.IList<string>
-		PermissionIds	null	System.Collections.Generic.IList<string>
-		Permissions	null	System.Collections.Generic.IList<Google.Apis.Drive.v3.Data.Permission>
-		Properties	null	System.Collections.Generic.IDictionary<string, string>
-		QuotaBytesUsed	null	long?
-		Shared	null	bool?
-		SharedWithMeTime	null	System.DateTime?
-		SharedWithMeTimeRaw	null	string
-		SharingUser	null	Google.Apis.Drive.v3.Data.User
-		ShortcutDetails	null	Google.Apis.Drive.v3.Data.File.ShortcutDetailsData
-		Size	null	long?
-		Spaces	null	System.Collections.Generic.IList<string>
-		Starred	null	bool?
-		TeamDriveId	null	string
-		ThumbnailLink	null	string
-		ThumbnailVersion	null	long?
-		Trashed	false	bool?
-		TrashedTime	null	System.DateTime?
-		TrashedTimeRaw	null	string
-		TrashingUser	null	Google.Apis.Drive.v3.Data.User
-		Version	null	long?
-		VideoMediaMetadata	null	Google.Apis.Drive.v3.Data.File.VideoMediaMetadataData
-		ViewedByMe	null	bool?
-		ViewedByMeTime	null	System.DateTime?
-		ViewedByMeTimeRaw	null	string
-		ViewersCanCopyContent	null	bool?
-		WebContentLink	null	string
-		WebViewLink	null	string
-		WritersCanShare	null	bool?
-
 
 
 	 */

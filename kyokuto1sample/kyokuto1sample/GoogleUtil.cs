@@ -12,10 +12,8 @@ using Google.Apis.Util.Store;
 
 namespace kyokuto1sample {
 	class GoogleUtil {
-		//public String parentFolderId;
-		//public IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
-		//public IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 
+	//登録状況表示
 		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp()
 		{
 			string TAG = "GDFileListUp";
@@ -24,11 +22,13 @@ namespace kyokuto1sample {
 			try {
 				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
-				listRequest.PageSize = 10;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+				listRequest.PageSize = 12;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+				//19で表示されなくなった
 				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
-				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,	modifiedTime,parents,trashed,size)";
+				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,modifiedTime,parents,trashed,size)";
 				//		GDriveFiles.Clear();						//newが使えない？
 				retList = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				dbMsg = "," + retList.Count() +  "件";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -36,7 +36,13 @@ namespace kyokuto1sample {
 			return retList;
 		}
 
-		//フォルダを作る
+		/// <summary>
+		/// フォルダを作る
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="parentFolderId"></param>
+		/// <param name="driveId"></param>
+		/// <returns></returns>
 		public async Task<File> CreateFolder(string name, string parentFolderId = null, string driveId = null)
 		{
 			string TAG = "CreateFolder";
@@ -64,6 +70,12 @@ namespace kyokuto1sample {
 			return newFolder;
 		}
 
+		/// <summary>
+		/// ファイルを一つ登録する
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="parentId"></param>
+		/// <returns></returns>
 		public async Task<File> UploadFile(string filePath, string parentId)
 		{
 			string TAG = "UploadFile";
@@ -85,6 +97,29 @@ namespace kyokuto1sample {
 					var result = await request.UploadAsync();
 					return request.Body;
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				return null;
+			}
+		}
+
+		public async Task<File> DelteItem(string itemName)
+		{
+			string TAG = "DelteItem";
+			string dbMsg = "[GoogleUtil]";
+			try {
+				dbMsg += itemName;
+				string fileId = "";
+
+				if(fileId.Equals("")) {
+					return null;
+				}else{
+					var request = Constant.MyDriveService.Files.Delete(fileId);
+					var result = await request.ExecuteAsync();
+				}
+				MyLog(TAG, dbMsg);
+				return null;
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 				return null;
@@ -109,7 +144,7 @@ namespace kyokuto1sample {
 /*
  https://toconakis.tech/google-drive-rest-api-v3-for-android/
  https://csharp.hotexamples.com/examples/Google.Apis.Drive.v3.Data/File/-/php-file-class-examples.html
- https://developers.google.com/drive/api/v3/quickstart/dotnet
+.NET Quickstart		 https://developers.google.com/drive/api/v3/quickstart/dotnet
  
  
  */

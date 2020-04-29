@@ -66,7 +66,6 @@ namespace kyokuto1sample {
 			return retStr;
 		}
 
-
 		public string GetMimeType(string fileName)
 		{
 			string TAG = "Serect_bt_Click";
