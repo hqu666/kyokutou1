@@ -28,13 +28,60 @@ namespace kyokuto1sample {
 			}
 		}
 
+		//rootName以下で一つ上のフォルダ名を返す
+		public string GetPearentPass(string fileName , string rootName)
+		{
+			string TAG = "GetPearentPass";
+			string dbMsg = "[LocalFileUtil]";
+			string retStr = "";
+			dbMsg += "," + fileName;
+			try {
+				retStr = System.IO.Path.GetDirectoryName(fileName);
+				dbMsg += "," + retStr;
+				string[] delimiter = { rootName };
+				string[] strs = retStr.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+				retStr = strs[1];
+				dbMsg += ">>" + retStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retStr;
+		}
+
+		//一つ上のフォルダ名を返す
+		public string GetFileNameExt(string fileName)
+		{
+			string TAG = "GetFileName";
+			string dbMsg = "[LocalFileUtil]";
+			dbMsg += "," + fileName;
+			string retStr = "";
+			try {
+				retStr = System.IO.Path.GetFileName(fileName);
+				dbMsg += ">>" + retStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retStr;
+		}
+
+
 		public string GetMimeType(string fileName)
 		{
+			string TAG = "Serect_bt_Click";
+			string dbMsg = "[LocalFileUtil]";
 			string mimeType = "application/unknown";
-			string ext = System.IO.Path.GetExtension(fileName).ToLower();
-			Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-			if (regKey != null && regKey.GetValue("Content Type") != null)
-				mimeType = regKey.GetValue("Content Type").ToString();
+			try {
+				dbMsg += "," + fileName;
+				string ext = System.IO.Path.GetExtension(fileName).ToLower();
+				Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
+				if (regKey != null && regKey.GetValue("Content Type") != null)
+					mimeType = regKey.GetValue("Content Type").ToString();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+					MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
 			return mimeType;
 		}
 

@@ -27,7 +27,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.send_bt = new System.Windows.Forms.Button();
 			this.info_lb = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -35,17 +34,6 @@
 			this.update_bt = new System.Windows.Forms.Button();
 			this.google_drive_tree = new System.Windows.Forms.TreeView();
 			this.SuspendLayout();
-			// 
-			// send_bt
-			// 
-			this.send_bt.Location = new System.Drawing.Point(561, 13);
-			this.send_bt.Margin = new System.Windows.Forms.Padding(4);
-			this.send_bt.Name = "send_bt";
-			this.send_bt.Size = new System.Drawing.Size(100, 29);
-			this.send_bt.TabIndex = 1;
-			this.send_bt.Text = "送信";
-			this.send_bt.UseVisualStyleBackColor = true;
-			this.send_bt.Click += new System.EventHandler(this.Send_bt_Click);
 			// 
 			// info_lb
 			// 
@@ -117,7 +105,6 @@
 			this.Controls.Add(this.pass_lv);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.info_lb);
-			this.Controls.Add(this.send_bt);
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "Form1";
 			this.Text = "Googleドライブとの連携";
@@ -128,7 +115,6 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.Button send_bt;
 		private System.Windows.Forms.Label info_lb;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;

@@ -8,6 +8,10 @@ using System.Windows.Forms;
 
 namespace kyokuto1sample {
 	public partial class Form1 : Form {
+		LocalFileUtil LFUtil = new LocalFileUtil();
+		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
+		GoogleUtil GUtil = new GoogleUtil();
+
 		public Form1()
 		{
 			string TAG = "Form1";
@@ -39,7 +43,6 @@ namespace kyokuto1sample {
 			string TAG = "Conect2Drive";
 			string dbMsg = "[Form1]";
 			try {
-				GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
 				String retStr = await GAuthUtil.Authentication("client1sampl.json", "token.json");
 				if(retStr.Equals("")) {
 					//メッセージボックスを表示する
@@ -76,7 +79,6 @@ namespace kyokuto1sample {
 			string TAG = "GoogleFileSarch";
 			string dbMsg = "[GoogleUtil]";
 			try {
-				GoogleUtil GUtil = new GoogleUtil();
 				Constant.GDriveFiles = GUtil.GDFileListUp();
 				Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 
@@ -136,6 +138,7 @@ namespace kyokuto1sample {
 						}
 					}
 					google_drive_tree.EndUpdate();
+					google_drive_tree.ExpandAll();                  // すべてのノードを展開する
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -186,7 +189,6 @@ namespace kyokuto1sample {
 			try {
 				DialogResult dr = openFileDialog1.ShowDialog();
 				if (dr == System.Windows.Forms.DialogResult.OK) {
-					LocalFileUtil LFUtil = new LocalFileUtil();
 					LFUtil.ListUpFolderFiles(openFileDialog1);
 					int fCount = 0;
 					foreach (string str in Constant.selectFiles) {
@@ -217,18 +219,32 @@ namespace kyokuto1sample {
 				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
 				if (0< fileCount) {
 					msgStr = "";
+					Constant.MakeFolderName = "";
 					Constant.selectFiles = new string[fileCount];
 					for (int i = 0; i < files.Length; i++) {
-						string fileName = files[i];
+						string rStr = files[i];
+						if(Constant.MakeFolderName.Equals("")) {
+							Constant.MakeFolderName = LFUtil.GetPearentPass(rStr, Constant.TopFolderName);
+							msgStr += Constant.TopFolderName + "の" + Constant.MakeFolderName + "に\r\n";
+						}
+						string fileName = LFUtil.GetFileNameExt(rStr);
 						Constant.selectFiles[i] = fileName;
 						msgStr += fileName + "\r\n";
 					}
 					buttns = MessageBoxButtons.OKCancel;
 					icon = MessageBoxIcon.Information;
 				}
+				if(1 == Constant.selectFiles.Count()) {
+					msgStr = Constant.TopFolderName + "に\r\n" + Constant.MakeFolderName + " を作成します";
+				}else{
+					msgStr += "\r\nを登録します";
+				}
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 				dbMsg += ",result=" + result;
-
+				if (result == DialogResult.OK) {        //「はい」が選択された時
+					dbMsg += ">>送信";
+					GFilePutAsync();							//送信
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -251,20 +267,18 @@ namespace kyokuto1sample {
 			}
 		}
 
-		//		files_lb.Text = files_lb.Text + "\r\n" + "\r\n" + (selectFiles.Count().ToString) + "件";
-
-		//送信ボタン
-		private void Send_bt_Click(object sender, EventArgs e)
-		{
-			string TAG = "Send_bt_Click";
-			string dbMsg = "[Form1]";
-			try {
-				GFilePutAsync();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-			}
-		}
+		////送信ボタン
+		//private void Send_bt_Click(object sender, EventArgs e)
+		//{
+		//	string TAG = "Send_bt_Click";
+		//	string dbMsg = "[Form1]";
+		//	try {
+		//		GFilePutAsync();
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+		//	}
+		//}
 	
 		//　GoogleDriveへ書き込み
 		public async void GFilePutAsync()
