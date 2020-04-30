@@ -378,9 +378,8 @@ namespace kyokuto1sample {
 				}
 				Conect2DriveAsync(false);
 				Task<string> newFolder = Task<string>.Run(() => GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID));
-			//	var newFolder = GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);  //フォルダを作る
-				string parentId = newFolder.Result;    //Constant.WriteFolderID;
-				dbMsg += ">>[" +  parentId + "]";           // newFolder.Result + "；" ++ newFolder.Name;
+				string parentId = newFolder.Result; 
+				dbMsg += ">>[" +  parentId + "]";
 				if (parentId == null) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
@@ -390,7 +389,7 @@ namespace kyokuto1sample {
 					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 					dbMsg += ",result=" + result;
 				} else {
-					dbMsg += "、" + Constant.selectFiles.Count() + "件";
+					dbMsg += "に" + Constant.selectFiles.Count() + "件";
 					foreach (string str in Constant.selectFiles) {
 						dbMsg += "\r\n" + str;
 						string fullName = System.IO.Path.Combine(Constant.LocalPass, str);

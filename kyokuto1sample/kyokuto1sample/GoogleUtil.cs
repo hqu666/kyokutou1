@@ -54,18 +54,25 @@ namespace kyokuto1sample {
 			File newFolder = new File();
 			try {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
-				File meta = new File();
-				meta.Name = name;
-				meta.MimeType = "application/vnd.google-apps.folder";
-	//			if (driveId != null) meta.DriveId = driveId;
-				if (parentFolderId != null) meta.Parents = new List<string> { parentFolderId };
-				dbMsg += ",meta=" + meta.Parents[0];
-				var request = Constant.MyDriveService.Files.Create(meta);
-				request.Fields = "id, name";
-				dbMsg += ",request=" + request.MethodName;
-				newFolder = await request.ExecuteAsync();
-				retStr = newFolder.Id;
-				dbMsg += ">>[" + retStr + "]" + newFolder.Name;
+				var folder = await FindByName(name, SearchFilter.FOLDER);
+				if(folder == null) {
+					File meta = new File();
+					meta.Name = name;
+					meta.MimeType = "application/vnd.google-apps.folder";
+					//			if (driveId != null) meta.DriveId = driveId;
+					if (parentFolderId != null) meta.Parents = new List<string> { parentFolderId };
+					dbMsg += ",meta=" + meta.Parents[0];
+					var request = Constant.MyDriveService.Files.Create(meta);
+					request.Fields = "id, name";
+					dbMsg += ",request=" + request.MethodName;
+					newFolder = await request.ExecuteAsync();
+					retStr = newFolder.Id;
+					dbMsg += ">>[" + retStr + "]" + newFolder.Name;
+				}else{
+					retStr = folder.Id;
+					dbMsg += ">既存>[" + retStr + "]" + newFolder.Name;
+				}
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -96,13 +103,14 @@ namespace kyokuto1sample {
 					MimeType = MimeStr,
 					Parents = new List<string> { parentId }
 				};
-				MyLog(TAG, dbMsg);
 				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
 					// 新規追加
 					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
 					request.Fields = "id, name";
 					newFile = (File)await request.UploadAsync();
 					retStr = newFile.Id;            //※作成したファイルID
+					dbMsg += ">>" + retStr;
+					MyLog(TAG, dbMsg);
 					return retStr;
 				}
 			} catch (Exception er) {
@@ -133,6 +141,106 @@ namespace kyokuto1sample {
 			}
 		}
 
+		/// <summary>
+		/// フォルダもしくはファイル名称で検索
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="filter"></param>
+		/// <returns></returns>
+		public static async Task<File> FindByName(string name, SearchFilter filter = SearchFilter.NONE)
+		{
+			string TAG = "FindByName";
+			string dbMsg = "[GoogleUtil]";
+			File newFolder = new File();
+			try {
+				dbMsg = "name=" + name;
+				var queries = new List<string>() { $"name = '{ name }'" };
+				if (filter != SearchFilter.NONE) queries.Add(filter.ToQuery());
+				MyLog(TAG, dbMsg);
+				return await FindFile(queries);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// ファイルを一件検索する
+		/// </summary>
+		/// <param name="queries"></param>
+		/// <returns></returns>
+		public static async Task<File> FindFile(List<string> queries)
+		{
+			string TAG = "FindFile";
+			string dbMsg = "[GoogleUtil]";
+			File newFolder = new File();
+			try {
+				dbMsg = "queries=" + queries.ToString();
+				var result = await FindFilesCore(queries);
+				MyLog(TAG, dbMsg);
+				return (result.Count > 0) ? result[0] : null;
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// リストで渡されたファイルを検索する
+		/// </summary>
+		/// <param name="queries"></param>
+		/// <param name="fileFields"></param>
+		/// <returns>List<File></returns>
+		public static async Task<List<File>> FindFiles(List<string> queries, string fileFields)
+		{
+			string TAG = "FindFiles";
+			string dbMsg = "[GoogleUtil]";
+			try {
+				dbMsg = "queries=" + queries.ToString();
+				dbMsg = "fileFields=" + fileFields;
+				MyLog(TAG, dbMsg);
+				return await FindFilesCore(queries, $"nextPageToken, files({fileFields})");
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// ファイル検索の本体
+		/// </summary>
+		/// <param name="queries"></param>
+		/// <param name="fields"></param>
+		/// <returns></returns>
+		static async Task<List<File>> FindFilesCore(List<string> queries, string fields = "nextPageToken, files(id, name)")
+		{
+			string TAG = "FindFilesCore";
+			string dbMsg = "[GoogleUtil]";
+			try {
+				dbMsg = "queries=" + queries.ToString();
+				dbMsg = "fields=" + fields;
+				string nextPageToken = null;
+				queries.Add("trashed = false");
+
+				do {
+					FilesResource.ListRequest request = Constant.MyDriveService.Files.List();
+					request.PageToken = nextPageToken;
+					request.Q = queries.ToQuery();
+					request.Fields = fields;
+					var result = await request.ExecuteAsync();
+					if (result.Files.Count > 0) return result.Files.ToList();
+					nextPageToken = result.NextPageToken;
+				} while (!string.IsNullOrEmpty(nextPageToken));
+				MyLog(TAG, dbMsg);
+				return new List<File>();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				return new List<File>();
+			}
+
+}
+
+
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{
@@ -144,6 +252,38 @@ namespace kyokuto1sample {
 		{
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
+		}
+	}
+
+	//	https://github.com/iwatuki/JuscoBot から
+	public enum SearchFilter {
+		/// <summary>フィルターなし</summary>
+		NONE,
+		/// <summary>フォルダのみ</summary>
+		FOLDER,
+		/// <summary>ファイルのみ</summary>
+		FILE,
+	}
+
+	internal static class GoogleDriveQueryExt {
+		public const string IGNORE_TRASH = "trashed = false";
+
+		static List<string> queries = new List<string> {
+			null,
+			"mimeType = 'application/vnd.google-apps.folder'", // フォルダのみ
+			"mimeType != 'application/vnd.google-apps.folder'", // ファイルのみ
+		};
+
+		public static string ToQuery(this SearchFilter type)
+		{
+			return queries[(int)type];
+		}
+
+		public static string ToQuery(this List<string> queries)
+		{
+			//while(queries.Contains("")) queries.Remove("");
+			//while (queries.Contains(null)) queries.Remove(null);
+			return string.Join(" and ", queries);
 		}
 	}
 
