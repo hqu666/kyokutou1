@@ -102,6 +102,27 @@ namespace kyokuto1sample {
 			return mimeType;
 		}
 
+		/// <summary>
+		/// 指定したファイルがフォルダならtrue
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <returns></returns>
+		public bool IsDirectory(string fileName)
+		{
+			string TAG = "IsFile";
+			string dbMsg = "[LocalFileUtil]";
+			dbMsg += "," + fileName;
+			bool retBool = false;
+			try {
+				retBool = File.GetAttributes(fileName).HasFlag(FileAttributes.Directory);
+				dbMsg += ">>" + retBool;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retBool;
+		}
+
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)
 		{

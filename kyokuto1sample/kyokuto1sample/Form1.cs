@@ -209,8 +209,28 @@ namespace kyokuto1sample {
 				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 				dbMsg += ",result=" + result;
-
+				if (result == DialogResult.Yes) {        //「はい」が選択された時
+					dbMsg += ">削除";
+					SearchFilter findType = SearchFilter.FOLDER;
+					//			string fullName = System.IO.Path.Combine(Constant.LocalPass, selectedItemText);
+					//	ファイルがドロップされなければLocalPassは入らない
+					if (selectedItemText.Contains('.') ){
+						dbMsg += ">ファイル";
+						findType = SearchFilter.FILE;
+					}
+					//string mimeStr = LFUtil.GetMimeType(selectedItemText);
+					//dbMsg += ",mimeStr=" + mimeStr;
+					Task<string> tFile = Task<string>.Run(() => GUtil.FindByName(selectedItemText, findType));
+					if (tFile != null) {
+						string fileId = tFile.Result;
+						dbMsg += ",削除[" + fileId + "]";
+						Task<string> rStr = Task<string>.Run(() => GUtil.DelteItem(fileId));
+						//		var result = await GUtil.DelteItem(fileId);
+						dbMsg += ",result=" + rStr.Result;
+					}
+				}
 				MyLog(TAG, dbMsg);
+				GoogleFileListUp();                     //更新状態を再描画
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -318,7 +338,7 @@ namespace kyokuto1sample {
 				dbMsg += ",result=" + result;
 				if (result == DialogResult.OK) {        //「はい」が選択された時
 					dbMsg += ">>送信";
-					GFilePutAsync();							//送信
+					GFilePut();							//送信
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -359,7 +379,7 @@ namespace kyokuto1sample {
 		/// GoogleDriveへ書き込み
 		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
 		/// </summary>
-		public async void GFilePutAsync()
+		public void GFilePut()
 		{
 			string TAG = "GFilePutAsync";
 			string dbMsg = "[Form1]";
@@ -377,8 +397,8 @@ namespace kyokuto1sample {
 				}
 				Conect2DriveAsync(false);
 				Task<string> newFolder = Task<string>.Run(() => GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID));
-				string parentId = newFolder.Result; 
-				dbMsg += ">>[" +  parentId + "]";
+				string parentId = newFolder.Result;
+				dbMsg += ">>[" + parentId + "]";
 				if (parentId == null) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
@@ -393,14 +413,14 @@ namespace kyokuto1sample {
 						dbMsg += "\r\n" + str;
 						string fullName = System.IO.Path.Combine(Constant.LocalPass, str);
 						dbMsg += ">>" + fullName;
-						Task<string> wrfile =  Task.Run(() => GUtil.UploadFile(str,fullName, parentId));
-				//		var wrfile = await GUtil.UploadFile(fullName, parentId);
+						Task<string> wrfile = Task.Run(() => GUtil.UploadFile(str, fullName, parentId));
+						//		var wrfile = await GUtil.UploadFile(fullName, parentId);
 						String wrfileId = wrfile.Result;
-						dbMsg += ">>[" + wrfileId + "]" ;
+						dbMsg += ">>[" + wrfileId + "]";
 					}
 				}
 				MyLog(TAG, dbMsg);
-				GoogleFileListUp();						//更新状態を再描画
+				GoogleFileListUp();                     //更新状態を再描画
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}

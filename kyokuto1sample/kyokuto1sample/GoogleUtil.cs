@@ -54,7 +54,8 @@ namespace kyokuto1sample {
 			File newFolder = new File();
 			try {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
-				var folder = await FindByName(name, SearchFilter.FOLDER);
+				Task<string> folder = Task<string>.Run(() => FindByName(name, SearchFilter.FOLDER));
+			//	var folder = await FindByName(name, SearchFilter.FOLDER);
 				if(folder == null) {
 					File meta = new File();
 					meta.Name = name;
@@ -69,7 +70,7 @@ namespace kyokuto1sample {
 					retStr = newFolder.Id;
 					dbMsg += ">>[" + retStr + "]" + newFolder.Name;
 				}else{
-					retStr = folder.Id;
+					retStr = folder.Result;
 					dbMsg += ">既存>[" + retStr + "]" + newFolder.Name;
 				}
 
@@ -96,9 +97,10 @@ namespace kyokuto1sample {
 			File newFile = new File();
 			try {
 				dbMsg += "[" + parentId + "]" + fileName + "(" + filePath + ")";
-				var tFile = await FindByName(fileName, SearchFilter.FILE);
+				Task<string> tFile = Task<string>.Run(() => FindByName(fileName, SearchFilter.FILE));
+		//		var tFile = await FindByName(fileName, SearchFilter.FILE);
 				if (tFile != null) {
-					string fileId = tFile.Id;
+					string fileId = tFile.Result;
 					dbMsg += ",削除[" + fileId + "]";
 					var result = DelteItem(fileId);
 					dbMsg += ",result=" + result.Result;
@@ -136,17 +138,12 @@ namespace kyokuto1sample {
 		{
 			string TAG = "DelteItem";
 			string dbMsg = "[GoogleUtil]";
-	//		File dellFile = null;
 			string retStr = null;
 			try {
 				dbMsg += fileId;
-				//if(fileId.Equals("")) {
-				//	return null;
-				//}else{
-					var request = Constant.MyDriveService.Files.Delete(fileId);
-					var result = await request.ExecuteAsync();
-				retStr = result.ToString();
-				//}
+				var request = Constant.MyDriveService.Files.Delete(fileId);
+				var result = await request.ExecuteAsync();
+				retStr = result.ToString();			//※これではIDが返らない
 				dbMsg += ">>" + retStr;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -161,21 +158,24 @@ namespace kyokuto1sample {
 		/// <param name="name"></param>
 		/// <param name="filter"></param>
 		/// <returns>Task<File></returns>
-		public static async Task<File> FindByName(string name, SearchFilter filter = SearchFilter.NONE)
+		public async Task<string> FindByName(string name, SearchFilter filter = SearchFilter.NONE)
 		{
 			string TAG = "FindByName";
 			string dbMsg = "[GoogleUtil]";
-			File newFolder = new File();
+			string retStr = null;
+			File retFile = null;
 			try {
 				dbMsg = "name=" + name;
 				var queries = new List<string>() { $"name = '{ name }'" };
 				if (filter != SearchFilter.NONE) queries.Add(filter.ToQuery());
+				retFile = await FindFile(queries);
+				retStr = retFile.Id;
+				dbMsg = ">>[" + retStr + "]";
 				MyLog(TAG, dbMsg);
-				return await FindFile(queries);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-				return null;
 			}
+			return retStr;
 		}
 
 		/// <summary>
