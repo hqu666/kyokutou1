@@ -359,7 +359,6 @@ namespace kyokuto1sample {
 		/// GoogleDriveへ書き込み
 		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
 		/// </summary>
-		//　
 		public async void GFilePutAsync()
 		{
 			string TAG = "GFilePutAsync";
@@ -394,7 +393,7 @@ namespace kyokuto1sample {
 						dbMsg += "\r\n" + str;
 						string fullName = System.IO.Path.Combine(Constant.LocalPass, str);
 						dbMsg += ">>" + fullName;
-						Task<string> wrfile = Task.Run(() =>  GUtil.UploadFile(fullName, parentId));
+						Task<string> wrfile =  Task.Run(() => GUtil.UploadFile(str,fullName, parentId));
 				//		var wrfile = await GUtil.UploadFile(fullName, parentId);
 						String wrfileId = wrfile.Result;
 						dbMsg += ">>[" + wrfileId + "]" ;

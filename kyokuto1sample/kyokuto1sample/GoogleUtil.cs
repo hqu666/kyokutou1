@@ -84,17 +84,25 @@ namespace kyokuto1sample {
 		/// <summary>
 		/// ファイルを一つ登録する
 		/// </summary>
-		/// <param name="filePath"></param>
-		/// <param name="parentId"></param>
-		/// <returns></returns>
-		public async Task<string> UploadFile(string filePath, string parentId)
+		/// <param name="fileName">単独のファイル名</param>
+		/// <param name="filePath">PC上のフルパス</param>
+		/// <param name="parentId">書込み先のフォルダID</param>
+		/// <returns>作成したファイルのID</returns>
+		public async Task<string> UploadFile(string fileName, string filePath, string parentId)
 		{
 			string TAG = "UploadFile";
 			string dbMsg = "[GoogleUtil]";
 			string retStr = null;
 			File newFile = new File();
 			try {
-				dbMsg += "[" + parentId + "]" + filePath;
+				dbMsg += "[" + parentId + "]" + fileName + "(" + filePath + ")";
+				var tFile = await FindByName(fileName, SearchFilter.FILE);
+				if (tFile != null) {
+					string fileId = tFile.Id;
+					dbMsg += ",削除[" + fileId + "]";
+					var result = DelteItem(fileId);
+					dbMsg += ",result=" + result.Result;
+				}
 				LocalFileUtil LFUtil = new LocalFileUtil();
 				String MimeStr = LFUtil.GetMimeType(filePath);
 				dbMsg += ",Mime=" + MimeStr;
@@ -119,26 +127,32 @@ namespace kyokuto1sample {
 			}
 		}
 
-		public async Task<File> DelteItem(string itemName)
+		/// <summary>
+		/// 指定されたIDのファイルを削除する
+		/// </summary>
+		/// <param name="fileId"></param>
+		/// <returns></returns>
+		public async Task<string> DelteItem(string fileId)
 		{
 			string TAG = "DelteItem";
 			string dbMsg = "[GoogleUtil]";
+	//		File dellFile = null;
+			string retStr = null;
 			try {
-				dbMsg += itemName;
-				string fileId = "";
-
-				if(fileId.Equals("")) {
-					return null;
-				}else{
+				dbMsg += fileId;
+				//if(fileId.Equals("")) {
+				//	return null;
+				//}else{
 					var request = Constant.MyDriveService.Files.Delete(fileId);
 					var result = await request.ExecuteAsync();
-				}
+				retStr = result.ToString();
+				//}
+				dbMsg += ">>" + retStr;
 				MyLog(TAG, dbMsg);
-				return null;
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-				return null;
 			}
+			return retStr;
 		}
 
 		/// <summary>
@@ -146,7 +160,7 @@ namespace kyokuto1sample {
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="filter"></param>
-		/// <returns></returns>
+		/// <returns>Task<File></returns>
 		public static async Task<File> FindByName(string name, SearchFilter filter = SearchFilter.NONE)
 		{
 			string TAG = "FindByName";
