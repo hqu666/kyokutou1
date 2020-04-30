@@ -8,14 +8,16 @@ using System.Windows.Forms;
 
 namespace kyokuto1sample {
 	class LocalFileUtil {
-		public String MakeFolderName = null;
+	//	public String MakeFolderName = null;
 
-		// OpenFileDialogで選択されたファイルのある全ファイル名を返す
+		/// <summary>
+		/// OpenFileDialogで選択されたファイルのある全ファイル名を返す
+		/// </summary>
+		/// <param name="ofDialog"></param>
 		public void ListUpFolderFiles(System.Windows.Forms.OpenFileDialog ofDialog)
 		{
 			string TAG = "Serect_bt_Click";
 			string dbMsg = "[LocalFileUtil]";
-//			String[] selectFiles = null;
 			try {
 				String FolderPath = System.IO.Path.GetDirectoryName(ofDialog.FileName);
 				System.IO.DirectoryInfo dirInfo = System.IO.Directory.GetParent(ofDialog.FileName);
@@ -34,8 +36,7 @@ namespace kyokuto1sample {
 		/// </summary>
 		/// <param name="fileName"></param>
 		/// <param name="rootName"></param>
-		/// <returns></returns>
-		//
+		/// <returns>フォルダ名</returns>
 		public string GetPearentPass(string fileName , string rootName)
 		{
 			string TAG = "GetPearentPass";
@@ -60,8 +61,8 @@ namespace kyokuto1sample {
 		/// <summary>
 		/// パスを抜いてファイル名を返す
 		/// </summary>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
+		/// <param name="fileName">フルパスファイル名</param>
+		/// <returns>パスを除去したファイル名</returns>
 		public string GetFileNameExt(string fileName)
 		{
 			string TAG = "GetFileName";
@@ -78,6 +79,11 @@ namespace kyokuto1sample {
 			return retStr;
 		}
 
+		/// <summary>
+		/// Mimeを返す
+		/// </summary>
+		/// <param name="fileName">調べるファイルのフルパス名</param>
+		/// <returns>Mime</returns>
 		public string GetMimeType(string fileName)
 		{
 			string TAG = "Serect_bt_Click";

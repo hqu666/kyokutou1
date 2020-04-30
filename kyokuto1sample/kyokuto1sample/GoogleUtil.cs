@@ -13,7 +13,10 @@ using Google.Apis.Util.Store;
 namespace kyokuto1sample {
 	class GoogleUtil {
 
-	//登録状況表示
+		/// <summary>
+		/// GoogleDriveの登録状況表示
+		/// </summary>
+		/// <returns></returns>
 		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp()
 		{
 			string TAG = "GDFileListUp";
@@ -22,9 +25,9 @@ namespace kyokuto1sample {
 			try {
 				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
-				listRequest.PageSize = 12;      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
-				//19で表示されなくなった
-				listRequest.Q = "trashed = false"; // 名前が file.txt に一致, ゴミ箱は検索しない
+				listRequest.PageSize = 12;						//返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+																				//※19で表示されなくなった
+				listRequest.Q = "trashed = false";			// ゴミ箱は検索しない
 				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,modifiedTime,parents,trashed,size)";
 				//		GDriveFiles.Clear();						//newが使えない？
 				retList = listRequest.Execute().Files;            // ドライブ内容のリストアップ
@@ -39,14 +42,15 @@ namespace kyokuto1sample {
 		/// <summary>
 		/// フォルダを作る
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="parentFolderId"></param>
-		/// <param name="driveId"></param>
-		/// <returns></returns>
-		public async Task<File> CreateFolder(string name, string parentFolderId = null, string driveId = null)
+		/// <param name="name">表示される名前</param>
+		/// <param name="parentFolderId">作成する位置</param>
+		/// <param name="driveId">できれば指定</param>
+		/// <returns>作成したフォルダのID</returns>
+		public async Task<string> CreateFolder(string name, string parentFolderId = null, string driveId = null)
 		{
 			string TAG = "CreateFolder";
 			string dbMsg = "[GoogleUtil]";
+			string retStr = null;
 			File newFolder = new File();
 			try {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
@@ -60,14 +64,14 @@ namespace kyokuto1sample {
 				request.Fields = "id, name";
 				dbMsg += ",request=" + request.MethodName;
 				newFolder = await request.ExecuteAsync();
-				//	The service drive has thrown an exception: Google.GoogleApiException: Google.Apis.Requests.RequestError
-				//	Insufficient Permission: Request had insufficient authentication scopes. [403]
-				dbMsg += ">>[" + newFolder.Id + "]" + newFolder.Name;
+				retStr = newFolder.Id;
+				dbMsg += ">>[" + retStr + "]" + newFolder.Name;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				return null;
 			}
-			return newFolder;
+			return retStr;
 		}
 
 		/// <summary>
@@ -76,10 +80,12 @@ namespace kyokuto1sample {
 		/// <param name="filePath"></param>
 		/// <param name="parentId"></param>
 		/// <returns></returns>
-		public async Task<File> UploadFile(string filePath, string parentId)
+		public async Task<string> UploadFile(string filePath, string parentId)
 		{
 			string TAG = "UploadFile";
 			string dbMsg = "[GoogleUtil]";
+			string retStr = null;
+			File newFile = new File();
 			try {
 				dbMsg += "[" + parentId + "]" + filePath;
 				LocalFileUtil LFUtil = new LocalFileUtil();
@@ -95,10 +101,10 @@ namespace kyokuto1sample {
 					// 新規追加
 					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
 					request.Fields = "id, name";
-					var result = await request.UploadAsync();
-					return request.Body;
+					newFile = (File)await request.UploadAsync();
+					retStr = newFile.Id;            //※作成したファイルID
+					return retStr;
 				}
-				//
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 				return null;

@@ -22,7 +22,7 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				InitializeComponent();
-				MyLog(TAG, dbMsg);
+		//		MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -35,13 +35,16 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				Conect2DriveAsync(true);
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
 
-		// 接続
+		/// <summary>
+		/// 接続
+		/// </summary>
+		/// <param name="isListUp"></param>
 		private async void Conect2DriveAsync(Boolean isListUp)
 		{
 			string TAG = "Conect2Drive";
@@ -78,7 +81,9 @@ namespace kyokuto1sample {
 			}
 		}
 
-		//treeViewへGoogleDriveの登録状態表示
+		/// <summary>
+		/// treeViewへGoogleDriveの登録状態表示
+		/// </summary>
 		public void GoogleFileListUp()
 		{
 			string TAG = "GoogleFileSarch";
@@ -197,7 +202,6 @@ namespace kyokuto1sample {
 			string dbMsg = "[Form1]";
 			try {
 				System.Windows.Forms.ToolStripMenuItem item = (System.Windows.Forms.ToolStripMenuItem)sender;
-			//	string message = item.Text + " が押されました";		//削除が入る
 				String titolStr = Constant.ApplicationName;
 				String msgStr = selectedItemText + " を削除しますか";
 				MessageBoxButtons buttns = MessageBoxButtons.YesNo;
@@ -338,7 +342,7 @@ namespace kyokuto1sample {
 			}
 		}
 
-		////送信ボタン
+		////送信ボタン;保留
 		//private void Send_bt_Click(object sender, EventArgs e)
 		//{
 		//	string TAG = "Send_bt_Click";
@@ -350,8 +354,12 @@ namespace kyokuto1sample {
 		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 		//	}
 		//}
-	
-		//　GoogleDriveへ書き込み
+
+		/// <summary>
+		/// GoogleDriveへ書き込み
+		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
+		/// </summary>
+		//　
 		public async void GFilePutAsync()
 		{
 			string TAG = "GFilePutAsync";
@@ -369,18 +377,29 @@ namespace kyokuto1sample {
 					return;
 				}
 				Conect2DriveAsync(false);
-				var newFolder = GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);  //フォルダを作る
-				string parentId = newFolder.Id.ToString();
-				dbMsg += ">>[" + newFolder.Id + "；" + parentId + "]";           // + newFolder.Name;
-
-				dbMsg += "、" + Constant.selectFiles.Count() + "件";
-				foreach (string str in Constant.selectFiles) {
-					dbMsg += "\r\n" + str;
-					string fullName =   System.IO.Path.Combine(Constant.LocalPass, str); 
-					dbMsg += ">>" + fullName;
-					var wrfile = await GUtil.UploadFile(fullName, parentId);
-					String wrfileId = wrfile.Id;
-					dbMsg += ">>[" + wrfileId + "]" + wrfile.Name;
+				Task<string> newFolder = Task<string>.Run(() => GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID));
+			//	var newFolder = GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);  //フォルダを作る
+				string parentId = newFolder.Result;    //Constant.WriteFolderID;
+				dbMsg += ">>[" +  parentId + "]";           // newFolder.Result + "；" ++ newFolder.Name;
+				if (parentId == null) {
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+				} else {
+					dbMsg += "、" + Constant.selectFiles.Count() + "件";
+					foreach (string str in Constant.selectFiles) {
+						dbMsg += "\r\n" + str;
+						string fullName = System.IO.Path.Combine(Constant.LocalPass, str);
+						dbMsg += ">>" + fullName;
+						Task<string> wrfile = Task.Run(() =>  GUtil.UploadFile(fullName, parentId));
+				//		var wrfile = await GUtil.UploadFile(fullName, parentId);
+						String wrfileId = wrfile.Result;
+						dbMsg += ">>[" + wrfileId + "]" ;
+					}
 				}
 				MyLog(TAG, dbMsg);
 				GoogleFileListUp();						//更新状態を再描画
