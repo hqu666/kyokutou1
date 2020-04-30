@@ -55,8 +55,9 @@ namespace kyokuto1sample {
 			try {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
 				Task<string> folder = Task<string>.Run(() => FindByName(name, SearchFilter.FOLDER));
+				string folderId = folder.Result;
 			//	var folder = await FindByName(name, SearchFilter.FOLDER);
-				if(folder == null) {
+				if (folderId == null) {
 					File meta = new File();
 					meta.Name = name;
 					meta.MimeType = "application/vnd.google-apps.folder";
@@ -70,7 +71,7 @@ namespace kyokuto1sample {
 					retStr = newFolder.Id;
 					dbMsg += ">>[" + retStr + "]" + newFolder.Name;
 				}else{
-					retStr = folder.Result;
+					retStr = folderId;
 					dbMsg += ">既存>[" + retStr + "]" + newFolder.Name;
 				}
 

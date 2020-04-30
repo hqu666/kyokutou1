@@ -45,7 +45,13 @@ namespace kyokuto1sample {
 		/// 接続
 		/// </summary>
 		/// <param name="isListUp"></param>
-		private async void Conect2DriveAsync(Boolean isListUp)
+		private async 
+		/// <summary>
+		/// 接続
+		/// </summary>
+		/// <param name="isListUp"></param>
+		Task
+Conect2DriveAsync(Boolean isListUp)
 		{
 			string TAG = "Conect2Drive";
 			string dbMsg = "[Form1]";
@@ -338,7 +344,7 @@ namespace kyokuto1sample {
 				dbMsg += ",result=" + result;
 				if (result == DialogResult.OK) {        //「はい」が選択された時
 					dbMsg += ">>送信";
-					GFilePut();							//送信
+					GFilePutAsync();							//送信
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -379,7 +385,7 @@ namespace kyokuto1sample {
 		/// GoogleDriveへ書き込み
 		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
 		/// </summary>
-		public void GFilePut()
+		public async void GFilePutAsync()
 		{
 			string TAG = "GFilePutAsync";
 			string dbMsg = "[Form1]";
@@ -395,7 +401,7 @@ namespace kyokuto1sample {
 					dbMsg += ",result=" + result;
 					return;
 				}
-				Conect2DriveAsync(false);
+				await Conect2DriveAsync(false);
 				Task<string> newFolder = Task<string>.Run(() => GUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID));
 				string parentId = newFolder.Result;
 				dbMsg += ">>[" + parentId + "]";
