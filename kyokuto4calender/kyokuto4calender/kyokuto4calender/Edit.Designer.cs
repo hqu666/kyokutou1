@@ -46,6 +46,7 @@
 			this.titol_tb.Size = new System.Drawing.Size(618, 19);
 			this.titol_tb.TabIndex = 1;
 			this.titol_tb.Text = "タイトルを入力して下さい";
+			this.titol_tb.TextChanged += new System.EventHandler(this.titolbt_TextChanged);
 			// 
 			// Edit
 			// 
@@ -56,6 +57,7 @@
 			this.Controls.Add(this.back_bt);
 			this.Name = "Edit";
 			this.Text = "Edit";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Edit_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
