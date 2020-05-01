@@ -26,7 +26,7 @@
 		private void InitializeComponent()
 		{
 			this.back_bt = new System.Windows.Forms.Button();
-			this.sendData_tb = new System.Windows.Forms.TreeView();
+			this.titol_tb = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// back_bt
@@ -39,29 +39,31 @@
 			this.back_bt.UseVisualStyleBackColor = true;
 			this.back_bt.Click += new System.EventHandler(this.back_bt_Click);
 			// 
-			// sendData_tb
+			// titol_tb
 			// 
-			this.sendData_tb.Location = new System.Drawing.Point(40, 64);
-			this.sendData_tb.Name = "sendData_tb";
-			this.sendData_tb.Size = new System.Drawing.Size(731, 24);
-			this.sendData_tb.TabIndex = 1;
+			this.titol_tb.Location = new System.Drawing.Point(34, 16);
+			this.titol_tb.Name = "titol_tb";
+			this.titol_tb.Size = new System.Drawing.Size(618, 19);
+			this.titol_tb.TabIndex = 1;
+			this.titol_tb.Text = "タイトルを入力して下さい";
 			// 
 			// Edit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Controls.Add(this.sendData_tb);
+			this.Controls.Add(this.titol_tb);
 			this.Controls.Add(this.back_bt);
 			this.Name = "Edit";
 			this.Text = "Edit";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
 		private System.Windows.Forms.Button back_bt;
-		private System.Windows.Forms.TreeView sendData_tb;
+		private System.Windows.Forms.TextBox titol_tb;
 	}
 }

@@ -12,6 +12,8 @@ namespace kyokuto4calender {
 	public partial class Edit : Form {
 		public Form1 mainForm;
 		private string sendData = "";
+		private string titolStr = "";
+
 
 		public Edit()
 		{
@@ -21,18 +23,19 @@ namespace kyokuto4calender {
 		private void back_bt_Click(object sender, EventArgs e)
 		{
 			if (mainForm != null) {
-				mainForm.ReceiveData = "Duck";
+				mainForm.ReceiveData = titolStr;
+				this.Close();
 			}
 
 		}
 
-		public string SendData {
+		public string TitolStr {
 			set {
-				sendData = value;
-				sendData_tb.Text = sendData;
+				titolStr = value;
+				titol_tb.Text = titolStr;
 			}
 			get {
-				return sendData;
+				return titolStr;
 			}
 		}
 
