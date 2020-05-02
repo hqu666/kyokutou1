@@ -41,10 +41,8 @@ namespace kyokuto4calender {
 		{
 			string TAG = "GetUserCredential";
 			string dbMsg = "[GoogleAuthUtil]";
-		//	var streamt = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
 			dbMsg += ",jsonPath=" + jsonPath;
 			MyLog(TAG, dbMsg);
-
 			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 				return GoogleWebAuthorizationBroker.AuthorizeAsync(
 					GoogleClientSecrets.Load(stream).Secrets,

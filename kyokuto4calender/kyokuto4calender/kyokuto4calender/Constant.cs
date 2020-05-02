@@ -26,6 +26,7 @@ namespace kyokuto4calender {
 
 		public static UserCredential MyCredential;
 		public static CalendarService MyCalendarService;        // Drive API service
+		public static IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent;//カレンダーの予定
 
 		public static DriveService MyDriveService;        // Drive API service
 		public static String parentFolderId;
