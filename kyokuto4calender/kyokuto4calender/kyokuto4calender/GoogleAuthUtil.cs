@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
@@ -20,8 +21,9 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleAuthUtil]";
 			string retStr = "";
 			try {
+				dbMsg += ",jsonPath=" + jsonPath;
 				Constant.MyCredential = await GetUserCredential(jsonPath, tokenFolderPath);
-				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+				Constant.MyCalendarService = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCredential,
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,                                           //追加
@@ -34,13 +36,19 @@ namespace kyokuto4calender {
 			return retStr;
 		}
 
-		// DriveServiceを作る
+		// Serviceを作る
 		static Task<UserCredential> GetUserCredential(string jsonPath, string tokenFolderPath)
 		{
+			string TAG = "GetUserCredential";
+			string dbMsg = "[GoogleAuthUtil]";
+		//	var streamt = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+			dbMsg += ",jsonPath=" + jsonPath;
+			MyLog(TAG, dbMsg);
+
 			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 				return GoogleWebAuthorizationBroker.AuthorizeAsync(
 					GoogleClientSecrets.Load(stream).Secrets,
-					Constant.DriveScopes,
+					Constant.CalenderScopes,
 					"user",
 					CancellationToken.None,
 					new FileDataStore(tokenFolderPath, true));
