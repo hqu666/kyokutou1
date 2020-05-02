@@ -132,72 +132,6 @@ namespace kyokuto4calender {
 				} else {
 					msgStr = "カレンダーの情報を取得できませんでした";
 				}
-				/*
-					Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
-
-					if (Constant.GDriveFiles != null && Constant.GDriveFiles.Count > 0) {
-						// フォルダIDの取得	;一行目にはフォルダ名/二行目以降はファイル情報
-						Constant.parentFolderId = Constant.GDriveFiles.First().Id;
-						String folderName = Constant.GDriveFiles.First().Name;
-						//フォルダ階層の取得
-						foreach (var file in Constant.GDriveFiles) {
-							String fName = file.Name;
-							String fId = file.Id;
-							if (file.Parents != null) {
-								String PId = file.Parents[0];
-								String fMimeType = file.MimeType;
-								DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-								if (fName.Equals(Constant.TopFolderName)) {
-									//最上位にするフォルダと
-									Constant.TopFolderID = fId;
-									Constant.RootFolderID = PId;
-									info_lb.Text = fName;                                           //照合が合っているか確認の為
-								} else if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-									Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
-								}
-							}
-						}
-						dbMsg += "[top=" + Constant.TopFolderID + "]";
-						dbMsg += "[root=" + Constant.RootFolderID + "]";
-						dbMsg += ",folders" + Constant.GDriveFolders.Count() + "件";
-						int nodeCount = 0;
-						google_drive_tree.Nodes.Clear();                    //viewを初期化して
-						google_drive_tree.BeginUpdate();                    //	更新開始
-						foreach (var folder in Constant.GDriveFolders) {
-							dbMsg += "\r\nfolder=" + folder.Key;
-							dbMsg += ":" + folder.Value.Name;
-							dbMsg += ":" + folder.Value.Parents[0];
-							if (folder.Value.Parents[0].Equals(Constant.TopFolderID)) {
-								google_drive_tree.Nodes.Add(folder.Value.Name);
-								foreach (var file in Constant.GDriveFiles) {
-									String PId = file.Parents[0];
-									if (folder.Key.Equals(PId)) {
-										String fName = file.Name;
-										String fId = file.Id;
-										String fMimeType = file.MimeType;
-
-										if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-										} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
-										} else if (file.Trashed == true) {
-										} else if (file.Size == null) {
-										} else {
-											DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-											long fSize = (long)file.Size;
-											google_drive_tree.Nodes[nodeCount].Nodes.Add(fName + ItemsSeparator + fModifiedTime + "       \t\t\t: " + file.Size);
-										}
-									}
-								}
-								nodeCount++;
-							} else {
-								dbMsg += ">>除外";
-							}
-						}
-						google_drive_tree.EndUpdate();
-						google_drive_tree.ExpandAll();                  // すべてのノードを展開する
-					} else {
-					}]
-					*/
-				//メッセージボックスを表示する
 				if(! msgStr.Equals("")) {
 					dbMsg += ",msgStr=" + msgStr;
 					MessageBoxButtons buttns = MessageBoxButtons.OK;
@@ -213,6 +147,43 @@ namespace kyokuto4calender {
 			}
 		}
 
+		/// <summary>
+		/// リストアイテムの選択
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		//private void event_lv_ItemCheck(object sender, ItemCheckEventArgs e)
+		//{
+
+		//}
+
+		/// <summary>
+		/// リストのダブルクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void event_lv_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			string TAG = "event_lv_SelectedIndexChanged";
+			string dbMsg = "[Form1]";
+			try {
+				int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
+				dbMsg += ",Index=" + selectedIndex  ;
+				Google.Apis.Calendar.v3.Data.Event eventItem = Constant.GCalenderEvent[selectedIndex];
+				string startDT = eventItem.Start.DateTime.ToString();
+				dbMsg += "\r\n" + startDT;
+				string endDT = eventItem.End.DateTime.ToString();
+				dbMsg += "～" + endDT;
+				if (String.IsNullOrEmpty(startDT)) {
+					startDT = eventItem.Start.Date;
+				}
+				string Summary = eventItem.Summary;
+				dbMsg += "," + Summary;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
 
 
 
@@ -231,8 +202,24 @@ namespace kyokuto4calender {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
-
 		}
+
+		/// <summary>
+		/// カレンダークリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void event_mc_DateChanged(object sender, DateRangeEventArgs e)
+		{
+			string TAG = "event_mc_DateChanged";
+			string dbMsg = "[Form1]";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
 		public string ReceiveData {
 			set {
 				receiveData = value;
@@ -256,10 +243,10 @@ namespace kyokuto4calender {
 			Util.MyErrorLog(TAG, dbMsg);
 		}
 
-		private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-		{
+		//private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		//{
 
-		}
+		//}
 	}
 }
 /*

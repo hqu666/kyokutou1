@@ -28,12 +28,12 @@
 			this.edit_bt = new System.Windows.Forms.Button();
 			this.receiveData_lv = new System.Windows.Forms.Label();
 			this.event_lv = new System.Windows.Forms.ListView();
-			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+			this.event_mc = new System.Windows.Forms.MonthCalendar();
 			this.SuspendLayout();
 			// 
 			// edit_bt
 			// 
-			this.edit_bt.Location = new System.Drawing.Point(728, 13);
+			this.edit_bt.Location = new System.Drawing.Point(11, 233);
 			this.edit_bt.Margin = new System.Windows.Forms.Padding(4);
 			this.edit_bt.Name = "edit_bt";
 			this.edit_bt.Size = new System.Drawing.Size(100, 29);
@@ -45,7 +45,7 @@
 			// receiveData_lv
 			// 
 			this.receiveData_lv.AutoSize = true;
-			this.receiveData_lv.Location = new System.Drawing.Point(272, 27);
+			this.receiveData_lv.Location = new System.Drawing.Point(13, 372);
 			this.receiveData_lv.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.receiveData_lv.Name = "receiveData_lv";
 			this.receiveData_lv.Size = new System.Drawing.Size(125, 15);
@@ -55,25 +55,26 @@
 			// event_lv
 			// 
 			this.event_lv.HideSelection = false;
-			this.event_lv.Location = new System.Drawing.Point(266, 67);
+			this.event_lv.Location = new System.Drawing.Point(271, 13);
 			this.event_lv.Name = "event_lv";
 			this.event_lv.Size = new System.Drawing.Size(562, 483);
 			this.event_lv.TabIndex = 2;
 			this.event_lv.UseCompatibleStateImageBehavior = false;
+			this.event_lv.SelectedIndexChanged += new System.EventHandler(this.event_lv_SelectedIndexChanged);
 			// 
-			// dateTimePicker1
+			// event_mc
 			// 
-			this.dateTimePicker1.Location = new System.Drawing.Point(23, 67);
-			this.dateTimePicker1.Name = "dateTimePicker1";
-			this.dateTimePicker1.Size = new System.Drawing.Size(200, 22);
-			this.dateTimePicker1.TabIndex = 3;
+			this.event_mc.Location = new System.Drawing.Point(11, 13);
+			this.event_mc.Name = "event_mc";
+			this.event_mc.TabIndex = 4;
+			this.event_mc.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.event_mc_DateChanged);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(845, 562);
-			this.Controls.Add(this.dateTimePicker1);
+			this.ClientSize = new System.Drawing.Size(844, 508);
+			this.Controls.Add(this.event_mc);
 			this.Controls.Add(this.event_lv);
 			this.Controls.Add(this.receiveData_lv);
 			this.Controls.Add(this.edit_bt);
@@ -90,7 +91,7 @@
 		private System.Windows.Forms.Button edit_bt;
 		private System.Windows.Forms.Label receiveData_lv;
 		private System.Windows.Forms.ListView event_lv;
-		private System.Windows.Forms.DateTimePicker dateTimePicker1;
+		private System.Windows.Forms.MonthCalendar event_mc;
 	}
 }
 
