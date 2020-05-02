@@ -35,7 +35,7 @@ namespace kyokuto4calender {
 				request.TimeMin = DateTime.Now;
 				request.ShowDeleted = false;
 				request.SingleEvents = true;
-				request.MaxResults = 10;
+				request.MaxResults = 1000;
 				request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 				Events events = request.Execute();				//取得実行
 				if (events.Items != null && events.Items.Count > 0) {

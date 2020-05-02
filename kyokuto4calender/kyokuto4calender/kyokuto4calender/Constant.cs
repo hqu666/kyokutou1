@@ -18,6 +18,7 @@ namespace kyokuto4calender {
 																			//0502	
 																			//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
 																			//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
+		public static string CalenderSummary = "abcbdffghaiklnm@gmail.com";   
 
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";

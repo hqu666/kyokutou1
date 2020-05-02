@@ -16,7 +16,7 @@ namespace kyokuto4calender {
 		GoogleUtil GUtil = new GoogleUtil();
 
 		Edit editForm;
-		private string receiveData = "";
+	//	private string receiveData = "";
 
 		ColumnHeader columnName = new ColumnHeader();
 		ColumnHeader columnType = new ColumnHeader();
@@ -28,8 +28,8 @@ namespace kyokuto4calender {
 			string dbMsg = "[Form1]";
 			try {
 				InitializeComponent();
-				editForm = new Edit();
-				editForm.mainForm = this;
+				//editForm = new Edit();
+				//editForm.mainForm = this;
 				MyLog(TAG, dbMsg);
 				Conect2DriveAsync(true);
 			} catch (Exception er) {
@@ -148,14 +148,40 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// リストアイテムの選択
+		/// リストアイテムのダブルクリック
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		//private void event_lv_ItemCheck(object sender, ItemCheckEventArgs e)
-		//{
+		private void event_lv_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			string TAG = "event_lv_MouseDoubleClick";
+			string dbMsg = "[Form1]";
+			try {
+				int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
+				dbMsg += ",Index=" + selectedIndex;
+				Google.Apis.Calendar.v3.Data.Event eventItem = Constant.GCalenderEvent[selectedIndex];
+				string startDT = eventItem.Start.DateTime.ToString();
+				dbMsg += ")" + startDT;
+				string endDT = eventItem.End.DateTime.ToString();
+				dbMsg += "～" + endDT;
+				if (String.IsNullOrEmpty(startDT)) {
+					startDT = eventItem.Start.Date;
+				}
+				string Summary = eventItem.Summary;
+				dbMsg += "," + Summary;
+				if (editForm == null) {
+					dbMsg = "Editを再生成";
+					editForm = new Edit();
+					editForm.mainForm = this;
+				}
+				editForm.eventItem = eventItem;
+				editForm.Show();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
 
-		//}
 
 		/// <summary>
 		/// リストのダブルクリック
@@ -167,24 +193,31 @@ namespace kyokuto4calender {
 			string TAG = "event_lv_SelectedIndexChanged";
 			string dbMsg = "[Form1]";
 			try {
-				int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
-				dbMsg += ",Index=" + selectedIndex  ;
-				Google.Apis.Calendar.v3.Data.Event eventItem = Constant.GCalenderEvent[selectedIndex];
-				string startDT = eventItem.Start.DateTime.ToString();
-				dbMsg += "\r\n" + startDT;
-				string endDT = eventItem.End.DateTime.ToString();
-				dbMsg += "～" + endDT;
-				if (String.IsNullOrEmpty(startDT)) {
-					startDT = eventItem.Start.Date;
-				}
-				string Summary = eventItem.Summary;
-				dbMsg += "," + Summary;
+				//int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
+				//dbMsg += ",Index=" + selectedIndex  ;
+				//Google.Apis.Calendar.v3.Data.Event eventItem = Constant.GCalenderEvent[selectedIndex];
+				//string startDT = eventItem.Start.DateTime.ToString();
+				//dbMsg += ")" + startDT;
+				//string endDT = eventItem.End.DateTime.ToString();
+				//dbMsg += "～" + endDT;
+				//if (String.IsNullOrEmpty(startDT)) {
+				//	startDT = eventItem.Start.Date;
+				//}
+				//string Summary = eventItem.Summary;
+				//dbMsg += "," + Summary;
+
+				//if (editForm == null) {
+				//	dbMsg = "Editを再生成";
+				//	editForm = new Edit();
+				//	editForm.mainForm = this;
+				//}
+				//editForm.eventItem = eventItem;
+				//editForm.Show();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
 
 
 		private void edit_bt_Click(object sender, EventArgs e)
@@ -220,16 +253,6 @@ namespace kyokuto4calender {
 			}
 		}
 
-		public string ReceiveData {
-			set {
-				receiveData = value;
-				receiveData_lv.Text = receiveData;
-			}
-			get {
-				return receiveData;
-			}
-		}
-
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{
@@ -243,10 +266,6 @@ namespace kyokuto4calender {
 			Util.MyErrorLog(TAG, dbMsg);
 		}
 
-		//private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-		//{
-
-		//}
 	}
 }
 /*
