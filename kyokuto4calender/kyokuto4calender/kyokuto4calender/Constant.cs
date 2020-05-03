@@ -18,7 +18,7 @@ namespace kyokuto4calender {
 																			//0502	
 																			//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
 																			//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
-		public static UserCredential MyCredential;
+		public static UserCredential MyCalendarCredential;
 		public static CalendarService MyCalendarService;        // Drive API service
 		
 		public static IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent;//カレンダーの予定
@@ -31,7 +31,7 @@ namespace kyokuto4calender {
 		public static string RootFolderID = "";            //保存先サーバのルートフォルダID
 		public static string LocalPass = "";            //送信元フォルダ
 
-
+		public static UserCredential MyDriveCredential;
 		public static DriveService MyDriveService;        // Drive API service
 		public static String parentFolderId;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;

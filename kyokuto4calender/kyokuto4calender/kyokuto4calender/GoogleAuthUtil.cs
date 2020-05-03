@@ -22,9 +22,15 @@ namespace kyokuto4calender {
 			string retStr = "";
 			try {
 				dbMsg += ",jsonPath=" + jsonPath;
-				Constant.MyCredential = await GetUserCredential(jsonPath, tokenFolderPath);
+				Constant.MyCalendarCredential = await GetCalendarCredential(jsonPath, tokenFolderPath);
 				Constant.MyCalendarService = new CalendarService(new BaseClientService.Initializer() {
-					HttpClientInitializer = Constant.MyCredential,
+					HttpClientInitializer = Constant.MyCalendarCredential,
+					ApplicationName = Constant.ApplicationName,
+					ApiKey = Constant.APIKey,                                           //追加
+				});
+				Constant.MyDriveCredential = await GetDriveCredential(jsonPath, tokenFolderPath);
+				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyDriveCredential,
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,                                           //追加
 				});
@@ -37,7 +43,7 @@ namespace kyokuto4calender {
 		}
 
 		// Serviceを作る
-		static Task<UserCredential> GetUserCredential(string jsonPath, string tokenFolderPath)
+		static Task<UserCredential> GetCalendarCredential(string jsonPath, string tokenFolderPath)
 		{
 			string TAG = "GetUserCredential";
 			string dbMsg = "[GoogleAuthUtil]";
@@ -47,6 +53,19 @@ namespace kyokuto4calender {
 				return GoogleWebAuthorizationBroker.AuthorizeAsync(
 					GoogleClientSecrets.Load(stream).Secrets,
 					Constant.CalenderScopes,
+					"user",
+					CancellationToken.None,
+					new FileDataStore(tokenFolderPath, true));
+			}
+		}
+
+		// DriveServiceを作る
+		static Task<UserCredential> GetDriveCredential(string jsonPath, string tokenFolderPath)
+		{
+			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
+				return GoogleWebAuthorizationBroker.AuthorizeAsync(
+					GoogleClientSecrets.Load(stream).Secrets,
+					Constant.DriveScopes,
 					"user",
 					CancellationToken.None,
 					new FileDataStore(tokenFolderPath, true));

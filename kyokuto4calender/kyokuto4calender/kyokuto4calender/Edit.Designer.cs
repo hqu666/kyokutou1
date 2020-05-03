@@ -31,24 +31,17 @@
 			this.end_dtp = new System.Windows.Forms.DateTimePicker();
 			this.label1 = new System.Windows.Forms.Label();
 			this.description_tb = new System.Windows.Forms.TextBox();
-			this.ColorId_tb = new System.Windows.Forms.TextBox();
 			this.location_tb = new System.Windows.Forms.TextBox();
-			this.status_tb = new System.Windows.Forms.TextBox();
 			this.recurringEventId_lb = new System.Windows.Forms.Label();
 			this.Id_lb = new System.Windows.Forms.Label();
-			this.attendees_lv = new System.Windows.Forms.ListView();
-			this.conferenceData_vb = new System.Windows.Forms.TextBox();
 			this.icaluid_lb = new System.Windows.Forms.Label();
-			this.organizer_dtp = new System.Windows.Forms.DateTimePicker();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.comboBox2 = new System.Windows.Forms.ComboBox();
 			this.ColorId_cb = new System.Windows.Forms.ComboBox();
 			this.owner_adress_lb = new System.Windows.Forms.Label();
-			this.comboBox3 = new System.Windows.Forms.ComboBox();
-			this.comboBox4 = new System.Windows.Forms.ComboBox();
 			this.send_web_bt = new System.Windows.Forms.Button();
 			this.delat_bt = new System.Windows.Forms.Button();
+			this.description_wb = new System.Windows.Forms.WebBrowser();
 			this.SuspendLayout();
 			// 
 			// back_bt
@@ -68,7 +61,7 @@
 			this.summary_tb.Location = new System.Drawing.Point(19, 59);
 			this.summary_tb.Margin = new System.Windows.Forms.Padding(4);
 			this.summary_tb.Name = "summary_tb";
-			this.summary_tb.Size = new System.Drawing.Size(855, 37);
+			this.summary_tb.Size = new System.Drawing.Size(849, 37);
 			this.summary_tb.TabIndex = 1;
 			this.summary_tb.Text = "タイトルを入力して下さい";
 			// 
@@ -97,38 +90,24 @@
 			// 
 			// description_tb
 			// 
-			this.description_tb.Location = new System.Drawing.Point(19, 297);
+			this.description_tb.Location = new System.Drawing.Point(19, 208);
 			this.description_tb.Multiline = true;
 			this.description_tb.Name = "description_tb";
 			this.description_tb.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.description_tb.Size = new System.Drawing.Size(853, 318);
+			this.description_tb.Size = new System.Drawing.Size(849, 249);
 			this.description_tb.TabIndex = 5;
-			// 
-			// ColorId_tb
-			// 
-			this.ColorId_tb.Location = new System.Drawing.Point(526, 221);
-			this.ColorId_tb.Name = "ColorId_tb";
-			this.ColorId_tb.Size = new System.Drawing.Size(100, 22);
-			this.ColorId_tb.TabIndex = 6;
 			// 
 			// location_tb
 			// 
 			this.location_tb.Location = new System.Drawing.Point(19, 159);
 			this.location_tb.Name = "location_tb";
-			this.location_tb.Size = new System.Drawing.Size(855, 22);
+			this.location_tb.Size = new System.Drawing.Size(849, 22);
 			this.location_tb.TabIndex = 7;
-			// 
-			// status_tb
-			// 
-			this.status_tb.Location = new System.Drawing.Point(526, 255);
-			this.status_tb.Name = "status_tb";
-			this.status_tb.Size = new System.Drawing.Size(100, 22);
-			this.status_tb.TabIndex = 8;
 			// 
 			// recurringEventId_lb
 			// 
 			this.recurringEventId_lb.AutoSize = true;
-			this.recurringEventId_lb.Location = new System.Drawing.Point(16, 184);
+			this.recurringEventId_lb.Location = new System.Drawing.Point(28, 100);
 			this.recurringEventId_lb.Name = "recurringEventId_lb";
 			this.recurringEventId_lb.Size = new System.Drawing.Size(43, 15);
 			this.recurringEventId_lb.TabIndex = 9;
@@ -137,54 +116,20 @@
 			// Id_lb
 			// 
 			this.Id_lb.AutoSize = true;
-			this.Id_lb.Location = new System.Drawing.Point(169, 224);
+			this.Id_lb.Location = new System.Drawing.Point(258, 100);
 			this.Id_lb.Name = "Id_lb";
 			this.Id_lb.Size = new System.Drawing.Size(43, 15);
 			this.Id_lb.TabIndex = 10;
 			this.Id_lb.Text = "label2";
 			// 
-			// attendees_lv
-			// 
-			this.attendees_lv.HideSelection = false;
-			this.attendees_lv.Location = new System.Drawing.Point(690, 202);
-			this.attendees_lv.Name = "attendees_lv";
-			this.attendees_lv.Size = new System.Drawing.Size(178, 89);
-			this.attendees_lv.TabIndex = 11;
-			this.attendees_lv.UseCompatibleStateImageBehavior = false;
-			// 
-			// conferenceData_vb
-			// 
-			this.conferenceData_vb.Location = new System.Drawing.Point(420, 255);
-			this.conferenceData_vb.Name = "conferenceData_vb";
-			this.conferenceData_vb.Size = new System.Drawing.Size(100, 22);
-			this.conferenceData_vb.TabIndex = 12;
-			// 
 			// icaluid_lb
 			// 
 			this.icaluid_lb.AutoSize = true;
-			this.icaluid_lb.Location = new System.Drawing.Point(329, 228);
+			this.icaluid_lb.Location = new System.Drawing.Point(664, 100);
 			this.icaluid_lb.Name = "icaluid_lb";
 			this.icaluid_lb.Size = new System.Drawing.Size(43, 15);
 			this.icaluid_lb.TabIndex = 13;
 			this.icaluid_lb.Text = "label2";
-			// 
-			// organizer_dtp
-			// 
-			this.organizer_dtp.Location = new System.Drawing.Point(667, 116);
-			this.organizer_dtp.Name = "organizer_dtp";
-			this.organizer_dtp.Size = new System.Drawing.Size(200, 22);
-			this.organizer_dtp.TabIndex = 14;
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Items.AddRange(new object[] {
-            "通知",
-            "メール"});
-			this.comboBox1.Location = new System.Drawing.Point(19, 202);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(121, 23);
-			this.comboBox1.TabIndex = 15;
 			// 
 			// checkBox1
 			// 
@@ -226,7 +171,7 @@
             "ラベンダー",
             "ブドウ",
             "グラファイト"});
-			this.ColorId_cb.Location = new System.Drawing.Point(281, 255);
+			this.ColorId_cb.Location = new System.Drawing.Point(747, 127);
 			this.ColorId_cb.Name = "ColorId_cb";
 			this.ColorId_cb.Size = new System.Drawing.Size(121, 23);
 			this.ColorId_cb.TabIndex = 18;
@@ -239,29 +184,6 @@
 			this.owner_adress_lb.Size = new System.Drawing.Size(178, 15);
 			this.owner_adress_lb.TabIndex = 19;
 			this.owner_adress_lb.Text = "abcbdffghaiklnm@gmail.com";
-			// 
-			// comboBox3
-			// 
-			this.comboBox3.FormattingEnabled = true;
-			this.comboBox3.Items.AddRange(new object[] {
-            "予定あり",
-            "予定なし"});
-			this.comboBox3.Location = new System.Drawing.Point(19, 254);
-			this.comboBox3.Name = "comboBox3";
-			this.comboBox3.Size = new System.Drawing.Size(121, 23);
-			this.comboBox3.TabIndex = 20;
-			// 
-			// comboBox4
-			// 
-			this.comboBox4.FormattingEnabled = true;
-			this.comboBox4.Items.AddRange(new object[] {
-            "デフォルトの公開設定",
-            "公開",
-            "非公開"});
-			this.comboBox4.Location = new System.Drawing.Point(154, 255);
-			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(121, 23);
-			this.comboBox4.TabIndex = 21;
 			// 
 			// send_web_bt
 			// 
@@ -283,29 +205,30 @@
 			this.delat_bt.UseVisualStyleBackColor = true;
 			this.delat_bt.Click += new System.EventHandler(this.delat_bt_Click);
 			// 
+			// description_wb
+			// 
+			this.description_wb.Location = new System.Drawing.Point(19, 479);
+			this.description_wb.MinimumSize = new System.Drawing.Size(20, 20);
+			this.description_wb.Name = "description_wb";
+			this.description_wb.Size = new System.Drawing.Size(849, 198);
+			this.description_wb.TabIndex = 24;
+			// 
 			// Edit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(893, 648);
+			this.ClientSize = new System.Drawing.Size(893, 840);
+			this.Controls.Add(this.description_wb);
 			this.Controls.Add(this.delat_bt);
 			this.Controls.Add(this.send_web_bt);
-			this.Controls.Add(this.comboBox4);
-			this.Controls.Add(this.comboBox3);
 			this.Controls.Add(this.owner_adress_lb);
 			this.Controls.Add(this.ColorId_cb);
 			this.Controls.Add(this.comboBox2);
 			this.Controls.Add(this.checkBox1);
-			this.Controls.Add(this.comboBox1);
-			this.Controls.Add(this.organizer_dtp);
 			this.Controls.Add(this.icaluid_lb);
-			this.Controls.Add(this.conferenceData_vb);
-			this.Controls.Add(this.attendees_lv);
 			this.Controls.Add(this.Id_lb);
 			this.Controls.Add(this.recurringEventId_lb);
-			this.Controls.Add(this.status_tb);
 			this.Controls.Add(this.location_tb);
-			this.Controls.Add(this.ColorId_tb);
 			this.Controls.Add(this.description_tb);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.end_dtp);
@@ -329,23 +252,16 @@
 		private System.Windows.Forms.DateTimePicker end_dtp;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox description_tb;
-		private System.Windows.Forms.TextBox ColorId_tb;
 		private System.Windows.Forms.TextBox location_tb;
-		private System.Windows.Forms.TextBox status_tb;
 		private System.Windows.Forms.Label recurringEventId_lb;
 		private System.Windows.Forms.Label Id_lb;
-		private System.Windows.Forms.ListView attendees_lv;
-		private System.Windows.Forms.TextBox conferenceData_vb;
 		private System.Windows.Forms.Label icaluid_lb;
-		private System.Windows.Forms.DateTimePicker organizer_dtp;
-		private System.Windows.Forms.ComboBox comboBox1;
 		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.ComboBox comboBox2;
 		private System.Windows.Forms.ComboBox ColorId_cb;
 		private System.Windows.Forms.Label owner_adress_lb;
-		private System.Windows.Forms.ComboBox comboBox3;
-		private System.Windows.Forms.ComboBox comboBox4;
 		private System.Windows.Forms.Button send_web_bt;
 		private System.Windows.Forms.Button delat_bt;
+		private System.Windows.Forms.WebBrowser description_wb;
 	}
 }

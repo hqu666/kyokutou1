@@ -63,7 +63,7 @@ namespace kyokuto4calender {
 				string description = eventItem.Description;
 				dbMsg += "," + description ;
 				description_tb.Text = description;
-
+				description_wb.Navigate(Constant.eventItem.HtmlLink);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);

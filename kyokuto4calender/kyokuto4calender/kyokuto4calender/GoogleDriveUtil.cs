@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Google.Apis.Auth.OAuth2;
@@ -11,7 +12,43 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
 namespace kyokuto4calender {
-	class GoogleUtil {
+	class GoogleDriveUtil {
+
+
+		//認証情報を作る
+		//public async Task<string> DriveAuthentication(string jsonPath, string tokenFolderPath)
+		//{
+		//	string TAG = "DriveAuthentication";
+		//	string dbMsg = "[GoogleDriveUtil]";
+		//	string retStr = "";
+		//	try {
+		//		Constant.DriveCredential = await GetDriveCredential(jsonPath, tokenFolderPath);
+		//		Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+		//			HttpClientInitializer = Constant.DriveCredential,
+		//			ApplicationName = Constant.ApplicationName,
+		//			ApiKey = Constant.APIKey,                                           //追加
+		//		});
+		//		retStr = "OK";
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+		//	}
+		//	return retStr;
+		//}
+
+		//// DriveServiceを作る
+		//static Task<UserCredential> GetDriveCredential(string jsonPath, string tokenFolderPath)
+		//{
+		//	using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
+		//		return GoogleWebAuthorizationBroker.AuthorizeAsync(
+		//			GoogleClientSecrets.Load(stream).Secrets,
+		//			Constant.DriveScopes,
+		//			"user",
+		//			CancellationToken.None,
+		//			new FileDataStore(tokenFolderPath, true));
+		//	}
+		//}
+
 		/// <summary>
 		/// GoogleDriveの登録状況表示
 		/// </summary>

@@ -27,7 +27,7 @@ namespace kyokuto4calender {
 			try {
 				// Create Google Calendar API service.
 				var service = new CalendarService(new BaseClientService.Initializer() {
-					HttpClientInitializer = Constant.MyCredential,
+					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
 				});
 				// Define parameters of request.

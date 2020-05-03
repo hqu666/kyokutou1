@@ -13,8 +13,9 @@ namespace kyokuto4calender {
 		LocalFileUtil LFUtil = new LocalFileUtil();
 		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
-		GoogleUtil GUtil = new GoogleUtil();
+		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 
+		GoogleDriveBrouser gdBrouser;
 		Edit editForm;
 	//	private string receiveData = "";
 
@@ -29,7 +30,7 @@ namespace kyokuto4calender {
 			try {
 				InitializeComponent();
 				MyLog(TAG, dbMsg);
-				Conect2DriveAsync(true);
+				Conect2CalenderAsync(true);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -39,9 +40,9 @@ namespace kyokuto4calender {
 		/// 接続
 		/// </summary>
 		/// <param name="isListUp"></param>
-		private async void Conect2DriveAsync(Boolean isListUp)
+		private async void Conect2CalenderAsync(Boolean isListUp)
 		{
-			string TAG = "Conect2Drive";
+			string TAG = "Conect2CalenderAsync";
 			string dbMsg = "[Form1]";
 			try {
 				String retStr = await GAuthUtil.Authentication("calender_oauth.json", "token.json");
@@ -55,11 +56,11 @@ namespace kyokuto4calender {
 					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 					dbMsg += ",result=" + result;
 				} else {
-					string UserId = Constant.MyCredential.UserId;
+					string UserId = Constant.MyCalendarCredential.UserId;
 					dbMsg += ",UserId=" + UserId;
-					Constant.MyTokenType = Constant.MyCredential.Token.TokenType;
-					Constant.MyRefreshToken = Constant.MyCredential.Token.RefreshToken;
-					Constant.MyAccessToken = Constant.MyCredential.Token.RefreshToken;
+					Constant.MyTokenType = Constant.MyCalendarCredential.Token.TokenType;
+					Constant.MyRefreshToken = Constant.MyCalendarCredential.Token.RefreshToken;
+					Constant.MyAccessToken = Constant.MyCalendarCredential.Token.RefreshToken;
 
 					dbMsg += "\r\nTokenType=" + Constant.MyTokenType;
 					dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
@@ -221,6 +222,29 @@ namespace kyokuto4calender {
 			}
 		}
 
+		/// <summary>
+		/// 現場マスタの添付ファイルパス
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void master_folder_url_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "master_folder_url_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				if (gdBrouser == null) {
+					dbMsg = "GoogleDriveBrouserを生成";
+					gdBrouser = new GoogleDriveBrouser();
+					gdBrouser.mainForm = this;
+				}
+				gdBrouser.Show();
+				gdBrouser.GoogleFolderListUp();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
 
 		private void edit_bt_Click(object sender, EventArgs e)
 		{
@@ -267,7 +291,6 @@ namespace kyokuto4calender {
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
 		}
-
 	}
 }
 /*
