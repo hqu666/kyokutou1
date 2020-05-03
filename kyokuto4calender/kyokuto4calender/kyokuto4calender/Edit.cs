@@ -16,9 +16,6 @@ namespace kyokuto4calender {
 		public Form1 mainForm;
 		public Google.Apis.Calendar.v3.Data.Event eventItem = null;
 
-		private string sendData = "";
-		private string titolStr = "";
-
 
 		public Edit()
 		{
@@ -26,6 +23,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[Edit]";
 			try {
 				InitializeComponent();
+				eventItem = new Google.Apis.Calendar.v3.Data.Event();
 				SetEditData();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -36,38 +34,37 @@ namespace kyokuto4calender {
 		/// <summary>
 		/// 既存データの書込み
 		/// </summary>
-		private void SetEditData()
+		public void SetEditData()
 		{
 			string TAG = "SetEditData";
 			string dbMsg = "[Edit]";
 			try {
-				string startDT = eventItem.Start.DateTime.ToString();
-				dbMsg += ")" + startDT;
-				string endDT = eventItem.End.DateTime.ToString();
-				dbMsg += "～" + endDT;
-				if (String.IsNullOrEmpty(startDT)) {
-					startDT = eventItem.Start.Date;
-				}
-				string Summary = eventItem.Summary;
-				dbMsg += "," + Summary;
+				//this.eventItem = new Google.Apis.Calendar.v3.Data.Event();
+				//this.eventItem = Constant.eventItem;
+
+				//string startDT = eventItem.Start.DateTime.ToString();
+				//dbMsg += ")" + startDT;
+				//string endDT = eventItem.End.DateTime.ToString();
+				//dbMsg += "～" + endDT;
+				//if (String.IsNullOrEmpty(startDT)) {
+				//	startDT = eventItem.Start.Date;
+				//}
+				//string Summary = eventItem.Summary;
+				//dbMsg += "," + Summary;
 
 
-				summary_tb.Text = eventItem.Summary;
-				start_dtp.Value = eventItem.Start.DateTime.Value;
-				end_dtp.Value = eventItem.End.DateTime.Value;
-				location_tb.Text = eventItem.Location;
-				description_tb.Text = eventItem.Location;
+				summary_tb.Text = Constant.eventItem.Summary;
+				start_dtp.Value = Constant.eventItem.Start.DateTime.Value;
+				end_dtp.Value = Constant.eventItem.End.DateTime.Value;
+				location_tb.Text = Constant.eventItem.Location;
+				owner_adress_lb.Text = Constant.CalenderSummary;		//Eventsのフィールド
+				description_tb.Text = Constant.eventItem.Description;
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
-
-		//private void titolbt_TextChanged(object sender, EventArgs e)
-		//{
-
-		//}
 
 		private void back_bt_Click(object sender, EventArgs e)
 		{
@@ -103,7 +100,6 @@ namespace kyokuto4calender {
 			string TAG = "QuitMe";
 			string dbMsg = "[Edit]";
 			try {
-				dbMsg += "titolStr=" + titolStr;
 				if (mainForm != null) {
 					this.Visible = false;//このオブジェクトを破棄させない(2);this.Close();だと再表示でクラッシュする
 				}
@@ -114,15 +110,14 @@ namespace kyokuto4calender {
 		}
 
 
-		//public string TitolStr {
-		//	set {
-		//		titolStr = value;
-		//		summary_tb.Text = titolStr;
-		//	}
-		//	get {
-		//		return titolStr;
-		//	}
-		//}
+		public Google.Apis.Calendar.v3.Data.Event EventItem {
+			set {
+				eventItem = value;
+			}
+			get {
+				return eventItem;
+			}
+		}
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{

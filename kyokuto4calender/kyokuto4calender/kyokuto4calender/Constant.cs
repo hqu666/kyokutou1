@@ -18,6 +18,12 @@ namespace kyokuto4calender {
 																			//0502	
 																			//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
 																			//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
+		public static UserCredential MyCredential;
+		public static CalendarService MyCalendarService;        // Drive API service
+		
+		public static IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent;//カレンダーの予定
+		public static Google.Apis.Calendar.v3.Data.Event eventItem;
+
 		public static string CalenderSummary = "abcbdffghaiklnm@gmail.com";   
 
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
@@ -25,9 +31,6 @@ namespace kyokuto4calender {
 		public static string RootFolderID = "";            //保存先サーバのルートフォルダID
 		public static string LocalPass = "";            //送信元フォルダ
 
-		public static UserCredential MyCredential;
-		public static CalendarService MyCalendarService;        // Drive API service
-		public static IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent;//カレンダーの予定
 
 		public static DriveService MyDriveService;        // Drive API service
 		public static String parentFolderId;

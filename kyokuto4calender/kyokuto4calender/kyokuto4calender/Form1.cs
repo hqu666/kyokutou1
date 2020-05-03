@@ -28,8 +28,6 @@ namespace kyokuto4calender {
 			string dbMsg = "[Form1]";
 			try {
 				InitializeComponent();
-				//editForm = new Edit();
-				//editForm.mainForm = this;
 				MyLog(TAG, dbMsg);
 				Conect2DriveAsync(true);
 			} catch (Exception er) {
@@ -90,6 +88,7 @@ namespace kyokuto4calender {
 				Constant.GCalenderEvent = GCalendarUtil.GEventsListUp();
 				if (Constant.GCalenderEvent != null ) {
 					dbMsg += Constant.GCalenderEvent.Count + "件";
+
 					if ( 0 < Constant.GCalenderEvent.Count) {
 						// ListViewコントロールのプロパティを設定
 						event_lv.FullRowSelect = true;
@@ -159,24 +158,27 @@ namespace kyokuto4calender {
 			try {
 				int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
 				dbMsg += ",Index=" + selectedIndex;
-				Google.Apis.Calendar.v3.Data.Event eventItem = Constant.GCalenderEvent[selectedIndex];
-				string startDT = eventItem.Start.DateTime.ToString();
+				Constant.eventItem = new Google.Apis.Calendar.v3.Data.Event();
+				Constant.eventItem = Constant.GCalenderEvent[selectedIndex];
+				string startDT = Constant.eventItem.Start.DateTime.ToString();
 				dbMsg += ")" + startDT;
-				string endDT = eventItem.End.DateTime.ToString();
+				string endDT = Constant.eventItem.End.DateTime.ToString();
 				dbMsg += "～" + endDT;
 				if (String.IsNullOrEmpty(startDT)) {
-					startDT = eventItem.Start.Date;
+					startDT = Constant.eventItem.Start.Date;
 				}
-				string Summary = eventItem.Summary;
+				string Summary = Constant.eventItem.Summary;
 				dbMsg += "," + Summary;
 				if (editForm == null) {
 					dbMsg = "Editを再生成";
 					editForm = new Edit();
 					editForm.mainForm = this;
 				}
-				editForm.eventItem = eventItem;
-				editForm.Show();
+				editForm.eventItem = new Google.Apis.Calendar.v3.Data.Event();
+				editForm.eventItem = Constant.eventItem;
 				MyLog(TAG, dbMsg);
+				editForm.Show();
+				editForm.SetEditData();
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}

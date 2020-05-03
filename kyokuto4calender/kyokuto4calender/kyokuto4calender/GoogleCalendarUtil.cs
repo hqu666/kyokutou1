@@ -37,7 +37,8 @@ namespace kyokuto4calender {
 				request.SingleEvents = true;
 				request.MaxResults = 1000;
 				request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-				Events events = request.Execute();				//取得実行
+				Events events = request.Execute();              //取得実行
+				Constant.CalenderSummary = events.Summary;
 				if (events.Items != null && events.Items.Count > 0) {
 					dbMsg += ",events=" + events.Items.Count() + "件";
 					foreach (var eventItem in events.Items) {
@@ -50,7 +51,6 @@ namespace kyokuto4calender {
 						}
 						string Summary = eventItem.Summary;
 						dbMsg += "," + Summary;
-	//					Console.WriteLine("{0} ({1})", Summary, startDT);
 						retList.Add(eventItem); 
 					}
 					dbMsg += "," + retList.Count() + "件";
