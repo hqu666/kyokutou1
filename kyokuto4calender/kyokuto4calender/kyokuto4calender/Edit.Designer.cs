@@ -47,11 +47,13 @@
 			this.owner_adress_lb = new System.Windows.Forms.Label();
 			this.comboBox3 = new System.Windows.Forms.ComboBox();
 			this.comboBox4 = new System.Windows.Forms.ComboBox();
+			this.send_web_bt = new System.Windows.Forms.Button();
+			this.delat_bt = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// back_bt
 			// 
-			this.back_bt.Location = new System.Drawing.Point(877, 16);
+			this.back_bt.Location = new System.Drawing.Point(716, 19);
 			this.back_bt.Margin = new System.Windows.Forms.Padding(4);
 			this.back_bt.Name = "back_bt";
 			this.back_bt.Size = new System.Drawing.Size(152, 29);
@@ -63,7 +65,7 @@
 			// summary_tb
 			// 
 			this.summary_tb.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.summary_tb.Location = new System.Drawing.Point(13, 14);
+			this.summary_tb.Location = new System.Drawing.Point(19, 59);
 			this.summary_tb.Margin = new System.Windows.Forms.Padding(4);
 			this.summary_tb.Name = "summary_tb";
 			this.summary_tb.Size = new System.Drawing.Size(855, 37);
@@ -72,14 +74,14 @@
 			// 
 			// start_dtp
 			// 
-			this.start_dtp.Location = new System.Drawing.Point(14, 73);
+			this.start_dtp.Location = new System.Drawing.Point(19, 121);
 			this.start_dtp.Name = "start_dtp";
 			this.start_dtp.Size = new System.Drawing.Size(200, 22);
 			this.start_dtp.TabIndex = 2;
 			// 
 			// end_dtp
 			// 
-			this.end_dtp.Location = new System.Drawing.Point(242, 73);
+			this.end_dtp.Location = new System.Drawing.Point(261, 121);
 			this.end_dtp.Name = "end_dtp";
 			this.end_dtp.Size = new System.Drawing.Size(200, 22);
 			this.end_dtp.TabIndex = 3;
@@ -87,7 +89,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(217, 75);
+			this.label1.Location = new System.Drawing.Point(233, 127);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(22, 15);
 			this.label1.TabIndex = 4;
@@ -95,7 +97,7 @@
 			// 
 			// description_tb
 			// 
-			this.description_tb.Location = new System.Drawing.Point(12, 296);
+			this.description_tb.Location = new System.Drawing.Point(19, 297);
 			this.description_tb.Multiline = true;
 			this.description_tb.Name = "description_tb";
 			this.description_tb.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -104,21 +106,21 @@
 			// 
 			// ColorId_tb
 			// 
-			this.ColorId_tb.Location = new System.Drawing.Point(874, 378);
+			this.ColorId_tb.Location = new System.Drawing.Point(526, 221);
 			this.ColorId_tb.Name = "ColorId_tb";
 			this.ColorId_tb.Size = new System.Drawing.Size(100, 22);
 			this.ColorId_tb.TabIndex = 6;
 			// 
 			// location_tb
 			// 
-			this.location_tb.Location = new System.Drawing.Point(13, 118);
+			this.location_tb.Location = new System.Drawing.Point(19, 159);
 			this.location_tb.Name = "location_tb";
 			this.location_tb.Size = new System.Drawing.Size(855, 22);
 			this.location_tb.TabIndex = 7;
 			// 
 			// status_tb
 			// 
-			this.status_tb.Location = new System.Drawing.Point(874, 419);
+			this.status_tb.Location = new System.Drawing.Point(526, 255);
 			this.status_tb.Name = "status_tb";
 			this.status_tb.Size = new System.Drawing.Size(100, 22);
 			this.status_tb.TabIndex = 8;
@@ -126,7 +128,7 @@
 			// recurringEventId_lb
 			// 
 			this.recurringEventId_lb.AutoSize = true;
-			this.recurringEventId_lb.Location = new System.Drawing.Point(16, 144);
+			this.recurringEventId_lb.Location = new System.Drawing.Point(16, 184);
 			this.recurringEventId_lb.Name = "recurringEventId_lb";
 			this.recurringEventId_lb.Size = new System.Drawing.Size(43, 15);
 			this.recurringEventId_lb.TabIndex = 9;
@@ -135,7 +137,7 @@
 			// Id_lb
 			// 
 			this.Id_lb.AutoSize = true;
-			this.Id_lb.Location = new System.Drawing.Point(17, 55);
+			this.Id_lb.Location = new System.Drawing.Point(169, 224);
 			this.Id_lb.Name = "Id_lb";
 			this.Id_lb.Size = new System.Drawing.Size(43, 15);
 			this.Id_lb.TabIndex = 10;
@@ -144,15 +146,15 @@
 			// attendees_lv
 			// 
 			this.attendees_lv.HideSelection = false;
-			this.attendees_lv.Location = new System.Drawing.Point(877, 60);
+			this.attendees_lv.Location = new System.Drawing.Point(690, 202);
 			this.attendees_lv.Name = "attendees_lv";
-			this.attendees_lv.Size = new System.Drawing.Size(178, 123);
+			this.attendees_lv.Size = new System.Drawing.Size(178, 89);
 			this.attendees_lv.TabIndex = 11;
 			this.attendees_lv.UseCompatibleStateImageBehavior = false;
 			// 
 			// conferenceData_vb
 			// 
-			this.conferenceData_vb.Location = new System.Drawing.Point(874, 461);
+			this.conferenceData_vb.Location = new System.Drawing.Point(420, 255);
 			this.conferenceData_vb.Name = "conferenceData_vb";
 			this.conferenceData_vb.Size = new System.Drawing.Size(100, 22);
 			this.conferenceData_vb.TabIndex = 12;
@@ -160,7 +162,7 @@
 			// icaluid_lb
 			// 
 			this.icaluid_lb.AutoSize = true;
-			this.icaluid_lb.Location = new System.Drawing.Point(16, 98);
+			this.icaluid_lb.Location = new System.Drawing.Point(329, 228);
 			this.icaluid_lb.Name = "icaluid_lb";
 			this.icaluid_lb.Size = new System.Drawing.Size(43, 15);
 			this.icaluid_lb.TabIndex = 13;
@@ -168,7 +170,7 @@
 			// 
 			// organizer_dtp
 			// 
-			this.organizer_dtp.Location = new System.Drawing.Point(668, 75);
+			this.organizer_dtp.Location = new System.Drawing.Point(667, 116);
 			this.organizer_dtp.Name = "organizer_dtp";
 			this.organizer_dtp.Size = new System.Drawing.Size(200, 22);
 			this.organizer_dtp.TabIndex = 14;
@@ -179,7 +181,7 @@
 			this.comboBox1.Items.AddRange(new object[] {
             "通知",
             "メール"});
-			this.comboBox1.Location = new System.Drawing.Point(13, 163);
+			this.comboBox1.Location = new System.Drawing.Point(19, 202);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(121, 23);
 			this.comboBox1.TabIndex = 15;
@@ -187,7 +189,7 @@
 			// checkBox1
 			// 
 			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(446, 75);
+			this.checkBox1.Location = new System.Drawing.Point(476, 123);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(59, 19);
 			this.checkBox1.TabIndex = 16;
@@ -204,7 +206,7 @@
             "毎年",
             "毎週平日（月～金）",
             "カスタム..."});
-			this.comboBox2.Location = new System.Drawing.Point(512, 74);
+			this.comboBox2.Location = new System.Drawing.Point(540, 119);
 			this.comboBox2.Name = "comboBox2";
 			this.comboBox2.Size = new System.Drawing.Size(121, 23);
 			this.comboBox2.TabIndex = 17;
@@ -224,7 +226,7 @@
             "ラベンダー",
             "ブドウ",
             "グラファイト"});
-			this.ColorId_cb.Location = new System.Drawing.Point(284, 215);
+			this.ColorId_cb.Location = new System.Drawing.Point(281, 255);
 			this.ColorId_cb.Name = "ColorId_cb";
 			this.ColorId_cb.Size = new System.Drawing.Size(121, 23);
 			this.ColorId_cb.TabIndex = 18;
@@ -232,7 +234,7 @@
 			// owner_adress_lb
 			// 
 			this.owner_adress_lb.AutoSize = true;
-			this.owner_adress_lb.Location = new System.Drawing.Point(19, 218);
+			this.owner_adress_lb.Location = new System.Drawing.Point(146, 22);
 			this.owner_adress_lb.Name = "owner_adress_lb";
 			this.owner_adress_lb.Size = new System.Drawing.Size(178, 15);
 			this.owner_adress_lb.TabIndex = 19;
@@ -244,7 +246,7 @@
 			this.comboBox3.Items.AddRange(new object[] {
             "予定あり",
             "予定なし"});
-			this.comboBox3.Location = new System.Drawing.Point(12, 255);
+			this.comboBox3.Location = new System.Drawing.Point(19, 254);
 			this.comboBox3.Name = "comboBox3";
 			this.comboBox3.Size = new System.Drawing.Size(121, 23);
 			this.comboBox3.TabIndex = 20;
@@ -261,11 +263,33 @@
 			this.comboBox4.Size = new System.Drawing.Size(121, 23);
 			this.comboBox4.TabIndex = 21;
 			// 
+			// send_web_bt
+			// 
+			this.send_web_bt.Location = new System.Drawing.Point(19, 17);
+			this.send_web_bt.Name = "send_web_bt";
+			this.send_web_bt.Size = new System.Drawing.Size(121, 24);
+			this.send_web_bt.TabIndex = 22;
+			this.send_web_bt.Text = "webで編集";
+			this.send_web_bt.UseVisualStyleBackColor = true;
+			this.send_web_bt.Click += new System.EventHandler(this.send_web_bt_Click);
+			// 
+			// delat_bt
+			// 
+			this.delat_bt.Location = new System.Drawing.Point(579, 22);
+			this.delat_bt.Name = "delat_bt";
+			this.delat_bt.Size = new System.Drawing.Size(82, 23);
+			this.delat_bt.TabIndex = 23;
+			this.delat_bt.Text = "削除";
+			this.delat_bt.UseVisualStyleBackColor = true;
+			this.delat_bt.Click += new System.EventHandler(this.delat_bt_Click);
+			// 
 			// Edit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1067, 648);
+			this.ClientSize = new System.Drawing.Size(893, 648);
+			this.Controls.Add(this.delat_bt);
+			this.Controls.Add(this.send_web_bt);
 			this.Controls.Add(this.comboBox4);
 			this.Controls.Add(this.comboBox3);
 			this.Controls.Add(this.owner_adress_lb);
@@ -321,5 +345,7 @@
 		private System.Windows.Forms.Label owner_adress_lb;
 		private System.Windows.Forms.ComboBox comboBox3;
 		private System.Windows.Forms.ComboBox comboBox4;
+		private System.Windows.Forms.Button send_web_bt;
+		private System.Windows.Forms.Button delat_bt;
 	}
 }

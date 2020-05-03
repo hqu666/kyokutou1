@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
+using System.Diagnostics;
+using System.Web;
 
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
@@ -49,21 +52,61 @@ namespace kyokuto4calender {
 				//if (String.IsNullOrEmpty(startDT)) {
 				//	startDT = eventItem.Start.Date;
 				//}
+
+				owner_adress_lb.Text = Constant.CalenderSummary;        //Eventsのフィールド
 				//string Summary = eventItem.Summary;
 				//dbMsg += "," + Summary;
-
-
 				summary_tb.Text = Constant.eventItem.Summary;
 				start_dtp.Value = Constant.eventItem.Start.DateTime.Value;
 				end_dtp.Value = Constant.eventItem.End.DateTime.Value;
 				location_tb.Text = Constant.eventItem.Location;
-				owner_adress_lb.Text = Constant.CalenderSummary;		//Eventsのフィールド
-				description_tb.Text = Constant.eventItem.Description;
+				string description = eventItem.Description;
+				dbMsg += "," + description ;
+				description_tb.Text = description;
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
+		}
+
+		/// <summary>
+		/// webで編集
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void send_web_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "send_web_bt_Click";
+			string dbMsg = "[Edit]";
+			try {
+				string htmlLink = Constant.eventItem.HtmlLink ;
+			//	htmlLink +=  "?sf=true";//=が%3Dに化けるので編集画面に入れない
+				dbMsg += ",htmlLink=" + htmlLink;
+				try {
+					System.Diagnostics.Process.Start(htmlLink);
+				} catch (
+					   System.ComponentModel.Win32Exception noBrowser) {
+					if (noBrowser.ErrorCode == -2147467259)
+						MessageBox.Show(noBrowser.Message);
+				} catch (System.Exception other) {
+					MessageBox.Show(other.Message);
+				}
+				MyLog(TAG, dbMsg);
+				QuitMe();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// 削除
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void delat_bt_Click(object sender, EventArgs e)
+		{
+
 		}
 
 		private void back_bt_Click(object sender, EventArgs e)
