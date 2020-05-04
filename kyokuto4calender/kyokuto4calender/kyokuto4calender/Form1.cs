@@ -46,6 +46,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[Form1]";
 			try {
 				String retStr = await GAuthUtil.Authentication("calender_oauth.json", "token.json");
+				dbMsg += ",retStr=" + retStr;
 				if (retStr.Equals("")) {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -60,11 +61,14 @@ namespace kyokuto4calender {
 					dbMsg += ",UserId=" + UserId;
 					Constant.MyTokenType = Constant.MyCalendarCredential.Token.TokenType;
 					Constant.MyRefreshToken = Constant.MyCalendarCredential.Token.RefreshToken;
-					Constant.MyAccessToken = Constant.MyCalendarCredential.Token.RefreshToken;
+					Constant.MyAccessToken = Constant.MyCalendarCredential.Token.AccessToken;
 
-					dbMsg += "\r\nTokenType=" + Constant.MyTokenType;
+					dbMsg += "\r\nMyCalendar::TokenType=" + Constant.MyTokenType;
 					dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
 					dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
+					dbMsg += "\r\nMyDriveCredential::TokenType=" + Constant.MyDriveCredential.Token.TokenType;
+					dbMsg += "\r\nRefreshToken=" + Constant.MyDriveCredential.Token.RefreshToken;
+					dbMsg += "\r\nAccessToken=" + Constant.MyDriveCredential.Token.AccessToken;
 					MyLog(TAG, dbMsg);
 					if (isListUp) {
 						EventListUp();

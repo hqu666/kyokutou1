@@ -28,12 +28,14 @@ namespace kyokuto4calender {
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,                                           //追加
 				});
+				dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
 				Constant.MyDriveCredential = await GetDriveCredential(jsonPath, tokenFolderPath);
 				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyDriveCredential,
 					ApplicationName = Constant.ApplicationName,
 					ApiKey = Constant.APIKey,                                           //追加
 				});
+				dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
 				retStr = "OK";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -57,6 +59,28 @@ namespace kyokuto4calender {
 					CancellationToken.None,
 					new FileDataStore(tokenFolderPath, true));
 			}
+		}
+
+		public async Task<string> DriveAuthentication(string jsonPath, string tokenFolderPath)
+		{
+			string TAG = "DriveAuthentication";
+			string dbMsg = "[GoogleAuthUtil]";
+			string retStr = "";
+			try {
+				dbMsg += ",jsonPath=" + jsonPath;
+				Constant.MyDriveCredential = await GetDriveCredential(jsonPath, tokenFolderPath);
+				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyDriveCredential,
+					ApplicationName = Constant.DriveApplicationName,
+					ApiKey = Constant.DriveAPIKey,                                           //追加
+				});
+				dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
+				retStr = "OK";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retStr;
 		}
 
 		// DriveServiceを作る

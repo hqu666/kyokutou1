@@ -61,12 +61,19 @@ namespace kyokuto4calender {
 			try {
 				// リクエストパラメータの定義	https://qiita.com/nori0__/items/dd5bbbf0b09ad58e40be
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
+				dbMsg += ",Name=" + listRequest.Service.Name;
+				dbMsg += ",ApiKey=" + listRequest.Service.ApiKey ;
+				dbMsg += ",BasePath=" + listRequest.Service.BasePath;
 				listRequest.PageSize = 12;                      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
 																//※19で表示されなくなった
 				listRequest.Q = "trashed = false";          // ゴミ箱は検索しない
 				listRequest.Fields = "nextPageToken, files(id, name, createdTime, mimeType,modifiedTime,parents,trashed,size)";
 				//		GDriveFiles.Clear();						//newが使えない？
-				retList = listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				var ret= listRequest.Execute().Files;            // ドライブ内容のリストアップ
+				if(ret != null) {
+					retList = ret;
+				}
+
 				dbMsg = "," + retList.Count() + "件";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

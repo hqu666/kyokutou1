@@ -23,7 +23,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				InitializeComponent();
-		//		Conect2DriveAsync(true);
+				Conect2DriveAsync(true);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -34,41 +34,42 @@ namespace kyokuto4calender {
 		/// 接続
 		/// </summary>
 		/// <param name="isListUp"></param>
-		//private async void Conect2DriveAsync(Boolean isListUp)
-		//{
-		//	string TAG = "Conect2Drive";
-		//	string dbMsg = "[GoogleDriveBrouser]";
-		//	try {
-		//		String retStr = await GDriveUtil.DriveAuthentication("calender_oauth.json", "token.json");
-		//		dbMsg += ",retStr=" + retStr;
-		//		if (retStr.Equals("")) {
-		//			//メッセージボックスを表示する
-		//			String titolStr = Constant.ApplicationName;
-		//			String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-		//			MessageBoxButtons buttns = MessageBoxButtons.OK;
-		//			MessageBoxIcon icon = MessageBoxIcon.Exclamation;
-		//			MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
-		//			DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
-		//			dbMsg += ",result=" + result;
-		//		} else {
-		//			string UserId = Constant.MyCredential.UserId;
-		//			dbMsg += ",UserId=" + UserId;
-		//			Constant.MyTokenType = Constant.MyCredential.Token.TokenType;
-		//			Constant.MyRefreshToken = Constant.MyCredential.Token.RefreshToken;
-		//			Constant.MyAccessToken = Constant.MyCredential.Token.RefreshToken;
+		private async void Conect2DriveAsync(Boolean isListUp)
+		{
+			string TAG = "Conect2DriveAsync";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+		//		String retStr = await GAuthUtil.DriveAuthentication("drive_service_acount.json", "token.json");
+				String retStr = await GAuthUtil.DriveAuthentication("drive_oauth.json", "token.json");
+				dbMsg += ",retStr=" + retStr;
+				if (retStr.Equals("")) {
+					//メッセージボックスを表示する
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+				} else {
+					string UserId = Constant.MyDriveCredential.UserId;
+					dbMsg += ",UserId=" + UserId;
+					Constant.MyTokenType = Constant.MyDriveCredential.Token.TokenType;
+					Constant.MyRefreshToken = Constant.MyDriveCredential.Token.RefreshToken;
+					Constant.MyAccessToken = Constant.MyDriveCredential.Token.RefreshToken;
 
-		//			dbMsg += "\r\nTokenType=" + Constant.MyTokenType;
-		//			dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
-		//			dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
-		//			MyLog(TAG, dbMsg);
-		//			if (isListUp) {
-		//				GoogleFolderListUp();
-		//			}
-		//		}
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-		//	}
-		//}
+					dbMsg += "\r\nTokenType=" + Constant.MyTokenType;
+					dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
+					dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
+					MyLog(TAG, dbMsg);
+					if (isListUp) {
+						GoogleFolderListUp();
+					}
+				}
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
 
 
 		/// <summary>
