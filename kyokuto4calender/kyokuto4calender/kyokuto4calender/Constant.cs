@@ -17,30 +17,35 @@ namespace kyokuto4calender {
 		//OAuth 2.0 クライアント ID
 		public static string CliantId = "1015531776934-tcehh91kdtcj3s346c242j2a6ooij26f.apps.googleusercontent.com";    //クライアント ID
 		public static string CliantSeacret = "eWi7voZh5xWvcqeDiUkwdTLX";    //クライアント シークレット
-		//0502	
-		//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
-		//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
-		//サービス アカウント
-		//112521590140634372048	?
-		//9cf88695ae37cd3dd57c3755e43b6a87fe465959	?
+																			//0502	
+																			//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
+																			//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
+																			//サービス アカウント
+																			//112521590140634372048	?
+																			//9cf88695ae37cd3dd57c3755e43b6a87fe465959	?
+																			// 111680048736455529877
 		public static UserCredential MyCalendarCredential;
 		public static CalendarService MyCalendarService;        // Drive API service
 		
 		public static IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent;//カレンダーの予定
 		public static Google.Apis.Calendar.v3.Data.Event eventItem;
-
-		public static string CalenderSummary = "abcbdffghaiklnm@gmail.com";   
+		public static string CalenderSummary = "abcbdffghaiklnm@gmail.com";   //Googleアカウント
 
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
 		public static string RootFolderID = "";            //保存先サーバのルートフォルダID
 		public static string LocalPass = "";            //送信元フォルダ
 
-		public static string DriveApplicationName = "kyokuto_drive";                                        //	アプリケーション名
-		public static string DriveAPIKey = "AIzaSyCy_Md_FoEpWJw_69n0j-gjryEBjQwSgYM";
+		public static string DriveApplicationName = "kyokuto1sample";                                        //	アプリケーション名
+		public static string DriveAPIKey = "AIzaSyBgQfaxlfQXP32-W8rRmGfj8nDf8vlSCxs";
 		//OAuth 2.0 クライアント ID
-		public static string DrivrCliantId = "1015531776934-86u2uakrilbc06icrquf1fkda9bqhbdl.apps.googleusercontent.com";    //クライアント ID
-		public static string DriveCliantSeacret = "rLdSo_9RjDY4sAaRuP9aeSNS";    //クライアント シークレット
+		public static string DrivrCliantId = "1015531776934-6lgfgndk2o2lp5iu29ddaabqrfn1ibp2.apps.googleusercontent.com";    //クライアント ID
+		public static string DriveCliantSeacret = "u-eNFbgl4c9yM2fMkusalRfG";    //クライアント シークレット
+																				 //public static string DriveApplicationName = "kyokuto_drive";                                        //	アプリケーション名
+																				 //public static string DriveAPIKey = "AIzaSyCy_Md_FoEpWJw_69n0j-gjryEBjQwSgYM";
+																				 //OAuth 2.0 クライアント ID
+		//public static string DrivrCliantId = "1015531776934-86u2uakrilbc06icrquf1fkda9bqhbdl.apps.googleusercontent.com";    //クライアント ID
+		//public static string DriveCliantSeacret = "rLdSo_9RjDY4sAaRuP9aeSNS";    //クライアント シークレット
 		public static UserCredential MyDriveCredential;
 		public static DriveService MyDriveService;        // Drive API service
 		public static String parentFolderId;

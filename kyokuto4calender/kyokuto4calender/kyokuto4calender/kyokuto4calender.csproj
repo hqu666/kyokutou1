@@ -117,6 +117,12 @@
     <None Include="calender_oauth.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="oauth_calender.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="oauth_drive.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="drive_oauth.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

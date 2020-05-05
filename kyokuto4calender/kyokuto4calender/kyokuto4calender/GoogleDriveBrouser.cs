@@ -40,7 +40,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 		//		String retStr = await GAuthUtil.DriveAuthentication("drive_service_acount.json", "token.json");
-				String retStr = await GAuthUtil.DriveAuthentication("drive_oauth.json", "token.json");
+				String retStr = await GAuthUtil.DriveAuthentication("oauth_drive.json", "token.json");
 				dbMsg += ",retStr=" + retStr;
 				if (retStr.Equals("")) {
 					//メッセージボックスを表示する

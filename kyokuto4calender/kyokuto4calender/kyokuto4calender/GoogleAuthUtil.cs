@@ -29,13 +29,50 @@ namespace kyokuto4calender {
 					ApiKey = Constant.APIKey,                                           //追加
 				});
 				dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
-				Constant.MyDriveCredential = await GetDriveCredential(jsonPath, tokenFolderPath);
-				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
-					HttpClientInitializer = Constant.MyDriveCredential,
-					ApplicationName = Constant.ApplicationName,
-					ApiKey = Constant.APIKey,                                           //追加
-				});
-				dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
+				//Constant.MyDriveCredential = await GetDriveCredential(jsonPath, tokenFolderPath);
+				//Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+				//	HttpClientInitializer = Constant.MyDriveCredential,
+				//	ApplicationName = Constant.ApplicationName,
+				//	ApiKey = Constant.APIKey,                                           //追加
+				//});
+		//		dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
+				retStr = "OK";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retStr;
+		}
+
+		public async Task<string> AuthServiceAccount(string jsonPath, string tokenFolderPath)
+		{
+			string TAG = "AuthServiceAccount";
+			string dbMsg = "[GoogleAuthUtil]";
+			string retStr = "";
+			try {
+				dbMsg += ",jsonPath=" + jsonPath;
+				//	ICredential credential = await GeAllCredential(jsonPath, tokenFolderPath);
+
+				using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
+					ICredential credential = GoogleCredential.FromStream(stream)
+						 .CreateScoped(new[] { DriveService.Scope.DriveFile,
+																	DriveService.Scope.DriveAppdata,			//追加
+																	DriveService.Scope.Drive,
+																	CalendarService.Scope.Calendar,
+																	CalendarService.Scope.CalendarEvents }).UnderlyingCredential;
+					Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+						HttpClientInitializer = credential,
+						ApplicationName = Constant.ApplicationName,
+						ApiKey = Constant.APIKey,                                           //追加
+					});
+					dbMsg += "\r\nMyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
+					Constant.MyCalendarService = new CalendarService(new BaseClientService.Initializer() {
+						HttpClientInitializer = credential,
+						ApplicationName = Constant.ApplicationName,
+						ApiKey = Constant.APIKey,                                           //追加
+					});
+					dbMsg += "\r\nMyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
+				}
 				retStr = "OK";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -45,6 +82,23 @@ namespace kyokuto4calender {
 		}
 
 		// Serviceを作る
+		//static Task<ICredential> GeAllCredential(string jsonPath, string tokenFolderPath)
+		//{
+		//	string TAG = "GeAllCredential";
+		//	string dbMsg = "[GoogleAuthUtil]";
+		//	dbMsg += ",jsonPath=" + jsonPath;
+		//	MyLog(TAG, dbMsg);
+		//	using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open,
+		//			System.IO.FileAccess.Read)) {
+		//		ICredential credential = GoogleCredential.FromStream(stream)
+		//				.CreateScoped(new[] { DriveService.Scope.DriveFile,
+		//															DriveService.Scope.DriveAppdata,			//追加
+		//															DriveService.Scope.Drive,
+		//															CalendarService.Scope.Calendar,
+		//															CalendarService.Scope.CalendarEvents }).UnderlyingCredential;
+		//	}
+		//}
+
 		static Task<UserCredential> GetCalendarCredential(string jsonPath, string tokenFolderPath)
 		{
 			string TAG = "GetUserCredential";
