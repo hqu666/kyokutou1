@@ -26,7 +26,7 @@
 		private void InitializeComponent()
 		{
 			this.pass_tv = new System.Windows.Forms.TreeView();
-			this.file_list_LV = new System.Windows.Forms.ListView();
+			this.file_list_Lv = new System.Windows.Forms.ListView();
 			this.SuspendLayout();
 			// 
 			// pass_tv
@@ -36,22 +36,22 @@
 			this.pass_tv.Size = new System.Drawing.Size(239, 697);
 			this.pass_tv.TabIndex = 0;
 			// 
-			// file_list_LV
+			// file_list_Lv
 			// 
-			this.file_list_LV.HideSelection = false;
-			this.file_list_LV.Location = new System.Drawing.Point(259, 13);
-			this.file_list_LV.Name = "file_list_LV";
-			this.file_list_LV.Size = new System.Drawing.Size(588, 697);
-			this.file_list_LV.TabIndex = 1;
-			this.file_list_LV.UseCompatibleStateImageBehavior = false;
-			this.file_list_LV.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.file_list_LV_MouseDoubleClick);
+			this.file_list_Lv.HideSelection = false;
+			this.file_list_Lv.Location = new System.Drawing.Point(259, 13);
+			this.file_list_Lv.Name = "file_list_Lv";
+			this.file_list_Lv.Size = new System.Drawing.Size(588, 697);
+			this.file_list_Lv.TabIndex = 1;
+			this.file_list_Lv.UseCompatibleStateImageBehavior = false;
+			this.file_list_Lv.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.file_list_LV_MouseDoubleClick);
 			// 
 			// GoogleDriveBrouser
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(859, 722);
-			this.Controls.Add(this.file_list_LV);
+			this.Controls.Add(this.file_list_Lv);
 			this.Controls.Add(this.pass_tv);
 			this.Name = "GoogleDriveBrouser";
 			this.Text = "GoogleDriveBrouser";
@@ -63,6 +63,6 @@
 		#endregion
 
 		private System.Windows.Forms.TreeView pass_tv;
-		private System.Windows.Forms.ListView file_list_LV;
+		private System.Windows.Forms.ListView file_list_Lv;
 	}
 }

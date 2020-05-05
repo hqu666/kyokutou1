@@ -59,13 +59,13 @@ namespace kyokuto4calender {
 				} else {
 					string UserId = Constant.MyCalendarCredential.UserId;
 					dbMsg += ",UserId=" + UserId;
-					Constant.MyTokenType = Constant.MyCalendarCredential.Token.TokenType;
-					Constant.MyRefreshToken = Constant.MyCalendarCredential.Token.RefreshToken;
-					Constant.MyAccessToken = Constant.MyCalendarCredential.Token.AccessToken;
+					//Constant.MyTokenType = Constant.MyCalendarCredential.Token.TokenType;
+					//Constant.MyRefreshToken = Constant.MyCalendarCredential.Token.RefreshToken;
+					//Constant.MyAccessToken = Constant.MyCalendarCredential.Token.AccessToken;
 
-					dbMsg += "\r\nMyCalendar::TokenType=" + Constant.MyTokenType;
-					dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
-					dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
+					//dbMsg += "\r\nMyCalendar::TokenType=" + Constant.MyTokenType;
+					//dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
+					//dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
 					MyLog(TAG, dbMsg);
 					if (isListUp) {
 						EventListUp();
@@ -97,7 +97,6 @@ namespace kyokuto4calender {
 						event_lv.GridLines = true;
 						event_lv.Sorting = SortOrder.Ascending;
 						event_lv.View = View.Details;
-
 
 						// 列（コラム）ヘッダの作成
 						columnName = new ColumnHeader();
@@ -239,7 +238,7 @@ namespace kyokuto4calender {
 					gdBrouser.mainForm = this;
 				}
 				gdBrouser.Show();
-				gdBrouser.GoogleFolderListUp();
+				gdBrouser.GoogleFileListUp(Constant.TopFolderName);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);

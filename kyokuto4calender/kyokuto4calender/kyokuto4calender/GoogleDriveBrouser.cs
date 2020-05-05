@@ -19,6 +19,10 @@ namespace kyokuto4calender {
 
 		public Form1 mainForm;
 
+		ColumnHeader columnName = new ColumnHeader();
+		ColumnHeader columnType = new ColumnHeader();
+		ColumnHeader columnData = new ColumnHeader();
+
 		public GoogleDriveBrouser()
 		{
 			string TAG = "GoogleDriveBrouser";
@@ -33,48 +37,6 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// 接続
-		/// </summary>
-		/// <param name="isListUp"></param>
-		//private async void Conect2DriveAsync(Boolean isListUp)
-		//{
-		//	string TAG = "Conect2DriveAsync";
-		//	string dbMsg = "[GoogleDriveBrouser]";
-		//	try {
-		////		String retStr = await GAuthUtil.DriveAuthentication("drive_service_acount.json", "token.json");
-		//		String retStr = await GAuthUtil.DriveAuthentication("oauth_drive.json", "token.json");
-		//		dbMsg += ",retStr=" + retStr;
-		//		if (retStr.Equals("")) {
-		//			//メッセージボックスを表示する
-		//			String titolStr = Constant.ApplicationName;
-		//			String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-		//			MessageBoxButtons buttns = MessageBoxButtons.OK;
-		//			MessageBoxIcon icon = MessageBoxIcon.Exclamation;
-		//			MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
-		//			DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
-		//			dbMsg += ",result=" + result;
-		//		} else {
-		//			string UserId = Constant.MyDriveCredential.UserId;
-		//			dbMsg += ",UserId=" + UserId;
-		//			Constant.MyTokenType = Constant.MyDriveCredential.Token.TokenType;
-		//			Constant.MyRefreshToken = Constant.MyDriveCredential.Token.RefreshToken;
-		//			Constant.MyAccessToken = Constant.MyDriveCredential.Token.RefreshToken;
-
-		//			dbMsg += "\r\nTokenType=" + Constant.MyTokenType;
-		//			dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
-		//			dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
-		//			MyLog(TAG, dbMsg);
-		//			if (isListUp) {
-		//				GoogleFolderListUp();
-		//			}
-		//		}
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-		//	}
-		//}
-
-
-		/// <summary>
 		/// treeViewへGoogleDriveの登録状態表示
 		/// </summary>
 		public void GoogleFolderListUp()
@@ -83,7 +45,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				Constant.GDriveFiles =null;
-				Constant.GDriveFiles = GDriveUtil.GDFileListUp();
+				Constant.GDriveFiles = GDriveUtil.GDFileListUp(Constant.RootFolderName, true);
 				Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
 				dbMsg += ",GDriveFiles=" + Constant.GDriveFiles.Count + "件";
 
@@ -95,19 +57,20 @@ namespace kyokuto4calender {
 					foreach (var file in Constant.GDriveFiles) {
 						String fName = file.Name;
 						String fId = file.Id;
-						if (file.Parents != null) {
-							String PId = file.Parents[0];
-							String fMimeType = file.MimeType;
-							DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-							if (fName.Equals(Constant.TopFolderName)) {
-								//最上位にするフォルダと
-								Constant.TopFolderID = fId;
-								Constant.RootFolderID = PId;
-					//			info_lb.Text = fName;                                           //照合が合っているか確認の為
-							} else if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-								Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
-							}
+						//	if (file.Parents != null) {
+						//		String PId = file.Parents[0];
+								String fMimeType = file.MimeType;
+						//		DateTime fModifiedTime = (DateTime)file.ModifiedTime;
+						//		if (fName.Equals(Constant.TopFolderName)) {
+						//			//最上位にするフォルダと
+						//			Constant.TopFolderID = fId;
+						//			Constant.RootFolderID = PId;
+						////			info_lb.Text = fName;                                           //照合が合っているか確認の為
+						//		} else
+						if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+							Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
 						}
+																										 //	}
 					}
 					dbMsg += "[top=" + Constant.TopFolderID + "]";
 					dbMsg += "[root=" + Constant.RootFolderID + "]";
@@ -115,37 +78,22 @@ namespace kyokuto4calender {
 					int nodeCount = 0;
 					pass_tv.Nodes.Clear();                    //viewを初期化して
 					pass_tv.BeginUpdate();                    //	更新開始
-/*
+
 					foreach (var folder in Constant.GDriveFolders) {
 						dbMsg += "\r\nfolder=" + folder.Key;
 						dbMsg += ":" + folder.Value.Name;
 						dbMsg += ":" + folder.Value.Parents[0];
-						if (folder.Value.Parents[0].Equals(Constant.TopFolderID)) {
-							pass_tv.Nodes.Add(folder.Value.Name);
-							foreach (var file in Constant.GDriveFiles) {
-								String PId = file.Parents[0];
-								if (folder.Key.Equals(PId)) {
-									String fName = file.Name;
-									String fId = file.Id;
-									String fMimeType = file.MimeType;
-
-									if (fMimeType.Equals("application/vnd.google-apps.folder")) {
-									} else if (fMimeType.Equals("application/vnd.android.package-archive")) {
-									} else if (file.Trashed == true) {
-									} else if (file.Size == null) {
-									} else {
-										DateTime fModifiedTime = (DateTime)file.ModifiedTime;
-										long fSize = (long)file.Size;
-										pass_tv.Nodes[nodeCount].Nodes.Add(fName + pass_tv + fModifiedTime + "       \t\t\t: " + file.Size);
-									}
-								}
+						pass_tv.Nodes.Add(folder.Value.Name);
+						foreach (var file in Constant.GDriveFiles) {
+							String PId = file.Parents[0];
+							if (folder.Key.Equals(PId)) {
+								String fName = file.Name;
+								String fId = file.Id;
+								String fMimeType = file.MimeType;
 							}
-							nodeCount++;
-						} else {
-							dbMsg += ">>除外";
 						}
+						nodeCount++;
 					}
-					*/
 					pass_tv.EndUpdate();
 					pass_tv.ExpandAll();                  // すべてのノードを展開する
 				} else {
@@ -158,6 +106,63 @@ namespace kyokuto4calender {
 					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 					dbMsg += ",result=" + result;
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// クリックされたフォルダの中身を表示
+		/// </summary>
+		public void GoogleFileListUp(string pFolder)
+		{
+			string TAG = "GoogleFileListUp";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				dbMsg = "," + pFolder;
+				Constant.GDriveFolderMembers = null;
+				Constant.GDriveFolderMembers = GDriveUtil.GDFileListUp(pFolder, false);
+				if (Constant.GDriveFolderMembers != null) {
+					dbMsg = "," + Constant.GDriveFolderMembers.Count + "件";
+					// ListViewコントロールのプロパティを設定
+					file_list_Lv.FullRowSelect = true;
+					file_list_Lv.GridLines = true;
+					file_list_Lv.Sorting = SortOrder.Ascending;
+					file_list_Lv.View = View.Details;
+
+					// 列（コラム）ヘッダの作成
+					columnName = new ColumnHeader();
+					columnType = new ColumnHeader();
+					columnData = new ColumnHeader();
+					columnName.Text = "名前";
+					columnName.Width = 200;
+					columnType.Text = "サイズ";
+					columnType.Width = 120;
+					columnData.Text = "更新日";
+					columnData.Width = 120;
+					ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
+					file_list_Lv.Columns.AddRange(colHeaderRegValue);
+					// ListViewコントロールのデータをすべて消去します。
+					file_list_Lv.Items.Clear();
+					foreach (var fileItem in Constant.GDriveFolderMembers) {
+						string fNmae = fileItem.Name.ToString();
+						dbMsg += "\r\n" + fNmae;
+						string fSize = fileItem.Size.ToString();
+						dbMsg += "," + fSize;
+						//if (String.IsNullOrEmpty(startDT)) {
+						//	startDT = fileItem.Start.Date;
+						//}
+						string fModifiedTime = fileItem.ModifiedTime.ToString();
+						dbMsg += "," + fModifiedTime;
+						// ListViewコントロールにデータを追加します。
+						string[] item1 = { fNmae, fSize, fModifiedTime };
+						file_list_Lv.Items.Add(new ListViewItem(item1));
+					}
+				} else {
+					dbMsg += "このフォルダはファイルなどが登録されていません";
+				}
+				GoogleFolderListUp();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -179,6 +184,7 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
 		private void GoogleDriveBrouser_FormClosing(object sender, FormClosingEventArgs e){ 
 			string TAG = "GoogleDriveBrouser_FormClosing";
 			string dbMsg = "[Edit]";
