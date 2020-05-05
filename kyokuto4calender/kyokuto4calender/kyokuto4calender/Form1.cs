@@ -45,8 +45,7 @@ namespace kyokuto4calender {
 			string TAG = "Conect2CalenderAsync";
 			string dbMsg = "[Form1]";
 			try {
-			//	String retStr = await GAuthUtil.AuthServiceAccount("savice_acount.json", "token.json");
-				String retStr = await GAuthUtil.Authentication("oauth_calender.json", "token.json");
+				String retStr = await GAuthUtil.Authentication("drive_calender.json", "token.json");
 				dbMsg += ",retStr=" + retStr;
 				if (retStr.Equals("")) {
 					//メッセージボックスを表示する

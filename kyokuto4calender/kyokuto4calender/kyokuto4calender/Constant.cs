@@ -5,25 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3;
+using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3.Data;
 
 namespace kyokuto4calender {
 	class Constant {
 		//認証情報/API キー
-		public static string ApplicationName = "kyokuto4calender";                                        //	アプリケーション名
-		public static string APIKey = "AIzaSyDrVJJaHe6MFnL1zeRRVp71vQG9OQfb-vw";
+		public static string ApplicationName = "kyokuto4";                                        //	アプリケーション名
+		public static string APIKey = "AIzaSyAnJ-QXa9dqQr644u7jn_3-sxSr3XL_z60";
 		//OAuth 2.0 クライアント ID
-		public static string CliantId = "1015531776934-tcehh91kdtcj3s346c242j2a6ooij26f.apps.googleusercontent.com";    //クライアント ID
-		public static string CliantSeacret = "eWi7voZh5xWvcqeDiUkwdTLX";    //クライアント シークレット
-																			//0502	
-																			//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
-																			//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
-																			//サービス アカウント
-																			//112521590140634372048	?
-																			//9cf88695ae37cd3dd57c3755e43b6a87fe465959	?
-																			// 111680048736455529877
+		public static string CliantId = "912719822179-n9hvcs7tr9pqgn8mns7pdl5njo54gpe1.apps.googleusercontent.com";    //クライアント ID
+		public static string CliantSeacret = "aGVZ_mfTKJq8WFf5spDOOiHi";    //クライアント シークレット
+
+		////認証情報/API キー
+		//public static string ApplicationName = "kyokuto4calender";                                        //	アプリケーション名
+		//public static string APIKey = "AIzaSyDrVJJaHe6MFnL1zeRRVp71vQG9OQfb-vw";
+		////OAuth 2.0 クライアント ID
+		//public static string CliantId = "1015531776934-tcehh91kdtcj3s346c242j2a6ooij26f.apps.googleusercontent.com";    //クライアント ID
+		//public static string CliantSeacret = "eWi7voZh5xWvcqeDiUkwdTLX";    //クライアント シークレット
+		//0502	
+		//public static string CliantId = "468394297775-okt0nb474ol5drnheustvokj22iu2p2l.apps.googleusercontent.com";    //クライアント ID
+		//public static string CliantSeacret = "kb8Jn4oNRKDiaIcnC2GVJxP0";    //クライアント シークレット
+		//サービス アカウント
+		//112521590140634372048	?
+		//9cf88695ae37cd3dd57c3755e43b6a87fe465959	?
+		// 111680048736455529877
 		public static UserCredential MyCalendarCredential;
 		public static CalendarService MyCalendarService;        // Drive API service
 		
@@ -56,6 +63,12 @@ namespace kyokuto4calender {
 																	DriveService.Scope.Drive
 															};
 		public static string[] CalenderScopes = { CalendarService.Scope.Calendar,
+																	CalendarService.Scope.CalendarEvents
+															};
+		public static string[] AllScopes = { DriveService.Scope.DriveFile,
+																	DriveService.Scope.DriveAppdata,			//追加
+																	DriveService.Scope.Drive,
+																	CalendarService.Scope.Calendar,
 																	CalendarService.Scope.CalendarEvents
 															};
 		public static string MyTokenType = "";
