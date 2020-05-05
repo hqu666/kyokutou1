@@ -38,9 +38,9 @@ namespace kyokuto4calender {
 				listRequest.PageSize = 12;                      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
 																//※19で表示されなくなった
 				listRequest.Q = $"('{folderId}' in parents) and (trashed = false)";
-				//if (isOnlyFolder) {
-				//	listRequest.Q = " and (mimeType = 'application/vnd.google-apps.folder')";
-				//}
+				if (isOnlyFolder) {
+					listRequest.Q += " and (mimeType = 'application/vnd.google-apps.folder')";
+				}
 				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType)";
 				//	var ret =  listRequest.ExecuteAsync.Files;
 				var ret = listRequest.Execute().Files;            // ドライブ内容のリストアップ

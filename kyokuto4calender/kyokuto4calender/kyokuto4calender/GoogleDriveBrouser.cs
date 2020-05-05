@@ -59,7 +59,7 @@ namespace kyokuto4calender {
 						String fId = file.Id;
 						//	if (file.Parents != null) {
 						//		String PId = file.Parents[0];
-								String fMimeType = file.MimeType;
+						//		String fMimeType = file.MimeType;
 						//		DateTime fModifiedTime = (DateTime)file.ModifiedTime;
 						//		if (fName.Equals(Constant.TopFolderName)) {
 						//			//最上位にするフォルダと
@@ -67,9 +67,9 @@ namespace kyokuto4calender {
 						//			Constant.RootFolderID = PId;
 						////			info_lb.Text = fName;                                           //照合が合っているか確認の為
 						//		} else
-						if (fMimeType.Equals("application/vnd.google-apps.folder")) {
+					//	if (fMimeType.Equals("application/vnd.google-apps.folder")) {
 							Constant.GDriveFolders.Add(fId, file);                                           //最上位以外のフォルダを格納
-						}
+					//	}
 																										 //	}
 					}
 					dbMsg += "[top=" + Constant.TopFolderID + "]";
