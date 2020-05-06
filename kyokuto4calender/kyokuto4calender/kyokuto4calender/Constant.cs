@@ -43,6 +43,7 @@ namespace kyokuto4calender {
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFolderMembers;
+		public static IList<Google.Apis.Drive.v3.Data.File> GDriveSelectedFiles;
 		public static string MakeFolderName = null;
 		public static string[] selectFiles = null;
 	}

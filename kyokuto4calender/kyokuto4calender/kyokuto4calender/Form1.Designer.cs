@@ -33,6 +33,7 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.contlor_no_url_lb = new System.Windows.Forms.Label();
 			this.master_folder_url_bt = new System.Windows.Forms.Button();
+			this.attach_file_lv = new System.Windows.Forms.ListView();
 			this.SuspendLayout();
 			// 
 			// edit_bt
@@ -66,7 +67,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 277);
+			this.label1.Location = new System.Drawing.Point(15, 412);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(176, 15);
 			this.label1.TabIndex = 5;
@@ -75,7 +76,7 @@
 			// master_folder_url_lb
 			// 
 			this.master_folder_url_lb.AutoSize = true;
-			this.master_folder_url_lb.Location = new System.Drawing.Point(15, 305);
+			this.master_folder_url_lb.Location = new System.Drawing.Point(15, 378);
 			this.master_folder_url_lb.Name = "master_folder_url_lb";
 			this.master_folder_url_lb.Size = new System.Drawing.Size(43, 15);
 			this.master_folder_url_lb.TabIndex = 6;
@@ -84,7 +85,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(8, 361);
+			this.label2.Location = new System.Drawing.Point(15, 436);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(174, 15);
 			this.label2.TabIndex = 7;
@@ -93,7 +94,7 @@
 			// contlor_no_url_lb
 			// 
 			this.contlor_no_url_lb.AutoSize = true;
-			this.contlor_no_url_lb.Location = new System.Drawing.Point(15, 394);
+			this.contlor_no_url_lb.Location = new System.Drawing.Point(15, 465);
 			this.contlor_no_url_lb.Name = "contlor_no_url_lb";
 			this.contlor_no_url_lb.Size = new System.Drawing.Size(43, 15);
 			this.contlor_no_url_lb.TabIndex = 8;
@@ -105,15 +106,25 @@
 			this.master_folder_url_bt.Name = "master_folder_url_bt";
 			this.master_folder_url_bt.Size = new System.Drawing.Size(248, 23);
 			this.master_folder_url_bt.TabIndex = 9;
-			this.master_folder_url_bt.Text = "現場マスタの添付ファイルパス";
+			this.master_folder_url_bt.Text = "添付ファイル選択";
 			this.master_folder_url_bt.UseVisualStyleBackColor = true;
 			this.master_folder_url_bt.Click += new System.EventHandler(this.master_folder_url_bt_Click);
+			// 
+			// attach_file_lv
+			// 
+			this.attach_file_lv.HideSelection = false;
+			this.attach_file_lv.Location = new System.Drawing.Point(11, 273);
+			this.attach_file_lv.Name = "attach_file_lv";
+			this.attach_file_lv.Size = new System.Drawing.Size(248, 97);
+			this.attach_file_lv.TabIndex = 10;
+			this.attach_file_lv.UseCompatibleStateImageBehavior = false;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(949, 731);
+			this.Controls.Add(this.attach_file_lv);
 			this.Controls.Add(this.master_folder_url_bt);
 			this.Controls.Add(this.contlor_no_url_lb);
 			this.Controls.Add(this.label2);
@@ -140,6 +151,7 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label contlor_no_url_lb;
 		private System.Windows.Forms.Button master_folder_url_bt;
+		private System.Windows.Forms.ListView attach_file_lv;
 	}
 }
 

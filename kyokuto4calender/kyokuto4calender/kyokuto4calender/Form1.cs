@@ -17,7 +17,6 @@ namespace kyokuto4calender {
 
 		GoogleDriveBrouser gdBrouser;
 		Edit editForm;
-	//	private string receiveData = "";
 
 		ColumnHeader columnName = new ColumnHeader();
 		ColumnHeader columnType = new ColumnHeader();
@@ -223,7 +222,8 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// 現場マスタの添付ファイルパス
+		/// 添付ファイル選択ボタンのクリック
+		/// ファイルブラウザに遷移し、選択されたファイルを記録する
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -273,6 +273,69 @@ namespace kyokuto4calender {
 			string TAG = "event_mc_DateChanged";
 			string dbMsg = "[Form1]";
 			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// 選択されたファイルのリストアップ
+		/// </summary>
+		public void FileListUp()
+		{
+			string TAG = "FileListUp";
+			string dbMsg = "[Form1]";
+			try {
+				String titolStr = Constant.ApplicationName;
+				String msgStr = "";
+
+				if (Constant.GDriveSelectedFiles != null) {
+					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
+
+					if (0 < Constant.GDriveSelectedFiles.Count) {
+						// ListViewコントロールのプロパティを設定
+						//attach_file_lv.FullRowSelect = true;
+						//attach_file_lv.GridLines = true;
+						attach_file_lv.Sorting = SortOrder.Ascending;
+						//	attach_file_lv.View = View.Details;
+
+						// 列（コラム）ヘッダの作成
+						//columnName = new ColumnHeader();
+						//columnType = new ColumnHeader();
+						//columnData = new ColumnHeader();
+						//columnName.Text = "開始";
+						//columnName.Width = 120;
+						//columnType.Text = "終了";
+						//columnType.Width = 120;
+						//columnData.Text = "タイトル";
+						//columnData.Width = 200;
+						//ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
+						//event_lv.Columns.AddRange(colHeaderRegValue);
+						// ListViewコントロールのデータをすべて消去します。
+						attach_file_lv.Items.Clear();
+						foreach (var fileItem in Constant.GDriveSelectedFiles) {
+							string fName = fileItem.Name.ToString();
+							dbMsg += "\r\n" + fName;
+							// ListViewコントロールにデータを追加します。
+							string[] item1 = { fName };
+							attach_file_lv.Items.Add(new ListViewItem(item1));
+						}
+					} else {
+						msgStr = "添付するファイルが登録されていません";
+					}
+				} else {
+					msgStr = "添付するファイルの情報を取得できませんでした";
+				}
+				if (!msgStr.Equals("")) {
+					dbMsg += ",msgStr=" + msgStr;
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					//メッセージボックスを表示する
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);

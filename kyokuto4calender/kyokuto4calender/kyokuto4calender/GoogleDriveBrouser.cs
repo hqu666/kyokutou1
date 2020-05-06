@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3.Data;
 
@@ -136,9 +137,9 @@ namespace kyokuto4calender {
 					columnType = new ColumnHeader();
 					columnData = new ColumnHeader();
 					columnName.Text = "名前";
-					columnName.Width = 200;
+					columnName.Width = 250;
 					columnType.Text = "サイズ";
-					columnType.Width = 120;
+					columnType.Width = 70;
 					columnData.Text = "更新日";
 					columnData.Width = 120;
 					ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
@@ -170,16 +171,51 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// ファイルリストアイテムのダブルクリック
+		/// ファイルリスト選択後
+		/// フォルダならその階層に降りて内容表示
+		/// ファイルなら選択リストを作成して呼出し元に戻る
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void file_list_LV_MouseDoubleClick(object sender, MouseEventArgs e)
+		private void file_list_Lv_MouseUp(object sender, MouseEventArgs e)
 		{
-			string TAG = "file_list_LV_MouseDoubleClick";
+			string TAG = "file_list_Lv_MouseUp";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
-				MyLog(TAG, dbMsg);
+				int focusedIndex = file_list_Lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
+				dbMsg += ",focused=" + focusedIndex;
+				Google.Apis.Drive.v3.Data.File focusedFiles = Constant.GDriveFolderMembers[focusedIndex];
+				string focusedName = focusedFiles.Name;
+				dbMsg += ",Name=" + focusedName;
+				string focusedFilesMimeType = focusedFiles.MimeType;
+				dbMsg += ",MimeType=" + focusedFilesMimeType;
+				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
+					dbMsg += ">>フォルダ";
+					GoogleFileListUp(focusedName);
+					MyLog(TAG, dbMsg);
+				} else {
+					dbMsg += ">>ファイル";
+					Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
+					if (file_list_Lv.SelectedItems.Count >= 1) {
+						//選択されているリストの情報を出力する
+						foreach (ListViewItem item in file_list_Lv.SelectedItems) {
+					//		MessageBox.Show(item.Text + " " + item.SubItems[1].Text + " " + item.SubItems[2].Text);
+							int selectedIndex = item.Index;
+							dbMsg += "\r\nselected=" + selectedIndex;
+							Constant.GDriveSelectedFiles.Add(Constant.GDriveFolderMembers[selectedIndex]);
+							string fId = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count-1].Id;
+							dbMsg += "[" + fId;
+							string fName = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Name;
+							dbMsg += "]" + fName;
+						}
+					} else {
+						dbMsg += "選択されていません";
+					}
+					mainForm.FileListUp();
+					QuitMe();
+					dbMsg += "\r\n選択結果=" + Constant.GDriveSelectedFiles.Count + "件";
+					MyLog(TAG, dbMsg);
+				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -225,7 +261,6 @@ namespace kyokuto4calender {
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
 		}
-
 
 	}
 

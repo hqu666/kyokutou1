@@ -44,7 +44,7 @@
 			this.file_list_Lv.Size = new System.Drawing.Size(588, 697);
 			this.file_list_Lv.TabIndex = 1;
 			this.file_list_Lv.UseCompatibleStateImageBehavior = false;
-			this.file_list_Lv.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.file_list_LV_MouseDoubleClick);
+			this.file_list_Lv.MouseUp += new System.Windows.Forms.MouseEventHandler(this.file_list_Lv_MouseUp);
 			// 
 			// GoogleDriveBrouser
 			// 
