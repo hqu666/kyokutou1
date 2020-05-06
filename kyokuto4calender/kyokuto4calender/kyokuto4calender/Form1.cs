@@ -148,6 +148,7 @@ namespace kyokuto4calender {
 
 		/// <summary>
 		/// リストアイテムのダブルクリック
+		/// EventのDescriptionに添付ファイルを埋め込む
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -169,6 +170,48 @@ namespace kyokuto4calender {
 				}
 				string Summary = Constant.eventItem.Summary;
 				dbMsg += "," + Summary;
+				string eDescription = Constant.eventItem.Description;
+				dbMsg += ",Description=" + eDescription;
+				if (Constant.GDriveSelectedFiles != null) {
+					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
+					if (0 < Constant.GDriveSelectedFiles.Count) {
+						eDescription += "<table>";
+						foreach (var fileItem in Constant.GDriveSelectedFiles) {
+							string fId = fileItem.Id;
+							dbMsg += "\r\n" + fId;
+							string fName = fileItem.Name.ToString();
+							dbMsg += "," + fName;
+							string fLink = fileItem.WebContentLink.ToString();
+							dbMsg += "," + fLink;
+							eDescription += "<tr>";
+							eDescription += "<td>" + fId + "</td>";
+							eDescription += "<td  style=\"padding: 10px 10px; \"><a href=\"" + fLink + "\">" + fName + "</a></td>";
+							eDescription += "</tr>";
+						}
+						eDescription += "</table>";
+						dbMsg += ",Description=\r\n" + eDescription;
+						Constant.eventItem.Description = eDescription;
+						string retLink = GCalendarUtil.UpDateGEvents();
+						dbMsg += "\r\nretLink"  + retLink;
+						try {
+							System.Diagnostics.Process.Start(retLink);
+						} catch (
+							   System.ComponentModel.Win32Exception noBrowser) {
+							if (noBrowser.ErrorCode == -2147467259)
+								MessageBox.Show(noBrowser.Message);
+						} catch (System.Exception other) {
+							MessageBox.Show(other.Message);
+						}
+
+					} else {
+						dbMsg += "添付するファイルが登録されていません";
+					}
+				} else {
+					dbMsg += "添付するファイルの情報を取得できませんでした";
+				}
+
+				MyLog(TAG, dbMsg);
+				/*
 				if (editForm == null) {
 					dbMsg = "Editを再生成";
 					editForm = new Edit();
@@ -176,9 +219,9 @@ namespace kyokuto4calender {
 				}
 				editForm.eventItem = new Google.Apis.Calendar.v3.Data.Event();
 				editForm.eventItem = Constant.eventItem;
-				MyLog(TAG, dbMsg);
 				editForm.Show();
 				editForm.SetEditData();
+				*/
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -289,35 +332,14 @@ namespace kyokuto4calender {
 			try {
 				String titolStr = Constant.ApplicationName;
 				String msgStr = "";
-
 				if (Constant.GDriveSelectedFiles != null) {
 					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
-
 					if (0 < Constant.GDriveSelectedFiles.Count) {
-						// ListViewコントロールのプロパティを設定
-						//attach_file_lv.FullRowSelect = true;
-						//attach_file_lv.GridLines = true;
 						attach_file_lv.Sorting = SortOrder.Ascending;
-						//	attach_file_lv.View = View.Details;
-
-						// 列（コラム）ヘッダの作成
-						//columnName = new ColumnHeader();
-						//columnType = new ColumnHeader();
-						//columnData = new ColumnHeader();
-						//columnName.Text = "開始";
-						//columnName.Width = 120;
-						//columnType.Text = "終了";
-						//columnType.Width = 120;
-						//columnData.Text = "タイトル";
-						//columnData.Width = 200;
-						//ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
-						//event_lv.Columns.AddRange(colHeaderRegValue);
-						// ListViewコントロールのデータをすべて消去します。
 						attach_file_lv.Items.Clear();
 						foreach (var fileItem in Constant.GDriveSelectedFiles) {
 							string fName = fileItem.Name.ToString();
 							dbMsg += "\r\n" + fName;
-							// ListViewコントロールにデータを追加します。
 							string[] item1 = { fName };
 							attach_file_lv.Items.Add(new ListViewItem(item1));
 						}

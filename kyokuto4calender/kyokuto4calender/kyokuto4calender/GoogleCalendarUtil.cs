@@ -64,8 +64,45 @@ namespace kyokuto4calender {
 			return retList;
 		}
 
+		/// <summary>
+		/// Eventの更新
+		/// 成功したらUrlを返す
+		/// </summary>
+		/// <returns>Url</returns>
+		public string UpDateGEvents()
+		{
+			string TAG = "UpDateGEvents";
+			string dbMsg = "[GoogleCalendarUtil]";
+			string retLink=null;
+			try {
+				// 予定を追加登録
+				String eventId = Constant.eventItem.Id;
+				Event body = Constant.eventItem;
+				dbMsg = "[" + eventId ;
+				dbMsg = "}" + Constant.eventItem.Start.ToString();
+				dbMsg = "," + Constant.eventItem.Summary;
+				dbMsg = "\r\n" + Constant.eventItem.Description;
+				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyCalendarCredential,
+					ApplicationName = Constant.ApplicationName,
+				});
+				string calendarId = "primary";
+				EventsResource.UpdateRequest request = service.Events.Update(body, calendarId, eventId);
 
+				//	EventsResource.InsertRequest request = Constant.MyCalendarService.Events.Insert(Constant.eventItem, calendarId);
+				//Google.Apis.Requests.RequestError .The requested identifier already exists. [409]
+				//すでに存在するオブジェクトを作成しようとしました。
+				Event createdEvent = request.Execute();
+				retLink = createdEvent.HtmlLink;
+				dbMsg = ">>" + retLink;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retLink;
+		}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
@@ -77,6 +114,10 @@ namespace kyokuto4calender {
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
 		}
-
 	}
 }
+
+/*
+ 追加		http://sloppy-content.blog.jp/archives/16488560.html
+ イベントを作成する		https://developers.google.com/calendar/create-events#java	
+ */

@@ -38,7 +38,7 @@
 			// 
 			// edit_bt
 			// 
-			this.edit_bt.Location = new System.Drawing.Point(11, 689);
+			this.edit_bt.Location = new System.Drawing.Point(13, 495);
 			this.edit_bt.Margin = new System.Windows.Forms.Padding(4);
 			this.edit_bt.Name = "edit_bt";
 			this.edit_bt.Size = new System.Drawing.Size(100, 29);
@@ -52,7 +52,7 @@
 			this.event_lv.HideSelection = false;
 			this.event_lv.Location = new System.Drawing.Point(289, 13);
 			this.event_lv.Name = "event_lv";
-			this.event_lv.Size = new System.Drawing.Size(648, 706);
+			this.event_lv.Size = new System.Drawing.Size(648, 511);
 			this.event_lv.TabIndex = 2;
 			this.event_lv.UseCompatibleStateImageBehavior = false;
 			this.event_lv.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.event_lv_MouseDoubleClick);
@@ -104,7 +104,7 @@
 			// 
 			this.master_folder_url_bt.Location = new System.Drawing.Point(11, 233);
 			this.master_folder_url_bt.Name = "master_folder_url_bt";
-			this.master_folder_url_bt.Size = new System.Drawing.Size(248, 23);
+			this.master_folder_url_bt.Size = new System.Drawing.Size(255, 23);
 			this.master_folder_url_bt.TabIndex = 9;
 			this.master_folder_url_bt.Text = "添付ファイル選択";
 			this.master_folder_url_bt.UseVisualStyleBackColor = true;
@@ -115,7 +115,7 @@
 			this.attach_file_lv.HideSelection = false;
 			this.attach_file_lv.Location = new System.Drawing.Point(11, 273);
 			this.attach_file_lv.Name = "attach_file_lv";
-			this.attach_file_lv.Size = new System.Drawing.Size(248, 97);
+			this.attach_file_lv.Size = new System.Drawing.Size(255, 97);
 			this.attach_file_lv.TabIndex = 10;
 			this.attach_file_lv.UseCompatibleStateImageBehavior = false;
 			// 
@@ -123,7 +123,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(949, 731);
+			this.ClientSize = new System.Drawing.Size(949, 539);
 			this.Controls.Add(this.attach_file_lv);
 			this.Controls.Add(this.master_folder_url_bt);
 			this.Controls.Add(this.contlor_no_url_lb);

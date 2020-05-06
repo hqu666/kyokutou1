@@ -41,7 +41,7 @@ namespace kyokuto4calender {
 				if (isOnlyFolder) {
 					listRequest.Q += " and (mimeType = 'application/vnd.google-apps.folder')";
 				}
-				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType)";
+				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType,webContentLink)";
 				//	var ret =  listRequest.ExecuteAsync.Files;
 				var ret = listRequest.Execute().Files;            // ドライブ内容のリストアップ
 				if(ret != null) {
@@ -319,3 +319,8 @@ namespace kyokuto4calender {
 		}
 	}
 }
+
+/*
+
+Google Drive APIv3リファレンス	 https://developers.google.com/drive/api/v3/reference/files
+ */
