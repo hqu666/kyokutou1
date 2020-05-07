@@ -21,6 +21,9 @@ namespace kyokuto4calender {
 		ColumnHeader columnName = new ColumnHeader();
 		ColumnHeader columnType = new ColumnHeader();
 		ColumnHeader columnData = new ColumnHeader();
+		ColumnHeader columnParent = new ColumnHeader();
+		ColumnHeader columnFName = new ColumnHeader();
+
 
 		public Form1()
 		{
@@ -106,7 +109,7 @@ namespace kyokuto4calender {
 						columnType.Text = "終了";
 						columnType.Width = 120;
 						columnData.Text = "タイトル";
-						columnData.Width = 200;
+						columnData.Width = 240;
 						ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
 						event_lv.Columns.AddRange(colHeaderRegValue);
 						// ListViewコントロールのデータをすべて消去します。
@@ -157,6 +160,21 @@ namespace kyokuto4calender {
 			string TAG = "event_lv_MouseDoubleClick";
 			string dbMsg = "[Form1]";
 			try {
+				ReWriteEvent();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// Descriptionに添付ファイルのリンクを追加してEventを更新
+		/// </summary>
+		private void ReWriteEvent()
+		{
+			string TAG = "ReWriteEvent";
+			string dbMsg = "[Form1]";
+			try {
 				int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
 				dbMsg += ",Index=" + selectedIndex;
 				Constant.eventItem = new Google.Apis.Calendar.v3.Data.Event();
@@ -171,20 +189,33 @@ namespace kyokuto4calender {
 				string Summary = Constant.eventItem.Summary;
 				dbMsg += "," + Summary;
 				string eDescription = Constant.eventItem.Description;
+				if (eDescription == null) {
+					eDescription = "";
+				} else {
+					eDescription += "</br>";
+				}
 				dbMsg += ",Description=" + eDescription;
 				if (Constant.GDriveSelectedFiles != null) {
-					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
+					dbMsg += ",添付⁼" + Constant.GDriveSelectedFiles.Count + "件";
 					if (0 < Constant.GDriveSelectedFiles.Count) {
-						eDescription += "<table>";
-						foreach (var fileItem in Constant.GDriveSelectedFiles) {
+						if (eDescription.Contains("添付ファイル")) {
+							eDescription += "<table>";
+						} else {
+							eDescription += "添付ファイル</br><table>";
+						}
+						foreach (Google.Apis.Drive.v3.Data.File fileItem in Constant.GDriveSelectedFiles) {
 							string fId = fileItem.Id;
 							dbMsg += "\r\n" + fId;
+							string ParentsID = fileItem.Parents[0];
+							dbMsg += "[Parents=" + ParentsID;
+							string ParentsName = GDriveUtil.FindById(ParentsID);
+							dbMsg += "]" + ParentsName;
 							string fName = fileItem.Name.ToString();
 							dbMsg += "," + fName;
 							string fLink = fileItem.WebContentLink.ToString();
 							dbMsg += "," + fLink;
 							eDescription += "<tr>";
-							eDescription += "<td>" + fId + "</td>";
+							eDescription += "<td>" + ParentsName + "</td>";
 							eDescription += "<td  style=\"padding: 10px 10px; \"><a href=\"" + fLink + "\">" + fName + "</a></td>";
 							eDescription += "</tr>";
 						}
@@ -192,7 +223,7 @@ namespace kyokuto4calender {
 						dbMsg += ",Description=\r\n" + eDescription;
 						Constant.eventItem.Description = eDescription;
 						string retLink = GCalendarUtil.UpDateGEvents();
-						dbMsg += "\r\nretLink"  + retLink;
+						dbMsg += "\r\nretLink" + retLink;
 						try {
 							System.Diagnostics.Process.Start(retLink);
 						} catch (
@@ -211,17 +242,6 @@ namespace kyokuto4calender {
 				}
 
 				MyLog(TAG, dbMsg);
-				/*
-				if (editForm == null) {
-					dbMsg = "Editを再生成";
-					editForm = new Edit();
-					editForm.mainForm = this;
-				}
-				editForm.eventItem = new Google.Apis.Calendar.v3.Data.Event();
-				editForm.eventItem = Constant.eventItem;
-				editForm.Show();
-				editForm.SetEditData();
-				*/
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -335,12 +355,33 @@ namespace kyokuto4calender {
 				if (Constant.GDriveSelectedFiles != null) {
 					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
 					if (0 < Constant.GDriveSelectedFiles.Count) {
+						// ListViewコントロールのプロパティを設定
+						attach_file_lv.FullRowSelect = true;
+						attach_file_lv.GridLines = true;
+						attach_file_lv.Sorting = SortOrder.Ascending;
+						attach_file_lv.View = View.Details;
+
+						// 列（コラム）ヘッダの作成
+						columnParent = new ColumnHeader();
+						columnFName = new ColumnHeader();
+						columnParent.Text = "フォルダ";
+						columnParent.Width = 110;
+						columnFName.Text = "ファイル";
+						columnFName.Width = 110;
+						ColumnHeader[] colHeaderRegValue = { this.columnParent, this.columnFName };
+						attach_file_lv.Columns.AddRange(colHeaderRegValue);
+
 						attach_file_lv.Sorting = SortOrder.Ascending;
 						attach_file_lv.Items.Clear();
 						foreach (var fileItem in Constant.GDriveSelectedFiles) {
+							string ParentsID = fileItem.Parents[0];
+							dbMsg += "\r\n[Parents=" + ParentsID;
+							string ParentsName = GDriveUtil.FindById(ParentsID);
+							dbMsg += "]" + ParentsName;
 							string fName = fileItem.Name.ToString();
-							dbMsg += "\r\n" + fName;
-							string[] item1 = { fName };
+							dbMsg += "," + fName;
+							// ListViewコントロールにデータを追加します。
+							string[] item1 = { ParentsName, fName };
 							attach_file_lv.Items.Add(new ListViewItem(item1));
 						}
 					} else {

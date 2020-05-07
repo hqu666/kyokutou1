@@ -21,10 +21,11 @@ namespace kyokuto4calender {
 		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp(string pFolder ,bool isOnlyFolder)
 		{
 			string TAG = "GDFileListUp";
-			string dbMsg = "[GoogleUtil]";
+			string dbMsg = "[GoogleDriveUtil]";
 			IList<Google.Apis.Drive.v3.Data.File> retList = null;
 			try {
 				dbMsg += ",pFolder=" + pFolder;
+				Constant.CurrentFolder = pFolder;
 				// フォルダIDの取得
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
 				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
@@ -41,6 +42,7 @@ namespace kyokuto4calender {
 				if (isOnlyFolder) {
 					listRequest.Q += " and (mimeType = 'application/vnd.google-apps.folder')";
 				}
+		//		listRequest.OrderBy("name");
 				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType,webContentLink)";
 				//	var ret =  listRequest.ExecuteAsync.Files;
 				var ret = listRequest.Execute().Files;            // ドライブ内容のリストアップ
@@ -66,7 +68,7 @@ namespace kyokuto4calender {
 		public async Task<string> CreateFolder(string name, string parentFolderId = null, string driveId = null)
 		{
 			string TAG = "CreateFolder";
-			string dbMsg = "[GoogleUtil]";
+			string dbMsg = "[GoogleDriveUtil]";
 			string retStr = null;
 			File newFolder = new File();
 			try {
@@ -110,7 +112,7 @@ namespace kyokuto4calender {
 		public async Task<string> UploadFile(string fileName, string filePath, string parentId)
 		{
 			string TAG = "UploadFile";
-			string dbMsg = "[GoogleUtil]";
+			string dbMsg = "[GoogleDriveUtil]";
 			string retStr = null;
 			File newFile = new File();
 			try {
@@ -197,6 +199,30 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
+		/// idに該当するファイル・フォルダの名称を返す
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public string FindById(string id)
+		{
+			string TAG = "FindById";
+			string dbMsg = "[GoogleDriveUtil]";
+			string retStr = null;
+			//	File retFile = null;
+			try {
+				dbMsg += "[id=" + id + "]";
+				File retFile = Constant.MyDriveService.Files.Get(id).Execute();
+				retStr = retFile.Name;
+				dbMsg += retStr;
+				dbMsg += ">>[" + retStr + "]";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retStr;
+		}
+
+		/// <summary>
 		/// ファイルを一件検索する
 		/// </summary>
 		/// <param name="queries"></param>
@@ -207,6 +233,11 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleUtil]";
 			File newFolder = new File();
 			try {
+				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyDriveCredential,
+					ApplicationName = Constant.ApplicationName,
+				});
+
 				dbMsg = "queries=" + queries.ToString();
 				var result = await FindFilesCore(queries);
 				MyLog(TAG, dbMsg);
@@ -321,6 +352,6 @@ namespace kyokuto4calender {
 }
 
 /*
-
 Google Drive APIv3リファレンス	 https://developers.google.com/drive/api/v3/reference/files
+https://www.apps-gcp.com/google-deive-api-v2-to-v3-4points/
  */
