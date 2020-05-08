@@ -24,7 +24,9 @@ namespace kyokuto4calender {
 		ColumnHeader columnParent = new ColumnHeader();
 		ColumnHeader columnFName = new ColumnHeader();
 
-
+		/// <summary>
+		/// 起動
+		/// </summary>
 		public Form1()
 		{
 			string TAG = "Form1";
@@ -61,13 +63,6 @@ namespace kyokuto4calender {
 				} else {
 					string UserId = Constant.MyCalendarCredential.UserId;
 					dbMsg += ",UserId=" + UserId;
-					//Constant.MyTokenType = Constant.MyCalendarCredential.Token.TokenType;
-					//Constant.MyRefreshToken = Constant.MyCalendarCredential.Token.RefreshToken;
-					//Constant.MyAccessToken = Constant.MyCalendarCredential.Token.AccessToken;
-
-					//dbMsg += "\r\nMyCalendar::TokenType=" + Constant.MyTokenType;
-					//dbMsg += "\r\nRefreshToken=" + Constant.MyRefreshToken;
-					//dbMsg += "\r\nAccessToken=" + Constant.MyAccessToken;
 					MyLog(TAG, dbMsg);
 					if (isListUp) {
 						EventListUp();
@@ -79,7 +74,7 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// treeViewへGoogleDriveの登録状態表示
+		/// treeViewへEventの登録状態表示
 		/// </summary>
 		public void EventListUp()
 		{
@@ -225,7 +220,7 @@ namespace kyokuto4calender {
 						string retLink = GCalendarUtil.UpDateGEvents();
 						dbMsg += "\r\nretLink" + retLink;
 						try {
-							System.Diagnostics.Process.Start(retLink);
+							System.Diagnostics.Process.Start(retLink);				//webで表示
 						} catch (
 							   System.ComponentModel.Win32Exception noBrowser) {
 							if (noBrowser.ErrorCode == -2147467259)
@@ -246,7 +241,6 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
 
 		/// <summary>
 		/// リストのダブルクリック
@@ -301,7 +295,7 @@ namespace kyokuto4calender {
 					gdBrouser.mainForm = this;
 				}
 				gdBrouser.Show();
-				gdBrouser.GoogleFileListUp(Constant.TopFolderName);
+				gdBrouser.ResetTree();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);

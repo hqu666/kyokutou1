@@ -14,8 +14,108 @@ using Google.Apis.Util.Store;
 namespace kyokuto4calender {
 	class GoogleDriveUtil {
 
+
 		/// <summary>
-		/// GoogleDriveの登録状況表示
+		/// 指定されたフォルダ以下の全フォルダ取得
+		/// passTreeに使用
+		/// </summary>
+		/// <param name="pFolder"></param>
+		/// <returns></returns>
+		public IList<Google.Apis.Drive.v3.Data.File> GDFolderListUp()
+		{
+			string TAG = "GDFolderListUp";
+			string dbMsg = "[GoogleDriveUtil]";
+			string pFolder = Constant.RootFolderName;
+			IList<Google.Apis.Drive.v3.Data.File> retList = null;
+			try {
+	//			Constant.CurrentFolder = pFolder;
+				// フォルダIDの取得
+				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
+				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
+				listRequest.Q = "(name = '" + pFolder + "') and (mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+				listRequest.Fields = "nextPageToken, files(id)";
+
+				var folderId = listRequest.Execute().Files.First().Id;
+				dbMsg += "[" + folderId + "]" + pFolder;
+				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDFolderListUpAsyncBody( pFolder));
+				IList<Google.Apis.Drive.v3.Data.File> pFolders = rFolders.Result;
+				if (pFolders != null && pFolders.Count > 0) {
+					dbMsg += "の直下に" + pFolders.Count + "件" ;
+					foreach (var folder in pFolders) {
+						retList.Add(folder);
+						string folderName = folder.Name;
+						dbMsg += "\r\n" + retList.Count + ")" + folderName;
+						Task<IList<Google.Apis.Drive.v3.Data.File>> rr = Task.Run(() => GDFolderListUpAsyncBody(folderName));
+						IList<Google.Apis.Drive.v3.Data.File> rrFolders = rr.Result;
+					}
+				} else {
+					dbMsg += "の直下にフォルダは有りません";
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retList;
+		}
+
+		public async Task<IList<File>> GDFolderListUpAsyncBody(string pFolder)
+		{
+			string TAG = "GDFolderListUpAsyncBody";
+			string dbMsg = "[GoogleDriveUtil]";
+			IList<Google.Apis.Drive.v3.Data.File> retList = new List<Google.Apis.Drive.v3.Data.File> ();
+			try {
+				dbMsg += ",pFolder=" + pFolder;
+				Constant.CurrentFolder = pFolder;
+				// フォルダIDの取得
+				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
+				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
+				listRequest.Q = "(name = '" + pFolder + "') and (mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+				listRequest.Fields = "nextPageToken, files(id)";
+
+				var folderId = listRequest.Execute().Files.First().Id;
+				dbMsg += "[" + folderId + "]";
+				// フォルダの内容
+				listRequest = Constant.MyDriveService.Files.List();
+				listRequest.PageSize = 12;                      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
+																//※19で表示されなくなった
+				listRequest.Q = $"('{folderId}' in parents) and (trashed = false) and (mimeType = 'application/vnd.google-apps.folder')";
+				//			listRequest.OrderBy('name');
+				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType,webContentLink)";
+				FileList ret = await listRequest.ExecuteAsync();
+				if (ret != null) {
+					int fCount = ret.Files.Count();
+					if (0 < fCount ) {
+						dbMsg += "の直下に" + fCount + "件";
+						foreach (var folder in ret.Files) {
+							string folderName = folder.Name;
+							dbMsg += "\r\n" + retList.Count + ")" + folderName;
+							retList.Add(folder);
+							//Task<IList<File>> rr = GDFolderListUpAsyncBody(folderName);
+							//if(rr == null) {
+							//	return retList;
+							//}
+							////Task<IList<Google.Apis.Drive.v3.Data.File>> rr = Task.Run(() => GDFolderListUpAsyncBody(folderName));
+							////IList<Google.Apis.Drive.v3.Data.File> rrFolders = rr.Result;
+
+						}
+					} else {
+						dbMsg += "の直下にフォルダは有りません";
+			//			return retList;
+					}
+				}
+				dbMsg = ">>" + retList.Count() + "件";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retList;
+		}
+
+
+
+		/// <summary>
+		/// 対象フォルダ内の登録状況表示
 		/// </summary>
 		/// <returns></returns>
 		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp(string pFolder ,bool isOnlyFolder)
@@ -42,11 +142,10 @@ namespace kyokuto4calender {
 				if (isOnlyFolder) {
 					listRequest.Q += " and (mimeType = 'application/vnd.google-apps.folder')";
 				}
-		//		listRequest.OrderBy("name");
+	//			listRequest.OrderBy('name');
 				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType,webContentLink)";
-				//	var ret =  listRequest.ExecuteAsync.Files;
-				var ret = listRequest.Execute().Files;            // ドライブ内容のリストアップ
-				if(ret != null) {
+				IList<Google.Apis.Drive.v3.Data.File> ret = listRequest.Execute().Files;
+				if (ret != null) {
 					retList = ret;
 					dbMsg = "," + retList.Count() + "件";
 				}
