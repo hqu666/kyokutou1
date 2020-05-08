@@ -157,7 +157,6 @@ namespace kyokuto4calender {
 			node.Nodes.Clear();
 			try {
 				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDriveUtil.GDFileListUp(path,true));
-//				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDriveUtil.GDFolderListUpAsyncBody(path));
 				IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
 				foreach (Google.Apis.Drive.v3.Data.File di in GDriveFolders) {
 					string folderName = di.Name;
