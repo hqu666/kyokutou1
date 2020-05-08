@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "kyokuto4",
+  "private_key_id": "5dc547b83b425a92d04a82a8653d6bb0c8b7be00",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC7JNY34JZkp+QC\nM7f2ygOLihkFwWCWFVjxTm1MJYMgRxFr8R9id6KqcEG8avBgxT/yMrW05iW9ixgz\nFYjBj0gR+nmS5Lw1B/IH9c+Zzb0HQqgok1o5aslyyLMgOdbvNquv8NHaI2dZllL7\nVkSi6vkzWDH4IwFJvYUd1aK6skJZsnmJ1wTdACZ41IxwLoZLTdD1D6hDBUKBs+pP\nVoLw2zys+3/FgIzQl7omHMXWPul8D/gd19I2lsdWuOhgrlEGpya5fmaMOv+GtRWC\nawZYqrZqmYhHV6WIhpzrsfT3HkEScCgYrwDqI+OnrdCKmHpSdHws0ts5315GoFJF\ntLyh2isfAgMBAAECggEAPX7f09G9qcrPrnePQo3kd1SEX3NJiVfvd6/1U3naKl+g\nFm/QB9vXPJmRyFf9sFbw6eYG9rBQA4ZzB8pSO4SZQqsjiwUV4XlAa6Q3OUu1i264\nckjlc4unMcxIrFTFT6sP5MtGMh/DJNm0X/nbqQt8owYeuXLLSA96cDDU/fN4wR9H\nQjOyqcn1mG2BJa1pRmEvs/pg8GIo47iwWXz9kzhVDPVjRzXU3C7dr74CAiHrqwTa\nrerSGETv+6ADnGAB/yuLhp6t2UpIEJcHEelcgEmLCHJsyovpHUFPdXbI0BA4L3OT\no5XTordcRRu4HZbxYMDXfUqhVvnx9Cv0CDlMqZBITQKBgQD3y/VF2FksVyCcifTI\nGJTzapk8S6EGLhKuXNCzOCj6vdqvB2ikVs8fZPkdKEq/vxQ6vASKR8bfQ/721XKO\nFeRR6QwFk5ffHOgzQKVZz3p59A0fXQFTtf91GdbZRvma/4Y7+vd+Pd2UWiIqZd97\njpv20lsINMzyiEzMlsHDsFWbAwKBgQDBVtrMs179GVCuy8yeH2NIDLABSsk7t0TG\nBdLe0mRVMCojYdoqFPJNCiSkf9r/+QUoe+Hj8Py0+wdpG6/lfrCHRWdrRaFJKiX+\n1DIFsfeqmv1ZRBojVDhGRZmhHQx5DGuPCUVgm/cawt4pkPldlQZckPngU5ERy+QN\nVveG0hCGtQKBgQC+utKTbC9XHckQNG+hBKrBoa9I5b2PkC743qAVEokYVsHYLw+w\nTtEmDQZiFv1SEbV0b/veo9jDSQca3rhJ/Te8hHCoai5foVRo/r1HH5fZ/quLFH9M\n+60haT4iB6tgToX37PhKxzuiUK4zjC40YFRT6x3+dwW5OIhEgVWrVjLOGQKBgQCJ\nLbspKsvnASNCItAYEWU8JeRrxkhp2mstpcws1VLjLr13RWKqIRqaluvQ2/bjUCjc\nxKlONhrXvpVPepmfV/igwhnS/yCk7QbwfFbRu6hioH3J7IwvLP6Qval3q0jCSpG2\nd3mGRqNZlZJUI80LHUXaP/NLu39fBS/WVzJhsoKPUQKBgQDWAB5bTc4jFBYNnZjX\nj7hjyrIb7E0Gu77ntN7YHfmfqTD+dowYY/BSXQRp233Xea3OtOSbeTy7EXLXbnPf\nKIFfzCbgkfLHz04OKRco/yTqTn7fDTn4N/FwIQokb7x1Q1lAZxlFsEbbtRq23qCH\nrD9lpY3C323bKW/u6HjSsrH6nw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "kyokuto4drive@kyokuto4.iam.gserviceaccount.com",
+  "client_id": "101965131806590223499",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kyokuto4drive%40kyokuto4.iam.gserviceaccount.com"
+}

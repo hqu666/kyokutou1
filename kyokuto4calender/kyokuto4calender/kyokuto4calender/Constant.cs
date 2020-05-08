@@ -17,12 +17,12 @@ namespace kyokuto4calender {
 		//OAuth 2.0 クライアント ID
 		public static string CliantId = "912719822179-n9hvcs7tr9pqgn8mns7pdl5njo54gpe1.apps.googleusercontent.com";    //クライアント ID
 		public static string CliantSeacret = "aGVZ_mfTKJq8WFf5spDOOiHi";    //クライアント シークレット
-		public static string[] AllScopes = { DriveService.Scope.DriveFile,
-																	DriveService.Scope.DriveAppdata,			//追加
-																	DriveService.Scope.Drive,
-																	CalendarService.Scope.Calendar,
-																	CalendarService.Scope.CalendarEvents
-															};
+		//public static string[] AllScopes = { DriveService.Scope.DriveFile,
+		//															DriveService.Scope.DriveAppdata,			//追加
+		//															DriveService.Scope.Drive,
+		//															CalendarService.Scope.Calendar,
+		//															CalendarService.Scope.CalendarEvents
+		//													};
 
 		public static UserCredential MyCalendarCredential;
 		public static CalendarService MyCalendarService; 

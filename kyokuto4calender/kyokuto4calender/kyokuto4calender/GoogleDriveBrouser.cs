@@ -195,7 +195,9 @@ namespace kyokuto4calender {
 					MyLog(TAG, dbMsg);
 				} else {
 					dbMsg += ">>ファイル";
-					Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
+					if(Constant.GDriveSelectedFiles == null) {
+						Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
+					}
 					if (file_list_Lv.SelectedItems.Count >= 1) {
 						//選択されているリストの情報を出力する
 						foreach (ListViewItem item in file_list_Lv.SelectedItems) {

@@ -352,8 +352,12 @@ namespace kyokuto4calender {
 			try {
 				String titolStr = Constant.ApplicationName;
 				String msgStr = "";
+				attach_file_lv.Items.Clear();
+				attach_file_lv.Clear();
 				if (Constant.GDriveSelectedFiles != null) {
-					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
+					int fileCount = Constant.GDriveSelectedFiles.Count;
+					file_count_lv.Text = fileCount.ToString();
+					dbMsg += fileCount + "件";
 					if (0 < Constant.GDriveSelectedFiles.Count) {
 						// ListViewコントロールのプロパティを設定
 						attach_file_lv.FullRowSelect = true;
@@ -372,7 +376,6 @@ namespace kyokuto4calender {
 						attach_file_lv.Columns.AddRange(colHeaderRegValue);
 
 						attach_file_lv.Sorting = SortOrder.Ascending;
-						attach_file_lv.Items.Clear();
 						foreach (var fileItem in Constant.GDriveSelectedFiles) {
 							string ParentsID = fileItem.Parents[0];
 							dbMsg += "\r\n[Parents=" + ParentsID;
@@ -404,6 +407,34 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+		/// <summary>
+		/// 選択したファイルを解除する
+		/// 
+		/// GDriveSelectedFilesはGoogleDriveBrouser.file_list_Lv_MouseUpで追記する時に生成されていなければ、そこでも再生成される
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void serected_clear_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "serected_clear_bt_Click";
+			string dbMsg = "[Form1]";
+			try {
+				if (Constant.GDriveSelectedFiles != null) {
+					dbMsg += Constant.GDriveSelectedFiles.Count + "件";
+					Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
+					Constant.GDriveSelectedFiles.Clear();
+					dbMsg += ">>" + Constant.GDriveSelectedFiles.Count + "件";
+					attach_file_lv.Clear();
+					int fileCount = Constant.GDriveSelectedFiles.Count;
+					file_count_lv.Text = fileCount.ToString();
+					dbMsg += ">>" + fileCount + "件";
+
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
 
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
@@ -417,6 +448,7 @@ namespace kyokuto4calender {
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
 		}
+
 	}
 }
 /*

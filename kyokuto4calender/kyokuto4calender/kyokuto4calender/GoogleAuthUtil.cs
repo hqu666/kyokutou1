@@ -14,8 +14,18 @@ using Google.Apis.Util.Store;
 
 namespace kyokuto4calender {
 	class GoogleAuthUtil {
-	
+
 	/// <summary>
+	/// 使用許諾を受けるAPIのリスト
+	/// </summary>
+		public static string[] AllScopes = { DriveService.Scope.DriveFile,
+																	DriveService.Scope.DriveAppdata,			//追加
+																	DriveService.Scope.Drive,
+																	CalendarService.Scope.Calendar,
+																	CalendarService.Scope.CalendarEvents
+															};
+
+		/// <summary>
 		/// 認証情報と各サービスを作成する
 		/// </summary>
 		/// <param name="jsonPath">読込むjsonファイルのURL</param>
@@ -64,7 +74,7 @@ namespace kyokuto4calender {
 			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 				return GoogleWebAuthorizationBroker.AuthorizeAsync(
 					GoogleClientSecrets.Load(stream).Secrets,
-					Constant.AllScopes,
+					AllScopes,
 					"user",
 					CancellationToken.None,
 					new FileDataStore(tokenFolderPath, true));
