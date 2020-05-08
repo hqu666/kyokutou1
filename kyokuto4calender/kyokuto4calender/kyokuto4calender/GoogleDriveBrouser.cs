@@ -218,7 +218,7 @@ namespace kyokuto4calender {
 					columnType = new ColumnHeader();
 					columnData = new ColumnHeader();
 					columnName.Text = "名前";
-					columnName.Width = 250;
+					columnName.Width = 245;
 					columnType.Text = "サイズ";
 					columnType.Width = 70;
 					columnData.Text = "更新日";
@@ -242,7 +242,7 @@ namespace kyokuto4calender {
 						file_list_Lv.Items.Add(new ListViewItem(item1));
 					}
 					// 列幅を自動調整
-					file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+			//		file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 				} else {
 					dbMsg += "このフォルダはファイルなどが登録されていません";
 				}
