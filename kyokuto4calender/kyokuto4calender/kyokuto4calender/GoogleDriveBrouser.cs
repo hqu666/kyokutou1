@@ -137,7 +137,7 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 			// 列幅を自動調整
-			file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+	//		file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 		}
 
 		/// <summary>
@@ -182,11 +182,10 @@ namespace kyokuto4calender {
 			string TAG = "PassTvNodeMouseClick";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
-				string folderName = e.Node.Nodes.ToString();
+				string folderName = e.Node.Text;
 				dbMsg += folderName;
 				MyLog(TAG, dbMsg);
 				GoogleFileListUp(folderName);
-				SetListItem(folderName);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
