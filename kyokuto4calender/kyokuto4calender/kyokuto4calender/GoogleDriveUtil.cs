@@ -80,7 +80,7 @@ namespace kyokuto4calender {
 				listRequest.PageSize = 12;                      //返される共有ドライブの最大数。許容値は1〜100です。（デフォルト：10）
 																//※19で表示されなくなった
 				listRequest.Q = $"('{folderId}' in parents) and (trashed = false) and (mimeType = 'application/vnd.google-apps.folder')";
-				//			listRequest.OrderBy('name');
+				listRequest.OrderBy = "name";
 				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType,webContentLink)";
 				FileList ret = await listRequest.ExecuteAsync();
 				if (ret != null) {
@@ -112,8 +112,6 @@ namespace kyokuto4calender {
 			return retList;
 		}
 
-
-
 		/// <summary>
 		/// 対象フォルダ内の登録状況表示
 		/// </summary>
@@ -131,7 +129,6 @@ namespace kyokuto4calender {
 				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
 				listRequest.Q = "(name = '" + pFolder + "') and (mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
 				listRequest.Fields = "nextPageToken, files(id)";
-
 				var folderId = listRequest.Execute().Files.First().Id;
 				dbMsg += "[" + folderId + "]";
 				// フォルダの内容
@@ -142,7 +139,7 @@ namespace kyokuto4calender {
 				if (isOnlyFolder) {
 					listRequest.Q += " and (mimeType = 'application/vnd.google-apps.folder')";
 				}
-	//			listRequest.OrderBy('name');
+				listRequest.OrderBy = "name";
 				listRequest.Fields = "nextPageToken, files(id, name,modifiedTime,size,parents,trashed, mimeType,webContentLink)";
 				IList<Google.Apis.Drive.v3.Data.File> ret = listRequest.Execute().Files;
 				if (ret != null) {

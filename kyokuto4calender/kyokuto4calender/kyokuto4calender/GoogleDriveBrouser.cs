@@ -46,7 +46,7 @@ namespace kyokuto4calender {
 			try {
 				pass_tv.Nodes.Clear();
 				GoogleFolderListUp(Constant.RootFolderName);
-				pass_name_lb.Text = Constant.RootFolderName + "\\" + pass_tv.SelectedNode.FullPath;
+				pass_name_lb.Text = Constant.RootFolderName ;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -61,17 +61,21 @@ namespace kyokuto4calender {
 			string TAG = "GoogleFolderListUp";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
-				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDriveUtil.GDFileListUp(folderName,true));
+				dbMsg += folderName + "を開く";
+				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => {
+					return GDriveUtil.GDFileListUp(folderName, true);
+				});
+				rFolders.Wait();
 				IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
-
-				dbMsg += ",GDriveFolders=" + GDriveFolders.Count + "件";
-
 				if (GDriveFolders != null && GDriveFolders.Count > 0) {
+					dbMsg += ",中に" + GDriveFolders.Count + "件";
 					// ドライブ一覧を走査してツリーに追加
 					foreach (Google.Apis.Drive.v3.Data.File folder in GDriveFolders) {
+						string mFolderName = folder.Name;
+						dbMsg += ",\r\n" + mFolderName ;
 						// 新規ノード作成
 						// プラスボタンを表示するため空のノードを追加しておく
-						TreeNode node = new TreeNode(folder.Name);
+						TreeNode node = new TreeNode(mFolderName);
 						node.Nodes.Add(new TreeNode());
 						pass_tv.Nodes.Add(node);
 					}
@@ -79,7 +83,7 @@ namespace kyokuto4calender {
 					pass_tv.EndUpdate();
 					//			pass_tv.ExpandAll();                  // すべてのノードを展開する
 					GoogleFileListUp(GDriveFolders.Last().Name);
-					pass_name_lb.Text = Constant.RootFolderName + "\\" +pass_tv.SelectedNode.FullPath;
+			//		pass_name_lb.Text = Constant.RootFolderName + "\\" +pass_tv.SelectedNode.FullPath;
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -94,52 +98,6 @@ namespace kyokuto4calender {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
-		}
-
-		/// <summary>
-		/// リストビューの項目を設定します.
-		/// </summary>
-		private  void SetListItem(String filePath)
-		{
-			string TAG = "SetListItem";
-			string dbMsg = "[GoogleDriveBrouser]";
-			// リストビューのヘッダーを設定
-			file_list_Lv.View = View.Details;
-			file_list_Lv.Clear();
-			file_list_Lv.Columns.Add("名前");
-			file_list_Lv.Columns.Add("更新日時");
-			file_list_Lv.Columns.Add("サイズ");
-
-			try {
-				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDriveUtil.GDFolderListUpAsyncBody(Constant.RootFolderName));
-				IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
-				dbMsg += "\r\nフォルダ一覧" + GDriveFolders.Count + "件";
-				foreach (Google.Apis.Drive.v3.Data.File di in GDriveFolders) {
-					string folderName = di.Name;
-					dbMsg += "\r\n" + folderName;
-					string modifiedTime = String.Format("{0:yyyy/MM/dd HH:mm:ss}", di.ModifiedTime);
-					dbMsg += "," + modifiedTime;
-					ListViewItem item = new ListViewItem(folderName);
-					item.SubItems.Add(modifiedTime);
-					item.SubItems.Add("");
-					file_list_Lv.Items.Add(item);
-				}
-				 Constant.GDriveFolderMembers = new List<Google.Apis.Drive.v3.Data.File>(GDriveUtil.GDFileListUp(filePath, false));
-				dbMsg += "\r\nファイル一覧" + Constant.GDriveFolderMembers.Count + "件";
-				foreach (Google.Apis.Drive.v3.Data.File file in Constant.GDriveFolderMembers) {
-					string filerName = file.Name;
-					dbMsg += "\r\n" + filerName;
-					ListViewItem item = new ListViewItem(filerName);
-					item.SubItems.Add(String.Format("{0:yyyy/MM/dd HH:mm:ss}", file.ModifiedTime));
-					item.SubItems.Add(file.Size.ToString());
-					file_list_Lv.Items.Add(item);
-				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-			}
-			// 列幅を自動調整
-	//		file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 		}
 
 		/// <summary>
@@ -194,7 +152,7 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// 選択されたフォルダの中身を表示
+		/// ListViewに選択されたフォルダの中身を表示
 		/// </summary>
 		/// 
 		public void GoogleFileListUp(string pFolder)
@@ -243,7 +201,7 @@ namespace kyokuto4calender {
 						file_list_Lv.Items.Add(new ListViewItem(item1));
 					}
 					//		file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);					// 列幅を自動調整
-					pass_name_lb.Text = Constant.RootFolderName + "\\" + pass_tv.SelectedNode.FullPath;
+			//		pass_name_lb.Text = Constant.RootFolderName + "\\" + pass_tv.SelectedNode.FullPath;
 				} else {
 					dbMsg += "このフォルダはファイルなどが登録されていません";
 				}
@@ -266,25 +224,24 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				int focusedIndex = file_list_Lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
-				dbMsg += ",focused=" + focusedIndex;
+				dbMsg += ",focused[" + focusedIndex;
 				Google.Apis.Drive.v3.Data.File focusedFiles = Constant.GDriveFolderMembers[focusedIndex];
 				string focusedName = focusedFiles.Name;
-				dbMsg += ",Name=" + focusedName;
+				dbMsg += "]" + focusedName;
 				string focusedFilesMimeType = focusedFiles.MimeType;
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
 				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
-					dbMsg += ">>フォルダ";
-					GoogleFileListUp(focusedName);
+					dbMsg += ">>フォルダ" + focusedName + "を開く" ;
 					MyLog(TAG, dbMsg);
+					GoogleFileListUp(focusedName);
 				} else {
-					dbMsg += ">>ファイル";
-					if(Constant.GDriveSelectedFiles == null) {
+					dbMsg += ">>ファイル" + focusedName + "を送る";
+					if (Constant.GDriveSelectedFiles == null) {
 						Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
 					}
 					if (file_list_Lv.SelectedItems.Count >= 1) {
 						//選択されているリストの情報を出力する
 						foreach (ListViewItem item in file_list_Lv.SelectedItems) {
-					//		MessageBox.Show(item.Text + " " + item.SubItems[1].Text + " " + item.SubItems[2].Text);
 							int selectedIndex = item.Index;
 							dbMsg += "\r\nselected=" + selectedIndex;
 							Constant.GDriveSelectedFiles.Add(Constant.GDriveFolderMembers[selectedIndex]);
@@ -296,10 +253,10 @@ namespace kyokuto4calender {
 					} else {
 						dbMsg += "選択されていません";
 					}
-					mainForm.FileListUp();
-					QuitMe();
 					dbMsg += "\r\n選択結果=" + Constant.GDriveSelectedFiles.Count + "件";
 					MyLog(TAG, dbMsg);
+					mainForm.FileListUp();
+					QuitMe();
 				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -441,6 +398,10 @@ namespace kyokuto4calender {
 					newFolder.Wait();
 				} catch (AggregateException ae) {
 					MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
+				}
+				string parentId = newFolder.Result;
+				dbMsg += ">parent>" ;
+				if (parentId == null) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
 					MessageBoxButtons buttns = MessageBoxButtons.OK;
@@ -448,19 +409,7 @@ namespace kyokuto4calender {
 					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
 					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 					dbMsg += msgStr + ",result=" + result;
-
-				}
-				string parentId = newFolder.Result;
-				dbMsg += ">parent>" ;
-				//if (parentId == null) {
-				//	String titolStr = Constant.ApplicationName;
-				//	String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
-				//	MessageBoxButtons buttns = MessageBoxButtons.OK;
-				//	MessageBoxIcon icon = MessageBoxIcon.Exclamation;
-				//	MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
-				//	DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
-				//	dbMsg += msgStr + ",result=" + result;
-				//} else {
+				} else {
 					dbMsg += "[" + parentId + "]に" + Constant.selectFiles.Count() + "件";
 					foreach (string str in Constant.selectFiles) {
 						dbMsg += "\r\n" + str;
@@ -473,7 +422,7 @@ namespace kyokuto4calender {
 						String wrfileId = wrfile.Result;
 						dbMsg += ">作成>[" + wrfileId + "]";
 					}
-			//	}
+			}
 				MyLog(TAG, dbMsg);
 				GoogleFolderListUp(Constant.MakeFolderName);                     //更新状態を再描画
 			} catch (Exception er) {
