@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3.Data;
+using System.Threading;
 
 namespace kyokuto4calender {
 	public partial class GoogleDriveBrouser : Form {
@@ -30,7 +31,9 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				InitializeComponent();
-		//		GoogleFolderListUpAsync();
+				pass_name_lb.Text = Constant.RootFolderName;
+
+				//		GoogleFolderListUpAsync();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -43,12 +46,12 @@ namespace kyokuto4calender {
 			try {
 				pass_tv.Nodes.Clear();
 				GoogleFolderListUp(Constant.RootFolderName);
+				pass_name_lb.Text = Constant.RootFolderName + "\\" + pass_tv.SelectedNode.FullPath;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
 
 		/// <summary>
 		/// treeViewへGoogleDriveの登録状態表示
@@ -58,7 +61,6 @@ namespace kyokuto4calender {
 			string TAG = "GoogleFolderListUp";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
-			//	Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDriveUtil.GDFolderListUpAsyncBody(folderName));
 				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => GDriveUtil.GDFileListUp(folderName,true));
 				IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
 
@@ -77,7 +79,7 @@ namespace kyokuto4calender {
 					pass_tv.EndUpdate();
 					//			pass_tv.ExpandAll();                  // すべてのノードを展開する
 					GoogleFileListUp(GDriveFolders.Last().Name);
-					//		 SetListItem(GDriveFolders.Last().Name);
+					pass_name_lb.Text = Constant.RootFolderName + "\\" +pass_tv.SelectedNode.FullPath;
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -165,7 +167,7 @@ namespace kyokuto4calender {
 					child.Nodes.Add(new TreeNode());
 					node.Nodes.Add(child);
 				}
-	//			node.TreeView.Sort();
+				pass_name_lb.Text = Constant.RootFolderName + "\\" + pass_tv.SelectedNode.FullPath;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -190,7 +192,6 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
 
 		/// <summary>
 		/// 選択されたフォルダの中身を表示
@@ -241,13 +242,12 @@ namespace kyokuto4calender {
 						string[] item1 = { fNmae, fSize, fModifiedTime };
 						file_list_Lv.Items.Add(new ListViewItem(item1));
 					}
-					// 列幅を自動調整
-			//		file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+					//		file_list_Lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);					// 列幅を自動調整
+					pass_name_lb.Text = Constant.RootFolderName + "\\" + pass_tv.SelectedNode.FullPath;
 				} else {
 					dbMsg += "このフォルダはファイルなどが登録されていません";
 				}
 				MyLog(TAG, dbMsg);
-	//			GoogleFolderListUpAsync();
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -305,6 +305,183 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
+		private void file_open_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "file_open_bt_Click";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				//複数のファイルを選択できるようにする
+				openFDialog.Multiselect = true;
+				DialogResult dr = openFDialog.ShowDialog();
+				if (dr == System.Windows.Forms.DialogResult.OK) {
+					LFUtil.ListUpFolderFiles(openFDialog);
+					int fCount = 0;
+					foreach (string str in Constant.selectFiles) {
+						string fileName = System.IO.Path.GetFileName(@str);
+						dbMsg += "\r\n" + fileName;
+						Constant.selectFiles[fCount] = fileName;
+						fCount++;
+					}
+				}
+				GFilePut();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// ファイルをドロップ終了時
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void file_list_Lv_DragEnter(object sender, DragEventArgs e)
+		{
+			string TAG = "file_list_Lv_DragEnter";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					e.Effect = DragDropEffects.All;
+				} else {
+					e.Effect = DragDropEffects.None;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// ファイルをドロップ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void file_list_Lv_DragDrop(object sender, DragEventArgs e)
+		{
+			string TAG = "file_list_Lv_DragDrop";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+				int fileCount = files.Length;
+				dbMsg += fileCount + "件";
+
+				String titolStr = Constant.ApplicationName;
+				String msgStr = "ファイルを取得できませんでした。\r\n" +
+											"もう一度、送信したいファイルをドロップしてください";
+				MessageBoxButtons buttns = MessageBoxButtons.OK;
+				MessageBoxIcon icon = MessageBoxIcon.Warning;
+				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+				if (0 < fileCount) {
+					msgStr = "";
+					Constant.MakeFolderName = "";
+					Constant.selectFiles = new string[fileCount];
+					for (int i = 0; i < files.Length; i++) {
+						string rStr = files[i];
+						if (Constant.MakeFolderName.Equals("")) {
+							Constant.MakeFolderName = LFUtil.GetPearentPass(rStr, Constant.TopFolderName);
+							msgStr += Constant.TopFolderName + "の" + Constant.MakeFolderName + "に\r\n";
+						}
+						string fileName = LFUtil.GetFileNameExt(rStr);
+						dbMsg += "\r\n" + i + ")" + fileName;
+						Constant.selectFiles[i] = fileName;
+						msgStr += fileName + "\r\n";
+					}
+					buttns = MessageBoxButtons.OKCancel;
+					icon = MessageBoxIcon.Information;
+				}
+				//	if (1 == Constant.selectFiles.Count()) {
+				////		Constant.MakeFolderName = Constant.selectFiles[0];
+				//		msgStr = Constant.TopFolderName + "に\r\n" + Constant.MakeFolderName + msgStr + " を作成します";
+				//	} else {
+				msgStr += "\r\nを登録します";
+				//	}
+				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+				dbMsg += ",result=" + result;
+				if (result == DialogResult.OK) {        //「はい」が選択された時
+					dbMsg += ">>送信";
+					GFilePut();                            //送信
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+
+		/// <summary>
+		/// GoogleDriveへ書き込み
+		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
+		/// </summary>
+		public void GFilePut()
+		{
+			string TAG = "GFilePut";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				dbMsg += "書込むフォルダ＝" + Constant.MakeFolderName;
+				if (Constant.MakeFolderName == null || Constant.selectFiles == null) {
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "送信するファイルを選択して下さい";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Warning;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result;
+					return;
+				}
+				///		await Conect2DriveAsync(false);
+
+				Task<string> newFolder = Task.Run(() => {
+					return  GDriveUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);
+				});
+				try {
+					// 例外をキャッチする場合には、Waitメソッドを実施している部分をtry...catchでくくります。
+					// 例外が発生すると、AggregateExceptionにラップされてスローされます。
+					newFolder.Wait();
+				} catch (AggregateException ae) {
+					MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
+					MessageBoxButtons buttns = MessageBoxButtons.OK;
+					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += msgStr + ",result=" + result;
+
+				}
+				string parentId = newFolder.Result;
+				dbMsg += ">parent>" ;
+				//if (parentId == null) {
+				//	String titolStr = Constant.ApplicationName;
+				//	String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
+				//	MessageBoxButtons buttns = MessageBoxButtons.OK;
+				//	MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+				//	MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+				//	DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+				//	dbMsg += msgStr + ",result=" + result;
+				//} else {
+					dbMsg += "[" + parentId + "]に" + Constant.selectFiles.Count() + "件";
+					foreach (string str in Constant.selectFiles) {
+						dbMsg += "\r\n" + str;
+						string fullName = System.IO.Path.Combine(Constant.LocalPass, str);
+						dbMsg += ">>" + fullName;
+						Task<string> wrfile = Task.Run(() => {
+							return GDriveUtil.UploadFile(str, fullName, parentId);
+						});
+						wrfile.Wait();
+						String wrfileId = wrfile.Result;
+						dbMsg += ">作成>[" + wrfileId + "]";
+					}
+			//	}
+				MyLog(TAG, dbMsg);
+				GoogleFolderListUp(Constant.MakeFolderName);                     //更新状態を再描画
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+
 
 		private void GoogleDriveBrouser_FormClosing(object sender, FormClosingEventArgs e){ 
 			string TAG = "GoogleDriveBrouser_FormClosing";

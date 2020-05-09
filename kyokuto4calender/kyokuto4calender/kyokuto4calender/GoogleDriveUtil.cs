@@ -9,7 +9,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
-using Google.Apis.Util.Store;
+using Google.Apis.Upload;
 
 namespace kyokuto4calender {
 	class GoogleDriveUtil {
@@ -158,7 +158,8 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
-		/// フォルダを作る
+		/// フォルダを作り、IDを返す
+		/// 既に同名フォルダが有ればIDを返す
 		/// </summary>
 		/// <param name="name">表示される名前</param>
 		/// <param name="parentFolderId">作成する位置</param>
@@ -179,11 +180,14 @@ namespace kyokuto4calender {
 					File meta = new File();
 					meta.Name = name;
 					meta.MimeType = "application/vnd.google-apps.folder";
-					//			if (driveId != null) meta.DriveId = driveId;
-					if (parentFolderId != null) meta.Parents = new List<string> { parentFolderId };
+					if (parentFolderId == null || parentFolderId.Equals("")) {
+						folder = Task<string>.Run(() => FindByName(Constant.TopFolderName, SearchFilter.FOLDER));
+						parentFolderId = folder.Result;
+						dbMsg += ",parentFolder[" + parentFolderId + "]"+ Constant.TopFolderName  + "を作成";
+					}
+					meta.Parents = new List<string> { parentFolderId }; //特定のフォルダのサブフォルダ
 					dbMsg += ",meta=" + meta.Parents[0];
 					var request = Constant.MyDriveService.Files.Create(meta);
-					request.Fields = "id, name";
 					dbMsg += ",request=" + request.MethodName;
 					newFolder = await request.ExecuteAsync();
 					retStr = newFolder.Id;
@@ -192,7 +196,6 @@ namespace kyokuto4calender {
 					retStr = folderId;
 					dbMsg += ">既存>[" + retStr + "]" + newFolder.Name;
 				}
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -213,13 +216,16 @@ namespace kyokuto4calender {
 			string TAG = "UploadFile";
 			string dbMsg = "[GoogleDriveUtil]";
 			string retStr = null;
-			File newFile = new File();
+	//		File newFile = new File();
 			try {
 				dbMsg += "[" + parentId + "]" + fileName + "(" + filePath + ")";
-				Task<string> tFile = Task<string>.Run(() => FindByName(fileName, SearchFilter.FILE));
+				Task<string> tFile = Task<string>.Run(() => {
+					return FindByName(fileName, SearchFilter.FILE);
+				});
+				tFile.Wait();
+				string fileId = tFile.Result;
 				//		var tFile = await FindByName(fileName, SearchFilter.FILE);
-				if (tFile != null) {
-					string fileId = tFile.Result;
+				if (fileId != null) {
 					dbMsg += ",削除[" + fileId + "]";
 					var result = DelteItem(fileId);
 					dbMsg += ",result=" + result.Result;
@@ -233,12 +239,17 @@ namespace kyokuto4calender {
 					Parents = new List<string> { parentId }
 				};
 				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
-					// 新規追加
+					// Create:新規追加
 					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
-					request.Fields = "id, name";
-					newFile = (File)await request.UploadAsync();
-					retStr = newFile.Id;            //※作成したファイルID
-					dbMsg += ">>" + retStr;
+		//			var uploadProgress = await request.UploadAsync();
+					Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
+						return request.UploadAsync();
+					});
+					uploadProgress.Wait();
+
+					var rFile = request.ResponseBody;							//作成結果が格納され戻される
+					retStr = rFile.Id;   
+					dbMsg += ">作成したファイルID>" + retStr;
 					MyLog(TAG, dbMsg);
 					return retStr;
 				}

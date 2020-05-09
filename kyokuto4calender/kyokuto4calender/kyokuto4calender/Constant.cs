@@ -31,14 +31,14 @@ namespace kyokuto4calender {
 		public static string RootFolderID = "";   
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
-		public static string LocalPass = "";            //送信元フォルダ
-
+		public static string MakeFolderName = null;         //作成するファイルの格納フォルダ
 		public static String parentFolderId;
+		public static string LocalPass = "";            //送信元PCフォルダ
+
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFolderMembers;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveSelectedFiles;
-		public static string MakeFolderName = null;
 		public static string CurrentFolder = "";            //現在の対象フォルダ
 		public static string[] selectFiles = null;
 	}
