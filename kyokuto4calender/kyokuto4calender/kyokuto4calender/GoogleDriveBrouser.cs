@@ -66,44 +66,14 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			string rStr = "";
 			try {
-				Thread.Sleep(1);
+			//	Thread.Sleep(1);
 				string strSelectedNode;
 				strSelectedNode = pass_tv.SelectedNode.Text;                  // 選択されたノードを取得
 				dbMsg += strSelectedNode + "を選択中";
 				string fullPath = pass_tv.SelectedNode.FullPath;
 				dbMsg += ">>" + fullPath ;
-				pass_name_lb.Text = fullPath;
+				pass_name_lb.Text = Constant.RootFolderName + "\\" +  fullPath;
 				rStr = strSelectedNode;
-				/*
-int lCount = passList.Count();
-dbMsg += lCount+ "階層";
-if (passName.Equals(Constant.TopFolderName) && 1 < lCount) {
-return passName;
-}else if(2 < lCount) {
-passList.RemoveAt(passList.Count - 1);
-}
-if (passName == null) {
-dbMsg += "削除";
-if(1< passList.Count) {
-passList.RemoveAt(passList.Count - 1);
-}else{
-dbMsg += "不能";
-}
-} else{
-dbMsg += passName + "を追加";
-passList.Add(passName);
-}
-string folderStrs = "";
-foreach (string passN in passList) {
-folderStrs += "/" + passN;
-rStr = passN;
-}
-dbMsg += ","+ rStr;
-pass_name_lb.Text = folderStrs;
-if (passName.Equals(Constant.RootFolderName)) {
-SetPassLabel(Constant.TopFolderName);
-}
-*/
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -118,7 +88,24 @@ SetPassLabel(Constant.TopFolderName);
 		/// <param name="e"></param>
 		private void pass_name_lb_Click(object sender, EventArgs e)
 		{
-			cureentPassName = SetPassLabel(null);
+			string TAG = "pass_name_lb_Click";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				TreeNode selected = pass_tv.SelectedNode;
+				string strSelectedNode = selected.Text;                  // 選択されたノードを取得
+				dbMsg += strSelectedNode + "を選択中";
+				TreeNode parent = selected.Parent;
+				dbMsg += ">>" + parent.Text + ">>";
+				pass_tv.SelectedNode= parent;
+				selected = pass_tv.SelectedNode;
+				strSelectedNode = selected.Text;                  // 選択されたノードを取得
+				dbMsg += strSelectedNode + "に移動";
+				cureentPassName = SetPassLabel(strSelectedNode);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+
 		}
 
 		/// <summary>
