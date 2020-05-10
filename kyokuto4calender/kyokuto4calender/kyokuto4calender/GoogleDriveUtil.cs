@@ -220,11 +220,16 @@ namespace kyokuto4calender {
 				});
 				tFile.Wait();
 				string fileId = tFile.Result;
-				//		var tFile = await FindByName(fileName, SearchFilter.FILE);
 				if (fileId != null) {
 					dbMsg += ",削除[" + fileId + "]";
+					File rfile = FindById(fileId);
 					bool isFolder = false;
-					//※フォルダならtruに
+					if (rfile.MimeType.Equals("application/vnd.google-apps.folder")) {
+						dbMsg += ">>フォルダ";
+						isFolder = true;
+					} else {
+						dbMsg += ">>ファイル";
+					}
 					var result = DelteItem(fileId, isFolder);
 					dbMsg += ",result=" + result.Result;
 				}
@@ -280,15 +285,12 @@ namespace kyokuto4calender {
 				dbMsg += fileId;
 				Google.Apis.Drive.v3.FilesResource.DeleteRequest request = Constant.MyDriveService.Files.Delete(fileId);
 				retStr = await request.ExecuteAsync();
-				//	var rFile = request.ResponseBody;                           //作成結果が格納され戻される
-				//		retStr = result.      //※これではIDが返らない
 				//Task<Google.Apis.Requests.ClientServiceRequest> csRequest = Task.Run(() => {
 				//	return request.Execute();
 				//});
 				//csRequest.Wait();
 				//var rFile = request.ResponseBody;                           //作成結果が格納され戻される
 				//retStr = rFile.Id;
-
 				dbMsg += ">削除したファイルID>" + retStr;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -328,15 +330,15 @@ namespace kyokuto4calender {
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		public string FindById(string id)
+		public File FindById(string id)
 		{
 			string TAG = "FindById";
 			string dbMsg = "[GoogleDriveUtil]";
 			string retStr = null;
-			//	File retFile = null;
+				File retFile = null;
 			try {
 				dbMsg += "[id=" + id + "]";
-				File retFile = Constant.MyDriveService.Files.Get(id).Execute();
+				retFile = Constant.MyDriveService.Files.Get(id).Execute();
 				retStr = retFile.Name;
 				dbMsg += retStr;
 				dbMsg += ">>[" + retStr + "]";
@@ -344,7 +346,7 @@ namespace kyokuto4calender {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
-			return retStr;
+			return retFile;
 		}
 
 		/// <summary>

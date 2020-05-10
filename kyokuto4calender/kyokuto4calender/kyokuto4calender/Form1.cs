@@ -203,7 +203,8 @@ namespace kyokuto4calender {
 							dbMsg += "\r\n" + fId;
 							string ParentsID = fileItem.Parents[0];
 							dbMsg += "[Parents=" + ParentsID;
-							string ParentsName = GDriveUtil.FindById(ParentsID);
+							Google.Apis.Drive.v3.Data.File rFile = GDriveUtil.FindById(ParentsID);
+							string ParentsName = rFile.Name;
 							dbMsg += "]" + ParentsName;
 							string fName = fileItem.Name.ToString();
 							dbMsg += "," + fName;
@@ -373,7 +374,8 @@ namespace kyokuto4calender {
 						foreach (var fileItem in Constant.GDriveSelectedFiles) {
 							string ParentsID = fileItem.Parents[0];
 							dbMsg += "\r\n[Parents=" + ParentsID;
-							string ParentsName = GDriveUtil.FindById(ParentsID);
+							Google.Apis.Drive.v3.Data.File rFile = GDriveUtil.FindById(ParentsID);
+							string ParentsName = rFile.Name;
 							dbMsg += "]" + ParentsName;
 							string fName = fileItem.Name.ToString();
 							dbMsg += "," + fName;

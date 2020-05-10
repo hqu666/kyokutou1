@@ -21,7 +21,9 @@ namespace kyokuto4calender {
 
 		public Form1 mainForm;
 		public IList<string> passList = new List<string>();
-		public string cureentPassName = "";				//現在のパス名
+		public string cureentPassName = "";									 //現在のパス名
+		public IList<string> fullNames = new List<string>();            //PC内ファイルリスト
+	//	public IList<string> orgNames = new List<string>();            //サブフォルダ検索用
 
 		ColumnHeader columnName = new ColumnHeader();
 		ColumnHeader columnType = new ColumnHeader();
@@ -392,6 +394,20 @@ namespace kyokuto4calender {
 				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 				int fileCount = files.Length;
 				dbMsg += fileCount + "件";
+				SendFileListUp(files);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		private void SendFileListUp(string[] files)
+		{
+			string TAG = "SendFileListUp";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				int fileCount = files.Length;
+				dbMsg += fileCount + "件";
 
 				String titolStr = Constant.ApplicationName;
 				String msgStr = "ファイルを取得できませんでした。\r\n" +
@@ -402,9 +418,40 @@ namespace kyokuto4calender {
 				if (0 < fileCount) {
 					msgStr = "";
 					Constant.MakeFolderName = "";
+					//サブデレクトリの中身も取得
+	//				fullNames = new List<string>();
+					List<string> orgNames = new List<string>(files);            //サブフォルダ検索用
+					fileCount = orgNames.Count();
+					dbMsg += ",検索前" + fileCount + "件";
+					IList<string> fullNames = new List<string>();            //PC内ファイルリスト
+					foreach (string item in orgNames) {
+						dbMsg += "\r\n" + fullNames.Count + ")" + item;
+						fullNames.Add(item);
+						bool isDirectory = System.IO.File.GetAttributes(item).HasFlag(System.IO.FileAttributes.Directory);
+						if (isDirectory) {
+							string[] flFilses = System.IO.Directory.GetFiles(item, "*", System.IO.SearchOption.AllDirectories);
+							foreach (string flFilse in flFilses) {
+								dbMsg += "\r\n" + fullNames.Count + ")" + flFilse;
+								fullNames.Add(item);
+							}
+						}
+					}
+					dbMsg += "\r\n正常終了";
+					//		List<string> fullNames = new List<string>(GetAllISendtems(orgNames));
+					//Task<IList<string>> wrfile = Task.Run(() => {
+					//	return GetAllISendtems(orgNames);
+					//});
+					//wrfile.Wait();
+					//fullNames = new List<string>(wrfile.Result);
+
+					fileCount = fullNames.Count();
+					dbMsg += ">>" + fileCount + "件";
 					Constant.selectFiles = new string[fileCount];
-					for (int i = 0; i < files.Length; i++) {
-						string rStr = files[i];
+					int i = 0;
+					foreach (string rStr in fullNames) {
+						//for (int i = 0; i < files.Length; i++) {
+						//	string rStr = files[i];
+						dbMsg += "\r\n" + i + ")" + rStr;
 						if (Constant.MakeFolderName.Equals("")) {
 							Constant.MakeFolderName = LFUtil.GetPearentPass(rStr, Constant.TopFolderName);
 							msgStr += Constant.TopFolderName + "の" + Constant.MakeFolderName + "に\r\n";
@@ -413,7 +460,9 @@ namespace kyokuto4calender {
 						dbMsg += "\r\n" + i + ")" + fileName;
 						Constant.selectFiles[i] = fileName;
 						msgStr += fileName + "\r\n";
+						i++;
 					}
+
 					buttns = MessageBoxButtons.OKCancel;
 					icon = MessageBoxIcon.Information;
 				}
@@ -435,6 +484,35 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
+		public IList<string> GetAllISendtems(IList<string> orgNames)
+		{
+			string TAG = "GetAllISendtems";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				IList<string> fullNames = new List<string>();            //PC内ファイルリスト
+				foreach (string item in orgNames) {
+					dbMsg += "\r\n" + fullNames.Count + ")" + item;
+					fullNames.Add(item);
+					bool isDirectory = System.IO.File.GetAttributes(item).HasFlag(System.IO.FileAttributes.Directory);
+					if (isDirectory) {
+						string[] flFilses = System.IO.Directory.GetFiles(item, "*", System.IO.SearchOption.AllDirectories);
+						foreach (string flFilse in flFilses) {
+							dbMsg += "\r\n" + fullNames.Count + ")" + flFilse;
+							fullNames.Add(item);
+						}
+					}
+				}
+				dbMsg += "\r\n正常終了" ;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+				throw new NotImplementedException();
+			}
+			return fullNames;
+		}
+
+
 
 		/// <summary>
 		/// GoogleDriveへ書き込み
