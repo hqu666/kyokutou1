@@ -223,7 +223,9 @@ namespace kyokuto4calender {
 				//		var tFile = await FindByName(fileName, SearchFilter.FILE);
 				if (fileId != null) {
 					dbMsg += ",削除[" + fileId + "]";
-					var result = DelteItem(fileId);
+					bool isFolder = false;
+					//※フォルダならtruに
+					var result = DelteItem(fileId, isFolder);
 					dbMsg += ",result=" + result.Result;
 				}
 				LocalFileUtil LFUtil = new LocalFileUtil();
@@ -242,7 +244,6 @@ namespace kyokuto4calender {
 						return request.UploadAsync();
 					});
 					uploadProgress.Wait();
-
 					var rFile = request.ResponseBody;                           //作成結果が格納され戻される
 					retStr = rFile.Id;
 					dbMsg += ">作成したファイルID>" + retStr;
@@ -258,19 +259,37 @@ namespace kyokuto4calender {
 		/// <summary>
 		/// 指定されたIDのファイルを削除する
 		/// </summary>
-		/// <param name="fileId"></param>
+		/// <param name="itemName"></param>
 		/// <returns></returns>
-		public async Task<string> DelteItem(string fileId)
+		public async Task<string> DelteItem(string itemName, bool isFolder)
 		{
 			string TAG = "DelteItem";
 			string dbMsg = "[GoogleUtil]";
 			string retStr = null;
 			try {
+				dbMsg += itemName;
+				Task<string> tFile = Task<string>.Run(() => {
+					if(isFolder) {
+						return FindByName(itemName, SearchFilter.FOLDER);
+					}else{
+						return FindByName(itemName, SearchFilter.FILE);
+					}
+				});
+				tFile.Wait();
+				string fileId = tFile.Result;
 				dbMsg += fileId;
-				var request = Constant.MyDriveService.Files.Delete(fileId);
-				var result = await request.ExecuteAsync();
-				retStr = result.ToString();         //※これではIDが返らない
-				dbMsg += ">>" + retStr;
+				Google.Apis.Drive.v3.FilesResource.DeleteRequest request = Constant.MyDriveService.Files.Delete(fileId);
+				retStr = await request.ExecuteAsync();
+				//	var rFile = request.ResponseBody;                           //作成結果が格納され戻される
+				//		retStr = result.      //※これではIDが返らない
+				//Task<Google.Apis.Requests.ClientServiceRequest> csRequest = Task.Run(() => {
+				//	return request.Execute();
+				//});
+				//csRequest.Wait();
+				//var rFile = request.ResponseBody;                           //作成結果が格納され戻される
+				//retStr = rFile.Id;
+
+				dbMsg += ">削除したファイルID>" + retStr;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);

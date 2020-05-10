@@ -25,11 +25,15 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.pass_tv = new System.Windows.Forms.TreeView();
 			this.file_list_Lv = new System.Windows.Forms.ListView();
 			this.openFDialog = new System.Windows.Forms.OpenFileDialog();
 			this.pass_name_lb = new System.Windows.Forms.Label();
 			this.file_open_bt = new System.Windows.Forms.Button();
+			this.contextMStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.DelTSMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pass_tv
@@ -50,6 +54,7 @@
 			this.file_list_Lv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.file_list_Lv.ContextMenuStrip = this.contextMStrip;
 			this.file_list_Lv.HideSelection = false;
 			this.file_list_Lv.Location = new System.Drawing.Point(259, 53);
 			this.file_list_Lv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -59,7 +64,7 @@
 			this.file_list_Lv.UseCompatibleStateImageBehavior = false;
 			this.file_list_Lv.DragDrop += new System.Windows.Forms.DragEventHandler(this.file_list_Lv_DragDrop);
 			this.file_list_Lv.DragEnter += new System.Windows.Forms.DragEventHandler(this.file_list_Lv_DragEnter);
-			this.file_list_Lv.MouseUp += new System.Windows.Forms.MouseEventHandler(this.file_list_Lv_MouseUp);
+			this.file_list_Lv.DoubleClick += new System.EventHandler(this.file_list_Lv_DoubleClick);
 			// 
 			// openFDialog
 			// 
@@ -87,6 +92,21 @@
 			this.file_open_bt.UseVisualStyleBackColor = true;
 			this.file_open_bt.Click += new System.EventHandler(this.file_open_bt_Click);
 			// 
+			// contextMStrip
+			// 
+			this.contextMStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+			this.contextMStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DelTSMenuItem});
+			this.contextMStrip.Name = "contextMStrip";
+			this.contextMStrip.Size = new System.Drawing.Size(109, 28);
+			// 
+			// DelTSMenuItem
+			// 
+			this.DelTSMenuItem.Name = "DelTSMenuItem";
+			this.DelTSMenuItem.Size = new System.Drawing.Size(210, 24);
+			this.DelTSMenuItem.Text = "削除";
+			this.DelTSMenuItem.Click += new System.EventHandler(this.DelTSMenuItem_Click);
+			// 
 			// GoogleDriveBrouser
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -101,6 +121,7 @@
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "GoogleDriveBrouser";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GoogleDriveBrouser_FormClosing);
+			this.contextMStrip.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -113,5 +134,7 @@
 		private System.Windows.Forms.OpenFileDialog openFDialog;
 		private System.Windows.Forms.Label pass_name_lb;
 		private System.Windows.Forms.Button file_open_bt;
+		private System.Windows.Forms.ContextMenuStrip contextMStrip;
+		private System.Windows.Forms.ToolStripMenuItem DelTSMenuItem;
 	}
 }

@@ -283,9 +283,9 @@ namespace kyokuto4calender {
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void file_list_Lv_MouseUp(object sender, MouseEventArgs e)
+		private void file_list_Lv_DoubleClick(object sender, EventArgs e)
 		{
-			string TAG = "file_list_Lv_MouseUp";
+			string TAG = "file_list_Lv_DoubleClick";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				int focusedIndex = file_list_Lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
@@ -296,12 +296,12 @@ namespace kyokuto4calender {
 				string focusedFilesMimeType = focusedFiles.MimeType;
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
 				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
-					dbMsg += ">>フォルダ" + focusedName + "を開く" ;
+					dbMsg += ">>フォルダ" + focusedName + "を開く";
 					MyLog(TAG, dbMsg);
-					if(focusedName.Equals(Constant.TopFolderName)) {
-					//誤動作対策
+					if (focusedName.Equals(Constant.TopFolderName)) {
+						//誤動作対策
 						GoogleFileListUp(focusedName);
-					}else{
+					} else {
 						GoogleFolderListUp(focusedName);
 					}
 				} else {
@@ -315,7 +315,7 @@ namespace kyokuto4calender {
 							int selectedIndex = item.Index;
 							dbMsg += "\r\nselected=" + selectedIndex;
 							Constant.GDriveSelectedFiles.Add(Constant.GDriveFolderMembers[selectedIndex]);
-							string fId = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count-1].Id;
+							string fId = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Id;
 							dbMsg += "[" + fId;
 							string fName = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Name;
 							dbMsg += "]" + fName;
@@ -456,8 +456,6 @@ namespace kyokuto4calender {
 					dbMsg += ",result=" + result;
 					return;
 				}
-				///		await Conect2DriveAsync(false);
-
 				Task<string> newFolder = Task.Run(() => {
 					return  GDriveUtil.CreateFolder(Constant.MakeFolderName, Constant.TopFolderID, Constant.RootFolderID);
 				});
@@ -498,6 +496,71 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
+		/// <summary>
+		/// 削除メニューを選択
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void DelTSMenuItem_Click(object sender, EventArgs e)
+		{
+			string TAG = "DelTSMenuItem_Click";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				DeletItem();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		private void DeletItem()
+		{
+			string TAG = "DeletItem";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				int focusedIndex = file_list_Lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
+				dbMsg += ",focused[" + focusedIndex;
+				Google.Apis.Drive.v3.Data.File focusedFiles = Constant.GDriveFolderMembers[focusedIndex];
+				string focusedName = focusedFiles.Name;
+				dbMsg += "]" + focusedName;
+				bool isFolder = true;
+				string focusedFilesMimeType = focusedFiles.MimeType;
+				dbMsg += ",MimeType=" + focusedFilesMimeType;
+				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
+					dbMsg += ">>フォルダ" + focusedName + "を削除";
+				} else {
+					dbMsg += ">>ファイル" + focusedName + "を削除";
+					isFolder = false;
+				}
+				String titolStr = Constant.ApplicationName;
+				String msgStr = focusedName + "を削除しますか";
+				MessageBoxButtons buttns = MessageBoxButtons.OKCancel;
+				MessageBoxIcon icon = MessageBoxIcon.Warning;
+				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+				dbMsg += ",result=" + result;
+				if (result == DialogResult.OK) {        //「はい」が選択された時
+					Task<string> delItem = Task.Run(() => {
+						return GDriveUtil.DelteItem(focusedName, isFolder);
+					});
+					try {
+						// 例外をキャッチする場合には、Waitメソッドを実施している部分をtry...catchでくくります。
+						// 例外が発生すると、AggregateExceptionにラップされてスローされます。
+						delItem.Wait();
+					} catch (AggregateException ae) {
+						MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
+					}
+					string deltId = delItem.Result;
+					dbMsg += ">削除>" + deltId;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+
 
 		private void GoogleDriveBrouser_FormClosing(object sender, FormClosingEventArgs e){ 
 			string TAG = "GoogleDriveBrouser_FormClosing";
@@ -540,7 +603,6 @@ namespace kyokuto4calender {
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg);
 		}
-
 	}
 }
 
