@@ -110,7 +110,9 @@ namespace kyokuto4calender {
 
 		/// <summary>
 		/// treeViewへGoogleDriveの登録状態表示
+		/// 描画後はlistViewの描画に
 		/// </summary>
+		/// <param name="folderName"></param>
 		public void GoogleFolderListUp(string folderName)
 		{
 			string TAG = "GoogleFolderListUp";
@@ -122,7 +124,8 @@ namespace kyokuto4calender {
 				});
 				rFolders.Wait();
 				IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
-				if (GDriveFolders != null && GDriveFolders.Count > 0) {
+				TreeNode targetNode = new TreeNode();
+				if (GDriveFolders != null) {          // && 0< GDriveFolders.Count  だと件数が取れてない
 					dbMsg += ",中に" + GDriveFolders.Count + "件";
 					// ドライブ一覧を走査してツリーに追加
 					foreach (Google.Apis.Drive.v3.Data.File folder in GDriveFolders) {
@@ -133,11 +136,14 @@ namespace kyokuto4calender {
 						TreeNode node = new TreeNode(mFolderName);
 						node.Nodes.Add(new TreeNode());
 						pass_tv.Nodes.Add(node);
-						pass_tv.SelectedNode = node;			//最後のノードが選択される
+						if(folderName.Equals(mFolderName)) {
+							targetNode = node;
+						}
 					}
-				//	pass_tv.Sort();		//渡された配列がソートされていなければ
+					dbMsg += ",\r\n最終選択" + targetNode.Text;
+					pass_tv.SelectedNode = targetNode; 
+																  //	pass_tv.Sort();		//渡された配列がソートされていなければ
 					pass_tv.EndUpdate();
-				//	pass_tv.Select=folderName;
 					//			pass_tv.ExpandAll();                  // すべてのノードを展開する
 					GoogleFileListUp(folderName);
 				} else {
@@ -210,7 +216,6 @@ namespace kyokuto4calender {
 			}
 		}
 
-
 		/// <summary>
 		/// ListViewに選択されたフォルダの中身を表示
 		/// </summary>
@@ -225,7 +230,7 @@ namespace kyokuto4calender {
 				Constant.GDriveFolderMembers = null;
 				Constant.GDriveFolderMembers = GDriveUtil.GDFileListUp(pFolder, false);
 				if (Constant.GDriveFolderMembers != null) {
-					dbMsg = "," + Constant.GDriveFolderMembers.Count + "件";
+					dbMsg += "フォルダに" + Constant.GDriveFolderMembers.Count + "件";
 					// ListViewコントロールのプロパティを設定
 					file_list_Lv.FullRowSelect = true;
 					file_list_Lv.GridLines = true;
@@ -244,7 +249,7 @@ namespace kyokuto4calender {
 					columnData.Width = 120;
 					ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
 					file_list_Lv.Columns.AddRange(colHeaderRegValue);
-					// ListViewコントロールのデータをすべて消去します。
+					// ListViewコントロールのデータをすべて消去
 		//			file_list_Lv.Items.Clear();
 					foreach (var fileItem in Constant.GDriveFolderMembers) {
 						string fNmae = fileItem.Name.ToString();
@@ -293,7 +298,12 @@ namespace kyokuto4calender {
 				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
 					dbMsg += ">>フォルダ" + focusedName + "を開く" ;
 					MyLog(TAG, dbMsg);
-					GoogleFileListUp(focusedName);
+					if(focusedName.Equals(Constant.TopFolderName)) {
+					//誤動作対策
+						GoogleFileListUp(focusedName);
+					}else{
+						GoogleFolderListUp(focusedName);
+					}
 				} else {
 					dbMsg += ">>ファイル" + focusedName + "を送る";
 					if (Constant.GDriveSelectedFiles == null) {
@@ -426,7 +436,6 @@ namespace kyokuto4calender {
 			}
 		}
 
-
 		/// <summary>
 		/// GoogleDriveへ書き込み
 		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
@@ -489,8 +498,6 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
-
 
 		private void GoogleDriveBrouser_FormClosing(object sender, FormClosingEventArgs e){ 
 			string TAG = "GoogleDriveBrouser_FormClosing";
