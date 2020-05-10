@@ -42,7 +42,7 @@
 			this.pass_tv.Size = new System.Drawing.Size(239, 294);
 			this.pass_tv.TabIndex = 0;
 			this.pass_tv.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.PassTvBeforeExpand);
-			this.pass_tv.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.PassTvNodeMouseClick);
+			this.pass_tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.pass_tv_AfterSelect);
 			// 
 			// file_list_Lv
 			// 
@@ -74,6 +74,7 @@
 			this.pass_name_lb.Size = new System.Drawing.Size(213, 30);
 			this.pass_name_lb.TabIndex = 2;
 			this.pass_name_lb.Text = "閲覧中のフォルダ";
+			this.pass_name_lb.Click += new System.EventHandler(this.pass_name_lb_Click);
 			// 
 			// file_open_bt
 			// 

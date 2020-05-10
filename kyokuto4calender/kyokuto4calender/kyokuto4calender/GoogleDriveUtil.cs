@@ -208,12 +208,11 @@ namespace kyokuto4calender {
 		/// <param name="filePath">PC上のフルパス</param>
 		/// <param name="parentId">書込み先のフォルダID</param>
 		/// <returns>作成したファイルのID</returns>
-		public async Task<string> UploadFile(string fileName, string filePath, string parentId)
+		public string UploadFile(string fileName, string filePath, string parentId)
 		{
 			string TAG = "UploadFile";
 			string dbMsg = "[GoogleDriveUtil]";
 			string retStr = null;
-	//		File newFile = new File();
 			try {
 				dbMsg += "[" + parentId + "]" + fileName + "(" + filePath + ")";
 				Task<string> tFile = Task<string>.Run(() => {
@@ -238,14 +237,14 @@ namespace kyokuto4calender {
 				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
 					// Create:新規追加
 					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
-		//			var uploadProgress = await request.UploadAsync();
+					//			var uploadProgress = await request.UploadAsync();
 					Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
 						return request.UploadAsync();
 					});
 					uploadProgress.Wait();
 
-					var rFile = request.ResponseBody;							//作成結果が格納され戻される
-					retStr = rFile.Id;   
+					var rFile = request.ResponseBody;                           //作成結果が格納され戻される
+					retStr = rFile.Id;
 					dbMsg += ">作成したファイルID>" + retStr;
 					MyLog(TAG, dbMsg);
 					return retStr;
