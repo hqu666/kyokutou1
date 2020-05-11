@@ -7,7 +7,6 @@ using System.Windows.Forms;
 
 namespace kyokuto4calender {
 	class CS_Util {
-		public Boolean debugNow = true;
 		/// <summary>
 		/// デバッグログ
 		/// 出荷時は　debugNow　をfalseに
@@ -16,17 +15,16 @@ namespace kyokuto4calender {
 		/// <param name="dbMsg"></param>
 		public void MyLog(String TAG, String dbMsg)
 		{
-			if (debugNow) {
+			if (Constant.debugNow) {
 				Console.WriteLine(TAG + " : " + dbMsg);
 				//System.Diagnostics.Trace.WriteLine(TAG + " : " + dbMsg);
 				//System.Diagnostics.Debug.WriteLine(TAG + " : " + dbMsg);
 			}
 		}
 
-		public static Boolean errorCheckNow = true;
 		public void MyErrorLog(String TAG, String dbMsg)
 		{
-			if (errorCheckNow) {
+			if (Constant.errorCheckNow) {
 				//					Xamarin.Forms.Internals.Log.Warning(TAG, dbMsg);
 				Console.WriteLine(TAG + " : " + dbMsg);
 			}

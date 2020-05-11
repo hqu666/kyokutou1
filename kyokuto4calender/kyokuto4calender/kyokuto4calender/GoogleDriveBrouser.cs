@@ -431,15 +431,16 @@ namespace kyokuto4calender {
 					IList<string> fullNames = new List<string>();            //PC内作業用ファイルリスト
 					foreach (string item in orgNames) {
 						dbMsg += "\r\n" + fullNames.Count + ")" + item;
-						fullNames.Add(item);
 						bool isDirectory = System.IO.File.GetAttributes(@item).HasFlag(System.IO.FileAttributes.Directory);
+						//フォルダが渡されたらその中
 						if (isDirectory) {
-							string[] flFilses = System.IO.Directory.GetFiles(@item, "*", System.IO.SearchOption.AllDirectories);
+						string[] flFilses = System.IO.Directory.GetFiles(@item, "*", System.IO.SearchOption.AllDirectories);
 							foreach (string flFilse in flFilses) {
 								dbMsg += "\r\n" + fullNames.Count + ")" + flFilse;
 								fullNames.Add(flFilse);
 							}
-						}else{
+						}else{																																								//ファイルなら
+							fullNames.Add(item);																																	//そのまま追加
 						}
 					}
 					dbMsg += "\r\n正常終了";
@@ -454,47 +455,50 @@ namespace kyokuto4calender {
 
 					////フォルダとファイルの格納
 					Constant.sendFiles = new List<Constant.LocalFile>();             //送信元PCのファイルリスト
-	//				Constant.selectFiles = new List<string>();                  //送信元PCのファイルリスト
-					string b_folderName = "";
+					string b_folderPass = "";
 					foreach (string rStr in fullNames) {
 						dbMsg += "\r\n" + Constant.sendFiles.Count + ")" + rStr;
 						string fileName = System.IO.Path.GetFileName(@rStr);
 						dbMsg += "::" + fileName;
-						string parentName = System.IO.Path.GetDirectoryName(@rStr);      //一つ上までのフルパス
-						dbMsg += ",一つ上のフォルダ名=" + parentName;
-						parentName = System.IO.Path.GetFileName(parentName);
-						dbMsg += ">>" + parentName;
+						string parentPsss = System.IO.Path.GetDirectoryName(@rStr);      //一つ上までのフルパス
+						dbMsg += ",一つ上のフォルダ名=" + parentPsss;
+						bool isDirectory = System.IO.Directory.Exists(@rStr);
+						string parentName = System.IO.Path.GetFileName(parentPsss);
+						dbMsg += ",parentName=" + parentName;
 
-						if (!parentName.Equals(b_folderName)) {                             //直上のフォルダ名が変わったら
+						//直上のフォルダ名が変わったらフォルダ作成
+						if (!@parentPsss.Equals(@b_folderPass)) {
+							b_folderPass = parentPsss;
 							Constant.LocalFile localFolder = new Constant.LocalFile();
 							dbMsg += ":フォルダ:" + parentName;
 							localFolder.name = parentName;
-							parentName = System.IO.Path.GetDirectoryName(@rStr);      //一つ上までのフルパス
-							localFolder.fullPass = parentName;
-							parentName = System.IO.Path.GetFileName(parentName);
-							localFolder.parent = parentName;
+							string parentparentPsss = System.IO.Path.GetDirectoryName(@parentPsss);
+							dbMsg += ">もう一つ上>" + parentparentPsss;
+							localFolder.fullPass = parentparentPsss;
+							string parentparentName = System.IO.Path.GetFileName(@parentparentPsss);
+							dbMsg += ",parentName=" + parentparentName;
+							localFolder.parent = parentparentName;
 							localFolder.isFolder = true;
 							Constant.sendFiles.Add(localFolder);
 							dbMsg += "\r\n" + Constant.sendFiles.Count + ")" + rStr;
 							msgStr += "\r\n" + parentName + "に";
-							b_folderName = parentName;
 						}
-						bool isDirectory = System.IO.Directory.Exists(@rStr);
-						if (isDirectory) {
-						} else { 
-							dbMsg += ":ファイル;" + fileName;
-			//				Constant.selectFiles.Add(fileName);
-							Constant.LocalFile localFile = new Constant.LocalFile();
-							localFile.fullPass = rStr;
-							localFile.name = fileName;
-							localFile.parent = parentName;
-							localFile.isFolder = false;
-							Constant.sendFiles.Add(localFile);
-							msgStr +=  fileName + ",";
-						}
+						dbMsg += ":ファイル;" + fileName;
+						Constant.LocalFile localFile = new Constant.LocalFile();
+						localFile.fullPass = rStr;
+						localFile.name = fileName;
+						localFile.parent = parentName;
+						localFile.isFolder = false;
+						Constant.sendFiles.Add(localFile);
+						msgStr +=  fileName + ",";
 					}
 					buttns = MessageBoxButtons.OKCancel;
 					icon = MessageBoxIcon.Information;
+				}
+				if (Constant.debugNow) {
+					foreach (Constant.LocalFile sFile in Constant.sendFiles) {
+						dbMsg += "\r\n" + sFile.parent + "に" + sFile.name + ":" + sFile.isFolder + ":" + sFile.fullPass;
+					}
 				}
 				msgStr += "\r\nを登録します";
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
@@ -538,8 +542,6 @@ namespace kyokuto4calender {
 			return fullNames;
 		}
 
-
-
 		/// <summary>
 		/// GoogleDriveへ書き込み
 		/// System.io.FileでPCのローカルファイルを読み出すのでGoogleDriveクラスと分離
@@ -549,14 +551,15 @@ namespace kyokuto4calender {
 			string TAG = "GFilePut";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
+				String titolStr = Constant.ApplicationName;
+				String msgStr = "送信するファイルを選択して下さい";
+				MessageBoxButtons buttns = MessageBoxButtons.OK;
+				MessageBoxIcon icon = MessageBoxIcon.Warning;
+				MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
+
 				if (Constant.sendFiles == null) {     //Constant.MakeFolderName == null || 
-					String titolStr = Constant.ApplicationName;
-					String msgStr = "送信するファイルを選択して下さい";
-					MessageBoxButtons buttns = MessageBoxButtons.OK;
-					MessageBoxIcon icon = MessageBoxIcon.Warning;
-					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
-					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
-					dbMsg += ",result=" + result;
+					DialogResult result1 = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += ",result=" + result1;
 					return;
 				}
 				dbMsg += "送信ファイル数＝" + Constant.sendFiles.Count + "件";
@@ -579,17 +582,20 @@ namespace kyokuto4calender {
 				string parentId = newFolder.Result;
 				dbMsg += ">parent>" ;
 				if (parentId == null) {
-					String titolStr = Constant.ApplicationName;
-					String msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
-					MessageBoxButtons buttns = MessageBoxButtons.OK;
-					MessageBoxIcon icon = MessageBoxIcon.Exclamation;
-					MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1;
-					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
-					dbMsg += msgStr + ",result=" + result;
+					 msgStr = "フォルダを作成できませんでした。\r\nもう一度書込むファイルをドロップしてください";
+					 icon = MessageBoxIcon.Exclamation;
+					DialogResult result2 = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+					dbMsg += msgStr + ",result=" + result2;
 				} else {
-					dbMsg += "[" + parentId + "]に" + Constant.sendFiles.Count() + "件";
+					dbMsg += "[" + parentId + "]" + Constant.MakeFolderName + "に" + Constant.sendFiles.Count() + "件を登録";
 					foreach (Constant.LocalFile sFile in Constant.sendFiles) {
 						string pName = sFile.parent;
+						bool isFolder = sFile.isFolder ;
+						if (isFolder){
+							dbMsg += "\r\nフォルダ作成";
+						}else{
+							dbMsg += "\r\nファイル書き込み";
+						}
 						Task<string> pFile= Task.Run(() => {
 							return GDriveUtil.FindByName(pName);
 						});
@@ -599,31 +605,56 @@ namespace kyokuto4calender {
 							MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
 						}
 						string pId = pFile.Result;
-
-						Task<string> pFolder = Task.Run(() => {
-							return GDriveUtil.CreateFolder(pName, Constant.TopFolderID, Constant.RootFolderID);
-						});
-						try {
-							pFolder.Wait();
-						} catch (AggregateException ae) {
-							MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
+						if(pId == null) {
+							pId = Constant.TopFolderID;
+							dbMsg += "＞追加フォルダ";
+							Task<string> pFolder = Task.Run(() => {
+								return GDriveUtil.CreateFolder(pName, pId, Constant.RootFolderID);
+							});
+							try {
+								pFolder.Wait();
+							} catch (AggregateException ae) {
+								MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
+							}
+							pId = pFolder.Result;
+						} else {
+							dbMsg += "＞既存フォルダ";
 						}
-						pId = pFolder.Result;
-						dbMsg += "\r\n["  + pId  + "]" + pName;
+
+						dbMsg += "["  + pId  + "]" + pName;
 
 						string sFileName = sFile.name;
 						dbMsg += "に" + sFileName;
 						string fullName = sFile.fullPass;
 						//System.IO.Path.Combine(Constant.LocalPass, str);
 						dbMsg += ">>" + fullName;
-						Task<string> wrfile = Task.Run(() => {
-							return GDriveUtil.UploadFile(sFileName, fullName, pId);
-						});
-						wrfile.Wait();
-						String wrfileId = wrfile.Result;
-						dbMsg += ">作成>[" + wrfileId + "]";
+						if(sFile.isFolder) {
+							Task<string> pFolder = Task.Run(() => {
+								return GDriveUtil.FindByName(sFile.parent);
+							});
+							pFolder.Wait();
+							string parentFolderId = pFolder.Result;
+							dbMsg += "[" + parentFolderId +"]" + sFile.parent + "の下に";
+							Task<string> wrfolder = Task.Run(() => {
+								return GDriveUtil.CreateFolder(sFileName, parentFolderId );
+							});
+							wrfolder.Wait();
+							String wrfileId = wrfolder.Result;
+							dbMsg += ">作成>[" + wrfileId + "]";
+						} else {
+							Task<string> wrfile = Task.Run(() => {
+								return GDriveUtil.UploadFile(sFileName, fullName, pId);
+							});
+							wrfile.Wait();
+							String wrfileId = wrfile.Result;
+							dbMsg += ">作成>[" + wrfileId + "]";
+						}
 					}
 			}
+				 msgStr = "終了しました";
+				 icon = MessageBoxIcon.Information;
+				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+
 				MyLog(TAG, dbMsg);
 				GoogleFolderListUp(Constant.MakeFolderName);                     //更新状態を再描画
 			} catch (Exception er) {

@@ -11,6 +11,9 @@ using Google.Apis.Calendar.v3.Data;
 
 namespace kyokuto4calender {
 	class Constant {
+		public static bool debugNow = true;
+		public static bool errorCheckNow = true;
+
 		//認証情報/API キー
 		public static string ApplicationName = "kyokuto4";                                        //	アプリケーション名
 		public static string APIKey = "AIzaSyAnJ-QXa9dqQr644u7jn_3-sxSr3XL_z60";

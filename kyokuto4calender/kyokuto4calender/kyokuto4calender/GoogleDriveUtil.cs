@@ -235,28 +235,29 @@ namespace kyokuto4calender {
 					var result = DelteItem(fileId, isFolder);
 					dbMsg += ",result=" + result.Result;
 				}
-				LocalFileUtil LFUtil = new LocalFileUtil();
-				String MimeStr = LFUtil.GetMimeType(filePath);
-				dbMsg += ",Mime=" + MimeStr;
-				var meta = new File() {
-					Name = System.IO.Path.GetFileName(filePath),
-					MimeType = MimeStr,
-					Parents = new List<string> { parentId }
-				};
-				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
-					// Create:新規追加
-					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
-					//			var uploadProgress = await request.UploadAsync();
-					Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
-						return request.UploadAsync();
-					});
-					uploadProgress.Wait();
-					var rFile = request.ResponseBody;                           //作成結果が格納され戻される
-					retStr = rFile.Id;
-					dbMsg += ">作成したファイルID>" + retStr;
-					MyLog(TAG, dbMsg);
-					return retStr;
-				}
+					LocalFileUtil LFUtil = new LocalFileUtil();
+					String MimeStr = LFUtil.GetMimeType(filePath);
+					dbMsg += ",Mime=" + MimeStr;
+					var meta = new File() {
+						Name = System.IO.Path.GetFileName(filePath),
+						MimeType = MimeStr,
+						Parents = new List<string> { parentId }
+					};
+					using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
+						// Create:新規追加
+						var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
+						//			var uploadProgress = await request.UploadAsync();
+						Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
+							return request.UploadAsync();
+						});
+						uploadProgress.Wait();
+						var rFile = request.ResponseBody;                           //作成結果が格納され戻される
+						retStr = rFile.Id;
+						dbMsg += ">作成したファイルID>" + retStr;
+						MyLog(TAG, dbMsg);
+						return retStr;
+					}
+
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 				return null;
