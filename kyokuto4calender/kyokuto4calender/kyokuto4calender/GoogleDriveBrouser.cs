@@ -401,6 +401,10 @@ namespace kyokuto4calender {
 			}
 		}
 
+		/// <summary>
+		/// ファイルとフォルダのリストアップ
+		/// </summary>
+		/// <param name="files"></param>
 		private void SendFileListUp(string[] files)
 		{
 			string TAG = "SendFileListUp";
@@ -418,23 +422,34 @@ namespace kyokuto4calender {
 				if (0 < fileCount) {
 					msgStr = "";
 					Constant.MakeFolderName = "";
-					//サブデレクトリの中身も取得
-	//				fullNames = new List<string>();
-					List<string> orgNames = new List<string>(files);            //サブフォルダ検索用
+					Constant.sendFiles = new List<Constant.LocalFile>();             //送信元PCのファイルリスト
+		//			List < Constant.LocalFile > readFiles = new List<Constant.LocalFile>();             //送信元PCのファイルリスト
+					Constant.selectFiles = new List<string>();                 //送信元PCのファイルリスト
+					////フォルダとファイルの格納
+					List<string> orgNames = new List<string>(files);            //渡されたファイル名リストからサブフォルダ検索用配列作成
 					fileCount = orgNames.Count();
-					dbMsg += ",検索前" + fileCount + "件";
-					IList<string> fullNames = new List<string>();            //PC内ファイルリスト
+					dbMsg += ",渡されたのは" + fileCount + "件";
+					IList<string> fullNames = new List<string>();            //PC内作業用ファイルリスト
 					foreach (string item in orgNames) {
 						dbMsg += "\r\n" + fullNames.Count + ")" + item;
+	//					Constant.LocalFile readFile = new Constant.LocalFile();
+		//				readFile.fullPass = item;
 						fullNames.Add(item);
-						bool isDirectory = System.IO.File.GetAttributes(item).HasFlag(System.IO.FileAttributes.Directory);
+						bool isDirectory = System.IO.File.GetAttributes(@item).HasFlag(System.IO.FileAttributes.Directory);
 						if (isDirectory) {
-							string[] flFilses = System.IO.Directory.GetFiles(item, "*", System.IO.SearchOption.AllDirectories);
+				//			readFile.isFolder = true;
+							string[] flFilses = System.IO.Directory.GetFiles(@item, "*", System.IO.SearchOption.AllDirectories);
 							foreach (string flFilse in flFilses) {
 								dbMsg += "\r\n" + fullNames.Count + ")" + flFilse;
-								fullNames.Add(item);
+								//Constant.LocalFile readFile2 = new Constant.LocalFile();
+								//readFile2.fullPass = item;
+								//readFiles.Add(readFile2);
+								fullNames.Add(flFilse);
 							}
+						}else{
+		//					readFile.isFolder = false;
 						}
+		//				readFiles.Add(readFile);
 					}
 					dbMsg += "\r\n正常終了";
 					//		List<string> fullNames = new List<string>(GetAllISendtems(orgNames));
@@ -443,24 +458,59 @@ namespace kyokuto4calender {
 					//});
 					//wrfile.Wait();
 					//fullNames = new List<string>(wrfile.Result);
-
 					fileCount = fullNames.Count();
-					dbMsg += ">>" + fileCount + "件";
-					Constant.selectFiles = new string[fileCount];
-					int i = 0;
+					dbMsg += ">ファイルだけで>" + fileCount + "件";
+
+					////フォルダとファイルの格納
+					Constant.sendFiles = new List<Constant.LocalFile>();             //送信元PCのファイルリスト
+					Constant.selectFiles = new List<string>();                  //送信元PCのファイルリスト
+		//			int i = 0;
+					string b_folderName = "";
 					foreach (string rStr in fullNames) {
-						//for (int i = 0; i < files.Length; i++) {
-						//	string rStr = files[i];
-						dbMsg += "\r\n" + i + ")" + rStr;
-						if (Constant.MakeFolderName.Equals("")) {
-							Constant.MakeFolderName = LFUtil.GetPearentPass(rStr, Constant.TopFolderName);
-							msgStr += Constant.TopFolderName + "の" + Constant.MakeFolderName + "に\r\n";
+						dbMsg += "\r\n" + Constant.sendFiles.Count + ")" + rStr;
+						string fileName = System.IO.Path.GetFileName(@rStr);
+						dbMsg += "::" + fileName;
+						string parentName = System.IO.Path.GetDirectoryName(@rStr);      //一つ上までのフルパス
+						dbMsg += ",一つ上のフォルダ名=" + parentName;
+						parentName = System.IO.Path.GetFileName(parentName);
+						dbMsg += ">>" + parentName;
+
+						if (!parentName.Equals(b_folderName)) {                             //直上のフォルダ名が変わったら
+							Constant.LocalFile localFolder = new Constant.LocalFile();
+							dbMsg += ":フォルダ:" + parentName;
+							localFolder.name = parentName;
+							parentName = System.IO.Path.GetDirectoryName(@rStr);      //一つ上までのフルパス
+							localFolder.fullPass = parentName;
+							parentName = System.IO.Path.GetFileName(parentName);
+							localFolder.parent = parentName;
+							localFolder.isFolder = true;
+							Constant.sendFiles.Add(localFolder);
+							//		if(!folderName.Equals(Constant.TopFolderName)) {            //仕様；案件フォルダは作らない
+							Constant.selectFiles.Add(parentName);           //その名称を格納
+							msgStr += "\r\n" + parentName + "に";
+							b_folderName = parentName;
+							//		}
 						}
-						string fileName = LFUtil.GetFileNameExt(rStr);
-						dbMsg += "\r\n" + i + ")" + fileName;
-						Constant.selectFiles[i] = fileName;
-						msgStr += fileName + "\r\n";
-						i++;
+						bool isDirectory = System.IO.Directory.Exists(@rStr);
+						//System.IO.File.GetAttributes(rStr).HasFlag(System.IO.FileAttributes.Directory);
+						if (isDirectory) {
+						} else { 
+							dbMsg += ":ファイル;" + fileName;
+							Constant.selectFiles.Add(fileName);
+							Constant.LocalFile localFile = new Constant.LocalFile();
+							localFile.fullPass = rStr;
+							localFile.name = fileName;
+							localFile.parent = parentName;
+							localFile.isFolder = false;
+							Constant.sendFiles.Add(localFile);
+							msgStr +=  fileName + ",";
+						}
+
+						//if (Constant.MakeFolderName.Equals("")) {
+						//	Constant.MakeFolderName = LFUtil.GetPearentPass(rStr, LocalFile.TopFolderName);
+						//	msgStr += Constant.TopFolderName + "の" + Constant.MakeFolderName + "に\r\n";
+						//}
+		//				i++;
 					}
 
 					buttns = MessageBoxButtons.OKCancel;
@@ -475,11 +525,12 @@ namespace kyokuto4calender {
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 				dbMsg += ",result=" + result;
 				if (result == DialogResult.OK) {        //「はい」が選択された時
-					dbMsg += ">>送信";
+					dbMsg += ">>" + Constant.selectFiles.Count + "件を送信";
+					MyLog(TAG, dbMsg);
 					GFilePut();                            //送信
+				}else{
+					MyLog(TAG, dbMsg);
 				}
-
-				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -524,7 +575,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				dbMsg += "書込むフォルダ＝" + Constant.MakeFolderName;
-				if (Constant.MakeFolderName == null || Constant.selectFiles == null) {
+				if (Constant.selectFiles == null) {     //Constant.MakeFolderName == null || 
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "送信するファイルを選択して下さい";
 					MessageBoxButtons buttns = MessageBoxButtons.OK;
@@ -686,4 +737,7 @@ namespace kyokuto4calender {
 
 /*
  TreeView と ListView でエクスプローラーのような画面を作成してみた		https://www.doraxdora.com/blog/2018/01/30/post-3801/
+
+ パスからファイル名、拡張子、ディレクトリ名、ルートディレクトリ名等の情報を取得する
+		https://dobon.net/vb/dotnet/file/pathclass.html
  */

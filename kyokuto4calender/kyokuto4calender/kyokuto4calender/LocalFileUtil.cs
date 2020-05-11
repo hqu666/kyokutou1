@@ -42,8 +42,8 @@ namespace kyokuto4calender {
 			string retStr = "";
 			dbMsg += "," + fileName;
 			try {
-				Constant.LocalPass = System.IO.Path.GetDirectoryName(fileName);
-				dbMsg += "," + Constant.LocalPass;
+				Constant.LocalPass = System.IO.Path.GetDirectoryName(fileName);		//
+				dbMsg += ",一つ上のフォルダ名=" + Constant.LocalPass;
 				string[] delimiter = { rootName };
 				string[] strs = Constant.LocalPass.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
 				retStr = strs[1];

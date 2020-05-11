@@ -39,7 +39,23 @@ namespace kyokuto4calender {
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFolderMembers;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveSelectedFiles;
-		public static string CurrentFolder = "";            //現在の対象フォルダ
-		public static string[] selectFiles = null;
+		public static string CurrentFolder = "";                    //現在の対象フォルダ
+		public struct LocalFile {
+			public string fullPass;
+			public string name;
+			public string parent;
+			public bool isFolder;
+
+			public LocalFile(string fullPass, string name, string parent, bool isFolder)
+			{
+				this.fullPass = fullPass;
+				this.name = name;
+				this.parent = parent;
+				this.isFolder = isFolder;
+			}
+		}
+		public static IList<LocalFile> sendFiles = null;             //送信元PCのファイルリスト
+
+		public static IList<string> selectFiles = null;             //送信元PCのファイルリスト
 	}
 }
