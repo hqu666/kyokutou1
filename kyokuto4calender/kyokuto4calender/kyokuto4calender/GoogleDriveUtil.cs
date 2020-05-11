@@ -181,6 +181,8 @@ namespace kyokuto4calender {
 						folder = Task<string>.Run(() => FindByName(Constant.TopFolderName, SearchFilter.FOLDER));
 						parentFolderId = folder.Result;
 						dbMsg += ",parentFolder[" + parentFolderId + "]"+ Constant.TopFolderName  + "を作成";
+					}else{
+
 					}
 					meta.Parents = new List<string> { parentFolderId }; //特定のフォルダのサブフォルダ
 					dbMsg += ",meta=" + meta.Parents[0];
