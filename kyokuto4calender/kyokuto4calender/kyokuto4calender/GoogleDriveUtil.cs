@@ -216,23 +216,27 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveUtil]";
 			string retStr = null;
 			try {
-				dbMsg += "[" + parentId + "]" + fileName + "(" + filePath + ")";
-				Task<string> tFile = Task<string>.Run(() => {
-					return FindByName(fileName, SearchFilter.FILE);
+				//検索して同じファイルが無い事を確認
+				File rParent = FindById(parentId);
+				string parentName = rParent.Name;
+				dbMsg += "[" + parentName + "]" + fileName + "(" + filePath + ")";
+				Task<File> tFile = Task<string>.Run(() => {
+					return FindByNameParent(fileName, parentName);
 				});
 				tFile.Wait();
-				string fileId = tFile.Result;
+				File targetF = tFile.Result;
+				string fileId = targetF.Id;
 				if (fileId != null) {
 					dbMsg += ",削除[" + fileId + "]";
-					File rfile = FindById(fileId);
-					bool isFolder = false;
-					if (rfile.MimeType.Equals("application/vnd.google-apps.folder")) {
-						dbMsg += ">>フォルダ";
-						isFolder = true;
-					} else {
-						dbMsg += ">>ファイル";
-					}
-					var result = DelteItem(fileId, isFolder);
+					//		File rfile = FindById(fileId);
+					//bool isFolder = false;
+					//if (targetF.MimeType.Equals("application/vnd.google-apps.folder")) {
+					//	dbMsg += ">>フォルダ";
+					//	isFolder = true;
+					//} else {
+					//	dbMsg += ">>ファイル";
+					//}
+					var result = DelteItem(fileId);
 					dbMsg += ",result=" + result.Result;
 				}
 					LocalFileUtil LFUtil = new LocalFileUtil();
@@ -267,24 +271,24 @@ namespace kyokuto4calender {
 		/// <summary>
 		/// 指定されたIDのファイルを削除する
 		/// </summary>
-		/// <param name="itemName"></param>
+		/// <param name="fileId"></param>
 		/// <returns></returns>
-		public async Task<string> DelteItem(string itemName, bool isFolder)
+		public async Task<string> DelteItem(string fileId)
 		{
 			string TAG = "DelteItem";
 			string dbMsg = "[GoogleUtil]";
 			string retStr = null;
 			try {
-				dbMsg += itemName;
-				Task<string> tFile = Task<string>.Run(() => {
-					if(isFolder) {
-						return FindByName(itemName, SearchFilter.FOLDER);
-					}else{
-						return FindByName(itemName, SearchFilter.FILE);
-					}
-				});
-				tFile.Wait();
-				string fileId = tFile.Result;
+				//dbMsg += itemName;
+				//Task<string> tFile = Task<string>.Run(() => {
+				//	if (isFolder) {
+				//		return FindByName(itemName, SearchFilter.FOLDER);
+				//	} else {
+				//		return FindByName(itemName, SearchFilter.FILE);
+				//	}
+				//});
+				//tFile.Wait();
+				//string fileId = tFile.Result;
 				dbMsg += fileId;
 				Google.Apis.Drive.v3.FilesResource.DeleteRequest request = Constant.MyDriveService.Files.Delete(fileId);
 				retStr = await request.ExecuteAsync();
@@ -301,6 +305,42 @@ namespace kyokuto4calender {
 			}
 			return retStr;
 		}
+
+		/// <summary>
+		/// 検索対象の名称と親フォルダの名称で検索
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="parentName"></param>
+		/// <param name="isFolder">検索対象の種類</param>
+		/// <returns>Google.Apis.Drive.v3.Data.File</returns>
+		public File FindByNameParent(string name, string parentName)
+		{
+			string TAG = "FindByNameParent";
+			string dbMsg = "[GoogleUtil]";
+			File retFile = null;
+			try {
+				dbMsg = "[" + parentName + "]" + name ;
+				IList<File> retList = GDFileListUp(parentName, false);
+				dbMsg += ">該当＞" + retList.Count + "件";
+				foreach (File rItem in retList) {
+					string itemName = rItem.Name;
+					string mimeType = rItem.MimeType;
+					dbMsg += "\r\n" + itemName + ")" + mimeType;
+					if(@itemName.Equals(@name)) {
+						//if(isFolder && mimeType.Equals("application/vnd.google-apps.folder")) {
+						retFile = rItem;
+						dbMsg += ">＞的中";
+						break;
+						//}
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retFile;
+		}
+
 
 		/// <summary>
 		/// フォルダもしくはファイル名称で検索
