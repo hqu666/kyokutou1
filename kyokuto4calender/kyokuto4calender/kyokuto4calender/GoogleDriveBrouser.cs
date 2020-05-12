@@ -707,7 +707,7 @@ namespace kyokuto4calender {
 				dbMsg += ",result=" + result;
 				if (result == DialogResult.OK) {        //「はい」が選択された時
 					Task<string> delItem = Task.Run(() => {
-						return GDriveUtil.DelteItem(focusedName, isFolder);
+						return GDriveUtil.DelteItem(focusedName);
 					});
 					try {
 						// 例外をキャッチする場合には、Waitメソッドを実施している部分をtry...catchでくくります。

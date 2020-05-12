@@ -236,8 +236,14 @@ namespace kyokuto4calender {
 					//} else {
 					//	dbMsg += ">>ファイル";
 					//}
-					var result = DelteItem(fileId);
-					dbMsg += ",result=" + result.Result;
+
+					Task<string> delItem = Task.Run(() => {
+						return DelteItem(fileId);
+					});
+					delItem.Wait();
+
+				//	var result = DelteItem(fileId);
+					dbMsg += ",消去=" + delItem.Result;
 				}
 					LocalFileUtil LFUtil = new LocalFileUtil();
 					String MimeStr = LFUtil.GetMimeType(filePath);
@@ -293,7 +299,7 @@ namespace kyokuto4calender {
 				Google.Apis.Drive.v3.FilesResource.DeleteRequest request = Constant.MyDriveService.Files.Delete(fileId);
 				retStr = await request.ExecuteAsync();
 				//Task<Google.Apis.Requests.ClientServiceRequest> csRequest = Task.Run(() => {
-				//	return request.Execute();
+				//	return request.ExecuteAsync();
 				//});
 				//csRequest.Wait();
 				//var rFile = request.ResponseBody;                           //作成結果が格納され戻される
