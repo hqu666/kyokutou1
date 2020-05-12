@@ -51,7 +51,8 @@ namespace kyokuto4calender {
 			try {
 				pass_tv.Nodes.Clear();
 				GoogleFolderListUp(Constant.RootFolderName);
-				SetPassLabel(Constant.TopFolderName);
+				cureentPassName = SetPassLabel(Constant.TopFolderName);
+				dbMsg += ">現在の選択>" + cureentPassName;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -205,11 +206,10 @@ namespace kyokuto4calender {
 		{
 			string TAG = "PassTvBeforeExpand";
 			string dbMsg = "[GoogleDriveBrouser]";
-			TreeNode node = e.Node;
-			String path = node.Text;
-			dbMsg += "選択：" + path;
-		//	node.Nodes.Clear();
 			try {
+				TreeNode node = e.Node;
+				String path = node.Text;
+				dbMsg += "選択：" + path;
 				AddChildNood( node);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -243,6 +243,36 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
+		public void AddChild2Node(TreeNode parentNode , String addFolder)
+		{
+			string TAG = "AddChild2Node";
+			string dbMsg = "[GoogleDriveBrouser]";
+			dbMsg += parentNode.Text + " に " + addFolder +"を追加";
+	//		parentNode.Nodes.Clear();
+			try {
+				Task<IList<Google.Apis.Drive.v3.Data.File>> folderTask = Task.Run(() => {
+					return GDriveUtil.GDFileListUp(addFolder, true);
+				});
+				folderTask.Wait();
+				IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(folderTask.Result);
+				dbMsg += " ,取得 " + GDriveFolders.Count + "件";
+				foreach (Google.Apis.Drive.v3.Data.File di in GDriveFolders) {
+					string folderName = di.Name;
+					dbMsg += "\r\n" + folderName;
+					TreeNode child = new TreeNode(folderName);
+					child.Nodes.Add(new TreeNode());
+					parentNode.Nodes.Add(child);
+				}
+				pass_tv.EndUpdate();
+				cureentPassName = SetPassLabel(addFolder);
+				dbMsg += ">現在の選択>" + cureentPassName;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
 
 		/// <summary>
 		/// ノードが選択された後
@@ -340,13 +370,12 @@ namespace kyokuto4calender {
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
 				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
 					dbMsg += ">>フォルダ" + focusedName + "を開く";
+					TreeNode nowSelectedNode = pass_tv.SelectedNode;
+					dbMsg += ":" + nowSelectedNode.Text + "を選択中";
 					MyLog(TAG, dbMsg);
-					if (focusedName.Equals(Constant.TopFolderName)) {
-						//誤動作対策
-						GoogleFileListUp(focusedName);
-					} else {
-						GoogleFolderListUp(focusedName);
-					}
+					GoogleFileListUp(focusedName);
+					cureentPassName = SetPassLabel(focusedName);
+					dbMsg += ">現在の選択>" + cureentPassName;
 				} else {
 					dbMsg += ">>ファイル" + focusedName + "を送る";
 					if (Constant.GDriveSelectedFiles == null) {
