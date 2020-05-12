@@ -78,7 +78,6 @@ namespace kyokuto4calender {
 			string rStr = "";
 			try {
 				dbMsg += "," + passName;
-	//			pass_tv.ExpandAll();
 				TreeNodeSelect(passName);
 
 				pass_tv.Select();
@@ -188,13 +187,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				TreeNode targetNode = new TreeNode();
-				TreeNode[] nodes2 = pass_tv.Nodes.Find(folderName, true);
-				dbMsg += nodes2.Length + "件から" + folderName + "を検索";
-
-				TreeNodeCollection nodes = pass_tv.Nodes;
-				dbMsg += nodes.Count + "件から" + folderName + "を検索";
-
-				foreach (TreeNode rNode in nodes) {
+				foreach (TreeNode rNode in pass_tv.Nodes) {
 					dbMsg += ",\r\n" + rNode.Text;
 					if (folderName.Equals(rNode.Text)) {
 						targetNode = rNode;
@@ -385,11 +378,10 @@ namespace kyokuto4calender {
 					dbMsg += ">>フォルダ" + focusedName + "を開く";
 					TreeNode nowSelectedNode = pass_tv.SelectedNode;
 					dbMsg += ":" + nowSelectedNode.Text + "を選択中";
-					AddChild2Node(nowSelectedNode, focusedName);
 					MyLog(TAG, dbMsg);
-				//	GoogleFileListUp(focusedName);
-					//cureentPassName = SetPassLabel(focusedName);
-					//dbMsg += ">現在の選択>" + cureentPassName;
+					GoogleFileListUp(focusedName);
+					cureentPassName = SetPassLabel(focusedName);
+					dbMsg += ">現在の選択>" + cureentPassName;
 				} else {
 					dbMsg += ">>ファイル" + focusedName + "を送る";
 					if (Constant.GDriveSelectedFiles == null) {
@@ -807,15 +799,12 @@ namespace kyokuto4calender {
 					}
 					string deltId = delItem.Result;
 					dbMsg += ">削除>" + deltId;
-					if(deltId != null) {
-						msgStr = focusedName + "を削除しました";
-						icon = MessageBoxIcon.Information;
-					}else{
-						msgStr = focusedName + "を削除する事が出来ませんでした。";
-						icon = MessageBoxIcon.Information;
-					}
-					buttns = MessageBoxButtons.OK;
+
+					msgStr = focusedName + "を削除しました";
+					buttns = MessageBoxButtons.OKCancel;
+					icon = MessageBoxIcon.Information;
 					DialogResult result2 = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
+
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

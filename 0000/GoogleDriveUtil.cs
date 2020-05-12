@@ -224,37 +224,49 @@ namespace kyokuto4calender {
 				});
 				tFile.Wait();
 				File targetF = tFile.Result;
-				if (targetF != null) {
-					string fileId = targetF.Id;
+				string fileId = targetF.Id;
+				if (fileId != null) {
 					dbMsg += ",削除[" + fileId + "]";
+					//		File rfile = FindById(fileId);
+					//bool isFolder = false;
+					//if (targetF.MimeType.Equals("application/vnd.google-apps.folder")) {
+					//	dbMsg += ">>フォルダ";
+					//	isFolder = true;
+					//} else {
+					//	dbMsg += ">>ファイル";
+					//}
+
 					Task<string> delItem = Task.Run(() => {
 						return DelteItem(fileId);
 					});
 					delItem.Wait();
+
+				//	var result = DelteItem(fileId);
 					dbMsg += ",消去=" + delItem.Result;
 				}
-				LocalFileUtil LFUtil = new LocalFileUtil();
-				String MimeStr = LFUtil.GetMimeType(filePath);
-				dbMsg += ",Mime=" + MimeStr;
-				var meta = new File() {
-					Name = System.IO.Path.GetFileName(filePath),
-					MimeType = MimeStr,
-					Parents = new List<string> { parentId }
-				};
-				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
-					// Create:新規追加
-					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
-					//			var uploadProgress = await request.UploadAsync();
-					Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
-						return request.UploadAsync();
-					});
-					uploadProgress.Wait();
-					var rFile = request.ResponseBody;                           //作成結果が格納され戻される
-					retStr = rFile.Id;
-					dbMsg += ">作成したファイルID>" + retStr;
-					MyLog(TAG, dbMsg);
-					return retStr;
-				}
+					LocalFileUtil LFUtil = new LocalFileUtil();
+					String MimeStr = LFUtil.GetMimeType(filePath);
+					dbMsg += ",Mime=" + MimeStr;
+					var meta = new File() {
+						Name = System.IO.Path.GetFileName(filePath),
+						MimeType = MimeStr,
+						Parents = new List<string> { parentId }
+					};
+					using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
+						// Create:新規追加
+						var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
+						//			var uploadProgress = await request.UploadAsync();
+						Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
+							return request.UploadAsync();
+						});
+						uploadProgress.Wait();
+						var rFile = request.ResponseBody;                           //作成結果が格納され戻される
+						retStr = rFile.Id;
+						dbMsg += ">作成したファイルID>" + retStr;
+						MyLog(TAG, dbMsg);
+						return retStr;
+					}
+
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 				return null;
