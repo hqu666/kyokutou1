@@ -58,6 +58,7 @@ namespace kyokuto4calender {
 					parentFolder = Constant.TopFolderName;
 					dbMsg = ">>" + parentFolder;
 				}
+
 				cureentPassName = SetPassLabel(parentFolder);
 				dbMsg += ">現在の選択>" + cureentPassName;
 				MyLog(TAG, dbMsg);
@@ -394,6 +395,11 @@ namespace kyokuto4calender {
 			}
 		}
 
+		/// <summary>
+		/// 標準ダイアログから送信ファイル選択
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void file_open_bt_Click(object sender, EventArgs e)
 		{
 			string TAG = "file_open_bt_Click";
@@ -403,16 +409,15 @@ namespace kyokuto4calender {
 				openFDialog.Multiselect = true;
 				DialogResult dr = openFDialog.ShowDialog();
 				if (dr == System.Windows.Forms.DialogResult.OK) {
-					LFUtil.ListUpFolderFiles(openFDialog);
-					int fCount = 0;
-					foreach (string str in Constant.selectFiles) {
-						string fileName = System.IO.Path.GetFileName(@str);
-						dbMsg += "\r\n" + fileName;
-						Constant.selectFiles[fCount] = fileName;
-						fCount++;
-					}
+					string[] files = openFDialog.FileNames;
+					dbMsg += "選択：" + files.Length + "件";
+
+					//選択したファイルが有るフォルダ内のファイルのみ
+			//		LFUtil.ListUpFolderFiles(openFDialog);
+		//			string[] files = (string[])Constant.selectFiles;
+
+					SendFileListUp(files);
 				}
-				GFilePut();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -711,7 +716,6 @@ namespace kyokuto4calender {
 						string sFileName = sFile.name;
 						dbMsg += "に" + sFileName;
 						string fullName = sFile.fullPass;
-						//System.IO.Path.Combine(Constant.LocalPass, str);
 						dbMsg += ">>" + fullName;
 						if(sFile.isFolder) {
 							Task<string> pFolder = Task.Run(() => {
