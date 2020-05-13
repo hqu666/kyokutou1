@@ -616,7 +616,23 @@ namespace kyokuto4calender {
 					dbMsg += ",result=" + result1;
 					return;
 				}
-				dbMsg += "送信ファイル数＝" + Constant.sendFiles.Count + "件";
+
+				int sendFilesCount = Constant.sendFiles.Count;
+				dbMsg += "送信ファイル数＝" + sendFilesCount + "件";
+
+				ProgressDialog pd = new ProgressDialog();
+				//ダイアログのタイトルを設定
+				pd.Title = "Googleドライブに登録";
+				//プログレスバーの最小値を設定
+				pd.Minimum = 0;
+				//プログレスバーの最大値を設定
+				pd.Maximum = sendFilesCount;
+				//プログレスバーの初期値を設定
+				pd.Value = 0;
+
+				//進行状況ダイアログを表示する
+				pd.Show(this);
+
 				Constant.LocalFile topF = Constant.sendFiles.First();
 				Constant.MakeFolderName = topF.name;
 				dbMsg += "書込むフォルダ＝" + Constant.MakeFolderName;
@@ -643,8 +659,20 @@ namespace kyokuto4calender {
 					dbMsg += msgStr + ",result=" + result2;
 				} else {
 					dbMsg += "[" + parentId + "]" + Constant.MakeFolderName + "に" + Constant.sendFiles.Count() + "件を登録";
+					int pdValue = 0;
+					pd.Message =  "";
 					foreach (Constant.LocalFile sFile in Constant.sendFiles) {
+						//プログレスバーの値を変更する
+						pd.Value = pdValue;
 						string pName = sFile.parent;
+						//メッセージを変更する
+						pd.Message += sFile.name + "を送信...";
+
+						//キャンセルされた時はループを抜ける
+						if (pd.Canceled){
+							break;
+						}
+
 						bool isFolder = sFile.isFolder ;
 						if (isFolder){
 							dbMsg += "\r\nフォルダ作成";
@@ -670,8 +698,10 @@ namespace kyokuto4calender {
 								pFolder.Wait();
 							} catch (AggregateException ae) {
 								MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
+								pd.Message +=  ":エラー発生:" + ae;
 							}
 							pId = pFolder.Result;
+
 						} else {
 							dbMsg += "＞既存フォルダ";
 						}
@@ -696,6 +726,7 @@ namespace kyokuto4calender {
 							wrfolder.Wait();
 							String wrfileId = wrfolder.Result;
 							dbMsg += ">作成>[" + wrfileId + "]";
+							pd.Message += sFile.parent + "の中に作成\r\n";
 						} else {
 							Task<string> wrfile = Task.Run(() => {
 								return GDriveUtil.UploadFile(sFileName, fullName, pId);
@@ -703,13 +734,19 @@ namespace kyokuto4calender {
 							wrfile.Wait();
 							String wrfileId = wrfile.Result;
 							dbMsg += ">作成>[" + wrfileId + "]";
+							pd.Message += sFile.parent + "の中に登録\r\n";
 						}
+						pdValue++;
 					}
 				}
 				dbMsg += "\r\n表示フォルダ＝" + displayFolder;
 				ResetTree(displayFolder);
-
-				 msgStr = "終了しました";
+				GoogleFileListUp(displayFolder);
+				//	SetPassLabel(displayFolder);	
+				
+				//ダイアログを閉じる
+				pd.Close();
+				msgStr = "終了しました";
 				 icon = MessageBoxIcon.Information;
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 				dbMsg += ",result=" + result;
@@ -719,7 +756,6 @@ namespace kyokuto4calender {
 
 				}
 				MyLog(TAG, dbMsg);
-				GoogleFolderListUp(Constant.MakeFolderName);                     //更新状態を再描画
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
@@ -898,6 +934,7 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{
