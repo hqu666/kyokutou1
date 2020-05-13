@@ -43,7 +43,7 @@ namespace kyokuto4calender {
 
 		/// <summary>
 		/// TreeViewを完全に消してからドライブ情報の再読込み
-		/// 遷移直後の初期書込み
+		/// 遷移直後の初期書込みとGoogleドライブへのファイル登録/削除操作後
 		/// </summary>
 		/// <param name="parentFolder">開いておく階層：省略すればTopへ</param>
 		public void ResetTree(string parentFolder = null)
@@ -133,7 +133,20 @@ namespace kyokuto4calender {
 			string TAG = "GoogleFolderListUp";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
+
 				dbMsg += folderName + "を開く";
+				treeNodeList = new List<TreeNodeMember>();             //ツリービューの内容
+				TreeNodeCollection nodes = pass_tv.Nodes;
+				foreach (TreeNode rNode in nodes) {
+					TreeViewNodeListUp(rNode);
+				}
+				if(Constant.debugNow){
+					dbMsg +=  "\r\nTree" + treeNodeList.Count + "件";
+					foreach (TreeNodeMember member in treeNodeList) {
+						dbMsg += "\r\n" + member.text;
+					}
+				}
+
 				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => {
 					return GDriveUtil.GDFileListUp(folderName, true);
 				});
@@ -142,7 +155,7 @@ namespace kyokuto4calender {
 				TreeNode targetNode = new TreeNode();
 				TreeNode node = new TreeNode();
 				if (GDriveFolders != null) {          // && 0< GDriveFolders.Count  だと件数が取れてない
-					dbMsg += ",中に" + GDriveFolders.Count + "件";
+					dbMsg += ",サブフォルダ" + GDriveFolders.Count + "件";
 					// ドライブ一覧を走査してツリーに追加
 					foreach (Google.Apis.Drive.v3.Data.File folder in GDriveFolders) {
 						string mFolderName = folder.Name;
@@ -158,7 +171,7 @@ namespace kyokuto4calender {
 						}
 					}
 					dbMsg += ",\r\n" + pass_tv.Nodes.Count + "件";
-					//	pass_tv.Sort();		//渡された配列がソートされていなければ
+					//	pass_tv.Sort();		//渡された配列がソートされていなければ使用；List()メソッドでlistRequest.OrderBy = "name";を指定済みなので不要化
 					pass_tv.EndUpdate();
 					//		pass_tv.ExpandAll();                  // すべてのノードを展開する;ノードごとにPassTvBeforeExpandが発生する
 					//	GoogleFileListUp(folderName);	//pass_tv_AfterSelectから呼ぶ
@@ -172,38 +185,6 @@ namespace kyokuto4calender {
 					DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 					dbMsg += ",result=" + result;
 				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
-			}
-		}
-
-		/// <summary>
-		/// 指定したノードを選択状態にする
-		/// </summary>
-		/// <param name="folderName"></param>
-		public void TreeNodeSelect(string folderName)
-		{
-			string TAG = "TreeNodeSelect";
-			string dbMsg = "[GoogleDriveBrouser]";
-			try {
-				TreeNode targetNode = new TreeNode();
-				TreeNode[] nodes2 = pass_tv.Nodes.Find(folderName, true);
-				dbMsg += nodes2.Length + "件から" + folderName + "を検索";
-
-				TreeNodeCollection nodes = pass_tv.Nodes;
-				dbMsg += nodes.Count + "件から" + folderName + "を検索";
-
-				foreach (TreeNode rNode in nodes) {
-					dbMsg += ",\r\n" + rNode.Text;
-					if (folderName.Equals(rNode.Text)) {
-						targetNode = rNode;
-						break;
-					}
-				}
-				dbMsg += ",\r\n最終選択=" + targetNode.Text;
-				pass_tv.SelectedNode = targetNode;
-				pass_tv.Focus();            //これがないと、クリックされた所にフォーカスが移ったままになってしまう
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -349,7 +330,7 @@ namespace kyokuto4calender {
 						dbMsg += "," + fSize;
 						string fModifiedTime = fileItem.ModifiedTime.ToString();
 						dbMsg += "," + fModifiedTime;
-						// ListViewコントロールにデータを追加します。
+						// ListViewコントロールにデータを追加
 						string[] item1 = { fNmae, fSize, fModifiedTime };
 						file_list_Lv.Items.Add(new ListViewItem(item1));
 					}
@@ -824,7 +805,6 @@ namespace kyokuto4calender {
 		}
 
 
-
 		private void GoogleDriveBrouser_FormClosing(object sender, FormClosingEventArgs e){ 
 			string TAG = "GoogleDriveBrouser_FormClosing";
 			string dbMsg = "[Edit]";
@@ -842,18 +822,88 @@ namespace kyokuto4calender {
 		/// ※this.Close();だと再表示でクラッシュするのでthis.Visible = false;でこのオブジェクトを破棄させない
 		/// </summary>
 		private void QuitMe(){
-		string TAG = "QuitMe";
-		string dbMsg = "[GoogleDriveBrouser]";
-		try {
-			if (mainForm != null) {
-				this.Visible = false;//このオブジェクトを破棄させない(2);this.Close();だと再表示でクラッシュする
+			string TAG = "QuitMe";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				if (mainForm != null) {
+					this.Visible = false;//このオブジェクトを破棄させない(2);this.Close();だと再表示でクラッシュする
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
-			MyLog(TAG, dbMsg);
-		} catch (Exception er) {
-			MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 		}
-	}
 
+		//TreeView//////////////////////////////////////////////////
+		public struct TreeNodeMember{
+			public string text;
+			public TreeNode node;
+
+			public TreeNodeMember(string text, TreeNode node)
+			{
+				this.text = text;
+				this.node = node;
+			}
+		}
+		public  IList<TreeNodeMember> treeNodeList = new List<TreeNodeMember>() ;             //ツリービューの内容
+
+		/// <summary>
+		/// TreeViewに登録されているノードをリストアップする
+		/// </summary>
+		/// <param name="treeNode"></param>
+		private void TreeViewNodeListUp(TreeNode treeNode)
+		{
+			string TAG = "TreeViewNodeListUp";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				dbMsg += "," + treeNode.Text;			// ":" + treeNode.FullPath.ToString();
+				if(! treeNode.Text.Equals("")) {
+					TreeNodeMember treeNodeMember = new TreeNodeMember();
+					treeNodeMember.text = treeNode.Text;
+					treeNodeMember.node = treeNode;
+					treeNodeList.Add(treeNodeMember);
+				}
+				foreach (TreeNode tn in treeNode.Nodes) {
+					TreeViewNodeListUp(tn);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// 指定したノードを選択状態にする
+		/// </summary>
+		/// <param name="folderName"></param>
+		public void TreeNodeSelect(string folderName)
+		{
+			string TAG = "TreeNodeSelect";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				TreeNode targetNode = new TreeNode();
+				TreeNodeCollection nodes = pass_tv.Nodes;
+				treeNodeList = new List<TreeNodeMember>();             //ツリービューの内容
+				foreach (TreeNode rNode in nodes) {
+					TreeViewNodeListUp(rNode);
+				}
+				dbMsg += "\r\nTree" + treeNodeList.Count + "件から" + folderName + "を検索";
+				foreach (TreeNodeMember member in treeNodeList) {
+					dbMsg += "\r\n" + member.text;
+					dbMsg += ":" + member.node.FullPath;
+					if (folderName.Equals(member.text)) {
+						targetNode = member.node;
+						break;
+					}
+				}
+				dbMsg += ",\r\n最終選択=" + targetNode.Text;
+				pass_tv.SelectedNode = targetNode;
+				pass_tv.Focus();            //これがないと、クリックされた所にフォーカスが移ったままになってしまう
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{
