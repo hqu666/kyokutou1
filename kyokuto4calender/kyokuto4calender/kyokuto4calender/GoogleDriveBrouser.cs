@@ -61,7 +61,7 @@ namespace kyokuto4calender {
 
 				cureentPassName = SetPassLabel(parentFolder);
 				dbMsg += ">現在の選択>" + cureentPassName;
-			//	pass_tv.ExpandAll();
+			//	pass_tv.ExpandAll();	これが有るとループして全ノード書き出さないと終わらない
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -458,10 +458,6 @@ namespace kyokuto4calender {
 					string[] files = openFDialog.FileNames;
 					dbMsg += "選択：" + files.Length + "件";
 
-					//選択したファイルが有るフォルダ内のファイルのみ
-			//		LFUtil.ListUpFolderFiles(openFDialog);
-		//			string[] files = (string[])Constant.selectFiles;
-
 					SendFileListUp(files);
 				}
 				MyLog(TAG, dbMsg);
@@ -791,8 +787,7 @@ namespace kyokuto4calender {
 				}
 				dbMsg += "\r\n表示フォルダ＝" + displayFolder;
 				ResetTree(displayFolder);
-				GoogleFileListUp(displayFolder);
-				//	SetPassLabel(displayFolder);	
+			//	GoogleFileListUp(displayFolder);
 				
 				//ダイアログを閉じる
 				pd.Close();
@@ -800,10 +795,9 @@ namespace kyokuto4calender {
 				 icon = MessageBoxIcon.Information;
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 				dbMsg += ",result=" + result;
-				if (result == DialogResult.OK) {        //「はい」が選択された時
-					//cureentPassName = SetPassLabel(displayFolder);
-					//dbMsg += ">現在の選択>" + cureentPassName;
-
+				if (result == DialogResult.OK) {        //「はい」が選択された時;描画時間を稼ぐ
+					cureentPassName = SetPassLabel(displayFolder);
+					dbMsg += ">現在の選択>" + cureentPassName;
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -841,8 +835,19 @@ namespace kyokuto4calender {
 				int focusedIndex = file_list_Lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
 				dbMsg += ",focused[" + focusedIndex;
 				Google.Apis.Drive.v3.Data.File focusedFiles = Constant.GDriveFolderMembers[focusedIndex];
+				string focusedId = focusedFiles.Id;
+				dbMsg += "[" + focusedId;
 				string focusedName = focusedFiles.Name;
 				dbMsg += "]" + focusedName;
+				string parentID = focusedFiles.Parents[0];
+				dbMsg += "[parentID=" + parentID + "]";
+				Task<Google.Apis.Drive.v3.Data.File> pFolder = Task.Run(() => {
+					return GDriveUtil.FindById(parentID);
+				});
+				pFolder.Wait();
+				Google.Apis.Drive.v3.Data.File parentFolder = pFolder.Result;
+				dbMsg += parentFolder.Name;
+
 				bool isFolder = true;
 				string focusedFilesMimeType = focusedFiles.MimeType;
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
@@ -852,16 +857,15 @@ namespace kyokuto4calender {
 					dbMsg += ">>ファイル" + focusedName + "を削除";
 					isFolder = false;
 				}
+
 				msgStr = focusedName + "を削除しますか";
 				DialogResult result = MessageBox.Show(msgStr, titolStr, buttns, icon, defaultButton);
 				dbMsg += ",result=" + result;
 				if (result == DialogResult.OK) {        //「はい」が選択された時
 					Task<string> delItem = Task.Run(() => {
-						return GDriveUtil.DelteItem(focusedName);
+						return GDriveUtil.DelteItem(focusedId);
 					});
 					try {
-						// 例外をキャッチする場合には、Waitメソッドを実施している部分をtry...catchでくくります。
-						// 例外が発生すると、AggregateExceptionにラップされてスローされます。
 						delItem.Wait();
 					} catch (AggregateException ae) {
 						MyErrorLog(TAG, dbMsg + "でエラー発生;" + ae);
@@ -871,7 +875,11 @@ namespace kyokuto4calender {
 					if(deltId != null) {
 						msgStr = focusedName + "を削除しました";
 						icon = MessageBoxIcon.Information;
-					}else{
+						GoogleFileListUp(parentFolder.Name);
+						//			ResetTree(parentFolder.Name);
+						cureentPassName = SetPassLabel(parentFolder.Name);
+						dbMsg += ">現在の選択>" + cureentPassName;
+					} else {
 						msgStr = focusedName + "を削除する事が出来ませんでした。";
 						icon = MessageBoxIcon.Information;
 					}

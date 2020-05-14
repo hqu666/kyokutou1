@@ -273,16 +273,7 @@ namespace kyokuto4calender {
 			string dbMsg = "[GoogleUtil]";
 			string retStr = null;
 			try {
-				//dbMsg += itemName;
-				//Task<string> tFile = Task<string>.Run(() => {
-				//	if (isFolder) {
-				//		return FindByName(itemName, SearchFilter.FOLDER);
-				//	} else {
-				//		return FindByName(itemName, SearchFilter.FILE);
-				//	}
-				//});
-				//tFile.Wait();
-				//string fileId = tFile.Result;
+				dbMsg += fileId;
 				dbMsg += fileId;
 				Google.Apis.Drive.v3.FilesResource.DeleteRequest request = Constant.MyDriveService.Files.Delete(fileId);
 				retStr = await request.ExecuteAsync();
