@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1082
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kyokuto4calender", "kyokuto4calender\kyokuto4calender.csproj", "{6A810AD0-CFD0-4FB9-8A61-8E2ECFA551B9}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{71078CAD-B365-4908-B779-7DCCFA19FFB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,9 @@ Global
 		{6A810AD0-CFD0-4FB9-8A61-8E2ECFA551B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A810AD0-CFD0-4FB9-8A61-8E2ECFA551B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A810AD0-CFD0-4FB9-8A61-8E2ECFA551B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71078CAD-B365-4908-B779-7DCCFA19FFB0}.Debug|Any CPU.ActiveCfg = Debug
+		{71078CAD-B365-4908-B779-7DCCFA19FFB0}.Release|Any CPU.ActiveCfg = Release
+		{71078CAD-B365-4908-B779-7DCCFA19FFB0}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

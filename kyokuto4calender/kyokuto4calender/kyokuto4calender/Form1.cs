@@ -49,7 +49,7 @@ namespace kyokuto4calender {
 			string TAG = "Conect2CalenderAsync";
 			string dbMsg = "[Form1]";
 			try {
-				String retStr = await GAuthUtil.Authentication("drive_calender.json", "token.json");
+				String retStr = GAuthUtil.Authentication("drive_calender.json", "token.json");
 				dbMsg += ",retStr=" + retStr;
 				if (retStr.Equals("")) {
 					//メッセージボックスを表示する
@@ -124,7 +124,7 @@ namespace kyokuto4calender {
 							event_lv.Items.Add(new ListViewItem(item1));
 						}
 					} else{
-					msgStr = "カレンダーには未だ予定が登録されていません";
+						msgStr = "カレンダーには未だ予定が登録されていません";
 					}
 				} else {
 					msgStr = "カレンダーの情報を取得できませんでした";
@@ -403,6 +403,7 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
 		/// <summary>
 		/// 選択したファイルを解除する
 		/// 

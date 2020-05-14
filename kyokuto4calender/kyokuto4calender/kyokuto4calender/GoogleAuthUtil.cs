@@ -31,14 +31,21 @@ namespace kyokuto4calender {
 		/// <param name="jsonPath">読込むjsonファイルのURL</param>
 		/// <param name="tokenFolderPath"></param>
 		/// <returns>正常に認証されればOKの文字が返る</returns>
-		public async Task<string> Authentication(string jsonPath, string tokenFolderPath)
+		public string Authentication(string jsonPath, string tokenFolderPath)
 		{
 			string TAG = "Authentication";
 			string dbMsg = "[GoogleAuthUtil]";
 			string retStr = "";
 			try {
 				dbMsg += ",jsonPath=" + jsonPath;
-				Constant.MyDriveCredential = await GetAllCredential(jsonPath, tokenFolderPath);
+				Task<UserCredential> userCredential = Task.Run(() => {
+					return GetAllCredential(jsonPath, tokenFolderPath);
+				});
+				userCredential.Wait();
+				Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
+																							  //				Constant.MyDriveCredential = await GetAllCredential(jsonPath, tokenFolderPath);
+				dbMsg += "\r\nAccessToken=" + Constant.MyDriveCredential.Token.AccessToken;
+				dbMsg += "\r\nRefreshToken=" + Constant.MyDriveCredential.Token.RefreshToken;
 				Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyDriveCredential,
 					ApplicationName = Constant.ApplicationName,

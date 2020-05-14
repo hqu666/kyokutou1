@@ -19,7 +19,7 @@ namespace kyokuto4calender {
 		/// GoogleDriveの登録状況表示
 		/// </summary>
 		/// <returns></returns>
-		public IList<Google.Apis.Calendar.v3.Data.Event> GEventsListUp()
+		public IList<Event> GEventsListUp()
 		{
 			string TAG = "GEventsListUp";
 			string dbMsg = "[GoogleCalendarUtil]";
@@ -30,6 +30,8 @@ namespace kyokuto4calender {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
 				});
+				dbMsg += ",HttpClient=" + service.HttpClient.ToString();
+
 				// Define parameters of request.
 				EventsResource.ListRequest request = service.Events.List("primary");
 				request.TimeMin = DateTime.Now;
@@ -37,7 +39,12 @@ namespace kyokuto4calender {
 				request.SingleEvents = true;
 				request.MaxResults = 1000;
 				request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-				Events events = request.Execute();              //取得実行
+				Task<Events> evRequest = Task.Run(() => {
+					return request.ExecuteAsync();              //取得実行
+				});
+				evRequest.Wait();
+				Events events = evRequest.Result;                           //作成結果が格納され戻される
+																			//				Events events = request.Execute();              //取得実行
 				Constant.CalenderSummary = events.Summary;
 				if (events.Items != null && events.Items.Count > 0) {
 					dbMsg += ",events=" + events.Items.Count() + "件";
@@ -51,7 +58,7 @@ namespace kyokuto4calender {
 						}
 						string Summary = eventItem.Summary;
 						dbMsg += "," + Summary;
-						retList.Add(eventItem); 
+						retList.Add(eventItem);
 					}
 					dbMsg += "," + retList.Count() + "件";
 				} else {
