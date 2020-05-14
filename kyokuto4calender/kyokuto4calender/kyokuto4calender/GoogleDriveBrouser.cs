@@ -61,7 +61,7 @@ namespace kyokuto4calender {
 
 				cureentPassName = SetPassLabel(parentFolder);
 				dbMsg += ">現在の選択>" + cureentPassName;
-				pass_tv.ExpandAll();
+			//	pass_tv.ExpandAll();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -81,9 +81,6 @@ namespace kyokuto4calender {
 			try {
 				dbMsg += "," + passName;
 				TreeNodeSelect(passName);															//指定したノードを選択して
-		//		pass_tv.Select();
-				//string strSelectedNode = pass_tv.SelectedNode.Text;
-				//dbMsg += strSelectedNode + "を選択中";
 				string fullPath = pass_tv.SelectedNode.FullPath;                  // 選択されたノードを取得
 				dbMsg += ">>" + fullPath;
 				pass_name_lb.Text = Constant.RootFolderName + "\\" + fullPath;
@@ -142,7 +139,6 @@ namespace kyokuto4calender {
 				}else{
 					dbMsg +=  "最上位に配意したい";
 				}
-
 				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => {
 					return GDriveUtil.GDFileListUp(folderName, true);
 				});
@@ -169,8 +165,6 @@ namespace kyokuto4calender {
 					dbMsg += ",\r\n" + pass_tv.Nodes.Count + "件";
 					//	pass_tv.Sort();		//渡された配列がソートされていなければ使用；List()メソッドでlistRequest.OrderBy = "name";を指定済みなので不要化
 					pass_tv.EndUpdate();
-					//		pass_tv.ExpandAll();                  // すべてのノードを展開する;ノードごとにPassTvBeforeExpandが発生する
-					//	GoogleFileListUp(folderName);	//pass_tv_AfterSelectから呼ぶ
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -288,14 +282,11 @@ namespace kyokuto4calender {
 					parentNode.Nodes.Add(child);
 				}
 				pass_tv.EndUpdate();
-				//cureentPassName = SetPassLabel(@addFolder);
-				//dbMsg += ">現在の選択>" + cureentPassName;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
-
 
 		/// <summary>
 		/// ノードが選択された後
@@ -373,7 +364,8 @@ namespace kyokuto4calender {
 					if(0< GDriveFoldersCount) {
 						AddList2Node(pFolder, GDriveFolders);	//treeにサブフォルダー追記
 					}
-
+					//TreeNode rNode = SrachNodeList(pFolder);
+					//dbMsg += "、最終" + rNode.Text + "を選択";
 				} else {
 					dbMsg += "このフォルダはファイルなどが登録されていません";
 				}
@@ -402,7 +394,7 @@ namespace kyokuto4calender {
 				dbMsg += "]" + focusedName;
 				string focusedFilesMimeType = focusedFiles.MimeType;
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
-				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
+				if (focusedFilesMimeType.Equals(GoogleDriveMime_Folder)) {
 					dbMsg += ">>フォルダ" + focusedName + "を開く";
 
 					//string fullpass = pass_name_lb.Text; が正常値になっているとは限らない
@@ -854,7 +846,7 @@ namespace kyokuto4calender {
 				bool isFolder = true;
 				string focusedFilesMimeType = focusedFiles.MimeType;
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
-				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
+				if (focusedFilesMimeType.Equals(GoogleDriveMime_Folder)) {
 					dbMsg += ">>フォルダ" + focusedName + "を削除";
 				} else {
 					dbMsg += ">>ファイル" + focusedName + "を削除";

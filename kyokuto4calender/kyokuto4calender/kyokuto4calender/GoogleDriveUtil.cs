@@ -13,6 +13,7 @@ using Google.Apis.Upload;
 
 namespace kyokuto4calender {
 	class GoogleDriveUtil {
+		public string GoogleDriveMime_Folder = Constant.GoogleDriveMime_Folder;
 
 		/// <summary>
 		/// 指定されたフォルダ以下の全フォルダ取得
@@ -175,7 +176,7 @@ namespace kyokuto4calender {
 				if (folderId == null) {
 					File meta = new File();
 					meta.Name = name;
-					meta.MimeType = "application/vnd.google-apps.folder";
+					meta.MimeType = GoogleDriveMime_Folder;
 					if (parentFolderId == null || parentFolderId.Equals("")) {
 						folder = Task<string>.Run(() => FindByName(Constant.TopFolderName, SearchFilter.FOLDER));
 						parentFolderId = folder.Result;
@@ -320,11 +321,9 @@ namespace kyokuto4calender {
 					string mimeType = rItem.MimeType;
 					dbMsg += "\r\n" + itemName + ")" + mimeType;
 					if(@itemName.Equals(@name)) {
-						//if(isFolder && mimeType.Equals("application/vnd.google-apps.folder")) {
 						retFile = rItem;
 						dbMsg += ">＞的中";
 						break;
-						//}
 					}
 				}
 				MyLog(TAG, dbMsg);
