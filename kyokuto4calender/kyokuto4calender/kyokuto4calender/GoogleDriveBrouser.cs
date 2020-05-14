@@ -23,7 +23,7 @@ namespace kyokuto4calender {
 		public IList<string> passList = new List<string>();
 		public string cureentPassName = "";									 //現在のパス名
 		public IList<string> fullNames = new List<string>();            //PC内ファイルリスト
-	//	public IList<string> orgNames = new List<string>();            //サブフォルダ検索用
+		public  string GoogleDriveMime_Folder = Constant.GoogleDriveMime_Folder;
 
 		ColumnHeader columnName = new ColumnHeader();
 		ColumnHeader columnType = new ColumnHeader();
@@ -61,6 +61,7 @@ namespace kyokuto4calender {
 
 				cureentPassName = SetPassLabel(parentFolder);
 				dbMsg += ">現在の選択>" + cureentPassName;
+				pass_tv.ExpandAll();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
@@ -137,7 +138,7 @@ namespace kyokuto4calender {
 				if(0 < pass_tv.Nodes.Count) {
 					TreeNodeSelect(folderName);                                                           //親ノードを選択して
 					string parentNode = pass_tv.SelectedNode.FullPath;                  // 選択されたノードを取得
-					dbMsg += parentNode + "に配意したい";
+					dbMsg += parentNode + "に配置したい";
 				}else{
 					dbMsg +=  "最上位に配意したい";
 				}
@@ -256,6 +257,36 @@ namespace kyokuto4calender {
 					child.Nodes.Add(new TreeNode());
 					parentNode.Nodes.Add(child);
 				}
+				//		pass_tv.EndUpdate();
+				cureentPassName = SetPassLabel(@addFolder);
+				dbMsg += ">現在の選択>" + cureentPassName;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+		}
+
+		/// <summary>
+		/// 渡されたリストを指定したノードの子ノードに追加する
+		/// </summary>
+		/// <param name="parentNode"></param>
+		/// <param name="addFolder"></param>
+		public void AddList2Node(string parentName, IList<Google.Apis.Drive.v3.Data.File> GDriveFolders)
+		{
+			string TAG = "AddList2Node";
+			string dbMsg = "[GoogleDriveBrouser]";
+			dbMsg += parentName + " に " + GDriveFolders.Count + "件追加";
+			try {
+				TreeNode parentNode = TreeNodeSelect(parentName);
+				parentNode.Nodes.Clear();
+				dbMsg += "," + parentNode.Text + " を選択";
+				foreach (Google.Apis.Drive.v3.Data.File di in GDriveFolders) {
+					string folderName = di.Name;
+					dbMsg += "\r\n" + folderName;
+					TreeNode child = new TreeNode(@folderName);
+					child.Nodes.Add(new TreeNode());
+					parentNode.Nodes.Add(child);
+				}
 				pass_tv.EndUpdate();
 				//cureentPassName = SetPassLabel(@addFolder);
 				//dbMsg += ">現在の選択>" + cureentPassName;
@@ -264,6 +295,7 @@ namespace kyokuto4calender {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
 		}
+
 
 		/// <summary>
 		/// ノードが選択された後
@@ -320,7 +352,8 @@ namespace kyokuto4calender {
 					ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
 					file_list_Lv.Columns.AddRange(colHeaderRegValue);
 					//			file_list_Lv.Items.Clear();					// ListViewコントロールのデータをすべて消去
-					foreach (var fileItem in Constant.GDriveFolderMembers) {
+					IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>();
+					foreach (Google.Apis.Drive.v3.Data.File fileItem in Constant.GDriveFolderMembers) {
 						string fNmae = fileItem.Name.ToString();
 						dbMsg += "\r\n" + fNmae;
 						string fSize = fileItem.Size.ToString();
@@ -330,7 +363,17 @@ namespace kyokuto4calender {
 						// ListViewコントロールにデータを追加
 						string[] item1 = { fNmae, fSize, fModifiedTime };
 						file_list_Lv.Items.Add(new ListViewItem(item1));
+						//フォルダが有れば記録
+						if(fileItem.MimeType == GoogleDriveMime_Folder) {
+							GDriveFolders.Add(fileItem);
+						}
 					}
+					int GDriveFoldersCount = GDriveFolders.Count;
+					dbMsg += "、フォルダ" + GDriveFoldersCount +"件";
+					if(0< GDriveFoldersCount) {
+						AddList2Node(pFolder, GDriveFolders);	//treeにサブフォルダー追記
+					}
+
 				} else {
 					dbMsg += "このフォルダはファイルなどが登録されていません";
 				}
@@ -361,6 +404,17 @@ namespace kyokuto4calender {
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
 				if (focusedFilesMimeType.Equals("application/vnd.google-apps.folder")) {
 					dbMsg += ">>フォルダ" + focusedName + "を開く";
+
+					//string fullpass = pass_name_lb.Text; が正常値になっているとは限らない
+					TreeNode rNode = SrachNodeList(focusedName);
+					string tFullPass = rNode.FullPath;
+					string[] passse = tFullPass.Split('\\');
+					string cPass = passse[passse.Length - 1];
+					string pPass = passse[passse.Length - 2];
+					dbMsg += ",pPass=" + pPass + ",pPass=" + pPass;
+
+					pass_tv.Focus();				//フォーカスをtreeに移す
+
 					TreeNode nowSelectedNode = pass_tv.SelectedNode;
 					dbMsg += ":" + nowSelectedNode.Text + "を選択中";
 					GoogleFileListUp(focusedName);
@@ -838,7 +892,6 @@ namespace kyokuto4calender {
 			}
 		}
 
-
 		private void GoogleDriveBrouser_FormClosing(object sender, FormClosingEventArgs e){ 
 			string TAG = "GoogleDriveBrouser_FormClosing";
 			string dbMsg = "[Edit]";
@@ -907,15 +960,45 @@ namespace kyokuto4calender {
 		}
 
 		/// <summary>
+		/// treeViewの元データを検索
+		/// </summary>
+		/// <param name="folderName"></param>
+		/// <returns>該当するNodeを返す</returns>
+		private TreeNode SrachNodeList(string folderName)
+		{
+			string TAG = "SrachNodeList";
+			string dbMsg = "[GoogleDriveBrouser]";
+			TreeNode retNode=null;
+			try {
+				dbMsg += "," + folderName;           // ":" + treeNode.FullPath.ToString();
+				if(0<treeNodeList.Count) {
+					foreach (TreeNodeMember treeNodeMember in treeNodeList) {
+						string rText = treeNodeMember.text;
+						if(rText.Equals(folderName)) {
+							retNode = treeNodeMember.node;          //
+							break;
+						}
+					}
+
+				}
+				dbMsg += ">>" + retNode;           // ":" + treeNode.FullPath.ToString();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
+			}
+			return retNode;
+		}
+
+		/// <summary>
 		/// 指定したノードを選択状態にする
 		/// </summary>
 		/// <param name="folderName"></param>
-		public void TreeNodeSelect(string folderName)
+		public TreeNode TreeNodeSelect(string folderName)
 		{
 			string TAG = "TreeNodeSelect";
 			string dbMsg = "[GoogleDriveBrouser]";
+			TreeNode targetNode = new TreeNode();
 			try {
-				TreeNode targetNode = new TreeNode();
 				TreeNodeCollection nodes = pass_tv.Nodes;
 				treeNodeList = new List<TreeNodeMember>();             //ツリービューの内容
 				foreach (TreeNode rNode in nodes) {
@@ -937,6 +1020,7 @@ namespace kyokuto4calender {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg + "でエラー発生;" + er);
 			}
+			return targetNode;
 		}
 
 		////////////////////////////////////////////////////

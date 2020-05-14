@@ -42,6 +42,7 @@ namespace kyokuto4calender {
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFolderMembers;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveSelectedFiles;
+		public static string GoogleDriveMime_Folder = "application/vnd.google-apps.folder";
 		public static string CurrentFolder = "";                    //現在の対象フォルダ
 		public struct LocalFile {
 			public string fullPass;
