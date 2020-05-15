@@ -45,8 +45,8 @@
 
 		<!-- 四角形：外枠用 -->
 		<Style x:Key="rec-border" TargetType="Rectangle">
-			<Setter Property="Stroke" Value="Black" />
-			<Setter Property="StrokeThickness" Value="1" />
+			<Setter Property="Stroke" Value="#8F8F8F" />
+			<Setter Property="StrokeThickness" Value="2" />
 			<Setter Property="Grid.ColumnSpan" Value="7" />
 			<Setter Property="Grid.RowSpan" Value="7" />
 		</Style>
@@ -55,7 +55,7 @@
 		<Style x:Key="rec-underlining" TargetType="Rectangle">
 			<Setter Property="Stroke" Value="Black" />
 			<Setter Property="StrokeThickness" Value="1" />
-			<Setter Property="Height" Value="1" />
+			<Setter Property="Height" Value="3" />
 			<Setter Property="VerticalAlignment" Value="Bottom" />
 			<Setter Property="Grid.ColumnSpan" Value="7" />
 		</Style>
@@ -63,6 +63,9 @@
 		<!-- 四角形：曜日 -->
 		<Style x:Key="rec-week" TargetType="Rectangle">
 			<Setter Property="Fill" Value="#888888" />
+		<Setter Property="Stroke" Value="#8F8F8F" />
+		<Setter Property="StrokeThickness" Value="1" />
+		<!--<Setter Property="StrokeDashArray" Value="1 1" />-->
 			<Setter Property="VerticalAlignment" Value="Stretch" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 			<Setter Property="Grid.Row" Value="0" />
@@ -72,9 +75,7 @@
 
 		<!-- 四角形：曜日 -->
 		<Style x:Key="rec-week-sat" TargetType="Rectangle" BasedOn="{StaticResource rec-week}">
-		<Setter Property="Fill" Value="#0088FF" />
-		<Setter Property="Stroke" Value="#FFFFFF" />
-
+			<Setter Property="Fill" Value="#CCCCFF" />
 		<Setter Property="Margin" Value="1, 1, 1, 0" />
 		</Style>
 
@@ -82,10 +83,16 @@
 		<Setter Property="Fill" Value="#FFEEFF" />
 	</Style>
 
+	<Style x:Key="rec-week-mf" TargetType="Rectangle" BasedOn="{StaticResource rec-week}">
+		<Setter Property="Fill" Value="#EFEFEF" />
+	</Style>
+
 
 	<!-- 四角形：日付セル（通常） -->
 		<Style x:Key="rec-date" TargetType="Rectangle">
-			<Setter Property="VerticalAlignment" Value="Stretch" />
+		<Setter Property="Stroke" Value="#8F8F8F" />
+		<Setter Property="StrokeThickness" Value="1" />
+		<Setter Property="VerticalAlignment" Value="Stretch" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 			<Setter Property="Fill" Value="Transparent" />
 			<Setter Property="Margin" Value="0, -1, -1, 0" />
@@ -93,7 +100,7 @@
 			<Style.Triggers>
 				<Trigger Property="IsMouseOver" Value="true">
 					<Trigger.Setters>
-						<Setter Property="Margin" Value="0, 0, 0, 0" />
+						<Setter Property="Margin" Value="0, -2, 0, 0" />
 						<Setter Property="Fill" Value="#60d0ff" />
 						<Setter Property="Opacity" Value="0.1"/>
 					</Trigger.Setters>
@@ -124,6 +131,6 @@
 			<Setter Property="Grid.Row" Value="0" />
 			<Setter Property="FontSize" Value="11" />
 			<Setter Property="Padding" Value="0" />
-		</Style>
+	</Style>
 
 	</ResourceDictionary>

@@ -101,7 +101,7 @@ namespace KGSample {
 				// グリッド
 				Grid calendarGrid1 = new Grid();
 				calendarGrid1.Style = FindResource("grid-calendar") as System.Windows.Style;
-				double windowMarginTop = 140;
+				double windowMarginTop = 150;
 				double windowMarginLeft = 20;
 				double windowMarginRight = 30;
 				double windowMarginBottom = 10;
@@ -136,6 +136,8 @@ namespace KGSample {
 						week.Style =  FindResource("rec-week-sun") as System.Windows.Style;
 					}else if(col == 6) {
 						week.Style = FindResource("rec-week-sat") as System.Windows.Style;
+					} else {
+						week.Style = FindResource("rec-week-mf") as System.Windows.Style;
 					}
 					//	week.Style = (col == 6) ? FindResource("rec-week-sat") as System.Windows.Style : FindResource("rec-week-mf") as System.Windows.Style;
 					week.SetValue(Grid.ColumnProperty, col);
