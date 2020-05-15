@@ -8,14 +8,15 @@
         GlowBrush="{DynamicResource AccentColorBrush}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="スケジュール管理" Height="400" Width="525">
+        Title="スケジュール管理" Height="800" Width="1050" SizeChanged="MetroWindow_SizeChanged">
 	<Window.Resources>
 		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
 	</Window.Resources>
-	<Grid x:Name="MainContainer">
+	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
 		<Label x:Name="lbYearMonth" Content="年月：" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" />
 		<ComboBox x:Name="cbYearMonth" HorizontalAlignment="Left" Margin="61,20,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbYearMonth_SelectionChanged"/>
-		<Grid x:Name="CalendarContainer" HorizontalAlignment="Left" Height="317" Margin="0,53,0,0" VerticalAlignment="Top" Width="517"/>
+		<Grid x:Name="CalendarContainer"  Margin="0,53,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+		<!--<Grid x:Name="CalendarContainer" HorizontalAlignment="Left" Height="317" Margin="0,53,0,0" VerticalAlignment="Top" Width="517"/>-->
 		<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Left" Margin="222,20,0,0" VerticalAlignment="Top"/>
 		<Label x:Name="lbSelectedDate" Content="" HorizontalAlignment="Left" Margin="333,20,0,0" VerticalAlignment="Top"/>
 	</Grid>
