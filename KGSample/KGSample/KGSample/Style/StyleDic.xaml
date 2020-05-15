@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                    xmlns:local="clr-namespace:WpfApp1.Style">
+
+	<!-- グループ：通常-->
+	<Style x:Key="gp-normal" TargetType="GroupBox" >
+		<Setter Property="VerticalAlignment" Value="Top" />
+		<Setter Property="HorizontalAlignment" Value="Left" />
+		<Setter Property="Background" Value="#FFFFFFFF" />
+		<Setter Property="Foreground" Value="#FF777777" />
+	</Style>
+</ResourceDictionary>
