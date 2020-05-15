@@ -8,7 +8,7 @@ namespace KGSample {
 		/// </summary>
 		/// <param name="TAG"></param>
 		/// <param name="dbMsg"></param>
-		public void MyLog(String TAG, String dbMsg)
+		public  void MyLog(String TAG, String dbMsg)
 		{
 			if (Constant.debugNow) {
 				Console.WriteLine(TAG + " : " + dbMsg);
@@ -17,7 +17,7 @@ namespace KGSample {
 			}
 		}
 
-		public void MyErrorLog(String TAG, String dbMsg, Exception err)
+		public  void MyErrorLog(String TAG, String dbMsg , Exception err)
 		{
 			if (Constant.errorCheckNow) {
 				//					Xamarin.Forms.Internals.Log.Warning(TAG, dbMsg);

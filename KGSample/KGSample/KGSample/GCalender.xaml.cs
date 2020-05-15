@@ -21,11 +21,11 @@ namespace KGSample {
 	/// </summary>
 	public partial class GCalender : MetroWindow {
 		CS_Util Util = new CS_Util();
+		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
+		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
+		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
+		LocalFileUtil LFUtil = new LocalFileUtil();
 
-		//LocalFileUtil LFUtil = new LocalFileUtil();
-		//GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
-		//GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
-		//GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 		private Rectangle selectedRec;
 
 		public GCalender()
