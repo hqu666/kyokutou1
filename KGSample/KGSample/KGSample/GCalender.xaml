@@ -8,50 +8,15 @@
         GlowBrush="{DynamicResource AccentColorBrush}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="スケジュール管理" Height="350" Width="525">
+        Title="スケジュール管理" Height="400" Width="525">
 	<Window.Resources>
 		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
 	</Window.Resources>
-
-	<Grid>
-		<GroupBox x:Name="CalendarGropu1" Header="" HorizontalAlignment="Left" Height="300" Margin="10,10,0,0" VerticalAlignment="Top" Width="497" Style="{StaticResource gp-normal}">
-			<Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="258" Margin="10,10,0,0" VerticalAlignment="Top" Width="467">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*" />
-					<ColumnDefinition Width="1*" />
-					<ColumnDefinition Width="1*" />
-					<ColumnDefinition Width="1*" />
-					<ColumnDefinition Width="1*" />
-					<ColumnDefinition Width="1*" />
-					<ColumnDefinition Width="1*" />
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="20" />
-					<RowDefinition Height="1*" />
-					<RowDefinition Height="1*" />
-					<RowDefinition Height="1*" />
-					<RowDefinition Height="1*" />
-					<RowDefinition Height="1*" />
-				</Grid.RowDefinitions>
-				<Rectangle Stroke="Black" StrokeThickness="1" Grid.ColumnSpan="7" Grid.RowSpan="7"/>
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Margin="1 1 0 0" Panel.ZIndex="0" />
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" Margin="1 1 0 0" Panel.ZIndex="0"/>
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="2" VerticalAlignment="Stretch" Margin="1 1 0 0" Panel.ZIndex="0"/>
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="3" VerticalAlignment="Stretch" Margin="1 1 0 0" Panel.ZIndex="0"/>
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="4" VerticalAlignment="Stretch" Margin="1 1 0 0" Panel.ZIndex="0"/>
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="5" VerticalAlignment="Stretch" Margin="1 1 0 0" Panel.ZIndex="0"/>
-				<Rectangle Fill="#ff8000" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="6" VerticalAlignment="Stretch" Margin="1 1 1 0" Panel.ZIndex="0"/>
-				<Rectangle Height="1" Stroke="Black" StrokeThickness="1" VerticalAlignment="Bottom" Grid.ColumnSpan="7"/>
-				<Label Content="日" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-				<Label Content="月" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-				<Label Content="火" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-				<Label Content="水" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-				<Label Content="木" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-				<Label Content="金" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-				<Label Content="土" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontSize="11" Padding="0"/>
-
-			</Grid>
-		</GroupBox>
-
+	<Grid x:Name="MainContainer">
+		<Label x:Name="lbYearMonth" Content="年月：" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" />
+		<ComboBox x:Name="cbYearMonth" HorizontalAlignment="Left" Margin="61,20,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbYearMonth_SelectionChanged"/>
+		<Grid x:Name="CalendarContainer" HorizontalAlignment="Left" Height="317" Margin="0,53,0,0" VerticalAlignment="Top" Width="517"/>
+		<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Left" Margin="222,20,0,0" VerticalAlignment="Top"/>
+		<Label x:Name="lbSelectedDate" Content="" HorizontalAlignment="Left" Margin="333,20,0,0" VerticalAlignment="Top"/>
 	</Grid>
 </Mah:MetroWindow>

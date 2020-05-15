@@ -108,10 +108,12 @@
     </ApplicationDefinition>
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
+    <Compile Include="DateInfo.cs" />
     <Compile Include="GoogleAuthUtil.cs" />
     <Compile Include="GoogleCalendarUtil.cs" />
     <Compile Include="GoogleDriveUtil.cs" />
     <Compile Include="LocalFileUtil.cs" />
+    <Compile Include="MonthInfo.cs" />
     <Compile Include="Style\StyleDic.xaml.cs">
       <DependentUpon>StyleDic.xaml</DependentUpon>
     </Compile>
