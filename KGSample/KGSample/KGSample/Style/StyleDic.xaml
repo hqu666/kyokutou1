@@ -21,7 +21,7 @@
 			<Setter Property="Background" Value="#FFFFFFFF" />
 			<!--<Setter Property="Height" Value="258" />
 			<Setter Property="Width" Value="450" />-->
-			<Setter Property="Margin" Value="0, 0, 0, 0" />
+			<Setter Property="Margin" Value="0,0, 0, 0" />
 		</Style>
 
 		<!-- テキストブロック：日付セル（通常） -->
@@ -43,7 +43,12 @@
 			<Setter Property="Foreground" Value="Red" />
 		</Style>
 
-		<!-- 四角形：外枠用 -->
+	<!-- テキストブロック：日付セル（日曜） -->
+	<Style x:Key="txb-date-out" TargetType="TextBlock" BasedOn="{StaticResource txb-date}">
+		<Setter Property="Background" Value="#DFDFDF" />
+	</Style>
+
+	<!-- 四角形：外枠用 -->
 		<Style x:Key="rec-border" TargetType="Rectangle">
 			<Setter Property="Stroke" Value="#8F8F8F" />
 			<Setter Property="StrokeThickness" Value="2" />
@@ -95,12 +100,12 @@
 		<Setter Property="VerticalAlignment" Value="Stretch" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 			<Setter Property="Fill" Value="Transparent" />
-			<Setter Property="Margin" Value="0, -1, -1, 0" />
+			<Setter Property="Margin" Value="3, 3, 1, 1" />
 			<!-- トリガーを使ってマウスオーバーで背景色を変更する -->
 			<Style.Triggers>
 				<Trigger Property="IsMouseOver" Value="true">
 					<Trigger.Setters>
-						<Setter Property="Margin" Value="0, -2, 0, 0" />
+						<Setter Property="Margin"  Value="0, 0, 1, 0" />
 						<Setter Property="Fill" Value="#60d0ff" />
 						<Setter Property="Opacity" Value="0.1"/>
 					</Trigger.Setters>
@@ -110,17 +115,23 @@
 
 		<!-- 四角形：日付セル（土曜） → 最後の列を微調整-->
 		<Style x:Key="rec-date-sat" TargetType="Rectangle" BasedOn="{StaticResource rec-date}">
-			<Setter Property="Margin" Value="0, -1, 0, 0" />
+			<Setter Property="Margin" Value="3, 3, 5, 1" />
 		</Style>
 
-		<!-- 四角形：日付セル（選択） -->
+	<!-- 四角形：日付セル（今月以外）-->
+	<Style x:Key="rec-date-outside" TargetType="Rectangle" BasedOn="{StaticResource rec-date}">
+		<Setter Property="Fill" Value="#393939" />
+		<Setter Property="Opacity" Value="0.1"/>
+	</Style>
+
+	<!-- 四角形：日付セル（選択） -->
 		<Style x:Key="rec-date-selected" TargetType="Rectangle">
 			<Setter Property="VerticalAlignment" Value="Stretch" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 			<Setter Property="Stroke" Value="Black" />
 			<Setter Property="StrokeDashArray" Value="1 1" />
 			<Setter Property="StrokeThickness" Value="1"/>
-			<Setter Property="Fill" Value="#007acc" />
+		<Setter Property="Fill" Value="#f6f631" />
 			<Setter Property="Opacity" Value="0.2"/>
 		</Style>
 

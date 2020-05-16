@@ -95,7 +95,7 @@ namespace KGSample {
 
 				// グループボックス
 				GroupBox calendarGroup1 = new GroupBox();
-				calendarGroup1.Header = monthInfo.YearMonthWithKanji;
+		//		calendarGroup1.Header = monthInfo.YearMonthWithKanji;
 				calendarGroup1.Style = FindResource("gp-normal") as System.Windows.Style;
 
 				// グリッド
@@ -140,7 +140,6 @@ namespace KGSample {
 					} else {
 						week.Style = FindResource("rec-week-mf") as System.Windows.Style;
 					}
-					//	week.Style = (col == 6) ? FindResource("rec-week-sat") as System.Windows.Style : FindResource("rec-week-mf") as System.Windows.Style;
 					week.SetValue(Grid.ColumnProperty, col);
 					calendarGrid1.Children.Add(week);
 					Label lbWeek = new Label();
@@ -176,7 +175,6 @@ namespace KGSample {
 				for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
 					int day = firstDate.AddDays(dayCount).Day;
 					int index = (dayCount ) + dayOfWeek;
-//					int index = (day - 1) + dayOfWeek;
 					int x = index % 7;
 					int y = index / 7;
 					dbMsg += "\r\n(" + dayCount + ")" + day + "日:セル位置[" + index + "](" + x + " .  " + y + ")";
@@ -185,8 +183,10 @@ namespace KGSample {
 					tb.Text = string.Format("{0}", day);
 					// 土日は文字色を変更する
 					if (x == 0) {
+						dbMsg += "(日)";
 						tb.Style = FindResource("txb-date-sun") as System.Windows.Style;
 					} else if (x == 6) {
+						dbMsg += "(土)";
 						tb.Style = FindResource("txb-date-sat") as System.Windows.Style;
 					} else {
 						tb.Style = FindResource("txb-date") as System.Windows.Style;
@@ -194,6 +194,7 @@ namespace KGSample {
 					calendarGrid1.Children.Add(tb);
 					tb.SetValue(Grid.ColumnProperty, x);
 					tb.SetValue(Grid.RowProperty, y + 1);
+
 					// 四角形を生成してグリッドに追加
 					// セルの枠線などを表示し、イベントをハンドリングする用
 					var rec = new Rectangle();
@@ -205,7 +206,11 @@ namespace KGSample {
 					} else {
 						rec.Style = FindResource("rec-date") as System.Windows.Style;
 					}
-	//				rec.Style = (x == 6) ? FindResource("rec-date-sat") as System.Windows.Style : FindResource("rec-date") as System.Windows.Style;
+					//月中でなければ
+					if (dayCount < 0 || lastDay <= dayCount) {
+						rec.Style = FindResource("rec-date-outside") as System.Windows.Style;
+					}
+
 					// イベント設定
 					rec.MouseLeftButtonDown += date_MouseLeftButtonDown;
 					calendarGrid1.Children.Add(rec);
@@ -218,23 +223,6 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-		/// <summary>
-		/// 未使用
-		/// </summary>
-		/// <param name="monthInfo"></param>
-		private void CreateCalendarDate(MonthInfo monthInfo)
-		{
-			string TAG = "CreateCalendarDate";
-			string dbMsg = "[GCalender]";
-			try {
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-
 
 		/// <summary>
 		/// セル（日）をクリックした際のイベントハンドラ.
@@ -264,6 +252,23 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 本日ボタンクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Today_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Today_bt_Click";
+			string dbMsg = "[GCalender]";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)
 		{

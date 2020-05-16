@@ -16,8 +16,16 @@ namespace KGSample {
 		/// <param name="day"></param>
 		public DateInfo(String yearMonth, String day) : base(yearMonth)
 		{
-			this.YearMonthDay = yearMonth + day;
-			this.Date = new DateTime(int.Parse(getYear()), int.Parse(getMonth()), int.Parse(day));
+			string TAG = "CreatDateInfoeCalendarDate";
+			string dbMsg = "[DateInfo]";
+			try {
+				dbMsg = yearMonth + "年月" + day + "日";
+				this.YearMonthDay = yearMonth + day;
+				this.Date = new DateTime(int.Parse(getYear()), int.Parse(getMonth()), int.Parse(day));
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		public DateTime Date { set; get; }
@@ -44,5 +52,18 @@ namespace KGSample {
 			if (String.IsNullOrEmpty(YearMonthDay)) return "";
 			return YearMonthDay.Substring(6, 2);
 		}
+		////////////////////////////////////////////////////
+		public void MyLog(string TAG, string dbMsg)
+		{
+			CS_Util Util = new CS_Util();
+			Util.MyLog(TAG, dbMsg);
+		}
+
+		public void MyErrorLog(string TAG, string dbMsg, Exception err)
+		{
+			CS_Util Util = new CS_Util();
+			Util.MyErrorLog(TAG, dbMsg, err);
+		}
+
 	}
 }
