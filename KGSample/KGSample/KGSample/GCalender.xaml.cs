@@ -42,7 +42,7 @@ namespace KGSample {
 				this.cbYearMonth.DisplayMemberPath = "YearMonthWithKanji";
 				this.cbYearMonth.SelectedIndex = 1;
 
-				createCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
+				CreateCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -59,7 +59,7 @@ namespace KGSample {
 			string TAG = "cbYearMonth_SelectionChanged";
 			string dbMsg = "[GCalender]";
 			try {
-				createCalendar(cbYearMonth.SelectedItem as MonthInfo);
+				CreateCalendar(cbYearMonth.SelectedItem as MonthInfo);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -70,7 +70,7 @@ namespace KGSample {
 			string TAG = "MetroWindow_SizeChanged";
 			string dbMsg = "[GCalender]";
 			try {
-				createCalendar(cbYearMonth.SelectedItem as MonthInfo);
+				CreateCalendar(cbYearMonth.SelectedItem as MonthInfo);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -81,7 +81,7 @@ namespace KGSample {
 		/// 指定された年月のカレンダーを作成
 		/// </summary>
 		/// <param name="monthInfo"></param>
-		private void createCalendar(MonthInfo monthInfo)
+		private void CreateCalendar(MonthInfo monthInfo)
 		{
 			string TAG = "createCalendar";
 			string dbMsg = "[GCalender]";
@@ -89,7 +89,7 @@ namespace KGSample {
 				Application.Current.MainWindow = this;
 				double windowWidth = Application.Current.MainWindow.Width;
 				double windowHeight = Application.Current.MainWindow.Height;
-				dbMsg = "window[" + windowWidth + "×" + windowHeight + "]";
+				dbMsg += "window[" + windowWidth + "×" + windowHeight + "]";
 
 				CalendarContainer.Children.Clear();
 
@@ -105,10 +105,10 @@ namespace KGSample {
 				double windowMarginLeft = 20;
 				double windowMarginRight = 30;
 				double windowMarginBottom = 10;
-				dbMsg = "、Margin← " + windowMarginLeft + "  ↑ " + windowMarginTop + "  ⇒  " + windowMarginRight + " ↓" + windowMarginBottom;
+				dbMsg += "、Margin← " + windowMarginLeft + "  ↑ " + windowMarginTop + "  ⇒  " + windowMarginRight + " ↓" + windowMarginBottom;
 				double CalendarWidth = windowWidth - (windowMarginLeft + windowMarginRight);
 				double CalendarHight = windowHeight - (windowMarginTop + windowMarginBottom);
-				dbMsg = ">>Calendar[" + CalendarWidth + "×" + CalendarHight + "]";
+				dbMsg += ">>Calendar[" + CalendarWidth + "×" + CalendarHight + "]";
 				calendarGrid1.Width = CalendarWidth;
 				calendarGrid1.Height = CalendarHight;
 
@@ -157,19 +157,29 @@ namespace KGSample {
 				calendarGroup1.Content = calendarGrid1;
 				CalendarContainer.Children.Add(calendarGroup1);
 				// 当月の月初を取得
-				var firstDate = new DateTime(int.Parse(monthInfo.getYear()), int.Parse(monthInfo.getMonth()), 1);
+				DateTime firstDate = new DateTime(int.Parse(monthInfo.getYear()), int.Parse(monthInfo.getMonth()), 1);
 				// 曜日番号の取得
 				int dayOfWeek = (int)firstDate.DayOfWeek;
 				// 月末を取得
 				int lastDay = firstDate.AddMonths(1).AddDays(-1).Day;
-				// 1日から月末までを走査
-				for (int day = 1; day <= lastDay; day++) {
-					// セル位置
-					int index = (day - 1) + dayOfWeek;
-					// 横位置
+				dbMsg += "\r\n今月" + firstDate + "(" + dayOfWeek + ")～" + lastDay;
+				int lMonthBack =  - dayOfWeek;
+				int llManthStartDay = firstDate.AddDays(lMonthBack).Day;
+				dbMsg += "\r\n先月" + -lMonthBack + "日戻して" + llManthStartDay + "日から";
+				DateTime lastDate = new DateTime(int.Parse(monthInfo.getYear()), int.Parse(monthInfo.getMonth()), lastDay);
+				int lastDayOfWeek = (int)lastDate.DayOfWeek;
+				int nMonthLastday = 6 - lastDayOfWeek ;
+				int nMonthFowerd = lastDay + nMonthLastday;
+				dbMsg += "\r\n次月" + nMonthLastday + "日まで,カウントは" + nMonthFowerd + "まで" ;
+
+				// 1日から月末まを走査
+				for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
+					int day = firstDate.AddDays(dayCount).Day;
+					int index = (dayCount ) + dayOfWeek;
+//					int index = (day - 1) + dayOfWeek;
 					int x = index % 7;
-					// 縦位置
 					int y = index / 7;
+					dbMsg += "\r\n(" + dayCount + ")" + day + "日:セル位置[" + index + "](" + x + " .  " + y + ")";
 					// テキストブロックを生成してグリッドに追加
 					var tb = new TextBlock();
 					tb.Text = string.Format("{0}", day);
@@ -208,6 +218,23 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 未使用
+		/// </summary>
+		/// <param name="monthInfo"></param>
+		private void CreateCalendarDate(MonthInfo monthInfo)
+		{
+			string TAG = "CreateCalendarDate";
+			string dbMsg = "[GCalender]";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// セル（日）をクリックした際のイベントハンドラ.
