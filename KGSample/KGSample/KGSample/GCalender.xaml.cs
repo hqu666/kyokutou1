@@ -35,9 +35,7 @@ namespace KGSample {
 			string dbMsg = "[GCalender]";
 			try {
 				InitializeComponent();
-				DateTime now = DateTime.Now;
-				YearMonthComboMake(now);
-				CreateCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
+				DrowToday();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -54,6 +52,18 @@ namespace KGSample {
 			string TAG = "Today_bt_Click";
 			string dbMsg = "[GCalender]";
 			try {
+				DrowToday();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void DrowToday()
+		{
+			string TAG = "DrowToday";
+			string dbMsg = "[GCalender]";
+			try {
 				DateTime now = DateTime.Now;
 				YearMonthComboMake(now);
 				CreateCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
@@ -63,6 +73,13 @@ namespace KGSample {
 			}
 		}
 
+
+
+		/// <summary>
+		/// 選択されている年月から半年戻す
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Back_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Back_bt_Click";
@@ -83,6 +100,11 @@ namespace KGSample {
 			}
 		}
 
+		/// <summary>
+		/// 選択されている年月から半年送る
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Next_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "BacNext_bt_Clickk_bt_Click";
@@ -102,7 +124,6 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// 年月選択コンボボックスを生成する
@@ -128,7 +149,6 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// 年月コンボの選択変更イベントハンドラー.
@@ -168,10 +188,11 @@ namespace KGSample {
 		/// 指定された年月のカレンダーを作成
 		/// </summary>
 		/// <param name="monthInfo"></param>
-		private void CreateCalendar(MonthInfo monthInfo)
+		private string CreateCalendar(MonthInfo monthInfo)
 		{
 			string TAG = "createCalendar";
 			string dbMsg = "[GCalender]";
+			string retStr = null;
 			try {
 				dbMsg += "," + monthInfo.YearMonth;
 				if (monthInfo.YearMonth.Equals(b_selectYM)) {
@@ -269,6 +290,8 @@ namespace KGSample {
 						int x = index % 7;
 						int y = index / 7;
 						dbMsg += "\r\n(" + dayCount + ")" + day + "日:セル位置[" + index + "](" + x + " .  " + y + ")";
+						DateTime carentDate = firstDate.AddDays(dayCount);
+						dbMsg += ":" + carentDate;
 						// テキストブロックを生成してグリッドに追加
 						var tb = new TextBlock();
 						tb.Text = string.Format("{0}", day);
@@ -289,18 +312,23 @@ namespace KGSample {
 						// 四角形を生成してグリッドに追加
 						// セルの枠線などを表示し、イベントをハンドリングする用
 						var rec = new Rectangle();
-						DateInfo dt = new DateInfo(monthInfo.YearMonth, string.Format("{0:00}", day));
+						DateInfo dt = new DateInfo(String.Format("{0:yyyyMM}", carentDate), string.Format("{0:00}", day));
 						rec.DataContext = dt;
 						// 土曜日の枠線を調整
 						if (x == 6) {
 							rec.Style = FindResource("rec-date-sat") as System.Windows.Style;
 						} else {
-							rec.Style = FindResource("rec-date") as System.Windows.Style;
+							rec.Style = FindResource("rec-date") as System .Windows.Style;
 						}
 						//月中でなければ
 						if (dayCount < 0 || lastDay <= dayCount) {
 							rec.Style = FindResource("rec-date-outside") as System.Windows.Style;
 						}
+
+						string setName = "R"+ String.Format("{0:yyyyMMdd}", carentDate);		//数字になるものは名前にならない
+						dbMsg += ":setName:" + setName;
+						this.RegisterName(setName, rec);                        //	rec.Name = setName では設定できない
+						dbMsg += ":rec:" + rec.Name;
 
 						// イベント設定
 						rec.MouseLeftButtonDown += date_MouseLeftButtonDown;
@@ -311,11 +339,12 @@ namespace KGSample {
 					}
 				}
 				b_selectYM = monthInfo.YearMonth;
-
+				retStr = monthInfo.YearMonth;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return retStr;
 		}
 
 		/// <summary>
@@ -340,7 +369,7 @@ namespace KGSample {
 				// 選択時のスタイルに変更
 				rec.Style = FindResource("rec-date-selected") as System.Windows.Style;
 				// ラベルに日付をセット
-	//			dbMsg += "、[" + CalendarWidth + "×" + CalendarHight + "]";
+				dbMsg += "、" + rec.DataContext;
 				lbSelectedDate.Content = (rec.DataContext as DateInfo).getYearMonthDayWithKanji();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
