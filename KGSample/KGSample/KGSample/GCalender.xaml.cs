@@ -125,8 +125,9 @@ namespace KGSample {
 				calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
 				calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
 				calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+				calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
 
-				// グリッド枠線
+				// 曜日を記入	グリッド枠線
 				Rectangle border = new Rectangle();
 				border.Style = FindResource("rec-border") as System.Windows.Style;
 				calendarGrid1.Children.Add(border);
@@ -188,8 +189,13 @@ namespace KGSample {
 					var rec = new Rectangle();
 					DateInfo dt = new DateInfo(monthInfo.YearMonth, string.Format("{0:00}", day));
 					rec.DataContext = dt;
-					// 枠線を調整
-					rec.Style = (x == 6) ? FindResource("rec-date-sat") as System.Windows.Style : FindResource("rec-date") as System.Windows.Style;
+					// 土曜日の枠線を調整
+					if (x == 6) {
+						rec.Style = FindResource("rec-date-sat") as System.Windows.Style;
+					} else {
+						rec.Style = FindResource("rec-date") as System.Windows.Style;
+					}
+	//				rec.Style = (x == 6) ? FindResource("rec-date-sat") as System.Windows.Style : FindResource("rec-date") as System.Windows.Style;
 					// イベント設定
 					rec.MouseLeftButtonDown += date_MouseLeftButtonDown;
 					calendarGrid1.Children.Add(rec);
