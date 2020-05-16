@@ -22,7 +22,7 @@ namespace KGSample {
 				dbMsg = yearMonth + "年月" + day + "日";
 				this.YearMonthDay = yearMonth + day;
 				this.Date = new DateTime(int.Parse(getYear()), int.Parse(getMonth()), int.Parse(day));
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}

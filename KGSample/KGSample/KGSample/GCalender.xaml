@@ -13,8 +13,10 @@
 		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
 	</Window.Resources>
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
-		<ComboBox x:Name="cbYearMonth" HorizontalAlignment="Left" Margin="16,20,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="cbYearMonth_SelectionChanged" FontSize="18"/>
-		<Button x:Name="today_bt" Content="本日" HorizontalAlignment="Left" Margin="195,21,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.387,0.485" Click="Today_bt_Click"/>
+		<Button x:Name="Back_bt" Content="▲" HorizontalAlignment="Left" Margin="17,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Back_bt_Click"/>
+		<ComboBox x:Name="cbYearMonth" HorizontalAlignment="Left" Margin="73,20,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="cbYearMonth_SelectionChanged" FontSize="18"/>
+		<Button x:Name="Next_bt" Content="▼" HorizontalAlignment="Left" Margin="241,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Next_bt_Click"/>
+		<Button x:Name="today_bt" Content="本日" HorizontalAlignment="Left" Margin="329,21,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.387,0.485" Click="Today_bt_Click"/>
 		<Grid x:Name="CalendarContainer"  Margin="0,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
 		<!--<Grid x:Name="CalendarContainer" HorizontalAlignment="Left" Height="317" Margin="0,53,0,0" VerticalAlignment="Top" Width="517"/>-->
 		<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Left" Margin="476,20,0,0" VerticalAlignment="Top"/>
