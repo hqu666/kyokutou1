@@ -123,8 +123,6 @@ namespace KGSample {
 			return GCalenderEvent;
 		}
 
-
-
 		/// <summary>
 		/// 本日ボタンクリック
 		/// </summary>
@@ -369,20 +367,33 @@ namespace KGSample {
 					int nMonthLastday = 6 - lastDayOfWeek;
 					int nMonthFowerd = lastDay + nMonthLastday;
 					dbMsg += "\r\n次月" + nMonthLastday + "日まで,カウントは" + nMonthFowerd + "まで";
-					DateTime timeMin = firstDate.AddMonths(-1);			//	default(DateTime);
-					DateTime timeMax = firstDate.AddMonths(1);         //default(DateTime);
+					DateTime timeMin = firstDate.AddMonths(-2);			//	default(DateTime);
+					DateTime timeMax = firstDate.AddMonths(2);         //default(DateTime);
 					IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent = EventListUp( timeMin,  timeMax);
 					dbMsg += "\r\nEvent" + GCalenderEvent.Count + "件";
+					int passesDays = 0;
 					// 1日から月末まを走査
 					for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
 						int day = firstDate.AddDays(dayCount).Day;
 						int index = (dayCount) + dayOfWeek;
 						int x = index % 7;
 						int y = index / 7;
-						dbMsg += "\r\n(" + dayCount + ")" + day + "日:セル位置[" + index + "](" + x + " .  " + y + ")";
+						dbMsg += "\r\n(" + dayCount + ")" + day + "日:セル位置[" + index + "](" + x + "." + y + ")";
 						DateTime carentDate = firstDate.AddDays(dayCount);
-						dbMsg += ":" + carentDate;
-						// テキストブロックを生成してグリッドに追加
+						string carentDateStr = String.Format("{0:yyyyMMdd}", carentDate); 
+						dbMsg += "carentDateStr=" + carentDateStr;
+						DateInfo dt = new DateInfo(String.Format("{0:yyyyMM}", carentDate), string.Format("{0:00}", day));
+						dbMsg += ",前日から" + passesDays + "日残り";
+
+						//Gridの直上にStackPanel
+						StackPanel bsp = new StackPanel();
+						bsp.Style = FindResource("sp-bace") as System.Windows.Style;
+						bsp.DataContext = dt;
+						calendarGrid1.Children.Add(bsp);
+						bsp.SetValue(Grid.ColumnProperty, x);
+						bsp.SetValue(Grid.RowProperty, y + 1);
+
+						// テキストブロックを生成してStackPanelの一番上に追加
 						var tb = new TextBlock();
 						tb.Text = string.Format("{0}", day);
 						// 土日は文字色を変更する
@@ -395,14 +406,13 @@ namespace KGSample {
 						} else {
 							tb.Style = FindResource("txb-date") as System.Windows.Style;
 						}
-						calendarGrid1.Children.Add(tb);
-						tb.SetValue(Grid.ColumnProperty, x);
-						tb.SetValue(Grid.RowProperty, y + 1);
+						bsp.Children.Add(tb);
+						//tb.SetValue(Grid.ColumnProperty, x);
+						//tb.SetValue(Grid.RowProperty, y + 1);
 
 						// 四角形を生成してグリッドに追加
 						// セルの枠線などを表示し、イベントをハンドリングする用
 						var rec = new Rectangle();
-						DateInfo dt = new DateInfo(String.Format("{0:yyyyMM}", carentDate), string.Format("{0:00}", day));
 						rec.DataContext = dt;
 						// 土曜日の枠線を調整
 						if (x == 6) {
@@ -415,16 +425,115 @@ namespace KGSample {
 							rec.Style = FindResource("rec-date-outside") as System.Windows.Style;
 						}
 
-						string setName = "R"+ String.Format("{0:yyyyMMdd}", carentDate);		//数字になるものは名前にならない
-						dbMsg += ":setName:" + setName;
-						this.RegisterName(setName, rec);                        //	rec.Name = setName では設定できない
-						dbMsg += ":rec:" + rec.Name;
+						//string setName = "R"+ String.Format("{0:yyyyMMdd}", carentDate);		//数字になるものは名前にならない
+						//dbMsg += ":setName:" + setName;
+						//this.RegisterName(setName, rec);                        //	rec.Name = setName では設定できない
+						//dbMsg += ":rec:" + rec.Name;
 
 						// イベント設定
 						rec.MouseLeftButtonDown += date_MouseLeftButtonDown;
 						calendarGrid1.Children.Add(rec);
 						rec.SetValue(Grid.ColumnProperty, x);
 						rec.SetValue(Grid.RowProperty, y + 1);
+
+						string todayStr = "";
+						if (0 < GCalenderEvent.Count) {
+							dbMsg += ".GCalenderEvent" + GCalenderEvent.Count + "件";
+							IList<Google.Apis.Calendar.v3.Data.Event> TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+							foreach (Google.Apis.Calendar.v3.Data.Event todayItem in GCalenderEvent) {
+
+								//Google.Apis.Calendar.v3.Data.EventDateTime todayItemStart = todayItem.Start;
+								////		dbMsg += ".todayItemStart=" + todayItemStart;
+								//	string todayItemStartDateTime = todayItemStart.DateTime.ToString();
+								//		DateTime? todayItemStartDateTime = todayItemStart.DateTime;
+								//			dbMsg += ">DateTime>" + todayItemStartDateTime;
+								//string todayItemStartDate = todayItemStart.Date;	//オブジェクト参照がオブジェクト インスタンスに設定されていません。
+								//dbMsg += ">Date>" + todayItemStartDate;
+								//string[] strs1 = todayItemStartDateTime.Split(' ');
+								//string[] strs = strs1[0].Split('/');
+								//dbMsg += "(0)" + strs[0] + "(1)" + strs[1] + "(2)" + strs[2];
+								//		DateTime StartDate = new DateTime(int.Parse(strs[0]), int.Parse(strs[1]), int.Parse(strs[2]));
+								if(todayItem.Start.DateTime != null) {
+									int sYear = todayItem.Start.DateTime.Value.Year;
+									int sMonth = todayItem.Start.DateTime.Value.Month;
+									int sDay = todayItem.Start.DateTime.Value.Day;
+									DateTime StartDate = new DateTime(sYear, sMonth, sDay);
+									todayStr = String.Format("{0:yyyyMMdd}", StartDate);
+									if (todayStr.Equals(carentDateStr)) {
+										TodayEvent.Add(todayItem);
+									}
+								}
+							}
+							dbMsg += "中" + todayStr + "のEventは" + TodayEvent.Count + "件";
+							if (0<TodayEvent.Count) {
+								//単日と複数の日付にまたがるEventを分ける
+								IList<Google.Apis.Calendar.v3.Data.Event> onedayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+								IList<Google.Apis.Calendar.v3.Data.Event> passesEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+								foreach (Google.Apis.Calendar.v3.Data.Event todayItem in TodayEvent) {
+									string endStr = String.Format("{0:yyyyMMdd}", todayItem.End.DateTime);
+									if (todayStr.Equals(endStr)) {
+										onedayEvent.Add(todayItem);
+									}else{
+										passesEvent.Add(todayItem);
+										passesDays = int.Parse(endStr) - int.Parse(todayStr) +1;
+										dbMsg += "," + passesDays + "日に渡る";
+									}
+								}
+
+								TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+								if(0<passesEvent.Count) {
+									dbMsg += ",複数の日" + passesEvent.Count + "件";
+									foreach (Google.Apis.Calendar.v3.Data.Event todayItem in passesEvent) {
+										TodayEvent.Add(todayItem);
+									}
+								}
+								if (0 < onedayEvent.Count) {
+									dbMsg += ",単日" + onedayEvent.Count + "件";
+									foreach (Google.Apis.Calendar.v3.Data.Event todayItem in onedayEvent) {
+										TodayEvent.Add(todayItem);
+									}
+								}
+
+								bool isNeedStack = true;
+								StackPanel esp = new StackPanel();
+								foreach (Google.Apis.Calendar.v3.Data.Event eventItem in TodayEvent) {
+									//				string startDT = eventItem.Start.DateTime.ToString();
+									string startDateStr = String.Format("{0:yyyyMMdd}", eventItem.Start.DateTime);
+									string endStr = String.Format("{0:yyyyMMdd}", eventItem.End.DateTime);
+									//dbMsg += "\r\n" + startDT;
+									string startTimeStr = String.Format("{0:hh:mm}", eventItem.Start.DateTime);
+									dbMsg += " " + startTimeStr;
+									string endDT = eventItem.End.DateTime.ToString();
+									dbMsg += "～" + endDT;
+									//if (String.IsNullOrEmpty(startDT)) {
+									//	startDT = eventItem.Start.Date;
+									//}
+									string Summary = eventItem.Summary;
+									dbMsg += "," + Summary;
+									Button bt = new Button();
+									bt.Content = startTimeStr + " " + Summary;
+									if (todayStr.Equals(endStr)) {
+										if (isNeedStack) {
+											esp.Style = FindResource("sp-event") as System.Windows.Style;
+											//StackPanelの上にEvent用のStackPanelを追加
+											bsp.Children.Add(esp);
+											esp.SetValue(Grid.ColumnProperty, x);
+											esp.SetValue(Grid.RowProperty, y + 1);
+											isNeedStack = false;
+											dbMsg += ":::StackPanel作成";
+										}
+										bt.Style = FindResource("bt-event-one") as System.Windows.Style;
+										esp.Children.Add(bt);
+									}else{
+										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
+										bsp.Children.Add(bt);
+										//bt.SetValue(Grid.ColumnProperty, x);
+										//bt.SetValue(Grid.RowProperty, y + 1);
+									}
+									passesDays--;
+								}
+							}
+						}
 					}
 				}
 				b_selectYM = monthInfo.YearMonth;
