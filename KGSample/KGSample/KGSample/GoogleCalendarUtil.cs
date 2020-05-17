@@ -12,15 +12,18 @@ namespace KGSample {
 		CS_Util Util = new CS_Util();
 
 		/// <summary>
-		/// GoogleDriveの登録状況表示
+		/// GoogleCalender・Eventの登録状況表示
 		/// </summary>
+		/// <param name="timeMin">開始日</param>
+		/// <param name="timeMax">終了日</param>
 		/// <returns></returns>
-		public IList<Event> GEventsListUp()
+		public IList<Event> GEventsListUp(DateTime timeMin,DateTime timeMax)
 		{
 			string TAG = "GEventsListUp";
 			string dbMsg = "[GoogleCalendarUtil]";
 			IList<Google.Apis.Calendar.v3.Data.Event> retList = new List<Google.Apis.Calendar.v3.Data.Event>();
 			try {
+				dbMsg += ",対象期間=" + timeMin + "～" + timeMax;
 				// Create Google Calendar API service.
 				var service = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCalendarCredential,
@@ -30,7 +33,8 @@ namespace KGSample {
 
 				// Define parameters of request.
 				EventsResource.ListRequest request = service.Events.List("primary");
-				request.TimeMin = DateTime.Now;
+				request.TimeMin = timeMin;                     //DateTime.Now;
+				request.TimeMax = timeMax;
 				request.ShowDeleted = false;
 				request.SingleEvents = true;
 				request.MaxResults = 1000;

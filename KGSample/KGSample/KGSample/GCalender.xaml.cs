@@ -70,7 +70,6 @@ namespace KGSample {
 					MyLog(TAG, dbMsg);
 					if (isListUp) {
 						DrowToday();
-						//	EventListUp();
 					}
 				}
 			} catch (Exception er) {
@@ -81,21 +80,20 @@ namespace KGSample {
 		/// <summary>
 		/// treeViewへEventの登録状態表示
 		/// </summary>
-		public void EventListUp()
+		public IList<Google.Apis.Calendar.v3.Data.Event> EventListUp(DateTime timeMin, DateTime timeMax)
 		{
 			string TAG = "EventListUp";
 			string dbMsg = "[GCalender]";
+			IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent =new List<Google.Apis.Calendar.v3.Data.Event>();
 			try {
 				String titolStr = Constant.ApplicationName;
 				String msgStr = "";
+				GCalenderEvent = GCalendarUtil.GEventsListUp(timeMin, timeMax);
+				if (GCalenderEvent != null) {
+					dbMsg += GCalenderEvent.Count + "件";
 
-				Constant.GCalenderEvent = GCalendarUtil.GEventsListUp();
-				if (Constant.GCalenderEvent != null) {
-					dbMsg += Constant.GCalenderEvent.Count + "件";
-
-					if (0 < Constant.GCalenderEvent.Count) {
-					//	event_lv.Items.Clear();
-						foreach (var eventItem in Constant.GCalenderEvent) {
+					if (0 <GCalenderEvent.Count) {
+						foreach (Google.Apis.Calendar.v3.Data.Event eventItem in GCalenderEvent) {
 							string startDT = eventItem.Start.DateTime.ToString();
 							dbMsg += "\r\n" + startDT;
 							string endDT = eventItem.End.DateTime.ToString();
@@ -105,10 +103,8 @@ namespace KGSample {
 							}
 							string Summary = eventItem.Summary;
 							dbMsg += "," + Summary;
-							// ListViewコントロールにデータを追加します。
-							string[] item1 = { startDT, endDT, Summary };
-			//				event_lv.Items.Add(new ListViewItem(item1));
 						}
+
 					} else {
 						msgStr = "カレンダーには未だ予定が登録されていません";
 					}
@@ -124,6 +120,7 @@ namespace KGSample {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return GCalenderEvent;
 		}
 
 
@@ -164,8 +161,6 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
 
 		/// <summary>
 		/// 選択されている年月から半年戻す
@@ -374,7 +369,10 @@ namespace KGSample {
 					int nMonthLastday = 6 - lastDayOfWeek;
 					int nMonthFowerd = lastDay + nMonthLastday;
 					dbMsg += "\r\n次月" + nMonthLastday + "日まで,カウントは" + nMonthFowerd + "まで";
-
+					DateTime timeMin = firstDate.AddMonths(-1);			//	default(DateTime);
+					DateTime timeMax = firstDate.AddMonths(1);         //default(DateTime);
+					IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent = EventListUp( timeMin,  timeMax);
+					dbMsg += "\r\nEvent" + GCalenderEvent.Count + "件";
 					// 1日から月末まを走査
 					for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
 						int day = firstDate.AddDays(dayCount).Day;
