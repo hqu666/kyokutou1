@@ -22,6 +22,11 @@ namespace KGSample {
 	/// cbYearMonthで該当年月を保持
 	/// </summary>
 	public partial class GCalender : MetroWindow {
+		LocalFileUtil LFUtil = new LocalFileUtil();
+		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
+		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
+		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
+
 		private Rectangle selectedRec;
 		private System.Windows.Style selectedRecStyle;
 
@@ -35,12 +40,93 @@ namespace KGSample {
 			string dbMsg = "[GCalender]";
 			try {
 				InitializeComponent();
-				DrowToday();
+				Conect2Calender( true);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 接続
+		/// </summary>
+		/// <param name="isListUp"></param>
+		private void Conect2Calender(Boolean isListUp)
+		{
+			string TAG = "Conect2Calender";
+			string dbMsg = "[GCalender]";
+			try {
+				String retStr = GAuthUtil.Authentication("drive_calender.json", "token.json");
+				dbMsg += ",retStr=" + retStr;
+				if (retStr.Equals("")) {
+					//メッセージボックスを表示する
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+				} else {
+					string UserId = Constant.MyCalendarCredential.UserId;
+					dbMsg += ",UserId=" + UserId;
+					MyLog(TAG, dbMsg);
+					if (isListUp) {
+						DrowToday();
+						//	EventListUp();
+					}
+				}
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// treeViewへEventの登録状態表示
+		/// </summary>
+		public void EventListUp()
+		{
+			string TAG = "EventListUp";
+			string dbMsg = "[GCalender]";
+			try {
+				String titolStr = Constant.ApplicationName;
+				String msgStr = "";
+
+				Constant.GCalenderEvent = GCalendarUtil.GEventsListUp();
+				if (Constant.GCalenderEvent != null) {
+					dbMsg += Constant.GCalenderEvent.Count + "件";
+
+					if (0 < Constant.GCalenderEvent.Count) {
+					//	event_lv.Items.Clear();
+						foreach (var eventItem in Constant.GCalenderEvent) {
+							string startDT = eventItem.Start.DateTime.ToString();
+							dbMsg += "\r\n" + startDT;
+							string endDT = eventItem.End.DateTime.ToString();
+							dbMsg += "～" + endDT;
+							if (String.IsNullOrEmpty(startDT)) {
+								startDT = eventItem.Start.Date;
+							}
+							string Summary = eventItem.Summary;
+							dbMsg += "," + Summary;
+							// ListViewコントロールにデータを追加します。
+							string[] item1 = { startDT, endDT, Summary };
+			//				event_lv.Items.Add(new ListViewItem(item1));
+						}
+					} else {
+						msgStr = "カレンダーには未だ予定が登録されていません";
+					}
+				} else {
+					msgStr = "カレンダーの情報を取得できませんでした";
+				}
+				if (!msgStr.Equals("")) {
+					dbMsg += ",msgStr=" + msgStr;
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// 本日ボタンクリック
@@ -67,6 +153,12 @@ namespace KGSample {
 				DateTime now = DateTime.Now;
 				YearMonthComboMake(now);
 				CreateCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
+
+				string selectName = "R" + String.Format("{0:yyyyMMdd}", now);       //数字になるものは名前にならない
+				dbMsg += ":rselectNameec=" + selectName;
+		//		Rectangle.
+		//		this.s.FindName(selectName, Rectangle) as Rectangle;
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -335,7 +427,6 @@ namespace KGSample {
 						calendarGrid1.Children.Add(rec);
 						rec.SetValue(Grid.ColumnProperty, x);
 						rec.SetValue(Grid.RowProperty, y + 1);
-
 					}
 				}
 				b_selectYM = monthInfo.YearMonth;
@@ -388,6 +479,14 @@ namespace KGSample {
 		{
 			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg, err);
+		}
+
+		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
+																		MessageBoxButton buttns,
+																		MessageBoxImage icon
+																		){
+			CS_Util Util = new CS_Util();
+			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
 
 	}
