@@ -27,11 +27,14 @@
 		<!-- テキストブロック：日付セル（通常） -->
 		<Style x:Key="txb-date" TargetType="TextBlock">
 			<Setter Property="FontSize" Value="12" />
+			<Setter Property="Height" Value="20" />
+			<!--<Setter Property="Width" Value="100" />-->
 			<Setter Property="Foreground" Value="Black" />
 			<Setter Property="Margin" Value="4" />
 			<Setter Property="Background" Value="Transparent" />
 			<Setter Property="VerticalAlignment" Value="Top" />
 			<Setter Property="HorizontalAlignment" Value="Right" />
+			<Setter Property="Panel.ZIndex" Value="2" />
 		</Style>
 
 		<!-- テキストブロック：日付セル（土曜） -->
@@ -55,7 +58,8 @@
 			<Setter Property="Stroke" Value="#8F8F8F" />
 			<Setter Property="StrokeThickness" Value="2" />
 			<Setter Property="Grid.ColumnSpan" Value="7" />
-			<Setter Property="Grid.RowSpan" Value="7" />
+			<Setter Property="Grid.RowSpan" Value="35" />
+			<!--元は７　＊　dayRow-->
 		</Style>
 
 		<!-- 四角形：下線用 -->
@@ -95,14 +99,16 @@
 
 	<!-- 四角形：日付セル（通常） -->
 		<Style x:Key="rec-date" TargetType="Rectangle">
-		<Setter Property="Stroke" Value="#8F8F8F" />
-		<Setter Property="StrokeThickness" Value="1" />
-		<Setter Property="VerticalAlignment" Value="Stretch" />
-			<!--<Setter Property="HorizontalAlignment" Value="Stretch" />-->
+			<Setter Property="Stroke" Value="#8F8F8F" />
+			<Setter Property="StrokeThickness" Value="1" />
+			<Setter Property="VerticalAlignment" Value="Stretch" />
+			<Setter Property="Grid.RowSpan" Value="5" />
+			<!--元は無し　＊　dayRow-->
+			<Setter Property="Panel.ZIndex" Value="1" />
 			<Setter Property="Fill" Value="Transparent" />
 			<Setter Property="Margin" Value="3, 3, 1, 1" />
 			<!-- トリガーを使ってマウスオーバーで背景色を変更する -->
-			<!--<Style.Triggers>
+			<Style.Triggers>
 				<Trigger Property="IsMouseOver" Value="true">
 					<Trigger.Setters>
 						<Setter Property="Margin"  Value="0, 0, 1, 0" />
@@ -110,7 +116,7 @@
 						<Setter Property="Opacity" Value="0.1"/>
 					</Trigger.Setters>
 				</Trigger>
-			</Style.Triggers>-->
+			</Style.Triggers>
 		</Style>
 
 		<!-- 四角形：日付セル（土曜） → 最後の列を微調整-->
@@ -120,8 +126,8 @@
 
 	<!-- 四角形：日付セル（今月以外）-->
 	<Style x:Key="rec-date-outside" TargetType="Rectangle" BasedOn="{StaticResource rec-date}">
-		<Setter Property="Fill" Value="#393939" />
-		<Setter Property="Opacity" Value="0.1"/>
+		<Setter Property="Fill" Value="#ACACAC" />
+		<!--<Setter Property="Opacity" Value="0.1"/>-->
 	</Style>
 
 	<!-- 四角形：日付セル（選択） -->
@@ -131,9 +137,12 @@
 			<Setter Property="Stroke" Value="Black" />
 			<Setter Property="StrokeDashArray" Value="1 1" />
 			<Setter Property="StrokeThickness" Value="1"/>
-		<Setter Property="Fill" Value="#f6f631" />
+			<Setter Property="Fill" Value="#f6f631" />
 			<Setter Property="Opacity" Value="0.2"/>
-		</Style>
+			<Setter Property="Grid.RowSpan" Value="5" />
+			<!--元は無し　＊　dayRow-->
+		<Setter Property="Panel.ZIndex" Value="1" />
+	</Style>
 
 		<!-- ラベル：曜日ヘッダ-->
 		<Style x:Key="lb-week" TargetType="Label">
@@ -142,7 +151,8 @@
 			<Setter Property="Grid.Row" Value="0" />
 			<Setter Property="FontSize" Value="11" />
 			<Setter Property="Padding" Value="0" />
-	</Style>
+			<Setter Property="Panel.ZIndex" Value="4" />
+		</Style>
 
 	<Style x:Key="sp-bace" TargetType="StackPanel">
 		<Setter Property="VerticalAlignment" Value="Top" />
@@ -188,10 +198,35 @@
 		<Setter Property="VerticalAlignment" Value="Top" />
 		<Setter Property="HorizontalAlignment" Value="Left" />
 		<Setter Property="Margin" Value="1" />
+		<Setter Property="Width" Value="1000" />
 		<Setter Property="Panel.ZIndex" Value="99" />
 	</Style>
 
-	<Style x:Key="bt-event-one" TargetType="Button" BasedOn="{StaticResource bt-event}">
+	<Style x:Key="bt-event-seven" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Grid.ColumnSpan" Value="7" />
+	</Style>
+
+	<Style x:Key="bt-event-six" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Grid.ColumnSpan" Value="6" />
+	</Style>
+
+	<Style x:Key="bt-event-five" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Grid.ColumnSpan" Value="5" />
+	</Style>
+
+	<Style x:Key="bt-event-four" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Grid.ColumnSpan" Value="4" />
+	</Style>
+
+	<Style x:Key="bt-event-three" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Grid.ColumnSpan"  Value="3" />
+	</Style>
+
+	<Style x:Key="bt-event-two" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Grid.ColumnSpan" Value="2" />
+	</Style>
+
+	<Style x:Key="bt-event-one" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
 		<Setter Property="Foreground" Value="Black" />
 		<Setter Property="BorderThickness"  Value="0" />
 		<Setter Property="Background" Value="Transparent" />
