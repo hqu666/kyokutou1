@@ -436,46 +436,57 @@ namespace KGSample {
 						rec.SetValue(Grid.ColumnProperty, x);
 						rec.SetValue(Grid.RowProperty, y + 1);
 
-						string todayStr = "";
+				//		string todayStr = "";
 						if (0 < GCalenderEvent.Count) {
 							dbMsg += ".GCalenderEvent" + GCalenderEvent.Count + "件";
 							IList<Google.Apis.Calendar.v3.Data.Event> TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+							//本日Eventの抽出	※終日・複数日のStartはDateTimeが無い。単日はDateがない
 							foreach (Google.Apis.Calendar.v3.Data.Event todayItem in GCalenderEvent) {
+								string startStr = GCalendarUtil.EventDateTime2Str(todayItem.Start);
+								//	DateTime todayItemStartDateTime = carentDate;
+								//if (todayItem.Start.DateTime == null) {
+								//	string todayItemStartDate = todayItem.Start.Date;
+								//	string[] sStr = todayItemStartDate.Split('-');
+								//	todayItemStartDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+								//}
+								//if (todayItem.Start.Date == null) {
+								//	int sYear = todayItem.Start.DateTime.Value.Year;
+								//	int sMonth = todayItem.Start.DateTime.Value.Month;
+								//	int sDay = todayItem.Start.DateTime.Value.Day;
+								//	 todayItemStartDateTime = new DateTime(sYear, sMonth, sDay);
+								//}
+								//string todayStr = String.Format("{0:yyyyMMdd}", todayItemStartDateTime);
+								////			if(todayItem.Start.DateTime != null) {
 
-								//Google.Apis.Calendar.v3.Data.EventDateTime todayItemStart = todayItem.Start;
-								////		dbMsg += ".todayItemStart=" + todayItemStart;
-								//	string todayItemStartDateTime = todayItemStart.DateTime.ToString();
-								//		DateTime? todayItemStartDateTime = todayItemStart.DateTime;
-								//			dbMsg += ">DateTime>" + todayItemStartDateTime;
-								//string todayItemStartDate = todayItemStart.Date;	//オブジェクト参照がオブジェクト インスタンスに設定されていません。
-								//dbMsg += ">Date>" + todayItemStartDate;
-								//string[] strs1 = todayItemStartDateTime.Split(' ');
-								//string[] strs = strs1[0].Split('/');
-								//dbMsg += "(0)" + strs[0] + "(1)" + strs[1] + "(2)" + strs[2];
-								//		DateTime StartDate = new DateTime(int.Parse(strs[0]), int.Parse(strs[1]), int.Parse(strs[2]));
-								if(todayItem.Start.DateTime != null) {
-									int sYear = todayItem.Start.DateTime.Value.Year;
-									int sMonth = todayItem.Start.DateTime.Value.Month;
-									int sDay = todayItem.Start.DateTime.Value.Day;
-									DateTime StartDate = new DateTime(sYear, sMonth, sDay);
-									todayStr = String.Format("{0:yyyyMMdd}", StartDate);
-									if (todayStr.Equals(carentDateStr)) {
+								//	todayStr = String.Format("{0:yyyyMMdd}", todayItem.Start.DateTime);
+								if (startStr.Equals(carentDateStr)) {
 										TodayEvent.Add(todayItem);
 									}
-								}
+					//			}
 							}
-							dbMsg += "中" + todayStr + "のEventは" + TodayEvent.Count + "件";
+							dbMsg += "中" + carentDateStr + "のEventは" + TodayEvent.Count + "件";
 							if (0<TodayEvent.Count) {
 								//単日と複数の日付にまたがるEventを分ける
 								IList<Google.Apis.Calendar.v3.Data.Event> onedayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 								IList<Google.Apis.Calendar.v3.Data.Event> passesEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 								foreach (Google.Apis.Calendar.v3.Data.Event todayItem in TodayEvent) {
-									string endStr = String.Format("{0:yyyyMMdd}", todayItem.End.DateTime);
-									if (todayStr.Equals(endStr)) {
+									int startInt = GCalendarUtil.EventDateTime2Int(todayItem.Start);
+									int endInt = GCalendarUtil.EventDateTime2Int(todayItem.End);
+
+									//				string todayItemStartDate = todayItem.Start.Date;
+									//				string[] sStr = todayItemStartDate.Split('-');
+									//				DateTime todayItemStartDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+									//				string todayStr = String.Format("{0:yyyyMMdd}", todayItemStartDateTime);
+									//				string todayItemEndDate = todayItem.End.Date;
+									//				string[] eStr = todayItemEndDate.Split('-');
+									//				DateTime todayItemEndDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+									//				string endDateStr = String.Format("{0:yyyyMMdd}", todayItemEndDateTime);
+									////				string endDateStr = todayItem.End.Date;                              //String.Format("{0:yyyyMMdd}", todayItem.End.DateTime);
+									if (endInt == startInt) {
 										onedayEvent.Add(todayItem);
 									}else{
 										passesEvent.Add(todayItem);
-										passesDays = int.Parse(endStr) - int.Parse(todayStr) +1;
+										passesDays = endInt - startInt + 1;
 										dbMsg += "," + passesDays + "日に渡る";
 									}
 								}
@@ -497,22 +508,32 @@ namespace KGSample {
 								bool isNeedStack = true;
 								StackPanel esp = new StackPanel();
 								foreach (Google.Apis.Calendar.v3.Data.Event eventItem in TodayEvent) {
+									string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
+									string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
+									string colorId = eventItem.ColorId;
+									dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
 									//				string startDT = eventItem.Start.DateTime.ToString();
-									string startDateStr = String.Format("{0:yyyyMMdd}", eventItem.Start.DateTime);
-									string endStr = String.Format("{0:yyyyMMdd}", eventItem.End.DateTime);
-									//dbMsg += "\r\n" + startDT;
-									string startTimeStr = String.Format("{0:hh:mm}", eventItem.Start.DateTime);
-									dbMsg += " " + startTimeStr;
-									string endDT = eventItem.End.DateTime.ToString();
-									dbMsg += "～" + endDT;
+									//		string startDateStr = String.Format("{0:yyyyMMdd}", eventItem.Start.DateTime);
 									//if (String.IsNullOrEmpty(startDT)) {
 									//	startDT = eventItem.Start.Date;
 									//}
 									string Summary = eventItem.Summary;
 									dbMsg += "," + Summary;
+									string ContentStr = "";
+									if (eventItem.Start.DateTime == null) {
+										dbMsg += "：終日・連日：";
+									} else { 
+										dbMsg += "：単日：";
+										string startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
+										string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
+										dbMsg += ", " + startTimeStr + "～" + endTimeStr;
+										//string endDT = eventItem.End.DateTime.ToString();
+										//dbMsg += "～" + endDT;
+										ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
+									}
 									Button bt = new Button();
-									bt.Content = startTimeStr + " " + Summary;
-									if (todayStr.Equals(endStr)) {
+									bt.Content = ContentStr;
+									if (carentDateStr.Equals(endStr)) {
 										if (isNeedStack) {
 											esp.Style = FindResource("sp-event") as System.Windows.Style;
 											//StackPanelの上にEvent用のStackPanelを追加

@@ -32,6 +32,7 @@ namespace KGSample {
 				dbMsg += ",HttpClient=" + service.HttpClient.ToString();
 
 				// Define parameters of request.
+				// ※終日・複数日のStartはDateTimeが無いのでStart.DateでソートしたいがOrderByEnumに該当カラムが無い
 				EventsResource.ListRequest request = service.Events.List("primary");
 				request.TimeMin = timeMin;                     //DateTime.Now;
 				request.TimeMax = timeMax;
@@ -72,6 +73,63 @@ namespace KGSample {
 		}
 
 		/// <summary>
+		/// EventDateTimeを20211231などの数値で返す
+		/// </summary>
+		/// <param name="TEventDateTime">EventのStartやEnd</param>
+		/// <returns>20211231などのint</returns>
+		public int EventDateTime2Int(EventDateTime TEventDateTime)
+		{
+			string TAG = "EventDateTime2Str";
+			string dbMsg = "[GoogleCalendarUtil]";
+			int retInt = 0;
+			try {
+				retInt = int.Parse(EventDateTime2Str(TEventDateTime));
+				dbMsg = ">>" + retInt;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retInt;
+		}
+
+		/// <summary>
+		///  EventDateTimeをyyyyMMddの文字列で返す
+		/// </summary>
+		/// <param name="TEventDateTime">EventのStartやEnd</param>
+		/// <returns>yyyyMMddのstring</returns>
+		public string EventDateTime2Str(EventDateTime TEventDateTime)
+		{
+			string TAG = "EventDateTime2Str";
+			string dbMsg = "[GoogleCalendarUtil]";
+			string retStr = null;
+			try {
+				DateTime tDateTime = DateTime.Now;
+				if (TEventDateTime.DateTime == null) {
+					dbMsg = "Date=" + TEventDateTime.Date;
+					string todayItemStartDate = TEventDateTime.Date;
+					string[] sStr = todayItemStartDate.Split('-');
+					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+				}
+				if (TEventDateTime.Date == null) {
+					dbMsg = "Date=" + TEventDateTime.DateTime;
+					int sYear = TEventDateTime.DateTime.Value.Year;
+					int sMonth = TEventDateTime.DateTime.Value.Month;
+					int sDay = TEventDateTime.DateTime.Value.Day;
+					tDateTime = new DateTime(sYear, sMonth, sDay);
+				}
+				retStr = String.Format("{0:yyyyMMdd}", tDateTime);
+
+				dbMsg = ">>" + retStr;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retStr;
+		}
+
+
+
+		/// <summary>
 		/// Eventの更新
 		/// 成功したらUrlを返す
 		/// </summary>
@@ -108,6 +166,7 @@ namespace KGSample {
 			}
 			return retLink;
 		}
+
 	}
 }
 
