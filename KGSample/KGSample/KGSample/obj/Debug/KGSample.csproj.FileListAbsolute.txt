@@ -1,4 +1,7 @@
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\drive_calender.json
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\KGSample.exe.config
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\KGSample.exe
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\KGSample.pdb
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\ControlzEx.dll
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\Google.Apis.Auth.dll
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\Google.Apis.Auth.PlatformServices.dll
@@ -39,6 +42,3 @@ C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.csp
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.csproj.CopyComplete
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.exe
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.pdb
-C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\KGSample.exe.config
-C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\KGSample.exe
-C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\KGSample.pdb

@@ -28,16 +28,16 @@
 		<Style x:Key="txb-date" TargetType="TextBlock">
 			<Setter Property="FontSize" Value="12" />
 			<Setter Property="Foreground" Value="Black" />
-			<Setter Property="Margin" Value="5" />
+			<Setter Property="Margin" Value="4" />
 			<Setter Property="Background" Value="Transparent" />
-		<!--<Setter Property="Padding" Value="0, 0, 0, 0" />-->
 			<Setter Property="VerticalAlignment" Value="Top" />
 			<Setter Property="HorizontalAlignment" Value="Right" />
 		</Style>
 
 		<!-- テキストブロック：日付セル（土曜） -->
 		<Style x:Key="txb-date-sat" TargetType="TextBlock" BasedOn="{StaticResource txb-date}">
-			<Setter Property="Foreground" Value="Blue" />
+		<Setter Property="Margin" Value="4,4,8,4" />
+		<Setter Property="Foreground" Value="Blue" />
 		</Style>
 
 		<!-- テキストブロック：日付セル（日曜） -->
@@ -200,8 +200,13 @@
 	<Style x:Key="bt-event-passes" TargetType="Button" BasedOn="{StaticResource bt-event}">
 		<Setter Property="BorderThickness"  Value="1" />
 		<Setter Property="Foreground" Value="White" />
-		<Setter Property="Background" Value="#FF1E6FBC" />
-		<!--<Setter Property="r" Value="#FF1E6FBC" />-->
+		<Setter Property="Margin" Value="5,0,0,0" />
+		<Setter Property="Width" Value="1000" />
+	</Style>
+	<Style x:Key="lv-event-one" TargetType="ListView">
+		<Setter Property="Foreground" Value="Black" />
+		<Setter Property="BorderThickness"  Value="0" />
+		<Setter Property="Background" Value="Transparent" />
 	</Style>
 
 

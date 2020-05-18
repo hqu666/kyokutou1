@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -262,6 +264,7 @@ namespace KGSample {
 			string TAG = "MetroWindow_SizeChanged";
 			string dbMsg = "[GCalender]";
 			try {
+				b_selectYM = "";            //要サイズ修正
 				CreateCalendar(cbYearMonth.SelectedItem as MonthInfo);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -316,7 +319,7 @@ namespace KGSample {
 					calendarGrid1.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 					calendarGrid1.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 					calendarGrid1.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-					calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
+					calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(25) });
 					calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
 					calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
 					calendarGrid1.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
@@ -374,6 +377,7 @@ namespace KGSample {
 					int passesDays = 0;
 					// 1日から月末まを走査
 					for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
+						int subRow = 0;
 						int day = firstDate.AddDays(dayCount).Day;
 						int index = (dayCount) + dayOfWeek;
 						int x = index % 7;
@@ -385,13 +389,24 @@ namespace KGSample {
 						DateInfo dt = new DateInfo(String.Format("{0:yyyyMM}", carentDate), string.Format("{0:00}", day));
 						dbMsg += ",前日から" + passesDays + "日残り";
 
-						//Gridの直上にStackPanel
-						StackPanel bsp = new StackPanel();
-						bsp.Style = FindResource("sp-bace") as System.Windows.Style;
-						bsp.DataContext = dt;
-						calendarGrid1.Children.Add(bsp);
-						bsp.SetValue(Grid.ColumnProperty, x);
-						bsp.SetValue(Grid.RowProperty, y + 1);
+						////Gridの直上にStackPanel
+						//StackPanel bsp = new StackPanel();
+						//bsp.Style = FindResource("sp-bace") as System.Windows.Style;
+						//bsp.DataContext = dt;
+						//calendarGrid1.Children.Add(bsp);
+						//bsp.SetValue(Grid.ColumnProperty, x);
+						//bsp.SetValue(Grid.RowProperty, y + 1);
+						////Gridを行方向に細分化
+						Grid subGrid = new Grid();
+		//				subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
+						subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+						subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+						subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+						subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+						subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+						calendarGrid1.Children.Add(subGrid);
+						subGrid.SetValue(Grid.ColumnProperty, x);
+						subGrid.SetValue(Grid.RowProperty, y + 1);
 
 						// テキストブロックを生成してStackPanelの一番上に追加
 						var tb = new TextBlock();
@@ -406,7 +421,9 @@ namespace KGSample {
 						} else {
 							tb.Style = FindResource("txb-date") as System.Windows.Style;
 						}
-						bsp.Children.Add(tb);
+						subGrid.Children.Add(tb);
+						tb.SetValue(Grid.RowProperty, subRow);
+						subRow++;
 						//tb.SetValue(Grid.ColumnProperty, x);
 						//tb.SetValue(Grid.RowProperty, y + 1);
 
@@ -466,19 +483,95 @@ namespace KGSample {
 								TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 								if(0<passesEvent.Count) {
 									dbMsg += ",複数の日" + passesEvent.Count + "件";
-									foreach (Google.Apis.Calendar.v3.Data.Event todayItem in passesEvent) {
-										TodayEvent.Add(todayItem);
-									}
-								}
-								if (0 < onedayEvent.Count) {
-									dbMsg += ",単日" + onedayEvent.Count + "件";
-									foreach (Google.Apis.Calendar.v3.Data.Event todayItem in onedayEvent) {
-										TodayEvent.Add(todayItem);
+									foreach (Google.Apis.Calendar.v3.Data.Event eventItem in passesEvent) {
+										//TodayEvent.Add(eventItem);
+										string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
+										string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
+										string colorId = eventItem.ColorId;
+										dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
+										string Summary = eventItem.Summary;
+										dbMsg += "  ," + Summary;
+										string ContentStr = "";
+										if (eventItem.Start.DateTime == null) {
+											dbMsg += "：終日・連日：";
+											ContentStr = Summary + " : " + eventItem.End.Date + "まで";
+										} else {
+											dbMsg += "：単日：";
+											string startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
+											string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
+											dbMsg += ", " + startTimeStr + "～" + endTimeStr;
+											ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
+										}
+										Button bt = new Button();
+										bt.Content = ContentStr;
+										Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
+										bt.Background = new SolidColorBrush(BGColor);
+										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
+										subGrid.Children.Add(bt);
+										bt.SetValue(Grid.RowProperty, subRow);
+										subRow++;
 									}
 								}
 
+								if (0 < onedayEvent.Count) {
+									dbMsg += ",単日" + onedayEvent.Count + "件";
+									ListView lv = new System.Windows.Controls.ListView();
+
+									GridView oneRecords = new GridView();
+									oneRecords.AllowsColumnReorder = true;
+									oneRecords.ColumnHeaderToolTip = "Event Information";
+
+									GridViewColumn gvc1 = new GridViewColumn();
+									gvc1.DisplayMemberBinding = new Binding("Color");
+									gvc1.Header = " ";
+									gvc1.Width = 30;
+									oneRecords.Columns.Add(gvc1);
+
+									GridViewColumn gvc2 = new GridViewColumn();
+									gvc2.DisplayMemberBinding = new Binding("Start");
+									gvc2.Header = "Start";
+									gvc2.Width = 100;
+									oneRecords.Columns.Add(gvc2);
+
+									GridViewColumn gvc3 = new GridViewColumn();
+									gvc3.DisplayMemberBinding = new Binding("Summary");
+									gvc3.Header = "Summary";
+									gvc3.Width = 100;
+									oneRecords.Columns.Add(gvc3);
+
+									IList<GEvent> oneList = new List<GEvent>();
+									foreach (Google.Apis.Calendar.v3.Data.Event eventItem in onedayEvent) {
+										//		TodayEvent.Add(eventItem);
+										string startTimeStr = "";
+										string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
+										string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
+										string colorId = eventItem.ColorId;
+										dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
+										string Summary = eventItem.Summary;
+										dbMsg += "  ," + Summary;
+										if (eventItem.Start.DateTime == null) {
+							//				dbMsg += "：終日・連日："　+　Summary + " : " + eventItem.End.Date + "まで";
+										} else {
+								//			dbMsg += "：単日：";
+											startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
+											string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
+											dbMsg += ", " + startTimeStr + "～" + endTimeStr;
+										}
+										oneList.Add(new GEvent() { color = "●", start = startTimeStr, summary = Summary });
+						//				lv.ItemBindingGroup.Items.Add(Summary );
+									}
+									dbMsg += ">>oneList" + oneList.Count + "件";
+									lv.ItemsSource = oneList;
+
+									// Add the ListView to a parent container in the visual tree (that you created in the corresponding XAML file).
+									subGrid.Children.Add(lv);
+									lv.SetValue(Grid.RowProperty, subRow);
+								}
+								/*
 								bool isNeedStack = true;
 								StackPanel esp = new StackPanel();
+								List ls = new List();
+								dbMsg += "＞＞" + TodayEvent.Count + "件";
 								foreach (Google.Apis.Calendar.v3.Data.Event eventItem in TodayEvent) {
 									string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
 									string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
@@ -503,11 +596,15 @@ namespace KGSample {
 									bt.Background =  new SolidColorBrush(BGColor);
 									if (carentDateStr.Equals(endStr)) {
 										if (isNeedStack) {
+											ls.Style = FindResource("ls-event-one") as System.Windows.Style;
+											subGrid.Children.Add(ls);
+											ls.SetValue(Grid.RowProperty, subRow);
+
 											esp.Style = FindResource("sp-event") as System.Windows.Style;
 											//StackPanelの上にEvent用のStackPanelを追加
-											bsp.Children.Add(esp);
-											esp.SetValue(Grid.ColumnProperty, x);
-											esp.SetValue(Grid.RowProperty, y + 1);
+											subGrid.Children.Add(esp);
+											esp.SetValue(Grid.RowProperty, subRow);
+											subRow++;
 											isNeedStack = false;
 											dbMsg += ":::StackPanel作成";
 										}
@@ -515,12 +612,14 @@ namespace KGSample {
 										esp.Children.Add(bt);
 									}else{
 										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
-										bsp.Children.Add(bt);
-										//bt.SetValue(Grid.ColumnProperty, x);
-										//bt.SetValue(Grid.RowProperty, y + 1);
+										subGrid.Children.Add(bt);
+										bt.SetValue(Grid.RowProperty, subRow);
+										subRow++;
 									}
 									passesDays--;
 								}
+						*/
+
 							}
 						}
 					}
@@ -564,6 +663,12 @@ namespace KGSample {
 			}
 		}
 
+
+		public class GEvent {
+			public string color { get; set; }
+			public string start { get; set; }
+			public string summary { get; set; }
+		}
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)
 		{
