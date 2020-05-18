@@ -436,33 +436,15 @@ namespace KGSample {
 						rec.SetValue(Grid.ColumnProperty, x);
 						rec.SetValue(Grid.RowProperty, y + 1);
 
-				//		string todayStr = "";
 						if (0 < GCalenderEvent.Count) {
 							dbMsg += ".GCalenderEvent" + GCalenderEvent.Count + "件";
 							IList<Google.Apis.Calendar.v3.Data.Event> TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 							//本日Eventの抽出	※終日・複数日のStartはDateTimeが無い。単日はDateがない
 							foreach (Google.Apis.Calendar.v3.Data.Event todayItem in GCalenderEvent) {
 								string startStr = GCalendarUtil.EventDateTime2Str(todayItem.Start);
-								//	DateTime todayItemStartDateTime = carentDate;
-								//if (todayItem.Start.DateTime == null) {
-								//	string todayItemStartDate = todayItem.Start.Date;
-								//	string[] sStr = todayItemStartDate.Split('-');
-								//	todayItemStartDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
-								//}
-								//if (todayItem.Start.Date == null) {
-								//	int sYear = todayItem.Start.DateTime.Value.Year;
-								//	int sMonth = todayItem.Start.DateTime.Value.Month;
-								//	int sDay = todayItem.Start.DateTime.Value.Day;
-								//	 todayItemStartDateTime = new DateTime(sYear, sMonth, sDay);
-								//}
-								//string todayStr = String.Format("{0:yyyyMMdd}", todayItemStartDateTime);
-								////			if(todayItem.Start.DateTime != null) {
-
-								//	todayStr = String.Format("{0:yyyyMMdd}", todayItem.Start.DateTime);
 								if (startStr.Equals(carentDateStr)) {
 										TodayEvent.Add(todayItem);
 									}
-					//			}
 							}
 							dbMsg += "中" + carentDateStr + "のEventは" + TodayEvent.Count + "件";
 							if (0<TodayEvent.Count) {
@@ -472,16 +454,6 @@ namespace KGSample {
 								foreach (Google.Apis.Calendar.v3.Data.Event todayItem in TodayEvent) {
 									int startInt = GCalendarUtil.EventDateTime2Int(todayItem.Start);
 									int endInt = GCalendarUtil.EventDateTime2Int(todayItem.End);
-
-									//				string todayItemStartDate = todayItem.Start.Date;
-									//				string[] sStr = todayItemStartDate.Split('-');
-									//				DateTime todayItemStartDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
-									//				string todayStr = String.Format("{0:yyyyMMdd}", todayItemStartDateTime);
-									//				string todayItemEndDate = todayItem.End.Date;
-									//				string[] eStr = todayItemEndDate.Split('-');
-									//				DateTime todayItemEndDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
-									//				string endDateStr = String.Format("{0:yyyyMMdd}", todayItemEndDateTime);
-									////				string endDateStr = todayItem.End.Date;                              //String.Format("{0:yyyyMMdd}", todayItem.End.DateTime);
 									if (endInt == startInt) {
 										onedayEvent.Add(todayItem);
 									}else{
@@ -512,27 +484,23 @@ namespace KGSample {
 									string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
 									string colorId = eventItem.ColorId;
 									dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
-									//				string startDT = eventItem.Start.DateTime.ToString();
-									//		string startDateStr = String.Format("{0:yyyyMMdd}", eventItem.Start.DateTime);
-									//if (String.IsNullOrEmpty(startDT)) {
-									//	startDT = eventItem.Start.Date;
-									//}
 									string Summary = eventItem.Summary;
-									dbMsg += "," + Summary;
+									dbMsg += "  ," + Summary;
 									string ContentStr = "";
 									if (eventItem.Start.DateTime == null) {
 										dbMsg += "：終日・連日：";
+										ContentStr = Summary  + " : " + eventItem.End.Date + "まで";
 									} else { 
 										dbMsg += "：単日：";
 										string startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
 										string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
 										dbMsg += ", " + startTimeStr + "～" + endTimeStr;
-										//string endDT = eventItem.End.DateTime.ToString();
-										//dbMsg += "～" + endDT;
 										ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
 									}
 									Button bt = new Button();
 									bt.Content = ContentStr;
+									Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
+									bt.Background =  new SolidColorBrush(BGColor);
 									if (carentDateStr.Equals(endStr)) {
 										if (isNeedStack) {
 											esp.Style = FindResource("sp-event") as System.Windows.Style;

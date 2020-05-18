@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
@@ -84,8 +85,8 @@ namespace KGSample {
 			int retInt = 0;
 			try {
 				retInt = int.Parse(EventDateTime2Str(TEventDateTime));
-				dbMsg = ">>" + retInt;
-				Util.MyLog(TAG, dbMsg);
+				dbMsg += ">>" + retInt;
+		//		Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
@@ -105,13 +106,13 @@ namespace KGSample {
 			try {
 				DateTime tDateTime = DateTime.Now;
 				if (TEventDateTime.DateTime == null) {
-					dbMsg = "Date=" + TEventDateTime.Date;
+					dbMsg += "Date=" + TEventDateTime.Date;
 					string todayItemStartDate = TEventDateTime.Date;
 					string[] sStr = todayItemStartDate.Split('-');
 					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
 				}
 				if (TEventDateTime.Date == null) {
-					dbMsg = "Date=" + TEventDateTime.DateTime;
+					dbMsg += "Date=" + TEventDateTime.DateTime;
 					int sYear = TEventDateTime.DateTime.Value.Year;
 					int sMonth = TEventDateTime.DateTime.Value.Month;
 					int sDay = TEventDateTime.DateTime.Value.Day;
@@ -119,14 +120,77 @@ namespace KGSample {
 				}
 				retStr = String.Format("{0:yyyyMMdd}", tDateTime);
 
-				dbMsg = ">>" + retStr;
-				Util.MyLog(TAG, dbMsg);
+				dbMsg += ">>" + retStr;
+	//			Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
 			return retStr;
 		}
 
+		public Color ColorId2RGB(string colorId)
+		{
+			string TAG = "ColorId2RGB";
+			string dbMsg = "[GoogleCalendarUtil]";
+			Color reColor = Color.FromRgb( 0x00, 0xFF, 0x00);
+			try {
+				dbMsg += "colorId=" + colorId;
+				switch(colorId){
+					case "1":
+						dbMsg += ":ラベンダー";
+						reColor = Color.FromRgb( 121, 134, 203);
+						break;
+					case "2":
+						dbMsg += ":セージ";
+						reColor = Color.FromRgb( 51, 182, 121);
+						break;
+					case "3":
+						dbMsg += ":ブドウ";
+						reColor = Color.FromRgb( 142, 36, 170);
+						break;
+					case "4":
+						dbMsg += ":フラミンゴ";
+						reColor = Color.FromRgb( 230, 124, 115);
+						break;
+					case "5":
+						dbMsg += ":バナナ";
+						reColor = Color.FromRgb(246, 192, 40);
+						break;
+					case "6":
+						dbMsg += ":ミカン";
+						reColor = Color.FromRgb( 244, 81, 30);
+						break;
+					case "7":
+						dbMsg += ":不明";
+						break;
+					case "8":
+						dbMsg += ":ブルーベリー";
+						reColor = Color.FromRgb( 63, 81, 181);
+						break;
+					case "9":
+						dbMsg += ":グラファイト";
+						reColor = Color.FromRgb( 97, 97, 97);
+						break;
+					case "10":
+						dbMsg += ":バジル";
+						reColor = Color.FromRgb( 11, 128, 67);
+						break;
+					case "11":
+						dbMsg += ":トマト";
+						reColor = Color.FromRgb( 213, 0, 0);
+						break;
+					default:
+						dbMsg += ":無指定：ピーコック";
+						reColor = Color.FromRgb( 121, 134, 203);
+						break;
+				}
+				dbMsg += ">>" + reColor;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return reColor;
+		}
 
 
 		/// <summary>
