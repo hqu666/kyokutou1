@@ -370,11 +370,12 @@ namespace KGSample {
 					int nMonthLastday = 6 - lastDayOfWeek;
 					int nMonthFowerd = lastDay + nMonthLastday;
 					dbMsg += "\r\n次月" + nMonthLastday + "日まで,カウントは" + nMonthFowerd + "まで";
-					DateTime timeMin = firstDate.AddMonths(-2);			//	default(DateTime);
-					DateTime timeMax = firstDate.AddMonths(2);         //default(DateTime);
+					DateTime timeMin = firstDate.AddMonths(-1);
+					DateTime timeMax = firstDate.AddMonths(2); 
 					IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent = EventListUp( timeMin,  timeMax);
 					dbMsg += "\r\nEvent" + GCalenderEvent.Count + "件";
-					int passesDays = 0;
+					IList<EventSpan> eventSpanList = new List<EventSpan>();		//記載中の複数の日に渡るスケジュール
+
 					// 1日から月末まを走査
 					for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
 				//		int subRow = 0;
@@ -387,25 +388,9 @@ namespace KGSample {
 						string carentDateStr = String.Format("{0:yyyyMMdd}", carentDate); 
 						dbMsg += "carentDateStr=" + carentDateStr;
 						DateInfo dt = new DateInfo(String.Format("{0:yyyyMM}", carentDate), string.Format("{0:00}", day));
-						dbMsg += ",前日から" + passesDays + "日残り";
-
-						////Gridの直上にStackPanel
-						//StackPanel bsp = new StackPanel();
-						//bsp.Style = FindResource("sp-bace") as System.Windows.Style;
-						//bsp.DataContext = dt;
-						//calendarGrid1.Children.Add(bsp);
-						//bsp.SetValue(Grid.ColumnProperty, x);
-						//bsp.SetValue(Grid.RowProperty, y + 1);
-						////Gridを行方向に細分化
-		//				Grid subGrid = new Grid();
-		//				subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-		//				subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-		//				subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-		//				subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-		//				subGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-		//				calendarGrid1.Children.Add(subGrid);
-		//				subGrid.SetValue(Grid.ColumnProperty, x);
-		//				subGrid.SetValue(Grid.RowProperty, y + 1);
+						int eventStartRow = y+2;                  //タイトル行直下
+						dbMsg += "," + eventStartRow + "行目からスケジュールの書き込み開始";
+						int carentDateInt = int.Parse(carentDateStr);
 
 						// テキストブロックを生成してStackPanelの一番上に追加
 						var tb = new TextBlock();
@@ -421,8 +406,6 @@ namespace KGSample {
 							tb.Style = FindResource("txb-date") as System.Windows.Style;
 						}
 						calendarGrid1.Children.Add(tb);
-						//tb.SetValue(Grid.RowProperty, subRow);
-						//subRow++;
 						tb.SetValue(Grid.ColumnProperty, x);
 						//		tb.SetValue(Grid.RowProperty, y  );
 						tb.SetValue(Grid.RowProperty, y + 1);
@@ -453,24 +436,70 @@ namespace KGSample {
 						rec.SetValue(Grid.RowProperty, y + 1);
 
 						y++;
+						/////スケジュール////////////////////////////////////////////////////
+						IList<int> writeSkip = new List<int>();
+						bool isRemove = false;
+
 						if (0 < GCalenderEvent.Count) {
-							dbMsg += ".GCalenderEvent" + GCalenderEvent.Count + "件";
 							IList<Google.Apis.Calendar.v3.Data.Event> TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+							if (0 < eventSpanList.Count) {
+								dbMsg += ",複数日スケジュール" + eventSpanList.Count + "件";
+								EventSpan delSpan = new EventSpan();
+								foreach (EventSpan eventSpan in eventSpanList) {
+									int eventSpanRow = eventSpan.row;
+									int eventSpanEndDate = eventSpan.endDateInt;
+									string eventSpanSummary = eventSpan.eventItem.Summary;
+									dbMsg += "\r\n(" + eventSpanRow + ")" + eventSpanEndDate + "まで" + eventSpanSummary;
+									if (eventSpanEndDate < carentDateInt) {
+										delSpan = eventSpan;
+										isRemove = true;
+										break;
+									} else {
+										if (eventSpanRow == eventStartRow) {
+											eventStartRow++;
+											dbMsg += ">>スケジュールの書き込み開始" + eventStartRow + "行目から";
+										} else {
+											writeSkip.Add(eventStartRow);
+										}
+									}
+								}
+								if (isRemove) {
+									eventSpanList.Remove(delSpan);
+									dbMsg += "を削除>>" + eventSpanList.Count + "件";
+								}
+							}
+
+							IList<Google.Apis.Calendar.v3.Data.Event> onedayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+							IList<Google.Apis.Calendar.v3.Data.Event> passesEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+
+							if (x == 0) {																			//日曜日に
+								if (0 < eventSpanList.Count) {											//前の週からの継続を確認して
+									dbMsg += "," + eventSpanList.Count + "件残り";
+									foreach (EventSpan eventSpan in eventSpanList) {
+										dbMsg += "," + eventSpan.eventItem.Summary ;
+										passesEvent.Add(eventSpan.eventItem);				//日曜日のリストに追加
+									}
+									dbMsg += "," + passesEvent.Count + "件から開始";
+								}
+								eventSpanList = new List<EventSpan>();
+							}
 							//本日Eventの抽出	※終日・複数日のStartはDateTimeが無い。単日はDateがない
+							dbMsg += ".GCalenderEvent" + GCalenderEvent.Count + "件";
 							foreach (Google.Apis.Calendar.v3.Data.Event todayItem in GCalenderEvent) {
 								string startStr = GCalendarUtil.EventDateTime2Str(todayItem.Start);
 								if (startStr.Equals(carentDateStr)) {
 										TodayEvent.Add(todayItem);
 									}
 							}
-							dbMsg += "中" + carentDateStr + "のEventは" + TodayEvent.Count + "件";
+							dbMsg += "中" + carentDateStr + "のスケジュールは" + TodayEvent.Count + "件";
 							if (0<TodayEvent.Count) {
 								//単日と複数の日付にまたがるEventを分ける
-								IList<Google.Apis.Calendar.v3.Data.Event> onedayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
-								IList<Google.Apis.Calendar.v3.Data.Event> passesEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 								foreach (Google.Apis.Calendar.v3.Data.Event todayItem in TodayEvent) {
+									//※翌日以降に続く事の判定
 									int startInt = GCalendarUtil.EventDateTime2Int(todayItem.Start);
 									int endInt = GCalendarUtil.EventDateTime2Int(todayItem.End);
+									//if (endInt == startInt) {
+									//※Googleの判定方法		todayItem.Start.Date == null ||
 									if (endInt == startInt) {
 										onedayEvent.Add(todayItem);
 									}else{
@@ -478,7 +507,7 @@ namespace KGSample {
 									}
 								}
 
-								TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+						//		TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 								if(0<passesEvent.Count) {
 									dbMsg += ",複数の日" + passesEvent.Count + "件";
 									foreach (Google.Apis.Calendar.v3.Data.Event eventItem in passesEvent) {
@@ -492,7 +521,11 @@ namespace KGSample {
 										string ContentStr = "";
 										int startInt = GCalendarUtil.EventDateTime2Int(eventItem.Start);
 										int endInt = GCalendarUtil.EventDateTime2Int(eventItem.End);
-										passesDays = endInt - startInt;
+										if (eventItem.End.DateTime == null) {
+											endInt--;
+											dbMsg += ">>" + endInt;
+										}
+										int passesDays = endInt - startInt +1;
 										dbMsg += "," + passesDays + "日に渡る";
 										if (eventItem.Start.DateTime == null) {
 											dbMsg += "：終日・連日：";
@@ -504,12 +537,26 @@ namespace KGSample {
 											dbMsg += ", " + startTimeStr + "～" + endTimeStr;
 											ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
 										}
+
+										//if(0< writeSkip.Count) {
+										//	foreach (int skipRow in writeSkip) {
+										//		if(eventStartRow== skipRow) {
+										//			eventStartRow++;
+										//			dbMsg += "書き込み開始" + eventStartRow + "行目に" ;
+										//		}
+										//	}
+										//}
 										Button bt = new Button();
 										bt.Content = ContentStr;
 										Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
 										bt.Background = new SolidColorBrush(BGColor);
 										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
+										if(6<passesDays) {
+											passesDays=passesDays % 7 + 1;
+											dbMsg += "今週分" + passesDays + "日";
+										}
 										if (0 < passesDays) {
+											dbMsg += ",前日から" + passesDays + "日残り";
 											switch (passesDays) {
 												case 2:
 													bt.Style = FindResource("bt-event-two") as System.Windows.Style;
@@ -530,14 +577,18 @@ namespace KGSample {
 													bt.Style = FindResource("bt-event-seven") as System.Windows.Style;
 													break;
 											}
+
+											EventSpan eventSpan = new EventSpan();
+											eventSpan.row = eventStartRow;
+											eventSpan.endDateInt = endInt;
+											eventSpan.eventItem = eventItem;
+											eventSpanList.Add(eventSpan);
+											dbMsg += ",eventSpanList" + eventSpanList.Count + "件目";
 										}
 										calendarGrid1.Children.Add(bt);
 										bt.SetValue(Grid.ColumnProperty, x);
-										bt.SetValue(Grid.RowProperty, y + 1);
-										y++;
-										//subGrid.Children.Add(bt);
-										//bt.SetValue(Grid.RowProperty, subRow);
-										//subRow++;
+										bt.SetValue(Grid.RowProperty, eventStartRow);
+										eventStartRow++;
 									}
 								}
 
@@ -592,7 +643,7 @@ namespace KGSample {
 									lv.ItemsSource = oneList;
 									calendarGrid1.Children.Add(lv);
 									lv.SetValue(Grid.ColumnProperty, x);
-									lv.SetValue(Grid.RowProperty, y + 1);
+									lv.SetValue(Grid.RowProperty, eventStartRow);
 
 									// Add the ListView to a parent container in the visual tree (that you created in the corresponding XAML file).
 									//subGrid.Children.Add(lv);
@@ -664,6 +715,8 @@ namespace KGSample {
 			return retStr;
 		}
 
+
+
 		/// <summary>
 		/// セル（日）をクリックした際のイベントハンドラ.
 		/// </summary>
@@ -692,6 +745,24 @@ namespace KGSample {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+		}
+
+		/// <summary>
+		/// 連日予定の終了状況管理
+		/// </summary>
+		public class EventSpan {
+		/// <summary>
+		/// 日付の直下を1行目にした行番号
+		/// </summary>
+			public int row { get; set; }
+			/// <summary>
+			/// 終了日
+			/// </summary>
+			public int endDateInt { get; set; }
+			/// <summary>
+			/// 対象スケジュール
+			/// </summary>
+			public Google.Apis.Calendar.v3.Data.Event eventItem { get; set; }
 		}
 
 

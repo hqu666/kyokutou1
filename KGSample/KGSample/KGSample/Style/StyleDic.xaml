@@ -202,23 +202,35 @@
 		<Setter Property="Panel.ZIndex" Value="99" />
 	</Style>
 
+	<Style x:Key="bt-event-passes" TargetType="Button" BasedOn="{StaticResource bt-event}">
+		<Setter Property="BorderThickness"  Value="1" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="Margin" Value="5,0,0,0" />
+		<Setter Property="Width" Value="1000" />
+	</Style>
+
 	<Style x:Key="bt-event-seven" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
 		<Setter Property="Grid.ColumnSpan" Value="7" />
+		<Setter Property="Width" Value="1000" />
 	</Style>
 
 	<Style x:Key="bt-event-six" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
 		<Setter Property="Grid.ColumnSpan" Value="6" />
+		<Setter Property="Width" Value="1000" />
 	</Style>
 
 	<Style x:Key="bt-event-five" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
 		<Setter Property="Grid.ColumnSpan" Value="5" />
+		<Setter Property="Width" Value="1000" />
 	</Style>
 
 	<Style x:Key="bt-event-four" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Width" Value="1000" />
 		<Setter Property="Grid.ColumnSpan" Value="4" />
 	</Style>
 
 	<Style x:Key="bt-event-three" TargetType="Button" BasedOn="{StaticResource bt-event-passes}">
+		<Setter Property="Width" Value="1000" />
 		<Setter Property="Grid.ColumnSpan"  Value="3" />
 	</Style>
 
@@ -232,12 +244,6 @@
 		<Setter Property="Background" Value="Transparent" />
 	</Style>
 
-	<Style x:Key="bt-event-passes" TargetType="Button" BasedOn="{StaticResource bt-event}">
-		<Setter Property="BorderThickness"  Value="1" />
-		<Setter Property="Foreground" Value="White" />
-		<Setter Property="Margin" Value="5,0,0,0" />
-		<Setter Property="Width" Value="1000" />
-	</Style>
 	<Style x:Key="lv-event-one" TargetType="ListView">
 		<Setter Property="Foreground" Value="Black" />
 		<Setter Property="BorderThickness"  Value="0" />
