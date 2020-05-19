@@ -492,7 +492,8 @@ namespace KGSample {
 									}
 							}
 							dbMsg += "中" + carentDateStr + "のスケジュールは" + TodayEvent.Count + "件";
-							if (0<TodayEvent.Count) {
+							if (0<TodayEvent.Count ||
+								(0< passesEvent.Count && x == 0)) {
 								//単日と複数の日付にまたがるEventを分ける
 								foreach (Google.Apis.Calendar.v3.Data.Event todayItem in TodayEvent) {
 									//※翌日以降に続く事の判定
@@ -507,7 +508,6 @@ namespace KGSample {
 									}
 								}
 
-						//		TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
 								if(0<passesEvent.Count) {
 									dbMsg += ",複数の日" + passesEvent.Count + "件";
 									foreach (Google.Apis.Calendar.v3.Data.Event eventItem in passesEvent) {
@@ -649,59 +649,6 @@ namespace KGSample {
 									//subGrid.Children.Add(lv);
 									//lv.SetValue(Grid.RowProperty, subRow);
 								}
-								/*
-								bool isNeedStack = true;
-								StackPanel esp = new StackPanel();
-								List ls = new List();
-								dbMsg += "＞＞" + TodayEvent.Count + "件";
-								foreach (Google.Apis.Calendar.v3.Data.Event eventItem in TodayEvent) {
-									string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
-									string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
-									string colorId = eventItem.ColorId;
-									dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
-									string Summary = eventItem.Summary;
-									dbMsg += "  ," + Summary;
-									string ContentStr = "";
-									if (eventItem.Start.DateTime == null) {
-										dbMsg += "：終日・連日：";
-										ContentStr = Summary  + " : " + eventItem.End.Date + "まで";
-									} else { 
-										dbMsg += "：単日：";
-										string startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
-										string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
-										dbMsg += ", " + startTimeStr + "～" + endTimeStr;
-										ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
-									}
-									Button bt = new Button();
-									bt.Content = ContentStr;
-									Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
-									bt.Background =  new SolidColorBrush(BGColor);
-									if (carentDateStr.Equals(endStr)) {
-										if (isNeedStack) {
-											ls.Style = FindResource("ls-event-one") as System.Windows.Style;
-											subGrid.Children.Add(ls);
-											ls.SetValue(Grid.RowProperty, subRow);
-
-											esp.Style = FindResource("sp-event") as System.Windows.Style;
-											//StackPanelの上にEvent用のStackPanelを追加
-											subGrid.Children.Add(esp);
-											esp.SetValue(Grid.RowProperty, subRow);
-											subRow++;
-											isNeedStack = false;
-											dbMsg += ":::StackPanel作成";
-										}
-										bt.Style = FindResource("bt-event-one") as System.Windows.Style;
-										esp.Children.Add(bt);
-									}else{
-										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
-										subGrid.Children.Add(bt);
-										bt.SetValue(Grid.RowProperty, subRow);
-										subRow++;
-									}
-									passesDays--;
-								}
-						*/
-
 							}
 						}
 					}
