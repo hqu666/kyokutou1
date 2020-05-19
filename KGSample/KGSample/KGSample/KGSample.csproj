@@ -109,6 +109,9 @@
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
+    <Compile Include="GEventEdit.xaml.cs">
+      <DependentUpon>GEventEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GoogleAuthUtil.cs" />
     <Compile Include="GoogleCalendarUtil.cs" />
     <Compile Include="GoogleDriveUtil.cs" />
@@ -129,6 +132,10 @@
       <DependentUpon>GCalender.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="GEventEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Style\StyleDic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
