@@ -378,12 +378,12 @@ namespace KGSample {
 
 					// 1日から月末まを走査
 					for (int dayCount = lMonthBack; dayCount < nMonthFowerd; dayCount++) {
-				//		int subRow = 0;
 						int day = firstDate.AddDays(dayCount).Day;
 						int index = (dayCount) + dayOfWeek;
 						int x = index % 7;
 						int y = index / 7 * dayRow;
 						dbMsg += "\r\n(" + dayCount + ")" + day + "日:セル位置[" + index + "](" + x + "." + y + ")";
+						int weekTop = y;
 						DateTime carentDate = firstDate.AddDays(dayCount);
 						string carentDateStr = String.Format("{0:yyyyMMdd}", carentDate); 
 						dbMsg += "carentDateStr=" + carentDateStr;
@@ -407,7 +407,6 @@ namespace KGSample {
 						}
 						calendarGrid1.Children.Add(tb);
 						tb.SetValue(Grid.ColumnProperty, x);
-						//		tb.SetValue(Grid.RowProperty, y  );
 						tb.SetValue(Grid.RowProperty, y + 1);
 
 						// 四角形を生成してグリッドに追加
@@ -442,8 +441,9 @@ namespace KGSample {
 
 						if (0 < GCalenderEvent.Count) {
 							IList<Google.Apis.Calendar.v3.Data.Event> TodayEvent = new List<Google.Apis.Calendar.v3.Data.Event>();
+	
 							if (0 < eventSpanList.Count) {
-								dbMsg += ",複数日スケジュール" + eventSpanList.Count + "件";
+								dbMsg += "\r\n複数日" + eventSpanList.Count + "件";
 								EventSpan delSpan = new EventSpan();
 								foreach (EventSpan eventSpan in eventSpanList) {
 									int eventSpanRow = eventSpan.row;
@@ -509,7 +509,7 @@ namespace KGSample {
 								}
 
 								if(0<passesEvent.Count) {
-									dbMsg += ",複数の日" + passesEvent.Count + "件";
+									dbMsg += "\r\n複数の日" + passesEvent.Count + "件";
 									foreach (Google.Apis.Calendar.v3.Data.Event eventItem in passesEvent) {
 										//TodayEvent.Add(eventItem);
 										string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
@@ -592,58 +592,71 @@ namespace KGSample {
 									}
 								}
 
-								if (0 < onedayEvent.Count) {
-									dbMsg += ",単日" + onedayEvent.Count + "件";
-									ListView lv = new System.Windows.Controls.ListView();
+								int onedayEventCount = onedayEvent.Count;
+								if (0 < onedayEventCount) {
+									dbMsg += "\r\n単日" + onedayEventCount + "件";
+									dbMsg += "、ここまで" + eventStartRow + "行";
+									int wRow =  eventStartRow - weekTop;
+									dbMsg += "、書き込めるのは" + wRow +"行";
+									if (onedayEventCount <= wRow) {
+										dbMsg += "、ボタンで配置";
+										foreach (Google.Apis.Calendar.v3.Data.Event eventItem in onedayEvent) {
+											//		TodayEvent.Add(eventItem);
+											string startTimeStr = "";
+											string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
+											string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
+											string colorId = eventItem.ColorId;
+											dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
+											string Summary = eventItem.Summary;
+											dbMsg += "  ," + Summary;
+											string ContentStr = Summary;
+											if (eventItem.Start.DateTime == null) {
+												//				dbMsg += "：終日・連日："　+　Summary + " : " + eventItem.End.Date + "まで";
+											} else {
+												//			dbMsg += "：単日：";
+												startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
+												string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
+												dbMsg += ", " + startTimeStr + "～" + endTimeStr;
+												ContentStr = startTimeStr + " " + Summary;
+											}
+											tb = new TextBlock();
+											tb.Style = FindResource("txb-event-one") as System.Windows.Style;
+											tb.Text = "●";
+											Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
+											tb.Foreground = new SolidColorBrush(BGColor);
+											calendarGrid1.Children.Add(tb);
+											tb.SetValue(Grid.ColumnProperty, x);
+											tb.SetValue(Grid.RowProperty, eventStartRow);
 
-									GridView oneRecords = new GridView();
-									oneRecords.AllowsColumnReorder = true;
-									oneRecords.ColumnHeaderToolTip = "Event Information";
-
-									GridViewColumn gvc1 = new GridViewColumn();
-									gvc1.DisplayMemberBinding = new Binding("Color");
-									gvc1.Header = " ";
-									gvc1.Width = 30;
-									oneRecords.Columns.Add(gvc1);
-
-									GridViewColumn gvc2 = new GridViewColumn();
-									gvc2.DisplayMemberBinding = new Binding("Start");
-									gvc2.Header = "Start";
-									gvc2.Width = 100;
-									oneRecords.Columns.Add(gvc2);
-
-									GridViewColumn gvc3 = new GridViewColumn();
-									gvc3.DisplayMemberBinding = new Binding("Summary");
-									gvc3.Header = "Summary";
-									gvc3.Width = 100;
-									oneRecords.Columns.Add(gvc3);
-
-									IList<GEvent> oneList = new List<GEvent>();
-									foreach (Google.Apis.Calendar.v3.Data.Event eventItem in onedayEvent) {
-										//		TodayEvent.Add(eventItem);
-										string startTimeStr = "";
-										string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
-										string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
-										string colorId = eventItem.ColorId;
-										dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
+											Button bt = new Button();
+											bt.Content = ContentStr;
+											bt.Style = FindResource("bt-event-one") as System.Windows.Style;
+											calendarGrid1.Children.Add(bt);
+											bt.SetValue(Grid.ColumnProperty, x);
+											bt.SetValue(Grid.RowProperty, eventStartRow);
+											eventStartRow++;
+										}
+									} else {
+										dbMsg += "、リスト表示準備";
+										Google.Apis.Calendar.v3.Data.Event eventItem = onedayEvent.First();
 										string Summary = eventItem.Summary;
 										dbMsg += "  ," + Summary;
-										if (eventItem.Start.DateTime == null) {
-							//				dbMsg += "：終日・連日："　+　Summary + " : " + eventItem.End.Date + "まで";
-										} else {
-								//			dbMsg += "：単日：";
-											startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
-											string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
-											dbMsg += ", " + startTimeStr + "～" + endTimeStr;
-										}
-										oneList.Add(new GEvent() { color = "●", start = startTimeStr, summary = Summary });
-						//				lv.ItemBindingGroup.Items.Add(Summary );
+										Button bt = new Button();
+										bt.Content = Summary + "など";
+										bt.Style = FindResource("bt-event-one") as System.Windows.Style;
+										calendarGrid1.Children.Add(bt);
+										bt.SetValue(Grid.ColumnProperty, x);
+										bt.SetValue(Grid.RowProperty, eventStartRow);
 									}
-									dbMsg += ">>oneList" + oneList.Count + "件";
-									lv.ItemsSource = oneList;
-									calendarGrid1.Children.Add(lv);
-									lv.SetValue(Grid.ColumnProperty, x);
-									lv.SetValue(Grid.RowProperty, eventStartRow);
+
+
+
+
+									//dbMsg += ">>oneList" + oneList.Count + "件";
+									//lv.ItemsSource = oneList;
+									//calendarGrid1.Children.Add(lv);
+									//lv.SetValue(Grid.ColumnProperty, x);
+									//lv.SetValue(Grid.RowProperty, eventStartRow);
 
 									// Add the ListView to a parent container in the visual tree (that you created in the corresponding XAML file).
 									//subGrid.Children.Add(lv);
