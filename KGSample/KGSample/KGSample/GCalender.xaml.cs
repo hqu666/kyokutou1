@@ -29,11 +29,16 @@ namespace KGSample {
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 
+		public GEventEdit editView;
+		public GEventDayList dayListView;
+		public WebWindow webWindow;
+
 		private Rectangle selectedRec;
 		private System.Windows.Style selectedRecStyle;
 
 		private string selectYM = "";
 		private string b_selectYM = "";
+		private string taregetURL = null;
 
 
 		public GCalender()
@@ -550,6 +555,9 @@ namespace KGSample {
 										//}
 										Button bt = new Button();
 										bt.Content = ContentStr;
+										bt.Click += Event_bt_Click;
+										bt.DataContext = eventItem.HtmlLink;        //クリックイベントでこれが解読できないので
+										taregetURL = eventItem.HtmlLink;
 										Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
 										bt.Background = new SolidColorBrush(BGColor);
 										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
@@ -631,6 +639,9 @@ namespace KGSample {
 
 											Button bt = new Button();
 											bt.Content = ContentStr;
+											bt.Click += Event_bt_Click;
+											bt.DataContext = eventItem.HtmlLink;
+											taregetURL =  eventItem.HtmlLink;
 											bt.Style = FindResource("bt-event-one") as System.Windows.Style;
 											calendarGrid1.Children.Add(bt);
 											bt.SetValue(Grid.ColumnProperty, x);
@@ -640,6 +651,8 @@ namespace KGSample {
 										} else {
 											Button bt = new Button();
 											bt.Content = "その他" + remeinRow + "件";
+											bt.DataContext = startStr;
+											bt.Click += Other_bt_Click;
 											bt.Style = FindResource("bt-event-other") as System.Windows.Style;
 											calendarGrid1.Children.Add(bt);
 											bt.SetValue(Grid.ColumnProperty, x);
@@ -692,6 +705,61 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// スケジュール個々の編集画面へ遷移する
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Event_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "Event_bt_Click";
+			string dbMsg = "[GCalender]";
+			try {
+				dbMsg += "taregetURL=" + taregetURL;
+				if (webWindow == null) {
+					dbMsg += "webを生成";
+					webWindow = new WebWindow(new Uri(taregetURL));
+					webWindow.mainView = this;
+					webWindow.Show();
+				}
+
+
+
+				//if (editView == null) {
+				//	dbMsg += "Editを再生成";
+				//	editView = new GEventEdit(new Uri(taregetURL));
+				//	editView.mainView = this;
+				//	editView.Show();
+				//	//}else{
+				//	//	editView.taregetURL = taregetURL;		public WebWindow webWindow;
+
+				//	//	editView. = true;
+				//}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void Other_bt_Click(object sender, EventArgs e)
+		{
+			string TAG = "Other_bt_Click";
+			string dbMsg = "[GCalender]";
+			try {
+				if (dayListView == null) {
+					dbMsg = "一日表示を再生成";
+					dayListView = new GEventDayList();
+					dayListView.mainView = this;
+				}
+				MyLog(TAG, dbMsg);
+				dayListView.Show();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// 連日予定の終了状況管理

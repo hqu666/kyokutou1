@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace KGSample {
+namespace KGSample
+{
 	/// <summary>
 	/// GEventEdit.xaml の相互作用ロジック
 	/// </summary>
@@ -23,27 +24,31 @@ namespace KGSample {
 		/// <summary>
 		/// このページで表示するwebページのURL
 		/// </summary>
-		public Uri taregetURL { set; get; }
+		public string taregetURL { set; get; }
 
-		public GEventEdit(Uri taregetURL)
+		public GEventEdit(string taregetURL)
 		{
 			string TAG = "GEventEdit";
 			string dbMsg = "[GEventEdit]";
 			try {
 				InitializeComponent();
-				dbMsg = "taregetURL="+ taregetURL;
-				url_lb.Content = taregetURL;         //※TextBlock,TextBoxだと？以降のパラメータが入らない
-																//System.Text.Encoding encoding = System.Text.Encoding.UTF8;
-																//edit_web.ObjectForScripting = new TestClasss();
-																//edit_web.InvokeScript("JavaScriptFunctionWithoutParameters");
-				edit_web.Navigate(taregetURL);
-				//	edit_web.Source = taregetURL;
+				url_tv.Text = taregetURL;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 
+		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "ListView_SelectionChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 
 		private void Back_bt_Click(object sender, EventArgs e)
@@ -65,10 +70,10 @@ namespace KGSample {
 		/// <param name="e"></param>
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			string TAG = "Window_Closing";
+			string TAG = "ViewClosing";
 			string dbMsg = "[GEventEdit]";
 			try {
-//				e.Cancel = true;                //このオブジェクトを破棄させない(1)
+				e.Cancel = true;                //このオブジェクトを破棄させない(1)
 				QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -87,14 +92,12 @@ namespace KGSample {
 			string dbMsg = "[GEventEdit]";
 			try {
 				if (mainView != null) {
-					mainView.editView = null;
-			//		this.Visibility=false;//このオブジェクトを破棄させない(2);this.Close();だと再表示でクラッシュする
+					//			this.Visible = false;//このオブジェクトを破棄させない(2);this.Close();だと再表示でクラッシュする
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			this.Close();
 		}
 
 
@@ -119,14 +122,5 @@ namespace KGSample {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
 	}
 }
-
-
-/*
- WebbrowserクラスはIE7相当で動作します
- WebBrowser コントロールで使われている Internet Explorerを最新のバージョンに変更する方法
- https://www.ipentec.com/document/csharp-change-webbrower-control-internet-explorer-version
- 
- */

@@ -109,6 +109,9 @@
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
+    <Compile Include="GEventDayList.xaml.cs">
+      <DependentUpon>GEventDayList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GEventEdit.xaml.cs">
       <DependentUpon>GEventEdit.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,9 @@
     <Compile Include="MonthInfo.cs" />
     <Compile Include="Style\StyleDic.xaml.cs">
       <DependentUpon>StyleDic.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WebWindow.xaml.cs">
+      <DependentUpon>WebWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="GCalender.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -132,11 +138,19 @@
       <DependentUpon>GCalender.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="GEventDayList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GEventEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Style\StyleDic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WebWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -183,7 +197,17 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="MSHTML">
+      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\circle.png" />
   </ItemGroup>

@@ -5,17 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KGSample"
         mc:Ignorable="d"
-        Title="GEventEdit" Height="540.705" Width="800">
-	<Grid>
-		<WebBrowser HorizontalAlignment="Left" Height="327" VerticalAlignment="Top" Width="774" Margin="10,10,0,0"/>
-		<ListView HorizontalAlignment="Left" Height="149" Margin="10,352,0,0" VerticalAlignment="Top" Width="694" SelectionChanged="ListView_SelectionChanged">
-			<ListView.View>
-				<GridView>
-					<GridViewColumn/>
-				</GridView>
-			</ListView.View>
-		</ListView>
-		<Button Content="送信" HorizontalAlignment="Left" Margin="709,473,0,0" VerticalAlignment="Top" Width="75"/>
+        Title="GEventEdit" Height="1000" Width="1200" Closing="Window_Closing">
 
+
+	<Grid>
+		<Label  Name="url_lb" Content="Label" HorizontalAlignment="Left"  Margin="10,10,0,0" VerticalAlignment="Top"/>
+		<WebBrowser Name="edit_web" HorizontalAlignment="Left" Height="918" Margin="10,41,0,0" VerticalAlignment="Top" Width="1172" RenderTransformOrigin="1,1"/>
 	</Grid>
 </Window>

@@ -26,3 +26,6 @@
 		<Label Content="の表示" Margin="870,20,101.2,0" VerticalAlignment="Top"/>
 	</Grid>
 </Mah:MetroWindow>
+
+
+<!--MahApps.Metroを使ってみた		http://sourcechord.hatenablog.com/entry/2016/02/23/012511-->
