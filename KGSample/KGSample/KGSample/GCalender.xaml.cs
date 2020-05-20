@@ -556,8 +556,8 @@ namespace KGSample {
 										Button bt = new Button();
 										bt.Content = ContentStr;
 										bt.Click += Event_bt_Click;
-										bt.DataContext = eventItem.HtmlLink;        //クリックイベントでこれが解読できないので
-										taregetURL = eventItem.HtmlLink;
+										bt.DataContext = eventItem;        //クリックイベントでこれが解読できないので
+						//				taregetURL = eventItem.HtmlLink;
 										Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
 										bt.Background = new SolidColorBrush(BGColor);
 										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
@@ -640,7 +640,7 @@ namespace KGSample {
 											Button bt = new Button();
 											bt.Content = ContentStr;
 											bt.Click += Event_bt_Click;
-											bt.DataContext = eventItem.HtmlLink;
+											bt.DataContext = eventItem;
 											taregetURL =  eventItem.HtmlLink;
 											bt.Style = FindResource("bt-event-one") as System.Windows.Style;
 											calendarGrid1.Children.Add(bt);
@@ -716,26 +716,16 @@ namespace KGSample {
 			string TAG = "Event_bt_Click";
 			string dbMsg = "[GCalender]";
 			try {
-				dbMsg += "taregetURL=" + taregetURL;
-				if (webWindow == null) {
-					dbMsg += "webを生成";
-					webWindow = new WebWindow(new Uri(taregetURL));
-					webWindow.mainView = this;
-					webWindow.Show();
+				// 選択されたセルの取得
+				Button bt = sender as Button;
+				Google.Apis.Calendar.v3.Data.Event taregetEvent = bt.DataContext as Google.Apis.Calendar.v3.Data.Event;
+				dbMsg += "taregetEvent=" + taregetEvent.Summary;
+				if (editView == null) {
+					dbMsg += "Editを再生成";
+					editView = new GEventEdit(taregetEvent);
+					editView.mainView = this;
+					editView.Show();
 				}
-
-
-
-				//if (editView == null) {
-				//	dbMsg += "Editを再生成";
-				//	editView = new GEventEdit(new Uri(taregetURL));
-				//	editView.mainView = this;
-				//	editView.Show();
-				//	//}else{
-				//	//	editView.taregetURL = taregetURL;		public WebWindow webWindow;
-
-				//	//	editView. = true;
-				//}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -759,6 +749,28 @@ namespace KGSample {
 			}
 		}
 
+		/// <summary>
+		/// 一日リストへ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Button_Click";
+			string dbMsg = "[GCalender]";
+			try {
+				dbMsg += "taregetURL=" + taregetURL;
+				if (webWindow == null) {
+					dbMsg += "一日リストを生成";
+					webWindow = new WebWindow(new Uri(taregetURL));
+					webWindow.mainView = this;
+					webWindow.Show();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 
 		/// <summary>
@@ -805,7 +817,6 @@ namespace KGSample {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
 	}
 }
 /*

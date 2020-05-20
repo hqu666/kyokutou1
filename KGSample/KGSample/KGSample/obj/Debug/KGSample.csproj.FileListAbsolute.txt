@@ -93,3 +93,10 @@ C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.exe
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.pdb
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.csproj.ResolveComReference.cache
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.csproj.ResolveComReference.cache
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventDayList.g.cs
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventEdit.g.cs
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\WebWindow.g.cs
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventDayList.baml
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventEdit.baml
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\WebWindow.baml

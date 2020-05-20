@@ -21,7 +21,7 @@
 		<!--<Grid x:Name="CalendarContainer" HorizontalAlignment="Left" Height="317" Margin="0,53,0,0" VerticalAlignment="Top" Width="517"/>-->
 		<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Right" Margin="0,20,275.2,0" VerticalAlignment="Top" Width="94"/>
 		<Label x:Name="lbSelectedDate" Content="" Margin="0,20,153.2,0" VerticalAlignment="Top" Width="102" HorizontalAlignment="Right"/>
-		<Button Content="日" HorizontalAlignment="Left" Margin="970,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"/>
+		<Button Content="日" HorizontalAlignment="Left" Margin="970,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中" Click="Button_Click"/>
 		<Button Content="週" HorizontalAlignment="Left" Margin="922,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"/>
 		<Label Content="の表示" Margin="870,20,101.2,0" VerticalAlignment="Top"/>
 	</Grid>

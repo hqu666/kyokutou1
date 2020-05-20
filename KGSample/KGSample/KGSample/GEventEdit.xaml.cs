@@ -21,23 +21,19 @@ namespace KGSample {
 		public GCalender mainView;
 
 		/// <summary>
-		/// このページで表示するwebページのURL
+		/// このページで編集するEvent
 		/// </summary>
-		public Uri taregetURL { set; get; }
+		//public Uri taregetURL { set; get; }
+		private Google.Apis.Calendar.v3.Data.Event taregetEvent { set; get; }
 
-		public GEventEdit(Uri taregetURL)
+		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent)
 		{
 			string TAG = "GEventEdit";
 			string dbMsg = "[GEventEdit]";
 			try {
 				InitializeComponent();
-				dbMsg = "taregetURL="+ taregetURL;
-				url_lb.Content = taregetURL;         //※TextBlock,TextBoxだと？以降のパラメータが入らない
-																//System.Text.Encoding encoding = System.Text.Encoding.UTF8;
-																//edit_web.ObjectForScripting = new TestClasss();
-																//edit_web.InvokeScript("JavaScriptFunctionWithoutParameters");
-				edit_web.Navigate(taregetURL);
-				//	edit_web.Source = taregetURL;
+				dbMsg = "taregetEvent=" + taregetEvent.Summary;
+				titol_tv.Content = taregetEvent.Summary;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -122,11 +118,3 @@ namespace KGSample {
 
 	}
 }
-
-
-/*
- WebbrowserクラスはIE7相当で動作します
- WebBrowser コントロールで使われている Internet Explorerを最新のバージョンに変更する方法
- https://www.ipentec.com/document/csharp-change-webbrower-control-internet-explorer-version
- 
- */
