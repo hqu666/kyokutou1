@@ -556,8 +556,7 @@ namespace KGSample {
 										Button bt = new Button();
 										bt.Content = ContentStr;
 										bt.Click += Event_bt_Click;
-										bt.DataContext = eventItem;        //クリックイベントでこれが解読できないので
-						//				taregetURL = eventItem.HtmlLink;
+										bt.DataContext = eventItem;
 										Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
 										bt.Background = new SolidColorBrush(BGColor);
 										bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
@@ -673,8 +672,6 @@ namespace KGSample {
 			}
 			return retStr;
 		}
-
-
 
 		/// <summary>
 		/// セル（日）をクリックした際のイベントハンドラ.
