@@ -11,12 +11,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace KGSample {
 	/// <summary>
 	/// GEventEdit.xaml の相互作用ロジック
 	/// </summary>
-	public partial class GEventEdit : Window {
+	public partial class GEventEdit : MetroWindow {
 
 		public GCalender mainView;
 
@@ -33,7 +34,7 @@ namespace KGSample {
 			try {
 				InitializeComponent();
 				dbMsg = "taregetEvent=" + taregetEvent.Summary;
-				titol_tv.Content = taregetEvent.Summary;
+				titol_tv.Text = taregetEvent.Summary;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
