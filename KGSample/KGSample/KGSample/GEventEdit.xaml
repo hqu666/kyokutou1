@@ -8,20 +8,44 @@
         GlowBrush="{DynamicResource AccentColorBrush}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="スケジュール編集" Height="800" Width="1050" FontSize="12"
-		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing">
+        Title="スケジュール編集"  FontSize="12" VerticalAlignment="Center"
+		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing" d:DesignWidth="850">
 	<Window.Resources>
-		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
+		<!--<ResourceDictionary Source="/Style/StyleDic.xaml"/>-->
+		<Style TargetType="StackPanel">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,10,10,0"/>
+		</Style>
+		<Style TargetType="Label">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+
+		<Style TargetType="Button">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+		<Style x:Key="bt-attachment" TargetType="Button">
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="HorizontalContentAlignment" Value="Left" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<!--<Setter Property="HorizontalAlignment" Value="Left" />-->
+			<Setter Property="Margin" Value="3" />
+			<Setter Property="Width" Value="150" />
+			<Setter Property="Panel.ZIndex" Value="90" />
+		</Style>
+
 	</Window.Resources>
+
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition x:Name="top_col" Width="Auto"/>
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
+		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
-			<RowDefinition x:Name="titol_row" Height="Auto"/>
+			<RowDefinition x:Name="titol_row" Height="Auto" />
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -35,13 +59,12 @@
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<Label Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="6" 
-								Name="htmlLink_lb" Content="url"  HorizontalAlignment="Left"  Margin="0,0,0,0"
-								VerticalAlignment="Top" />
+		<TextBlock Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="6" 
+								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,0,0"
+								VerticalAlignment="Top" TextTrimming="CharacterEllipsis"/>
 
 		<Button Grid.Row="1" Grid.Column="0"
-							  Name="del_bt" Content="×"  
-							HorizontalAlignment="Center" Margin="5,0,5,0"  VerticalAlignment="Bottom" />
+							  Name="del_bt" Content="×"  />
 		<TextBox Grid.Row="1"  Grid.Column="1" 
 								Name="titol_tv" Text="タイトル" FontSize="24"  HorizontalAlignment="Left"  Margin="0,0,0,0" 
 								VerticalAlignment="Top" />
@@ -49,16 +72,14 @@
 		<StackPanel Grid.Row="1" Grid.Column="2"   Orientation="Horizontal"
 								HorizontalAlignment="Right" VerticalAlignment="Bottom"  
 								 Margin="5,0,5,0" >
-			<Button  Name="save_bt" Content="保存"  HorizontalAlignment="Center" Margin="5,0,5,0"  
-								VerticalAlignment="Bottom" />
+			<Button  Name="save_bt" Content="保存"  />
 			<ComboBox HorizontalAlignment="Center"
-								VerticalAlignment="Bottom" />
+			/>
 		</StackPanel>
 
-		<Label Grid.Row="2" Grid.Column="0"   Content="日時" HorizontalAlignment="Right"  Margin="0,0,0,0" VerticalAlignment="Top" />
+		<Label Grid.Row="2" Grid.Column="0"   Content="日時" HorizontalAlignment="Right"  />
 		<StackPanel Grid.Row="2"    Grid.Column="1"   Orientation="Horizontal"
-								HorizontalAlignment="Left" Height="25" Margin="0,0.2,0,0"  
-								 VerticalAlignment="Top" >
+								HorizontalAlignment="Left" >
 			<DatePicker Name="start_date_dp"
 								HorizontalAlignment="Left" VerticalAlignment="Top"/>
 			<Mah:TimePicker  Name="start_time_tp" 
@@ -73,17 +94,15 @@
 								 Margin="0,0,5,0" HorizontalAlignment="Right" >
 			<Label Name="time_zone_lb" Content="GMT+09:00) 日本標準時" 
 						HorizontalAlignment="Left"  Margin="0,0,0,0" 
-						VerticalAlignment="Top" />
+						VerticalAlignment="Center" />
 			<Button  Name="tim_zone_attach_bt" Content="タイムゾーン"  
-							HorizontalAlignment="Center" Margin="5,0,5,0"  VerticalAlignment="Bottom" />
+							HorizontalAlignment="Center" Margin="5,0,5,0"   />
 		</StackPanel>
 
-		<Label Grid.Row="3"  Grid.Column="1"  
-						Name="rep" Content="繰り返し" HorizontalAlignment="Left"  Margin="0,0,0,0" 
-						VerticalAlignment="Top" />
-		<StackPanel Grid.Row="3" Grid.Column="1"   Orientation="Horizontal"
-								 Margin="0,0,5,0" >
-			<CheckBox Name="syuujitu_c" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+		<Label Grid.Row="3"  Grid.Column="0"  
+						Name="rep" Content="繰り返し" HorizontalAlignment="Right" />
+		<StackPanel Grid.Row="3" Grid.Column="1"   Orientation="Horizontal" >
+			<CheckBox Name="syuujitu_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 			<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >
 				<Button Content="繰り返さない"/>
 				<Button Content="毎日"/>
@@ -96,17 +115,20 @@
 		</StackPanel>
 
 		<Label Grid.Row="4" Grid.Column="0"   
-						Content="場所" HorizontalAlignment="Right"  Margin="0,0,0,0" 
-						VerticalAlignment="Top" />
-		<TextBox Grid.Row="4"  Grid.Column="1"  Grid.ColumnSpan="2" 
-						Name="location_tb" Text="場所"  />
+						Content="場所" HorizontalAlignment="Right"  />
+		<TextBox Grid.Row="4"  Grid.Column="1"   Margin="0,5,0,5" 
+						Name="location_tb" Text="場所" />
 
-		<!--通知  / ゲスト-->
+		<Label Grid.Row="5" Grid.Column="0"   
+						Content="通知" HorizontalAlignment="Right"  />
+		<StackPanel Grid.Row="5" Grid.Column="1"   
+							Name="overrides_sp" />
+		<StackPanel Grid.Row="5" Grid.Column="2"   
+							Name="attendees_sp" />
+
 		<Label Grid.Row="6" Grid.Column="0"   
-						Content="×" HorizontalAlignment="Right"  Margin="0,0,0,0" 
-						VerticalAlignment="Top" />
-		<StackPanel Grid.Row="6" Grid.Column="1"   Orientation="Horizontal"
-								 Margin="0,0,5,0" >
+						Content="×" HorizontalAlignment="Right"   />
+		<StackPanel Grid.Row="6" Grid.Column="1"   Orientation="Horizontal" >
 			<Label Grid.Row="6" Grid.Column="1"   
 						Name="email_lb" Content="アカウント"  />
 			<ComboBox Name="color_cb" Width="120">
@@ -117,8 +139,7 @@
 		<Label Grid.Row="8" Grid.Column="0"   
 						Content="予定" 
 					/>
-		<StackPanel Grid.Row="8" Grid.Column="1"   Orientation="Horizontal"
-								 Margin="0,0,5,0" >
+		<StackPanel Grid.Row="8" Grid.Column="1"   Orientation="Horizontal" Margin="0,5,0,5" >
 			<ComboBox Name="yotei_cb" SelectedIndex="1" >
 				<Button Content="予定あり"/>
 				<Button Content="予定なし"/>
@@ -134,18 +155,35 @@
 
 		<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,0,0,0" VerticalAlignment="Top" />
 
-		<StackPanel Grid.Row="9" Grid.Column="1"   Margin="0,0,5,0" >
+		<StackPanel Grid.Row="9" Grid.Column="1"   >
 			<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Button  Name="attach_bt" Content="添付" 
-								HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="boldattach_bt" Content="太字" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="italick_bt" Content="斜体" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="under_lin_bt" Content="下線" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="num_list_bt" Content="番号" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="m_list_bt" Content="箇条" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="insert_link_bt" Content="リンク" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
+				<Button  Name="format_clear_bt" Content="書式クリア" 
+								HorizontalAlignment="Left" VerticalAlignment="Center" />
 			</ToolBar>
-			<StackPanel  Name="attachments_sp" Orientation="Horizontal" Margin="0,0,5,5" >
+			<StackPanel  Name="attachments_sp" Orientation="Horizontal">
 			</StackPanel>
-			<TextBox Grid.Row="9"  Grid.Column="1"  MinLines="10" 
-						Name="description_tb" Text="詳細"  />
+			<TextBox  Grid.Row="9"  Grid.Column="1"   MinLines="10" Width="500"
+						Name="description_tb" Text="詳細" 
+						TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" 
+						Typography.NumeralStyle="OldStyle" Typography.SlashedZero="True"
+						/>
 		</StackPanel>
 
-		<Label Grid.Row="10" Grid.Column="0"   
+		<!--<Label Grid.Row="10" Grid.Column="0"   
 					Content="添付" HorizontalAlignment="Right"   />
 		<Label Grid.Row="10"  Grid.Column="1"  Grid.ColumnSpan="4" Name="drive" Content="親フォルダ" HorizontalAlignment="Left"  Margin="0,0,0,0" VerticalAlignment="Top" />
 		<StackPanel Grid.Row="10" Grid.Column="1"  Grid.RowSpan="2" Orientation="Horizontal"
@@ -159,7 +197,7 @@
 			<ListBox Name="attach_lb" HorizontalAlignment="Left"  VerticalAlignment="Stretch" 
 								Width="228"  Height="200"
 								Margin="0.8,0,0,0"/>
-		</StackPanel>
+		</StackPanel>-->
 	</Grid>
 </Mah:MetroWindow>
 

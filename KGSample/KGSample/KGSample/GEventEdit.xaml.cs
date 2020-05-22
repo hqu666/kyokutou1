@@ -47,7 +47,7 @@ namespace KGSample {
 			string dbMsg = "[GEventEdit]";
 			try {
 				dbMsg = "HtmlLink=" + taregetEvent.HtmlLink;
-				htmlLink_lb.Content = taregetEvent.HtmlLink;
+				htmlLink_lb.Text = taregetEvent.HtmlLink;
 				dbMsg = "taregetEvent=" + taregetEvent.Summary;
 				titol_tv.Text = taregetEvent.Summary;
 				/*
@@ -279,18 +279,27 @@ Visibility	null	string
 						string title = attachment.Title;
 						string fileId = attachment.FileId;
 						string fileUrl = attachment.FileUrl;
-						dbMsg += "\r\n" + title + ",fileId="+ fileId + ",fileUrl=" + fileUrl;
-						string iconLink = attachment.IconLink;
+						dbMsg += "\r\n" + title + ",fileId="+ fileId + ",fileUrl= " + fileUrl;
 						string mimeType = attachment.MimeType;
 						string eTag = attachment.ETag;
-						dbMsg += ",iconLink=" + iconLink + ",mimeType=" + mimeType + ",eTag=" + eTag;
+						dbMsg +=  "  ,mimeType=" + mimeType + ",eTag= " + eTag;
 						Button bt = new Button();
-						bt.Content = title;
 						bt.Click += Attachment_bt_Click;
 						bt.DataContext = fileUrl;
-						//Color BGColor = GCalendarUtil.ColorId2RGB(eventItem.ColorId);
-						//bt.Background = new SolidColorBrush(BGColor);
-						//bt.Style = FindResource("bt-event-passes") as System.Windows.Style;
+						bt.Style = FindResource("bt-attachment") as System.Windows.Style;
+						StackPanel sp=new StackPanel();
+
+						string iconLink = attachment.IconLink;
+						dbMsg += "  ,iconLink= " + iconLink;
+						Image img = new Image();
+						img.Source = new BitmapImage(new Uri(iconLink));
+						img.Height = 10;
+						img.Width = 10;
+						sp.Children.Add(img);
+						Label lb = new Label();
+						lb.Content = title;
+						sp.Children.Add(lb);
+						bt.Content=sp;
 						attachments_sp.Children.Add(bt);
 					}
 				}
