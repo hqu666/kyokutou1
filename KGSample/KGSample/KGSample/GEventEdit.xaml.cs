@@ -34,6 +34,7 @@ namespace KGSample {
 			string dbMsg = "[GEventEdit]";
 			try {
 				InitializeComponent();
+				this.taregetEvent = taregetEvent;
 				EventWrite(taregetEvent);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -315,12 +316,13 @@ Visibility	null	string
 						//削除ボタン
 						Button dbt = new Button();
 						dbt.Click += Del_Attachment_bt_Click;
-						dbt.DataContext = fileUrl;
+						dbt.DataContext = attachment;
 						dbt.Style = FindResource("bt-dell") as System.Windows.Style;
 						psp.Children.Add(dbt);
 
 						//XAMLへ格納;
 						attachments_sp.Children.Add(psp);
+						psp.Name = fileId;
 					}
 				}
 				MyLog(TAG, dbMsg);
@@ -340,6 +342,29 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				Button bt = sender as Button;
+				Google.Apis.Calendar.v3.Data.EventAttachment delAttachment = bt.DataContext as Google.Apis.Calendar.v3.Data.EventAttachment;
+				string delFileId = delAttachment.FileId;
+				dbMsg += "  ,Del;Title=" + delAttachment.Title + "  ,Id=" + delAttachment.FileId;
+				IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments = this.taregetEvent.Attachments;
+				dbMsg += "Attachments" + attachments.Count + "件";
+				int delIndex = 0;
+				if (0 < attachments.Count) {
+					foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
+						string title = attachment.Title;
+						string fileId = attachment.FileId;
+						dbMsg += "\r\n" + delIndex + ")" + title + ",fileId=" + fileId;
+						if(fileId.Equals(delFileId)) {
+							break;
+						}
+						delIndex++;
+					}
+					dbMsg += ",delIndex=" + delIndex;
+					attachments.RemoveAt(delIndex);
+					dbMsg += ">削除：添付>" +attachments.Count + "件";
+					//添付表示も削除
+					attachments_sp.Children.RemoveAt(delIndex);
+				}
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
