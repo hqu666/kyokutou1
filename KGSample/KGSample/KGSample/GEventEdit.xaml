@@ -9,12 +9,13 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
         Title="スケジュール編集"  FontSize="12" VerticalAlignment="Center"
-		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing" d:DesignWidth="850">
+		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+		Closing="MetroWindow_Closing" d:DesignWidth="850">
 	<Window.Resources>
 		<!--<ResourceDictionary Source="/Style/StyleDic.xaml"/>-->
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="0,10,10,0"/>
+			<Setter Property="Margin" Value="0,10,0,10"/>
 		</Style>
 		<Style TargetType="Label">
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -23,15 +24,25 @@
 
 		<Style TargetType="Button">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="5"/>
+			<Setter Property="Margin" Value="0,5,0,5"/>
 		</Style>
 		<Style x:Key="bt-attachment" TargetType="Button">
-			<Setter Property="FontSize" Value="12" />
 			<Setter Property="HorizontalContentAlignment" Value="Left" />
+			<!--<Setter Property="VerticalAlignment" Value="Center" />-->
+			<Setter Property="Margin" Value="3,3,3,3" />
+			<Setter Property="Padding" Value="10,-5,0,-5" />
+			<Setter Property="Width" Value="100" />
+			<!--<Setter Property="Height" Value="50" />-->
+			<Setter Property="Panel.ZIndex" Value="90" />
+		</Style>
+		<Style x:Key="bt-dell" TargetType="Button">
+			<Setter Property="HorizontalContentAlignment" Value="Center" />
 			<Setter Property="VerticalAlignment" Value="Center" />
-			<!--<Setter Property="HorizontalAlignment" Value="Left" />-->
-			<Setter Property="Margin" Value="3" />
-			<Setter Property="Width" Value="150" />
+			<Setter Property="Margin" Value="0,0,10,0" />
+			<!--<Setter Property="Padding" Value="5" />-->
+			<Setter Property="Content" Value="×" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
 			<Setter Property="Panel.ZIndex" Value="90" />
 		</Style>
 
@@ -63,8 +74,8 @@
 								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,0,0"
 								VerticalAlignment="Top" TextTrimming="CharacterEllipsis"/>
 
-		<Button Grid.Row="1" Grid.Column="0"
-							  Name="del_bt" Content="×"  />
+		<Button Grid.Row="1" Grid.Column="0" Style="{StaticResource bt-dell}"
+							  Name="del_bt" />
 		<TextBox Grid.Row="1"  Grid.Column="1" 
 								Name="titol_tv" Text="タイトル" FontSize="24"  HorizontalAlignment="Left"  Margin="0,0,0,0" 
 								VerticalAlignment="Top" />
@@ -136,9 +147,8 @@
 			</ComboBox>
 		</StackPanel>
 
-		<Label Grid.Row="8" Grid.Column="0"   
-						Content="予定" 
-					/>
+		<Label Grid.Row="8" Grid.Column="0"   HorizontalAlignment="Right"
+						Content="予定" />
 		<StackPanel Grid.Row="8" Grid.Column="1"   Orientation="Horizontal" Margin="0,5,0,5" >
 			<ComboBox Name="yotei_cb" SelectedIndex="1" >
 				<Button Content="予定あり"/>
@@ -153,7 +163,7 @@
 		</StackPanel>
 
 
-		<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,0,0,0" VerticalAlignment="Top" />
+		<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,10,0,0" VerticalAlignment="Top" />
 
 		<StackPanel Grid.Row="9" Grid.Column="1"   >
 			<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -174,8 +184,8 @@
 				<Button  Name="format_clear_bt" Content="書式クリア" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" />
 			</ToolBar>
-			<StackPanel  Name="attachments_sp" Orientation="Horizontal">
-			</StackPanel>
+			<StackPanel  Name="attachments_sp" Orientation="Horizontal" Margin="5,5,5,10" />
+
 			<TextBox  Grid.Row="9"  Grid.Column="1"   MinLines="10" Width="500"
 						Name="description_tb" Text="詳細" 
 						TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" 

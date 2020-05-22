@@ -283,12 +283,21 @@ Visibility	null	string
 						string mimeType = attachment.MimeType;
 						string eTag = attachment.ETag;
 						dbMsg +=  "  ,mimeType=" + mimeType + ",eTag= " + eTag;
+						//親になるパネルを作る
+						StackPanel psp = new StackPanel();
+						psp.Orientation = Orientation.Horizontal;
+						psp.Margin = new Thickness(-5);
+
+						//ボタンに見える部分
 						Button bt = new Button();
 						bt.Click += Attachment_bt_Click;
 						bt.DataContext = fileUrl;
 						bt.Style = FindResource("bt-attachment") as System.Windows.Style;
+						//横並べ
 						StackPanel sp=new StackPanel();
-
+						sp.Orientation= Orientation.Horizontal;
+						sp.Margin = new Thickness(-5);
+						//アイコン
 						string iconLink = attachment.IconLink;
 						dbMsg += "  ,iconLink= " + iconLink;
 						Image img = new Image();
@@ -296,11 +305,22 @@ Visibility	null	string
 						img.Height = 10;
 						img.Width = 10;
 						sp.Children.Add(img);
+						//ファイルの表示名
 						Label lb = new Label();
 						lb.Content = title;
+						//格納
 						sp.Children.Add(lb);
 						bt.Content=sp;
-						attachments_sp.Children.Add(bt);
+						psp.Children.Add(bt);
+						//削除ボタン
+						Button dbt = new Button();
+						dbt.Click += Del_Attachment_bt_Click;
+						dbt.DataContext = fileUrl;
+						dbt.Style = FindResource("bt-dell") as System.Windows.Style;
+						psp.Children.Add(dbt);
+
+						//XAMLへ格納;
+						attachments_sp.Children.Add(psp);
 					}
 				}
 				MyLog(TAG, dbMsg);
@@ -309,9 +329,44 @@ Visibility	null	string
 			}
 		}
 
+		/// <summary>
+		/// 添付解除
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Del_Attachment_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Del_Attachment_bt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				Button bt = sender as Button;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// 添付ファイル種億
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Attachment_bt_Click(object sender, RoutedEventArgs e)
 		{
-			throw new NotImplementedException();
+			string TAG = "Attachment_bt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				Button bt = sender as Button;
+				string taregetUrl = bt.DataContext as string;
+				dbMsg += "  ,taregetUrl=" + taregetUrl ;
+				//デフォルトのブラウザで開く
+				System.Diagnostics.Process.Start(taregetUrl);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+				throw new NotImplementedException();
+			}
 		}
 
 		private void Back_bt_Click(object sender, EventArgs e)
@@ -344,7 +399,6 @@ Visibility	null	string
 			}
 		}
 
-
 		/// <summary>
 		/// このフォームを閉じる
 		/// ※this.Close();だと再表示でクラッシュするのでthis.Visible = false;でこのオブジェクトを破棄させない
@@ -356,7 +410,6 @@ Visibility	null	string
 			try {
 				if (mainView != null) {
 					mainView.editView = null;
-			//		this.Visibility=false;//このオブジェクトを破棄させない(2);this.Close();だと再表示でクラッシュする
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -364,7 +417,6 @@ Visibility	null	string
 			}
 			this.Close();
 		}
-
 
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)
