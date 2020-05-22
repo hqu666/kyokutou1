@@ -100,3 +100,5 @@ H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\WebWindow.g.cs
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventDayList.baml
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventEdit.baml
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\WebWindow.baml
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.g.cs
+H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.baml

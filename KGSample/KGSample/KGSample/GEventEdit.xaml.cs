@@ -19,8 +19,9 @@ namespace KGSample {
 	/// GEventEdit.xaml の相互作用ロジック
 	/// </summary>
 	public partial class GEventEdit : MetroWindow {
-
+		
 		public GCalender mainView;
+		public GoogleDriveBrouser driveView;
 
 		/// <summary>
 		/// このページで編集するEvent
@@ -322,7 +323,6 @@ Visibility	null	string
 
 						//XAMLへ格納;
 						attachments_sp.Children.Add(psp);
-						psp.Name = fileId;
 					}
 				}
 				MyLog(TAG, dbMsg);
@@ -373,7 +373,7 @@ Visibility	null	string
 		}
 
 		/// <summary>
-		/// 添付ファイル種億
+		/// 添付ファイルの取得処理
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -391,6 +391,28 @@ Visibility	null	string
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// 添付ボタンのクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Attach_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Attach_bt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				if (driveView == null) {
+					dbMsg += "GoogleDriveBrouserを再生成";
+					driveView = new GoogleDriveBrouser();
+					driveView.editView = this;
+					driveView.Show();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 

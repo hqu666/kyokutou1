@@ -117,6 +117,9 @@
     </Compile>
     <Compile Include="GoogleAuthUtil.cs" />
     <Compile Include="GoogleCalendarUtil.cs" />
+    <Compile Include="GoogleDriveBrouser.xaml.cs">
+      <DependentUpon>GoogleDriveBrouser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GoogleDriveUtil.cs" />
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
@@ -143,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GEventEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GoogleDriveBrouser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -168,7 +168,7 @@
 		<StackPanel Grid.Row="9" Grid.Column="1"   >
 			<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Button  Name="attach_bt" Content="添付" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Click="Attach_bt_Click" />
 				<Button  Name="boldattach_bt" Content="太字" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" />
 				<Button  Name="italick_bt" Content="斜体" 
