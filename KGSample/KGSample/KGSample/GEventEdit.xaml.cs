@@ -409,6 +409,7 @@ Visibility	null	string
 					driveView = new GoogleDriveBrouser();
 					driveView.editView = this;
 					driveView.Show();
+					driveView.GoogleFolderListUp(Constant.RootFolderName);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

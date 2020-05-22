@@ -8,20 +8,39 @@
         GlowBrush="{DynamicResource AccentColorBrush}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="GoogleDrive" Height="600" Width="800" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing">
+        Title="GoogleDrive" Height="400" Width="800" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing">
 	<Window.Resources>
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="0,10,0,10"/>
+			<Setter Property="Margin" Value="16,5,0,5"/>
 		</Style>
+
 		<Style TargetType="Label">
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 			<Setter Property="Margin" Value="5"/>
 		</Style>
 
+		<Style x:Key="lb-r-try" TargetType="Label" >
+			<Setter Property="Content"  Value="▼" />
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter  Property="LayoutTransform">
+				<Setter.Value>
+					<RotateTransform Angle="90"/>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="lb-l-try" TargetType="Label" BasedOn="{StaticResource lb-r-try}">
+			<Setter  Property="LayoutTransform">
+				<Setter.Value>
+					<RotateTransform Angle="-90"/>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
 		<Style TargetType="Button">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="0,5,0,5"/>
+			<Setter Property="Margin" Value="5,0,0,0"/>
 		</Style>
 	</Window.Resources>
 
@@ -35,17 +54,23 @@
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>-->
-		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal"  Name="pass_sp" />
+		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal"  Name="pass_sp">
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+				<Label Content="KSクラウド" VerticalAlignment="Center" />
+				<Label Style="{StaticResource lb-l-try}"  VerticalAlignment="Center" Margin="-15,0,0,0" />
+			</StackPanel>
+		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" >
-			<TreeView HorizontalAlignment="Left" Height="526" Margin="0,0,0,0" 
+			<TreeView HorizontalAlignment="Left" Height="270" Margin="0,0,0,0" 
 								Name="pass_tv"
-								VerticalAlignment="Top" Width="100"/>
-			<ListView Name="file_list_lv">
+								VerticalAlignment="Top"/>
+			<ListView ItemsSource="{Binding}" x:Name="file_list_lv" >
 				<ListView.View>
 					<GridView>
-						<GridViewColumn/>
-						<GridViewColumn/>
-						<GridViewColumn/>
+						<GridViewColumn Header="名前" DisplayMemberBinding="{Binding Path=Name}" Width="250"/>
+						<GridViewColumn Header="サイズ" DisplayMemberBinding="{Binding Path=Size}" Width="100"/>
+						<GridViewColumn Header="更新日" DisplayMemberBinding="{Binding Path=ModifiedTime}" Width="125"/>
+						<GridViewColumn Header="種類" DisplayMemberBinding="{Binding Path=MimeType}" Width="Auto"/>
 					</GridView>
 				</ListView.View>
 			</ListView>
