@@ -278,13 +278,52 @@ Visibility	null	string
 				dbMsg+= "Attachments" + attachments.Count +"件";
 				if(0< attachments.Count) {
 					foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
+						AddAttachmentst(attachment);
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		public void AttachmentsFromDrive(Google.Apis.Drive.v3.Data.File fileItem)
+		{
+			string TAG = "AttachmentsFromDrive";
+			string dbMsg = "[GEventEdit]";
+			try {
+				Google.Apis.Calendar.v3.Data.EventAttachment attachment = new Google.Apis.Calendar.v3.Data.EventAttachment();
+				attachment.Title = fileItem.Name;
+				attachment.FileId = fileItem.Id;
+				attachment.FileUrl = fileItem.WebContentLink;
+				dbMsg += "," + attachment.Title + ",fileId=" + attachment.FileId + ",fileUrl= " + attachment.FileUrl;
+				attachment.MimeType = fileItem.MimeType;
+				attachment.ETag = fileItem.MimeType;
+				dbMsg += "  ,mimeType=" + attachment.MimeType + ",eTag= " + attachment.ETag;
+				dbMsg += "  ,iconLink= " + attachment.IconLink;
+				MyLog(TAG, dbMsg);
+				AddAttachmentst(attachment);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 添付ファイルのボタン化
+		/// </summary>
+		/// <param name="attachment"></param>
+		private void AddAttachmentst(Google.Apis.Calendar.v3.Data.EventAttachment attachment)
+		{
+			string TAG = "AddAttachmentst";
+			string dbMsg = "[GEventEdit]";
+			try {
 						string title = attachment.Title;
 						string fileId = attachment.FileId;
 						string fileUrl = attachment.FileUrl;
-						dbMsg += "\r\n" + title + ",fileId="+ fileId + ",fileUrl= " + fileUrl;
+						dbMsg += "\r\n" + title + ",fileId=" + fileId + ",fileUrl= " + fileUrl;
 						string mimeType = attachment.MimeType;
 						string eTag = attachment.ETag;
-						dbMsg +=  "  ,mimeType=" + mimeType + ",eTag= " + eTag;
+						dbMsg += "  ,mimeType=" + mimeType + ",eTag= " + eTag;
 						//親になるパネルを作る
 						StackPanel psp = new StackPanel();
 						psp.Orientation = Orientation.Horizontal;
@@ -296,14 +335,21 @@ Visibility	null	string
 						bt.DataContext = fileUrl;
 						bt.Style = FindResource("bt-attachment") as System.Windows.Style;
 						//横並べ
-						StackPanel sp=new StackPanel();
-						sp.Orientation= Orientation.Horizontal;
+						StackPanel sp = new StackPanel();
+						sp.Orientation = Orientation.Horizontal;
 						sp.Margin = new Thickness(-5);
 						//アイコン
 						string iconLink = attachment.IconLink;
 						dbMsg += "  ,iconLink= " + iconLink;
 						Image img = new Image();
-						img.Source = new BitmapImage(new Uri(iconLink));
+						img.Source = new BitmapImage(new Uri("Resources/file.png", UriKind.Relative));
+						if (iconLink == null) {
+							if(mimeType.Equals(Constant.GoogleDriveMime_Folder)) {
+								img.Source = new BitmapImage(new Uri("Resources/folder.png", UriKind.Relative));
+							}
+						} else{
+							img.Source = new BitmapImage(new Uri(iconLink));
+						}
 						img.Height = 10;
 						img.Width = 10;
 						sp.Children.Add(img);
@@ -312,7 +358,7 @@ Visibility	null	string
 						lb.Content = title;
 						//格納
 						sp.Children.Add(lb);
-						bt.Content=sp;
+						bt.Content = sp;
 						psp.Children.Add(bt);
 						//削除ボタン
 						Button dbt = new Button();
@@ -323,13 +369,13 @@ Visibility	null	string
 
 						//XAMLへ格納;
 						attachments_sp.Children.Add(psp);
-					}
-				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+
 
 		/// <summary>
 		/// 添付解除

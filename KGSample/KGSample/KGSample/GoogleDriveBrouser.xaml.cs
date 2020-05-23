@@ -137,6 +137,7 @@ namespace KGSample
 				//dbMsg += ">>" + fullPath;
 				//pass_name_lb.Text = Constant.RootFolderName + "\\" + fullPath;
 				//rStr = pass_name_lb.Text;
+				GoogleFileListUp(parentFolder.Name);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -231,29 +232,10 @@ namespace KGSample
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				dbMsg = "," + pFolder;
-				//file_list_lv.Clear();                                                           //listViewの書込み初期化
 				Constant.GDriveFolderMembers = null;
 				Constant.GDriveFolderMembers = GDriveUtil.GDFileListUp(pFolder, false);
 				if (Constant.GDriveFolderMembers != null) {
 					dbMsg += "フォルダに" + Constant.GDriveFolderMembers.Count + "件";
-					// ListViewコントロールのプロパティを設定
-					//file_list_lv.FullRowSelect = true;
-					//file_list_lv.GridLines = true;
-					//file_list_lv.Sorting = SortOrder.Ascending;
-					//file_list_lv.View = View.Details;
-
-					// 列（コラム）ヘッダの作成
-					//columnName = new ColumnHeader();
-					//columnType = new ColumnHeader();
-					//columnData = new ColumnHeader();
-					//columnName.Text = "名前";
-					//columnName.Width = 245;
-					//columnType.Text = "サイズ";
-					//columnType.Width = 70;
-					//columnData.Text = "更新日";
-					//columnData.Width = 120;
-					//ColumnHeader[] colHeaderRegValue = { this.columnName, this.columnType, this.columnData };
-					//file_list_lv.Columns.AddRange(colHeaderRegValue);
 					//			file_list_lv.Items.Clear();					// ListViewコントロールのデータをすべて消去
 					IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>();
 					ObservableCollection<GFile> GDriveFiles = new ObservableCollection<GFile>();
@@ -267,7 +249,7 @@ namespace KGSample
 						string fMimeType = fileItem.MimeType;
 						dbMsg += "," + fMimeType;
 						// ListViewコントロールにデータを追加
-						GDriveFiles.Add(new GFile { Name = fNmae, Size = fSize, ModifiedTime = fModifiedTime, MimeType = fMimeType });
+						GDriveFiles.Add(new GFile { Name = fNmae, Size = fSize, ModifiedTime = fModifiedTime, MimeType = fMimeType ,File= fileItem });
 						////フォルダが有れば記録
 						if (fMimeType == GoogleDriveMime_Folder) {
 							GDriveFolders.Add(fileItem);
@@ -299,60 +281,63 @@ namespace KGSample
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void file_list_lv_DoubleClick(object sender, EventArgs e)
+		private void File_list_lv_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			string TAG = "file_list_lv_DoubleClick";
+			string TAG = "File_list_lv_MouseDoubleClick";
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
-				//int focusedIndex = file_list_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
-				//dbMsg += ",focused[" + focusedIndex;
-				//Google.Apis.Drive.v3.Data.File focusedFiles = Constant.GDriveFolderMembers[focusedIndex];
-				//string focusedName = focusedFiles.Name;
-				//dbMsg += "]" + focusedName;
-				//string focusedFilesMimeType = focusedFiles.MimeType;
-				//dbMsg += ",MimeType=" + focusedFilesMimeType;
-				//if (focusedFilesMimeType.Equals(GoogleDriveMime_Folder)) {
-				//	dbMsg += ">>フォルダ" + focusedName + "を開く";
+				ListView lv = sender as ListView;
+				int focusedIndex = lv.SelectedIndex;	
+				dbMsg += ",focused[" + focusedIndex;
+				GFile selectedItem = lv.SelectedItem as GFile;
+				Google.Apis.Drive.v3.Data.File focusedFiles = selectedItem.File;
+				string focusedName = focusedFiles.Name;
+				dbMsg += "]" + focusedName;
+				string focusedFilesMimeType = focusedFiles.MimeType;
+				dbMsg += ",MimeType=" + focusedFilesMimeType;
+				if (focusedFilesMimeType.Equals(GoogleDriveMime_Folder)) {
+					dbMsg += ">>フォルダ" + focusedName + "を開く";
 
-				//	//string fullpass = pass_name_lb.Text; が正常値になっているとは限らない
-				//	TreeNode rNode = SrachNodeList(focusedName);
-				//	string tFullPass = rNode.FullPath;
-				//	string[] passse = tFullPass.Split('\\');
-				//	string cPass = passse[passse.Length - 1];
-				//	string pPass = passse[passse.Length - 2];
-				//	dbMsg += ",pPass=" + pPass + ",pPass=" + pPass;
+					////string fullpass = pass_name_lb.Text; が正常値になっているとは限らない
+					//TreeNode rNode = SrachNodeList(focusedName);
+					//string tFullPass = rNode.FullPath;
+					//string[] passse = tFullPass.Split('\\');
+					//string cPass = passse[passse.Length - 1];
+					//string pPass = passse[passse.Length - 2];
+					//dbMsg += ",pPass=" + pPass + ",pPass=" + pPass;
 
-				//	pass_tv.Focus();                //フォーカスをtreeに移す
+					//pass_tv.Focus();                //フォーカスをtreeに移す
 
-				//	TreeNode nowSelectedNode = pass_tv.SelectedNode;
-				//	dbMsg += ":" + nowSelectedNode.Text + "を選択中";
-				//	GoogleFileListUp(focusedName);
-				//	SetPassLabel(focusedName);
-				//	MyLog(TAG, dbMsg);
-				//} else {
-				//	dbMsg += ">>ファイル" + focusedName + "を送る";
-				//	if (Constant.GDriveSelectedFiles == null) {
-				//		Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
-				//	}
-				//	if (file_list_lv.SelectedItems.Count >= 1) {
-				//		//選択されているリストの情報を出力する
-				//		foreach (ListViewItem item in file_list_lv.SelectedItems) {
-				//			int selectedIndex = item.Index;
-				//			dbMsg += "\r\nselected=" + selectedIndex;
-				//			Constant.GDriveSelectedFiles.Add(Constant.GDriveFolderMembers[selectedIndex]);
-				//			string fId = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Id;
-				//			dbMsg += "[" + fId;
-				//			string fName = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Name;
-				//			dbMsg += "]" + fName;
-				//		}
-				//	} else {
-				//		dbMsg += "選択されていません";
-				//	}
-				//	dbMsg += "\r\n選択結果=" + Constant.GDriveSelectedFiles.Count + "件";
-				//	MyLog(TAG, dbMsg);
-				//	mainForm.FileListUp();
-				//	QuitMe();
-				//}
+					//TreeNode nowSelectedNode = pass_tv.SelectedNode;
+					//dbMsg += ":" + nowSelectedNode.Text + "を選択中";
+					//GoogleFileListUp(focusedName);
+					SetPassLabel(focusedFiles);
+					MyLog(TAG, dbMsg);
+				} else {
+					dbMsg += ">>ファイル" + focusedName + "を送る";
+					if (Constant.GDriveSelectedFiles == null) {
+						Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
+					}
+					if (0< file_list_lv.SelectedItems.Count ) {
+						//選択されているリストの情報を出力する
+						//foreach (ListViewItem item in file_list_lv.SelectedItems) {
+						//	//int selectedIndex = item.Index;
+						//	//dbMsg += "\r\nselected=" + selectedIndex;
+						//	//Constant.GDriveSelectedFiles.Add(Constant.GDriveFolderMembers[selectedIndex]);
+						//	//string fId = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Id;
+						//	//dbMsg += "[" + fId;
+						//	//string fName = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Name;
+						//	//dbMsg += "]" + fName;
+						//}
+						dbMsg += "\r\n選択結果=" + focusedFiles.Name;
+						MyLog(TAG, dbMsg);
+						editView.AttachmentsFromDrive(focusedFiles);
+						QuitMe();
+					} else {
+						dbMsg += "選択されていません";
+						MyLog(TAG, dbMsg);
+					}
+				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -389,24 +374,16 @@ namespace KGSample
 			this.Close();
 		}
 
+		/// <summary>
+		/// ListViewに格納するための置き換えクラス
+		/// </summary>
 		public class GFile {
 			public string Name { get; set; }
 			public string Size { get; set; }
 			public string ModifiedTime { get; set; }
 			public string MimeType { get; set; }
+			public Google.Apis.Drive.v3.Data.File File { get; set; }
 		}
-		//public class GDFtList {
-		//	// バインディングの指定先プロパティ
-		//	public ObservableCollection<GFile> Data { get; }
-
-		//	// コンストラクタ(データ入力)
-		//	public GDFtList()
-		//	{
-		//		Data = new ObservableCollection<GFile> {
-
-		//			};
-		//	}
-		//}
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)
 		{

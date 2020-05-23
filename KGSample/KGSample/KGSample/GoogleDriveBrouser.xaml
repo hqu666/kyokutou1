@@ -64,7 +64,7 @@
 			<TreeView HorizontalAlignment="Left" Height="270" Margin="0,0,0,0" 
 								Name="pass_tv"
 								VerticalAlignment="Top"/>
-			<ListView ItemsSource="{Binding}" x:Name="file_list_lv" >
+			<ListView ItemsSource="{Binding}" x:Name="file_list_lv" MouseDoubleClick="File_list_lv_MouseDoubleClick" >
 				<ListView.View>
 					<GridView>
 						<GridViewColumn Header="名前" DisplayMemberBinding="{Binding Path=Name}" Width="250"/>
