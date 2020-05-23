@@ -12,7 +12,6 @@
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
 		Closing="MetroWindow_Closing" d:DesignWidth="850">
 	<Window.Resources>
-		<!--<ResourceDictionary Source="/Style/StyleDic.xaml"/>-->
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
 			<Setter Property="Margin" Value="0,10,0,10"/>
@@ -28,18 +27,15 @@
 		</Style>
 		<Style x:Key="bt-attachment" TargetType="Button">
 			<Setter Property="HorizontalContentAlignment" Value="Left" />
-			<!--<Setter Property="VerticalAlignment" Value="Center" />-->
 			<Setter Property="Margin" Value="3,3,3,3" />
 			<Setter Property="Padding" Value="10,-5,0,-5" />
 			<Setter Property="Width" Value="100" />
-			<!--<Setter Property="Height" Value="50" />-->
 			<Setter Property="Panel.ZIndex" Value="90" />
 		</Style>
 		<Style x:Key="bt-dell" TargetType="Button">
 			<Setter Property="HorizontalContentAlignment" Value="Center" />
 			<Setter Property="VerticalAlignment" Value="Center" />
 			<Setter Property="Margin" Value="0,0,10,0" />
-			<!--<Setter Property="Padding" Value="5" />-->
 			<Setter Property="Content" Value="×" />
 			<Setter Property="Background" Value="Transparent" />
 			<Setter Property="BorderBrush" Value="Transparent" />
@@ -159,9 +155,7 @@
 				<Button Content="公開"/>
 				<Button Content="非公開"/>
 			</ComboBox>
-			<Label Name="koukai" Content="デフォルトの公開予定" Margin="0,0,0,0" />
 		</StackPanel>
-
 
 		<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,10,0,0" VerticalAlignment="Top" />
 
@@ -192,22 +186,6 @@
 						Typography.NumeralStyle="OldStyle" Typography.SlashedZero="True"
 						/>
 		</StackPanel>
-
-		<!--<Label Grid.Row="10" Grid.Column="0"   
-					Content="添付" HorizontalAlignment="Right"   />
-		<Label Grid.Row="10"  Grid.Column="1"  Grid.ColumnSpan="4" Name="drive" Content="親フォルダ" HorizontalAlignment="Left"  Margin="0,0,0,0" VerticalAlignment="Top" />
-		<StackPanel Grid.Row="10" Grid.Column="1"  Grid.RowSpan="2" Orientation="Horizontal"
-								 Margin="5,0,5,0" >
-			<TreeView Width="200" Height="200" Margin="0,0,0,0" />
-			<ListBox Width="200"  Height="200" Margin="8,0,0,0"
-								 Name="dfile_lb"/>
-		</StackPanel>
-		<StackPanel Grid.Row="10" Grid.Column="3"  Grid.RowSpan="2" Orientation="Horizontal"
-								 Margin="5,0,5,0" >
-			<ListBox Name="attach_lb" HorizontalAlignment="Left"  VerticalAlignment="Stretch" 
-								Width="228"  Height="200"
-								Margin="0.8,0,0,0"/>
-		</StackPanel>-->
 	</Grid>
 </Mah:MetroWindow>
 

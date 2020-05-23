@@ -139,6 +139,10 @@ namespace KGSample
 			return rStr;
 		}
 
+		/// <summary>
+		/// 上の階層に戻す処理
+		/// </summary>
+		/// <param name="targetID"></param>
 		private void DelPassLabel(string targetID)
 		{
 			string TAG = "DelPassLabel";
@@ -167,8 +171,6 @@ namespace KGSample
 						pass_sp.Children.RemoveAt(i);
 						passList.RemoveAt(i-1);
 					}
-					//attachments.RemoveAt(delIndex);
-					//添付表示も削除
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -181,7 +183,6 @@ namespace KGSample
 		{
 			string TAG = "pass_name_bt_Click";
 			string dbMsg = "[GoogleDriveBrouser]";
-			//IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>();
 			try {
 				Button bt = sender as Button;
 				Google.Apis.Drive.v3.Data.File taregetFolder = bt.DataContext as Google.Apis.Drive.v3.Data.File;
@@ -208,38 +209,13 @@ namespace KGSample
 			try {
 
 				dbMsg += folderName + "を開き";
-
-				//if (0 < pass_tv.Nodes.Count) {
-				//	TreeNodeSelect(folderName);                                                           //親ノードを選択して
-				//	string parentNode = pass_tv.SelectedNode.FullPath;                  // 選択されたノードを取得
-				//	dbMsg += parentNode + "に配置したい";
-				//} else {
-				//	dbMsg += "最上位に配意したい";
-				//}
 				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => {
 					return GDriveUtil.GDFileListUp(folderName, false);
 				});
 				rFolders.Wait();
 				GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
-				//TreeNode targetNode = new TreeNode();
-				//TreeNode node = new TreeNode();
 				if (GDriveFolders != null) {          // && 0< GDriveFolders.Count  だと件数が取れてない
 					dbMsg += ",サブフォルダ" + GDriveFolders.Count + "件";
-					// ドライブ一覧を走査してツリーに追加
-					//foreach (Google.Apis.Drive.v3.Data.File folder in GDriveFolders) {
-					//	string mFolderName = folder.Name;
-					//	dbMsg += ",\r\n" + mFolderName;
-					//	// 新規ノード作成
-					//	// プラスボタンを表示するため空のノードを追加しておく
-					//	//node = new TreeNode(mFolderName);
-					//	//node.Nodes.Add(new TreeNode());
-					//	//pass_tv.Nodes.Add(node);
-					//	//if (@folderName.Equals(@mFolderName)) {
-					//	//	targetNode = node
-					//	//	dbMsg += ",\r\n最終選択=" + targetNode.Text;
-					//	//}
-					//}
-
 					IList<string> parents = GDriveFolders.First().Parents;
 					string parentsId = parents.First();
 					dbMsg += ",parents[" + parentsId + "件";
@@ -334,21 +310,6 @@ namespace KGSample
 				dbMsg += ",MimeType=" + focusedFilesMimeType;
 				if (focusedFilesMimeType.Equals(GoogleDriveMime_Folder)) {
 					dbMsg += ">>フォルダ" + focusedName + "を開く";
-
-					////string fullpass = pass_name_lb.Text; が正常値になっているとは限らない
-					//TreeNode rNode = SrachNodeList(focusedName);
-					//string tFullPass = rNode.FullPath;
-					//string[] passse = tFullPass.Split('\\');
-					//string cPass = passse[passse.Length - 1];
-					//string pPass = passse[passse.Length - 2];
-					//dbMsg += ",pPass=" + pPass + ",pPass=" + pPass;
-
-					//pass_tv.Focus();                //フォーカスをtreeに移す
-
-					//TreeNode nowSelectedNode = pass_tv.SelectedNode;
-					//dbMsg += ":" + nowSelectedNode.Text + "を選択中";
-					//GoogleFileListUp(focusedName);
-					//	SetPassLabel(focusedFiles
 					GoogleFolderListUp(focusedFiles.Name);
 					MyLog(TAG, dbMsg);
 				} else {
@@ -357,16 +318,6 @@ namespace KGSample
 						Constant.GDriveSelectedFiles = new List<Google.Apis.Drive.v3.Data.File>();
 					}
 					if (0< file_list_lv.SelectedItems.Count ) {
-						//選択されているリストの情報を出力する
-						//foreach (ListViewItem item in file_list_lv.SelectedItems) {
-						//	//int selectedIndex = item.Index;
-						//	//dbMsg += "\r\nselected=" + selectedIndex;
-						//	//Constant.GDriveSelectedFiles.Add(Constant.GDriveFolderMembers[selectedIndex]);
-						//	//string fId = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Id;
-						//	//dbMsg += "[" + fId;
-						//	//string fName = Constant.GDriveSelectedFiles[Constant.GDriveSelectedFiles.Count - 1].Name;
-						//	//dbMsg += "]" + fName;
-						//}
 						dbMsg += "\r\n選択結果=" + focusedFiles.Name;
 						MyLog(TAG, dbMsg);
 						editView.AttachmentsFromDrive(focusedFiles);
@@ -443,10 +394,5 @@ namespace KGSample
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
-		//private void MetroWindow_LostStylusCapture(object sender, StylusEventArgs e)
-		//{
-
-		//}
 	}
 }

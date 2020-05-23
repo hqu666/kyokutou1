@@ -216,9 +216,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\circle.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\file.png" />
     <Resource Include="Resources\folder.png" />
   </ItemGroup>

@@ -19,7 +19,8 @@ namespace KGSample {
 	/// GEventEdit.xaml の相互作用ロジック
 	/// </summary>
 	public partial class GEventEdit : MetroWindow {
-		
+		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
+
 		public GCalender mainView;
 		public GoogleDriveBrouser driveView;
 
@@ -52,12 +53,9 @@ namespace KGSample {
 				htmlLink_lb.Text = taregetEvent.HtmlLink;
 				dbMsg = "taregetEvent=" + taregetEvent.Summary;
 				titol_tv.Text = taregetEvent.Summary;
-				/*
-			<DatePicker Name="start_date_dp"
-			<Mah:TimePicker  Name="start_time_tp" 
-			<Mah:TimePicker  Name="end_time_tp" />
-			<DatePicker Name="end_date_dp"
-			*/
+
+				SetDate(taregetEvent);
+
 				if(taregetEvent.OriginalStartTime !=null) {
 					time_zone_lb.Content += taregetEvent.OriginalStartTime.TimeZone;
 				}
@@ -218,42 +216,6 @@ Minutes	1440	int?
 UseDefault	FALSE	bool?
 Sequence	5	int?
 Source	null	Google.Apis.Calendar.v3.Data.Event.SourceData
-◢ Start	{Google.Apis.Calendar.v3.Data.EventDateTime}	Google.Apis.Calendar.v3.Data.EventDateTime
-Date	null	string
-◢ DateTime	{2020/05/06 10:00:00}	System.DateTime?
-▶ Date	{2020/05/06 0:00:00}	System.DateTime
-Day	6	int
-DayOfWeek	Wednesday	System.DayOfWeek
-DayOfYear	127	int
-Hour	10	int
-InternalKind	9.22337E+18	ulong
-InternalTicks	6.37244E+17	long
-Kind	Local	System.DateTimeKind
-Millisecond	0	int
-Minute	0	int
-Month	5	int
-Second	0	int
-Ticks	6.37244E+17	long
-◢ TimeOfDay	{10:00:00}	System.TimeSpan
-Days	0	int
-Hours	10	int
-Milliseconds	0	int
-Minutes	0	int
-Seconds	0	int
-Ticks	3.6E+11	long
-TotalDays	0.416666667	double
-TotalHours	10	double
-TotalMilliseconds	36000000	double
-TotalMinutes	600	double
-TotalSeconds	36000	double
-_ticks	3.6E+11	long
-▶ 静的メンバー		
-Year	2020	int
-dateData	9.86062E+18	ulong
-▶ 静的メンバー		
-DateTimeRaw	"2020-05-06T10:00:00+09:00"	string
-ETag	null	string
-TimeZone	"Asia/Tokyo"	string
 Status	"confirmed"	string
 Transparency	null	string
 ▶ Updated	{2020/05/21 11:12:09}	System.DateTime?
@@ -266,6 +228,52 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 開始・終了の日時設定
+		/// </summary>
+		/// <param name="taregetEvent"></param>
+		private void SetDate(Google.Apis.Calendar.v3.Data.Event eventItem)
+		{
+			string TAG = "SetDate";
+			string dbMsg = "[GEventEdit]";
+			try {
+				string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
+				string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
+				string colorId = eventItem.ColorId;
+				dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
+				string Summary = eventItem.Summary;
+				dbMsg += "  ," + Summary;
+				string ContentStr = "";
+				int startInt = GCalendarUtil.EventDateTime2Int(eventItem.Start);
+				int endInt = GCalendarUtil.EventDateTime2Int(eventItem.End);
+				if (eventItem.End.DateTime == null) {
+					endInt--;
+					dbMsg += ">>" + endInt;
+				}
+				if (eventItem.Start.DateTime == null) {
+					dbMsg += "：終日・連日：";
+					ContentStr = Summary + " : " + eventItem.End.Date + "まで";
+				} else {
+					dbMsg += "：単日：";
+					string startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
+					string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
+					dbMsg += ", " + startTimeStr + "～" + endTimeStr;
+					ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
+				}
+				/*
+			<DatePicker Name="start_date_dp"
+			<Mah:TimePicker  Name="start_time_tp" 
+			<Mah:TimePicker  Name="end_time_tp" />
+			<DatePicker Name="end_date_dp"
+			*/
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// 添付ファイルの表示
@@ -286,7 +294,11 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
+	
+		/// <summary>
+		/// GoogleDriveで選択したファイルを添付する
+		/// </summary>
+		/// <param name="fileItem"></param>
 		public void AttachmentsFromDrive(Google.Apis.Drive.v3.Data.File fileItem)
 		{
 			string TAG = "AttachmentsFromDrive";
