@@ -301,6 +301,9 @@ Visibility	null	string
 				attachment.ETag = fileItem.MimeType;
 				dbMsg += "  ,mimeType=" + attachment.MimeType + ",eTag= " + attachment.ETag;
 				dbMsg += "  ,iconLink= " + attachment.IconLink;
+				dbMsg += "  ,attachments= " + this.taregetEvent.Attachments.Count+"件";
+				this.taregetEvent.Attachments.Add(attachment);
+				dbMsg += " >> " +this. taregetEvent.Attachments.Count + "件";
 				MyLog(TAG, dbMsg);
 				AddAttachmentst(attachment);
 			} catch (Exception er) {
@@ -410,7 +413,6 @@ Visibility	null	string
 					//添付表示も削除
 					attachments_sp.Children.RemoveAt(delIndex);
 				}
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -455,7 +457,7 @@ Visibility	null	string
 					driveView = new GoogleDriveBrouser();
 					driveView.editView = this;
 					driveView.Show();
-					driveView.GoogleFolderListUp(Constant.RootFolderName);
+					driveView.GoogleFolderListUp(Constant.TopFolderName);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

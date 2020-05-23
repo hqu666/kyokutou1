@@ -8,7 +8,7 @@
         GlowBrush="{DynamicResource AccentColorBrush}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="GoogleDrive" Height="400" Width="800" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing">
+        Title="GoogleDrive" Height="380" Width="700" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="MetroWindow_Closing">
 	<Window.Resources>
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
@@ -36,6 +36,7 @@
 					<RotateTransform Angle="-90"/>
 				</Setter.Value>
 			</Setter>
+			<Setter Property="Margin" Value="16,5,-10,5"/>
 		</Style>
 
 		<Style TargetType="Button">
@@ -43,7 +44,6 @@
 			<Setter Property="Margin" Value="5,0,0,0"/>
 		</Style>
 	</Window.Resources>
-
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -57,7 +57,7 @@
 		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal"  Name="pass_sp">
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 				<Label Content="KSクラウド" VerticalAlignment="Center" />
-				<Label Style="{StaticResource lb-l-try}"  VerticalAlignment="Center" Margin="-15,0,0,0" />
+				<!--<Label Style="{StaticResource lb-l-try}"  VerticalAlignment="Center" Margin="-15,0,0,0" />-->
 			</StackPanel>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" >

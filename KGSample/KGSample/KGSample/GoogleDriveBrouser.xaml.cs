@@ -26,14 +26,10 @@ namespace KGSample
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 
-		public IList<string> passList = new List<string>();
+		public IList<Google.Apis.Drive.v3.Data.File> passList = new List<Google.Apis.Drive.v3.Data.File>();
 		public string cureentPassName = "";                                  //現在のパス名
 		public IList<string> fullNames = new List<string>();            //PC内ファイルリスト
 		public string GoogleDriveMime_Folder = Constant.GoogleDriveMime_Folder;
-
-		//ColumnHeader columnName = new ColumnHeader();
-		//ColumnHeader columnType = new ColumnHeader();
-		//ColumnHeader columnData = new ColumnHeader();
 		public GoogleDriveBrouser()
         {
 			string TAG = "GoogleDriveBrouser";
@@ -90,7 +86,10 @@ namespace KGSample
 				StackPanel psp = new StackPanel();
 				psp.Orientation = Orientation.Horizontal;
 				psp.Margin = new Thickness(-5);
-
+				//セパレータ代わりの▲
+				Label lb = new Label();
+				lb.Style = FindResource("lb-l-try") as System.Windows.Style;
+				psp.Children.Add(lb);
 				//ボタンに見える部分
 				Button bt = new Button();
 				//ファイルの表示名
@@ -124,11 +123,6 @@ namespace KGSample
 				//dbt.Style = FindResource("bt-dell") as System.Windows.Style;
 				//psp.Children.Add(dbt);
 
-				//ファイルの表示名
-				Label lb = new Label();
-				lb.Content = "▲";
-				lb.Style = FindResource("lb-r-try") as System.Windows.Style;
-				psp.Children.Add(lb);
 				//XAMLへ格納;
 				pass_sp.Children.Add(psp);
 
@@ -145,15 +139,54 @@ namespace KGSample
 			return rStr;
 		}
 
+		private void DelPassLabel(string targetID)
+		{
+			string TAG = "DelPassLabel";
+			string dbMsg = "[GoogleDriveBrouser]";
+			try {
+				int delIndex = pass_sp.Children.Count;
+				dbMsg += "pass_spへの登録" + delIndex + "件";
+				int passListCount = passList.Count;
+				dbMsg += "passList" + passListCount + "件";
+				if (0 < passListCount) {
+					for (int i = passListCount; 0< i ; i--) {
+						dbMsg += "\r\n" + i + ")" ;
+						Google.Apis.Drive.v3.Data.File pass = passList[i-1];
+						string passId = pass.Id;
+						dbMsg += "[" + passId ;
+						string passName = pass.Name;
+						dbMsg += "]" + passName;
+						if(passId.Equals(targetID)) {
+							delIndex = i;
+							break;
+						}
+					}
+					dbMsg += ",delIndex=" + delIndex;
+					for (int i = passListCount; delIndex< i ; i--) {
+						dbMsg += ">削除：添付>" + i + ")";
+						pass_sp.Children.RemoveAt(i);
+						passList.RemoveAt(i-1);
+					}
+					//attachments.RemoveAt(delIndex);
+					//添付表示も削除
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+				throw new NotImplementedException();
+			}
+		}
+
 		private void pass_name_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "pass_name_bt_Click";
 			string dbMsg = "[GoogleDriveBrouser]";
-			IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>();
+			//IList<Google.Apis.Drive.v3.Data.File> GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>();
 			try {
 				Button bt = sender as Button;
 				Google.Apis.Drive.v3.Data.File taregetFolder = bt.DataContext as Google.Apis.Drive.v3.Data.File;
 				dbMsg += "選択されたフォルダ=" + taregetFolder.Name;
+				DelPassLabel(taregetFolder.Id);
 				GoogleFileListUp(taregetFolder.Name);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -175,6 +208,7 @@ namespace KGSample
 			try {
 
 				dbMsg += folderName + "を開き";
+
 				//if (0 < pass_tv.Nodes.Count) {
 				//	TreeNodeSelect(folderName);                                                           //親ノードを選択して
 				//	string parentNode = pass_tv.SelectedNode.FullPath;                  // 選択されたノードを取得
@@ -183,7 +217,7 @@ namespace KGSample
 				//	dbMsg += "最上位に配意したい";
 				//}
 				Task<IList<Google.Apis.Drive.v3.Data.File>> rFolders = Task.Run(() => {
-					return GDriveUtil.GDFileListUp(folderName, true);
+					return GDriveUtil.GDFileListUp(folderName, false);
 				});
 				rFolders.Wait();
 				GDriveFolders = new List<Google.Apis.Drive.v3.Data.File>(rFolders.Result);
@@ -192,23 +226,26 @@ namespace KGSample
 				if (GDriveFolders != null) {          // && 0< GDriveFolders.Count  だと件数が取れてない
 					dbMsg += ",サブフォルダ" + GDriveFolders.Count + "件";
 					// ドライブ一覧を走査してツリーに追加
-					foreach (Google.Apis.Drive.v3.Data.File folder in GDriveFolders) {
-						string mFolderName = folder.Name;
-						dbMsg += ",\r\n" + mFolderName;
-						// 新規ノード作成
-						// プラスボタンを表示するため空のノードを追加しておく
-						//node = new TreeNode(mFolderName);
-						//node.Nodes.Add(new TreeNode());
-						//pass_tv.Nodes.Add(node);
-						//if (@folderName.Equals(@mFolderName)) {
-						//	targetNode = node;
-						//	dbMsg += ",\r\n最終選択=" + targetNode.Text;
-						//}
-					}
-					//dbMsg += ",\r\n" + pass_tv.Nodes.Count + "件";
-					////	pass_tv.Sort();		//渡された配列がソートされていなければ使用；List()メソッドでlistRequest.OrderBy = "name";を指定済みなので不要化
-					//pass_tv.EndUpdate();
-					cureentPassName = SetPassLabel(GDriveFolders.First());
+					//foreach (Google.Apis.Drive.v3.Data.File folder in GDriveFolders) {
+					//	string mFolderName = folder.Name;
+					//	dbMsg += ",\r\n" + mFolderName;
+					//	// 新規ノード作成
+					//	// プラスボタンを表示するため空のノードを追加しておく
+					//	//node = new TreeNode(mFolderName);
+					//	//node.Nodes.Add(new TreeNode());
+					//	//pass_tv.Nodes.Add(node);
+					//	//if (@folderName.Equals(@mFolderName)) {
+					//	//	targetNode = node
+					//	//	dbMsg += ",\r\n最終選択=" + targetNode.Text;
+					//	//}
+					//}
+
+					IList<string> parents = GDriveFolders.First().Parents;
+					string parentsId = parents.First();
+					dbMsg += ",parents[" + parentsId + "件";
+					Google.Apis.Drive.v3.Data.File parentIdFolder = GDriveUtil.FindById(parentsId);
+					passList.Add(parentIdFolder);
+					cureentPassName = SetPassLabel(parentIdFolder);
 				} else {
 					//メッセージボックスを表示する
 					String titolStr = Constant.ApplicationName;
@@ -311,7 +348,8 @@ namespace KGSample
 					//TreeNode nowSelectedNode = pass_tv.SelectedNode;
 					//dbMsg += ":" + nowSelectedNode.Text + "を選択中";
 					//GoogleFileListUp(focusedName);
-					SetPassLabel(focusedFiles);
+					//	SetPassLabel(focusedFiles
+					GoogleFolderListUp(focusedFiles.Name);
 					MyLog(TAG, dbMsg);
 				} else {
 					dbMsg += ">>ファイル" + focusedName + "を送る";
@@ -406,5 +444,9 @@ namespace KGSample
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
 
+		//private void MetroWindow_LostStylusCapture(object sender, StylusEventArgs e)
+		//{
+
+		//}
 	}
 }
