@@ -44,6 +44,27 @@ namespace KGSample {
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveSelectedFiles;
 		public static string GoogleDriveMime_Folder = "application/vnd.google-apps.folder";
 		public static string CurrentFolder = "";                    //現在の対象フォルダ
+
+		/// <summary>
+		/// GoogleのIDで定義されたEventColor
+		/// </summary>
+		public struct GoogleEventColor {
+			public string id;
+			public string name;
+			public System.Windows.Media.Color rgb;  //= System.Windows.Media.Color.FromRgb(0x00, 0xFF, 0x00);
+
+			public GoogleEventColor(string id, string name, System.Windows.Media.Color rgb)
+			{
+				this.id = id;
+				this.name = name;
+				this.rgb = rgb;
+			}
+		}
+		public static IList<GoogleEventColor> googleEventColor;   
+
+		/// <summary>
+		/// PCのファイル管理
+		/// </summary>
 		public struct LocalFile {
 			public string fullPass;
 			public string name;

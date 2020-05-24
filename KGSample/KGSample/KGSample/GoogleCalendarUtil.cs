@@ -108,19 +108,6 @@ namespace KGSample {
 				if(tDateTime ==null) {
 					tDateTime = DateTime.Now;
 				}
-				//if (TEventDateTime.DateTime == null) {
-				//	dbMsg += "Date=" + TEventDateTime.Date;
-				//	string todayItemStartDate = TEventDateTime.Date;
-				//	string[] sStr = todayItemStartDate.Split('-');
-				//	tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
-				//}
-				//if (TEventDateTime.Date == null) {
-				//	dbMsg += "Date=" + TEventDateTime.DateTime;
-				//	int sYear = TEventDateTime.DateTime.Value.Year;
-				//	int sMonth = TEventDateTime.DateTime.Value.Month;
-				//	int sDay = TEventDateTime.DateTime.Value.Day;
-				//	tDateTime = new DateTime(sYear, sMonth, sDay);
-				//}
 				retStr = String.Format("{0:yyyyMMdd}", tDateTime);
 				dbMsg += ">>" + retStr;
 	//			Util.MyLog(TAG, dbMsg);
@@ -173,7 +160,24 @@ namespace KGSample {
 			Color reColor = Color.FromRgb( 0x00, 0xFF, 0x00);
 			try {
 				dbMsg += "colorId=" + colorId;
-				switch(colorId){
+/*
+				Google.Apis.Calendar.v3.Data.Colors colors = Constant.MyCalendarService.Colors.Get().Fetch();
+
+				// Print available calendarListEntry colors.
+				foreach (KeyValuePair<String, ColorDefinition> color in colors.Calendar) {
+					System.out.println("ColorId : " + color.Key);
+					System.out.println("  Background: " + color.Value.Background);
+					System.out.println("  Foreground: " + color.Value.Foreground);
+				}
+				// Print available event colors.
+				foreach (KeyValuePair<String, ColorDefinition> color in colors.Event) {
+					System.out.println("ColorId : " + color.Key);
+					System.out.println("  Background: " + color.Value.Background);
+					System.out.println("  Foreground: " + color.Value.Foreground);
+				}
+*/
+
+				switch (colorId){
 					case "1":
 						dbMsg += ":ラベンダー";
 						reColor = Color.FromRgb( 121, 134, 203);
@@ -229,7 +233,33 @@ namespace KGSample {
 			}
 			return reColor;
 		}
+		//https://developers.google.com/calendar/v3/reference/colors/get#.net
 
+		/// <summary>
+		/// GoogleのIDで定義されたEventColor	を設定する	
+		/// </summary>
+		public void setGoogleEventColor()
+		{
+			string TAG = "setGoogleEventColor";
+			string dbMsg = "[GCalender]";
+			try {
+				Constant.googleEventColor = new List<Constant.GoogleEventColor>();
+				dbMsg += ":googleEventColor=" + Constant.googleEventColor.Count + "件";
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("1", "ラベンダー", Color.FromRgb(121, 134, 203)));       //,#FF7986CB
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("2", "セージ", Color.FromRgb(1, 182, 121)));                   //#FF01B679
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("3", "ブドウ", Color.FromRgb(142, 36, 170)));                  //#FF8E24AA
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("4", "フラミンゴ", Color.FromRgb(230, 124, 115)));       //#FFE67C73
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("5", "バナナ", Color.FromRgb(246, 192, 40)));               //#FFF6C028
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("6", "ミカン", Color.FromRgb(244, 81, 30)));                   //#FFF4511E
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("7", "ピーコック", Color.FromRgb(121, 134, 203)));			//
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("8", "ブルーベリー", Color.FromRgb(63, 81, 181)));            //#FF3F51B5
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("9", "グラファイト", Color.FromRgb(97, 97, 97)));         //#FF616161
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("10", "バジル", Color.FromRgb(11, 128, 67)));                //#FF0B8043
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("11", "トマト", Color.FromRgb(213, 0, 0)));                        //#FFD50000				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		/// <summary>
 		/// Eventの更新

@@ -68,9 +68,6 @@ namespace KGSample {
 				email_lb.Content = taregetEvent.Organizer.Email;
 
 				/*
-							<ComboBox Name="color_cb" Width="120">
-								<ListBoxItem/>
-							</ComboBox>
 				<Label Grid.Row="8" Grid.Column="0"   
 										Content="予定" 
 									/>
@@ -91,24 +88,10 @@ namespace KGSample {
 
 						<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,0,0,0" VerticalAlignment="Top" />
 				*/
+				SetColor(taregetEvent.ColorId);
 				SetAttachments(taregetEvent.Attachments);
 				description_tb.Text = taregetEvent.Description;
 				//Description	"<a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing\">https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing</a><br>予定議事<br><ol><li>今期予算確認<br></li><li>各課進捗報告</li></ol><br>下記の添付ファイルを各自参照できる様、持参して下さい。<table><tbody><tr><td>PR0003</td><td><a href=\"https://drive.google.com/uc?id=10NTpRCN5xwCIvIT-qeAUZx6T4cM2eyGY&export=download\">PR0003.txt</a></td></tr><tr><td>PR0001</td><td><a href=\"https://drive.google.com/uc?id=1-qsqVlHH1bfaMVJwCeBLHoXlIGpSTrjP&export=download\">PR0001.pptx</a></td></tr><tr><td>PR0003</td><td><a href=\"https://drive.google.com/uc?id=11fP9Krj48m_za3Z5IAVxEFpFQRWjLRU6&export=download\">PR0003.xlsx</a></td></tr></tbody></table><br><a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=drive_web\"><span></span><span></span></a>"	string
-
-				/*		
-						<Label Grid.Row="10" Grid.Column="0"   
-									Content="添付" HorizontalAlignment="Right"   />
-						<Label Grid.Row="10"  Grid.Column="1"  Grid.ColumnSpan="4" Name="drive" Content="親フォルダ" HorizontalAlignment="Left"  Margin="0,0,0,0" VerticalAlignment="Top" />
-						<StackPanel Grid.Row="10" Grid.Column="1"  Grid.RowSpan="2" Orientation="Horizontal"
-												 Margin="5,0,5,0" >
-							<TreeView Width="200" Height="200" Margin="0,0,0,0" />
-							<ListBox Width="200"  Height="200" Margin="8,0,0,0"
-												 Name="dfile_lb"/>
-						</StackPanel>
-						<StackPanel Grid.Row="10" Grid.Column="3"  Grid.RowSpan="2" Orientation="Horizontal"
-												 Margin="5,0,5,0" >
-							<ListBox Name="attach_lb" HorizontalAlignment="Left"  VerticalAlignment="Stretch" 				 
-								 */
 
 				/*
 		   AnyoneCanAddSelf	null	bool?
@@ -130,7 +113,6 @@ Self	null	bool?
 ▶ [3]	{Google.Apis.Calendar.v3.Data.EventAttendee}	Google.Apis.Calendar.v3.Data.EventAttendee
 ▶ 列ビュー		
 AttendeesOmitted	null	bool?
-ColorId	null	string
 ConferenceData	null	Google.Apis.Calendar.v3.Data.ConferenceData
 ▶ Created	{2020/05/02 10:58:35}	System.DateTime?
 CreatedRaw	"2020-05-02T01:58:35.000Z"	string
@@ -263,6 +245,82 @@ Visibility	null	string
 		}
 
 		/// <summary>
+		/// カラー設定
+		/// </summary>
+		/// <param name="colorID"></param>
+		private void SetColor(string colorID)
+		{
+			string TAG = "SetColor";
+			string dbMsg = "[GEventEdit]";
+			try {
+				dbMsg += "colorID=" + colorID;
+				if(colorID==null) {
+					colorID = "7";
+				}
+				if (Constant.googleEventColor == null) {
+					GCalendarUtil.setGoogleEventColor();
+					dbMsg += ">>" + colorID;
+				}
+				dbMsg += "googleEventColor=" + Constant.googleEventColor.Count+"色";
+				int serectIndex = 0;
+				int nowCount = 0;
+				foreach(Constant.GoogleEventColor color in Constant.googleEventColor) {
+					dbMsg += "\r\n" + color.id +")" + color.name+ "," + color.rgb;
+					//ファイルの表示名color情報をラベルに格納して
+					Label lb = new Label();
+					lb.Content = color.name;
+					lb.Background = new SolidColorBrush(color.rgb);
+					lb.Foreground = new SolidColorBrush(Color.FromRgb(255,255,255));
+					lb.DataContext = color;
+					//リストアイテムに格納
+					color_cb.Items.Add(lb);
+					if (color.id.Equals(colorID)) {
+						serectIndex = nowCount;
+						color_cb.Background = new SolidColorBrush(color.rgb);
+						color_cb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+					}
+					nowCount++;
+				}
+				dbMsg += ",serectIndex=" + serectIndex;
+				color_cb.SelectedIndex = serectIndex;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// カラー選択後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Color_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "Color_cb_SelectionChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+			//※　作成時も発生する
+				ComboBox cb = sender as ComboBox;
+				int serectIndex = cb.SelectedIndex;
+				dbMsg += ",serectIndex=" + serectIndex;
+				//Label selectedItem = cb.SelectedItem as Label;
+				//Constant.GoogleEventColor colorObj = new Constant.GoogleEventColor();
+				//colorObj = selectedItem.DataContext;
+				Constant.GoogleEventColor color = Constant.googleEventColor[serectIndex];
+				dbMsg += "," + color.id + ")" + color.name + "," + color.rgb;
+				if(! taregetEvent.ColorId.Equals(color.id)){
+					color_cb.Background = new SolidColorBrush(color.rgb);
+					taregetEvent.ColorId = color.id;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
+		}
+
+
+		/// <summary>
 		/// 添付ファイル
 		/// </summary>
 		/// <param name="attachments"></param>
@@ -379,8 +437,6 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
 
 		/// <summary>
 		/// 添付解除
@@ -537,6 +593,5 @@ Visibility	null	string
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
 	}
 }
