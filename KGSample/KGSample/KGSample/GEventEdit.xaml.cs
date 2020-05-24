@@ -138,29 +138,6 @@ ConferenceData	null	Google.Apis.Calendar.v3.Data.ConferenceData
 CreatedRaw	"2020-05-02T01:58:35.000Z"	string
 ▶ Creator	{Google.Apis.Calendar.v3.Data.Event.CreatorData}	Google.Apis.Calendar.v3.Data.Event.CreatorData
 ETag	"\"3180052441811000\""	string
-◢ End	{Google.Apis.Calendar.v3.Data.EventDateTime}	Google.Apis.Calendar.v3.Data.EventDateTime
-Date	null	string
-◢ DateTime	{2020/05/06 12:00:00}	System.DateTime?
-▶ Date	{2020/05/06 0:00:00}	System.DateTime
-Day	6	int
-DayOfWeek	Wednesday	System.DayOfWeek
-DayOfYear	127	int
-Hour	12	int
-InternalKind	9.22337E+18	ulong
-InternalTicks	6.37244E+17	long
-Kind	Local	System.DateTimeKind
-Millisecond	0	int
-Minute	0	int
-Month	5	int
-Second	0	int
-Ticks	6.37244E+17	long
-▶ TimeOfDay	{12:00:00}	System.TimeSpan
-Year	2020	int
-dateData	9.86062E+18	ulong
-▶ 静的メンバー		
-DateTimeRaw	"2020-05-06T12:00:00+09:00"	string
-ETag	null	string
-EndTimeUnspecified	null	bool?
 ExtendedProperties	null	Google.Apis.Calendar.v3.Data.Event.ExtendedPropertiesData
 Gadget	null	Google.Apis.Calendar.v3.Data.Event.GadgetData
 GuestsCanInviteOthers	null	bool?
@@ -238,35 +215,29 @@ Visibility	null	string
 			string TAG = "SetDate";
 			string dbMsg = "[GEventEdit]";
 			try {
-				string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
-				string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
-				string colorId = eventItem.ColorId;
-				dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
-				string Summary = eventItem.Summary;
-				dbMsg += "  ," + Summary;
-				string ContentStr = "";
-				int startInt = GCalendarUtil.EventDateTime2Int(eventItem.Start);
-				int endInt = GCalendarUtil.EventDateTime2Int(eventItem.End);
-				if (eventItem.End.DateTime == null) {
-					endInt--;
-					dbMsg += ">>" + endInt;
+				TimeSpan nonTS = new TimeSpan(0, 0, 0);
+				dbMsg += ",TimeSpan未設定=" + nonTS;
+				DateTime now =DateTime.Now;
+				DateTime originalSDT = GCalendarUtil.EventDateTime2DT(eventItem.OriginalStartTime);
+				dbMsg += ",OriginalStartTime=" + originalSDT;
+				if(now== originalSDT) {
+					dbMsg += ">>現在時刻" ;
 				}
-				if (eventItem.Start.DateTime == null) {
-					dbMsg += "：終日・連日：";
-					ContentStr = Summary + " : " + eventItem.End.Date + "まで";
-				} else {
-					dbMsg += "：単日：";
-					string startTimeStr = String.Format("{0:HH:mm}", eventItem.Start.DateTime);
-					string endTimeStr = String.Format("{0:HH:mm}", eventItem.End.DateTime);
-					dbMsg += ", " + startTimeStr + "～" + endTimeStr;
-					ContentStr = startTimeStr + "～" + endTimeStr + " : " + Summary; ;
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(eventItem.Start);
+				TimeSpan startDTT = startDT.TimeOfDay;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(eventItem.End);
+				TimeSpan endDTT = endDT.TimeOfDay;
+				dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT  + ")" ;
+				start_date_dp.SelectedDate = startDT;
+				start_time_tp.SelectedTime = startDTT;
+				if(startDTT == nonTS) {
+					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				}
-				/*
-			<DatePicker Name="start_date_dp"
-			<Mah:TimePicker  Name="start_time_tp" 
-			<Mah:TimePicker  Name="end_time_tp" />
-			<DatePicker Name="end_date_dp"
-			*/
+				end_time_tp.SelectedTime = endDTT;
+				if (endDTT == nonTS) {
+					end_time_tp.Visibility = System.Windows.Visibility.Hidden;
+				}
+				end_date_dp.SelectedDate = endDT;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -283,10 +254,12 @@ Visibility	null	string
 			string TAG = "SetAttachments";
 			string dbMsg = "[GEventEdit]";
 			try {
-				dbMsg+= "Attachments" + attachments.Count +"件";
-				if(0< attachments.Count) {
-					foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
-						AddAttachmentst(attachment);
+				if(attachments != null) {
+					dbMsg += "Attachments" + attachments.Count + "件";
+					if (0 < attachments.Count) {
+						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
+							AddAttachmentst(attachment);
+						}
 					}
 				}
 				MyLog(TAG, dbMsg);

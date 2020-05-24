@@ -104,22 +104,24 @@ namespace KGSample {
 			string dbMsg = "[GoogleCalendarUtil]";
 			string retStr = null;
 			try {
-				DateTime tDateTime = DateTime.Now;
-				if (TEventDateTime.DateTime == null) {
-					dbMsg += "Date=" + TEventDateTime.Date;
-					string todayItemStartDate = TEventDateTime.Date;
-					string[] sStr = todayItemStartDate.Split('-');
-					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+				DateTime tDateTime = EventDateTime2DT( TEventDateTime);
+				if(tDateTime ==null) {
+					tDateTime = DateTime.Now;
 				}
-				if (TEventDateTime.Date == null) {
-					dbMsg += "Date=" + TEventDateTime.DateTime;
-					int sYear = TEventDateTime.DateTime.Value.Year;
-					int sMonth = TEventDateTime.DateTime.Value.Month;
-					int sDay = TEventDateTime.DateTime.Value.Day;
-					tDateTime = new DateTime(sYear, sMonth, sDay);
-				}
+				//if (TEventDateTime.DateTime == null) {
+				//	dbMsg += "Date=" + TEventDateTime.Date;
+				//	string todayItemStartDate = TEventDateTime.Date;
+				//	string[] sStr = todayItemStartDate.Split('-');
+				//	tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+				//}
+				//if (TEventDateTime.Date == null) {
+				//	dbMsg += "Date=" + TEventDateTime.DateTime;
+				//	int sYear = TEventDateTime.DateTime.Value.Year;
+				//	int sMonth = TEventDateTime.DateTime.Value.Month;
+				//	int sDay = TEventDateTime.DateTime.Value.Day;
+				//	tDateTime = new DateTime(sYear, sMonth, sDay);
+				//}
 				retStr = String.Format("{0:yyyyMMdd}", tDateTime);
-
 				dbMsg += ">>" + retStr;
 	//			Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -127,6 +129,42 @@ namespace KGSample {
 			}
 			return retStr;
 		}
+
+		/// <summary>
+		/// Google.EventのStart・Endでデータが入っているところからDateTimeを返す
+		/// 何も使えるものが無ければ現在日時が返る
+		/// </summary>
+		/// <param name="TEventDateTime"></param>
+		/// <returns></returns>
+		public DateTime EventDateTime2DT(EventDateTime TEventDateTime)
+		{
+			string TAG = "EventDateTime2DT";
+			string dbMsg = "[GoogleCalendarUtil]";
+			DateTime tDateTime = DateTime.Now;
+			try {
+				if (TEventDateTime.DateTime != null) {
+					dbMsg += "Date=" + TEventDateTime.DateTime;
+					int sYear = TEventDateTime.DateTime.Value.Year;
+					int sMonth = TEventDateTime.DateTime.Value.Month;
+					int sDay = TEventDateTime.DateTime.Value.Day;
+					int sHour = TEventDateTime.DateTime.Value.Hour;
+					int sMinute = TEventDateTime.DateTime.Value.Minute;
+					int sSecond = TEventDateTime.DateTime.Value.Second;
+					tDateTime = new DateTime(sYear, sMonth, sDay, sHour, sMinute, sSecond);
+				}else if (TEventDateTime.Date != null) {
+					dbMsg += "Date=" + TEventDateTime.Date;
+					string todayItemStartDate = TEventDateTime.Date;
+					string[] sStr = todayItemStartDate.Split('-');
+					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+				}
+				dbMsg += ">>" + tDateTime;
+				//			Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return tDateTime;
+		}
+
 
 		public Color ColorId2RGB(string colorId)
 		{
