@@ -102,14 +102,14 @@
 			<Label Name="time_zone_lb" Content="GMT+09:00) 日本標準時" 
 						HorizontalAlignment="Left"  Margin="0,0,0,0" 
 						VerticalAlignment="Center" />
-			<Button  Name="tim_zone_attach_bt" Content="タイムゾーン"  
+			<Button  Name="time_zone_attach_bt" Content="タイムゾーン"  
 							HorizontalAlignment="Center" Margin="5,0,5,0"   />
 		</StackPanel>
 
 		<Label Grid.Row="3"  Grid.Column="0"  
 						Name="rep" Content="繰り返し" HorizontalAlignment="Right" />
 		<StackPanel Grid.Row="3" Grid.Column="1"   Orientation="Horizontal" >
-			<CheckBox Name="syuujitu_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+			<CheckBox Name="daylong_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 			<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >
 				<Button Content="繰り返さない"/>
 				<Button Content="毎日"/>
@@ -180,7 +180,7 @@
 			</ToolBar>
 			<StackPanel  Name="attachments_sp" Orientation="Horizontal" Margin="5,5,5,10" />
 
-			<TextBox  Grid.Row="9"  Grid.Column="1"   MinLines="10" Width="500"
+			<TextBox  Grid.Row="9"  Grid.Column="1"   MinLines="5" Width="450"
 						Name="description_tb" Text="詳細" 
 						TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" 
 						Typography.NumeralStyle="OldStyle" Typography.SlashedZero="True"

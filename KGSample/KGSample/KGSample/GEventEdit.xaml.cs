@@ -53,14 +53,12 @@ namespace KGSample {
 				htmlLink_lb.Text = taregetEvent.HtmlLink;
 				dbMsg = "taregetEvent=" + taregetEvent.Summary;
 				titol_tv.Text = taregetEvent.Summary;
-
 				SetDate(taregetEvent);
-
 				if(taregetEvent.OriginalStartTime !=null) {
 					time_zone_lb.Content += taregetEvent.OriginalStartTime.TimeZone;
 				}
+				SetDaylong(taregetEvent);
 				/*
-				<CheckBox Name="syuujitu_c" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 				<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >
 	*/
 				location_tb.Text = taregetEvent.Location;
@@ -244,11 +242,30 @@ Visibility	null	string
 			}
 		}
 
-
+		/// <summary>
+		/// 終日
+		/// </summary>
+		/// <param name="eventItem"></param>
+		private void SetDaylong(Google.Apis.Calendar.v3.Data.Event taregetEvent)
+		{
+			string TAG = "SetDate";
+			string dbMsg = "[GEventEdit]";
+			try {
+				string startDate = taregetEvent.Start.Date;
+				if(startDate != null) {
+					dbMsg += "startDate="+ startDate;
+					daylong_cb.IsChecked=true;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		/// <summary>
-		/// 添付ファイルの表示
+		/// 添付ファイル
 		/// </summary>
+		/// <param name="attachments"></param>
 		private void SetAttachments(IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments)
 		{
 			string TAG = "SetAttachments";

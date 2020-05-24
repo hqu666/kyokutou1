@@ -273,6 +273,7 @@ namespace KGSample {
 }
 
 /*
+ * https://developers.google.com/calendar/v3/reference/events
  追加		http://sloppy-content.blog.jp/archives/16488560.html
  イベントを作成する		https://developers.google.com/calendar/create-events#java	
  */
