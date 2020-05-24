@@ -225,9 +225,81 @@ Visibility	null	string
 		}
 
 		/// <summary>
-		/// 終日
+		/// 開始日変更後
 		/// </summary>
-		/// <param name="eventItem"></param>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Start_date_dp_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "Start_date_dp_SelectedDateChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+				DatePicker dp = sender as DatePicker;
+				dbMsg += ",開始日=" + dp.SelectedDate;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 開始時刻変更後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Start_time_tp_SelectedTimeChanged(object sender, TimePickerBaseSelectionChangedEventArgs<TimeSpan?> e)
+		{
+			string TAG = "Start_time_tp_SelectedTimeChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+				TimePicker tp = sender as TimePicker;
+				dbMsg += ",開始時刻=" + tp.SelectedTime;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 終了時刻変更後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void End_time_tp_SelectedTimeChanged(object sender, TimePickerBaseSelectionChangedEventArgs<TimeSpan?> e)
+		{
+			string TAG = "End_time_tp_SelectedTimeChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+				TimePicker tp = sender as TimePicker;
+				dbMsg += ",終了時刻=" + tp.SelectedTime;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 終了日変更後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void End_date_dp_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "End_date_dp_SelectedDateChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+				DatePicker dp = sender as DatePicker;
+				dbMsg += ",終了日=" + dp.SelectedDate;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+	/// <summary>
+	/// 終日
+	/// </summary>
+	/// <param name="eventItem"></param>
 		private void SetDaylong(Google.Apis.Calendar.v3.Data.Event taregetEvent)
 		{
 			string TAG = "SetDate";
@@ -243,6 +315,32 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 終日の選択変更後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Daylong_cb_Checked(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Daylong_cb_Checked";
+			string dbMsg = "[GEventEdit]";
+			try {
+				CheckBox cb = sender as CheckBox;
+				dbMsg += "IsChecked=" + cb.IsChecked;
+				//trueからfaleseに変わったらDateを記入
+				//aleseからtruefに変わったらDateTimeを記入
+
+				//string startDate = taregetEvent.Start.Date;
+				//if (startDate != null) {
+				//	daylong_cb.IsChecked = true;
+				//}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		/// <summary>
 		/// カラー設定
@@ -593,5 +691,6 @@ Visibility	null	string
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+
 	}
 }

@@ -88,14 +88,14 @@
 		<StackPanel Grid.Row="2"    Grid.Column="1"   Orientation="Horizontal"
 								HorizontalAlignment="Left" >
 			<DatePicker Name="start_date_dp"
-								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" />
-			<Mah:TimePicker  Name="start_time_tp" 
+								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" SelectedDateChanged="Start_date_dp_SelectedDateChanged" />
+			<Mah:TimePicker  Name="start_time_tp" SelectedTimeChanged="Start_time_tp_SelectedTimeChanged" 
 			/>
 			<Label Content="～"  HorizontalAlignment="Left"  Margin="10,0,10,0" 
 							VerticalAlignment="Top"/>
-			<Mah:TimePicker  Name="end_time_tp"  Margin="0,0,10,0" />
+			<Mah:TimePicker  Name="end_time_tp"  Margin="0,0,10,0" SelectedTimeChanged="End_time_tp_SelectedTimeChanged" />
 			<DatePicker Name="end_date_dp"
-								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" />
+								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" SelectedDateChanged="End_date_dp_SelectedDateChanged" />
 		</StackPanel>
 		<StackPanel Grid.Row="2" Grid.Column="3"   Orientation="Horizontal"
 								 Margin="0,0,5,0" HorizontalAlignment="Right" >
@@ -109,7 +109,7 @@
 		<Label Grid.Row="3"  Grid.Column="0"  
 						Name="rep" Content="繰り返し" HorizontalAlignment="Right" />
 		<StackPanel Grid.Row="3" Grid.Column="1"   Orientation="Horizontal" >
-			<CheckBox Name="daylong_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+			<CheckBox Name="daylong_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="Daylong_cb_Checked"/>
 			<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >
 				<Button Content="繰り返さない"/>
 				<Button Content="毎日"/>
