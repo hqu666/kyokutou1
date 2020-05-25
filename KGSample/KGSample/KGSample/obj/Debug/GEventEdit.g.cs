@@ -9,9 +9,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Infragistics;
-using Infragistics.Controls;
-using Infragistics.Controls.Editors;
 using KGSample;
 using MahApps.Metro.Controls;
 using System;

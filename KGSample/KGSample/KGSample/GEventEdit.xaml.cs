@@ -255,17 +255,23 @@ Visibility	null	string
 					}else{
 						selectedDate=selectedDate.Add(startDTT);
 						dbMsg += ",登録＝"+ selectedDate;
+						//登録時バリデーションに
+						//int endInt = GCalendarUtil.EventDateTime2Int(taregetEvent.End);
+						//int startInt = GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
+						//if (endInt < startInt) {
+						//	dbMsg += ">終了日以降になっている>";
+						//	String titolStr = Constant.ApplicationName;
+						//	String msgStr = "	終了日以降に変更されましたが構いませんか？";
+						//	MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						//	dbMsg += ",result=" + result;
+
+						//	//taregetEvent.End.DateTime = selectedDate.Add(duration);
+						//	//dbMsg += taregetEvent.End.DateTime;
+						//	//end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
+						//}
 						taregetEvent.Start.DateTime = selectedDate;
 						taregetEvent.Start.Date = null;						//終日ではない事のフラグ
 					}
-					int endInt = int.Parse(String.Format("{0:yyyyMMdd}", endDT));
-					int startInt = GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
-					//if(endInt< startInt) {
-					//	dbMsg += ">終了日以降になっている>";
-						taregetEvent.End.DateTime = selectedDate.Add(duration);
-						dbMsg += taregetEvent.End.DateTime;
-						end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
-					//}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -283,8 +289,33 @@ Visibility	null	string
 			string TAG = "Start_time_tp_SelectedTimeChanged";
 			string dbMsg = "[GEventEdit]";
 			try {
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				TimeSpan startDTT = startDT.TimeOfDay;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				TimeSpan endDTT = endDT.TimeOfDay;
+				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+				TimeSpan duration = endDT - startDT;
+				dbMsg += ",所要時間=" + duration;
+	
 				TimePicker tp = sender as TimePicker;
-				dbMsg += ",開始時刻=" + tp.SelectedTime;
+				int selectedHours = tp.SelectedTime.Value.Hours;
+				int selectedMinutes = tp.SelectedTime.Value.Minutes;
+				int selectedSeconds = tp.SelectedTime.Value.Seconds;
+				TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds); 
+				 dbMsg += ",開始時刻=" + selectedTime;
+				if (!selectedTime.Equals(startDTT)){
+					DateTime startDTDate = startDT.Date;
+					dbMsg += ",startDTDate="+ startDTDate;
+					startDT = startDTDate.Add(selectedTime);
+					dbMsg += ">登録>" + startDT;
+					taregetEvent.Start.DateTime = startDT;
+					//終了側の変更
+					//taregetEvent.End.DateTime = startDT.Add(duration);
+					//dbMsg += ">end>" + taregetEvent.End.DateTime;
+					//end_time_tp.SelectedTime = taregetEvent.End.DateTime.Value.TimeOfDay;
+					//end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
+					taregetEvent.Start.Date = null;                     //終日ではない事のフラグ
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -301,8 +332,33 @@ Visibility	null	string
 			string TAG = "End_time_tp_SelectedTimeChanged";
 			string dbMsg = "[GEventEdit]";
 			try {
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				TimeSpan startDTT = startDT.TimeOfDay;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				TimeSpan endDTT = endDT.TimeOfDay;
+				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+				TimeSpan duration = endDT - startDT;
+				dbMsg += ",所要時間=" + duration;
+
 				TimePicker tp = sender as TimePicker;
-				dbMsg += ",終了時刻=" + tp.SelectedTime;
+				int selectedHours = tp.SelectedTime.Value.Hours;
+				int selectedMinutes = tp.SelectedTime.Value.Minutes;
+				int selectedSeconds = tp.SelectedTime.Value.Seconds;
+				TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
+				dbMsg += ",終了時刻=" + selectedTime;
+				if (!selectedTime.Equals(endDTT)) {
+					DateTime endDTDate = endDT.Date;
+					dbMsg += ",endDTDate=" + endDTDate;
+					endDT = endDTDate.Add(selectedTime);
+					dbMsg += ">登録>" + endDT;
+					taregetEvent.Start.DateTime = endDT;
+					//終了側の変更
+					//taregetEvent.End.DateTime = startDT.Add(duration);
+					//dbMsg += ">end>" + taregetEvent.End.DateTime;
+					//end_time_tp.SelectedTime = taregetEvent.End.DateTime.Value.TimeOfDay;
+					//end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
+					taregetEvent.End.Date = null;                     //終日ではない事のフラグ
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -343,13 +399,13 @@ Visibility	null	string
 						taregetEvent.End.DateTime = selectedDate;
 						taregetEvent.End.Date = null;                     //終日ではない事のフラグ
 					}
-					int endInt = GCalendarUtil.EventDateTime2Int(taregetEvent.End);
-					int startInt =GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
+					//int endInt = GCalendarUtil.EventDateTime2Int(taregetEvent.End);
+					//int startInt =GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
 					//if (endInt < startInt) {
 					//	dbMsg += ">終了日以降になっている>";
-						taregetEvent.Start.DateTime = selectedDate.Add(-duration);
-						dbMsg += taregetEvent.Start.DateTime;
-						start_date_dp.SelectedDate = taregetEvent.Start.DateTime.Value.Date;
+					//	taregetEvent.Start.DateTime = selectedDate.Add(-duration);
+					//	dbMsg += taregetEvent.Start.DateTime;
+					//	start_date_dp.SelectedDate = taregetEvent.Start.DateTime.Value.Date;
 					//}
 				}
 				MyLog(TAG, dbMsg);
@@ -388,15 +444,58 @@ Visibility	null	string
 			string TAG = "Daylong_cb_Checked";
 			string dbMsg = "[GEventEdit]";
 			try {
-				CheckBox cb = sender as CheckBox;
-				dbMsg += "IsChecked=" + cb.IsChecked;
-				//trueからfaleseに変わったらDateを記入
-				//aleseからtruefに変わったらDateTimeを記入
+				TimeSpan nonTS = new TimeSpan(0, 0, 0);
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				TimeSpan startDTT = startDT.TimeOfDay;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				TimeSpan endDTT = endDT.TimeOfDay;
+				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+				TimeSpan duration = endDT - startDT;
+				dbMsg += ",所要時間=" + duration;
 
-				//string startDate = taregetEvent.Start.Date;
-				//if (startDate != null) {
-				//	daylong_cb.IsChecked = true;
-				//}
+				CheckBox cb = sender as CheckBox;
+				bool isChecked = cb.IsChecked.Value;
+				dbMsg += "IsChecked=" + isChecked;
+				if(isChecked) {
+					//trueからfaleseに変わったらDateを記入
+					dbMsg += ">終日>";
+					string StartDTStr = String.Format("{0:yyyy-MM-dd}", startDT);
+					taregetEvent.Start.Date = StartDTStr;
+					taregetEvent.Start.DateTime = null;
+					dbMsg += "開始="+ StartDTStr +"(" + GCalendarUtil.EventDateTime2DT(taregetEvent.Start) +")";
+					string endDTStr = String.Format("{0:yyyy-MM-dd}", endDT);
+					taregetEvent.End.Date = endDTStr;
+					taregetEvent.End.DateTime = null;
+					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
+					end_time_tp.Visibility = System.Windows.Visibility.Hidden;
+				} else {
+					//aleseからtruefに変わったらDateTimeを記入
+					dbMsg += ">時刻指定>";
+					taregetEvent.Start.Date = null;
+					if(startDTT== nonTS) {
+						DateTime nowDT = DateTime.Now;
+						TimeSpan nowDTT = nowDT.TimeOfDay;
+						startDT = startDT.Add(nowDTT);
+					}
+					taregetEvent.Start.DateTime = startDT;
+					dbMsg += "開始="  + GCalendarUtil.EventDateTime2DT(taregetEvent.Start) ;
+					taregetEvent.End.Date = null;
+					if(nonTS < duration) {
+						endDT = startDT.Add(duration);
+					}else{
+						endDT = startDT.Add(new TimeSpan(1, 0, 0));
+					}
+					taregetEvent.End.DateTime = endDT;
+					dbMsg += "～終了=" + GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+					start_time_tp.Visibility = System.Windows.Visibility.Visible;
+					end_time_tp.Visibility = System.Windows.Visibility.Visible;
+					startDTT = startDT.TimeOfDay;
+					start_time_tp.SelectedTime = startDTT;
+					endDTT = endDT.TimeOfDay;
+					end_time_tp.SelectedTime = endDTT;
+				}
+				start_date_dp.SelectedDate = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				end_date_dp.SelectedDate = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
