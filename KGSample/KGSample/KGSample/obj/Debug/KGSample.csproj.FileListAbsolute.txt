@@ -102,3 +102,5 @@ H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GEventEdit.baml
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\WebWindow.baml
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.g.cs
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.baml
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.g.cs
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.baml

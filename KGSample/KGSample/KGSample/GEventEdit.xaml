@@ -87,7 +87,7 @@
 		<Label Grid.Row="2" Grid.Column="0"   Content="日時" HorizontalAlignment="Right"  />
 		<StackPanel Grid.Row="2"    Grid.Column="1"   Orientation="Horizontal"
 								HorizontalAlignment="Left" >
-			<DatePicker Name="start_date_dp"
+			<DatePicker Name="start_date_dp" SelectedDateFormat="Long"
 								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" SelectedDateChanged="Start_date_dp_SelectedDateChanged" />
 			<Mah:TimePicker  Name="start_time_tp" SelectedTimeChanged="Start_time_tp_SelectedTimeChanged" 
 			/>
