@@ -39,10 +39,22 @@
 			<Setter Property="Margin" Value="16,5,-10,5"/>
 		</Style>
 
+		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Background="{TemplateBinding Background}"
+                CornerRadius="2">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
 		<Style TargetType="Button">
-			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="5,0,0,0"/>
+			<Setter Property="Margin" Value="0,5,0,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
 		</Style>
+
 	</Window.Resources>
 
 	<Grid>

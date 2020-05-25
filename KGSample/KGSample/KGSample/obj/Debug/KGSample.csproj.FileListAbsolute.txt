@@ -104,3 +104,10 @@ H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.g.c
 H:\develop\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.baml
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.g.cs
 C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\GoogleDriveBrouser.baml
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\InfragisticsWPF4.Controls.Editors.XamMaskedInput.v12.2.dll
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\InfragisticsWPF4.v12.2.dll
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\InfragisticsWPF4.Controls.Editors.XamMaskedInput.v12.2.xml
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\InfragisticsWPF4.v12.2.xml
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\ja\InfragisticsWPF4.Controls.Editors.XamMaskedInput.v12.2.resources.dll
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\bin\Debug\ja\InfragisticsWPF4.v12.2.resources.dll
+C:\work\2020\kyokuto\testBuild\KGSample\KGSample\KGSample\obj\Debug\KGSample.exe.licenses
