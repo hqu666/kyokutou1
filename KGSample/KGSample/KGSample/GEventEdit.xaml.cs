@@ -236,11 +236,12 @@ Visibility	null	string
 			try {
 				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
 				TimeSpan startDTT = startDT.TimeOfDay;
-				DateTime endDT = end_date_dp.SelectedDate.Value.Date;     //時刻は00:00
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
 				TimeSpan endDTT = endDT.TimeOfDay;
 				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
 				TimeSpan duration = endDT - startDT;
 				dbMsg += ",所要時間=" + duration;
+	
 				DatePicker dp = sender as DatePicker;
 				DateTime selectedDate = dp.SelectedDate.Value.Date;     //時刻は00:00
 				string selectedDateStr = String.Format("{0:yyyy-MM-dd}", selectedDate);
@@ -259,12 +260,12 @@ Visibility	null	string
 					}
 					int endInt = int.Parse(String.Format("{0:yyyyMMdd}", endDT));
 					int startInt = GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
-					if(endInt< startInt) {
-						dbMsg += ">終了日以降になっている>";
+					//if(endInt< startInt) {
+					//	dbMsg += ">終了日以降になっている>";
 						taregetEvent.End.DateTime = selectedDate.Add(duration);
 						dbMsg += taregetEvent.End.DateTime;
 						end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
-					}
+					//}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -318,8 +319,39 @@ Visibility	null	string
 			string TAG = "End_date_dp_SelectedDateChanged";
 			string dbMsg = "[GEventEdit]";
 			try {
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				TimeSpan startDTT = startDT.TimeOfDay;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End); 
+				TimeSpan endDTT = endDT.TimeOfDay;
+				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+				TimeSpan duration = endDT - startDT;
+				dbMsg += ",所要時間=" + duration;
+	
 				DatePicker dp = sender as DatePicker;
-				dbMsg += ",終了日=" + dp.SelectedDate;
+				DateTime selectedDate = dp.SelectedDate.Value.Date;     //時刻は00:00
+				string selectedDateStr = String.Format("{0:yyyy-MM-dd}", selectedDate);
+				dbMsg += ",終了日=" + selectedDateStr;
+				string StartDTStr = String.Format("{0:yyyy-MM-dd}", startDT);
+				if (!selectedDateStr.Equals(StartDTStr)) {
+					dbMsg += ">>変更";
+					if (daylong_cb.IsChecked.Value) {
+						dbMsg += ">>終日";
+						taregetEvent.End.Date = selectedDateStr;
+					} else {
+						selectedDate = selectedDate.Add(endDTT);
+						dbMsg += ",登録＝" + selectedDate;
+						taregetEvent.End.DateTime = selectedDate;
+						taregetEvent.End.Date = null;                     //終日ではない事のフラグ
+					}
+					int endInt = GCalendarUtil.EventDateTime2Int(taregetEvent.End);
+					int startInt =GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
+					//if (endInt < startInt) {
+					//	dbMsg += ">終了日以降になっている>";
+						taregetEvent.Start.DateTime = selectedDate.Add(-duration);
+						dbMsg += taregetEvent.Start.DateTime;
+						start_date_dp.SelectedDate = taregetEvent.Start.DateTime.Value.Date;
+					//}
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
