@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen" 
         Title="スケジュール編集"  FontSize="12" VerticalAlignment="Center"
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
-		Closing="MetroWindow_Closing" d:DesignWidth="850" Height="565">
+		Closing="MetroWindow_Closing" d:DesignWidth="1078" Height="847.25">
 
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -79,6 +79,11 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
 
@@ -97,6 +102,10 @@
 								 Margin="5,0,5,0" >
 			<Button  Name="save_bt" Content="保存" Width="40" Margin="0,0,10,0"  />
 			<ComboBox HorizontalAlignment="Center" Text="その他の操作" Width="148">
+				<ListBoxItem Content="イベントのコピー"/>
+				<ListBoxItem Content="工程イベントを作成"/>
+				<ListBoxItem Content="発注伝票を作成"/>
+				<Separator/>
 				<ListBoxItem Content="印刷"/>
 				<ListBoxItem Content="削除"/>
 				<ListBoxItem Content="複製"/>
@@ -155,7 +164,7 @@
 						Content="場所" HorizontalAlignment="Right"  />
 		<TextBox Grid.Row="4"  Grid.Column="1"   Margin="0,5,0,5" 
 						Name="location_tb" Text="場所" />
-		<StackPanel Grid.Row="4" Grid.Column="2"  Grid.RowSpan="6" VerticalAlignment="Top"  Margin="10,5,0,5" >
+		<StackPanel Grid.Row="4" Grid.Column="2"  Grid.RowSpan="5" VerticalAlignment="Top"  Margin="10,5,0,5" >
 			<Button  Content="ゲストを追加" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" Width="225" />
 			<StackPanel>
@@ -194,17 +203,15 @@
 		<StackPanel Grid.Row="5" Grid.Column="2"   
 							Name="attendees_sp" />
 
-		<Label Grid.Row="6" Grid.Column="0"   
-						Content="×" HorizontalAlignment="Right"   />
 		<StackPanel Grid.Row="6" Grid.Column="1"   Orientation="Horizontal" >
 			<Label Grid.Row="6" Grid.Column="1"   
 						Name="email_lb" Content="アカウント"  />
 			<ComboBox Name="color_cb" Width="120" Margin="10,5,5,5" SelectionChanged="Color_cb_SelectionChanged"/>
 		</StackPanel>
 
-		<Label Grid.Row="8" Grid.Column="0"   HorizontalAlignment="Right"
+		<Label Grid.Row="7" Grid.Column="0"   HorizontalAlignment="Right"
 						Content="予定" />
-		<StackPanel Grid.Row="8" Grid.Column="1"   Orientation="Horizontal" Margin="0,5,0,5" >
+		<StackPanel Grid.Row="7" Grid.Column="1"   Orientation="Horizontal" Margin="0,5,0,5" >
 			<ComboBox Name="yotei_cb" SelectedIndex="1" >
 				<ListBoxItem Content="予定あり"/>
 				<ListBoxItem Content="予定なし"/>
@@ -215,35 +222,51 @@
 				<ListBoxItem Content="非公開"/>
 			</ComboBox>
 		</StackPanel>
+		<StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal"  Margin="0,0,0,0" >
+			<ComboBox SelectedIndex="1" >
+				<ListBoxItem Content="工事イベント"/>
+				<ListBoxItem Content="工程イベント"/>
+				<ListBoxItem Content="通常イベント"/>
+			</ComboBox>
+			<Button Content="詳細に反映" HorizontalAlignment="Left"  Margin="330,0,0,0" Width="84" />
+		</StackPanel>
+		<Label   Grid.Row="10" Grid.Column="0"   Content="受注No" HorizontalAlignment="Right"/>
+		<TextBox  Grid.Row="10" Grid.Column="1"  Name="order_tb"  Text="ABC123456789def" VerticalAlignment="Center" />
+		<Label   Grid.Row="11" Grid.Column="0"  Content="管理番号" HorizontalAlignment="Right"/>
+		<TextBox    Grid.Row="11" Grid.Column="1" Name="management_number_tb"  Text="123456789"  VerticalAlignment="Center" />
+		<Label  Grid.Row="12" Grid.Column="0"   Content="得意先" HorizontalAlignment="Right" />
+		<TextBox  Grid.Row="12" Grid.Column="1"    Name="customer_tb"  Text="ABCdef"   VerticalAlignment="Center" />
+		<Label Grid.Row="13" Grid.Column="0"   HorizontalAlignment="Right" VerticalAlignment="Top" Content="メモ" />
+		<TextBox  	Grid.Row="13"  Grid.Column="1"   Margin="0,0,0,0" Width="516"
+						Name="momo_tb" Text="詳細"   MinLines="10" 
+						TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" 
+						Typography.NumeralStyle="OldStyle" Typography.SlashedZero="True" HorizontalAlignment="Left" VerticalAlignment="Top"
+						 LostFocus="Momo_tb_LostFocus"/>
+		<WebBrowser  Grid.Row="12"  Grid.Column="2"    Grid.RowSpan="3"
+						Name="description_wb"/>
 
-		<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,10,0,0" VerticalAlignment="Top" />
 
-		<StackPanel Grid.Row="9" Grid.Column="1"   >
+		<StackPanel Grid.Row="14" Grid.Column="1"   >
 			<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Button  Name="attach_bt" Content="添付" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" Click="Attach_bt_Click" />
 				<Button  Name="boldattach_bt" Content="太字" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="italick_bt" Content="斜体" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="under_lin_bt" Content="下線" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="num_list_bt" Content="番号" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="m_list_bt" Content="箇条" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="insert_link_bt" Content="リンク" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="format_clear_bt" Content="書式クリア" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" />
+								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 			</ToolBar>
 			<StackPanel  Name="attachments_sp" Orientation="Horizontal" Margin="5,5,5,10" />
 
-			<TextBox  Grid.Row="9"  Grid.Column="1"   MinLines="5" 
-						Name="description_tb" Text="詳細" 
-						TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" 
-						Typography.NumeralStyle="OldStyle" Typography.SlashedZero="True"
-						/>
 		</StackPanel>
 	</Grid>
 </Mah:MetroWindow>

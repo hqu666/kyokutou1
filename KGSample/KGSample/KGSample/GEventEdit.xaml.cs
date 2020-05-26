@@ -24,13 +24,16 @@ namespace KGSample {
 		public GCalender mainView;
 		public GoogleDriveBrouser driveView;
 
+		//public string orderNumber;					//受注No（参照項目）
+		//public string managementNumber;		//管理番号（参照項目）
+		//public string customerName;				//得意先（参照項目）
+
 		/// <summary>
 		/// このページで編集するEvent
 		/// </summary>
-		//public Uri taregetURL { set; get; }
 		private Google.Apis.Calendar.v3.Data.Event taregetEvent { set; get; }
 
-		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent)
+		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent )
 		{
 			string TAG = "GEventEdit";
 			string dbMsg = "[GEventEdit]";
@@ -61,11 +64,15 @@ namespace KGSample {
 				/*
 				<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >
 	*/
-				location_tb.Text = taregetEvent.Location;
+				if (taregetEvent.Location != null) {
+					location_tb.Text = taregetEvent.Location;
+				}
 				/*
 						<!--通知  / ゲスト-->
 				*/
-				email_lb.Content = taregetEvent.Organizer.Email;
+				if(taregetEvent.Organizer!=null) {
+					email_lb.Content = taregetEvent.Organizer.Email;
+				}
 
 				/*
 				<Label Grid.Row="8" Grid.Column="0"   
@@ -84,15 +91,10 @@ namespace KGSample {
 							</ComboBox>
 							<Label Name="koukai" Content="デフォルトの公開予定" Margin="0,0,0,0" />
 						</StackPanel>
-
-
-						<Label Grid.Row="9" Grid.Column="0"   Content="詳細" HorizontalAlignment="Right"  Margin="0,0,0,0" VerticalAlignment="Top" />
 				*/
 				SetColor(taregetEvent.ColorId);
 				SetAttachments(taregetEvent.Attachments);
-				description_tb.Text = taregetEvent.Description;
-				//Description	"<a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing\">https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing</a><br>予定議事<br><ol><li>今期予算確認<br></li><li>各課進捗報告</li></ol><br>下記の添付ファイルを各自参照できる様、持参して下さい。<table><tbody><tr><td>PR0003</td><td><a href=\"https://drive.google.com/uc?id=10NTpRCN5xwCIvIT-qeAUZx6T4cM2eyGY&export=download\">PR0003.txt</a></td></tr><tr><td>PR0001</td><td><a href=\"https://drive.google.com/uc?id=1-qsqVlHH1bfaMVJwCeBLHoXlIGpSTrjP&export=download\">PR0001.pptx</a></td></tr><tr><td>PR0003</td><td><a href=\"https://drive.google.com/uc?id=11fP9Krj48m_za3Z5IAVxEFpFQRWjLRU6&export=download\">PR0003.xlsx</a></td></tr></tbody></table><br><a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=drive_web\"><span></span><span></span></a>"	string
-
+				SetDescription(taregetEvent);
 				/*
 		   AnyoneCanAddSelf	null	bool?
 ▶ 列ビュー		
@@ -133,36 +135,6 @@ DisplayName	null	string
 Email	"hkuwauama@gmail.com"	string
 Id	null	string
 Self	TRUE	bool?
-◢ OriginalStartTime	{Google.Apis.Calendar.v3.Data.EventDateTime}	Google.Apis.Calendar.v3.Data.EventDateTime
-Date	null	string
-◢ DateTime	{2020/05/06 10:00:00}	System.DateTime?
-▶ Date	{2020/05/06 0:00:00}	System.DateTime
-Day	6	int
-DayOfWeek	Wednesday	System.DayOfWeek
-DayOfYear	127	int
-Hour	10	int
-InternalKind	9.22337E+18	ulong
-InternalTicks	6.37244E+17	long
-Kind	Local	System.DateTimeKind
-Millisecond	0	int
-Minute	0	int
-Month	5	int
-Second	0	int
-Ticks	6.37244E+17	long
-▶ TimeOfDay	{10:00:00}	System.TimeSpan
-Year	2020	int
-dateData	9.86062E+18	ulong
-▶ 静的メンバー		
-DateTimeRaw	"2020-05-06T10:00:00+09:00"	string
-ETag	null	string
-TimeZone	"Asia/Tokyo"	string
-PrivateCopy	null	bool?
-Recurrence	null	System.Collections.Generic.IList<string>
-RecurringEventId	"5q8qbifpcm5j7skslte8u0hute"	string
-◢ Reminders	{Google.Apis.Calendar.v3.Data.Event.RemindersData}	Google.Apis.Calendar.v3.Data.Event.RemindersData
-◢ Overrides	Count = 2	System.Collections.Generic.IList<Google.Apis.Calendar.v3.Data.EventReminder> {System.Collections.Generic.List<Google.Apis.Calendar.v3.Data.EventReminder>}
-◢ [0]	{Google.Apis.Calendar.v3.Data.EventReminder}	Google.Apis.Calendar.v3.Data.EventReminder
-ETag	null	string
 Method	"popup"	string
 Minutes	60	int?
 ◢ [1]	{Google.Apis.Calendar.v3.Data.EventReminder}	Google.Apis.Calendar.v3.Data.EventReminder
@@ -578,6 +550,97 @@ Visibility	null	string
 
 		}
 
+		/// <summary>
+		/// 渡されたイベントのDescriptionを各フィールドに切り分ける
+		/// </summary>
+		/// <param name="taregetEvent"></param>
+		private void SetDescription(Google.Apis.Calendar.v3.Data.Event taregetEvent)
+		{
+			string TAG = "SetDescription";
+			string dbMsg = "[GEventEdit]";
+			try {
+				order_tb.Text = Constant.orderNumber;                                               //受注No
+				management_number_tb.Text = Constant.managementNumber;           //管理番号
+				customer_tb.Text = Constant.customerName;                                       //得意先
+				string description = taregetEvent.Description;
+
+				string htmlStr = @"<html lang=""jp"" xmlns =""http://www.w3.org/1999/xhtml"">";
+				htmlStr += @"<head><meta charset=""utf-8"" /><title></title></head><body>";
+				htmlStr += @description;
+				htmlStr += "</body></html>";
+				dbMsg = ",htmlStr="+ htmlStr;
+				description_wb.NavigateToString(htmlStr);
+
+				string memoStr = description;
+				if (description.Contains( "</table>" )) {
+					string[] delimiter = { "</table>" };
+					string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					memoStr = memoStrs[1];
+				}
+				momo_tb.Text = memoStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		private void Momo_tb_LostFocus(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Momo_tb_LostFocus";
+			string dbMsg = "[GEventEdit]";
+			try {
+				MyLog(TAG, dbMsg);
+				WriteDescription();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 登録するDescriptionの作成
+		/// </summary>
+		private void WriteDescription()
+		{
+			string TAG = "WriteDescription";
+			string dbMsg = "[GEventEdit]";
+			try {
+				string description = "<table><tbody>";
+				description+= "< tr ><td>受注No</td>" + "< td>"+order_tb.Text + "</td></tr>";
+				description += "< tr ><td>管理番号</td>" + "< td>" + management_number_tb.Text + "</td></tr>";
+				description += "< tr ><td>得意先</td>" + "< td>" + customer_tb.Text + "</td></tr>";
+				description += "</ tbody ></table><br>" + momo_tb.Text;
+				dbMsg += ",description="+ description;
+				this.taregetEvent.Description = description;
+				string htmlStr = @"<html lang=""jp"" xmlns =""http://www.w3.org/1999/xhtml"">";
+				htmlStr += @"<head><meta charset=""utf-8"" /><title></title></head><body>";
+				htmlStr += @description;
+				htmlStr += "</body></html>";
+				/*
+</body></html>
+Description	"<a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing\">
+https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing</a><br>
+予定議事<br><ol><li>今期予算確認<br></li><li>各課進捗報告</li></ol><br>下記の添付ファイルを各自参照できる様、持参して下さい。
+<table><tbody>
+<tr>
+<td>PR0003</td>
+<td>
+<a href=\"https://drive.google.com/uc?id=10NTpRCN5xwCIvIT-qeAUZx6T4cM2eyGY&export=download\">PR0003.txt</a></td>
+</tr>
+<tr><td>PR0001</td><td><a href=\"https://drive.google.com/uc?id=1-qsqVlHH1bfaMVJwCeBLHoXlIGpSTrjP&export=download\">PR0001.pptx</a></td></tr><tr><td>PR0003</td><td><a href=\"https://drive.google.com/uc?id=11fP9Krj48m_za3Z5IAVxEFpFQRWjLRU6&export=download\">PR0003.xlsx</a></td></tr>
+</tbody>
+</table>
+<br><a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=drive_web\"><span></span><span></span></a>"	string
+*/
+				description_wb.NavigateToString(htmlStr);
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// 添付ファイル
@@ -830,6 +893,8 @@ Visibility	null	string
 			}
 			this.Close();
 		}
+
+
 
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)

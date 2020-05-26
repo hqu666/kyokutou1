@@ -226,5 +226,10 @@
     <Resource Include="Resources\file.png" />
     <Resource Include="Resources\folder.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Document1.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

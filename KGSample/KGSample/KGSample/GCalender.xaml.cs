@@ -437,6 +437,7 @@ namespace KGSample {
 						//dbMsg += ":rec:" + rec.Name;
 						// イベント設定
 						rec.MouseLeftButtonDown += date_MouseLeftButtonDown;
+						rec.MouseDown += Date_MouseDown;
 						calendarGrid1.Children.Add(rec);
 						rec.SetValue(Grid.ColumnProperty, x);
 						rec.SetValue(Grid.RowProperty, y + 1);
@@ -674,6 +675,54 @@ namespace KGSample {
 		}
 
 		/// <summary>
+		/// 新規スケジュール作成
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Date_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			string TAG = "Date_MouseDown";
+			string dbMsg = "[GCalender]";
+			try {
+				Rectangle rec = sender as Rectangle;
+				Google.Apis.Calendar.v3.Data.Event taregetEvent = new Google.Apis.Calendar.v3.Data.Event();
+
+				//作成直後はNullなので生成が必要
+				taregetEvent.Start = new Google.Apis.Calendar.v3.Data.EventDateTime();
+				taregetEvent.End = new Google.Apis.Calendar.v3.Data.EventDateTime();
+
+				//Eventにセットできる項目
+				taregetEvent.Summary = "新規案件対応会議";
+				dbMsg += "taregetEvent=" + taregetEvent.Summary;
+				DateTime startDT = (rec.DataContext as DateInfo).GetDateTime();
+				DateTime now = DateTime.Now;
+				TimeSpan nowTime = new TimeSpan(now.Hour, 0, 0);
+				startDT=startDT.Add(nowTime);
+				dbMsg += "startDT=" + startDT;
+				taregetEvent.Start.DateTime = startDT;
+				dbMsg += "Start=" + taregetEvent.Start.DateTime;
+				taregetEvent.End.DateTime = startDT.AddHours(1);
+				dbMsg += "～" + taregetEvent.End.DateTime;
+				taregetEvent.Description ="添付ファイルを参照できる様、準備して参加をお願いします。";
+				dbMsg += ",Description=" + taregetEvent.Description;
+				//Eventに無い項目
+				Constant.orderNumber = "abc987654321DEF";                  //受注No（参照項目）
+				Constant.managementNumber = "987654321";     //管理番号（参照項目）
+				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
+				if (editView == null) {
+					dbMsg += "Editを再生成";
+					editView = new GEventEdit(taregetEvent);
+					editView.mainView = this;
+					editView.Show();
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
 		/// セル（日）をクリックした際のイベントハンドラ.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -717,6 +766,10 @@ namespace KGSample {
 				Button bt = sender as Button;
 				Google.Apis.Calendar.v3.Data.Event taregetEvent = bt.DataContext as Google.Apis.Calendar.v3.Data.Event;
 				dbMsg += "taregetEvent=" + taregetEvent.Summary;
+				//Eventに無い項目
+				Constant.orderNumber = "abc987654321DEF";                  //受注No（参照項目）
+				Constant.managementNumber = "987654321";     //管理番号（参照項目）
+				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
 					editView = new GEventEdit(taregetEvent);
@@ -818,4 +871,6 @@ namespace KGSample {
 }
 /*
  【WPF】自作カレンダー　その２（動的生成）		https://www.doraxdora.com/blog/2017/10/16/post-2779/
+calendar  v3		https://developers.google.com/resources/api-libraries/documentation/calendar/v3/csharp/latest/classGoogle_1_1Apis_1_1Calendar_1_1v3_1_1Data_1_1Event.html#ac23c0f6e9cd8f8eff44dbe1694143279	
+
  */

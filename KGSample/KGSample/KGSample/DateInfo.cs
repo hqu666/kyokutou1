@@ -43,6 +43,10 @@ namespace KGSample {
 			return String.Format("{0:yyyy年MM月dd日（ddd）}", Date);
 		}
 
+		public DateTime GetDateTime()
+		{
+			return Date;
+		}
 		/// <summary>
 		/// 日を返します.
 		/// </summary>

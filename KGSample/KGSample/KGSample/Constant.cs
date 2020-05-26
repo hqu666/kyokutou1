@@ -60,7 +60,20 @@ namespace KGSample {
 				this.rgb = rgb;
 			}
 		}
-		public static IList<GoogleEventColor> googleEventColor;   
+		public static IList<GoogleEventColor> googleEventColor;
+
+		/// <summary>
+		/// 受注No　:　GoogleEventに無い追加項目
+		/// </summary>
+		public static string orderNumber = "";
+		/// <summary>
+		/// 管理番号　:　GoogleEventに無い追加項目
+		/// </summary>
+		public static string managementNumber = "";
+		/// <summary>
+		/// 得意先　:　GoogleEventに無い追加項目
+		/// </summary>
+		public static string customerName =""; 
 
 		/// <summary>
 		/// PCのファイル管理
