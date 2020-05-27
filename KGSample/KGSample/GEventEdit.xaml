@@ -91,7 +91,7 @@
 								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,0,0"
 								VerticalAlignment="Top" />
 
-		<Button Grid.Row="1" Grid.Column="0" Style="{StaticResource bt-dell}" FontSize="24"
+		<Button Grid.Row="1" Grid.Column="0" Style="{StaticResource bt-dell}" FontSize="24"  HorizontalAlignment="Right"
 							  Name="del_bt" />
 		<TextBox Grid.Row="1"  Grid.Column="1" 
 								Name="titol_tv" Text="タイトル" FontSize="24"  HorizontalAlignment="Left"  Margin="0,0,0,0" 
@@ -178,20 +178,26 @@
 		</StackPanel>
 
 		<Label Grid.Row="5" Grid.Column="0"   
-						Content="通知" HorizontalAlignment="Right"  />
+						Content="通知" HorizontalAlignment="Right"  VerticalAlignment="Top"/>
 		<StackPanel Grid.Row="5" Grid.Column="1"   
 							Name="overrides_sp">
 			<StackPanel  Orientation="Horizontal">
-				<ComboBox SelectedIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
+				<ComboBox SelectedIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70">
 					<ListBoxItem Content="メール"/>
 					<ListBoxItem Content="通知"/>
 				</ComboBox>
-				<WindowsFormsHost Grid.Row="0" Width="60" Margin="5,0,5,0"  >
-					<!-- 要アセンブリ参照追加：System.Windows.Forms -->
+				<!--<WindowsFormsHost Grid.Row="0" Width="60" Margin="5,0,5,0"  >
+					--><!-- 要アセンブリ参照追加：System.Windows.Forms --><!--
 					<wfm:NumericUpDown x:Name="Spin1" x:FieldModifier="public"  
                                Value="10" Maximum="50" Minimum="1" ReadOnly="True" />
-				</WindowsFormsHost>
-				<ComboBox SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
+				</WindowsFormsHost>-->
+				<ComboBox SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60">
+					<ListBoxItem Content="5"/>
+					<ListBoxItem Content="10"/>
+					<ListBoxItem Content="20"/>
+					<ListBoxItem Content="30"/>
+				</ComboBox>
+				<ComboBox SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" >
 					<ListBoxItem Content="分"/>
 					<ListBoxItem Content="時間"/>
 					<ListBoxItem Content="日"/>
@@ -228,7 +234,6 @@
 				<ListBoxItem Content="工程イベント"/>
 				<ListBoxItem Content="通常イベント"/>
 			</ComboBox>
-			<Button Content="詳細に反映" HorizontalAlignment="Left"  Margin="330,0,0,0" Width="84" />
 		</StackPanel>
 		<Label   Grid.Row="10" Grid.Column="0"   Content="受注No" HorizontalAlignment="Right"/>
 		<TextBox  Grid.Row="10" Grid.Column="1"  Name="order_tb"  Text="ABC123456789def" VerticalAlignment="Center" />
@@ -245,9 +250,12 @@
 		<WebBrowser  Grid.Row="12"  Grid.Column="2"    Grid.RowSpan="3"
 						Name="description_wb"/>
 
+		<Button Grid.Row="14" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"
+						Name="attach_bt" Content="添付" 
+								Click="Attach_bt_Click" />
 
-		<StackPanel Grid.Row="14" Grid.Column="1"   >
-			<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
+		<StackPanel Grid.Row="14" Grid.Column="0"   >
+			<!--<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Button  Name="attach_bt" Content="添付" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" Click="Attach_bt_Click" />
 				<Button  Name="boldattach_bt" Content="太字" 
@@ -264,7 +272,7 @@
 								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 				<Button  Name="format_clear_bt" Content="書式クリア" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-			</ToolBar>
+			</ToolBar>-->
 			<StackPanel  Name="attachments_sp" Orientation="Horizontal" Margin="5,5,5,10" />
 
 		</StackPanel>
