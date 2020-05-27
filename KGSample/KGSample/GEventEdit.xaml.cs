@@ -606,10 +606,10 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				string description = "<table><tbody>";
-				description+= "< tr ><td>受注No</td>" + "< td>"+order_tb.Text + "</td></tr>";
-				description += "< tr ><td>管理番号</td>" + "< td>" + management_number_tb.Text + "</td></tr>";
-				description += "< tr ><td>得意先</td>" + "< td>" + customer_tb.Text + "</td></tr>";
-				description += "</ tbody ></table><br>" + momo_tb.Text;
+				description+= "<tr><td>受注No</td>" + "<td> : "+order_tb.Text + "</td></tr>";
+				description += "<tr><td>管理番号</td>" + "<td> : " + management_number_tb.Text + "</td></tr>";
+				description += "<tr><td>得意先</td>" + "<td> : " + customer_tb.Text + "</td></tr>";
+				description += "</tbody ></table><br><pre>" + momo_tb.Text+ "</pre>";
 				dbMsg += ",description="+ description;
 				this.taregetEvent.Description = description;
 				string htmlStr = @"<html lang=""jp"" xmlns =""http://www.w3.org/1999/xhtml"">";
