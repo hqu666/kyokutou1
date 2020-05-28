@@ -411,7 +411,7 @@ Visibility	null	string
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void Daylong_cb_Checked(object sender, RoutedEventArgs e)
+		private void Daylong_cb_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Daylong_cb_Checked";
 			string dbMsg = "[GEventEdit]";
@@ -448,6 +448,7 @@ Visibility	null	string
 						DateTime nowDT = DateTime.Now;
 						TimeSpan nowDTT = nowDT.TimeOfDay;
 						startDT = startDT.Add(nowDTT);
+						dbMsg += ">>"+ startDT;
 					}
 					taregetEvent.Start.DateTime = startDT;
 					dbMsg += "開始="  + GCalendarUtil.EventDateTime2DT(taregetEvent.Start) ;
@@ -845,6 +846,131 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 			}
 		}
 
+
+		private void Save_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Save_bt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				if(this.taregetEvent.Id == null){
+					dbMsg += "新規";
+					WriteEvent();
+				} else{
+					dbMsg += "変更";
+					ReWriteEvent();
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void WriteEvent()
+		{
+			string TAG = "WriteEvent";
+			string dbMsg = "[GEventEdit]";
+			try {
+				string startDT = taregetEvent.Start.DateTime.ToString();
+				dbMsg += ")" + startDT;
+				string endDT = taregetEvent.End.DateTime.ToString();
+				dbMsg += "～" + endDT;
+				if (String.IsNullOrEmpty(startDT)) {
+					startDT = taregetEvent.Start.Date;
+				}
+				string Summary = taregetEvent.Summary;
+				dbMsg += "," + Summary;
+				string eDescription = taregetEvent.Description;
+				dbMsg += ",Description=" + eDescription +"を新規登録";
+				string retLink = GCalendarUtil.InsertGEvents(taregetEvent);
+				dbMsg += "\r\nretLink" + retLink;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// Descriptionに添付ファイルのリンクを追加してEventを更新
+		/// </summary>
+		private void ReWriteEvent()
+		{
+			string TAG = "ReWriteEvent";
+			string dbMsg = "[GEventEdit]";
+			try {
+				//int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
+				//dbMsg += ",Index=" + selectedIndex;
+				//Constant.eventItem = new Google.Apis.Calendar.v3.Data.Event();
+				//Constant.eventItem = Constant.GCalenderEvent[selectedIndex];
+				string startDT = taregetEvent.Start.DateTime.ToString();
+				dbMsg += ")" + startDT;
+				string endDT = taregetEvent.End.DateTime.ToString();
+				dbMsg += "～" + endDT;
+				if (String.IsNullOrEmpty(startDT)) {
+					startDT = taregetEvent.Start.Date;
+				}
+				string Summary = taregetEvent.Summary;
+				dbMsg += "," + Summary;
+				string eDescription = taregetEvent.Description;
+				//if (eDescription == null) {
+				//	eDescription = "";
+				//} else {
+				//	eDescription += "</br>";
+				//}
+				dbMsg += ",Description=" + eDescription;
+				//if (Constant.GDriveSelectedFiles != null) {
+				//	dbMsg += ",添付⁼" + Constant.GDriveSelectedFiles.Count + "件";
+				//	if (0 < Constant.GDriveSelectedFiles.Count) {
+				//		if (eDescription.Contains("添付ファイル")) {
+				//			eDescription += "<table>";
+				//		} else {
+				//			eDescription += "添付ファイル</br><table>";
+				//		}
+				//		foreach (Google.Apis.Drive.v3.Data.File fileItem in Constant.GDriveSelectedFiles) {
+				//			string fId = fileItem.Id;
+				//			dbMsg += "\r\n" + fId;
+				//			string ParentsID = fileItem.Parents[0];
+				//			dbMsg += "[Parents=" + ParentsID;
+				//			Google.Apis.Drive.v3.Data.File rFile = GDriveUtil.FindById(ParentsID);
+				//			string ParentsName = rFile.Name;
+				//			dbMsg += "]" + ParentsName;
+				//			string fName = fileItem.Name.ToString();
+				//			dbMsg += "," + fName;
+				//			string fLink = fileItem.WebContentLink.ToString();
+				//			dbMsg += "," + fLink;
+				//			eDescription += "<tr>";
+				//			eDescription += "<td>" + ParentsName + "</td>";
+				//			eDescription += "<td  style=\"padding: 10px 10px; \"><a href=\"" + fLink + "\">" + fName + "</a></td>";
+				//			eDescription += "</tr>";
+				//		}
+				//		eDescription += "</table>";
+				//		dbMsg += ",Description=\r\n" + eDescription;
+				//		Constant.eventItem.Description = eDescription;
+				string retLink = GCalendarUtil.UpDateGEvents(taregetEvent);
+				dbMsg += "\r\nretLink" + retLink;
+				//		try {
+				//			System.Diagnostics.Process.Start(retLink);              //webで表示
+				//		} catch (
+				//			   System.ComponentModel.Win32Exception noBrowser) {
+				//			if (noBrowser.ErrorCode == -2147467259)
+				//				MessageBox.Show(noBrowser.Message);
+				//		} catch (System.Exception other) {
+				//			MessageBox.Show(other.Message);
+				//		}
+
+				//	} else {
+				//		dbMsg += "添付するファイルが登録されていません";
+				//	}
+				//} else {
+				//	dbMsg += "添付するファイルの情報を取得できませんでした";
+				//}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		private void Back_bt_Click(object sender, EventArgs e)
 		{
 			string TAG = "back_bt_Click";
@@ -856,6 +982,7 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		/// <summary>
 		/// WPFでクローズボックスなど、ウインドウを閉じる時に発生するイベントハンドラ

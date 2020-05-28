@@ -100,7 +100,7 @@
 		<StackPanel Grid.Row="1" Grid.Column="2"   Orientation="Horizontal"
 								HorizontalAlignment="Right" VerticalAlignment="Bottom"  
 								 Margin="5,0,5,0" >
-			<Button  Name="save_bt" Content="保存" Width="40" Margin="0,0,10,0"  />
+			<Button  Name="save_bt" Content="保存" Width="40" Margin="0,0,10,0" Click="Save_bt_Click"  />
 			<ComboBox HorizontalAlignment="Center" Text="その他の操作" Width="148">
 				<ListBoxItem Content="イベントのコピー"/>
 				<ListBoxItem Content="工程イベントを作成"/>
@@ -140,7 +140,8 @@
 		<Label Grid.Row="3"  Grid.Column="0"  
 						Name="rep" Content="繰り返し" HorizontalAlignment="Right" />
 		<StackPanel Grid.Row="3" Grid.Column="1"   Orientation="Horizontal" >
-			<CheckBox Name="daylong_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="Daylong_cb_Checked"/>
+			<CheckBox Name="daylong_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center" 
+								Click="Daylong_cb_Click"/>
 			<ComboBox Name="kurikaesi_cb" SelectedIndex="1" Margin="10,0,0,0" >
 				<ListBoxItem Content="繰り返さない"/>
 				<ListBoxItem Content="毎日"/>
@@ -191,8 +192,8 @@
 					<wfm:NumericUpDown x:Name="Spin1" x:FieldModifier="public"  
                                Value="10" Maximum="50" Minimum="1" ReadOnly="True" />
 				</WindowsFormsHost>-->
-				<ComboBox SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60">
-					<ListBoxItem Content="5"/>
+				<ComboBox SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60">
+					<ListBoxItem Content="5" />
 					<ListBoxItem Content="10"/>
 					<ListBoxItem Content="20"/>
 					<ListBoxItem Content="30"/>
@@ -247,7 +248,7 @@
 						TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" 
 						Typography.NumeralStyle="OldStyle" Typography.SlashedZero="True" HorizontalAlignment="Left" VerticalAlignment="Top"
 						 LostFocus="Momo_tb_LostFocus"/>
-		<WebBrowser  Grid.Row="12"  Grid.Column="2"    Grid.RowSpan="3"
+		<WebBrowser  Grid.Row="11"  Grid.Column="2"    Grid.RowSpan="4" Language="jp" 
 						Name="description_wb"/>
 
 		<Button Grid.Row="14" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"

@@ -129,7 +129,12 @@ namespace KGSample {
 			string dbMsg = "[GoogleCalendarUtil]";
 			DateTime tDateTime = DateTime.Now;
 			try {
-				if (TEventDateTime.DateTime != null) {
+				if (TEventDateTime.Date != null) {
+					dbMsg += "Date=" + TEventDateTime.Date;
+					string todayItemStartDate = TEventDateTime.Date;
+					string[] sStr = todayItemStartDate.Split('-');
+					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
+				}else if (TEventDateTime.DateTime != null) {
 					dbMsg += "Date=" + TEventDateTime.DateTime;
 					int sYear = TEventDateTime.DateTime.Value.Year;
 					int sMonth = TEventDateTime.DateTime.Value.Month;
@@ -138,11 +143,6 @@ namespace KGSample {
 					int sMinute = TEventDateTime.DateTime.Value.Minute;
 					int sSecond = TEventDateTime.DateTime.Value.Second;
 					tDateTime = new DateTime(sYear, sMonth, sDay, sHour, sMinute, sSecond);
-				}else if (TEventDateTime.Date != null) {
-					dbMsg += "Date=" + TEventDateTime.Date;
-					string todayItemStartDate = TEventDateTime.Date;
-					string[] sStr = todayItemStartDate.Split('-');
-					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
 				}
 				dbMsg += ">>" + tDateTime;
 				//			Util.MyLog(TAG, dbMsg);
@@ -266,29 +266,57 @@ namespace KGSample {
 		/// 成功したらUrlを返す
 		/// </summary>
 		/// <returns>Url</returns>
-		public string UpDateGEvents()
+		public string UpDateGEvents(Google.Apis.Calendar.v3.Data.Event eventItem)
 		{
 			string TAG = "UpDateGEvents";
 			string dbMsg = "[GoogleCalendarUtil]";
 			string retLink = null;
 			try {
 				// 予定を追加登録
-				String eventId = Constant.eventItem.Id;
-				Event body = Constant.eventItem;
+				String eventId =eventItem.Id;
+				Event body = eventItem;
 				dbMsg = "[" + eventId;
-				dbMsg = "}" + Constant.eventItem.Start.ToString();
-				dbMsg = "," + Constant.eventItem.Summary;
-				dbMsg = "\r\n" + Constant.eventItem.Description;
+				dbMsg = "}" + eventItem.Start.ToString();
+				dbMsg = "," +eventItem.Summary;
+				dbMsg = "\r\n" + eventItem.Description;
 				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
 				});
 				string calendarId = "primary";
 				EventsResource.UpdateRequest request = service.Events.Update(body, calendarId, eventId);
+				Event createdEvent = request.Execute();
+				retLink = createdEvent.HtmlLink;
+				dbMsg = ">>" + retLink;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retLink;
+		}
 
-				//	EventsResource.InsertRequest request = Constant.MyCalendarService.Events.Insert(Constant.eventItem, calendarId);
-				//Google.Apis.Requests.RequestError .The requested identifier already exists. [409]
-				//すでに存在するオブジェクトを作成しようとしました。
+		/// <summary>
+		/// 予定を新規登録
+		/// </summary>
+		/// <returns></returns>
+		public string InsertGEvents(Google.Apis.Calendar.v3.Data.Event eventItem)
+		{
+			string TAG = "InsertGEvents";
+			string dbMsg = "[GoogleCalendarUtil]";
+			string retLink = null;
+			try {
+				String eventId = eventItem.Id;
+				Event body = eventItem;
+				//dbMsg = "[" + eventId;
+				dbMsg =  eventItem.Start.ToString();
+				dbMsg = "," + eventItem.Summary;
+				dbMsg = "\r\n" + eventItem.Description;
+				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyCalendarCredential,
+					ApplicationName = Constant.ApplicationName,
+				});
+				string calendarId = "primary";
+				EventsResource.InsertRequest request = service.Events.Insert(body, calendarId);
 				Event createdEvent = request.Execute();
 				retLink = createdEvent.HtmlLink;
 				dbMsg = ">>" + retLink;
