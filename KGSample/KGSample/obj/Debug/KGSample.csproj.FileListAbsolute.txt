@@ -206,9 +206,6 @@ H:\develop\cs\KGSample\KGSample\bin\Debug\InfragisticsWPF4.v12.2.xml
 H:\develop\cs\KGSample\KGSample\bin\Debug\MahApps.Metro.pdb
 H:\develop\cs\KGSample\KGSample\bin\Debug\MahApps.Metro.xml
 H:\develop\cs\KGSample\KGSample\bin\Debug\Newtonsoft.Json.xml
-H:\develop\cs\KGSample\KGSample\bin\Debug\ja\InfragisticsWPF4.Controls.Editors.XamMaskedInput.v12.2.resources.dll
-H:\develop\cs\KGSample\KGSample\bin\Debug\ja\InfragisticsWPF4.v12.2.resources.dll
-H:\develop\cs\KGSample\KGSample\obj\Debug\KGSample.csprojAssemblyReference.cache
 H:\develop\cs\KGSample\KGSample\obj\Debug\KGSample.csproj.ResolveComReference.cache
 H:\develop\cs\KGSample\KGSample\obj\Debug\GCalender.g.cs
 H:\develop\cs\KGSample\KGSample\obj\Debug\GEventDayList.g.cs
