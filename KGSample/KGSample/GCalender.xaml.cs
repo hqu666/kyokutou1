@@ -690,6 +690,7 @@ namespace KGSample {
 				//作成直後はNullなので生成が必要
 				taregetEvent.Start = new Google.Apis.Calendar.v3.Data.EventDateTime();
 				taregetEvent.End = new Google.Apis.Calendar.v3.Data.EventDateTime();
+				taregetEvent.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
 				taregetEvent.Attendees = new List<Google.Apis.Calendar.v3.Data.EventAttendee>();
 				taregetEvent.Attachments = new List<Google.Apis.Calendar.v3.Data.EventAttachment>();
 	//			taregetEvent.Reminders = new List<Google.Apis.Calendar.v3.Data.RemindersData>();

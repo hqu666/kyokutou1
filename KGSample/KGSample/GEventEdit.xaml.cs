@@ -182,7 +182,8 @@ Visibility	null	string
 				dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT  + ")" ;
 				start_date_dp.SelectedDate = startDT;
 				start_time_tp.SelectedTime = startDTT;
-				if(startDTT == nonTS) {
+				st_tp.selectedTimeSpan = DateTime.Now.TimeOfDay;
+				if (startDTT == nonTS) {
 					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				}
 				end_time_tp.SelectedTime = endDTT;
@@ -256,6 +257,16 @@ Visibility	null	string
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		/// 
+		private void St_tp_SelectedTimeChanged(object sender, RoutedEventArgs e)
+		{
+			string TAG = "St_tp_SelectedTimeChanged";
+			string dbMsg = "[GEventEdit]";
+			TimePic tp = sender as TimePic;
+
+			MyLog(TAG, dbMsg);
+
+		}
 		private void Start_time_tp_SelectedTimeChanged(object sender, TimePickerBaseSelectionChangedEventArgs<TimeSpan?> e)
 		{
 			string TAG = "Start_time_tp_SelectedTimeChanged";

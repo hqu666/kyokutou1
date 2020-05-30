@@ -75,9 +75,9 @@ namespace KGSample {
 		/// <returns>UserCredential</returns>
 		static Task<UserCredential> GetAllCredential(string jsonPath, string tokenFolderPath)
 		{
-			string TAG = "GetAllCredential";
-			string dbMsg = "[GoogleAuthUtil]";
-			dbMsg += ",jsonPath=" + jsonPath;
+			//string TAG = "GetAllCredential";
+			//string dbMsg = "[GoogleAuthUtil]";
+			//dbMsg += ",jsonPath=" + jsonPath;
 			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 				return GoogleWebAuthorizationBroker.AuthorizeAsync(
 					GoogleClientSecrets.Load(stream).Secrets,

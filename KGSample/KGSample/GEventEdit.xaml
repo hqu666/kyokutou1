@@ -120,10 +120,11 @@
 								HorizontalAlignment="Left" >
 			<DatePicker Name="start_date_dp" SelectedDateFormat="Long" Width="130"
 								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" SelectedDateChanged="Start_date_dp_SelectedDateChanged" />
-			<Mah:TimePicker  Name="start_time_tp" SelectedTimeChanged="Start_time_tp_SelectedTimeChanged" 
-			/>
-			<Label Content="～"  HorizontalAlignment="Left"  Margin="10,0,10,0" 
-							VerticalAlignment="Top"/>
+			<Mah:TimePicker  Name="start_time_tp" SelectedTimeChanged="Start_time_tp_SelectedTimeChanged" />
+			<local:TimePic x:Name="st_tp" SelectedTimeChanged="St_tp_SelectedTimeChanged"  />
+
+			<Label Content="～"  HorizontalAlignment="Left"  Margin="10,0,10,0" 	VerticalAlignment="Top"/>
+			<!--<local:TimePic x:Name="et_tp" />-->
 			<Mah:TimePicker  Name="end_time_tp"  Margin="0,0,10,0" SelectedTimeChanged="End_time_tp_SelectedTimeChanged" />
 			<DatePicker Name="end_date_dp"  Width="130"
 								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" SelectedDateChanged="End_date_dp_SelectedDateChanged" />
@@ -187,11 +188,6 @@
 					<ListBoxItem Content="メール"/>
 					<ListBoxItem Content="通知"/>
 				</ComboBox>
-				<!--<WindowsFormsHost Grid.Row="0" Width="60" Margin="5,0,5,0"  >
-					--><!-- 要アセンブリ参照追加：System.Windows.Forms --><!--
-					<wfm:NumericUpDown x:Name="Spin1" x:FieldModifier="public"  
-                               Value="10" Maximum="50" Minimum="1" ReadOnly="True" />
-				</WindowsFormsHost>-->
 				<ComboBox SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60">
 					<ListBoxItem Content="5" />
 					<ListBoxItem Content="10"/>
