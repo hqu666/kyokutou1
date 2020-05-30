@@ -181,8 +181,8 @@ Visibility	null	string
 				TimeSpan endDTT = endDT.TimeOfDay;
 				dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT  + ")" ;
 				start_date_dp.SelectedDate = startDT;
-				start_time_tp.SelectedTime = startDTT;
-				st_tp.selectedTimeSpan = DateTime.Now.TimeOfDay;
+			//	start_time_tp.SelectedTime = startDTT;
+				start_time_tp.SetMyTimeSpan(startDTT);
 				if (startDTT == nonTS) {
 					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				}
@@ -258,15 +258,45 @@ Visibility	null	string
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		/// 
-		private void St_tp_SelectedTimeChanged(object sender, RoutedEventArgs e)
+		private void St_tp_TimeSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			string TAG = "St_tp_SelectedTimeChanged";
 			string dbMsg = "[GEventEdit]";
-			TimePic tp = sender as TimePic;
+			try {
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				TimeSpan startDTT = startDT.TimeOfDay;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				TimeSpan endDTT = endDT.TimeOfDay;
+				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+				TimeSpan duration = endDT - startDT;
+				dbMsg += ",所要時間=" + duration;
 
-			MyLog(TAG, dbMsg);
-
+				TimePic tp = sender as TimePic;
+				TimeSpan selectedTS = tp.selectedTS;
+				int selectedHours = selectedTS.Hours;
+				int selectedMinutes = selectedTS.Minutes;
+				int selectedSeconds = selectedTS.Seconds;
+				TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
+				dbMsg += ",開始時刻=" + selectedTime;
+					if (!selectedTime.Equals(startDTT)) {
+						DateTime startDTDate = startDT.Date;
+						dbMsg += ",startDTDate=" + startDTDate;
+						startDT = startDTDate.Add(selectedTime);
+						dbMsg += ">登録>" + startDT;
+						taregetEvent.Start.DateTime = startDT;
+						//終了側の変更
+						//taregetEvent.End.DateTime = startDT.Add(duration);
+						//dbMsg += ">end>" + taregetEvent.End.DateTime;
+						//end_time_tp.SelectedTime = taregetEvent.End.DateTime.Value.TimeOfDay;
+						//end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
+						taregetEvent.Start.Date = null;                     //終日ではない事のフラグ
+					}
+					MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
+
 		private void Start_time_tp_SelectedTimeChanged(object sender, TimePickerBaseSelectionChangedEventArgs<TimeSpan?> e)
 		{
 			string TAG = "Start_time_tp_SelectedTimeChanged";
@@ -474,7 +504,8 @@ Visibility	null	string
 					start_time_tp.Visibility = System.Windows.Visibility.Visible;
 					end_time_tp.Visibility = System.Windows.Visibility.Visible;
 					startDTT = startDT.TimeOfDay;
-					start_time_tp.SelectedTime = startDTT;
+			//		start_time_tp.SelectedTime = startDTT;
+					start_time_tp.SetMyTimeSpan(startDTT);
 					endDTT = endDT.TimeOfDay;
 					end_time_tp.SelectedTime = endDTT;
 				}

@@ -115,13 +115,15 @@
 			</ComboBox>
 		</StackPanel>
 
-		<Label Grid.Row="2" Grid.Column="0"   Content="日時" HorizontalAlignment="Right"  />
+		<Label Grid.Row="2" Grid.Column="0"   Content="日時" HorizontalAlignment="Right" />
 		<StackPanel Grid.Row="2"    Grid.Column="1"   Orientation="Horizontal"
 								HorizontalAlignment="Left" >
 			<DatePicker Name="start_date_dp" SelectedDateFormat="Long" Width="130"
-								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,10,0" SelectedDateChanged="Start_date_dp_SelectedDateChanged" />
-			<Mah:TimePicker  Name="start_time_tp" SelectedTimeChanged="Start_time_tp_SelectedTimeChanged" />
-			<local:TimePic x:Name="st_tp" SelectedTimeChanged="St_tp_SelectedTimeChanged"  />
+								HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" 
+								SelectedDateChanged="Start_date_dp_SelectedDateChanged" />
+			<!--<Mah:TimePicker  Name="start_time_tp" SelectedTimeChanged="Start_time_tp_SelectedTimeChanged" />-->
+			<local:TimePic x:Name="start_time_tp"  VerticalAlignment="Top"  
+									TimeSelectionChanged="St_tp_TimeSelectionChanged"   />
 
 			<Label Content="～"  HorizontalAlignment="Left"  Margin="10,0,10,0" 	VerticalAlignment="Top"/>
 			<!--<local:TimePic x:Name="et_tp" />-->

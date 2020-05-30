@@ -19,7 +19,12 @@ namespace KGSample {
 	/// TimePic.xaml の相互作用ロジック
 	/// </summary>
 	public partial class TimePic : UserControl {
-		
+
+		/// <summary>
+		/// 選択値が変わった時に発生するイベント
+		/// </summary>
+		public event SelectionChangedEventHandler TimeSelectionChanged;
+
 		public static RoutedEvent selectedTimeEvent = EventManager.RegisterRoutedEvent(
 									 "selectedTimeChanged", // イベント名
 									RoutingStrategy.Tunnel, // イベントタイプ
@@ -40,7 +45,6 @@ namespace KGSample {
 			RaiseEvent(new RoutedEventArgs(TimePic.selectedTimeEvent));
 		}
 
-
 		public TimeSpan selectedTS;
 
 		/// <summary>
@@ -54,10 +58,13 @@ namespace KGSample {
 			}
 			set {
 				selectedTS = value;
-				SetMyTimeSpan(selectedTS);
+		//		SetMyTimeSpan(selectedTS);
 			}
 		}
 
+		/// <summary>
+		/// 読み込まれた時点でリストを構成する
+		/// </summary>
 		public TimePic()
 		{
 			string TAG = "TimePic";
@@ -66,8 +73,13 @@ namespace KGSample {
 				InitializeComponent();
 				AddHours();
 				AddMinutes();
-		//		this.AddHandler(ComboBox.SelectedEvent, new RoutedEventHandler(this.selectedTimeChanged));
-				//		SetDateTime(DateTime.Now.TimeOfDay);
+				//添付イベント
+				//this.TimePic_sp.AddHandler(
+				//						ComboBox.SelectionChanged, 
+				//						new RoutedEventHandler(this.StackPanel_SelectionChanged)
+				//						);
+
+				//		TimePic.TimeSelectionChanged += Hours_cb.SelectionChanged;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -75,7 +87,7 @@ namespace KGSample {
 		}
 		
 		/// <summary>
-		/// 表示時刻を設定する
+		/// 外部から表示時刻を設定する
 		/// </summary>
 		/// <param name="targetDT"></param>
 		public void SetMyTimeSpan(TimeSpan setTS)
@@ -83,8 +95,10 @@ namespace KGSample {
 			string TAG = "SetMyTimeSpan";
 			string dbMsg = "[TimePic]" + setTS;
 			try {
+				//初期化して入れ物を作る
 				selectedTS = DateTime.Now.TimeOfDay;
 				dbMsg += ",selectedTS=" + selectedTS;
+				//指定値が有ればそちらに入れ替える
 				if (setTS != null) {
 					selectedTS = setTS;
 					dbMsg += ">>" + selectedTS;
@@ -143,49 +157,62 @@ namespace KGSample {
 			}
 		}
 
-		private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			string TAG = "Hours_cb_SelectionChanged";
-			string dbMsg = "[TimePic]";
-			try {
-				ComboBox cb = sender as ComboBox;
-				int serectIndex = cb.SelectedIndex;
-				dbMsg += ",serectIndex=" + serectIndex;
-				int serectVal = int.Parse(cb.SelectedValue.ToString());
-				dbMsg += ",serectVal=" + serectVal;
-				if (serectIndex != selectedTS.Hours) {
-					SetSelctedDateTime(serectVal, selectedTS.Minutes, e);
-				}
-
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//{
+		//	string TAG = "Hours_cb_SelectionChanged";
+		//	string dbMsg = "[TimePic]";
+		//	try {
+		//		ComboBox cb = sender as ComboBox;
+		//		int serectIndex = cb.SelectedIndex;
+		//		dbMsg += ",serectIndex=" + serectIndex;
+		//		if (serectIndex != selectedTS.Hours) {
+		//			SetSelctedDateTime(serectIndex, selectedTS.Minutes, e);
+		//		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		/// <summary>
 		/// 時の選択
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void Minutes_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//private void Minutes_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//{
+		//	string TAG = "Minutes_cb_SelectionChanged";
+		//	string dbMsg = "[TimePic]";
+		//	try {
+		//		ComboBox cb = sender as ComboBox;
+		//		int serectIndex = cb.SelectedIndex;
+		//		dbMsg += ",serectIndex=" + serectIndex;
+		//		if(serectIndex != selectedTS.Minutes) {
+		//			SetSelctedDateTime(selectedTS.Hours, serectIndex, e);
+		//		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
+
+		private void StackPanel_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			string TAG = "Minutes_cb_SelectionChanged";
+			string TAG = "StackPanel_SelectionChanged";
 			string dbMsg = "[TimePic]";
 			try {
-				ComboBox cb = sender as ComboBox;
-				int serectIndex = cb.SelectedIndex;
-				dbMsg += ",serectIndex=" + serectIndex;
-				if(serectIndex != selectedTS.Minutes) {
-					SetSelctedDateTime(selectedTS.Hours, serectIndex, e);
+				//ComboBox cb = sender as ComboBox;
+				//int serectIndex = cb.SelectedIndex;
+				//dbMsg += ",serectIndex=" + serectIndex;
+				if (-1<Hours_cb.SelectedIndex && -1<Minutes_cb.SelectedIndex ) {
+					SetSelctedDateTime(Hours_cb.SelectedIndex, Minutes_cb.SelectedIndex, e);
 				}
-				//int serectVal = int.Parse(cb.SelectedValue.ToString());
-				//dbMsg += ",serectVal=" + serectVal;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		/// <summary>
 		/// 分の選択
@@ -199,14 +226,18 @@ namespace KGSample {
 			try {
 				selectedTS = new TimeSpan(setHours, setMinutes,0);
 				dbMsg = ",selectedDT=" + selectedTS;
-				TimeSelectionChanged(this, e);
+				//if (this.SelectedTimeChanged != null) {
+				//	TimeSelectionChanged(this, e);
+				//}
+				if (this.TimeSelectionChanged != null) {
+					TimeSelectionChanged(this, e);
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 
-		public event SelectionChangedEventHandler TimeSelectionChanged;
 
 		private void OnComboBoxSelectionChanged(SelectionChangedEventArgs e)
 		{

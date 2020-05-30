@@ -9,12 +9,16 @@
 			 HorizontalAlignment="Center" VerticalAlignment="Center"
 			 >
 	<Grid >
-		<StackPanel Orientation="Horizontal" >
-			<ComboBox Name="Hours_cb" HorizontalAlignment="Center" VerticalAlignment="Center"  MinWidth="55" 
-								SelectionChanged="Hours_cb_SelectionChanged"/>
+		<!--ParentでまとめてChildrenのイベント発生を受け取る-->
+		<StackPanel Orientation="Horizontal" Name="TimePic_sp" Margin="0,0,0,0" 
+							ComboBox.SelectionChanged="StackPanel_SelectionChanged">
+			<ComboBox Name="Hours_cb" HorizontalAlignment="Center" 
+								VerticalAlignment="Center"  MinWidth="55" />
+			<!--SelectionChanged="Hours_cb_SelectionChanged"/>-->
 			<TextBlock Text="：" HorizontalAlignment="Center"  FontSize="18"/>
-			<ComboBox Name="Minutes_cb" HorizontalAlignment="Center" VerticalAlignment="Center"  MinWidth="55" 
-								SelectionChanged="Minutes_cb_SelectionChanged"/>
+			<ComboBox Name="Minutes_cb" HorizontalAlignment="Center" 
+									VerticalAlignment="Center"  MinWidth="55" />
+			<!--SelectionChanged="Minutes_cb_SelectionChanged"/>-->
 		</StackPanel>
 	</Grid>
 </UserControl>
