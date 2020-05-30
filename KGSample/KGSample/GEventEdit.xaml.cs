@@ -18,7 +18,7 @@ namespace KGSample {
 	/// <summary>
 	/// GEventEdit.xaml の相互作用ロジック
 	/// </summary>
-	public partial class GEventEdit : MetroWindow {
+	public partial class GEventEdit : Window {
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 
 		public GCalender mainView;
@@ -181,12 +181,10 @@ Visibility	null	string
 				TimeSpan endDTT = endDT.TimeOfDay;
 				dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT  + ")" ;
 				start_date_dp.SelectedDate = startDT;
-			//	start_time_tp.SelectedTime = startDTT;
 				start_time_tp.SetMyTimeSpan(startDTT);
 				if (startDTT == nonTS) {
 					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				}
-			//	end_time_tp.SelectedTime = endDTT;
 				end_time_tp.SetMyTimeSpan(endDTT);
 				if (endDTT == nonTS) {
 					end_time_tp.Visibility = System.Windows.Visibility.Hidden;

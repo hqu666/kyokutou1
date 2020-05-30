@@ -58,7 +58,6 @@ namespace KGSample {
 			}
 			set {
 				selectedTS = value;
-		//		SetMyTimeSpan(selectedTS);
 			}
 		}
 
@@ -116,7 +115,7 @@ namespace KGSample {
 			string TAG = "AddHours";
 			string dbMsg = "[TimePic]";
 			try {
-				for (int i = 0;i<23;i++){
+				for (int i = 0;i<24;i++){
 					//ファイルの表示名color情報をラベルに格納して
 					Label lb = new Label();
 					lb.Content = i.ToString();
@@ -137,7 +136,7 @@ namespace KGSample {
 			string TAG = "AddMinutes";
 			string dbMsg = "[TimePic]";
 			try {
-				for (int i = 0; i < 59; i++) {
+				for (int i = 0; i < 60; i++) {
 					Label lb = new Label();
 					lb.Content = i.ToString();
 					lb.DataContext = i;
@@ -160,11 +159,32 @@ namespace KGSample {
 			string TAG = "StackPanel_SelectionChanged";
 			string dbMsg = "[TimePic]";
 			try {
-				//ComboBox cb = sender as ComboBox;
-				//int serectIndex = cb.SelectedIndex;
-				//dbMsg += ",serectIndex=" + serectIndex;
+				int hoursInt = -1;
+				int minutesInt = -1;
+				StackPanel sp = sender as StackPanel;
+				if (sp.Children[0] !=null) {
+					ComboBox cb = sender as ComboBox;
+					if (-1< cb.SelectedIndex) {
+						dbMsg += ",Hours=" + selectedTS.Hours;
+						if (cb.SelectedIndex != selectedTS.Hours) {
+							hoursInt = cb.SelectedIndex;
+								dbMsg += ">>" + hoursInt;
+						}
+					}
+				}
+				if (sp.Children[2] != null) {
+					ComboBox cb = sender as ComboBox;
+					if (-1 < cb.SelectedIndex) {
+						dbMsg += ",Minutes=" + selectedTS.Minutes;
+						if (cb.SelectedIndex != selectedTS.Minutes) {
+							minutesInt = cb.SelectedIndex;
+							dbMsg += ">>" + minutesInt;
+						}
+					}
+				}
+
 				//childrenのデータが全て生成できていたら　※読込み直後はnullの可能性有り
-				if (-1<Hours_cb.SelectedIndex && -1<Minutes_cb.SelectedIndex ) {
+				if (-1 < hoursInt && -1 < minutesInt) {
 					SetSelctedDateTime(Hours_cb.SelectedIndex, Minutes_cb.SelectedIndex, e);
 				}
 				MyLog(TAG, dbMsg);
@@ -186,9 +206,6 @@ namespace KGSample {
 			try {
 				selectedTS = new TimeSpan(setHours, setMinutes,0);
 				dbMsg = ",selectedDT=" + selectedTS;
-				//if (this.SelectedTimeChanged != null) {
-				//	TimeSelectionChanged(this, e);
-				//}
 				if (this.TimeSelectionChanged != null) {
 					TimeSelectionChanged(this, e);
 				}
