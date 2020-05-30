@@ -54,7 +54,6 @@ namespace KGSample {
 			return result;
 		}
 
-
 		/// <summary>
 		/// ダイアログ表示
 		/// </summary>

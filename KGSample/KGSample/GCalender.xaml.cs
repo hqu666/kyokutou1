@@ -505,8 +505,8 @@ namespace KGSample {
 								//単日と複数の日付にまたがるEventを分ける
 								foreach (Google.Apis.Calendar.v3.Data.Event todayItem in TodayEvent) {
 									//※翌日以降に続く事の判定
-									int startInt = GCalendarUtil.EventDateTime2Int(todayItem.Start);
-									int endInt = GCalendarUtil.EventDateTime2Int(todayItem.End);
+									int startInt = GCalendarUtil.EventDate2Int(todayItem.Start);
+									int endInt = GCalendarUtil.EventDate2Int(todayItem.End);
 									//if (endInt == startInt) {
 									//※Googleの判定方法		todayItem.Start.Date == null ||
 									if (endInt == startInt) {
@@ -527,8 +527,8 @@ namespace KGSample {
 										string Summary = eventItem.Summary;
 										dbMsg += "  ," + Summary;
 										string ContentStr = "";
-										int startInt = GCalendarUtil.EventDateTime2Int(eventItem.Start);
-										int endInt = GCalendarUtil.EventDateTime2Int(eventItem.End);
+										int startInt = GCalendarUtil.EventDate2Int(eventItem.Start);
+										int endInt = GCalendarUtil.EventDate2Int(eventItem.End);
 										if (eventItem.End.DateTime == null) {
 											endInt--;
 											dbMsg += ">>" + endInt;

@@ -163,7 +163,7 @@ namespace KGSample {
 				int minutesInt = -1;
 				StackPanel sp = sender as StackPanel;
 				if (sp.Children[0] !=null) {
-					ComboBox cb = sender as ComboBox;
+					ComboBox cb = sp.Children[0] as ComboBox;
 					if (-1< cb.SelectedIndex) {
 						dbMsg += ",Hours=" + selectedTS.Hours;
 						if (cb.SelectedIndex != selectedTS.Hours) {
@@ -173,7 +173,7 @@ namespace KGSample {
 					}
 				}
 				if (sp.Children[2] != null) {
-					ComboBox cb = sender as ComboBox;
+					ComboBox cb = sp.Children[2] as ComboBox;
 					if (-1 < cb.SelectedIndex) {
 						dbMsg += ",Minutes=" + selectedTS.Minutes;
 						if (cb.SelectedIndex != selectedTS.Minutes) {

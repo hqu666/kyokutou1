@@ -480,7 +480,6 @@ Visibility	null	string
 			}
 		}
 
-
 		/// <summary>
 		/// カラー設定
 		/// </summary>
@@ -851,13 +850,36 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 			}
 		}
 
-
+		/// <summary>
+		/// 保存ボタンクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Save_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Save_bt_Click";
 			string dbMsg = "[GEventEdit]";
 			try {
-				if(this.taregetEvent.Id == null){
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				dbMsg += ",元の設定：" + startDT + "～" + endDT;
+				long endLong = GCalendarUtil.EventDateTime2Long(taregetEvent.End);
+				long starLong = GCalendarUtil.EventDateTime2Long(taregetEvent.Start);
+				if (endLong < starLong) {
+						dbMsg += ">終了日以降になっている>";
+						TimeSpan startDTT = startDT.TimeOfDay;
+						TimeSpan endDTT = endDT.TimeOfDay;
+						dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+						String titolStr = Constant.ApplicationName;
+						String msgStr = "	開始：" + startDT;
+						msgStr += "	\r\n終了：" + endDT;
+						msgStr += "	開始日時が終了日時以降に設定されています。\r\n修正して下さい。";
+						MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						dbMsg += ",result=" + result;
+						return;
+					}
+
+				if (this.taregetEvent.Id == null){
 					dbMsg += "新規";
 					WriteEvent();
 				} else{

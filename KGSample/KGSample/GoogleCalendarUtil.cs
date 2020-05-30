@@ -78,19 +78,39 @@ namespace KGSample {
 		/// </summary>
 		/// <param name="TEventDateTime">EventのStartやEnd</param>
 		/// <returns>20211231などのint</returns>
-		public int EventDateTime2Int(EventDateTime TEventDateTime)
+		public int EventDate2Int(EventDateTime TEventDateTime)
 		{
-			string TAG = "EventDateTime2Str";
+			string TAG = "EventDate2Str";
 			string dbMsg = "[GoogleCalendarUtil]";
 			int retInt = 0;
 			try {
-				retInt = int.Parse(EventDateTime2Str(TEventDateTime));
+				DateTime tDateTime = EventDateTime2DT(TEventDateTime);
+				string retStr = String.Format("{0:yyyyMMdd}", tDateTime);
+				retInt = int.Parse(retStr);
 				dbMsg += ">>" + retInt;
 		//		Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
 			return retInt;
+		}
+
+		public long EventDateTime2Long(EventDateTime TEventDateTime)
+		{
+			string TAG = "EventDateTime2Long";
+			string dbMsg = "[GoogleCalendarUtil]";
+			long retLong  = 0;
+			try {
+				DateTime tDateTime = EventDateTime2DT(TEventDateTime);
+				string retStr = String.Format("{0:yyyyMMddHHmm}", tDateTime);
+	//			retStr += String.Format("{0:HHmm}", tDateTime);
+				 retLong = long.Parse(retStr);
+				dbMsg += ">>" + retLong;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retLong;
 		}
 
 		/// <summary>
