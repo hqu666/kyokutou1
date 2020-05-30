@@ -186,7 +186,8 @@ Visibility	null	string
 				if (startDTT == nonTS) {
 					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				}
-				end_time_tp.SelectedTime = endDTT;
+			//	end_time_tp.SelectedTime = endDTT;
+				end_time_tp.SetMyTimeSpan(endDTT);
 				if (endDTT == nonTS) {
 					end_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				}
@@ -258,9 +259,9 @@ Visibility	null	string
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		/// 
-		private void St_tp_TimeSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void Start_time_tp_SelectedTimeChanged(object sender, SelectionChangedEventArgs e)
 		{
-			string TAG = "St_tp_SelectedTimeChanged";
+			string TAG = "Start_time_tp_SelectedTimeChanged";
 			string dbMsg = "[GEventEdit]";
 			try {
 				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
@@ -297,50 +298,12 @@ Visibility	null	string
 			}
 		}
 
-		private void Start_time_tp_SelectedTimeChanged(object sender, TimePickerBaseSelectionChangedEventArgs<TimeSpan?> e)
-		{
-			string TAG = "Start_time_tp_SelectedTimeChanged";
-			string dbMsg = "[GEventEdit]";
-			try {
-				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
-				TimeSpan startDTT = startDT.TimeOfDay;
-				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
-				TimeSpan endDTT = endDT.TimeOfDay;
-				dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
-				TimeSpan duration = endDT - startDT;
-				dbMsg += ",所要時間=" + duration;
-	
-				TimePicker tp = sender as TimePicker;
-				int selectedHours = tp.SelectedTime.Value.Hours;
-				int selectedMinutes = tp.SelectedTime.Value.Minutes;
-				int selectedSeconds = tp.SelectedTime.Value.Seconds;
-				TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds); 
-				 dbMsg += ",開始時刻=" + selectedTime;
-				if (!selectedTime.Equals(startDTT)){
-					DateTime startDTDate = startDT.Date;
-					dbMsg += ",startDTDate="+ startDTDate;
-					startDT = startDTDate.Add(selectedTime);
-					dbMsg += ">登録>" + startDT;
-					taregetEvent.Start.DateTime = startDT;
-					//終了側の変更
-					//taregetEvent.End.DateTime = startDT.Add(duration);
-					//dbMsg += ">end>" + taregetEvent.End.DateTime;
-					//end_time_tp.SelectedTime = taregetEvent.End.DateTime.Value.TimeOfDay;
-					//end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
-					taregetEvent.Start.Date = null;                     //終日ではない事のフラグ
-				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
 		/// <summary>
 		/// 終了時刻変更後
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void End_time_tp_SelectedTimeChanged(object sender, TimePickerBaseSelectionChangedEventArgs<TimeSpan?> e)
+		private void End_time_tp_SelectedTimeChanged(object sender, SelectionChangedEventArgs e)
 		{
 			string TAG = "End_time_tp_SelectedTimeChanged";
 			string dbMsg = "[GEventEdit]";
@@ -353,10 +316,11 @@ Visibility	null	string
 				TimeSpan duration = endDT - startDT;
 				dbMsg += ",所要時間=" + duration;
 
-				TimePicker tp = sender as TimePicker;
-				int selectedHours = tp.SelectedTime.Value.Hours;
-				int selectedMinutes = tp.SelectedTime.Value.Minutes;
-				int selectedSeconds = tp.SelectedTime.Value.Seconds;
+				TimePic tp = sender as TimePic;
+				TimeSpan selectedTS = tp.selectedTS;
+				int selectedHours = selectedTS.Hours;
+				int selectedMinutes = selectedTS.Minutes;
+				int selectedSeconds = selectedTS.Seconds;
 				TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
 				dbMsg += ",終了時刻=" + selectedTime;
 				if (!selectedTime.Equals(endDTT)) {
@@ -507,7 +471,8 @@ Visibility	null	string
 			//		start_time_tp.SelectedTime = startDTT;
 					start_time_tp.SetMyTimeSpan(startDTT);
 					endDTT = endDT.TimeOfDay;
-					end_time_tp.SelectedTime = endDTT;
+			//		end_time_tp.SelectedTime = endDTT;
+					end_time_tp.SetMyTimeSpan(endDTT);
 				}
 				start_date_dp.SelectedDate = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
 				end_date_dp.SelectedDate = GCalendarUtil.EventDateTime2DT(taregetEvent.End);

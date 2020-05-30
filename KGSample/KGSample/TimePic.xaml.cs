@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace KGSample {
 	/// <summary>
-	/// TimePic.xaml の相互作用ロジック
+	/// XAMLにTimePickerが無いので作成した時刻選択
 	/// </summary>
 	public partial class TimePic : UserControl {
 
@@ -73,13 +73,6 @@ namespace KGSample {
 				InitializeComponent();
 				AddHours();
 				AddMinutes();
-				//添付イベント
-				//this.TimePic_sp.AddHandler(
-				//						ComboBox.SelectionChanged, 
-				//						new RoutedEventHandler(this.StackPanel_SelectionChanged)
-				//						);
-
-				//		TimePic.TimeSelectionChanged += Hours_cb.SelectionChanged;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -157,45 +150,11 @@ namespace KGSample {
 			}
 		}
 
-		//private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		//{
-		//	string TAG = "Hours_cb_SelectionChanged";
-		//	string dbMsg = "[TimePic]";
-		//	try {
-		//		ComboBox cb = sender as ComboBox;
-		//		int serectIndex = cb.SelectedIndex;
-		//		dbMsg += ",serectIndex=" + serectIndex;
-		//		if (serectIndex != selectedTS.Hours) {
-		//			SetSelctedDateTime(serectIndex, selectedTS.Minutes, e);
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
-
 		/// <summary>
-		/// 時の選択
+		/// Parentでchildrenのイベントをまとめて取得
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		//private void Minutes_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		//{
-		//	string TAG = "Minutes_cb_SelectionChanged";
-		//	string dbMsg = "[TimePic]";
-		//	try {
-		//		ComboBox cb = sender as ComboBox;
-		//		int serectIndex = cb.SelectedIndex;
-		//		dbMsg += ",serectIndex=" + serectIndex;
-		//		if(serectIndex != selectedTS.Minutes) {
-		//			SetSelctedDateTime(selectedTS.Hours, serectIndex, e);
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
-
 		private void StackPanel_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			string TAG = "StackPanel_SelectionChanged";
@@ -204,6 +163,7 @@ namespace KGSample {
 				//ComboBox cb = sender as ComboBox;
 				//int serectIndex = cb.SelectedIndex;
 				//dbMsg += ",serectIndex=" + serectIndex;
+				//childrenのデータが全て生成できていたら　※読込み直後はnullの可能性有り
 				if (-1<Hours_cb.SelectedIndex && -1<Minutes_cb.SelectedIndex ) {
 					SetSelctedDateTime(Hours_cb.SelectedIndex, Minutes_cb.SelectedIndex, e);
 				}
@@ -260,9 +220,3 @@ namespace KGSample {
 
 	}
 }
-
-/*
-https://blog.okazuki.jp/entry/2014/08/22/211021
-https://blog.basyura.org/entry/2016/03/19/235427
-*/
-

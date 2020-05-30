@@ -14,16 +14,9 @@
 							ComboBox.SelectionChanged="StackPanel_SelectionChanged">
 			<ComboBox Name="Hours_cb" HorizontalAlignment="Center" 
 								VerticalAlignment="Center"  MinWidth="55" />
-			<!--SelectionChanged="Hours_cb_SelectionChanged"/>-->
 			<TextBlock Text="：" HorizontalAlignment="Center"  FontSize="18"/>
 			<ComboBox Name="Minutes_cb" HorizontalAlignment="Center" 
 									VerticalAlignment="Center"  MinWidth="55" />
-			<!--SelectionChanged="Minutes_cb_SelectionChanged"/>-->
 		</StackPanel>
 	</Grid>
 </UserControl>
-
-<!--<span class="hljs-keyword">public</span>
-<span class="hljs-keyword">event</span> EventHandler
-<EventArgs>CheckedChanged;-->
-
