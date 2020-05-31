@@ -878,7 +878,14 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 						dbMsg += ",result=" + result;
 						return;
 					}
-
+				if(taregetEvent.OriginalStartTime.Date == null && taregetEvent.OriginalStartTime.DateTime == null) {
+					if (taregetEvent.Start.Date == null) {
+						taregetEvent.OriginalStartTime.DateTime = taregetEvent.Start.DateTime;
+					}else{
+						taregetEvent.OriginalStartTime.Date = taregetEvent.Start.Date;
+					}
+					dbMsg += ",OriginalStartTime=" + taregetEvent.OriginalStartTime;
+				}
 				if (this.taregetEvent.Id == null){
 					dbMsg += "新規";
 					WriteEvent();
@@ -912,6 +919,7 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				string retLink = GCalendarUtil.InsertGEvents(taregetEvent);
 				dbMsg += "\r\nretLink" + retLink;
 				MyLog(TAG, dbMsg);
+				ExecuteRes(retLink);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -991,12 +999,36 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				//} else {
 				//	dbMsg += "添付するファイルの情報を取得できませんでした";
 				//}
+				MyLog(TAG, dbMsg);
+				ExecuteRes(retLink);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
+		private void ExecuteRes(string retLink)
+		{
+			string TAG = "ExecuteRes";
+			string dbMsg = "[GEventEdit]";
+			try {
+				if (retLink != null) {
+					//				if (retLink.Contains("https://www.google.com/calendar/event")) {
+					String titolStr = Constant.ApplicationName;
+					DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+					DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+					String msgStr = startDT + "～" + endDT;
+					msgStr += "	\r\n" + taregetEvent.Summary;
+					msgStr += "	を登録しました";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+					QuitMe();
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		private void Back_bt_Click(object sender, EventArgs e)
 		{
@@ -1016,7 +1048,7 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			string TAG = "Window_Closing";
 			string dbMsg = "[GEventEdit]";

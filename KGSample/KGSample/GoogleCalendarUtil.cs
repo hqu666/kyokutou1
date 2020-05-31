@@ -103,7 +103,6 @@ namespace KGSample {
 			try {
 				DateTime tDateTime = EventDateTime2DT(TEventDateTime);
 				string retStr = String.Format("{0:yyyyMMddHHmm}", tDateTime);
-	//			retStr += String.Format("{0:HHmm}", tDateTime);
 				 retLong = long.Parse(retStr);
 				dbMsg += ">>" + retLong;
 				Util.MyLog(TAG, dbMsg);

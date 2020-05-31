@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace KGSample
     /// <summary>
     /// GoogleDriveBrouser.xaml の相互作用ロジック
     /// </summary>
-    public partial class GoogleDriveBrouser : MetroWindow {
+    public partial class GoogleDriveBrouser : Window {
 		public GEventEdit editView;
 		LocalFileUtil LFUtil = new LocalFileUtil();
 		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
@@ -332,7 +331,7 @@ namespace KGSample
 			}
 		}
 	
-		private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			string TAG = "Window_Closing";
 			string dbMsg = "[GoogleDriveBrouser]";
