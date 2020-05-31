@@ -15,15 +15,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using MahApps.Metro.Controls;
-
 namespace KGSample {
 
 	/// <summary>
 	/// MainWindow.xaml の相互作用ロジック
 	/// cbYearMonthで該当年月を保持
 	/// </summary>
-	public partial class GCalender : MetroWindow {
+	public partial class GCalender : Window {
 		LocalFileUtil LFUtil = new LocalFileUtil();
 		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();

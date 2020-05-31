@@ -12,7 +12,8 @@
         mc:Ignorable="d"
         Title="スケジュール編集"  FontSize="12" VerticalAlignment="Center"
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
-	    WindowStartupLocation="CenterScreen"   d:DesignWidth="1078" Height="850"
+	    WindowStartupLocation="CenterScreen" 
+		d:DesignWidth="1078" Height="850"
 		Closing="Window_Closing" >
 		
 		<Window.Resources>
