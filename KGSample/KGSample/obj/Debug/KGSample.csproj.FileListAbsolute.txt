@@ -179,7 +179,6 @@ H:\develop\cs\KGSample\KGSample\bin\Debug\drive_calender.json
 H:\develop\cs\KGSample\KGSample\bin\Debug\KGSample.exe.config
 H:\develop\cs\KGSample\KGSample\bin\Debug\KGSample.exe
 H:\develop\cs\KGSample\KGSample\bin\Debug\KGSample.pdb
-H:\develop\cs\KGSample\KGSample\bin\Debug\ControlzEx.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Auth.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Auth.PlatformServices.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Calendar.v3.dll
@@ -187,10 +186,8 @@ H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Core.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Drive.v3.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.PlatformServices.dll
-H:\develop\cs\KGSample\KGSample\bin\Debug\MahApps.Metro.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\Newtonsoft.Json.dll
 H:\develop\cs\KGSample\KGSample\bin\Debug\System.Windows.Interactivity.dll
-H:\develop\cs\KGSample\KGSample\bin\Debug\ControlzEx.pdb
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.pdb
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.xml
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Auth.pdb
@@ -203,8 +200,6 @@ H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Drive.v3.pdb
 H:\develop\cs\KGSample\KGSample\bin\Debug\Google.Apis.Drive.v3.xml
 H:\develop\cs\KGSample\KGSample\bin\Debug\InfragisticsWPF4.Controls.Editors.XamMaskedInput.v12.2.xml
 H:\develop\cs\KGSample\KGSample\bin\Debug\InfragisticsWPF4.v12.2.xml
-H:\develop\cs\KGSample\KGSample\bin\Debug\MahApps.Metro.pdb
-H:\develop\cs\KGSample\KGSample\bin\Debug\MahApps.Metro.xml
 H:\develop\cs\KGSample\KGSample\bin\Debug\Newtonsoft.Json.xml
 H:\develop\cs\KGSample\KGSample\obj\Debug\KGSample.csprojAssemblyReference.cache
 H:\develop\cs\KGSample\KGSample\obj\Debug\KGSample.csproj.ResolveComReference.cache
@@ -367,3 +362,13 @@ H:\develop\KGSampleCustum\KGSample\obj\Debug\KGSample.pdb
 H:\develop\cs\KGSample\KGSample\obj\Debug\TimePic.g.cs
 H:\develop\cs\KGSample\KGSample\obj\Debug\GeneratedInternalTypeHelper.g.cs
 H:\develop\cs\KGSample\KGSample\obj\Debug\TimePic.baml
+H:\develop\cs\KGSample\KGSample\bin\Debug\de\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\en\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\es\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\it\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\ru\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+H:\develop\cs\KGSample\KGSample\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll

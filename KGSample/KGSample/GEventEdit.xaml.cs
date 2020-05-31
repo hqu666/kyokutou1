@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Google.Apis.Drive.v3.Data;
-using MahApps.Metro.Controls;
 
 namespace KGSample {
 	/// <summary>
