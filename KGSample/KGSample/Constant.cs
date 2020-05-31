@@ -100,7 +100,6 @@ namespace KGSample {
 
 /*
  このアプリに必要なパッケージ
- MahApps.Metro
  パッケージマネージャコンソールから
 Install-Package Google.Apis.Drive.v3
 Install-Package Google.Apis.Calendar.v3 
