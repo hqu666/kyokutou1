@@ -20,11 +20,15 @@
 		<Button x:Name="Next_bt" Content="▼" HorizontalAlignment="Left" Margin="241,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Next_bt_Click"/>
 		<Button x:Name="today_bt" Content="本日" HorizontalAlignment="Left" Margin="329,21,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.387,0.485" Click="Today_bt_Click"/>
 		<Grid x:Name="CalendarContainer"  Margin="0,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-		<!--<Grid x:Name="CalendarContainer" HorizontalAlignment="Left" Height="317" Margin="0,53,0,0" VerticalAlignment="Top" Width="517"/>-->
+		<Button HorizontalAlignment="Left" Margin="565,23,0,0" VerticalAlignment="Top" Width="75"
+					 x:Name="GDrive_bt" Content="ドライブを表示"
+					 Click="GDrive_bt_Click"/>
 		<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Right" Margin="0,20,275.2,0" VerticalAlignment="Top" Width="94"/>
 		<Label x:Name="lbSelectedDate" Content="" Margin="0,20,153.2,0" VerticalAlignment="Top" Width="102" HorizontalAlignment="Right"/>
-		<Button Content="日" HorizontalAlignment="Left" Margin="970,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中" Click="Button_Click"/>
-		<Button Content="週" HorizontalAlignment="Left" Margin="922,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"/>
 		<Label Content="の表示" Margin="870,20,101.2,0" VerticalAlignment="Top"/>
+		<Button HorizontalAlignment="Left" Margin="922,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
+						Name="Weekly_bt"  Content="週" Click="Weekly_bt_Click"/>
+		<Button HorizontalAlignment="Left" Margin="970,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
+					Name="Dayly_bt" Content="日" Click="Dayly_bt_Click" />
 	</Grid>
 </Window>

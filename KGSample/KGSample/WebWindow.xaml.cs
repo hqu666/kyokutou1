@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Toolkit.Wpf.UI.Controls;
 
 namespace KGSample {
 	/// <summary>
@@ -15,22 +16,38 @@ namespace KGSample {
 		/// </summary>
 		public Uri TaregetURL { set; get; }
 
-		public WebWindow(Uri taregetURL)
+		public WebWindow()
 		{
 			string TAG = "WebWindow";
 			string dbMsg = "[WebWindow]";
 			try {
 				InitializeComponent();
 
-				dbMsg += "taregetURL=" + taregetURL;
-				TaregetURL = taregetURL;
-				url_tb.Text= taregetURL.ToString();
-				web_wb.Navigate(taregetURL);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// この画面が表示された後でURLを与える
+		/// </summary>
+		/// <param name="taregetURL"></param>
+		public void SetMyURL(Uri taregetURL)
+		{
+			string TAG = "SetMyURL";
+			string dbMsg = "[GEventEdit]";
+			try {
+				dbMsg += "taregetURL=" + taregetURL;
+				TaregetURL = taregetURL;
+				url_tb.Text = taregetURL.ToString();
+				//		web_wb.Navigate(taregetURL);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		/// <summary>
 		/// URL書き換え
@@ -44,7 +61,7 @@ namespace KGSample {
 			try {
 				string urlTbText = url_tb.Text;
 				dbMsg += "urlTbText=" + urlTbText;
-				TaregetURL = new Uri(urlTbText, UriKind.Absolute);
+		//		TaregetURL = new Uri(urlTbText, UriKind.Absolute);
 				web_wb.Navigate(TaregetURL);
 
 				MyLog(TAG, dbMsg);
@@ -117,24 +134,17 @@ namespace KGSample {
 	}
 
 	/*
-	 WebbrowserクラスはIE7相当で動作します
-	 WebBrowser コントロールで使われている Internet Explorerを最新のバージョンに変更する方法
-	 https://www.ipentec.com/document/csharp-change-webbrower-control-internet-explorer-version
-
-	①Win+Rを押してregeditと入力、確定します。
-	②HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl にアクセスします。
-		FeatureControl キーが存在しない場合は新規に作ってください。 
-	③FeatureControl 以下に FEATURE_BROWSER_EMULATION キーを作成します。
-		1)FEATURE_BROWSER_EMULATION に
-		2)名前: [目的のブラウザの実行ファイル名] , データ: 0x2328(10進数で11001) としてDword値を作成します。
-				(例: 名前: donut.exe , データ: 0x00002328)
-	④FeatureControl 以下に FEATURE_USE_LEGACY_JSCRIPT キーを作成します。
-		1)FEATURE_USE_LEGACY_JSCRIPT に
-		2)名前: [目的のブラウザの実行ファイル名] , データ: 0x0 としてDword値を作成します。
-			(例: 名前: donut.exe , データ: 0x00000000)
-
-where is IHTMLScriptElement?
-	https://stackoverflow.com/questions/5216194/where-is-ihtmlscriptelement/5216255#5216255
+	WebbrowserクラスはIE7相当で動作します
+	WPFの場合
+	https://docs.microsoft.com/en-us/windows/communitytoolkit/controls/wpf-winforms/webview
+	①パッケージマネージャで　
+	Install-Package Microsoft.Toolkit.Wpf.UI.Controls.WebView -Version 6.0.1
+	②Visualstudio再起動
+	③using Microsoft.Toolkit.Wpf.UI.Controls;
+		C:\Users\hkuwayama\.nuget\packages\microsoft.toolkit.wpf.ui.controls.webview\6.0.1\lib\netcoreapp3.0に
+		Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll　がインストールされる
+	④Nugetの設定を変更してPackageReferenceを使う
+			Must use PackageReference対策	
 
 	 */
 

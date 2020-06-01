@@ -38,7 +38,6 @@ namespace KGSample {
 		private string b_selectYM = "";
 		private string taregetURL = null;
 
-
 		public GCalender()
 		{
 			string TAG = "GCalender";
@@ -179,7 +178,7 @@ namespace KGSample {
 				string yStr = selectYM.Substring(0, 4);
 				string mStr = selectYM.Substring(4, 2);
 				dbMsg += "、" + yStr + "年" + mStr + "月";
-				DateTime setDate = new DateTime(int.Parse(yStr), int.Parse(mStr), 1).AddMonths(-6);
+				DateTime setDate = new DateTime(int.Parse(yStr), int.Parse(mStr), 1).AddMonths(-1);
 				dbMsg += "、setDate=" + setDate;
 				//await Task.Delay(1000);
 				YearMonthComboMake(setDate);
@@ -204,7 +203,7 @@ namespace KGSample {
 				string yStr = selectYM.Substring(0, 4);
 				string mStr = selectYM.Substring(4, 2);
 				dbMsg += "、" + yStr + "年" + mStr + "月";
-				DateTime setDate = new DateTime(int.Parse(yStr), int.Parse(mStr), 1).AddMonths(6);
+				DateTime setDate = new DateTime(int.Parse(yStr), int.Parse(mStr), 1).AddMonths(1);
 				dbMsg += "、setDate=" + setDate;
 				//await Task.Delay(1000);
 				YearMonthComboMake(setDate);
@@ -802,21 +801,95 @@ namespace KGSample {
 		}
 
 		/// <summary>
-		/// 一日リストへ
+		/// Webで一日リストへ
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void Button_Click(object sender, RoutedEventArgs e)
+		//private void Button_Click(object sender, RoutedEventArgs e)
+		//{
+		//	string TAG = "Button_Click";
+		//	string dbMsg = "[GCalender]";
+		//	try {
+		//		dbMsg += "taregetURL=" + taregetURL;
+		//		if (webWindow == null) {
+		//			dbMsg += "一日リストを生成";
+		//			webWindow = new WebWindow();
+		//			webWindow.mainView = this;
+		//			webWindow.Show();
+		//			webWindow.SetMyURL(new Uri(@taregetURL));
+		//		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
+
+		/// <summary>
+		/// webでGoogleDriveを表示
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void GDrive_bt_Click(object sender, RoutedEventArgs e)
 		{
-			string TAG = "Button_Click";
+			string TAG = "GDrive_bt_Click";
+			string dbMsg = "[GCalender]";
+			try {
+				string DriveURL = "https://drive.google.com/drive/u/0/folders/1_8QOnkcJK83V__Cn16I31Pp5313tY1CY";
+				dbMsg += "DriveURL=" + DriveURL;
+				if (webWindow == null) {
+					dbMsg += "webでGoogleDriveを表示";
+					webWindow = new WebWindow();
+					webWindow.mainView = this;
+					webWindow.Show();
+					webWindow.SetMyURL(new Uri(@DriveURL));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// webで週間スケジュール表示
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Weekly_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Weekly_bt_Click";
 			string dbMsg = "[GCalender]";
 			try {
 				dbMsg += "taregetURL=" + taregetURL;
 				if (webWindow == null) {
 					dbMsg += "一日リストを生成";
-					webWindow = new WebWindow(new Uri(taregetURL));
+					webWindow = new WebWindow();
 					webWindow.mainView = this;
 					webWindow.Show();
+					webWindow.SetMyURL(new Uri(@taregetURL));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// webで一日のスケジュール表示
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Dayly_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Dayly_bt_Click";
+			string dbMsg = "[GCalender]";
+			try {
+				dbMsg += "taregetURL=" + taregetURL;
+				if (webWindow == null) {
+					dbMsg += "一日リストを生成";
+					webWindow = new WebWindow();
+					webWindow.mainView = this;
+					webWindow.Show();
+					webWindow.SetMyURL(new Uri(@taregetURL));
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -869,6 +942,7 @@ namespace KGSample {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+
 	}
 }
 /*
