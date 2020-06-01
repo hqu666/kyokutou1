@@ -12,8 +12,8 @@
 
 
 
-		<Window.Resources>
-		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
+	<Window.Resources>
+		<!--<ResourceDictionary Source="/Style/StyleDic.xaml"/>-->
 	</Window.Resources>
 
 

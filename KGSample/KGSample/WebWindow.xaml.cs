@@ -1,20 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using mshtml;
-using Microsoft.Win32;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.InteropServices;
 
 namespace KGSample {
 	/// <summary>
@@ -27,7 +13,7 @@ namespace KGSample {
 		/// <summary>
 		/// このページで表示するwebページのURL
 		/// </summary>
-		public Uri taregetURL { set; get; }
+		public Uri TaregetURL { set; get; }
 
 		public WebWindow(Uri taregetURL)
 		{
@@ -36,26 +22,9 @@ namespace KGSample {
 			try {
 				InitializeComponent();
 
-				// WebbrowserのIEバージョンを指定		http://kitunechan.hatenablog.jp/entry/2018/03/29/165019
-		//		using (var key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION")) {
-		//			key.SetValue(filename, 11001, RegistryValueKind.DWord);
-		////org			key.SetValue(filename, 11001, RegistryValueKind.DWord);
-		//		}
-
-				//// ローカルのファイル読み込みを有効にする
-				//using (var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BLOCK_LMZ_SCRIPT")) {
-				//	key.SetValue(filename, 0, RegistryValueKind.DWord);
-				//}
-
-				//// タッチ機能を有効にする
-				//using (var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_NINPUT_LEGACYMODE")) {
-				//	key.SetValue(filename, 0, RegistryValueKind.DWord);
-				//}
-
-
 				dbMsg += "taregetURL=" + taregetURL;
+				TaregetURL = taregetURL;
 				url_tb.Text= taregetURL.ToString();
-	//			web_wb.IsScriptEnabled = true;
 				web_wb.Navigate(taregetURL);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -75,15 +44,14 @@ namespace KGSample {
 			try {
 				string urlTbText = url_tb.Text;
 				dbMsg += "urlTbText=" + urlTbText;
-				taregetURL = new Uri(urlTbText, UriKind.Absolute);
-				web_wb.Navigate(taregetURL);
+				TaregetURL = new Uri(urlTbText, UriKind.Absolute);
+				web_wb.Navigate(TaregetURL);
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// WPFでクローズボックスなど、ウインドウを閉じる時に発生するイベントハンドラ
@@ -95,7 +63,6 @@ namespace KGSample {
 			string TAG = "Window_Closing";
 			string dbMsg = "[GEventEdit]";
 			try {
-				//				e.Cancel = true;                //このオブジェクトを破棄させない(1)
 				QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
