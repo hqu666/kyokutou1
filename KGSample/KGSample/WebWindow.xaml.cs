@@ -22,7 +22,6 @@ namespace KGSample {
 			string dbMsg = "[WebWindow]";
 			try {
 				InitializeComponent();
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -30,7 +29,7 @@ namespace KGSample {
 		}
 
 		/// <summary>
-		/// この画面が表示された後でURLを与える
+		/// この画面が表示された後で、他クラスからURLを与える
 		/// </summary>
 		/// <param name="taregetURL"></param>
 		public void SetMyURL(Uri taregetURL)
@@ -40,8 +39,7 @@ namespace KGSample {
 			try {
 				dbMsg += "taregetURL=" + taregetURL;
 				TaregetURL = taregetURL;
-				url_tb.Text = taregetURL.ToString();
-				//		web_wb.Navigate(taregetURL);
+				url_tb.Text = taregetURL.ToString();    //TextChangedが発生する
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -61,9 +59,10 @@ namespace KGSample {
 			try {
 				string urlTbText = url_tb.Text;
 				dbMsg += "urlTbText=" + urlTbText;
-		//		TaregetURL = new Uri(urlTbText, UriKind.Absolute);
-				web_wb.Navigate(TaregetURL);
-
+				if(! urlTbText.Equals("")) {
+					//		TaregetURL = new Uri(urlTbText, UriKind.Absolute);
+					web_wb.Navigate(TaregetURL);
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -134,11 +133,11 @@ namespace KGSample {
 	}
 
 	/*
-	WebbrowserクラスはIE7相当で動作します
+	WebbrowserクラスはIE7相当で動作する
 	WPFの場合
 	https://docs.microsoft.com/en-us/windows/communitytoolkit/controls/wpf-winforms/webview
 	①パッケージマネージャで　
-	Install-Package Microsoft.Toolkit.Wpf.UI.Controls.WebView -Version 6.0.1
+	Install-Package Microsoft.Toolkit.Wpf.UI.Controls.WebView -Version 6.0.1　でEdge相当のWebViewに変更する
 	②Visualstudio再起動
 	③using Microsoft.Toolkit.Wpf.UI.Controls;
 		C:\Users\hkuwayama\.nuget\packages\microsoft.toolkit.wpf.ui.controls.webview\6.0.1\lib\netcoreapp3.0に

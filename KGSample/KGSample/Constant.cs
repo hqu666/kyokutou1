@@ -29,6 +29,7 @@ namespace KGSample {
 		public static IList<Google.Apis.Calendar.v3.Data.Event> GCalenderEvent;//カレンダーの予定
 		public static Google.Apis.Calendar.v3.Data.Event eventItem;
 		public static string CalenderSummary = "abcbdffghaiklnm@gmail.com";   //Googleアカウント
+		public static string CalenderOtherView = "https://calendar.google.com/calendar/r/";            //週別/日別への切替
 
 		public static string RootFolderName = "KSクラウド";            //保存先サーバのルートフォルダ
 		public static string RootFolderID = "";

@@ -18,7 +18,7 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<TextBox x:Name="url_tb" Grid.Row="0" HorizontalAlignment="Stretch" Height="18" Margin="10,10,10,0" TextWrapping="Wrap" 
-						Text="TextBox" VerticalAlignment="Top" TextChanged="Url_tb_TextChanged"/>
+						Text="" VerticalAlignment="Top" TextChanged="Url_tb_TextChanged"/>
 		<Controls:WebView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 		Source="https://search.yahoo.co.jp/search"
 										x:Name="web_wb" />

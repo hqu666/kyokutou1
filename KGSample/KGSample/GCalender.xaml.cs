@@ -81,9 +81,6 @@ namespace KGSample {
 			}
 		}
 
-		/// <summary>
-		/// treeViewへEventの登録状態表示
-		/// </summary>
 		public IList<Google.Apis.Calendar.v3.Data.Event> EventListUp(DateTime timeMin, DateTime timeMax)
 		{
 			string TAG = "EventListUp";
@@ -860,12 +857,16 @@ namespace KGSample {
 			string dbMsg = "[GCalender]";
 			try {
 				dbMsg += "taregetURL=" + taregetURL;
+				dbMsg += ":" + taregetURL;
+				//	string WeekURL = "https://calendar.google.com/calendar/r/week?pli=1";               //https://calendar.google.com/calendar/r/week/2020/7/20?pli=1
+				string WeekURL = Constant.CalenderOtherView + "week?pli=1";               //https://calendar.google.com/calendar/r/week/2020/7/20?pli=1
+				dbMsg += ",WeekURL=" + WeekURL;
 				if (webWindow == null) {
 					dbMsg += "一日リストを生成";
 					webWindow = new WebWindow();
 					webWindow.mainView = this;
 					webWindow.Show();
-					webWindow.SetMyURL(new Uri(@taregetURL));
+					webWindow.SetMyURL(new Uri(@WeekURL));
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -884,12 +885,14 @@ namespace KGSample {
 			string dbMsg = "[GCalender]";
 			try {
 				dbMsg += "taregetURL=" + taregetURL;
+				string DayURL = "https://calendar.google.com/calendar/r/day?pli=1";         //https://calendar.google.com/calendar/r/day/2020/7/20?pli=1
+				dbMsg += ",DayURL=" + DayURL;
 				if (webWindow == null) {
 					dbMsg += "一日リストを生成";
 					webWindow = new WebWindow();
 					webWindow.mainView = this;
 					webWindow.Show();
-					webWindow.SetMyURL(new Uri(@taregetURL));
+					webWindow.SetMyURL(new Uri(@DayURL));
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
