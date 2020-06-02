@@ -7,7 +7,7 @@ namespace KGSample {
 	/// WebWindow.xaml の相互作用ロジック
 	/// </summary>
 	public partial class WebWindow :Window {
-	
+		public GoogleAuth authWindow;
 		public GCalender mainView;
 
 		/// <summary>

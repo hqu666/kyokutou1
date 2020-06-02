@@ -24,12 +24,18 @@ namespace KGSample {
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 
 		public WebWindow webWindow;
+		public GCalender calenderWindow;
 
 		public GoogleAuth()
 		{
 			InitializeComponent();
 		}
 
+		/// <summary>
+		/// ファイルで認証情報読込み
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Json_read_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Json_read_bt_Click";
@@ -72,6 +78,10 @@ namespace KGSample {
 			}
 		}
 
+		/// <summary>
+		/// ログイン実働
+		/// </summary>
+		/// <param name="JsonFileName"></param>
 		private void LogInProcrce(string JsonFileName)
 		{
 			string TAG = "LogInProcrce";
@@ -90,9 +100,22 @@ namespace KGSample {
 					string UserId = Constant.MyCalendarCredential.UserId;
 					dbMsg += ",UserId=" + UserId;
 					MyLog(TAG, dbMsg);
-					//if (isListUp) {
-					//	DrowToday();
+					//if (calenderWindow == null) {
+					//	dbMsg += "＞＞カレンダへ";
+					//	GCalender calenderWindow = new GCalender();
+					//	calenderWindow.authWindow = this;
+					//	calenderWindow.Show();
 					//}
+					string CalenderURL = Constant.CalenderOtherView +  "month?pli=1"; 
+					//特定日の指定は　/month/2020/9/1?pli=1
+					dbMsg += ",CalenderURL=" + CalenderURL;
+					if (webWindow == null) {
+						dbMsg += "一日リストを生成";
+						webWindow = new WebWindow();
+						webWindow.authWindow = this;
+						webWindow.Show();
+						webWindow.SetMyURL(new Uri(CalenderURL));
+					}
 				}
 
 				MyLog(TAG, dbMsg);

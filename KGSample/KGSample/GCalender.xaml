@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen" 
         Title="スケジュール管理" Height="800" Width="1050" 
 		SizeChanged="MetroWindow_SizeChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-		ScrollViewer.VerticalScrollBarVisibility="Auto">
+		ScrollViewer.VerticalScrollBarVisibility="Auto" Closed="Window_Closed">
 
 
 	<Window.Resources>

@@ -30,7 +30,8 @@ namespace KGSample {
 		public GEventEdit editView;
 		public GEventDayList dayListView;
 		public WebWindow webWindow;
-
+		public GoogleAuth authWindow;
+		
 		private Rectangle selectedRec;
 		private System.Windows.Style selectedRecStyle;
 
@@ -45,7 +46,8 @@ namespace KGSample {
 			try {
 				InitializeComponent();
 				this.FontSize = Constant.MyFontSize;
-				Conect2Calender( true);
+				//		Conect2Calender( true);
+				DrowToday();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -56,31 +58,31 @@ namespace KGSample {
 		/// 接続
 		/// </summary>
 		/// <param name="isListUp"></param>
-		private void Conect2Calender(Boolean isListUp)
-		{
-			string TAG = "Conect2Calender";
-			string dbMsg = "[GCalender]";
-			try {
-				String retStr = GAuthUtil.Authentication("drive_calender.json", "token.json");
-				dbMsg += ",retStr=" + retStr;
-				if (retStr.Equals("")) {
-					//メッセージボックスを表示する
-					String titolStr = Constant.ApplicationName;
-					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-					dbMsg += ",result=" + result;
-				} else {
-					string UserId = Constant.MyCalendarCredential.UserId;
-					dbMsg += ",UserId=" + UserId;
-					MyLog(TAG, dbMsg);
-					if (isListUp) {
-						DrowToday();
-					}
-				}
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//private void Conect2Calender(Boolean isListUp)
+		//{
+		//	string TAG = "Conect2Calender";
+		//	string dbMsg = "[GCalender]";
+		//	try {
+		//		String retStr = GAuthUtil.Authentication("drive_calender.json", "token.json");
+		//		dbMsg += ",retStr=" + retStr;
+		//		if (retStr.Equals("")) {
+		//			//メッセージボックスを表示する
+		//			String titolStr = Constant.ApplicationName;
+		//			String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+		//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		//			dbMsg += ",result=" + result;
+		//		} else {
+		//			string UserId = Constant.MyCalendarCredential.UserId;
+		//			dbMsg += ",UserId=" + UserId;
+		//			MyLog(TAG, dbMsg);
+		//			if (isListUp) {
+		//				DrowToday();
+		//			}
+		//		}
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		public IList<Google.Apis.Calendar.v3.Data.Event> EventListUp(DateTime timeMin, DateTime timeMax)
 		{
@@ -150,12 +152,8 @@ namespace KGSample {
 				DateTime now = DateTime.Now;
 				YearMonthComboMake(now);
 				CreateCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
-
 				string selectName = "R" + String.Format("{0:yyyyMMdd}", now);       //数字になるものは名前にならない
 				dbMsg += ":rselectNameec=" + selectName;
-		//		Rectangle.
-		//		this.s.FindName(selectName, Rectangle) as Rectangle;
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -899,6 +897,35 @@ namespace KGSample {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+		}
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			string TAG = "Window_Closed";
+			string dbMsg = "[GCalender]";
+			try {
+				QuitMe();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// このフォームを閉じる
+		/// </summary>
+		private void QuitMe()
+		{
+			string TAG = "QuitMe";
+			string dbMsg = "[GCalender]";
+			try {
+				if (authWindow != null) {
+					authWindow.calenderWindow = null;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			this.Close();
 		}
 
 
