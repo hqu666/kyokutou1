@@ -1,0 +1,66 @@
+﻿<Window x:Class="KGSample.GoogleAuth"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KGSample"
+        mc:Ignorable="d"
+        Title="Google認証" Height="450" Width="800">
+	<Window.Resources>
+		<Style TargetType="StackPanel">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,10,0,10"/>
+		</Style>
+
+		<Style TargetType="Label">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+
+		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Background="{TemplateBinding Background}"
+                CornerRadius="2">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
+		<Style TargetType="Button">
+			<Setter Property="Margin" Value="0,5,0,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
+		</Style>
+
+
+	</Window.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+			<Label Content="ようこそ" HorizontalAlignment="Right"  />
+			<TextBox HorizontalAlignment="Stretch"  Margin="10,0,10,0" TextWrapping="Wrap" 
+			MinWidth="150"
+						 x:Name="user_name_tb"/>
+			<Label Content="さん" HorizontalAlignment="Left" />
+		</StackPanel>
+		<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
+			<Button Padding="5" Width="Auto"  Height="Auto" Margin="10,0,10,0"
+							 x:Name="Json_read_bt" Content="認証ファイル読込み"  />
+			<Button  Width="75" Margin="10,0,10,0"
+							 x:Name="Log_in_bt" Content="ログイン"  />
+			<Button  Width="75"  Margin="10,0,10,0" HorizontalAlignment="Right"
+							 x:Name="Log_out_bt" Content="アウト"  />
+		</StackPanel>
+	</Grid>
+</Window>
