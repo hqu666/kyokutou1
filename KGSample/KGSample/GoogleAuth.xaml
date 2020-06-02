@@ -36,33 +36,63 @@
 			<Setter Property="Margin" Value="0,5,10,5"/>
 			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
 		</Style>
+
+		<Style TargetType="TextBox">
+			<Setter Property="Width" Value="Auto"/>
+			<Setter Property="MinWidth" Value="75"/>
+			<Setter Property="Height" Value="Auto"/>
+			<Setter Property="Margin" Value="5,10,5,10"/>
+			<Setter Property="HorizontalAlignment"  Value="Stretch"/>
+			<!--
+						<Setter Property="MinWidth" Value="150"/>
+						  HorizontalAlignment="Left" TextWrapping="Wrap" 
+						<TextBox ="" TextWrapping="Wrap" 
+			=""
+			Text="TextBox" VerticalAlignment="Top" Width="120"
+			<Setter Property="Padding" Value="5,5,5,5"/>
+			-->
+		</Style>
+
 	</Window.Resources>
 
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition  Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition/>
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
-		<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-			<Label Content="ようこそ" HorizontalAlignment="Right"  />
-			<TextBox HorizontalAlignment="Stretch"  Margin="10,0,10,0" TextWrapping="Wrap" 
-			MinWidth="150"
-						 x:Name="user_name_tb"/>
-			<Label Content="さん" HorizontalAlignment="Left" />
+		<Label  Grid.Row="0" Grid.Column="0"  Content="ようこそ" HorizontalAlignment="Right"  />
+		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
+			<Label Content="[" HorizontalAlignment="Left" />
+			<TextBox  x:Name="company_id_tb"/>
+			<Label Content="]" HorizontalAlignment="Left" />
+			<TextBox  x:Name="user_name_tb"/>
+			<Label Content="様" HorizontalAlignment="Left" />
 		</StackPanel>
 		<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
 			<Button x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click"  />
 			<Button  x:Name="Log_in_bt" Content="ログイン" Click="Log_in_bt_Click"  />
 			<Button  x:Name="Log_out_bt" Content="ログアウト" Click="Log_out_bt_Click"  />
 		</StackPanel>
-		<DataGrid Grid.Row="1"  Grid.Column="1"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="Auto" Width="Auto"
+		<Label Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Right"  Content="ID" />
+		<TextBox Grid.Column="1" Grid.Row="1"
+						Name="Google_Acount_tb" />
+		<Label Grid.Row="2" Grid.Column="0"  HorizontalAlignment="Right" Content="パスワード" />
+		<TextBox Grid.Row="2" Grid.Column="1"
+						Name="Google_Password_tb" />
+		<DataGrid Grid.Row="3"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
 						VerticalAlignment="Top"
-						Name="Campany_dg" />
+						Name="Setting_dg" />
 
 	</Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KGSample.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,34 @@ namespace KGSample {
 		public GoogleAuth()
 		{
 			InitializeComponent();
+			ReadSetting();
 		}
+
+		private void ReadSetting()
+		{
+			string TAG = "ReadSetting";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				Settings Settings = Properties.Settings.Default;
+				dbMsg += ",Settings=" + Settings.Context.Count + "件";
+				company_id_tb.Text = Properties.Settings.Default.companyId;
+				user_name_tb.Text = Properties.Settings.Default.companyName;
+				Google_Acount_tb.Text = Properties.Settings.Default.googleAcount;
+				Google_Password_tb.Text = Properties.Settings.Default.googlePassWord;
+				//foreach (System.Configuration.SettingsContext item in Settings.Context) {
+				//	dbMsg += "\r\n" + item.Keys + " : " + item.Values;
+				//	if (item.Keys.Equals("")) {
+
+				//	}
+
+				//}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// ファイルで認証情報読込み
