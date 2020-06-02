@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Toolkit.Wpf.UI.Controls;
 
 namespace KGSample {
 	/// <summary>
@@ -22,6 +21,7 @@ namespace KGSample {
 			string dbMsg = "[WebWindow]";
 			try {
 				InitializeComponent();
+				this.FontSize = Constant.MyFontSize;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

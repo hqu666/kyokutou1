@@ -44,6 +44,7 @@ namespace KGSample {
 			string dbMsg = "[GCalender]";
 			try {
 				InitializeComponent();
+				this.FontSize = Constant.MyFontSize;
 				Conect2Calender( true);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

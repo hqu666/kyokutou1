@@ -38,6 +38,7 @@ namespace KGSample {
 			string dbMsg = "[GEventEdit]";
 			try {
 				InitializeComponent();
+				this.FontSize = Constant.MyFontSize;
 				this.taregetEvent = taregetEvent;
 				EventWrite(taregetEvent);
 				MyLog(TAG, dbMsg);

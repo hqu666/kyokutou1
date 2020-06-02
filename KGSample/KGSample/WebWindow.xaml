@@ -8,7 +8,7 @@
 		x:Class="KGSample.WebWindow"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="web" Height="800" Width="1050" 
+        Title="web" Height="960" Width="1280" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
 		ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="Window_Closing">
 
@@ -20,7 +20,6 @@
 		<TextBox x:Name="url_tb" Grid.Row="0" HorizontalAlignment="Stretch" Height="18" Margin="10,10,10,0" TextWrapping="Wrap" 
 						Text="" VerticalAlignment="Top" TextChanged="Url_tb_TextChanged"/>
 		<Controls:WebView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-		Source="https://search.yahoo.co.jp/search"
 										x:Name="web_wb" />
 	</Grid>
 </Window>

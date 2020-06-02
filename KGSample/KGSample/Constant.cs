@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Drive.v3;
-using Google.Apis.Calendar.v3.Data;
 
 namespace KGSample {
 	class Constant {
 		public static bool debugNow = true;
 		public static bool errorCheckNow = true;
+		public static int MyFontSize = 12;
 
 		//認証情報/API キー
 		public static string ApplicationName = "kyokuto4";                                        //	アプリケーション名

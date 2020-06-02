@@ -35,6 +35,7 @@ namespace KGSample
 			string dbMsg = "[GoogleDriveBrouser]";
 			try {
 				InitializeComponent();
+				this.FontSize = Constant.MyFontSize;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
