@@ -443,3 +443,5 @@ C:\work\2020\kyokuto\sample\KGSample\KGSample\obj\Debug\KGSample.csproj.CoreComp
 C:\work\2020\kyokuto\sample\KGSample\KGSample\obj\Debug\KGSample.csproj.CopyComplete
 C:\work\2020\kyokuto\sample\KGSample\KGSample\obj\Debug\KGSample.exe
 C:\work\2020\kyokuto\sample\KGSample\KGSample\obj\Debug\KGSample.pdb
+C:\work\2020\kyokuto\sample\KGSample\KGSample\obj\Debug\GoogleAuth.g.cs
+C:\work\2020\kyokuto\sample\KGSample\KGSample\obj\Debug\GoogleAuth.baml

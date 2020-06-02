@@ -29,17 +29,18 @@
 		</ControlTemplate>
 
 		<Style TargetType="Button">
-			<Setter Property="Margin" Value="0,5,0,5"/>
+			<Setter Property="Width" Value="Auto"/>
+			<Setter Property="MinWidth" Value="75"/>
+			<Setter Property="Height" Value="Auto"/>
+			<Setter Property="Padding" Value="5,5,5,5"/>
+			<Setter Property="Margin" Value="0,5,10,5"/>
 			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
 		</Style>
-
-
 	</Window.Resources>
 
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition />
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -55,12 +56,13 @@
 			<Label Content="さん" HorizontalAlignment="Left" />
 		</StackPanel>
 		<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
-			<Button Padding="5" Width="Auto"  Height="Auto" Margin="10,0,10,0"
-							 x:Name="Json_read_bt" Content="認証ファイル読込み"  />
-			<Button  Width="75" Margin="10,0,10,0"
-							 x:Name="Log_in_bt" Content="ログイン"  />
-			<Button  Width="75"  Margin="10,0,10,0" HorizontalAlignment="Right"
-							 x:Name="Log_out_bt" Content="アウト"  />
+			<Button x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click"  />
+			<Button  x:Name="Log_in_bt" Content="ログイン" Click="Log_in_bt_Click"  />
+			<Button  x:Name="Log_out_bt" Content="ログアウト" Click="Log_out_bt_Click"  />
 		</StackPanel>
+		<DataGrid Grid.Row="1"  Grid.Column="1"  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="Auto" Width="Auto"
+						VerticalAlignment="Top"
+						Name="Campany_dg" />
+
 	</Grid>
 </Window>
