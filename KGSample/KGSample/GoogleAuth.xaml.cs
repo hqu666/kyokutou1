@@ -1,18 +1,14 @@
 ﻿using KGSample.Properties;
 using System;
-using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Drive.v3;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Util.Store;
 
 namespace KGSample {
 	/// <summary>
@@ -26,6 +22,16 @@ namespace KGSample {
 
 		public WebWindow webWindow;
 		public GCalender calenderWindow;
+
+		/// <summary>
+		/// 使用許諾を受けるAPIのリスト
+		/// </summary>
+		public static string[] AllScopes = { DriveService.Scope.DriveFile,
+																	DriveService.Scope.DriveAppdata,			//追加
+																	DriveService.Scope.Drive,
+																	CalendarService.Scope.Calendar,
+																	CalendarService.Scope.CalendarEvents
+															};
 
 		public GoogleAuth()
 		{
@@ -81,9 +87,20 @@ namespace KGSample {
 				if (0< rCount) {
 					// 選択されたファイル名 (ファイルパス) をメッセージボックスに表示
 					foreach (String fileOne in dialog.FileNames) {
-						string JsonFileName = fileOne.ToString();
-						dbMsg += "\r\n" + JsonFileName;
-						LogInProcrce(JsonFileName);
+						string jsonPath = fileOne.ToString();
+						dbMsg += "\r\n" + jsonPath;
+
+						dbMsg += ",jsonPath=" + jsonPath;
+						Task<UserCredential> userCredential = Task.Run(() => {
+							return GetAllCredential(jsonPath, "token.json");
+						});
+						userCredential.Wait();
+						Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
+						//Settings Settings = Properties.Settings.Default;
+						//Properties.Settings.Default.clientId = userCredential.Result.Flow;
+
+
+						//		LogInProcrce(JsonFileName);
 						//複数選ばれても一件目で強制的に処理開始
 						break;
 					}
@@ -93,6 +110,29 @@ namespace KGSample {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// UserCredentialを作成する
+		/// 初回アクセス時に使用するAPIをScopesで申請する
+		/// </summary>
+		/// <param name="jsonPath">読込むjsonファイルのURL</param>
+		/// <param name="tokenFolderPath"></param>
+		/// <returns>UserCredential</returns>
+		static Task<UserCredential> GetAllCredential(string jsonPath, string tokenFolderPath)
+		{
+			//string TAG = "GetAllCredential";
+			//string dbMsg = "[GoogleAuthUtil]";
+			//dbMsg += ",jsonPath=" + jsonPath;
+			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
+				return GoogleWebAuthorizationBroker.AuthorizeAsync(
+					GoogleClientSecrets.Load(stream).Secrets,
+					AllScopes,
+					"user",
+					CancellationToken.None,
+					new FileDataStore(tokenFolderPath, true));
+			}
+		}
+
 
 
 		private void Log_in_bt_Click(object sender, RoutedEventArgs e)

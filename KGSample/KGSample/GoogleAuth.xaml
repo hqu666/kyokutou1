@@ -14,7 +14,7 @@
 
 		<Style TargetType="Label">
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="5"/>
+			<!--<Setter Property="Margin" Value="5"/>-->
 		</Style>
 
 		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
@@ -58,10 +58,10 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition />
-			<RowDefinition />
-			<RowDefinition />
-			<RowDefinition />
+			<RowDefinition  Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
 			<RowDefinition />
 			<RowDefinition />
 			<RowDefinition  Height="Auto"/>
@@ -74,7 +74,7 @@
 		<Label  Grid.Row="0" Grid.Column="0"  Content="ようこそ" HorizontalAlignment="Right"  />
 		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
 			<Label Content="[" HorizontalAlignment="Left" />
-			<TextBox  x:Name="company_id_tb"/>
+			<TextBox  x:Name="company_id_tb" Width="32"/>
 			<Label Content="]" HorizontalAlignment="Left" />
 			<TextBox  x:Name="user_name_tb"/>
 			<Label Content="様" HorizontalAlignment="Left" />
