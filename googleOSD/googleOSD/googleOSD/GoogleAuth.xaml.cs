@@ -5,12 +5,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Util.Store;
 using googleOSD.Properties;
 using System.IO;
+
+
 
 namespace GoogleQSD {
 	/// <summary>
@@ -52,13 +55,21 @@ namespace GoogleQSD {
 				user_name_tb.Text = googleOSD.Properties.Settings.Default.companyName;
 				Google_Acount_tb.Text = googleOSD.Properties.Settings.Default.googleAcount;
 				Google_Password_tb.Text = googleOSD.Properties.Settings.Default.googlePassWord;
-				//foreach (System.Configuration.SettingsContext item in Settings.Context) {
-				//	dbMsg += "\r\n" + item.Keys + " : " + item.Values;
-				//	if (item.Keys.Equals("")) {
-
-				//	}
-
-				//}
+				googleOSD.GOAuthModel gOAuthModel = new googleOSD.GOAuthModel(
+																		googleOSD.Properties.Settings.Default.clientId,
+																		googleOSD.Properties.Settings.Default.clientSecret,
+																		googleOSD.Properties.Settings.Default.projectId,
+																			googleOSD.Properties.Settings.Default.authUri,
+																		googleOSD.Properties.Settings.Default.tokenUri,
+																		googleOSD.Properties.Settings.Default.auth_providerX509CertUrl
+															);
+				if (gOAuthModel.client_id==null || gOAuthModel.client_id.Equals("")){ 
+					dbMsg += ",JsonReadへ";
+					JsonRead();
+				}else{
+					dbMsg += ",接続へ";
+					//	LogInProcrce(gOAuthModel);
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -111,26 +122,26 @@ namespace GoogleQSD {
 							string rStr = sr.ReadToEnd();
 							sr.Close();
 							dbMsg += ",rStr=" + rStr;
-							//var deserialized = JsonConvert.DeserializeObject<Person>(rStr);
-							//WriteLine($"Name: {deserialized.Name}"); // Kato Jun
-							//WriteLine($"Age : {deserialized.Age}");  // 31
-																	 //string json = @"{""version"":1.2,""people"":[{""pose_keypoints_2d"":[343.339,560.812,0.70107,413.923,715.622,0.129554,198.376,715.582,0.176477,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,317.87,488.353,0.778215,423.633,498.118,0.798372,0,0,0,556.841,535.336,0.763956,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],""face_keypoints_2d"":[],""hand_left_keypoints_2d"":[],""hand_right_keypoints_2d"":[],""pose_keypoints_3d"":[],""face_keypoints_3d"":[],""hand_left_keypoints_3d"":[],""hand_right_keypoints_3d"":[]}]}";
-							dynamic o = JsonConvert.DeserializeObject(rStr);
-							//foreach (var a in o.people[0].pose_keypoints_2d) {
-							//	Console.WriteLine(a);
-							//}
+							var deserialized = JsonConvert.DeserializeObject<googleOSD.GOAuthModel>(rStr);
+							Settings Settings = googleOSD.Properties.Settings.Default;
+							googleOSD.Properties.Settings.Default.clientId = deserialized.client_id;
+							googleOSD.Properties.Settings.Default.clientSecret = deserialized.client_secret;
+							googleOSD.Properties.Settings.Default.projectId = deserialized.project_id;
+							googleOSD.Properties.Settings.Default.authUri = deserialized.auth_uri;
+							googleOSD.Properties.Settings.Default.tokenUri = deserialized.token_uri;
+							googleOSD.Properties.Settings.Default.auth_providerX509CertUrl = deserialized.auth_provider_x509_cert_url;
+							//(ユーザーフォルダー)\AppData\Local\CompanyName\ProgramName_xxxx\Version\user.config に保存
+							googleOSD.Properties.Settings.Default.Save();
+							ReadSetting();
 						}
-
 						//Task<UserCredential> userCredential = Task.Run(() => {
 						//	return GetAllCredential(jsonPath, "token.json");
 						//});
 						//userCredential.Wait();
 						//Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
-						//Settings Settings = googleOSD.Properties.Settings.Default;
-						//googleOSD.Properties.Settings.Default.clientId = userCredential.Result.GetHashCode;
 
 
-						LogInProcrce(jsonPath);
+						//			LogInProcrce(jsonPath);
 						//複数選ばれても一件目で強制的に処理開始
 						break;
 					}

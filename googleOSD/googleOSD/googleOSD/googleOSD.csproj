@@ -88,6 +88,7 @@
       <DependentUpon>GoogleDriveBrouser.xaml</DependentUpon>
     </Compile>
     <Compile Include="GoogleDriveUtil.cs" />
+    <Compile Include="GOAuthModel.cs" />
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
     <Compile Include="TimePic.xaml.cs">
