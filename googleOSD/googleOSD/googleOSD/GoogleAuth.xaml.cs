@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Util.Store;
 using googleOSD.Properties;
+using System.IO;
 
 namespace GoogleQSD {
 	/// <summary>
@@ -63,8 +65,6 @@ namespace GoogleQSD {
 			}
 		}
 
-
-
 		/// <summary>
 		/// ファイルで認証情報読込み
 		/// </summary>
@@ -73,6 +73,20 @@ namespace GoogleQSD {
 		private void Json_read_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Json_read_bt_Click";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				JsonRead();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// OAuthのJSONファイルを読む
+		/// </summary>
+		private void JsonRead() {
+			string TAG = "JsonRead";
 			string dbMsg = "[GoogleAuth]";
 			try {
 				// ダイアログのインスタンスを生成
@@ -84,20 +98,36 @@ namespace GoogleQSD {
 				DialogResult res = dialog.ShowDialog();
 				int rCount = dialog.FileNames.Count();
 				dbMsg += "," + rCount + "件";
-				if (0< rCount) {
+				if (0 < rCount) {
 					// 選択されたファイル名 (ファイルパス) をメッセージボックスに表示
 					foreach (String fileOne in dialog.FileNames) {
 						string jsonPath = fileOne.ToString();
 						dbMsg += "\r\n" + jsonPath;
-
 						dbMsg += ",jsonPath=" + jsonPath;
-						Task<UserCredential> userCredential = Task.Run(() => {
-							return GetAllCredential(jsonPath, "token.json");
-						});
-						userCredential.Wait();
-						Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
-																									  //Settings Settings = Properties.Settings.Default;
-																									  //Properties.Settings.Default.clientId = userCredential.Result.Flow;
+
+						using (System.IO.FileStream stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
+							//読込んだファイルを文字列に変換
+							StreamReader sr = new StreamReader(stream);
+							string rStr = sr.ReadToEnd();
+							sr.Close();
+							dbMsg += ",rStr=" + rStr;
+							//var deserialized = JsonConvert.DeserializeObject<Person>(rStr);
+							//WriteLine($"Name: {deserialized.Name}"); // Kato Jun
+							//WriteLine($"Age : {deserialized.Age}");  // 31
+																	 //string json = @"{""version"":1.2,""people"":[{""pose_keypoints_2d"":[343.339,560.812,0.70107,413.923,715.622,0.129554,198.376,715.582,0.176477,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,317.87,488.353,0.778215,423.633,498.118,0.798372,0,0,0,556.841,535.336,0.763956,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],""face_keypoints_2d"":[],""hand_left_keypoints_2d"":[],""hand_right_keypoints_2d"":[],""pose_keypoints_3d"":[],""face_keypoints_3d"":[],""hand_left_keypoints_3d"":[],""hand_right_keypoints_3d"":[]}]}";
+							dynamic o = JsonConvert.DeserializeObject(rStr);
+							//foreach (var a in o.people[0].pose_keypoints_2d) {
+							//	Console.WriteLine(a);
+							//}
+						}
+
+						//Task<UserCredential> userCredential = Task.Run(() => {
+						//	return GetAllCredential(jsonPath, "token.json");
+						//});
+						//userCredential.Wait();
+						//Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
+						//Settings Settings = googleOSD.Properties.Settings.Default;
+						//googleOSD.Properties.Settings.Default.clientId = userCredential.Result.GetHashCode;
 
 
 						LogInProcrce(jsonPath);

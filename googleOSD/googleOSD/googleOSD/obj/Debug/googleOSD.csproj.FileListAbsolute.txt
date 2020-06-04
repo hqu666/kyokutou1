@@ -60,3 +60,4 @@ C:\work\2020\kyokuto\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.cs
 C:\work\2020\kyokuto\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csproj.CopyComplete
 C:\work\2020\kyokuto\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 C:\work\2020\kyokuto\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
+C:\work\2020\kyokuto\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csprojAssemblyReference.cache
