@@ -1,0 +1,98 @@
+﻿<Window x:Class="GoogleQSD.GoogleAuth"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoogleQSD"
+        mc:Ignorable="d"
+        Title="Google認証" Height="450" Width="800">
+	<Window.Resources>
+		<Style TargetType="StackPanel">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,10,0,10"/>
+		</Style>
+
+		<Style TargetType="Label">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<!--<Setter Property="Margin" Value="5"/>-->
+		</Style>
+
+		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Background="{TemplateBinding Background}"
+                CornerRadius="2">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
+		<Style TargetType="Button">
+			<Setter Property="Width" Value="Auto"/>
+			<Setter Property="MinWidth" Value="75"/>
+			<Setter Property="Height" Value="Auto"/>
+			<Setter Property="Padding" Value="5,5,5,5"/>
+			<Setter Property="Margin" Value="0,5,10,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
+		</Style>
+
+		<Style TargetType="TextBox">
+			<Setter Property="Width" Value="Auto"/>
+			<Setter Property="MinWidth" Value="75"/>
+			<Setter Property="Height" Value="Auto"/>
+			<Setter Property="Margin" Value="5,10,5,10"/>
+			<Setter Property="HorizontalAlignment"  Value="Stretch"/>
+			<!--
+						<Setter Property="MinWidth" Value="150"/>
+						  HorizontalAlignment="Left" TextWrapping="Wrap" 
+						<TextBox ="" TextWrapping="Wrap" 
+			=""
+			Text="TextBox" VerticalAlignment="Top" Width="120"
+			<Setter Property="Padding" Value="5,5,5,5"/>
+			-->
+		</Style>
+
+	</Window.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition  Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Label  Grid.Row="0" Grid.Column="0"  Content="ようこそ" HorizontalAlignment="Right"  />
+		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
+			<Label Content="[" HorizontalAlignment="Left" />
+			<TextBox  x:Name="company_id_tb" Width="32"/>
+			<Label Content="]" HorizontalAlignment="Left" />
+			<TextBox  x:Name="user_name_tb"/>
+			<Label Content="様" HorizontalAlignment="Left" />
+		</StackPanel>
+		<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
+			<Button x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click"  />
+			<Button  x:Name="Log_in_bt" Content="ログイン" Click="Log_in_bt_Click"  />
+			<Button  x:Name="Log_out_bt" Content="ログアウト" Click="Log_out_bt_Click"  />
+		</StackPanel>
+		<Label Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Right"  Content="ID" />
+		<TextBox Grid.Column="1" Grid.Row="1"
+						Name="Google_Acount_tb" />
+		<Label Grid.Row="2" Grid.Column="0"  HorizontalAlignment="Right" Content="パスワード" />
+		<TextBox Grid.Row="2" Grid.Column="1"
+						Name="Google_Password_tb" />
+		<DataGrid Grid.Row="3"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
+						VerticalAlignment="Top"
+						Name="Setting_dg" />
+
+	</Grid>
+</Window>
