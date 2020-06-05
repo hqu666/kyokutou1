@@ -69,6 +69,7 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleAuth.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleDriveBrouser.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\MainWindow.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\TimePic.g.cs
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\WebWindow.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\App.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD_Content.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -106,7 +107,7 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Security.Crypto
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Security.SecureString.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Threading.Overlapped.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Xml.XPath.XDocument.dll
-H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\WebWindow.g.cs
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csprojAssemblyReference.cache
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\App.baml
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GCalender.baml
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GEventDayList.baml
@@ -123,4 +124,3 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csproj.CoreC
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csproj.CopyComplete
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
-H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csprojAssemblyReference.cache

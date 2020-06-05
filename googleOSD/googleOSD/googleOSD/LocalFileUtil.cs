@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	class LocalFileUtil {
 		///// <summary>
 		///// OpenFileDialogで選択されたファイルのある全ファイル名を返す

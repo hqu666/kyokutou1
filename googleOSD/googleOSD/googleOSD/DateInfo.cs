@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	/// <summary>
 	/// 日付情報
 	/// </summary>

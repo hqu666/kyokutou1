@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	/// <summary>
 	/// WebWindow.xaml の相互作用ロジック
 	/// </summary>

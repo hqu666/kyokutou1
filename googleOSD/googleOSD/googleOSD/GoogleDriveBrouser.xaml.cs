@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace GoogleQSD
+namespace GoogleOSD
 {
     /// <summary>
     /// GoogleDriveBrouser.xaml の相互作用ロジック

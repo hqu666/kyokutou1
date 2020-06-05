@@ -91,6 +91,7 @@
     <Compile Include="GOAuthModel.cs" />
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TimePic.xaml.cs">
       <DependentUpon>TimePic.xaml</DependentUpon>
     </Compile>

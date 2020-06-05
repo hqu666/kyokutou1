@@ -10,12 +10,13 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Util.Store;
-using googleOSD.Properties;
 using System.IO;
+using GoogleOSD.Properties;
+using System.Collections.Generic;
+using System.Reflection;
+//using System.Text.Json;
 
-
-
-namespace GoogleQSD {
+namespace GoogleOSD {
 	/// <summary>
 	/// GoogleAuth.xaml の相互作用ロジック
 	/// </summary>
@@ -49,19 +50,19 @@ namespace GoogleQSD {
 			string TAG = "ReadSetting";
 			string dbMsg = "[GoogleAuth]";
 			try {
-				Settings Settings = googleOSD.Properties.Settings.Default;
-				dbMsg += ",Settings=" + Settings.Context.Count + "件";
-				company_id_tb.Text = googleOSD.Properties.Settings.Default.companyId;
-				user_name_tb.Text = googleOSD.Properties.Settings.Default.companyName;
-				Google_Acount_tb.Text = googleOSD.Properties.Settings.Default.googleAcount;
-				Google_Password_tb.Text = googleOSD.Properties.Settings.Default.googlePassWord;
-				googleOSD.GOAuthModel gOAuthModel = new googleOSD.GOAuthModel(
-																		googleOSD.Properties.Settings.Default.clientId,
-																		googleOSD.Properties.Settings.Default.clientSecret,
-																		googleOSD.Properties.Settings.Default.projectId,
-																			googleOSD.Properties.Settings.Default.authUri,
-																		googleOSD.Properties.Settings.Default.tokenUri,
-																		googleOSD.Properties.Settings.Default.auth_providerX509CertUrl
+				Settings MySettings = Settings.Default;
+				dbMsg += ",Settings=" + MySettings.Context.Count + "件";
+				company_id_tb.Text = MySettings.companyId;
+				user_name_tb.Text = MySettings.companyName;
+				Google_Acount_tb.Text = MySettings.googleAcount;
+				Google_Password_tb.Text = MySettings.googlePassWord;
+				GOAuthModel gOAuthModel = new GOAuthModel(
+																		MySettings.clientId,
+																		MySettings.clientSecret,
+																		MySettings.projectId,
+																		MySettings.authUri,
+																		MySettings.tokenUri,
+																		MySettings.auth_providerX509CertUrl
 															);
 				if (gOAuthModel.client_id==null || gOAuthModel.client_id.Equals("")){ 
 					dbMsg += ",JsonReadへ";
@@ -122,16 +123,17 @@ namespace GoogleQSD {
 							string rStr = sr.ReadToEnd();
 							sr.Close();
 							dbMsg += ",rStr=" + rStr;
-							var deserialized = JsonConvert.DeserializeObject<googleOSD.GOAuthModel>(rStr);
-							Settings Settings = googleOSD.Properties.Settings.Default;
-							googleOSD.Properties.Settings.Default.clientId = deserialized.client_id;
-							googleOSD.Properties.Settings.Default.clientSecret = deserialized.client_secret;
-							googleOSD.Properties.Settings.Default.projectId = deserialized.project_id;
-							googleOSD.Properties.Settings.Default.authUri = deserialized.auth_uri;
-							googleOSD.Properties.Settings.Default.tokenUri = deserialized.token_uri;
-							googleOSD.Properties.Settings.Default.auth_providerX509CertUrl = deserialized.auth_provider_x509_cert_url;
+							var deserialized = JsonConvert.DeserializeObject<GOAuthModel>(rStr);
+							Settings MySettings = Settings.Default;
+							MySettings.clientId = deserialized.client_id;
+							MySettings.clientSecret = deserialized.client_secret;
+							MySettings.projectId = deserialized.project_id;
+							MySettings.authUri = deserialized.auth_uri;
+							MySettings.tokenUri = deserialized.token_uri;
+							MySettings.auth_providerX509CertUrl = deserialized.auth_provider_x509_cert_url;
+							MyLog(TAG, dbMsg);
 							//(ユーザーフォルダー)\AppData\Local\CompanyName\ProgramName_xxxx\Version\user.config に保存
-							googleOSD.Properties.Settings.Default.Save();
+							MySettings.Save();
 							ReadSetting();
 						}
 						//Task<UserCredential> userCredential = Task.Run(() => {

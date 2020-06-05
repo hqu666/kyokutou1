@@ -11,7 +11,7 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Upload;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	class GoogleDriveUtil {
 		CS_Util Util = new CS_Util();
 		LocalFileUtil LFUtil = new LocalFileUtil();

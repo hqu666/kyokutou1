@@ -12,7 +12,7 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	class GoogleAuthUtil {
 		CS_Util Util = new CS_Util();
 

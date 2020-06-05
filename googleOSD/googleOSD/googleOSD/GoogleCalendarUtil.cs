@@ -7,7 +7,7 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	class GoogleCalendarUtil {
 		public Google.Apis.Calendar.v3.Data.Event listItems = null;
 		CS_Util Util = new CS_Util();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	class CS_Util {
 		/// <summary>
 		/// デバッグログ

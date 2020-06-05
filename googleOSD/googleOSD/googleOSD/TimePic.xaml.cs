@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	/// <summary>
 	/// XAMLにTimePickerが無いので作成した時刻選択
 	/// </summary>

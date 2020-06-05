@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Google.Apis.Drive.v3.Data;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	/// <summary>
 	/// GEventEdit.xaml の相互作用ロジック
 	/// </summary>

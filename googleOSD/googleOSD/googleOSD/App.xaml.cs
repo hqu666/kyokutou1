@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace GoogleQSD {
+namespace GoogleOSD {
 	/// <summary>
 	/// App.xaml の相互作用ロジック
 	/// </summary>
