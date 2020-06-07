@@ -55,15 +55,6 @@ namespace GoogleOSD {
 				user_name_tb.Text = MySettings.companyName;
 				Google_Acount_tb.Text = MySettings.googleAcount;
 				Google_Password_tb.Text = MySettings.googlePassWord;
-				//GOAuthModel gOAuthModel = new GOAuthModel(
-				//														MySettings.clientId,
-				//														MySettings.clientSecret,
-				//														MySettings.projectId,
-				//														MySettings.authUri,
-				//														MySettings.tokenUri,
-				//														MySettings.auth_providerX509CertUrl
-				//											);
-				//if (gOAuthModel.client_id == null || gOAuthModel.client_id.Equals("")) {
 				dbMsg += ",Settings=" + MySettings.clientId ;
 				if (MySettings.clientId==null || MySettings.clientId.Equals("")){ 
 					dbMsg += ",JsonReadへ";
@@ -71,6 +62,8 @@ namespace GoogleOSD {
 				}else{
 					dbMsg += ",接続へ";
 					//	LogInProcrce(gOAuthModel);
+					MySettings.clientId = null;
+					MySettings.Save();
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -117,15 +110,6 @@ namespace GoogleOSD {
 						string jsonPath = fileOne.ToString();
 						dbMsg += "\r\n" + jsonPath;
 						dbMsg += ",jsonPath=" + jsonPath;
-												//Task<UserCredential> userCredential = Task.Run(() => {
-												//	return GetAllCredential(jsonPath, "token.json");
-												//});
-												//userCredential.Wait();
-												//Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
-						//jsonString = File.ReadAllText(jsonPath);
-						//dbMsg += ",jsonString=" + jsonString;
-						//GOAuthModel gOAuthModel = JsonSerializer.Deserialize<GOAuthModel>(jsonString);
-
 						using (System.IO.FileStream stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 							//読込んだファイルを文字列に変換
 							StreamReader sr = new StreamReader(stream);
@@ -134,9 +118,6 @@ namespace GoogleOSD {
 							dbMsg += ",rStr=" + rStr;
 							GOAuthModel gOAuthModel = JsonConvert.DeserializeObject<GOAuthModel>(rStr);
 							Settings MySettings = Settings.Default;
-							/*					JObject dd = (JObject) JsonConvert.DeserializeObject(rStr);
-																		*/
-
 							dbMsg += ",client_id=" + gOAuthModel.client_id;
 												MySettings.clientId = gOAuthModel.client_id;
 												dbMsg += ",client_secret=" + gOAuthModel.client_secret;
@@ -150,9 +131,6 @@ namespace GoogleOSD {
 							MySettings.Save();
 							ReadSetting();
 						}
-
-
-						//			LogInProcrce(jsonPath);
 						//複数選ばれても一件目で強制的に処理開始
 						break;
 					}
