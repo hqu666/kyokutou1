@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
+using Windows.UI.Xaml.Controls;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -39,11 +39,64 @@ namespace GoogleOSD {
 		public void SetMyURL(Uri taregetURL)
 		{
 			string TAG = "SetMyURL";
-			string dbMsg = "[GEventEdit]";
+			string dbMsg = "[WebWindow]";
 			try {
 				dbMsg += "taregetURL=" + taregetURL;
 				TaregetURL = taregetURL;
-				url_tb.Text = taregetURL.ToString();    //TextChangedが発生する
+				web_wb.Navigate(TaregetURL);
+
+			//	url_tb.Text = taregetURL.ToString();    //TextChangedが発生する
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 戻るボタン
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Go_back_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Go_back_bt_Click";
+			string dbMsg = "[WebWindow]";
+			try {
+				this.web_wb.GoBack();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 進むボタン
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Fowerd_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Fowerd_bt_Click";
+			string dbMsg = "[WebWindow]";
+			try {
+				this.web_wb.GoForward();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 更新ボタン
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Refresh_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Refresh_bt_Click";
+			string dbMsg = "[WebWindow]";
+			try {
+				this.web_wb.Refresh();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -56,15 +109,16 @@ namespace GoogleOSD {
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void Url_tb_TextChanged(object sender, TextChangedEventArgs e)
+		private void Url_tb_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
 		{
 			string TAG = "Url_tb_TextChanged";
-			string dbMsg = "[GEventEdit]";
+			string dbMsg = "[WebWindow]";
 			try {
 				string urlTbText = url_tb.Text;
-				dbMsg += "urlTbText=" + urlTbText;
-				if(! urlTbText.Equals("")) {
-					//		TaregetURL = new Uri(urlTbText, UriKind.Absolute);
+				dbMsg += ",urlTbText=" + urlTbText;
+				dbMsg += ",TaregetURL=" + TaregetURL;
+				if ( urlTbText.Equals(TaregetURL)) {            //! urlTbText.Equals("")||
+																//	TaregetURL = new Uri(urlTbText, UriKind.Absolute);
 					web_wb.Navigate(TaregetURL);
 				}
 				MyLog(TAG, dbMsg);
@@ -72,6 +126,66 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		private void Web_wb_NavigationStarting(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationStartingEventArgs args)
+		{
+			string TAG = "Web_wb_NavigationStarting";
+			string dbMsg = "[WebWindow]";
+			try {
+				WebView wv = sender as WebView;
+				string documentTitle = web_wb.DocumentTitle.ToString();
+				dbMsg += ",documentTitle=" + documentTitle;
+				dbMsg += ",Source=" + web_wb.Source;
+				string source = @web_wb.Source.ToString();
+				if (source.Contains("eventedit")) {
+					dbMsg += ">>編集へ" ;
+				}
+				dbMsg += ",CanGoBack=" + web_wb.CanGoBack;
+				dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		/// <summary>
+		/// 読込み後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="args"></param>
+		private void Web_wb_NavigationCompleted(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationCompletedEventArgs args)
+		{
+			string TAG = "Web_wb_NavigationCompleted";
+			string dbMsg = "[WebWindow]";
+			try {
+				WebView wv = sender as WebView;
+				if (!args.IsSuccess) {
+					// エラー発生
+					string errMsg = args.WebErrorStatus.ToString();
+					int errCode = (int)args.WebErrorStatus;
+					string msg = string.Format("サーバ側エラー：{0}（{1}）", errMsg, errCode);
+				//	await new Windows.UI.Popups.MessageDialog(msg).ShowAsync();
+				}
+			//	if(wv != null) {
+			//		string documentTitle = wv.DocumentTitle;
+					dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
+					if (web_wb.DocumentTitle != null) {
+						this.Title = web_wb.DocumentTitle;
+					}
+					dbMsg += ",Source= " + web_wb.Source;
+		//			url_tb.Text = @web_wb.Source;
+					dbMsg += " ,CanGoBack=" + web_wb.CanGoBack;
+					dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
+		//		}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		/// <summary>
 		/// WPFでクローズボックスなど、ウインドウを閉じる時に発生するイベントハンドラ
@@ -81,7 +195,7 @@ namespace GoogleOSD {
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			string TAG = "Window_Closing";
-			string dbMsg = "[GEventEdit]";
+			string dbMsg = "[WebWindow]";
 			try {
 				QuitMe();
 				MyLog(TAG, dbMsg);
@@ -91,15 +205,17 @@ namespace GoogleOSD {
 		}
 
 		/// このフォームを閉じる
-		/// ※this.Close();だと再表示でクラッシュするのでthis.Visible = false;でこのオブジェクトを破棄させない
 		/// </summary>
 		private void QuitMe()
 		{
 			string TAG = "QuitMe";
-			string dbMsg = "[GEventEdit]";
+			string dbMsg = "[WebWindow]";
 			try {
 				if (mainView != null) {
 					mainView.webWindow = null;
+				}
+				if (authWindow != null) {
+					authWindow.webWindow = null;
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -134,6 +250,7 @@ namespace GoogleOSD {
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 
 	/*

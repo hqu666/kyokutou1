@@ -11,15 +11,71 @@
         Title="web" Height="960" Width="1280" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
 		ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="Window_Closing">
+	<Window.Resources>
+		<Style TargetType="StackPanel">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,10,0,10"/>
+		</Style>
+
+		<Style TargetType="Label">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<!--<Setter Property="Margin" Value="5"/>-->
+		</Style>
+
+		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Background="{TemplateBinding Background}"
+                CornerRadius="15">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
+		<Style TargetType="Button">
+			<Setter Property="Width" Value="30"/>
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="Padding" Value="5,5,5,5"/>
+			<Setter Property="Margin" Value="5,5,5,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
+		</Style>
+
+		<Style TargetType="TextBox">
+			<Setter Property="Width" Value="Auto"/>
+			<!--<Setter Property="MinWidth" Value="75"/>-->
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="Margin" Value="5,5,5,5"/>
+			<Setter Property="HorizontalAlignment"  Value="Stretch"/>
+			<!--
+						<Setter Property="MinWidth" Value="150"/>
+						  HorizontalAlignment="Left" TextWrapping="Wrap" 
+						<TextBox ="" TextWrapping="Wrap" 
+			=""
+			Text="TextBox" VerticalAlignment="Top" Width="120"
+			<Setter Property="Padding" Value="5,5,5,5"/>
+			-->
+		</Style>
+
+	</Window.Resources>
 
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition />
 		</Grid.RowDefinitions>
-		<TextBox x:Name="url_tb" Grid.Row="0" HorizontalAlignment="Stretch"  Margin="10,10,10,0" TextWrapping="Wrap" 
-						Text="" VerticalAlignment="Top" TextChanged="Url_tb_TextChanged"/>
+		<StackPanel x:Name="control_sp" Grid.Row="0" Orientation="Horizontal">
+			<Button  x:Name="go_back_bt"  Content="戻る" Click="Go_back_bt_Click"
+							/>
+			<Button  x:Name="fowerd_bt"  Content="進む" Click="Fowerd_bt_Click"
+							/>
+			<Button  x:Name="refresh_bt"  Content="更新" Click="Refresh_bt_Click"/>
+			<TextBox  TextWrapping="Wrap" HorizontalAlignment="Stretch" 
+						 Text="{Binding Source, ElementName=web_wb, Mode=OneWay}"
+						VerticalAlignment="Center" 
+						x:Name="url_tb" TextChanged="Url_tb_TextChanged"  />
+		</StackPanel>
 		<Controls:WebView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-										x:Name="web_wb" />
+										x:Name="web_wb" NavigationCompleted="Web_wb_NavigationCompleted" NavigationStarting="Web_wb_NavigationStarting" />
 	</Grid>
 </Window>
