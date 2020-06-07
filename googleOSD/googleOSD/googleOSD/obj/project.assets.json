@@ -1447,9 +1447,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\googleOSD.csproj",
-      "projectName": "googleOSD",
-      "projectPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\googleOSD.csproj",
+      "projectUniqueName": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "projectName": "GoogleOSD",
+      "projectPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
       "packagesPath": "C:\\Users\\博臣\\.nuget\\packages\\",
       "outputPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\obj\\",
       "projectStyle": "PackageReference",

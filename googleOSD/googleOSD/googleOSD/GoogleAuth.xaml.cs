@@ -4,17 +4,16 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Util.Store;
 using System.IO;
 using GoogleOSD.Properties;
-using System.Collections.Generic;
-using System.Reflection;
 //using System.Text.Json;
+//using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -56,15 +55,17 @@ namespace GoogleOSD {
 				user_name_tb.Text = MySettings.companyName;
 				Google_Acount_tb.Text = MySettings.googleAcount;
 				Google_Password_tb.Text = MySettings.googlePassWord;
-				GOAuthModel gOAuthModel = new GOAuthModel(
-																		MySettings.clientId,
-																		MySettings.clientSecret,
-																		MySettings.projectId,
-																		MySettings.authUri,
-																		MySettings.tokenUri,
-																		MySettings.auth_providerX509CertUrl
-															);
-				if (gOAuthModel.client_id==null || gOAuthModel.client_id.Equals("")){ 
+				//GOAuthModel gOAuthModel = new GOAuthModel(
+				//														MySettings.clientId,
+				//														MySettings.clientSecret,
+				//														MySettings.projectId,
+				//														MySettings.authUri,
+				//														MySettings.tokenUri,
+				//														MySettings.auth_providerX509CertUrl
+				//											);
+				//if (gOAuthModel.client_id == null || gOAuthModel.client_id.Equals("")) {
+				dbMsg += ",Settings=" + MySettings.clientId ;
+				if (MySettings.clientId==null || MySettings.clientId.Equals("")){ 
 					dbMsg += ",JsonReadへ";
 					JsonRead();
 				}else{
@@ -116,6 +117,14 @@ namespace GoogleOSD {
 						string jsonPath = fileOne.ToString();
 						dbMsg += "\r\n" + jsonPath;
 						dbMsg += ",jsonPath=" + jsonPath;
+												//Task<UserCredential> userCredential = Task.Run(() => {
+												//	return GetAllCredential(jsonPath, "token.json");
+												//});
+												//userCredential.Wait();
+												//Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
+						//jsonString = File.ReadAllText(jsonPath);
+						//dbMsg += ",jsonString=" + jsonString;
+						//GOAuthModel gOAuthModel = JsonSerializer.Deserialize<GOAuthModel>(jsonString);
 
 						using (System.IO.FileStream stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
 							//読込んだファイルを文字列に変換
@@ -123,24 +132,24 @@ namespace GoogleOSD {
 							string rStr = sr.ReadToEnd();
 							sr.Close();
 							dbMsg += ",rStr=" + rStr;
-							var deserialized = JsonConvert.DeserializeObject<GOAuthModel>(rStr);
+							GOAuthModel gOAuthModel = JsonConvert.DeserializeObject<GOAuthModel>(rStr);
 							Settings MySettings = Settings.Default;
-							MySettings.clientId = deserialized.client_id;
-							MySettings.clientSecret = deserialized.client_secret;
-							MySettings.projectId = deserialized.project_id;
-							MySettings.authUri = deserialized.auth_uri;
-							MySettings.tokenUri = deserialized.token_uri;
-							MySettings.auth_providerX509CertUrl = deserialized.auth_provider_x509_cert_url;
+							/*					JObject dd = (JObject) JsonConvert.DeserializeObject(rStr);
+																		*/
+
+							dbMsg += ",client_id=" + gOAuthModel.client_id;
+												MySettings.clientId = gOAuthModel.client_id;
+												dbMsg += ",client_secret=" + gOAuthModel.client_secret;
+												MySettings.clientSecret = gOAuthModel.client_secret;
+												MySettings.projectId = gOAuthModel.project_id;
+												MySettings.authUri = gOAuthModel.auth_uri;
+												MySettings.tokenUri = gOAuthModel.token_uri;
+												MySettings.auth_providerX509CertUrl = gOAuthModel.auth_provider_x509_cert_url;
 							MyLog(TAG, dbMsg);
 							//(ユーザーフォルダー)\AppData\Local\CompanyName\ProgramName_xxxx\Version\user.config に保存
 							MySettings.Save();
 							ReadSetting();
 						}
-						//Task<UserCredential> userCredential = Task.Run(() => {
-						//	return GetAllCredential(jsonPath, "token.json");
-						//});
-						//userCredential.Wait();
-						//Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
 
 
 						//			LogInProcrce(jsonPath);
