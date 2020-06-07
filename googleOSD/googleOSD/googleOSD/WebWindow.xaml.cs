@@ -22,6 +22,10 @@ namespace GoogleOSD {
 			try {
 				InitializeComponent();
 				this.FontSize = Constant.MyFontSize;
+				// タイトルバーと境界線を表示しない
+		//		this.WindowStyle = WindowStyle.None;
+				// 最大化表示
+				this.WindowState = WindowState.Maximized;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

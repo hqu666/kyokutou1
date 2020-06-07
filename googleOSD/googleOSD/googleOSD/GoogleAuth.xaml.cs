@@ -14,6 +14,7 @@ using GoogleOSD.Properties;
 //using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Google.Apis.Services;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -44,6 +45,10 @@ namespace GoogleOSD {
 			ReadSetting();
 		}
 
+		/// <summary>
+		/// 設定ファイルの読み込み
+		/// OAuthのJSONを読み取って取っていなければ読込みへ
+		/// </summary>
 		private void ReadSetting()
 		{
 			string TAG = "ReadSetting";
@@ -51,6 +56,10 @@ namespace GoogleOSD {
 			try {
 				Settings MySettings = Settings.Default;
 				dbMsg += ",Settings=" + MySettings.Context.Count + "件";
+				//	Json読込みのテスト時は以下の二行で読込みリセット
+				//	MySettings.clientId = null;
+				//MySettings.Save();
+
 				company_id_tb.Text = MySettings.companyId;
 				user_name_tb.Text = MySettings.companyName;
 				Google_Acount_tb.Text = MySettings.googleAcount;
@@ -61,9 +70,32 @@ namespace GoogleOSD {
 					JsonRead();
 				}else{
 					dbMsg += ",接続へ";
-					//	LogInProcrce(gOAuthModel);
-					MySettings.clientId = null;
-					MySettings.Save();
+					Task<UserCredential> userCredential = Task.Run(() => {
+						return MakeAllCredentialAsync();
+					});
+					userCredential.Wait();
+					Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
+					if (Constant.MyDriveCredential==null) {
+						//メッセージボックスを表示する
+						String titolStr = Constant.ApplicationName;
+						String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+						MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						dbMsg += ",result=" + result;
+					} else {
+						dbMsg += "\r\nAccessToken=" + Constant.MyDriveCredential.Token.AccessToken;
+						dbMsg += "\r\nRefreshToken=" + Constant.MyDriveCredential.Token.RefreshToken;
+						Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+							HttpClientInitializer = Constant.MyDriveCredential,
+							ApplicationName = Constant.ApplicationName,
+						});
+						dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
+						Constant.MyCalendarCredential = Constant.MyDriveCredential;
+						Constant.MyCalendarService = new CalendarService(new BaseClientService.Initializer() {
+							HttpClientInitializer = Constant.MyCalendarCredential,
+							ApplicationName = Constant.ApplicationName,
+						});
+						dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
+					}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -72,7 +104,8 @@ namespace GoogleOSD {
 		}
 
 		/// <summary>
-		/// ファイルで認証情報読込み
+		/// ファイルで認証情報読込む
+		/// 初回とOAuth更新時に使用
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -145,31 +178,76 @@ namespace GoogleOSD {
 		/// UserCredentialを作成する
 		/// 初回アクセス時に使用するAPIをScopesで申請する
 		/// </summary>
-		/// <param name="jsonPath">読込むjsonファイルのURL</param>
-		/// <param name="tokenFolderPath"></param>
 		/// <returns>UserCredential</returns>
-		static Task<UserCredential> GetAllCredential(string jsonPath, string tokenFolderPath)
+		private async Task<UserCredential> MakeAllCredentialAsync()
 		{
-			//string TAG = "GetAllCredential";
-			//string dbMsg = "[GoogleAuthUtil]";
-			//dbMsg += ",jsonPath=" + jsonPath;
-			using (var stream = new System.IO.FileStream(jsonPath, System.IO.FileMode.Open, System.IO.FileAccess.Read)) {
-				return GoogleWebAuthorizationBroker.AuthorizeAsync(
-					GoogleClientSecrets.Load(stream).Secrets,
-					AllScopes,
-					"user",
-					CancellationToken.None,
-					new FileDataStore(tokenFolderPath, true));
+			string TAG = "MakeAllCredentialAsync";
+			string dbMsg = "[GoogleAuthUtil]";
+			UserCredential userCedential=null;
+			try {
+				ClientSecrets clientSecrets = new ClientSecrets();
+				Settings MySettings = Settings.Default;
+				dbMsg += ",clientId=" + MySettings.clientId;
+				clientSecrets.ClientId = MySettings.clientId;
+				dbMsg += ",clientSecret=" + MySettings.clientSecret;
+				clientSecrets.ClientSecret = MySettings.clientSecret;
+				//there are different scopes, which you can find here https://cloud.google.com/storage/docs/authentication
+				//	var scopes = new[] { @"https://www.googleapis.com/auth/devstorage.full_control" };
+				CancellationTokenSource cts = new CancellationTokenSource();
+				userCedential = await GoogleWebAuthorizationBroker.AuthorizeAsync(clientSecrets, AllScopes, "yourGoogle@email", cts.Token);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
+			return userCedential;
 		}
 
-
-
+		/// <summary>
+		/// webでカレンダーへ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Log_in_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Log_in_bt_Click";
 			string dbMsg = "[GoogleAuth]";
 			try {
+				string UserId = Constant.MyCalendarCredential.UserId;
+				dbMsg += ",UserId=" + UserId;
+				MyLog(TAG, dbMsg);
+				string CalenderURL = Constant.CalenderOtherView + "month?pli=1";
+				//特定日の指定は　/month/2020/9/1?pli=1
+				dbMsg += ",CalenderURL=" + CalenderURL;
+				if (webWindow == null) {
+					dbMsg += "一日リストを生成";
+					webWindow = new WebWindow();
+					webWindow.authWindow = this;
+					webWindow.Show();
+					webWindow.SetMyURL(new Uri(CalenderURL));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void Xaml_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Xaml_bt_Click";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				string UserId = Constant.MyCalendarCredential.UserId;
+				dbMsg += ",UserId=" + UserId;
+				MyLog(TAG, dbMsg);
+				string CalenderURL = Constant.CalenderOtherView + "month?pli=1";
+				//特定日の指定は　/month/2020/9/1?pli=1
+				dbMsg += ",CalenderURL=" + CalenderURL;
+				if (calenderWindow == null) {
+					dbMsg += "＞＞カレンダへ";
+					GCalender calenderWindow = new GCalender();
+					calenderWindow.authWindow = this;
+					calenderWindow.Show();
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -179,53 +257,53 @@ namespace GoogleOSD {
 		/// <summary>
 		/// ログイン実働
 		/// </summary>
-		/// <param name="JsonFileName"></param>
-		private void LogInProcrce(string JsonFileName)
-		{
-			string TAG = "LogInProcrce";
-			string dbMsg = "[GoogleAuth]";
-			try {
-				dbMsg += ",JsonFileName=" + JsonFileName;
-				String retStr = GAuthUtil.Authentication(JsonFileName, "token.json");           //"drive_calender.json"
-				dbMsg += ",retStr=" + retStr;
-				if (retStr.Equals("")) {
-					//メッセージボックスを表示する
-					String titolStr = Constant.ApplicationName;
-					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-					dbMsg += ",result=" + result;
-				} else {
-					string UserId = Constant.MyCalendarCredential.UserId;
-					dbMsg += ",UserId=" + UserId;
-					MyLog(TAG, dbMsg);
-					//if (calenderWindow == null) {
-					//	dbMsg += "＞＞カレンダへ";
-					//	GCalender calenderWindow = new GCalender();
-					//	calenderWindow.authWindow = this;
-					//	calenderWindow.Show();
-					//}
-					string CalenderURL = Constant.CalenderOtherView +  "month?pli=1"; 
-					//特定日の指定は　/month/2020/9/1?pli=1
-					dbMsg += ",CalenderURL=" + CalenderURL;
-					if (webWindow == null) {
-						dbMsg += "一日リストを生成";
-						webWindow = new WebWindow();
-						webWindow.authWindow = this;
-						webWindow.Show();
-						webWindow.SetMyURL(new Uri(CalenderURL));
-					}
-				}
+		//private void LogInProcrce()
+		//{
+		//	string TAG = "LogInProcrce";
+		//	string dbMsg = "[GoogleAuth]";
+		//	try {
+		//		//dbMsg += ",JsonFileName=" + JsonFileName;
+		//		//String retStr = GAuthUtil.Authentication(JsonFileName, "token.json");           //"drive_calender.json"
+		//		//dbMsg += ",retStr=" + retStr;
+		//		//if (retStr.Equals("")) {
+		//		//	//メッセージボックスを表示する
+		//		//	String titolStr = Constant.ApplicationName;
+		//		//	String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+		//		//	MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		//		//	dbMsg += ",result=" + result;
+		//		//} else {
+		//			string UserId = Constant.MyCalendarCredential.UserId;
+		//			dbMsg += ",UserId=" + UserId;
+		//			MyLog(TAG, dbMsg);
+		//			//if (calenderWindow == null) {
+		//			//	dbMsg += "＞＞カレンダへ";
+		//			//	GCalender calenderWindow = new GCalender();
+		//			//	calenderWindow.authWindow = this;
+		//			//	calenderWindow.Show();
+		//			//}
+		//			string CalenderURL = Constant.CalenderOtherView +  "month?pli=1"; 
+		//			//特定日の指定は　/month/2020/9/1?pli=1
+		//			dbMsg += ",CalenderURL=" + CalenderURL;
+		//			if (webWindow == null) {
+		//				dbMsg += "一日リストを生成";
+		//				webWindow = new WebWindow();
+		//				webWindow.authWindow = this;
+		//				webWindow.Show();
+		//				webWindow.SetMyURL(new Uri(CalenderURL));
+		//			}
+		////		}
 
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 
 		/// <summary>
 		/// ログアウト処理
 		/// アウトでアプリケーション終了
+		/// Googleのログアウト処理は調査中
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -273,6 +351,7 @@ namespace GoogleOSD {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+
 
 		////////////////////////////////////////////////////
 
