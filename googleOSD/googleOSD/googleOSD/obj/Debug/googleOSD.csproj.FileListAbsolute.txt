@@ -124,3 +124,4 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csproj.CoreC
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.csproj.CopyComplete
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\Style\StyleDic.baml

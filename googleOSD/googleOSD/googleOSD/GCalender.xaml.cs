@@ -45,44 +45,15 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				InitializeComponent();
+				// 最大化表示
+				this.WindowState = WindowState.Maximized;
 				this.FontSize = Constant.MyFontSize;
-				//		Conect2Calender( true);
 				DrowToday();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-		/// <summary>
-		/// 接続
-		/// </summary>
-		/// <param name="isListUp"></param>
-		//private void Conect2Calender(Boolean isListUp)
-		//{
-		//	string TAG = "Conect2Calender";
-		//	string dbMsg = "[GCalender]";
-		//	try {
-		//		String retStr = GAuthUtil.Authentication("drive_calender.json", "token.json");
-		//		dbMsg += ",retStr=" + retStr;
-		//		if (retStr.Equals("")) {
-		//			//メッセージボックスを表示する
-		//			String titolStr = Constant.ApplicationName;
-		//			String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-		//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-		//			dbMsg += ",result=" + result;
-		//		} else {
-		//			string UserId = Constant.MyCalendarCredential.UserId;
-		//			dbMsg += ",UserId=" + UserId;
-		//			MyLog(TAG, dbMsg);
-		//			if (isListUp) {
-		//				DrowToday();
-		//			}
-		//		}
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
 
 		public IList<Google.Apis.Calendar.v3.Data.Event> EventListUp(DateTime timeMin, DateTime timeMax)
 		{

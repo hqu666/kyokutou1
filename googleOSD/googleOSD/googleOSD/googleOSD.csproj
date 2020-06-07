@@ -92,6 +92,9 @@
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Style\StyleDic.xaml.cs">
+      <DependentUpon>StyleDic.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimePic.xaml.cs">
       <DependentUpon>TimePic.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Style\StyleDic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TimePic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

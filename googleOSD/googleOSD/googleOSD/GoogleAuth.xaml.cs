@@ -255,52 +255,6 @@ namespace GoogleOSD {
 		}
 
 		/// <summary>
-		/// ログイン実働
-		/// </summary>
-		//private void LogInProcrce()
-		//{
-		//	string TAG = "LogInProcrce";
-		//	string dbMsg = "[GoogleAuth]";
-		//	try {
-		//		//dbMsg += ",JsonFileName=" + JsonFileName;
-		//		//String retStr = GAuthUtil.Authentication(JsonFileName, "token.json");           //"drive_calender.json"
-		//		//dbMsg += ",retStr=" + retStr;
-		//		//if (retStr.Equals("")) {
-		//		//	//メッセージボックスを表示する
-		//		//	String titolStr = Constant.ApplicationName;
-		//		//	String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-		//		//	MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-		//		//	dbMsg += ",result=" + result;
-		//		//} else {
-		//			string UserId = Constant.MyCalendarCredential.UserId;
-		//			dbMsg += ",UserId=" + UserId;
-		//			MyLog(TAG, dbMsg);
-		//			//if (calenderWindow == null) {
-		//			//	dbMsg += "＞＞カレンダへ";
-		//			//	GCalender calenderWindow = new GCalender();
-		//			//	calenderWindow.authWindow = this;
-		//			//	calenderWindow.Show();
-		//			//}
-		//			string CalenderURL = Constant.CalenderOtherView +  "month?pli=1"; 
-		//			//特定日の指定は　/month/2020/9/1?pli=1
-		//			dbMsg += ",CalenderURL=" + CalenderURL;
-		//			if (webWindow == null) {
-		//				dbMsg += "一日リストを生成";
-		//				webWindow = new WebWindow();
-		//				webWindow.authWindow = this;
-		//				webWindow.Show();
-		//				webWindow.SetMyURL(new Uri(CalenderURL));
-		//			}
-		////		}
-
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
-
-
-		/// <summary>
 		/// ログアウト処理
 		/// アウトでアプリケーション終了
 		/// Googleのログアウト処理は調査中
