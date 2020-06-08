@@ -13,6 +13,7 @@
 		ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="Window_Closing">
 	<Window.Resources>
 		<Style TargetType="StackPanel">
+			<Setter Property="Width" Value="Auto"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 			<Setter Property="Margin" Value="0,10,0,10"/>
 		</Style>
@@ -22,7 +23,24 @@
 			<!--<Setter Property="Margin" Value="5"/>-->
 		</Style>
 
-		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+		<ControlTemplate x:Key="buttonStd"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="2"
+                BorderBrush="DarkGray"
+                Background="{TemplateBinding Background}"
+                CornerRadius="3">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
+		<Style TargetType="Button">
+			<Setter Property="Padding" Value="10,5,10,5"/>
+			<Setter Property="Margin" Value="10,5,10,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonStd}"/>
+		</Style>
+
+		<ControlTemplate x:Key="buttonRadius"  TargetType="Button">
 			<Border Name="border"
                 BorderThickness="1"
                 BorderBrush="LightGray"
@@ -32,13 +50,12 @@
                               HorizontalAlignment="Center" />
 			</Border>
 		</ControlTemplate>
-
-		<Style TargetType="Button">
+		<Style x:Key="bt_radius" TargetType="Button">
 			<Setter Property="Width" Value="30"/>
 			<Setter Property="Height" Value="30"/>
-			<Setter Property="Padding" Value="5,5,5,5"/>
 			<Setter Property="Margin" Value="5,5,5,5"/>
-			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
+
+			<Setter Property="Template"  Value="{StaticResource buttonRadius}"/>
 		</Style>
 
 		<Style TargetType="TextBox">
@@ -63,19 +80,33 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition />
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<StackPanel x:Name="control_sp" Grid.Row="0" Orientation="Horizontal">
-			<Button  x:Name="go_back_bt"  Content="戻る" Click="Go_back_bt_Click"
+			<Button  	x:Name="go_back_bt"  Content="戻る" Click="Go_back_bt_Click"
+							Style="{StaticResource bt_radius}"
 							/>
 			<Button  x:Name="fowerd_bt"  Content="進む" Click="Fowerd_bt_Click"
+							Style="{StaticResource bt_radius}"
 							/>
-			<Button  x:Name="refresh_bt"  Content="更新" Click="Refresh_bt_Click"/>
+			<Button  x:Name="refresh_bt"  Content="更新" Click="Refresh_bt_Click"
+							Style="{StaticResource bt_radius}"
+							/>
 			<TextBox  TextWrapping="Wrap" HorizontalAlignment="Stretch" 
 						 Text="{Binding Source, ElementName=web_wb, Mode=OneWay}"
 						VerticalAlignment="Center" 
-						x:Name="url_tb" TextChanged="Url_tb_TextChanged"  />
+						x:Name="url_tb" TextChanged="Url_tb_TextChanged" Width="615"  />
+			<StackPanel x:Name="status_sp"  Orientation="Horizontal" HorizontalAlignment="Right"
+							Background="DarkRed"  Margin="0,5,0,0" Width="955">
+				<Label Foreground="White" FontSize="18"  HorizontalAlignment="Right"
+						TextBlock.TextAlignment="Right" 
+						Content="予定を仮作成しました。不要なら削除ボタンをクリックして下さい" Width="auto"/>
+				<Button   HorizontalAlignment="Right" Margin="10,5,10,5"  FontSize="18" Width="50"
+						x:Name="del_event_bt"  Content="削除" />
+			</StackPanel>
+
 		</StackPanel>
 		<Controls:WebView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-										x:Name="web_wb" NavigationCompleted="Web_wb_NavigationCompleted" NavigationStarting="Web_wb_NavigationStarting" />
+										x:Name="web_wb" NavigationCompleted="Web_wb_NavigationCompleted" NavigationStarting="Web_wb_NavigationStarting" MouseUp="Web_wb_MouseUp" />
 	</Grid>
 </Window>

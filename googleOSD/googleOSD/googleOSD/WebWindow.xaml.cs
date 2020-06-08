@@ -139,6 +139,10 @@ namespace GoogleOSD {
 				string source = @web_wb.Source.ToString();
 				if (source.Contains("eventedit")) {
 					dbMsg += ">>編集へ" ;
+					MakeEvent(source);
+				}else{
+					//削除ボタンを隠す
+					status_sp.Visibility = Visibility.Hidden;
 				}
 				dbMsg += ",CanGoBack=" + web_wb.CanGoBack;
 				dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
@@ -185,6 +189,18 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+		private void Web_wb_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			string TAG = "Web_wb_MouseUp";
+			string dbMsg = "[WebWindow]";
+			try {
+				Button bt = sender as Button;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 
 		/// <summary>
@@ -217,6 +233,22 @@ namespace GoogleOSD {
 				if (authWindow != null) {
 					authWindow.webWindow = null;
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			this.Close();
+		}
+
+		////////////////////////////////////////////////////
+		private void MakeEvent(string source)
+		{
+			string TAG = "MakeEvent";
+			string dbMsg = "[WebWindow]";
+			try {
+				dbMsg += ",Source= " + source;
+				//削除ボタンを表示する
+				status_sp.Visibility=Visibility.Visible;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
