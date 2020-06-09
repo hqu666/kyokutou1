@@ -62,7 +62,9 @@ namespace GoogleOSD {
 			string TAG = "Go_back_bt_Click";
 			string dbMsg = "[WebWindow]";
 			try {
+				dbMsg += ",CanGoBack" + this.web_wb.CanGoBack;
 				this.web_wb.GoBack();
+				dbMsg += ",戻る";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -79,7 +81,9 @@ namespace GoogleOSD {
 			string TAG = "Fowerd_bt_Click";
 			string dbMsg = "[WebWindow]";
 			try {
+				dbMsg += ",CanGoForward" + this.web_wb.CanGoForward;
 				this.web_wb.GoForward();
+				dbMsg += ",進む";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -97,6 +101,7 @@ namespace GoogleOSD {
 			string dbMsg = "[WebWindow]";
 			try {
 				this.web_wb.Refresh();
+				dbMsg += ",更新";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -135,17 +140,22 @@ namespace GoogleOSD {
 				WebView wv = sender as WebView;
 				string documentTitle = web_wb.DocumentTitle.ToString();
 				dbMsg += ",documentTitle=" + documentTitle;
-				dbMsg += ",Source=" + web_wb.Source;
-				string source = @web_wb.Source.ToString();
-				if (source.Contains("eventedit")) {
-					dbMsg += ">>編集へ" ;
-					MakeEvent(source);
-				}else{
-					//削除ボタンを隠す
-					status_sp.Visibility = Visibility.Hidden;
+				if (web_wb.DocumentTitle != null) {
+					this.Title = web_wb.DocumentTitle;
 				}
 				dbMsg += ",CanGoBack=" + web_wb.CanGoBack;
+				go_back_bt.IsEnabled = web_wb.CanGoBack;
 				dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
+				fowerd_bt.IsEnabled = web_wb.CanGoForward;
+				string source = @web_wb.Source.ToString();
+				dbMsg += ",Source=　" + source;
+				if (source.Contains("eventedit")) {
+					dbMsg += "　　>>編集へ" ;
+					MakeEvent(source);
+				}else if(status_sp.IsVisible) {
+					dbMsg += "　　>>削除ボタンを隠す";
+					status_sp.Visibility = Visibility.Hidden;
+				}
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -170,19 +180,20 @@ namespace GoogleOSD {
 					string errMsg = args.WebErrorStatus.ToString();
 					int errCode = (int)args.WebErrorStatus;
 					string msg = string.Format("サーバ側エラー：{0}（{1}）", errMsg, errCode);
-				//	await new Windows.UI.Popups.MessageDialog(msg).ShowAsync();
+					dbMsg += msg;
+					//	await new Windows.UI.Popups.MessageDialog(msg).ShowAsync();
 				}
-			//	if(wv != null) {
-			//		string documentTitle = wv.DocumentTitle;
-					dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
-					if (web_wb.DocumentTitle != null) {
-						this.Title = web_wb.DocumentTitle;
-					}
-					dbMsg += ",Source= " + web_wb.Source;
-		//			url_tb.Text = @web_wb.Source;
-					dbMsg += " ,CanGoBack=" + web_wb.CanGoBack;
-					dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
-		//		}
+		//		//	if(wv != null) {
+		//		//		string documentTitle = wv.DocumentTitle;
+		//		dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
+		//			if (web_wb.DocumentTitle != null) {
+		//				this.Title = web_wb.DocumentTitle;
+		//			}
+		//			dbMsg += ",Source= " + web_wb.Source;
+		////			url_tb.Text = @web_wb.Source;
+		//			dbMsg += "　 ,CanGoBack=" + web_wb.CanGoBack;
+		//			dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
+		////		}
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -246,14 +257,14 @@ namespace GoogleOSD {
 			string TAG = "MakeEvent";
 			string dbMsg = "[WebWindow]";
 			try {
-				dbMsg += ",Source= " + source;
-				//削除ボタンを表示する
+				dbMsg += ",Source= 　" + source;
 				status_sp.Visibility=Visibility.Visible;
+				dbMsg += "　削除ボタンを表示" ;
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			this.Close();
 		}
 
 		////////////////////////////////////////////////////
