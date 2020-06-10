@@ -73,6 +73,63 @@ namespace GoogleOSD {
 			return retList;
 		}
 
+		public IList<Event> Pram2GEvents(string KetStr, string VarStr, DateTime timeMin, DateTime timeMax)
+		{
+			string TAG = "Pram2GEvents";
+			string dbMsg = "[GoogleCalendarUtil]";
+			IList<Google.Apis.Calendar.v3.Data.Event> retList = new List<Google.Apis.Calendar.v3.Data.Event>();
+			try {
+				dbMsg += ",検索対象=" + KetStr + " :  " + VarStr;
+				dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
+				// Create Google Calendar API service.
+				var service = new CalendarService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyCalendarCredential,
+					ApplicationName = Constant.ApplicationName,
+				});
+				dbMsg += ",HttpClient=" + service.HttpClient.ToString();
+
+				// Define parameters of request.
+				// ※終日・複数日のStartはDateTimeが無いのでStart.DateでソートしたいがOrderByEnumに該当カラムが無い
+				EventsResource.ListRequest request = service.Events.List("primary");
+				request.TimeMin = timeMin;                     //DateTime.Now;
+				request.TimeMax = timeMax;
+				request.ShowDeleted = false;
+				request.SingleEvents = true;
+				request.MaxResults = 1000;
+				request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+				Task<Events> evRequest = Task.Run(() => {
+					return request.ExecuteAsync();              //取得実行
+				});
+				evRequest.Wait();
+				Events events = evRequest.Result;                           //作成結果が格納され戻される
+																			//				Events events = request.Execute();              //取得実行
+				Constant.CalenderSummary = events.Summary;
+				if (events.Items != null && events.Items.Count > 0) {
+					dbMsg += ",events=" + events.Items.Count() + "件";
+					foreach (var eventItem in events.Items) {
+						string startDT = eventItem.Start.DateTime.ToString();
+						dbMsg += "\r\n" + startDT;
+						string endDT = eventItem.End.DateTime.ToString();
+						dbMsg += "～" + endDT;
+						if (String.IsNullOrEmpty(startDT)) {
+							startDT = eventItem.Start.Date;
+						}
+						string Summary = eventItem.Summary;
+						dbMsg += "," + Summary;
+						retList.Add(eventItem);
+					}
+					dbMsg += "," + retList.Count() + "件";
+				} else {
+					dbMsg += "まだ予定が登録されていません";
+				}
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retList;
+		}
+
+
 		/// <summary>
 		/// EventDateTimeを20211231などの数値で返す
 		/// </summary>

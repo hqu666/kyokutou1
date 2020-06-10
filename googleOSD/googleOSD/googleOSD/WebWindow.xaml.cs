@@ -9,7 +9,9 @@ namespace GoogleOSD {
 	public partial class WebWindow :Window {
 		public GoogleAuth authWindow;
 		public GCalender mainView;
-
+		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
+		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
+		public string b_UrlStr;
 		/// <summary>
 		/// このページで表示するwebページのURL
 		/// </summary>
@@ -151,7 +153,7 @@ namespace GoogleOSD {
 				dbMsg += ",Source=　" + source;
 				if (source.Contains("eventedit")) {
 					dbMsg += "　　>>編集へ" ;
-					MakeEvent(source);
+					MakeEvent(source, @b_UrlStr);
 				}else if(status_sp.IsVisible) {
 					dbMsg += "　　>>削除ボタンを隠す";
 					status_sp.Visibility = Visibility.Hidden;
@@ -183,23 +185,25 @@ namespace GoogleOSD {
 					dbMsg += msg;
 					//	await new Windows.UI.Popups.MessageDialog(msg).ShowAsync();
 				}
-		//		//	if(wv != null) {
-		//		//		string documentTitle = wv.DocumentTitle;
-		//		dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
-		//			if (web_wb.DocumentTitle != null) {
-		//				this.Title = web_wb.DocumentTitle;
-		//			}
-		//			dbMsg += ",Source= " + web_wb.Source;
-		////			url_tb.Text = @web_wb.Source;
-		//			dbMsg += "　 ,CanGoBack=" + web_wb.CanGoBack;
-		//			dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
-		////		}
+				b_UrlStr = @web_wb.Source.ToString();
+				//		//	if(wv != null) {
+				//		//		string documentTitle = wv.DocumentTitle;
+				//		dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
+				//			if (web_wb.DocumentTitle != null) {
+				//				this.Title = web_wb.DocumentTitle;
+				//			}
+				//			dbMsg += ",Source= " + web_wb.Source;
+				////			url_tb.Text = @web_wb.Source;
+				//			dbMsg += "　 ,CanGoBack=" + web_wb.CanGoBack;
+				//			dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
+				////		}
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 		private void Web_wb_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			string TAG = "Web_wb_MouseUp";
@@ -252,15 +256,85 @@ namespace GoogleOSD {
 		}
 
 		////////////////////////////////////////////////////
-		private void MakeEvent(string source)
+		
+		/// <summary>
+		/// 選択された予定へ
+		/// </summary>
+		/// <param name="HtmlLink"></param>
+		/// <param name="CurrentUrl"></param>
+		private void MakeEvent(string HtmlLink, string CurrentUrl)
 		{
 			string TAG = "MakeEvent";
 			string dbMsg = "[WebWindow]";
 			try {
-				dbMsg += ",Source= 　" + source;
-				status_sp.Visibility=Visibility.Visible;
-				dbMsg += "　削除ボタンを表示" ;
+				dbMsg += ",CurrentUrl= 　" + b_UrlStr; 
+				string DatePram = "";
+				DateTime timeCurrent = DateTime.Now;
+				DateTime timeMin = timeCurrent.AddMonths(-1);
+				DateTime timeMax = timeCurrent.AddMonths(1);
+				string rangeStr = "month";
+				if (!CurrentUrl.Contains("calendar.google.com/calendar/r/")) {
+					return;
+				} else if (CurrentUrl.Contains("r/year")) {
+					dbMsg += ">>年"; 
+					string[] delimiter = { "r/year" };
+					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					DatePram = Strs[1];
+				} else if (CurrentUrl.Contains("r/month")) {
+					dbMsg += ">>月";	
+					string[] delimiter = { "r/month" };
+					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					DatePram = Strs[1];
+				} else if (CurrentUrl.Contains("r/week")) {
+					dbMsg += ">>週";
+					rangeStr = "week";
+					string[] delimiter = { "r/week" };
+					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					DatePram = Strs[1];
+				} else if (CurrentUrl.Contains("r/day")) {
+					dbMsg += ">>日";
+					rangeStr = "day";
+					string[] delimiter = { "r/day" };
+					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					DatePram = Strs[1];
+				} else if (CurrentUrl.Contains("r/agenda")) {
+					dbMsg += ">>スケジュール";
+					rangeStr = "agenda";
+					string[] delimiter = { "r/agenda" };
+					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					DatePram = Strs[1];
+				}
+				dbMsg += ",DatePram= " + DatePram;
+				string[] dStrs = DatePram.Split('/');
+				if (2<dStrs.Length) {
+					int yearInt = int.Parse(dStrs[dStrs.LongLength - 3]);
+					int monthInt = int.Parse(dStrs[dStrs.LongLength - 2]);
+					int dayInt = int.Parse(dStrs[dStrs.LongLength - 1]);
+					timeCurrent = new DateTime(yearInt, monthInt, dayInt);
+					if (CurrentUrl.Contains("r/year")) {
+						timeMin = new DateTime(yearInt, 1, 1);
+						timeMax = timeMin.AddYears(1);
+					} else if (CurrentUrl.Contains("r/month")) {
+						timeMin = new DateTime(yearInt, monthInt, 1);
+						timeMax = timeMin.AddMonths(1);
+					} else if (CurrentUrl.Contains("r/week")) {
+						timeMin = new DateTime(yearInt, monthInt, 1);
+						timeMax = timeMin.AddDays(7);
+					} else if (CurrentUrl.Contains("r/day")) {
+						timeMin = timeCurrent.AddDays(-1);
+						timeMax = timeMin.AddDays(1);
+					} else if (CurrentUrl.Contains("r/agenda")) {
+						timeMin = timeCurrent.AddDays(-1);
+						timeMax = timeMin.AddMonths(1);
+					}
+				}
+				dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
+				dbMsg += ",Source= 　" + HtmlLink;
+				GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
+				status_sp.Visibility = Visibility.Visible;
+				dbMsg += "　削除ボタンを表示";
 
+				//?eid=NXNkYTUzZGo2bHM4dmVicGFsNGppNDVkZ3VfMjAyMDA1MjBUMDEwMDAwWiBoa3V3YXVhbWFAbQ"
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
