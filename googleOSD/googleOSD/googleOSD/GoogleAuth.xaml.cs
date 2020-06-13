@@ -231,6 +231,36 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// webでGoogleDriveへ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Web_drive_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Web_drive_bt_Click";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				string UserId = Constant.MyDriveCredential.UserId;
+				dbMsg += ",UserId=" + UserId;
+				MyLog(TAG, dbMsg);
+				Constant.DriveStratUrl = Constant.DriveOtherView;
+				Google.Apis.Drive.v3.Data.File folder = GDriveUtil.FindByNameParent(Constant.TopFolderName, Constant.RootFolderName);
+				Constant.DriveStratUrl += folder.Id;
+				dbMsg += ",DriveURL=" + Constant.DriveStratUrl;
+				if (webWindow == null) {
+					dbMsg += "案件フォルダへ";
+					webWindow = new WebWindow();
+					webWindow.authWindow = this;
+					webWindow.Show();
+					webWindow.SetMyURL(new Uri(Constant.DriveStratUrl));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		private void Xaml_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Xaml_bt_Click";
@@ -253,6 +283,7 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		/// <summary>
 		/// ログアウト処理

@@ -71,7 +71,8 @@ namespace GoogleOSD {
 				if (this.web_wb.CanGoBack){
 					dbMsg += ",戻る";
 					this.web_wb.GoBack();
-				}else if(GCalendarUtil.IsGoogleCalender(this.web_wb.Source.ToString())) {
+				}else if(GCalendarUtil.IsGoogleCalender(this.web_wb.Source.ToString()) ||
+							Constant.DriveStratUrl.Equals(this.web_wb.Source.ToString())) {
 					dbMsg += ">>終わる";
 					QuitMe();
 				}

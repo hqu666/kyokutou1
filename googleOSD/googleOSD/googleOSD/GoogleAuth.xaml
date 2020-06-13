@@ -86,7 +86,7 @@
 						Name="Google_Acount_tb" />
 		<StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
 			<Button  x:Name="xaml_bt" Content="xamlでカレンダへ" Click="Xaml_bt_Click" />
-			<Button  x:Name="web_drive_bt" Content="webでドライブへ" Click="Xaml_bt_Click" />
+			<Button  x:Name="web_drive_bt" Content="webでドライブへ" Click="Web_drive_bt_Click"  />
 		</StackPanel>
 		<Label Grid.Row="2" Grid.Column="0"  HorizontalAlignment="Right" Content="パスワード" />
 		<TextBox Grid.Row="2" Grid.Column="1"

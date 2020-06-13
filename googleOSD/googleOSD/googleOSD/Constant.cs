@@ -29,10 +29,13 @@ namespace GoogleOSD {
 		public static string CalenderSummary = "abcbdffghaiklnm@gmail.com";   //Googleアカウント
 		public static string CalenderOtherView = "https://calendar.google.com/calendar/r/";            //週別/日別への切替
 
+		public static string DriveOtherView = "https://drive.google.com/drive/folders/";
 		public static string RootFolderName = "KSクラウド";            //保存先サーバのルートフォルダ
 		public static string RootFolderID = "";
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
+		public static string DriveStratUrl ="https://drive.google.com/drive/my-drive";		///Googleマイドライブ
+
 		public static string MakeFolderName = null;         //作成するファイルの格納フォルダ
 		public static String parentFolderId;
 		public static string LocalPass = "";            //送信元PCフォルダ
