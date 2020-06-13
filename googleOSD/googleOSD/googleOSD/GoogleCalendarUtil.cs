@@ -18,7 +18,7 @@ namespace GoogleOSD {
 		/// <param name="timeMin">開始日</param>
 		/// <param name="timeMax">終了日</param>
 		/// <returns></returns>
-		public IList<Event> GEventsListUp(DateTime timeMin,DateTime timeMax)
+		public IList<Event> GEventsListUp(DateTime timeMin, DateTime timeMax)
 		{
 			string TAG = "GEventsListUp";
 			string dbMsg = "[GoogleCalendarUtil]";
@@ -73,23 +73,44 @@ namespace GoogleOSD {
 			return retList;
 		}
 
-		public IList<Event> Pram2GEvents(string KetStr, string VarStr, DateTime timeMin, DateTime timeMax)
+		/// <summary>
+		/// 指定されたスケジュールを検索する
+		/// </summary>
+		/// <param name="KetStr"></param>
+		/// <param name="VarStr"></param>
+		/// <param name="timeMin"></param>
+		/// <param name="timeMax"></param>
+		/// <returns></returns>
+		public Event Pram2GEvents(string KetStr, string VarStr, DateTime timeMin, DateTime timeMax)
 		{
 			string TAG = "Pram2GEvents";
 			string dbMsg = "[GoogleCalendarUtil]";
-			IList<Google.Apis.Calendar.v3.Data.Event> retList = new List<Google.Apis.Calendar.v3.Data.Event>();
+			Google.Apis.Calendar.v3.Data.Event rEvent = new Google.Apis.Calendar.v3.Data.Event();
+			//		IList<Google.Apis.Calendar.v3.Data.Event> retList = new List<Google.Apis.Calendar.v3.Data.Event>();
 			try {
 				dbMsg += ",検索対象=" + KetStr + " :  " + VarStr;
+				if (KetStr.Equals("HtmlLink")) {
+					if (VarStr.Contains("calendar/r/eventedit/")) {
+						string[] delimiter = { "calendar/r/eventedit/" };
+						string[] Strs = VarStr.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						VarStr = Strs[1];
+						string[] delimiter2 = { "?pli=" };
+						string[] Strs2 = VarStr.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
+						VarStr = Strs2[0];
+					} else if (VarStr.Contains("www.google.com/calendar/event")) {
+						string[] delimiter = { "eid=" };
+						string[] Strs = VarStr.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						VarStr = Strs[1];
+					}
+					dbMsg += ">>" + VarStr;
+				}
+
 				dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
-				// Create Google Calendar API service.
 				var service = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
 				});
 				dbMsg += ",HttpClient=" + service.HttpClient.ToString();
-
-				// Define parameters of request.
-				// ※終日・複数日のStartはDateTimeが無いのでStart.DateでソートしたいがOrderByEnumに該当カラムが無い
 				EventsResource.ListRequest request = service.Events.List("primary");
 				request.TimeMin = timeMin;                     //DateTime.Now;
 				request.TimeMax = timeMax;
@@ -107,18 +128,30 @@ namespace GoogleOSD {
 				if (events.Items != null && events.Items.Count > 0) {
 					dbMsg += ",events=" + events.Items.Count() + "件";
 					foreach (var eventItem in events.Items) {
-						string startDT = eventItem.Start.DateTime.ToString();
-						dbMsg += "\r\n" + startDT;
-						string endDT = eventItem.End.DateTime.ToString();
-						dbMsg += "～" + endDT;
-						if (String.IsNullOrEmpty(startDT)) {
-							startDT = eventItem.Start.Date;
+						if (KetStr.Equals("HtmlLink")) {
+							string HtmlLink = @eventItem.HtmlLink;
+							string[] delimiter = { "eid=" };
+							string[] Strs = HtmlLink.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+							HtmlLink = Strs[1];
+							dbMsg += ", " + HtmlLink;
+							if (HtmlLink.Equals(VarStr)) {
+								rEvent = eventItem;
+								string startDT = eventItem.Start.DateTime.ToString();
+								dbMsg += "\r\n" + startDT;
+								string endDT = eventItem.End.DateTime.ToString();
+								dbMsg += "～" + endDT;
+								if (String.IsNullOrEmpty(startDT)) {
+									startDT = eventItem.Start.Date;
+								}
+								string Summary = eventItem.Summary;
+								dbMsg += "," + Summary;
+								break;
+							}
+
 						}
-						string Summary = eventItem.Summary;
-						dbMsg += "," + Summary;
-						retList.Add(eventItem);
+						//					retList.Add(eventItem);
 					}
-					dbMsg += "," + retList.Count() + "件";
+					//				dbMsg += "," + retList.Count() + "件";
 				} else {
 					dbMsg += "まだ予定が登録されていません";
 				}
@@ -126,7 +159,88 @@ namespace GoogleOSD {
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
-			return retList;
+			return rEvent;
+		}
+
+		/// <summary>
+		/// GoogleCalenderならtrueを返す
+		/// </summary>
+		/// <param name="CurrentUrl"></param>
+		/// <returns></returns>
+		public bool IsGoogleCalender(string CurrentUrl)
+		{
+			string TAG = "IsGoogleCalender";
+			string dbMsg = "[GoogleCalendarUtil]";
+			bool retBool = false;
+			try {
+				dbMsg += ",CurrentUrl= 　" + CurrentUrl;
+				if (CurrentUrl.Contains("calendar.google.com/calendar/r/") ||
+					CurrentUrl.Contains("www.google.com/calendar/")) {
+					retBool = true;
+				}
+				dbMsg += ",retBool= " + retBool;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
+		/// <summary>
+		/// Googleカレンダーから表示している日付を返す
+		/// 日付部分が無ければ本日と判定する
+		/// </summary>
+		/// <param name="CurrentUrl"></param>
+		public DateTime GoogleWebCurentDate(string CurrentUrl)
+		{
+			string TAG = "GoogleWebCurentDate";
+			string dbMsg = "[GoogleCalendarUtil]";
+			DateTime timeCurrent = DateTime.Now;
+			try {
+				dbMsg += ",CurrentUrl= 　" + CurrentUrl;
+				string DatePram = "";
+				if (IsGoogleCalender(CurrentUrl)) {
+					if (CurrentUrl.Contains("r/year")) {
+						dbMsg += ">>年";
+						string[] delimiter = { "r/year" };
+						string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						DatePram = Strs[1];
+					} else if (CurrentUrl.Contains("r/month")) {
+						dbMsg += ">>月";
+						string[] delimiter = { "r/month" };
+						string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						DatePram = Strs[1];
+					} else if (CurrentUrl.Contains("r/week")) {
+						dbMsg += ">>週";
+						string[] delimiter = { "r/week" };
+						string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						DatePram = Strs[1];
+					} else if (CurrentUrl.Contains("r/day")) {
+						dbMsg += ">>日";
+						string[] delimiter = { "r/day" };
+						string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						DatePram = Strs[1];
+					} else if (CurrentUrl.Contains("r/agenda")) {
+						dbMsg += ">>スケジュール";
+						string[] delimiter = { "r/agenda" };
+						string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+						DatePram = Strs[1];
+					}
+				}
+				dbMsg += ",DatePram= " + DatePram;
+				string[] dStrs = DatePram.Split('/');
+				if (2 < dStrs.Length) {
+					int yearInt = int.Parse(dStrs[dStrs.LongLength - 3]);
+					int monthInt = int.Parse(dStrs[dStrs.LongLength - 2]);
+					int dayInt = int.Parse(dStrs[dStrs.LongLength - 1]);
+					timeCurrent = new DateTime(yearInt, monthInt, dayInt);
+				}
+				dbMsg += " ,対象期間=" + timeCurrent;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return timeCurrent;
 		}
 
 
@@ -145,7 +259,7 @@ namespace GoogleOSD {
 				string retStr = String.Format("{0:yyyyMMdd}", tDateTime);
 				retInt = int.Parse(retStr);
 				dbMsg += ">>" + retInt;
-		//		Util.MyLog(TAG, dbMsg);
+				//		Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
@@ -156,11 +270,11 @@ namespace GoogleOSD {
 		{
 			string TAG = "EventDateTime2Long";
 			string dbMsg = "[GoogleCalendarUtil]";
-			long retLong  = 0;
+			long retLong = 0;
 			try {
 				DateTime tDateTime = EventDateTime2DT(TEventDateTime);
 				string retStr = String.Format("{0:yyyyMMddHHmm}", tDateTime);
-				 retLong = long.Parse(retStr);
+				retLong = long.Parse(retStr);
 				dbMsg += ">>" + retLong;
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -180,13 +294,13 @@ namespace GoogleOSD {
 			string dbMsg = "[GoogleCalendarUtil]";
 			string retStr = null;
 			try {
-				DateTime tDateTime = EventDateTime2DT( TEventDateTime);
-				if(tDateTime ==null) {
+				DateTime tDateTime = EventDateTime2DT(TEventDateTime);
+				if (tDateTime == null) {
 					tDateTime = DateTime.Now;
 				}
 				retStr = String.Format("{0:yyyyMMdd}", tDateTime);
 				dbMsg += ">>" + retStr;
-	//			Util.MyLog(TAG, dbMsg);
+				//			Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
@@ -210,7 +324,7 @@ namespace GoogleOSD {
 					string todayItemStartDate = TEventDateTime.Date;
 					string[] sStr = todayItemStartDate.Split('-');
 					tDateTime = new DateTime(int.Parse(sStr[0]), int.Parse(sStr[1]), int.Parse(sStr[2]));
-				}else if (TEventDateTime.DateTime != null) {
+				} else if (TEventDateTime.DateTime != null) {
 					dbMsg += "Date=" + TEventDateTime.DateTime;
 					int sYear = TEventDateTime.DateTime.Value.Year;
 					int sMonth = TEventDateTime.DateTime.Value.Month;
@@ -233,42 +347,42 @@ namespace GoogleOSD {
 		{
 			string TAG = "ColorId2RGB";
 			string dbMsg = "[GoogleCalendarUtil]";
-			Color reColor = Color.FromRgb( 0x00, 0xFF, 0x00);
+			Color reColor = Color.FromRgb(0x00, 0xFF, 0x00);
 			try {
 				dbMsg += "colorId=" + colorId;
-/*
-				Google.Apis.Calendar.v3.Data.Colors colors = Constant.MyCalendarService.Colors.Get().Fetch();
+				/*
+								Google.Apis.Calendar.v3.Data.Colors colors = Constant.MyCalendarService.Colors.Get().Fetch();
 
-				// Print available calendarListEntry colors.
-				foreach (KeyValuePair<String, ColorDefinition> color in colors.Calendar) {
-					System.out.println("ColorId : " + color.Key);
-					System.out.println("  Background: " + color.Value.Background);
-					System.out.println("  Foreground: " + color.Value.Foreground);
-				}
-				// Print available event colors.
-				foreach (KeyValuePair<String, ColorDefinition> color in colors.Event) {
-					System.out.println("ColorId : " + color.Key);
-					System.out.println("  Background: " + color.Value.Background);
-					System.out.println("  Foreground: " + color.Value.Foreground);
-				}
-*/
+								// Print available calendarListEntry colors.
+								foreach (KeyValuePair<String, ColorDefinition> color in colors.Calendar) {
+									System.out.println("ColorId : " + color.Key);
+									System.out.println("  Background: " + color.Value.Background);
+									System.out.println("  Foreground: " + color.Value.Foreground);
+								}
+								// Print available event colors.
+								foreach (KeyValuePair<String, ColorDefinition> color in colors.Event) {
+									System.out.println("ColorId : " + color.Key);
+									System.out.println("  Background: " + color.Value.Background);
+									System.out.println("  Foreground: " + color.Value.Foreground);
+								}
+				*/
 
-				switch (colorId){
+				switch (colorId) {
 					case "1":
 						dbMsg += ":ラベンダー";
-						reColor = Color.FromRgb( 121, 134, 203);
+						reColor = Color.FromRgb(121, 134, 203);
 						break;
 					case "2":
 						dbMsg += ":セージ";
-						reColor = Color.FromRgb( 51, 182, 121);
+						reColor = Color.FromRgb(51, 182, 121);
 						break;
 					case "3":
 						dbMsg += ":ブドウ";
-						reColor = Color.FromRgb( 142, 36, 170);
+						reColor = Color.FromRgb(142, 36, 170);
 						break;
 					case "4":
 						dbMsg += ":フラミンゴ";
-						reColor = Color.FromRgb( 230, 124, 115);
+						reColor = Color.FromRgb(230, 124, 115);
 						break;
 					case "5":
 						dbMsg += ":バナナ";
@@ -276,30 +390,30 @@ namespace GoogleOSD {
 						break;
 					case "6":
 						dbMsg += ":ミカン";
-						reColor = Color.FromRgb( 244, 81, 30);
+						reColor = Color.FromRgb(244, 81, 30);
 						break;
 					case "7":
 						dbMsg += ":不明";
 						break;
 					case "8":
 						dbMsg += ":ブルーベリー";
-						reColor = Color.FromRgb( 63, 81, 181);
+						reColor = Color.FromRgb(63, 81, 181);
 						break;
 					case "9":
 						dbMsg += ":グラファイト";
-						reColor = Color.FromRgb( 97, 97, 97);
+						reColor = Color.FromRgb(97, 97, 97);
 						break;
 					case "10":
 						dbMsg += ":バジル";
-						reColor = Color.FromRgb( 11, 128, 67);
+						reColor = Color.FromRgb(11, 128, 67);
 						break;
 					case "11":
 						dbMsg += ":トマト";
-						reColor = Color.FromRgb( 213, 0, 0);
+						reColor = Color.FromRgb(213, 0, 0);
 						break;
 					default:
 						dbMsg += ":無指定：ピーコック";
-						reColor = Color.FromRgb( 121, 134, 203);
+						reColor = Color.FromRgb(121, 134, 203);
 						break;
 				}
 				dbMsg += ">>" + reColor;
@@ -327,7 +441,7 @@ namespace GoogleOSD {
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("4", "フラミンゴ", Color.FromRgb(230, 124, 115)));       //#FFE67C73
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("5", "バナナ", Color.FromRgb(246, 192, 40)));               //#FFF6C028
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("6", "ミカン", Color.FromRgb(244, 81, 30)));                   //#FFF4511E
-				Constant.googleEventColor.Add(new Constant.GoogleEventColor("7", "ピーコック", Color.FromRgb(121, 134, 203)));			//
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("7", "ピーコック", Color.FromRgb(121, 134, 203)));           //
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("8", "ブルーベリー", Color.FromRgb(63, 81, 181)));            //#FF3F51B5
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("9", "グラファイト", Color.FromRgb(97, 97, 97)));         //#FF616161
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("10", "バジル", Color.FromRgb(11, 128, 67)));                //#FF0B8043
@@ -349,11 +463,11 @@ namespace GoogleOSD {
 			string retLink = null;
 			try {
 				// 予定を追加登録
-				String eventId =eventItem.Id;
+				String eventId = eventItem.Id;
 				Event body = eventItem;
 				dbMsg = "[" + eventId;
 				dbMsg = "}" + eventItem.Start.ToString();
-				dbMsg = "," +eventItem.Summary;
+				dbMsg = "," + eventItem.Summary;
 				dbMsg = "\r\n" + eventItem.Description;
 				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCalendarCredential,
@@ -384,7 +498,7 @@ namespace GoogleOSD {
 				String eventId = eventItem.Id;
 				Event body = eventItem;
 				//dbMsg = "[" + eventId;
-				dbMsg =  eventItem.Start.ToString();
+				dbMsg = eventItem.Start.ToString();
 				dbMsg = "," + eventItem.Summary;
 				dbMsg = "\r\n" + eventItem.Description;
 				CalendarService service = new CalendarService(new BaseClientService.Initializer() {

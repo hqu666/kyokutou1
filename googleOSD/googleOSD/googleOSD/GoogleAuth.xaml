@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GoogleOSD"
         mc:Ignorable="d"
-        Title="Google認証" Height="450" Width="800">
+        Title="Google認証"  FontSize="12"  Height="300" Width="512">
+
 	<Window.Resources>
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="0,10,0,10"/>
+			<!--<Setter Property="Margin" Value="0,10,0,10"/>-->
 		</Style>
 
 		<Style TargetType="Label">
@@ -19,8 +20,9 @@
 
 		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
 			<Border Name="border"
-                BorderThickness="1"
-                BorderBrush="LightGray"
+                BorderThickness="2"
+                BorderBrush="DarkGray"
+				 Padding="5"
                 Background="{TemplateBinding Background}"
                 CornerRadius="2">
 				<ContentPresenter VerticalAlignment="Center"
@@ -29,17 +31,15 @@
 		</ControlTemplate>
 
 		<Style TargetType="Button">
-			<Setter Property="Width" Value="Auto"/>
-			<Setter Property="MinWidth" Value="75"/>
-			<Setter Property="Height" Value="Auto"/>
-			<Setter Property="Padding" Value="5,5,5,5"/>
-			<Setter Property="Margin" Value="0,5,10,5"/>
+			<Setter Property="MinWidth" Value="95"/>
+
+			<Setter Property="Margin" Value="5,5,5,5"/>
 			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
 		</Style>
 
 		<Style TargetType="TextBox">
 			<Setter Property="Width" Value="Auto"/>
-			<Setter Property="MinWidth" Value="75"/>
+			<Setter Property="MinWidth" Value="80"/>
 			<Setter Property="Height" Value="Auto"/>
 			<Setter Property="Margin" Value="5,10,5,10"/>
 			<Setter Property="HorizontalAlignment"  Value="Stretch"/>
@@ -62,14 +62,12 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition  Height="Auto"/>
-			<RowDefinition />
-			<RowDefinition />
 			<RowDefinition  Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 		<Label  Grid.Row="0" Grid.Column="0"  Content="ようこそ" HorizontalAlignment="Right"  />
 		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal">
@@ -80,7 +78,6 @@
 			<Label Content="様" HorizontalAlignment="Left" />
 		</StackPanel>
 		<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
-			<Button x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click"  />
 			<Button  x:Name="Log_in_bt" Content="ログイン" Click="Log_in_bt_Click"  />
 			<Button  x:Name="Log_out_bt" Content="ログアウト" Click="Log_out_bt_Click"  />
 		</StackPanel>
@@ -88,11 +85,14 @@
 		<TextBox Grid.Column="1" Grid.Row="1"
 						Name="Google_Acount_tb" />
 		<StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right"  Width="Auto">
-			<Button  x:Name="xaml_bt" Content="xamlカレンダ" Click="Xaml_bt_Click" />
+			<Button  x:Name="xaml_bt" Content="xamlでカレンダへ" Click="Xaml_bt_Click" />
+			<Button  x:Name="web_drive_bt" Content="webでドライブへ" Click="Xaml_bt_Click" />
 		</StackPanel>
 		<Label Grid.Row="2" Grid.Column="0"  HorizontalAlignment="Right" Content="パスワード" />
 		<TextBox Grid.Row="2" Grid.Column="1"
 						Name="Google_Password_tb" />
+		<Button  Grid.Row="2" Grid.Column="2" Width="200" HorizontalAlignment="Right"
+						x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click" />
 		<DataGrid Grid.Row="3"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
 						VerticalAlignment="Top"
 						Name="Setting_dg" />

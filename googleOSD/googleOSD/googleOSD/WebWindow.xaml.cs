@@ -6,12 +6,14 @@ namespace GoogleOSD {
 	/// <summary>
 	/// WebWindow.xaml の相互作用ロジック
 	/// </summary>
-	public partial class WebWindow :Window {
+	public partial class WebWindow : Window {
 		public GoogleAuth authWindow;
 		public GCalender mainView;
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 		public string b_UrlStr;
+		public DateTime timeCurrent = DateTime.Now;
+
 		/// <summary>
 		/// このページで表示するwebページのURL
 		/// </summary>
@@ -25,9 +27,9 @@ namespace GoogleOSD {
 				InitializeComponent();
 				this.FontSize = Constant.MyFontSize;
 				// タイトルバーと境界線を表示しない場合は
-		//		this.WindowStyle = WindowStyle.None;
+				//		this.WindowStyle = WindowStyle.None;
 				// 最大化表示
-				this.WindowState = WindowState.Maximized;
+		//		this.WindowState = WindowState.Maximized;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -47,7 +49,7 @@ namespace GoogleOSD {
 				TaregetURL = taregetURL;
 				web_wb.Navigate(TaregetURL);
 
-			//	url_tb.Text = taregetURL.ToString();    //TextChangedが発生する
+				//	url_tb.Text = taregetURL.ToString();    //TextChangedが発生する
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -124,8 +126,8 @@ namespace GoogleOSD {
 				string urlTbText = url_tb.Text;
 				dbMsg += ",urlTbText=" + urlTbText;
 				dbMsg += ",TaregetURL=" + TaregetURL;
-				if ( urlTbText.Equals(TaregetURL)) {            //! urlTbText.Equals("")||
-																//	TaregetURL = new Uri(urlTbText, UriKind.Absolute);
+				if (urlTbText.Equals(TaregetURL)) {            //! urlTbText.Equals("")||
+															   //	TaregetURL = new Uri(urlTbText, UriKind.Absolute);
 					web_wb.Navigate(TaregetURL);
 				}
 				MyLog(TAG, dbMsg);
@@ -134,12 +136,21 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// 新しいコンテンツに移動する前
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="args"></param>
 		private void Web_wb_NavigationStarting(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationStartingEventArgs args)
 		{
-			string TAG = "Web_wb_NavigationStarting";
-			string dbMsg = "[WebWindow]";
+			string TAG = "NavigationStarting";
+			string dbMsg = "[WebWindow]";//WebWindow
 			try {
 				WebView wv = sender as WebView;
+				if(wv != null) {
+					dbMsg += ",sender.Source=　" + wv.Source;
+				}
+				dbMsg += ",args.Uri=　" + args.Uri;
 				string documentTitle = web_wb.DocumentTitle.ToString();
 				dbMsg += ",documentTitle=" + documentTitle;
 				if (web_wb.DocumentTitle != null) {
@@ -151,14 +162,68 @@ namespace GoogleOSD {
 				fowerd_bt.IsEnabled = web_wb.CanGoForward;
 				string source = @web_wb.Source.ToString();
 				dbMsg += ",Source=　" + source;
+				//if (source.Contains("eventedit")) {
+				//	dbMsg += "　　>>編集へ";
+				//	MakeEvent(source, @b_UrlStr);
+				//} else if (status_sp.IsVisible) {
+				//	dbMsg += "　　>>削除ボタンを隠す";
+				//	status_sp.Visibility = Visibility.Hidden;
+				//}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		/// <summary>
+		/// 新しいコンテンツの読み込みを開始
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Web_wb_ContentLoading(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlContentLoadingEventArgs args)
+		{
+			string TAG = "ContentLoading";
+			string dbMsg = "[WebWindow]";//WebWindow
+			try {
+				WebView wv = sender as WebView;
+				if (wv != null) {
+					string wvSource = @wv.Source.ToString();
+					dbMsg += ",sender.Source=　" + wvSource;
+				}
+				string source = args.Uri.ToString();
+				dbMsg += " ,args.Uri=　" + source;
 				if (source.Contains("eventedit")) {
-					dbMsg += "　　>>編集へ" ;
+					dbMsg += "　　>>編集へ";
 					MakeEvent(source, @b_UrlStr);
-				}else if(status_sp.IsVisible) {
+				} else if (status_sp.IsVisible) {
 					dbMsg += "　　>>削除ボタンを隠す";
 					status_sp.Visibility = Visibility.Hidden;
 				}
+				string source2 = @web_wb.Source.ToString();
+				dbMsg += "	,Source=　" + source2;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
+		/// <summary>
+		/// 現在の HTML のコンテンツの解析を完了
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Web_wb_DOMContentLoaded(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlDOMContentLoadedEventArgs args)
+		{
+			string TAG = "DOMContentLoaded";
+			string dbMsg = "[WebWindow]";//WebWindow
+			try {
+				WebView wv = sender as WebView;
+				if (wv != null) {
+					dbMsg += ",sender.Source=　" + wv.Source;
+				}
+				dbMsg += " ,args.Uri=　" + args.Uri;
+				string source = @web_wb.Source.ToString();
+				dbMsg += ",Source=　" + source;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -173,10 +238,12 @@ namespace GoogleOSD {
 		/// <param name="args"></param>
 		private void Web_wb_NavigationCompleted(object sender, Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT.WebViewControlNavigationCompletedEventArgs args)
 		{
-			string TAG = "Web_wb_NavigationCompleted";
+			string TAG = "NavigationCompleted";
 			string dbMsg = "[WebWindow]";
 			try {
 				WebView wv = sender as WebView;
+				dbMsg += ",sender.Source=　" + wv.Source;
+				dbMsg += " ,args.Uri=　" + args.Uri;
 				if (!args.IsSuccess) {
 					// エラー発生
 					string errMsg = args.WebErrorStatus.ToString();
@@ -186,6 +253,9 @@ namespace GoogleOSD {
 					//	await new Windows.UI.Popups.MessageDialog(msg).ShowAsync();
 				}
 				b_UrlStr = @web_wb.Source.ToString();
+				dbMsg += ",b_UrlStr=   " + b_UrlStr;
+				timeCurrent = GCalendarUtil.GoogleWebCurentDate(b_UrlStr);
+				dbMsg += "     ,timeCurrent=" + timeCurrent;
 				//		//	if(wv != null) {
 				//		//		string documentTitle = wv.DocumentTitle;
 				//		dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
@@ -256,7 +326,7 @@ namespace GoogleOSD {
 		}
 
 		////////////////////////////////////////////////////
-		
+
 		/// <summary>
 		/// 選択された予定へ
 		/// </summary>
@@ -267,58 +337,18 @@ namespace GoogleOSD {
 			string TAG = "MakeEvent";
 			string dbMsg = "[WebWindow]";
 			try {
-				dbMsg += ",CurrentUrl= 　" + b_UrlStr; 
-				string DatePram = "";
-				DateTime timeCurrent = DateTime.Now;
+				dbMsg += ",timeCurrent= 　" + timeCurrent;
 				DateTime timeMin = timeCurrent.AddMonths(-1);
 				DateTime timeMax = timeCurrent.AddMonths(1);
-				string rangeStr = "month";
-				if (!CurrentUrl.Contains("calendar.google.com/calendar/r/")) {
-					return;
-				} else if (CurrentUrl.Contains("r/year")) {
-					dbMsg += ">>年"; 
-					string[] delimiter = { "r/year" };
-					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					DatePram = Strs[1];
-				} else if (CurrentUrl.Contains("r/month")) {
-					dbMsg += ">>月";	
-					string[] delimiter = { "r/month" };
-					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					DatePram = Strs[1];
-				} else if (CurrentUrl.Contains("r/week")) {
-					dbMsg += ">>週";
-					rangeStr = "week";
-					string[] delimiter = { "r/week" };
-					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					DatePram = Strs[1];
-				} else if (CurrentUrl.Contains("r/day")) {
-					dbMsg += ">>日";
-					rangeStr = "day";
-					string[] delimiter = { "r/day" };
-					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					DatePram = Strs[1];
-				} else if (CurrentUrl.Contains("r/agenda")) {
-					dbMsg += ">>スケジュール";
-					rangeStr = "agenda";
-					string[] delimiter = { "r/agenda" };
-					string[] Strs = CurrentUrl.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					DatePram = Strs[1];
-				}
-				dbMsg += ",DatePram= " + DatePram;
-				string[] dStrs = DatePram.Split('/');
-				if (2<dStrs.Length) {
-					int yearInt = int.Parse(dStrs[dStrs.LongLength - 3]);
-					int monthInt = int.Parse(dStrs[dStrs.LongLength - 2]);
-					int dayInt = int.Parse(dStrs[dStrs.LongLength - 1]);
-					timeCurrent = new DateTime(yearInt, monthInt, dayInt);
+				if (GCalendarUtil.IsGoogleCalender(CurrentUrl)) {
 					if (CurrentUrl.Contains("r/year")) {
-						timeMin = new DateTime(yearInt, 1, 1);
+						timeMin = new DateTime(timeCurrent.Year, 1, 1);
 						timeMax = timeMin.AddYears(1);
 					} else if (CurrentUrl.Contains("r/month")) {
-						timeMin = new DateTime(yearInt, monthInt, 1);
+						timeMin = new DateTime(timeCurrent.Year, timeCurrent.Month, 1);
 						timeMax = timeMin.AddMonths(1);
 					} else if (CurrentUrl.Contains("r/week")) {
-						timeMin = new DateTime(yearInt, monthInt, 1);
+						timeMin = new DateTime(timeCurrent.Year, timeCurrent.Month, 1);
 						timeMax = timeMin.AddDays(7);
 					} else if (CurrentUrl.Contains("r/day")) {
 						timeMin = timeCurrent.AddDays(-1);
@@ -327,14 +357,15 @@ namespace GoogleOSD {
 						timeMin = timeCurrent.AddDays(-1);
 						timeMax = timeMin.AddMonths(1);
 					}
-				}
-				dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
-				dbMsg += ",Source= 　" + HtmlLink;
-				GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
-				status_sp.Visibility = Visibility.Visible;
-				dbMsg += "　削除ボタンを表示";
+					dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
+					dbMsg += ",Source= 　" + HtmlLink;
+					Google.Apis.Calendar.v3.Data.Event rEvent = GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
+					dbMsg += "  ,rEvent=" + rEvent.Id;
 
-				//?eid=NXNkYTUzZGo2bHM4dmVicGFsNGppNDVkZ3VfMjAyMDA1MjBUMDEwMDAwWiBoa3V3YXVhbWFAbQ"
+
+					status_sp.Visibility = Visibility.Visible;
+					dbMsg += "　削除ボタンを表示";
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -383,6 +414,7 @@ namespace GoogleOSD {
 	④Nugetの設定を変更してPackageReferenceを使う
 			Must use PackageReference対策	
 
+Web ビュー	https://docs.microsoft.com/ja-jp/windows/uwp/design/controls-and-patterns/web-view
 	 */
 
 }

@@ -72,7 +72,7 @@ namespace GoogleOSD {
 		/// <summary>
 		/// 得意先　:　GoogleEventに無い追加項目
 		/// </summary>
-		public static string customerName =""; 
+		public static string customerName = "";
 
 		/// <summary>
 		/// PCのファイル管理
@@ -103,4 +103,5 @@ namespace GoogleOSD {
 Install-Package Google.Apis.Drive.v3
 Install-Package Google.Apis.Calendar.v3
 Install-Package Microsoft.Toolkit.Wpf.UI.Controls.WebView -Version 6.0.1
+Newtonsoft.Json
  */

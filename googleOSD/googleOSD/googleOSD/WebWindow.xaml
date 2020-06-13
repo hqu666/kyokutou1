@@ -10,7 +10,9 @@
         WindowStartupLocation="CenterScreen" 
         Title="web" Height="960" Width="1280" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-		ScrollViewer.VerticalScrollBarVisibility="Auto" Closing="Window_Closing">
+		ScrollViewer.VerticalScrollBarVisibility="Auto"
+		Closing="Window_Closing">
+
 	<Window.Resources>
 		<Style TargetType="StackPanel">
 			<Setter Property="Width" Value="Auto"/>
@@ -148,6 +150,8 @@
 
 		</StackPanel>
 		<Controls:WebView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-										x:Name="web_wb" NavigationCompleted="Web_wb_NavigationCompleted" NavigationStarting="Web_wb_NavigationStarting" MouseUp="Web_wb_MouseUp" />
+										x:Name="web_wb" NavigationCompleted="Web_wb_NavigationCompleted" 
+										NavigationStarting="Web_wb_NavigationStarting" MouseUp="Web_wb_MouseUp" 
+										ContentLoading="Web_wb_ContentLoading" DOMContentLoaded="Web_wb_DOMContentLoaded" />
 	</Grid>
 </Window>
