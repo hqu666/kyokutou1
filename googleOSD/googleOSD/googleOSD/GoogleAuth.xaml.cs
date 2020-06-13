@@ -215,15 +215,15 @@ namespace GoogleOSD {
 				string UserId = Constant.MyCalendarCredential.UserId;
 				dbMsg += ",UserId=" + UserId;
 				MyLog(TAG, dbMsg);
-				string CalenderURL = Constant.CalenderOtherView + "month?pli=1";
+				Constant.WebStratUrl = Constant.CalenderOtherView + "month?pli=1";
 				//特定日の指定は　/month/2020/9/1?pli=1
-				dbMsg += ",CalenderURL=" + CalenderURL;
+				dbMsg += ",CalenderURL=" + Constant.WebStratUrl;
 				if (webWindow == null) {
 					dbMsg += "一日リストを生成";
 					webWindow = new WebWindow();
 					webWindow.authWindow = this;
 					webWindow.Show();
-					webWindow.SetMyURL(new Uri(CalenderURL));
+					webWindow.SetMyURL(new Uri(Constant.WebStratUrl));
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -244,16 +244,16 @@ namespace GoogleOSD {
 				string UserId = Constant.MyDriveCredential.UserId;
 				dbMsg += ",UserId=" + UserId;
 				MyLog(TAG, dbMsg);
-				Constant.DriveStratUrl = Constant.DriveOtherView;
+				Constant.WebStratUrl = Constant.DriveOtherView;
 				Google.Apis.Drive.v3.Data.File folder = GDriveUtil.FindByNameParent(Constant.TopFolderName, Constant.RootFolderName);
-				Constant.DriveStratUrl += folder.Id;
-				dbMsg += ",DriveURL=" + Constant.DriveStratUrl;
+				Constant.WebStratUrl += folder.Id;
+				dbMsg += ",DriveURL=" + Constant.WebStratUrl;
 				if (webWindow == null) {
 					dbMsg += "案件フォルダへ";
 					webWindow = new WebWindow();
 					webWindow.authWindow = this;
 					webWindow.Show();
-					webWindow.SetMyURL(new Uri(Constant.DriveStratUrl));
+					webWindow.SetMyURL(new Uri(Constant.WebStratUrl));
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

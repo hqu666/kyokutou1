@@ -85,8 +85,8 @@ namespace GoogleOSD {
 		{
 			string TAG = "Pram2GEvents";
 			string dbMsg = "[GoogleCalendarUtil]";
+			//この戻り値はnullを返すだけ
 			Google.Apis.Calendar.v3.Data.Event rEvent = new Google.Apis.Calendar.v3.Data.Event();
-			//		IList<Google.Apis.Calendar.v3.Data.Event> retList = new List<Google.Apis.Calendar.v3.Data.Event>();
 			try {
 				dbMsg += ",検索対象=" + KetStr + " :  " + VarStr;
 				if (KetStr.Equals("HtmlLink")) {
@@ -135,7 +135,7 @@ namespace GoogleOSD {
 							HtmlLink = Strs[1];
 							dbMsg += ", " + HtmlLink;
 							if (HtmlLink.Equals(VarStr)) {
-								rEvent = eventItem;
+								rEvent = eventItem; 
 								string startDT = eventItem.Start.DateTime.ToString();
 								dbMsg += "\r\n" + startDT;
 								string endDT = eventItem.End.DateTime.ToString();
@@ -145,7 +145,8 @@ namespace GoogleOSD {
 								}
 								string Summary = eventItem.Summary;
 								dbMsg += "," + Summary;
-								break;
+								return eventItem;
+				//				break;
 							}
 
 						}
@@ -516,6 +517,55 @@ namespace GoogleOSD {
 			}
 			return retLink;
 		}
+
+		///////////////////////////////////////////////////////////////
+		//public DateTime timeCurrent = DateTime.Now;
+
+		/// <summary>
+		/// 選択された予定へ
+		/// </summary>
+		/// <param name="HtmlLink"></param>
+		/// <param name="CurrentUrl"></param>
+		//private void ModifyingEvent(string HtmlLink, string CurrentUrl)
+		//{
+		//	string TAG = "ModifyingEvent";
+		//	string dbMsg = "[WebWindow]";
+		//	try {
+		//		dbMsg += ",timeCurrent= 　" + timeCurrent;
+		//		DateTime timeMin = timeCurrent.AddMonths(-1);
+		//		DateTime timeMax = timeCurrent.AddMonths(1);
+		//		if (GCalendarUtil.IsGoogleCalender(CurrentUrl)) {
+		//			if (CurrentUrl.Contains("r/year")) {
+		//				timeMin = new DateTime(timeCurrent.Year, 1, 1);
+		//				timeMax = timeMin.AddYears(1);
+		//			} else if (CurrentUrl.Contains("r/month")) {
+		//				timeMin = new DateTime(timeCurrent.Year, timeCurrent.Month, 1);
+		//				timeMax = timeMin.AddMonths(1);
+		//			} else if (CurrentUrl.Contains("r/week")) {
+		//				timeMin = new DateTime(timeCurrent.Year, timeCurrent.Month, 1);
+		//				timeMax = timeMin.AddDays(7);
+		//			} else if (CurrentUrl.Contains("r/day")) {
+		//				timeMin = timeCurrent.AddDays(-1);
+		//				timeMax = timeMin.AddDays(1);
+		//			} else if (CurrentUrl.Contains("r/agenda")) {
+		//				timeMin = timeCurrent.AddDays(-1);
+		//				timeMax = timeMin.AddMonths(1);
+		//			}
+		//			dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
+		//			dbMsg += ",Source= 　" + HtmlLink;
+		//			Google.Apis.Calendar.v3.Data.Event rEvent = GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
+		//			dbMsg += "  ,rEvent=" + rEvent.Id;
+
+
+		//			status_sp.Visibility = Visibility.Visible;
+		//			dbMsg += "　削除ボタンを表示";
+		//		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
+
 
 	}
 }

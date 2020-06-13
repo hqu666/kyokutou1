@@ -34,7 +34,7 @@ namespace GoogleOSD {
 		public static string RootFolderID = "";
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
-		public static string DriveStratUrl ="https://drive.google.com/drive/my-drive";		///Googleマイドライブ
+		public static string WebStratUrl ="https://drive.google.com/drive/my-drive";		///Googleマイドライブ
 
 		public static string MakeFolderName = null;         //作成するファイルの格納フォルダ
 		public static String parentFolderId;

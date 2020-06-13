@@ -72,7 +72,7 @@ namespace GoogleOSD {
 					dbMsg += ",戻る";
 					this.web_wb.GoBack();
 				}else if(GCalendarUtil.IsGoogleCalender(this.web_wb.Source.ToString()) ||
-							Constant.DriveStratUrl.Equals(this.web_wb.Source.ToString())) {
+							Constant.WebStratUrl.Equals(this.web_wb.Source.ToString())) {
 					dbMsg += ">>終わる";
 					QuitMe();
 				}
@@ -332,6 +332,7 @@ namespace GoogleOSD {
 
 		/// <summary>
 		/// 選択された予定へ
+		/// EventIdをURLから検索
 		/// </summary>
 		/// <param name="HtmlLink"></param>
 		/// <param name="CurrentUrl"></param>
