@@ -58,6 +58,7 @@ namespace GoogleOSD {
 
 		/// <summary>
 		/// 戻るボタン
+		/// カレンダー（予定リスト）まで戻ったら
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -67,8 +68,13 @@ namespace GoogleOSD {
 			string dbMsg = "[WebWindow]";
 			try {
 				dbMsg += ",CanGoBack" + this.web_wb.CanGoBack;
-				this.web_wb.GoBack();
-				dbMsg += ",戻る";
+				if (this.web_wb.CanGoBack){
+					dbMsg += ",戻る";
+					this.web_wb.GoBack();
+				}else if(GCalendarUtil.IsGoogleCalender(this.web_wb.Source.ToString())) {
+					dbMsg += ">>終わる";
+					QuitMe();
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -86,7 +92,9 @@ namespace GoogleOSD {
 			string dbMsg = "[WebWindow]";
 			try {
 				dbMsg += ",CanGoForward" + this.web_wb.CanGoForward;
-				this.web_wb.GoForward();
+				if (this.web_wb.CanGoForward) {
+					this.web_wb.GoForward();
+				}
 				dbMsg += ",進む";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -126,9 +134,8 @@ namespace GoogleOSD {
 				string urlTbText = url_tb.Text;
 				dbMsg += ",urlTbText=" + urlTbText;
 				dbMsg += ",TaregetURL=" + TaregetURL;
-				if (urlTbText.Equals(TaregetURL)) {            //! urlTbText.Equals("")||
-															   //	TaregetURL = new Uri(urlTbText, UriKind.Absolute);
-					web_wb.Navigate(TaregetURL);
+				if (urlTbText.Equals(TaregetURL)) {            //手入力された場合だけ			の条件設定ができるまで封鎖
+//					web_wb.Navigate(TaregetURL);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -156,16 +163,13 @@ namespace GoogleOSD {
 				if (web_wb.DocumentTitle != null) {
 					this.Title = web_wb.DocumentTitle;
 				}
-				dbMsg += ",CanGoBack=" + web_wb.CanGoBack;
-				go_back_bt.IsEnabled = web_wb.CanGoBack;
-				dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
-				fowerd_bt.IsEnabled = web_wb.CanGoForward;
 				string source = @web_wb.Source.ToString();
 				dbMsg += ",Source=　" + source;
 				//if (source.Contains("eventedit")) {
 				//	dbMsg += "　　>>編集へ";
 				//	MakeEvent(source, @b_UrlStr);
-				//} else if (status_sp.IsVisible) {
+				//} else if (status_sp.IsVisible) {				this.web_wb.GoForward();
+
 				//	dbMsg += "　　>>削除ボタンを隠す";
 				//	status_sp.Visibility = Visibility.Hidden;
 				//}
@@ -192,6 +196,7 @@ namespace GoogleOSD {
 				}
 				string source = args.Uri.ToString();
 				dbMsg += " ,args.Uri=　" + source;
+				url_tb.Text = source;
 				if (source.Contains("eventedit")) {
 					dbMsg += "　　>>編集へ";
 					MakeEvent(source, @b_UrlStr);
@@ -242,7 +247,9 @@ namespace GoogleOSD {
 			string dbMsg = "[WebWindow]";
 			try {
 				WebView wv = sender as WebView;
-				dbMsg += ",sender.Source=　" + wv.Source;
+				if (wv != null) {
+					dbMsg += ",sender.Source=　" + wv.Source;
+				}
 				dbMsg += " ,args.Uri=　" + args.Uri;
 				if (!args.IsSuccess) {
 					// エラー発生
@@ -256,18 +263,13 @@ namespace GoogleOSD {
 				dbMsg += ",b_UrlStr=   " + b_UrlStr;
 				timeCurrent = GCalendarUtil.GoogleWebCurentDate(b_UrlStr);
 				dbMsg += "     ,timeCurrent=" + timeCurrent;
-				//		//	if(wv != null) {
-				//		//		string documentTitle = wv.DocumentTitle;
-				//		dbMsg += ",documentTitle=" + web_wb.DocumentTitle;
-				//			if (web_wb.DocumentTitle != null) {
-				//				this.Title = web_wb.DocumentTitle;
-				//			}
-				//			dbMsg += ",Source= " + web_wb.Source;
-				////			url_tb.Text = @web_wb.Source;
-				//			dbMsg += "　 ,CanGoBack=" + web_wb.CanGoBack;
-				//			dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
-				////		}
-
+				if (web_wb.DocumentTitle != null) {
+					this.Title = web_wb.DocumentTitle;
+				}
+				dbMsg += "　 ,CanGoBack=" + web_wb.CanGoBack;
+		//		go_back_bt.IsEnabled = web_wb.CanGoBack;
+				dbMsg += ",CanGoForward=" + web_wb.CanGoForward;
+	//			fowerd_bt.IsEnabled = web_wb.CanGoForward;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

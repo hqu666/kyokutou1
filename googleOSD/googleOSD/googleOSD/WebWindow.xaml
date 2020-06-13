@@ -125,6 +125,7 @@
 			<RowDefinition />
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
+
 		<StackPanel x:Name="control_sp" Grid.Row="0" Orientation="Horizontal">
 			<Button  	x:Name="go_back_bt"  Content="戻る" Click="Go_back_bt_Click"
 							Style="{StaticResource bt_radius}"
@@ -137,8 +138,8 @@
 							/>
 			<TextBox  TextWrapping="Wrap" HorizontalAlignment="Stretch"  VerticalAlignment="Center"
 							Width = "700" Height="auto"
-						 Text="{Binding Source, ElementName=web_wb, Mode=OneWay}"
 						x:Name="url_tb" TextChanged="Url_tb_TextChanged" />
+			<!--Text="{Binding Source, ElementName=web_wb, Mode=OneWay}"-->
 			<StackPanel x:Name="status_sp"  Orientation="Horizontal" HorizontalAlignment="Right"
 							Background="DarkRed"  Margin="0,0,0,0" Width="auto">
 				<Label Foreground="White" FontSize="12"  HorizontalAlignment="Right"

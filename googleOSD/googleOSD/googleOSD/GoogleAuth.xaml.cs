@@ -274,7 +274,7 @@ namespace GoogleOSD {
 					msgStr = "お疲れ様でした。";
 					 result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Information);
 					if (result.Equals(System.Windows.MessageBoxResult.OK)) {
-			//			this.Close();
+						this.Close();
 					}
 				}
 
