@@ -128,7 +128,11 @@ namespace GoogleOSD {
 				if (events.Items != null && events.Items.Count > 0) {
 					dbMsg += ",events=" + events.Items.Count() + "件";
 					foreach (var eventItem in events.Items) {
-						if (KetStr.Equals("HtmlLink")) {
+						if (KetStr.Equals("Start")) {
+							if (eventItem.Start.ToString().Equals(VarStr)) {
+								rEvent = eventItem;
+							}
+						} else if (KetStr.Equals("HtmlLink")) {
 							string HtmlLink = @eventItem.HtmlLink;
 							string[] delimiter = { "eid=" };
 							string[] Strs = HtmlLink.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
@@ -136,22 +140,22 @@ namespace GoogleOSD {
 							dbMsg += ", " + HtmlLink;
 							if (HtmlLink.Equals(VarStr)) {
 								rEvent = eventItem; 
-								string startDT = eventItem.Start.DateTime.ToString();
-								dbMsg += "\r\n" + startDT;
-								string endDT = eventItem.End.DateTime.ToString();
-								dbMsg += "～" + endDT;
-								if (String.IsNullOrEmpty(startDT)) {
-									startDT = eventItem.Start.Date;
-								}
-								string Summary = eventItem.Summary;
-								dbMsg += "," + Summary;
-								return eventItem;
-				//				break;
-							}
 
+						//		return eventItem;
+								break;
+							}
 						}
 						//					retList.Add(eventItem);
 					}
+					string startDT = rEvent.Start.DateTime.ToString();
+					dbMsg += "\r\n" + startDT;
+					string endDT = rEvent.End.DateTime.ToString();
+					dbMsg += "～" + endDT;
+					if (String.IsNullOrEmpty(startDT)) {
+						startDT = rEvent.Start.Date;
+					}
+					string Summary = rEvent.Summary;
+					dbMsg += "," + Summary;
 					//				dbMsg += "," + retList.Count() + "件";
 				} else {
 					dbMsg += "まだ予定が登録されていません";
@@ -518,54 +522,98 @@ namespace GoogleOSD {
 			return retLink;
 		}
 
-		///////////////////////////////////////////////////////////////
-		//public DateTime timeCurrent = DateTime.Now;
-
+		///webからのスケジュール操作////////////////////////////////////////////////////////
 		/// <summary>
 		/// 選択された予定へ
 		/// </summary>
-		/// <param name="HtmlLink"></param>
-		/// <param name="CurrentUrl"></param>
-		//private void ModifyingEvent(string HtmlLink, string CurrentUrl)
-		//{
-		//	string TAG = "ModifyingEvent";
-		//	string dbMsg = "[WebWindow]";
-		//	try {
-		//		dbMsg += ",timeCurrent= 　" + timeCurrent;
-		//		DateTime timeMin = timeCurrent.AddMonths(-1);
-		//		DateTime timeMax = timeCurrent.AddMonths(1);
-		//		if (GCalendarUtil.IsGoogleCalender(CurrentUrl)) {
-		//			if (CurrentUrl.Contains("r/year")) {
-		//				timeMin = new DateTime(timeCurrent.Year, 1, 1);
-		//				timeMax = timeMin.AddYears(1);
-		//			} else if (CurrentUrl.Contains("r/month")) {
-		//				timeMin = new DateTime(timeCurrent.Year, timeCurrent.Month, 1);
-		//				timeMax = timeMin.AddMonths(1);
-		//			} else if (CurrentUrl.Contains("r/week")) {
-		//				timeMin = new DateTime(timeCurrent.Year, timeCurrent.Month, 1);
-		//				timeMax = timeMin.AddDays(7);
-		//			} else if (CurrentUrl.Contains("r/day")) {
-		//				timeMin = timeCurrent.AddDays(-1);
-		//				timeMax = timeMin.AddDays(1);
-		//			} else if (CurrentUrl.Contains("r/agenda")) {
-		//				timeMin = timeCurrent.AddDays(-1);
-		//				timeMax = timeMin.AddMonths(1);
-		//			}
-		//			dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
-		//			dbMsg += ",Source= 　" + HtmlLink;
-		//			Google.Apis.Calendar.v3.Data.Event rEvent = GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
-		//			dbMsg += "  ,rEvent=" + rEvent.Id;
+		public string ModifyingEvent(Google.Apis.Calendar.v3.Data.Event taregetEvent, DateTime timeCurrent)
+		{
+			string TAG = "ModifyingEvent";
+			string dbMsg = "[WebWindow]";
+			string retLink = "";
+			try {
+				dbMsg += ",timeCurrent= " + timeCurrent;
+				if(taregetEvent == null) {
+					taregetEvent = MakeNewEvent( timeCurrent);
+				}
+				dbMsg += "  ,targetEvent=" + taregetEvent.Id;
+				dbMsg += " ; " + taregetEvent.Summary;
+				if(taregetEvent.Summary == null) {
+					taregetEvent.Summary = "新規案件対応会議";
+					dbMsg += "taregetEvent=" + taregetEvent.Summary;
+				}
 
+				//追加する項目
+				Constant.orderNumber = "abc987654321DEF";                  //受注No（参照項目）
+				Constant.managementNumber = timeCurrent.ToString();     //管理番号（参照項目）
+				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
+				string addText = "<table><tbody>";
+				addText += "<tr><td>受注No</td>" + "<td> : " + Constant.orderNumber + "</td></tr>";
+				addText += "<tr><td>管理番号</td>" + "<td> : " + Constant.managementNumber + "</td></tr>";
+				addText += "<tr><td>得意先</td>" + "<td> : " + Constant.customerName + "</td></tr>";
+				addText += "</tbody >";
 
-		//			status_sp.Visibility = Visibility.Visible;
-		//			dbMsg += "　削除ボタンを表示";
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
+				string description = taregetEvent.Description;
+				dbMsg += ",Description=" + description;
+				string memoStr = description;
+				//Descriptionのエディターから入力できないタグで既に追記が有るかどうかを判定
+				if ( description == null) {
+					description = "添付ファイルを参照できる様、準備して参加をお願いします。</p>" + addText;
+				} else if (description.Contains("<table>") ) {
+					string[] delimiter = { "<table>" };
+					string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					string prefix = memoStrs[0];
+					string suffix = memoStrs[memoStrs.Length-1];
+					string[] delimiter2 = { "</table>" };
+					string[] prefixs = suffix.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
+					suffix = memoStrs[memoStrs.Length - 1];
+					description = "< pre > " + prefix + " </ pre >" + addText  + "<br><pre>" + suffix + "</pre>";
+				}else{
+					description = description +addText;
+				}
+				dbMsg += ",description=" + description;
+				taregetEvent.Description = description;
+				retLink = UpDateGEvents(taregetEvent);
+				dbMsg += "\r\nretLink" + retLink;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retLink;
+		}
 
+		private Google.Apis.Calendar.v3.Data.Event MakeNewEvent(DateTime timeCurrent)
+		{
+			string TAG = "MakeNewEvent";
+			string dbMsg = "[WebWindow]";
+			Google.Apis.Calendar.v3.Data.Event taregetEvent = new Google.Apis.Calendar.v3.Data.Event();
+			try {
+				dbMsg += ",timeCurrent= " + timeCurrent;
+				//作成直後はNullなので生成が必要
+				taregetEvent.Start = new Google.Apis.Calendar.v3.Data.EventDateTime();
+				taregetEvent.End = new Google.Apis.Calendar.v3.Data.EventDateTime();
+				taregetEvent.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
+				taregetEvent.Attendees = new List<Google.Apis.Calendar.v3.Data.EventAttendee>();
+				taregetEvent.Attachments = new List<Google.Apis.Calendar.v3.Data.EventAttachment>();
+				//			taregetEvent.Reminders = new List<Google.Apis.Calendar.v3.Data.RemindersData>();
+
+				//Eventにセットできる項目
+				DateTime startDT = timeCurrent;
+				DateTime now = DateTime.Now;
+				TimeSpan nowTime = new TimeSpan(now.Hour, 0, 0);
+				startDT = startDT.Add(nowTime);
+				dbMsg += "startDT=" + startDT;
+				taregetEvent.Start.DateTime = startDT;
+				dbMsg += "Start=" + taregetEvent.Start.DateTime;
+				//終了は一時間後を仮設定
+				taregetEvent.End.DateTime = startDT.AddHours(1);
+				dbMsg += "～" + taregetEvent.End.DateTime;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return taregetEvent;
+		}
 
 	}
 }

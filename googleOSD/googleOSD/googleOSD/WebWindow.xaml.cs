@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using Windows.UI.Xaml.Controls;
 
@@ -199,6 +200,12 @@ namespace GoogleOSD {
 				dbMsg += " ,args.Uri=　" + source;
 				url_tb.Text = source;
 				if (source.Contains("eventedit")) {
+					/*
+					 htmlの中にdata-eid=　が有れば
+					 読み込ませる時は
+					  var content = fileManager.Read("help.html"); // Manually read the content of html file
+					webView.NavigateToString(content);
+					 */
 					dbMsg += "　　>>編集へ";
 					MakeEvent(source, @b_UrlStr);
 				} else if (status_sp.IsVisible) {
@@ -333,6 +340,8 @@ namespace GoogleOSD {
 		/// <summary>
 		/// 選択された予定へ
 		/// EventIdをURLから検索
+		/// 
+		/// ボタン外のクリックでも新規作成されても
 		/// </summary>
 		/// <param name="HtmlLink"></param>
 		/// <param name="CurrentUrl"></param>
@@ -341,6 +350,8 @@ namespace GoogleOSD {
 			string TAG = "MakeEvent";
 			string dbMsg = "[WebWindow]";
 			try {
+				status_sp.Visibility = Visibility.Visible;
+				dbMsg += "　削除ボタンを表示";
 				dbMsg += ",timeCurrent= 　" + timeCurrent;
 				DateTime timeMin = timeCurrent.AddMonths(-1);
 				DateTime timeMax = timeCurrent.AddMonths(1);
@@ -363,12 +374,48 @@ namespace GoogleOSD {
 					}
 					dbMsg += " ,対象期間=" + timeMin + "～" + timeMax;
 					dbMsg += ",Source= 　" + HtmlLink;
+					
+					/*
+					<div class="JPdR6b e5Emjc kydeve e6NAn" jscontroller="RsXxRc"
+					jsaction="IpSVtb:TvD9Pc;fEN2Ze:xzS4ub;frq95c:LNeFm;cFpp9e:J9oOtd; 
+					click:H8nU8b; mouseup:H8nU8b; keydown:I481le; keypress:Kr2w4b; blur:O22p3e; 
+					focus:H8nU8b;Z2AmMb:b50fGb;arGABd:aqzPVe;rcuQ6b:BPlul; 
+					contextmenu:nbwkDe;h4C2te:MvKmtd;fXDjj:LzIuXe;" role="menu" tabindex="0" jsname="mg9Pef" 
+					jsshadow="" 
+					data-eid="M2ppcWYwNzlkM2Rka2RvaXVnNWw3ZzRqbGFfMjAyMDA3MTRUMDQwMDAwWiBoa3V3YXVhbWFAbQ" 
+					data-back-to-cancel="false" style="position: absolute; max-width: 192px; left: 576px; top: 762px; max-height: 115px;"><div class="XvhY1d" jsaction="mousedown:p8EH2c; touchstart:p8EH2c;" style="max-width: 192px; max-height: 115px;"><div class="JAPqpe K0NPx" style="width: auto; height: auto; min-width: auto;"><span jsslot="" class="z80M1 PeCuse" jsaction="click:o6ZaF(preventDefault=true); mousedown:lAhnzb; mouseup:Osgxgf; mouseenter:SKyDAe; mouseleave:xq3APb;touchstart:jJiBRc; touchmove:kZeBdd; touchend:VfAz8(preventMouseEvents=true)" jsname="j7LFlb" aria-label="削除" role="menuitem" tabindex="-1"><div class="aBBjbd MbhUzd" jsname="ksKsZd"></div><div class="PCdOIb Ce1Y1c" aria-hidden="true"><span class="DPvwYc WcqLNe" aria-hidden="true"></span></div><div class="uyYuVb oJeWuf" jsname="BTRoxd"><div class="jO7h3c">削除</div></div></span><div class="kCtYwe ugNmBf" role="separator"></div><div jsname="j7LFlb" jsaction="focus:RZmiOe" jscontroller="VaW6vf"></div><div class="a63c9c ztKZ3d" jscontroller="CoDNrf" data-colors-per-row="6"><div><div class="ZeXxJd"><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#D50000" style="background-color: #D50000" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="69" tabindex="0" aria-label="トマトを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="トマト" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#E67C73" style="background-color: #E67C73" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="68" tabindex="0" aria-label="フラミンゴを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="フラミンゴ" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#F4511E" style="background-color: #F4511E" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="70" tabindex="0" aria-label="ミカンを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="ミカン" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#F6BF26" style="background-color: #F6BF26" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="78" tabindex="0" aria-label="バナナを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc eO2Zfd" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="バナナ" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#33B679" style="background-color: #33B679" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="79" tabindex="0" aria-label="セージを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="セージ" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#0B8043" style="background-color: #0B8043" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="74" tabindex="0" aria-label="バジルを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="バジル" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div></div><div class="ZeXxJd"><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#039BE5" style="background-color: #039BE5" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="-1" tabindex="0" aria-label="ピーコックを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="ピーコック" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#3F51B5" style="background-color: #3F51B5" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="82" tabindex="0" aria-label="ブルーベリーを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="ブルーベリー" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#7986CB" style="background-color: #7986CB" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="83" tabindex="0" aria-label="ラベンダーを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="ラベンダー" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#8E24AA" style="background-color: #8E24AA" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="89" tabindex="0" aria-label="ブドウを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="ブドウ" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div><div class="azQ4Lc pka1xd " jsname="Ly0WL" data-color="#616161" style="background-color: #616161" jsaction="click:rhcxd; keydown:Hq2uPe; focus:htbtNd;" data-color-index="85" tabindex="0" aria-label="グラファイトを予定の色に設定" role="menuitem"><span class="DPvwYc rXgejc" aria-hidden="true"></span><div class="WdtDhe" aria-hidden="true" jscontroller="BwYvd" jsaction="focus: eGiyHb;mouseenter: eGiyHb; touchstart: eGiyHb;" data-text="グラファイト" data-tooltip-position="top" data-tooltip-vertical-offset="0" data-tooltip-horizontal-offset="0" data-tooltip-only-if-necessary="false"></div></div></div></div></div><div jsname="j7LFlb" jsaction="focus:AN1NLe" jscontroller="VaW6vf"></div></div></div></div>
+					 */
 					Google.Apis.Calendar.v3.Data.Event rEvent = GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
-					dbMsg += "  ,rEvent=" + rEvent.Id;
+					//Task<Google.Apis.Calendar.v3.Data.Event> idRequest = Task.Run(() => {
+					//	return GCalendarUtil.Pram2GEvents("HtmlLink", HtmlLink, timeMin, timeMax);
+					//});
+					//idRequest.Wait();
+					//Google.Apis.Calendar.v3.Data.Event rEvent = idRequest.Result;                           //作成結果が格納され戻される
+					//if(rEvent.Start == null) {
+					//	// return様のダミーEventなら消す
+					//	rEvent = null;
+					//}
 
-
-					status_sp.Visibility = Visibility.Visible;
-					dbMsg += "　削除ボタンを表示";
+					if (rEvent != null) {
+						dbMsg += "  ,rEvent=" + rEvent.Id;
+						dbMsg += " ; " + rEvent.Summary;
+						//対象予定に情報
+						Task<string> evRequest = Task.Run(() => {
+							return GCalendarUtil.ModifyingEvent(rEvent, timeCurrent);
+						});
+						evRequest.Wait();
+						string TaregetURL = evRequest.Result;                           //作成結果が格納され戻される
+						if (TaregetURL != null) {
+							dbMsg += " >>" + TaregetURL;
+							//if (!TaregetURL.Equals("")) {
+							//	web_wb.Navigate(TaregetURL);
+							//}
+						}
+					}else{
+						dbMsg += " >>Refresh";
+						web_wb.Refresh();
+					}
+					
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

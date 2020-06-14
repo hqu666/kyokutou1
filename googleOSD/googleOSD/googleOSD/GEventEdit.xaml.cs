@@ -23,15 +23,15 @@ namespace GoogleOSD {
 		public GCalender mainView;
 		public GoogleDriveBrouser driveView;
 
-		//public string orderNumber;					//受注No（参照項目）
-		//public string managementNumber;		//管理番号（参照項目）
-		//public string customerName;				//得意先（参照項目）
-
 		/// <summary>
 		/// このページで編集するEvent
 		/// </summary>
 		private Google.Apis.Calendar.v3.Data.Event taregetEvent { set; get; }
 
+		/// <summary>
+		/// この画面の開始
+		/// </summary>
+		/// <param name="taregetEvent"></param>
 		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent )
 		{
 			string TAG = "GEventEdit";
@@ -47,6 +47,10 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// 開始直後、対象イベントの設定内容を読取りViewを初期構成
+		/// </summary>
+		/// <param name="taregetEvent"></param>
 		public void EventWrite(Google.Apis.Calendar.v3.Data.Event taregetEvent)
 		{
 			string TAG = "EventWrite";
