@@ -46,7 +46,7 @@ namespace GoogleOSD {
 			try {
 				InitializeComponent();
 				// 最大化表示
-				this.WindowState = WindowState.Maximized;
+	//			this.WindowState = WindowState.Maximized;
 				this.FontSize = Constant.MyFontSize;
 				DrowToday();
 				MyLog(TAG, dbMsg);

@@ -215,6 +215,29 @@ namespace GoogleOSD {
 				string UserId = Constant.MyCalendarCredential.UserId;
 				dbMsg += ",UserId=" + UserId;
 				MyLog(TAG, dbMsg);
+				string CalenderURL = Constant.CalenderOtherView + "month?pli=1";
+				//特定日の指定は　/month/2020/9/1?pli=1
+				dbMsg += ",CalenderURL=" + CalenderURL;
+				if (calenderWindow == null) {
+					dbMsg += "＞＞カレンダへ";
+					GCalender calenderWindow = new GCalender();
+					calenderWindow.authWindow = this;
+					calenderWindow.Show();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void Web_calender_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Web_calender_bt_Click";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				string UserId = Constant.MyCalendarCredential.UserId;
+				dbMsg += ",UserId=" + UserId;
+				MyLog(TAG, dbMsg);
 				Constant.WebStratUrl = Constant.CalenderOtherView + "month?pli=1";
 				//特定日の指定は　/month/2020/9/1?pli=1
 				dbMsg += ",CalenderURL=" + Constant.WebStratUrl;
@@ -254,29 +277,6 @@ namespace GoogleOSD {
 					webWindow.authWindow = this;
 					webWindow.Show();
 					webWindow.SetMyURL(new Uri(Constant.WebStratUrl));
-				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		private void Xaml_bt_Click(object sender, RoutedEventArgs e)
-		{
-			string TAG = "Xaml_bt_Click";
-			string dbMsg = "[GoogleAuth]";
-			try {
-				string UserId = Constant.MyCalendarCredential.UserId;
-				dbMsg += ",UserId=" + UserId;
-				MyLog(TAG, dbMsg);
-				string CalenderURL = Constant.CalenderOtherView + "month?pli=1";
-				//特定日の指定は　/month/2020/9/1?pli=1
-				dbMsg += ",CalenderURL=" + CalenderURL;
-				if (calenderWindow == null) {
-					dbMsg += "＞＞カレンダへ";
-					GCalender calenderWindow = new GCalender();
-					calenderWindow.authWindow = this;
-					calenderWindow.Show();
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -336,6 +336,7 @@ namespace GoogleOSD {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+
 
 
 		////////////////////////////////////////////////////

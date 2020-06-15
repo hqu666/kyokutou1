@@ -61,9 +61,9 @@ namespace GoogleOSD {
 				dbMsg = "taregetEvent=" + taregetEvent.Summary;
 				titol_tv.Text = taregetEvent.Summary;
 				SetDate(taregetEvent);
-				if(taregetEvent.OriginalStartTime !=null) {
-					time_zone_lb.Content += taregetEvent.OriginalStartTime.TimeZone;
-				}
+				//if(taregetEvent.OriginalStartTime !=null) {
+				//	time_zone_lb.Content += taregetEvent.OriginalStartTime.TimeZone;
+				//}
 				SetDaylong(taregetEvent);
 				/*
 				<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >

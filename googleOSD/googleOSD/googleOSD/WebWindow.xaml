@@ -148,7 +148,6 @@
 				<Button   HorizontalAlignment="Right" Margin="10,5,5,5"  FontSize="12" Width="50"
 						x:Name="del_event_bt"  Content="削除" />
 			</StackPanel>
-
 		</StackPanel>
 		<Controls:WebView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 										x:Name="web_wb" NavigationCompleted="Web_wb_NavigationCompleted" 
