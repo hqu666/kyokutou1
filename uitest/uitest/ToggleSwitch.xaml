@@ -19,7 +19,7 @@
 		<Style x:Key="ToggleSwitchButton" TargetType="{x:Type Button}">
 			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
 			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderThickness" Value="5"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 			<Setter Property="Padding" Value="1"/>
@@ -41,14 +41,17 @@
 	</UserControl.Resources>
 	<Button x:Name="buttonToggle" Tag="Off" Style="{DynamicResource ToggleSwitchButton}" Click="buttonToggle_Click" Cursor="Hand">
 		<Grid>
-			<Border x:Name="borderTrack" Width="35" Height="15" Background="Gray" CornerRadius="5"></Border>
-			<Ellipse x:Name="ellipseToggle" Height="20" Width="20" Fill="SteelBlue" Stroke="White" HorizontalAlignment="Center">
+			<Border x:Name="borderTrack" Width="70" Height="30" Background="#8ab2c9" BorderBrush="#72abdb"  CornerRadius="15">
+				<Label Content="ON" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"/>
+			</Border>
+
+			<Ellipse x:Name="ellipseToggle" Height="40" Width="40" Fill="White" Stroke="SteelBlue" HorizontalAlignment="Center">
 				<Ellipse.RenderTransform>
 					<TransformGroup>
 						<ScaleTransform/>
 						<SkewTransform/>
 						<RotateTransform/>
-						<TranslateTransform x:Name="translateTransform" X="-10"/>
+						<TranslateTransform x:Name="translateTransform" X="-20"/>
 					</TransformGroup>
 				</Ellipse.RenderTransform>
 			</Ellipse>

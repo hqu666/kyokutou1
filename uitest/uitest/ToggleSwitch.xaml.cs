@@ -85,14 +85,14 @@ namespace uitest {
 					borderTrack.Background = new SolidColorBrush(TrackBackgroundOffColor);
 					var ca = new ColorAnimation(TrackBackgroundOnColor, TimeSpan.FromSeconds(.25));
 					borderTrack.Background.BeginAnimation(SolidColorBrush.ColorProperty, ca);
-					var da = new DoubleAnimation(10, TimeSpan.FromSeconds(.25));
+					var da = new DoubleAnimation(20, TimeSpan.FromSeconds(.25));
 					translateTransform.BeginAnimation(TranslateTransform.XProperty, da);
 				} else {
 					buttonToggle.Tag = "Off";
 					borderTrack.Background = new SolidColorBrush(TrackBackgroundOnColor);
 					var ca = new ColorAnimation(TrackBackgroundOffColor, TimeSpan.FromSeconds(.25));
 					borderTrack.Background.BeginAnimation(SolidColorBrush.ColorProperty, ca);
-					var da = new DoubleAnimation(-10, TimeSpan.FromSeconds(.25));
+					var da = new DoubleAnimation(-20, TimeSpan.FromSeconds(.25));
 					translateTransform.BeginAnimation(TranslateTransform.XProperty, da);
 				}
 				Switched(this, EventArgs.Empty);
