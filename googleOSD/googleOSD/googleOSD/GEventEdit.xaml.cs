@@ -74,9 +74,9 @@ namespace GoogleOSD {
 				/*
 						<!--通知  / ゲスト-->
 				*/
-				if(taregetEvent.Organizer!=null) {
-					email_lb.Content = taregetEvent.Organizer.Email;
-				}
+				//if(taregetEvent.Organizer!=null) {
+				//	email_lb.Content = taregetEvent.Organizer.Email;
+				//}
 
 				/*
 				<Label Grid.Row="8" Grid.Column="0"   
@@ -502,27 +502,29 @@ Visibility	null	string
 					dbMsg += ">>" + colorID;
 				}
 				dbMsg += "googleEventColor=" + Constant.googleEventColor.Count+"色";
-				int serectIndex = 0;
-				int nowCount = 0;
-				foreach(Constant.GoogleEventColor color in Constant.googleEventColor) {
-					dbMsg += "\r\n" + color.id +")" + color.name+ "," + color.rgb;
-					//ファイルの表示名color情報をラベルに格納して
-					Label lb = new Label();
-					lb.Content = color.name;
-					lb.Background = new SolidColorBrush(color.rgb);
-					lb.Foreground = new SolidColorBrush(Color.FromRgb(255,255,255));
-					lb.DataContext = color;
-					//リストアイテムに格納
-					color_cb.Items.Add(lb);
-					if (color.id.Equals(colorID)) {
-						serectIndex = nowCount;
-						color_cb.Background = new SolidColorBrush(color.rgb);
-						color_cb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-					}
-					nowCount++;
-				}
-				dbMsg += ",serectIndex=" + serectIndex;
-				color_cb.SelectedIndex = serectIndex;
+				Constant.GoogleEventColor colorInfo = Constant.googleEventColor[int.Parse(colorID)];
+				Color_lb.Foreground = new SolidColorBrush(colorInfo.rgb); 
+				//int serectIndex = 0;
+				//int nowCount = 0;
+				//foreach(Constant.GoogleEventColor color in Constant.googleEventColor) {
+				//	dbMsg += "\r\n" + color.id +")" + color.name+ "," + color.rgb;
+				//	//ファイルの表示名color情報をラベルに格納して
+				//	Label lb = new Label();
+				//	lb.Content = color.name;
+				//	lb.Background = new SolidColorBrush(color.rgb);
+				//	lb.Foreground = new SolidColorBrush(Color.FromRgb(255,255,255));
+				//	lb.DataContext = color;
+				//	//リストアイテムに格納
+				//	color_cb.Items.Add(lb);
+				//	if (color.id.Equals(colorID)) {
+				//		serectIndex = nowCount;
+				//		color_cb.Background = new SolidColorBrush(color.rgb);
+				//		color_cb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+				//	}
+				//	nowCount++;
+				//}
+				//dbMsg += ",serectIndex=" + serectIndex;
+				//color_cb.SelectedIndex = serectIndex;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -549,7 +551,7 @@ Visibility	null	string
 				Constant.GoogleEventColor color = Constant.googleEventColor[serectIndex];
 				dbMsg += "," + color.id + ")" + color.name + "," + color.rgb;
 				if(! taregetEvent.ColorId.Equals(color.id)){
-					color_cb.Background = new SolidColorBrush(color.rgb);
+		//			color_cb.Background = new SolidColorBrush(color.rgb);
 					taregetEvent.ColorId = color.id;
 				}
 				MyLog(TAG, dbMsg);
