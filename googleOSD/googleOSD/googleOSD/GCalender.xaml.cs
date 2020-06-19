@@ -31,7 +31,7 @@ namespace GoogleOSD {
 		public GEventDayList dayListView;
 		public WebWindow webWindow;
 		public GoogleAuth authWindow;
-		
+
 		private Rectangle selectedRec;
 		private System.Windows.Style selectedRecStyle;
 
@@ -681,6 +681,7 @@ namespace GoogleOSD {
 					dbMsg += "Editを再生成";
 					editView = new GEventEdit(taregetEvent);
 					editView.mainView = this;
+					editView.authWindow = authWindow;
 					editView.Show();
 				}
 
@@ -742,6 +743,7 @@ namespace GoogleOSD {
 					dbMsg += "Editを再生成";
 					editView = new GEventEdit(taregetEvent);
 					editView.mainView = this;
+					editView.authWindow = authWindow;
 					editView.Show();
 				}
 				MyLog(TAG, dbMsg);
@@ -891,7 +893,7 @@ namespace GoogleOSD {
 			try {
 				if (authWindow != null) {
 					authWindow.calenderWindow = null;
-				}
+				}				
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

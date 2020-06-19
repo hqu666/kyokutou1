@@ -20,8 +20,10 @@ namespace GoogleOSD {
 	public partial class GEventEdit : Window {
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 
+		public GoogleAuth authWindow;
 		public GCalender mainView;
 		public GoogleDriveBrouser driveView;
+		public WebWindow webWindow;
 
 		/// <summary>
 		/// このページで編集するEvent
@@ -56,9 +58,9 @@ namespace GoogleOSD {
 			string TAG = "EventWrite";
 			string dbMsg = "[GEventEdit]";
 			try {
-				dbMsg = "HtmlLink=" + taregetEvent.HtmlLink;
+				dbMsg += "HtmlLink=" + taregetEvent.HtmlLink;
 				htmlLink_lb.Text = taregetEvent.HtmlLink;
-				dbMsg = "taregetEvent=" + taregetEvent.Summary;
+				dbMsg += "taregetEvent=" + taregetEvent.Summary;
 				titol_tv.Text = taregetEvent.Summary;
 				SetDate(taregetEvent);
 				//if(taregetEvent.OriginalStartTime !=null) {
@@ -884,7 +886,8 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 						dbMsg += ",result=" + result;
 						return;
 					}
-				if(taregetEvent.OriginalStartTime.Date == null && taregetEvent.OriginalStartTime.DateTime == null) {
+				if (taregetEvent.OriginalStartTime == null ) {
+					taregetEvent.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
 					if (taregetEvent.Start.Date == null) {
 						taregetEvent.OriginalStartTime.DateTime = taregetEvent.Start.DateTime;
 					}else{
@@ -892,24 +895,33 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 					}
 					dbMsg += ",OriginalStartTime=" + taregetEvent.OriginalStartTime;
 				}
+				string retLink = "";
 				if (this.taregetEvent.Id == null){
 					dbMsg += "新規";
-					WriteEvent();
+					retLink = WriteEvent();
 				} else{
 					dbMsg += "変更";
-					ReWriteEvent();
+					retLink = ReWriteEvent();
 				}
-
+				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);
+				if (!retLink.Equals("")) {
+					QuitToWeb(retLink);
+				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 
-		private void WriteEvent()
+		/// <summary>
+		/// 新規イベント作成
+		/// </summary>
+		/// <returns></returns>
+		private string WriteEvent()
 		{
 			string TAG = "WriteEvent";
 			string dbMsg = "[GEventEdit]";
+			string retLink = "";
 			try {
 				string startDT = taregetEvent.Start.DateTime.ToString();
 				dbMsg += ")" + startDT;
@@ -922,22 +934,24 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				dbMsg += "," + Summary;
 				string eDescription = taregetEvent.Description;
 				dbMsg += ",Description=" + eDescription +"を新規登録";
-				string retLink = GCalendarUtil.InsertGEvents(taregetEvent);
+				retLink = GCalendarUtil.InsertGEvents(taregetEvent);
 				dbMsg += "\r\nretLink" + retLink;
 				MyLog(TAG, dbMsg);
 				ExecuteRes(retLink);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return retLink;
 		}
 
 		/// <summary>
 		/// Descriptionに添付ファイルのリンクを追加してEventを更新
 		/// </summary>
-		private void ReWriteEvent()
+		private string ReWriteEvent()
 		{
 			string TAG = "ReWriteEvent";
 			string dbMsg = "[GEventEdit]";
+			string retLink = "";
 			try {
 				//int selectedIndex = event_lv.FocusedItem.Index;         //先頭0の選択位置：：Positionは座標
 				//dbMsg += ",Index=" + selectedIndex;
@@ -987,7 +1001,7 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				//		eDescription += "</table>";
 				//		dbMsg += ",Description=\r\n" + eDescription;
 				//		Constant.eventItem.Description = eDescription;
-				string retLink = GCalendarUtil.UpDateGEvents(taregetEvent);
+				retLink = GCalendarUtil.UpDateGEvents(taregetEvent);
 				dbMsg += "\r\nretLink" + retLink;
 				//		try {
 				//			System.Diagnostics.Process.Start(retLink);              //webで表示
@@ -1010,7 +1024,38 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return retLink;
 		}
+
+		private void QuitToWeb(string targetUrl)
+		{
+			string TAG = "QuitToWeb";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				dbMsg += ",targetUrl= " + targetUrl;
+
+				string UserId = Constant.MyCalendarCredential.UserId;
+				dbMsg += " ,UserId=" + UserId;
+				MyLog(TAG, dbMsg);
+				Constant.WebStratUrl = Constant.CalenderOtherView + "month?pli=1";
+				//特定日の指定は　/month/2020/9/1?pli=1
+		//		dbMsg += ",CalenderURL=" + Constant.WebStratUrl;
+				if (webWindow == null) {
+					dbMsg += "一日リストを生成";
+					webWindow = new WebWindow();
+					webWindow.authWindow = null;
+					webWindow.mainView = mainView;
+					webWindow.Show();
+					webWindow.SetMyURL(new Uri(targetUrl));
+				}
+				QuitMe();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		private void ExecuteRes(string retLink)
 		{
