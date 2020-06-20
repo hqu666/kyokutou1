@@ -886,27 +886,18 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 						dbMsg += ",result=" + result;
 						return;
 					}
-				if (taregetEvent.OriginalStartTime == null ) {
-					taregetEvent.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
-					if (taregetEvent.Start.Date == null) {
-						taregetEvent.OriginalStartTime.DateTime = taregetEvent.Start.DateTime;
-					}else{
-						taregetEvent.OriginalStartTime.Date = taregetEvent.Start.Date;
-					}
-					dbMsg += ",OriginalStartTime=" + taregetEvent.OriginalStartTime;
-				}
 				string retLink = "";
-				if (this.taregetEvent.Id == null){
-					dbMsg += "新規";
-					retLink = WriteEvent();
-				} else{
-					dbMsg += "変更";
-					retLink = ReWriteEvent();
-				}
+				string orderNumber = "abc987654321DEF";                  //受注No（参照項目）
+				string managementNumber = startDT.ToString();     //管理番号（参照項目）
+				string customerName = "(株)TEST建設";             //得意先（参照項目）
+				googleOSD.AddInfo addInfo = new googleOSD.AddInfo(orderNumber, managementNumber, customerName);
+				retLink = GCalendarUtil.AddEventInfo(taregetEvent, addInfo);
 				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);
-				if (!retLink.Equals("")) {
-					QuitToWeb(retLink);
+				if (retLink != null) {
+					if (!retLink.Equals("")) {
+						QuitToWeb(retLink);
+					}
 				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

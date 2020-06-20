@@ -245,7 +245,7 @@ namespace GoogleOSD {
 		/// 指定された年月のカレンダーを作成
 		/// </summary>
 		/// <param name="monthInfo"></param>
-		private string CreateCalendar(MonthInfo monthInfo)
+		public string CreateCalendar(MonthInfo monthInfo)
 		{
 			string TAG = "createCalendar";
 			string dbMsg = "[GCalender]";

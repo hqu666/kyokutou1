@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddInfo.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />

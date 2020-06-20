@@ -14,6 +14,7 @@ namespace GoogleOSD {
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 		public string b_UrlStr;
 		public DateTime timeCurrent = DateTime.Now;
+		public bool IsEventEdit = false;								//編集中
 
 		/// <summary>
 		/// このページで表示するwebページのURL
@@ -198,22 +199,39 @@ namespace GoogleOSD {
 				}
 				string source = args.Uri.ToString();
 				dbMsg += " ,args.Uri=　" + source;
-				url_tb.Text = source;
-				if (source.Contains("eventedit")) {
-					/*
-					 htmlの中にdata-eid=　が有れば
-					 読み込ませる時は
-					  var content = fileManager.Read("help.html"); // Manually read the content of html file
-					webView.NavigateToString(content);
-					 */
-					dbMsg += "　　>>編集へ";
-					MakeEvent(source, @b_UrlStr);
-				} else if (status_sp.IsVisible) {
-					dbMsg += "　　>>削除ボタンを隠す";
-					status_sp.Visibility = Visibility.Hidden;
+				if(GCalendarUtil.IsGoogleCalender(source) && IsEventEdit) {
+					//if (GCalendarUtil.IsGoogleCalender(source)) {
+					//	if (GCalendarUtil.IsGoogleEvent(source)) {
+					//		if (GCalendarUtil.IsEventEditEnd(source)) {
+					dbMsg += "　編集から戻り";
+					String yearMonth = "202006";
+					MonthInfo monthInfo = new MonthInfo(yearMonth);
+					//カレンダーを更新
+					mainView.CreateCalendar(monthInfo);
+					//webを閉じる
+					QuitMe();
+					//		}
+					//	}
+					//}
+				}else{
+					url_tb.Text = source;
+					if (source.Contains("eventedit")) {
+						/*
+						 htmlの中にdata-eid=　が有れば
+						 読み込ませる時は
+						  var content = fileManager.Read("help.html"); // Manually read the content of html file
+						webView.NavigateToString(content);
+						 */
+						dbMsg += "　　>>編集へ";
+						IsEventEdit = true;                                //編集中
+				//		MakeEvent(source, @b_UrlStr);
+					} else if (status_sp.IsVisible) {
+						dbMsg += "　　>>削除ボタンを隠す";
+						status_sp.Visibility = Visibility.Hidden;
+					}
+					string source2 = @web_wb.Source.ToString();
+					dbMsg += "	,Source=　" + source2;
 				}
-				string source2 = @web_wb.Source.ToString();
-				dbMsg += "	,Source=　" + source2;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

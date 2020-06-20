@@ -191,6 +191,44 @@ namespace GoogleOSD {
 			return retBool;
 		}
 
+		public bool IsGoogleEvent(string CurrentUrl)
+		{
+			string TAG = "IsGoogleEvent";
+			string dbMsg = "[GoogleCalendarUtil]";
+			bool retBool = false;
+			try {
+				dbMsg += ",CurrentUrl= 　" + CurrentUrl;
+				if (CurrentUrl.Contains("calendar.google.com/calendar/r/") &&
+					CurrentUrl.Contains("eid=")) {
+					retBool = true;
+				}
+				dbMsg += ",retBool= " + retBool;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
+		public bool IsEventEditEnd(string CurrentUrl)
+		{
+			string TAG = "IsGoogleEvent";
+			string dbMsg = "[GoogleCalendarUtil]";
+			bool retBool = false;
+			try {
+				dbMsg += ",CurrentUrl= 　" + CurrentUrl;
+				if (CurrentUrl.Contains("calendar.google.com/calendar/r/") &&
+					CurrentUrl.Contains("sf=false")) {
+					retBool = true;
+				}
+				dbMsg += ",retBool= " + retBool;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
 		/// <summary>
 		/// Googleカレンダーから表示している日付を返す
 		/// 日付部分が無ければ本日と判定する
@@ -470,10 +508,10 @@ namespace GoogleOSD {
 				// 予定を追加登録
 				String eventId = eventItem.Id;
 				Event body = eventItem;
-				dbMsg = "[" + eventId;
-				dbMsg = "}" + eventItem.Start.ToString();
-				dbMsg = "," + eventItem.Summary;
-				dbMsg = "\r\n" + eventItem.Description;
+				dbMsg += "[" + eventId;
+				dbMsg += "}" + eventItem.Start.ToString();
+				dbMsg += "," + eventItem.Summary;
+				dbMsg += "\r\n" + eventItem.Description;
 				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
@@ -482,7 +520,7 @@ namespace GoogleOSD {
 				EventsResource.UpdateRequest request = service.Events.Update(body, calendarId, eventId);
 				Event createdEvent = request.Execute();
 				retLink = createdEvent.HtmlLink;
-				dbMsg = ">>" + retLink;
+				dbMsg += ">>" + retLink;
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
@@ -500,12 +538,18 @@ namespace GoogleOSD {
 			string dbMsg = "[GoogleCalendarUtil]";
 			string retLink = null;
 			try {
+				dbMsg += ",Token= " + Constant.MyCalendarCredential.Token;
 				String eventId = eventItem.Id;
 				Event body = eventItem;
-				//dbMsg = "[" + eventId;
-				dbMsg = eventItem.Start.ToString();
-				dbMsg = "," + eventItem.Summary;
-				dbMsg = "\r\n" + eventItem.Description;
+				dbMsg += eventItem.Start.ToString();
+				//OriginalStartTimeを強制的に作る
+				eventItem.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
+				DateTime startDT = EventDateTime2DT(eventItem.Start);
+				eventItem.OriginalStartTime.DateTime = startDT;
+				dbMsg += ",OriginalStartTime=" + eventItem.OriginalStartTime;
+
+				dbMsg += "," + eventItem.Summary;
+				dbMsg += "\r\n" + eventItem.Description;
 				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
@@ -514,7 +558,7 @@ namespace GoogleOSD {
 				EventsResource.InsertRequest request = service.Events.Insert(body, calendarId);
 				Event createdEvent = request.Execute();
 				retLink = createdEvent.HtmlLink;
-				dbMsg = ">>" + retLink;
+				dbMsg += ">>" + retLink;
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
@@ -581,6 +625,75 @@ namespace GoogleOSD {
 			}
 			return retLink;
 		}
+
+		/// <summary>
+		/// スケジュールに情報追加
+		/// </summary>
+		/// <param name="taregetEvent">作成もしくは変更する予定</param>
+		/// <param name="addInfo">追加する情報</param>
+		/// <returns></returns>
+		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, googleOSD.AddInfo addInfo)
+		{
+			string TAG = "AddEventInfo";
+			string dbMsg = "[WebWindow]";
+			string retLink = "";
+			try {
+
+				if (taregetEvent == null) {
+					DateTime timeCurrent = DateTime.Now;
+					dbMsg += ",timeCurrent= " + timeCurrent;
+					taregetEvent = MakeNewEvent(timeCurrent);
+				}
+				dbMsg += "  ,targetEvent=" + taregetEvent.Id;
+				dbMsg += " ; " + taregetEvent.Summary;
+				if (taregetEvent.Summary == null) {
+					taregetEvent.Summary = "新規案件対応会議";
+					dbMsg += "taregetEvent=" + taregetEvent.Summary;
+				}
+
+				//追加する項目
+				string addText = "<table><tbody>";
+				addText += "<tr><td>受注No</td>" + "<td> : " + addInfo.orderNumber + "</td></tr>";
+				addText += "<tr><td>管理番号</td>" + "<td> : " + addInfo.managementNumber + "</td></tr>";
+				addText += "<tr><td>得意先</td>" + "<td> : " + addInfo.customerName + "</td></tr>";
+				addText += "</tbody >";
+
+				string description = taregetEvent.Description;
+				dbMsg += ",Description=" + description;
+				string memoStr = description;
+				//Descriptionのエディターから入力できないタグで既に追記が有るかどうかを判定
+				if (description == null) {
+					description = "添付ファイルを参照できる様、準備して参加をお願いします。</p>" + addText;
+				} else if (description.Contains("<table>")) {
+					string[] delimiter = { "<table>" };
+					string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					string prefix = memoStrs[0];
+					string suffix = memoStrs[memoStrs.Length - 1];
+					string[] delimiter2 = { "</table>" };
+					string[] prefixs = suffix.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
+					suffix = memoStrs[memoStrs.Length - 1];
+					description = "< pre > " + prefix + " </ pre >" + addText + "<br><pre>" + suffix + "</pre>";
+				} else {
+					description = description + addText;
+				}
+				dbMsg += ",description=" + description;
+				taregetEvent.Description = description;
+				if (taregetEvent.Id == null) {
+					dbMsg += "新規";
+					retLink = InsertGEvents(taregetEvent);
+				} else {
+					dbMsg += "変更";
+					retLink = UpDateGEvents(taregetEvent);
+				}
+
+				dbMsg += "\r\nretLink" + retLink;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retLink;
+		}
+
 
 		private Google.Apis.Calendar.v3.Data.Event MakeNewEvent(DateTime timeCurrent)
 		{
