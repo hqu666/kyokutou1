@@ -200,18 +200,21 @@ namespace GoogleOSD {
 				string source = args.Uri.ToString();
 				dbMsg += " ,args.Uri=　" + source;
 				if(GCalendarUtil.IsGoogleCalender(source) && IsEventEdit) {
-					//if (GCalendarUtil.IsGoogleCalender(source)) {
 					//	if (GCalendarUtil.IsGoogleEvent(source)) {
 					//		if (GCalendarUtil.IsEventEditEnd(source)) {
 					dbMsg += "　編集から戻り";
-					String yearMonth = "202006";
+					String yearMonth = args.Uri.AbsolutePath;
+					dbMsg += ",yearMonth=" + yearMonth;
+					string[] strs = yearMonth.Split('/');
+					yearMonth = strs[strs.Length - 2] + strs[strs.Length - 1];
+					DateTime dt = new DateTime(int.Parse(strs[strs.Length - 3]), int.Parse(strs[strs.Length - 2]), int.Parse(strs[strs.Length - 1]));
+					yearMonth =String.Format("{0:yyyyMM}", dt);
 					MonthInfo monthInfo = new MonthInfo(yearMonth);
 					//カレンダーを更新
 					mainView.CreateCalendar(monthInfo);
 					//webを閉じる
 					QuitMe();
 					//		}
-					//	}
 					//}
 				}else{
 					url_tb.Text = source;
