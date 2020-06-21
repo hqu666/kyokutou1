@@ -206,7 +206,6 @@ namespace GoogleOSD {
 					String yearMonth = args.Uri.AbsolutePath;
 					dbMsg += ",yearMonth=" + yearMonth;
 					string[] strs = yearMonth.Split('/');
-					yearMonth = strs[strs.Length - 2] + strs[strs.Length - 1];
 					DateTime dt = new DateTime(int.Parse(strs[strs.Length - 3]), int.Parse(strs[strs.Length - 2]), int.Parse(strs[strs.Length - 1]));
 					yearMonth =String.Format("{0:yyyyMM}", dt);
 					MonthInfo monthInfo = new MonthInfo(yearMonth);

@@ -233,20 +233,6 @@ Visibility	null	string
 					}else{
 						selectedDate=selectedDate.Add(startDTT);
 						dbMsg += ",登録＝"+ selectedDate;
-						//登録時バリデーションに
-						//int endInt = GCalendarUtil.EventDateTime2Int(taregetEvent.End);
-						//int startInt = GCalendarUtil.EventDateTime2Int(taregetEvent.Start);
-						//if (endInt < startInt) {
-						//	dbMsg += ">終了日以降になっている>";
-						//	String titolStr = Constant.ApplicationName;
-						//	String msgStr = "	終了日以降に変更されましたが構いませんか？";
-						//	MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-						//	dbMsg += ",result=" + result;
-
-						//	//taregetEvent.End.DateTime = selectedDate.Add(duration);
-						//	//dbMsg += taregetEvent.End.DateTime;
-						//	//end_date_dp.SelectedDate = taregetEvent.End.DateTime.Value.Date;
-						//}
 						taregetEvent.Start.DateTime = selectedDate;
 						taregetEvent.Start.Date = null;						//終日ではない事のフラグ
 					}
@@ -890,7 +876,8 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				string orderNumber = "abc987654321DEF";                  //受注No（参照項目）
 				string managementNumber = startDT.ToString();     //管理番号（参照項目）
 				string customerName = "(株)TEST建設";             //得意先（参照項目）
-				googleOSD.AddInfo addInfo = new googleOSD.AddInfo(orderNumber, managementNumber, customerName);
+				IList<LocalFile> sendFiles = new List<LocalFile>();
+				googleOSD.AddInfo addInfo = new googleOSD.AddInfo(orderNumber, managementNumber, customerName, sendFiles);
 				retLink = GCalendarUtil.AddEventInfo(taregetEvent, addInfo);
 				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);
