@@ -19,6 +19,7 @@ namespace GoogleOSD {
 	/// </summary>
 	public partial class GEventEdit : Window {
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
+		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 
 		public GoogleAuth authWindow;
 		public GCalender mainView;
@@ -876,8 +877,23 @@ https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=shari
 				string orderNumber = "abc987654321DEF";                  //受注No（参照項目）
 				string managementNumber = startDT.ToString();     //管理番号（参照項目）
 				string customerName = "(株)TEST建設";             //得意先（参照項目）
-				IList<LocalFile> sendFiles = new List<LocalFile>();
-				googleOSD.AddInfo addInfo = new googleOSD.AddInfo(orderNumber, managementNumber, customerName, sendFiles);
+				IList<GAttachFile> sendFiles = new List<GAttachFile>();
+
+				string fullPass = @"H:\develop\sample\0000\AriadneData\見積\MI20060001\見積書.xlsx";
+				string[] strs = fullPass.Split('\\');
+				string name = strs[strs.Length-1];
+				dbMsg += ",name=" + name;
+				string parent = strs[strs.Length - 2];
+				dbMsg += ",parent=" + parent;
+				File gFile = GDriveUtil.FindByNameParent(name, parent);
+				string gFileId = gFile.Id;
+				dbMsg += "[" + gFileId + "]";
+				bool isFolder = false;
+
+				GAttachFile gAttachFile = new GAttachFile(fullPass, gFileId, name, parent,  isFolder);
+				sendFiles.Add(gAttachFile);
+
+				AddInfo addInfo = new AddInfo(orderNumber, managementNumber, customerName, sendFiles);
 				retLink = GCalendarUtil.AddEventInfo(taregetEvent, addInfo);
 				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);

@@ -632,7 +632,7 @@ namespace GoogleOSD {
 		/// <param name="taregetEvent">作成もしくは変更する予定</param>
 		/// <param name="addInfo">追加する情報</param>
 		/// <returns></returns>
-		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, googleOSD.AddInfo addInfo)
+		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, AddInfo addInfo)
 		{
 			string TAG = "AddEventInfo";
 			string dbMsg = "[WebWindow]";

@@ -74,6 +74,7 @@
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
+    <Compile Include="GAttachFile.cs" />
     <Compile Include="GCalender.xaml.cs">
       <DependentUpon>GCalender.xaml</DependentUpon>
     </Compile>

@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContactXML version="1.1a" creator="http://www.kyokuto-sanki.co.jp">
+	<ContactXMLItem lastModifiedDate="2020-06-16">
+		<MitumoriH>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<MitumoriJokyoFlg>0</MitumoriJokyoFlg>
+			<MitsumoriDate>2020/06/16</MitsumoriDate>
+			<GenbaCD>1234</GenbaCD>
+			<GenbaEdaNo />
+			<KojiName>TEST現場</KojiName>
+			<YoteiKokiStart>2020/07/01</YoteiKokiStart>
+			<YoteiKokiEnd>2020/07/09</YoteiKokiEnd>
+			<YoteiUkeWatashiKijitu>2020/07/10</YoteiUkeWatashiKijitu>
+			<MitsumoriYukoKigenName>見積後３ヶ月</MitsumoriYukoKigenName>
+			<MitsumoriYukoKigen>2020/09/15</MitsumoriYukoKigen>
+			<TorihikiHoho>0</TorihikiHoho>
+			<TorihikiJoken>支払い条件は別途売買契約に定めた通りとする</TorihikiJoken>
+			<Tekiyo>TEST適用</Tekiyo>
+			<TokuiSakiCD>1234</TokuiSakiCD>
+			<TokuiSakiName>1234取引先名</TokuiSakiName>
+			<SeshuCD>4567</SeshuCD>
+			<SeshuName>施主</SeshuName>
+			<NouhinSakiCD>1234</NouhinSakiCD>
+			<NouhinSakiName>1234取引先名</NouhinSakiName>
+			<JitantoCD>1234</JitantoCD>
+			<TokuisakiTantoCD>1234</TokuisakiTantoCD>
+			<JikkoYosan>1111110</JikkoYosan>
+			<MokuhyoArariGaku>1110</MokuhyoArariGaku>
+			<MokuhyoArariRitsu>10.00</MokuhyoArariRitsu>
+			<ArariGaku>530000</ArariGaku>
+			<ArariRitsu>100.00</ArariRitsu>
+			<MeisaiGokei>530000</MeisaiGokei>
+			<GoukeiKingaku>583000</GoukeiKingaku>
+			<NebikiGaku>0</NebikiGaku>
+			<ZeiGaku>53000</ZeiGaku>
+			<GenkaGokei>0</GenkaGokei>
+			<ZeiKeisanKbn>1</ZeiKeisanKbn>
+			<ZeiKbn>1</ZeiKbn>
+			<ShukeiKbn1>1</ShukeiKbn1>
+			<ShukeiKbn2>1234</ShukeiKbn2>
+			<ShukeiKbn3>1</ShukeiKbn3>
+			<ShukeiKbn4>1234</ShukeiKbn4>
+			<ZeiRitsu>10.00</ZeiRitsu>
+			<ShichuFlg>0</ShichuFlg>
+			<ShichuDate>0:00:00</ShichuDate>
+			<ShichuRiyu />
+			<MitsumoriPrintDate>0:00:00</MitsumoriPrintDate>
+			<HogoFlag>0</HogoFlag>
+			<HogoUser />
+			<Biko>TESTメモ</Biko>
+			<MeisaiMaxRowID>11</MeisaiMaxRowID>
+			<GenkaMaxRowID>4</GenkaMaxRowID>
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1>False</YobiX1>
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>2</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>530000.00</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/15 15:37:04</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+			<ActivatedUpdateDay>2020/06/16 16:40:30</ActivatedUpdateDay>
+		</MitumoriH>
+		<MitumoriM>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<RowID>3</RowID>
+			<MeisaiNo>1</MeisaiNo>
+			<OyaRowID>0</OyaRowID>
+			<KaisoNo>2</KaisoNo>
+			<Zokusei>0</Zokusei>
+			<HeyaNo>1234</HeyaNo>
+			<BashoName>TEST場所</BashoName>
+			<KashoName>TEST個</KashoName>
+			<JishaHinban>A101</JishaHinban>
+			<MakerName>TESTメーカー</MakerName>
+			<MakerHinban>A001</MakerHinban>
+			<HinName>ＣＦシート貼工事　住宅</HinName>
+			<Kikaku />
+			<HinshuCD>101</HinshuCD>
+			<ShukeiKbn1>2</ShukeiKbn1>
+			<ShukeiKbn2>1234</ShukeiKbn2>
+			<UrikakeRitsuCD>0</UrikakeRitsuCD>
+			<Suryo>10.00</Suryo>
+			<Tani>㎡</Tani>
+			<HanbaiJodai>0</HanbaiJodai>
+			<HanbaiKakeRitsu>0.00</HanbaiKakeRitsu>
+			<HanbaiTanka>50000</HanbaiTanka>
+			<HanbaiKingaku>500000</HanbaiKingaku>
+			<ShiireKingaku>0</ShiireKingaku>
+			<ArariGaku>500000</ArariGaku>
+			<ArariRitsu>100.00</ArariRitsu>
+			<TankaTeInputFlg>0</TankaTeInputFlg>
+			<KingakuTeInputFlg>0</KingakuTeInputFlg>
+			<ZeiKbn>0</ZeiKbn>
+			<ZeiRitsu>10.00</ZeiRitsu>
+			<ZeiGaku>0</ZeiGaku>
+			<DenpyoKisaiFlg>1</DenpyoKisaiFlg>
+			<Curtain>0</Curtain>
+			<Biko>TEST品目1</Biko>
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1 />
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>0</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>0</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/16 13:15:36</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+		</MitumoriM>
+		<MitumoriM>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<RowID>7</RowID>
+			<MeisaiNo>2</MeisaiNo>
+			<OyaRowID>0</OyaRowID>
+			<KaisoNo>2</KaisoNo>
+			<Zokusei>0</Zokusei>
+			<HeyaNo>1234</HeyaNo>
+			<BashoName>TEST場所</BashoName>
+			<KashoName>TEST個</KashoName>
+			<JishaHinban>0315</JishaHinban>
+			<MakerName>TESTメーカー</MakerName>
+			<MakerHinban>A002</MakerHinban>
+			<HinName>薄畳</HinName>
+			<Kikaku />
+			<HinshuCD>404</HinshuCD>
+			<ShukeiKbn1>8</ShukeiKbn1>
+			<ShukeiKbn2>1234</ShukeiKbn2>
+			<UrikakeRitsuCD>0</UrikakeRitsuCD>
+			<Suryo>5.00</Suryo>
+			<Tani>帖</Tani>
+			<HanbaiJodai>0</HanbaiJodai>
+			<HanbaiKakeRitsu>0.00</HanbaiKakeRitsu>
+			<HanbaiTanka>6000</HanbaiTanka>
+			<HanbaiKingaku>30000</HanbaiKingaku>
+			<ShiireKingaku>0</ShiireKingaku>
+			<ArariGaku>30000</ArariGaku>
+			<ArariRitsu>100.00</ArariRitsu>
+			<TankaTeInputFlg>0</TankaTeInputFlg>
+			<KingakuTeInputFlg>0</KingakuTeInputFlg>
+			<ZeiKbn>0</ZeiKbn>
+			<ZeiRitsu>10.00</ZeiRitsu>
+			<ZeiGaku>0</ZeiGaku>
+			<DenpyoKisaiFlg>1</DenpyoKisaiFlg>
+			<Curtain>0</Curtain>
+			<Biko />
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1 />
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>0</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>0</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/16 13:19:05</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+		</MitumoriM>
+		<MitumoriM>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<RowID>11</RowID>
+			<MeisaiNo>3</MeisaiNo>
+			<OyaRowID>0</OyaRowID>
+			<KaisoNo>2</KaisoNo>
+			<Zokusei>1</Zokusei>
+			<HeyaNo>0</HeyaNo>
+			<BashoName />
+			<KashoName />
+			<JishaHinban />
+			<MakerName />
+			<MakerHinban />
+			<HinName>【小計】</HinName>
+			<Kikaku />
+			<HinshuCD>0</HinshuCD>
+			<ShukeiKbn1>0</ShukeiKbn1>
+			<ShukeiKbn2>0</ShukeiKbn2>
+			<UrikakeRitsuCD>0</UrikakeRitsuCD>
+			<Suryo>0.00</Suryo>
+			<Tani />
+			<HanbaiJodai>0</HanbaiJodai>
+			<HanbaiKakeRitsu>0.00</HanbaiKakeRitsu>
+			<HanbaiTanka>0</HanbaiTanka>
+			<HanbaiKingaku>530000</HanbaiKingaku>
+			<ShiireKingaku>0</ShiireKingaku>
+			<ArariGaku>530000</ArariGaku>
+			<ArariRitsu>0.00</ArariRitsu>
+			<TankaTeInputFlg>0</TankaTeInputFlg>
+			<KingakuTeInputFlg>0</KingakuTeInputFlg>
+			<ZeiKbn>0</ZeiKbn>
+			<ZeiRitsu>0.00</ZeiRitsu>
+			<ZeiGaku>0</ZeiGaku>
+			<DenpyoKisaiFlg>1</DenpyoKisaiFlg>
+			<Curtain>0</Curtain>
+			<Biko />
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1 />
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>0</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>0</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/16 13:21:17</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+		</MitumoriM>
+		<MitumoriG>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<RowID>2</RowID>
+			<MeisaiRowID>3</MeisaiRowID>
+			<GenkaGyoNo>1</GenkaGyoNo>
+			<JishaHinban>Z101</JishaHinban>
+			<MakerName />
+			<MakerHinban />
+			<HinName>ＣＦ材料</HinName>
+			<Kikaku />
+			<HinshuCD>101</HinshuCD>
+			<ShukeiKbn1>0</ShukeiKbn1>
+			<ShukeiKbn2>0</ShukeiKbn2>
+			<Suryo>10.00</Suryo>
+			<Tani>ｍ</Tani>
+			<ShiireJodai>20000</ShiireJodai>
+			<ShiireKakeRitsu>0.00</ShiireKakeRitsu>
+			<ShiireTanka>0</ShiireTanka>
+			<ShiireKingaku>0</ShiireKingaku>
+			<ShiireSakiCD>1234</ShiireSakiCD>
+			<ShiireSekoKbn>0</ShiireSekoKbn>
+			<HachuShoKisaiFlg>1</HachuShoKisaiFlg>
+			<YojakuHaneiFlg>0</YojakuHaneiFlg>
+			<Biko />
+			<YoteiDate>0:00:00</YoteiDate>
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1 />
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>0</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>0</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/16 16:40:30</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+		</MitumoriG>
+		<MitumoriG>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<RowID>3</RowID>
+			<MeisaiRowID>3</MeisaiRowID>
+			<GenkaGyoNo>2</GenkaGyoNo>
+			<JishaHinban>K101</JishaHinban>
+			<MakerName />
+			<MakerHinban />
+			<HinName>ＣＦ手間</HinName>
+			<Kikaku />
+			<HinshuCD>101</HinshuCD>
+			<ShukeiKbn1>0</ShukeiKbn1>
+			<ShukeiKbn2>0</ShukeiKbn2>
+			<Suryo>10.00</Suryo>
+			<Tani>㎡</Tani>
+			<ShiireJodai>0</ShiireJodai>
+			<ShiireKakeRitsu>0.00</ShiireKakeRitsu>
+			<ShiireTanka>0</ShiireTanka>
+			<ShiireKingaku>0</ShiireKingaku>
+			<ShiireSakiCD>1234</ShiireSakiCD>
+			<ShiireSekoKbn>1</ShiireSekoKbn>
+			<HachuShoKisaiFlg>1</HachuShoKisaiFlg>
+			<YojakuHaneiFlg>0</YojakuHaneiFlg>
+			<Biko />
+			<YoteiDate>0:00:00</YoteiDate>
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1 />
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>0</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>0</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/16 16:40:30</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+		</MitumoriG>
+		<MitumoriG>
+			<MitumoriNo>MI20060001</MitumoriNo>
+			<MitumoriEdaNo>0</MitumoriEdaNo>
+			<RowID>4</RowID>
+			<MeisaiRowID>7</MeisaiRowID>
+			<GenkaGyoNo>1</GenkaGyoNo>
+			<JishaHinban>0315</JishaHinban>
+			<MakerName />
+			<MakerHinban />
+			<HinName>薄畳</HinName>
+			<Kikaku />
+			<HinshuCD>404</HinshuCD>
+			<ShukeiKbn1>0</ShukeiKbn1>
+			<ShukeiKbn2>0</ShukeiKbn2>
+			<Suryo>0.00</Suryo>
+			<Tani>帖</Tani>
+			<ShiireJodai>2000</ShiireJodai>
+			<ShiireKakeRitsu>0.00</ShiireKakeRitsu>
+			<ShiireTanka>0</ShiireTanka>
+			<ShiireKingaku>0</ShiireKingaku>
+			<ShiireSakiCD>1234</ShiireSakiCD>
+			<ShiireSekoKbn>0</ShiireSekoKbn>
+			<HachuShoKisaiFlg>1</HachuShoKisaiFlg>
+			<YojakuHaneiFlg>1</YojakuHaneiFlg>
+			<Biko />
+			<YoteiDate>0:00:00</YoteiDate>
+			<Version>Ariadne 5.03.005</Version>
+			<YobiX1 />
+			<YobiX2 />
+			<YobiX3 />
+			<YobiN1>0</YobiN1>
+			<YobiN2>0</YobiN2>
+			<YobiN3>0</YobiN3>
+			<YobiD1>0</YobiD1>
+			<YobiD2>0</YobiD2>
+			<YobiD3>0</YobiD3>
+			<CreateUser>admin</CreateUser>
+			<CreateDay>2020/06/16 16:40:30</CreateDay>
+			<UpdateUser>admin</UpdateUser>
+			<UpdateDay>2020/06/16 16:40:30</UpdateDay>
+		</MitumoriG>
+	</ContactXMLItem>
+</ContactXML>
