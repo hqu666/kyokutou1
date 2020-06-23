@@ -4,31 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GoogleOSD"
-        mc:Ignorable="d"
+		xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
+		mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="スケジュール管理" Height="1000" Width="1400" Padding="10"
+        Title="スケジュール管理" Height="1000" Width="1700" Padding="10"
 		SizeChanged="MetroWindow_SizeChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
 		ScrollViewer.VerticalScrollBarVisibility="Auto" Closed="Window_Closed">
-
 
 	<Window.Resources>
 		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
 	</Window.Resources>
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,20">
-		<Button x:Name="Back_bt" Content="▲" HorizontalAlignment="Left" Margin="17,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Back_bt_Click"/>
-		<ComboBox x:Name="cbYearMonth" HorizontalAlignment="Left" Margin="73,20,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="cbYearMonth_SelectionChanged" FontSize="18"/>
-		<Button x:Name="Next_bt" Content="▼" HorizontalAlignment="Left" Margin="241,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Next_bt_Click"/>
-		<Button x:Name="today_bt" Content="本日" HorizontalAlignment="Left" Margin="329,21,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.387,0.485" Click="Today_bt_Click"/>
-		<Grid x:Name="CalendarContainer"  Margin="0,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-		<Button HorizontalAlignment="Left" Margin="565,23,0,0" VerticalAlignment="Top" Width="75"
-					 x:Name="GDrive_bt" Content="ドライブを表示"
-					 Click="GDrive_bt_Click"/>
-		<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Right" Margin="0,20,275.2,0" VerticalAlignment="Top" Width="94"/>
-		<Label x:Name="lbSelectedDate" Content="" Margin="0,20,153.2,0" VerticalAlignment="Top" Width="102" HorizontalAlignment="Right"/>
-		<Label Content="の表示" Margin="1165,20,10,0" VerticalAlignment="Top"/>
-		<Button HorizontalAlignment="Left" Margin="922,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
-						Name="Weekly_bt"  Content="週" Click="Weekly_bt_Click"/>
-		<Button HorizontalAlignment="Left" Margin="970,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
-					Name="Dayly_bt" Content="日" Click="Dayly_bt_Click" />
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition  Width="Auto" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<igWPF:XamDataGrid    Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"  Width="200" 
+					 x:Name="Ariadne_dg"/>
+
+		<StackPanel  Grid.Row="0" Grid.Column="1"   Orientation="Horizontal" Width="1400">
+			<Button x:Name="Back_bt" Content="▲" HorizontalAlignment="Left" Margin="20,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Back_bt_Click"/>
+			<ComboBox x:Name="cbYearMonth" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="139" SelectionChanged="cbYearMonth_SelectionChanged" FontSize="18"/>
+			<Button x:Name="Next_bt" Content="▼" HorizontalAlignment="Left" Margin="20,21,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.387,0.485" Click="Next_bt_Click"/>
+			<Button x:Name="today_bt" Content="本日" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.387,0.485" Click="Today_bt_Click"/>
+			<Button HorizontalAlignment="Left" Margin="20,23,0,0" VerticalAlignment="Top" Width="75"
+						 x:Name="GDrive_bt" Content="ドライブを表示"
+						 Click="GDrive_bt_Click"/>
+			<Label x:Name="lbDate" Content="選択された日付：" HorizontalAlignment="Right" Margin="20,20,275.2,0" VerticalAlignment="Top" Width="94"/>
+			<Label x:Name="lbSelectedDate" Content="" Margin="10,20,153.2,0" VerticalAlignment="Top" Width="102" HorizontalAlignment="Right"/>
+			<Label Content="の表示" Margin="0,20,10,0" VerticalAlignment="Top"/>
+			<Button HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
+							Name="Weekly_bt"  Content="週" Click="Weekly_bt_Click"/>
+			<Button HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
+						Name="Dayly_bt" Content="日" Click="Dayly_bt_Click" />
+		</StackPanel>
+		<Grid    Grid.Row="1" Grid.Column="1" x:Name="CalendarContainer"  Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+
 	</Grid>
 </Window>

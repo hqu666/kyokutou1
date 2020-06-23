@@ -189,3 +189,12 @@ C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.c
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\InfragisticsWPF4.DataPresenter.v12.2.dll
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\InfragisticsWPF4.Editors.v12.2.dll
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\InfragisticsWPF4.v12.2.dll
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\InfragisticsWPF4.DataPresenter.v12.2.xml
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\InfragisticsWPF4.Editors.v12.2.xml
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\InfragisticsWPF4.v12.2.xml
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.DataPresenter.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.Editors.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.v12.2.resources.dll

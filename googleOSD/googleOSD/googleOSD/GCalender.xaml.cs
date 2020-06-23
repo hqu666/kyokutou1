@@ -256,7 +256,7 @@ namespace GoogleOSD {
 					dbMsg += ">>同月";
 				} else {
 					Application.Current.MainWindow = this;
-					double windowWidth = Application.Current.MainWindow.Width;
+					double windowWidth = Application.Current.MainWindow.Width - Ariadne_dg.Width - 20;
 					double windowHeight = Application.Current.MainWindow.Height;
 					dbMsg += "window[" + windowWidth + "×" + windowHeight + "]";
 
@@ -264,7 +264,6 @@ namespace GoogleOSD {
 
 					// グループボックス
 					GroupBox calendarGroup1 = new GroupBox();
-					//		calendarGroup1.Header = monthInfo.YearMonthWithKanji;		//カレンダーの左上に当月を書き込む
 					calendarGroup1.Style = FindResource("gp-normal") as System.Windows.Style;
 
 					// グリッド
@@ -300,6 +299,7 @@ namespace GoogleOSD {
 					border.Style = FindResource("rec-border") as System.Windows.Style;
 					calendarGrid1.Children.Add(border);
 
+					//週名の行を作成
 					for (int col = 0; col < 7; col++) {
 						Rectangle week = new Rectangle();
 						if (col == 0) {
