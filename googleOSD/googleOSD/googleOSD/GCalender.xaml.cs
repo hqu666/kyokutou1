@@ -207,10 +207,15 @@ namespace GoogleOSD {
 						}
 						ohters.Add(oData);
 					}
-				}
-				dbMsg += "その他" + ohters.Count + "件";
 
+				}
+				//List<AriadneData> _ariadneData { get; set; }
+				//TreeViewのBinding作成
+				foreach (AriadneData aData in ariadneDatas) {
+					aData.Children.Add(aData);
+				}
 				Ariadne_tv.ItemsSource = ariadneDatas;
+				dbMsg += "その他" + ohters.Count + "件";
 				Ariadne_dg.ItemsSource = ohters;
 
 				MyLog(TAG, dbMsg);

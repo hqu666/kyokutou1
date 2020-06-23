@@ -15,6 +15,10 @@ namespace GoogleOSD {
 		///その他のファイルのGoogleDriveID
 		/// </summary>
 		public string OFileGoogleFileID { set; get; }
-
+		
+		/// <summary>
+		/// 添付などの選択
+		/// </summary>
+		public bool IsSerect { set; get; }
 	}
 }

@@ -23,14 +23,23 @@
 		<Label Content="添付するファイルにチェックを入れて下さい"/>
 			<TreeView Width="300"  x:Name="Ariadne_tv" MinHeight="500">
 				<TreeView.ItemTemplate>
-					<HierarchicalDataTemplate DataType="local:ariadneDatas" ItemsSource="{Binding OrderNumber}">
-						<TextBlock Text="{Binding ManagementNumber}" />
+					<HierarchicalDataTemplate DataType="local:ariadneDatas" ItemsSource="{Binding Children}">
+						<TextBlock Text="{Binding OrderNumber}" />
 					</HierarchicalDataTemplate>
 				</TreeView.ItemTemplate>
+				<!--<TreeViewItem Header="A部">
+					<TreeViewItem Header="Aグループ">
+						<TreeViewItem Header="グループ員１"/>
+						<TreeViewItem Header="グループ員２"/>
+						<TreeViewItem Header="グループ員３"/>
+					</TreeViewItem>
+				</TreeViewItem>-->
 			</TreeView>
+
 			<DataGrid  Width="300"  VerticalAlignment="Bottom"  AutoGenerateColumns="False" HorizontalContentAlignment="Right"
 					 x:Name="Ariadne_dg">
 				<DataGrid.Columns>
+					<DataGridCheckBoxColumn Binding="{Binding IsSerect}" />
 					<DataGridTextColumn Header="その他のファイル"   Binding="{Binding OFilePCPass}">
 						<DataGridTextColumn.CellStyle>
 							<Style TargetType="DataGridCell">

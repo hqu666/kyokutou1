@@ -89,6 +89,13 @@ namespace GoogleOSD {
 		/// </summary>
 		public string StockGoogleFileID { set; get; }
 
-
+		/// <summary>
+		/// TreeViewの階層化配列
+		/// </summary>
+		public List<AriadneData> Children { get; set; } = new List<AriadneData>();
+		/// <summary>
+		/// 添付などの選択
+		/// </summary>
+		public bool IsSerect { set; get; }
 	}
 }
