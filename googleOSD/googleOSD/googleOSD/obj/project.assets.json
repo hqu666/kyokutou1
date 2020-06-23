@@ -37,11 +37,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.45.0.1949": {
+      "Google.Apis.Calendar.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.45.0",
-          "Google.Apis.Auth": "1.45.0"
+          "Google.Apis": "1.46.0",
+          "Google.Apis.Auth": "1.46.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -65,7 +65,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1964": {
+      "Google.Apis.Drive.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.46.0",
@@ -78,7 +78,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -273,11 +273,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.45.0.1949": {
+      "Google.Apis.Calendar.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.45.0",
-          "Google.Apis.Auth": "1.45.0"
+          "Google.Apis": "1.46.0",
+          "Google.Apis.Auth": "1.46.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -301,7 +301,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1964": {
+      "Google.Apis.Drive.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.46.0",
@@ -314,7 +314,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -509,11 +509,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.45.0.1949": {
+      "Google.Apis.Calendar.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.45.0",
-          "Google.Apis.Auth": "1.45.0"
+          "Google.Apis": "1.46.0",
+          "Google.Apis.Auth": "1.46.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -537,7 +537,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1964": {
+      "Google.Apis.Drive.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.46.0",
@@ -550,7 +550,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -745,11 +745,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.45.0.1949": {
+      "Google.Apis.Calendar.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.45.0",
-          "Google.Apis.Auth": "1.45.0"
+          "Google.Apis": "1.46.0",
+          "Google.Apis.Auth": "1.46.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -773,7 +773,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1964": {
+      "Google.Apis.Drive.v3/1.46.0.1986": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.46.0",
@@ -786,7 +786,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -995,15 +995,15 @@
         "lib/netstandard2.0/Google.Apis.Auth.xml"
       ]
     },
-    "Google.Apis.Calendar.v3/1.45.0.1949": {
-      "sha512": "0Vcf1Z0v0NZQ7UMSvLKRbnykqPOHnagDw649n6oUB0SNEPm2OYHfFDEXLTsOBc1UJFubXRlyg1/p7W9wLYOtfQ==",
+    "Google.Apis.Calendar.v3/1.46.0.1986": {
+      "sha512": "NQBurb/zq6DLTSnXaDNPeMB2gUP0FwXBnMae+TXiE59O1ePpiSZ6dE/R0k6Hk0/3V7GB1W40hd3CL5S8NUpFaw==",
       "type": "package",
-      "path": "google.apis.calendar.v3/1.45.0.1949",
+      "path": "google.apis.calendar.v3/1.46.0.1986",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.calendar.v3.1.45.0.1949.nupkg.sha512",
+        "google.apis.calendar.v3.1.46.0.1986.nupkg.sha512",
         "google.apis.calendar.v3.nuspec",
         "lib/net40/Google.Apis.Calendar.v3.dll",
         "lib/net40/Google.Apis.Calendar.v3.pdb",
@@ -1044,15 +1044,15 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "Google.Apis.Drive.v3/1.46.0.1964": {
-      "sha512": "mb9mSzWCe+qVTksK1Kcazg4so5Z8cj/kZk10XCGPv+ydMO7vg6qllgJrkhk0gT/HBYAs0alvjG7vEMbhrq+9EA==",
+    "Google.Apis.Drive.v3/1.46.0.1986": {
+      "sha512": "YO504lH1syICTJRnXLYCc8yPecQnOXlyeh2P3xNvSmNjtVc/GcqDrCvcZs4eGCQecyrd/YqFZ9CCN2CfVnxZuQ==",
       "type": "package",
-      "path": "google.apis.drive.v3/1.46.0.1964",
+      "path": "google.apis.drive.v3/1.46.0.1986",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.drive.v3.1.46.0.1964.nupkg.sha512",
+        "google.apis.drive.v3.1.46.0.1986.nupkg.sha512",
         "google.apis.drive.v3.nuspec",
         "lib/net40/Google.Apis.Drive.v3.dll",
         "lib/net40/Google.Apis.Drive.v3.pdb",
@@ -1071,10 +1071,10 @@
         "lib/netstandard2.0/Google.Apis.Drive.v3.xml"
       ]
     },
-    "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
-      "sha512": "W1yS7AEuaSy04LZZVlcaDM40Kxooog4s6jMdLA80wlVJfFjKXIDDC+YK47mS2J8lHyDkyRmZwJlqvPVahq8p/A==",
+    "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
+      "sha512": "Wpvi9X+Wr3Cgcf0W+Ll6iNfPMp+KIOvu5H7yZ10s6pC6RZeUDxLqMvgqTCilF3GTW3ENSZR62ZXLOYkbgLdhlg==",
       "type": "package",
-      "path": "microsoft.toolkit.wpf.ui.controls.webview/6.0.1",
+      "path": "microsoft.toolkit.wpf.ui.controls.webview/6.1.0",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1085,7 +1085,7 @@
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll",
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.pdb",
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.xml",
-        "microsoft.toolkit.wpf.ui.controls.webview.6.0.1.nupkg.sha512",
+        "microsoft.toolkit.wpf.ui.controls.webview.6.1.0.nupkg.sha512",
         "microsoft.toolkit.wpf.ui.controls.webview.nuspec",
         "tools/VisualStudioToolsManifest.xml"
       ]
@@ -1435,27 +1435,27 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.7.1": [
-      "Google.Apis.Calendar.v3 >= 1.45.0.1949",
-      "Google.Apis.Drive.v3 >= 1.46.0.1964",
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.0.1",
+      "Google.Apis.Calendar.v3 >= 1.46.0.1986",
+      "Google.Apis.Drive.v3 >= 1.46.0.1986",
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.1.0",
       "Newtonsoft.Json >= 12.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\博臣\\.nuget\\packages\\": {}
+    "C:\\Users\\hkuwayama\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "projectUniqueName": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
       "projectName": "GoogleOSD",
-      "projectPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
-      "packagesPath": "C:\\Users\\博臣\\.nuget\\packages\\",
-      "outputPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\obj\\",
+      "projectPath": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "packagesPath": "C:\\Users\\hkuwayama\\.nuget\\packages\\",
+      "outputPath": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
-        "C:\\Users\\博臣\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hkuwayama\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1463,7 +1463,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://www.nuget.org/api/v2/": {}
       },
       "frameworks": {
         "net471": {
@@ -1476,15 +1476,15 @@
         "dependencies": {
           "Google.Apis.Calendar.v3": {
             "target": "Package",
-            "version": "[1.45.0.1949, )"
+            "version": "[1.46.0.1986, )"
           },
           "Google.Apis.Drive.v3": {
             "target": "Package",
-            "version": "[1.46.0.1964, )"
+            "version": "[1.46.0.1986, )"
           },
           "Microsoft.Toolkit.Wpf.UI.Controls.WebView": {
             "target": "Package",
-            "version": "[6.0.1, )"
+            "version": "[6.1.0, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",

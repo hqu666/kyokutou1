@@ -56,6 +56,14 @@ namespace GoogleOSD {
 			try {
 				Settings MySettings = Settings.Default;
 				dbMsg += ",Settings=" + MySettings.Context.Count + "件";
+				
+				if(MySettings.AriadneDataFolder == null || MySettings.AriadneDataFolder.Equals("")) {
+					Constant.AriadneDataFolder =  AriadneFolderRead();
+				}else{
+					Constant.AriadneDataFolder = MySettings.AriadneDataFolder;
+				}
+				dbMsg += ",AriadneDataFolder=" + Constant.AriadneDataFolder;
+
 				//	Json読込みのテスト時は以下の二行で読込みリセット
 				//	MySettings.clientId = null;
 				//MySettings.Save();
@@ -173,6 +181,38 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// Ariadneの生成ファイルフォルダの位置を読み出す
+		/// </summary>
+		private string AriadneFolderRead()
+		{
+			string TAG = "AriadneFolderRead";
+			string dbMsg = "[GoogleAuth]";
+			string retStr = "";
+			try {
+				// フォルダー参照ダイアログのインスタンスを生成
+				var dialog = new System.Windows.Forms.FolderBrowserDialog();
+
+				// 説明文を設定
+				dialog.Description = "Ariadneで作成したフォルダーを選択してください。";
+
+				// ダイアログを表示
+				if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					// 選択されたフォルダーパスをメッセージボックスに表示
+					Settings MySettings = Settings.Default;
+					retStr = dialog.SelectedPath;
+					MySettings.AriadneDataFolder = retStr;
+					dbMsg += ",MySettings.AriadneDataFolder=" + MySettings.AriadneDataFolder;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retStr;
+		}
+
+
 
 		/// <summary>
 		/// UserCredentialを作成する

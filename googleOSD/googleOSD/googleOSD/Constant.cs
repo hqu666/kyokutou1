@@ -39,6 +39,7 @@ namespace GoogleOSD {
 		public static string MakeFolderName = null;         //作成するファイルの格納フォルダ
 		public static String parentFolderId;
 		public static string LocalPass = "";            //送信元PCフォルダ
+		public static string AriadneDataFolder = "";       //AriadneのExcel出力フォルダ
 
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
