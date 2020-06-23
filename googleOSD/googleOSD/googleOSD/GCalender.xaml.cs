@@ -48,12 +48,177 @@ namespace GoogleOSD {
 				// 最大化表示
 	//			this.WindowState = WindowState.Maximized;
 				this.FontSize = Constant.MyFontSize;
+
+				DrowAriadneData();
 				DrowToday();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// AriadneDataの登録ファイルを読み出す
+		/// </summary>
+		private void DrowAriadneData()
+		{
+			string TAG = "DrowAriadneData";
+			string dbMsg = "[GCalender]";
+			try {
+				IList<AriadneData> ariadneDatas = new List<AriadneData>();
+				AriadneData ariadneData = new AriadneData();
+				ariadneData.OrderNumber = "JU20060007";                   //受注No
+				ariadneData.ManagementNumber = "工事１・現場１";		// 管理番号　:
+				ariadneData.CustomerName = "1234取引先名";              // 得意先　:
+				//伝票番号をGoogleDriveのFileIDに仮設定
+				ariadneData.EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
+				ariadneData.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
+				ariadneData.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
+				ariadneData.RequestPCPass = "";              //請求ファイルのPC保存位置
+				ariadneData.ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
+				ariadneData.ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
+				ariadneData.StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
+				ariadneDatas.Add(ariadneData);
+
+				ariadneData = new AriadneData();
+				ariadneData.OrderNumber = "JU20060006";                   //受注No
+				ariadneData.ManagementNumber = "工事１・現場2";      // 管理番号　:
+				ariadneData.CustomerName = "1234取引先名";              // 得意先　:
+				ariadneData.EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
+				ariadneData.OrderGoogleFileID = "JU20060006";              // 受注ファイルのGoogleDriveID
+				ariadneData.SalesGoogleFileID = "UR20060005";              //売上ファイルのGoogleDriveID
+				ariadneData.RequestPCPass = "";              //請求ファイルのPC保存位置
+				ariadneData.ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
+				ariadneData.ToOrderGoogleFileID = "HA20060002";              //発注ファイルのGoogleDriveID
+				ariadneData.StockGoogleFileID = "SI20060002";              // 入荷・工事消込ファイルのGoogleDriveID
+				ariadneDatas.Add(ariadneData);
+
+
+				ariadneData = new AriadneData();
+				ariadneData.OrderNumber = "JU20060007";                   //受注No
+				ariadneData.ManagementNumber = "工事2・現場1";      // 管理番号　:
+				ariadneData.CustomerName = "工事2取引先名";              // 得意先　:
+				ariadneData.EstimationGoogleFileID = "MI20060007";              // 見積ファイルのGoogleDriveID
+				ariadneData.OrderGoogleFileID = "JU20060006";              // 受注ファイルのGoogleDriveID
+				ariadneDatas.Add(ariadneData);
+
+				dbMsg += ",AriadneDataFolder=" + Constant.AriadneDataFolder;
+				string[] aFilrs= System.IO.Directory.GetFiles(@Constant.AriadneDataFolder, "*.xlsx", System.IO.SearchOption.AllDirectories);
+				dbMsg += " >xlsx>aFilrs=" + aFilrs.Length + "件";
+				IList<OtherData> ohters = new List<OtherData>();
+				foreach (string rFile in aFilrs) {
+					dbMsg += "\r\n" + rFile;
+					string[] strs = rFile.Split('\\');
+					string name = strs[strs.Length - 1];
+					dbMsg += ",name=" + name;
+					string parent = strs[strs.Length - 2];
+					dbMsg += ",parent=" + parent;
+
+					if (rFile.Contains("見積")) {
+						dbMsg += ">>見積";
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.EstimationGoogleFileID)) {
+								aData.EstimationPCPass = rFile;              // 見積ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.EstimationGoogleFileID = gFileId;
+							}
+						}
+					} else if (rFile.Contains("受注")) {
+						dbMsg += ">>受注" ;
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.OrderGoogleFileID)) {
+								aData.OrderPCPass = rFile;              // 受注ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.OrderGoogleFileID = gFileId;
+							}
+						}
+					} else if (rFile.Contains("売上")) {
+						dbMsg += ">>売上";
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.SalesGoogleFileID)) {
+								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.SalesGoogleFileID = gFileId;
+							}
+						}
+					} else if (rFile.Contains("請求")) {
+						dbMsg += ">>請求";
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.RequestGoogleFileID)) {
+								aData.RequestGoogleFileID = rFile;               //請求ファイルのGoogleDriveID
+								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.RequestGoogleFileID = gFileId;
+							}
+						}
+					} else if (rFile.Contains("入金")) {
+						dbMsg += ">>入金";
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.ReceipttGoogleFileID)) {
+								aData.ReceiptPCPass = rFile;            //入金ファイルのPC保存位置
+								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.ReceipttGoogleFileID = gFileId;
+							}
+						}
+					} else if (rFile.Contains("発注")) {
+						dbMsg += ">>発注";
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.ToOrderGoogleFileID)) {
+								aData.ToOrderPCPass = rFile;              //発注ファイルのPC保存位置
+								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.ToOrderGoogleFileID = gFileId;
+							}
+						}
+					} else if (rFile.Contains("入荷")) {
+						dbMsg += ">>入荷";
+						foreach (AriadneData aData in ariadneDatas) {
+							if (parent.Equals(aData.ToOrderGoogleFileID)) {
+								aData.StockPCPass = rFile;               // 入荷・工事消込ファイルのPC保存位置
+								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
+								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								string gFileId = gFile.Id;
+								dbMsg += "[" + gFileId + "]";
+								aData.ToOrderGoogleFileID = gFileId;
+							}
+						}
+					}else{
+						dbMsg += ">>その他";
+						OtherData oData = new OtherData();
+						oData.OFilePCPass = rFile;
+						Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+						if(gFile != null) {
+							string gFileId = gFile.Id;
+							dbMsg += "[" + gFileId + "]";
+							oData.OFileGoogleFileID = gFileId;
+						}
+						ohters.Add(oData);
+					}
+				}
+				dbMsg += "その他" + ohters.Count + "件";
+
+				Ariadne_tv.ItemsSource = ariadneDatas;
+				Ariadne_dg.ItemsSource = ohters;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		public IList<Google.Apis.Calendar.v3.Data.Event> EventListUp(DateTime timeMin, DateTime timeMax)
 		{
@@ -256,7 +421,7 @@ namespace GoogleOSD {
 					dbMsg += ">>同月";
 				} else {
 					Application.Current.MainWindow = this;
-					double windowWidth = Application.Current.MainWindow.Width - Ariadne_dg.Width - 20;
+					double windowWidth = Application.Current.MainWindow.Width - Ariadne_tv.Width - 20;
 					double windowHeight = Application.Current.MainWindow.Height;
 					dbMsg += "window[" + windowWidth + "×" + windowHeight + "]";
 
@@ -269,10 +434,10 @@ namespace GoogleOSD {
 					// グリッド
 					Grid calendarGrid1 = new Grid();
 					calendarGrid1.Style = FindResource("grid-calendar") as System.Windows.Style;
-					double windowMarginTop = 150;
+					double windowMarginTop = 0;			//150 ?
 					double windowMarginLeft = 20;
 					double windowMarginRight = 30;
-					double windowMarginBottom = 10;
+					double windowMarginBottom = 150;            //10 ? CControl_sp
 					dbMsg += "、Margin← " + windowMarginLeft + "  ↑ " + windowMarginTop + "  ⇒  " + windowMarginRight + " ↓" + windowMarginBottom;
 					double CalendarWidth = windowWidth - (windowMarginLeft + windowMarginRight);
 					double CalendarHight = windowHeight - (windowMarginTop + windowMarginBottom);

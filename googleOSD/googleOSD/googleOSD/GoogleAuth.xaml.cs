@@ -56,8 +56,8 @@ namespace GoogleOSD {
 			try {
 				Settings MySettings = Settings.Default;
 				dbMsg += ",Settings=" + MySettings.Context.Count + "件";
-				
-				if(MySettings.AriadneDataFolder == null || MySettings.AriadneDataFolder.Equals("")) {
+				MySettings.AriadneDataFolder  null;
+				if (MySettings.AriadneDataFolder == null || MySettings.AriadneDataFolder.Equals("")) {
 					Constant.AriadneDataFolder =  AriadneFolderRead();
 				}else{
 					Constant.AriadneDataFolder = MySettings.AriadneDataFolder;

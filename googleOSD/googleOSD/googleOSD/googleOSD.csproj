@@ -78,6 +78,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AddInfo.cs" />
+    <Compile Include="AriadneData.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="GOAuthModel.cs" />
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
+    <Compile Include="OtherData.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Style\StyleDic.xaml.cs">
       <DependentUpon>StyleDic.xaml</DependentUpon>
