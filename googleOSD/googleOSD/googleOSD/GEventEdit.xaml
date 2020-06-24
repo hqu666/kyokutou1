@@ -8,7 +8,7 @@
         Title="イベント登録"  FontSize="12" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
 	    WindowStartupLocation="CenterScreen" 
-		Width="850" Height="550"
+		Width="600" Height="450"
 		Closing="Window_Closing" >
 
 	<Window.Resources>
@@ -87,9 +87,9 @@
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto" />
-			<ColumnDefinition  Width="Auto" />
+			<ColumnDefinition  />
+			<ColumnDefinition />
+			<ColumnDefinition  />
 			<!--<ColumnDefinition Width="*"/>-->
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
@@ -109,7 +109,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
 
@@ -132,7 +132,15 @@
 
 		<Label Grid.Row="1" Grid.Column="0"   
 					Content="イベント種類" HorizontalAlignment="Right" Margin="0,5,5,5" />
-		<ComboBox  Grid.Row="1" Grid.Column="1"  HorizontalContentAlignment="Left" Width="150" >
+		<ComboBox  Grid.Row="1" Grid.Column="1"  
+							Height="24" Width="Auto" HorizontalAlignment="Left"
+							SelectedIndex="1">
+			<ListBoxItem Content="工事イベント"/>
+			<ListBoxItem Content="工程イベント"/>
+			<ListBoxItem Content="通常イベント"/>
+		</ComboBox>
+
+		<!--<ComboBox  Grid.Row="1" Grid.Column="1"  HorizontalContentAlignment="Left" Width="150" >
 			<ListBoxItem Content="案件イベント"/>
 			<ListBoxItem Content="工程イベント"/>
 			<ListBoxItem Content="発注伝票を作成"/>
@@ -142,10 +150,10 @@
 			<ListBoxItem Content="複製"/>
 			<ListBoxItem Content="予定を公開"/>
 			<ListBoxItem Content="主催者を変更"/>
-		</ComboBox>
-		<Label Grid.Row="1" Grid.Column="2"   
+		</ComboBox>-->
+		<Label Grid.Row="1" Grid.Column="2"
 					Content="背景色" HorizontalAlignment="Right" Margin="0,5,5,5" />
-		<ComboBox  Grid.Row="1" Grid.Column="3"
+		<ComboBox  Grid.Row="1" Grid.Column="3"  Height="24" 
 						Name="color_cb" SelectionChanged="Color_cb_SelectionChanged"/>
 
 		<!--<StackPanel Grid.Row="2" Grid.Column="3"   Orientation="Horizontal" Width="400"
@@ -159,19 +167,29 @@
 
 		<Label Grid.Row="3"  Grid.Column="0"  
 					Content="開始日時" HorizontalAlignment="Right" />
-		<DatePicker  Grid.Row="3"  Grid.Column="1"  
-					Name="start_date_dp" SelectedDateFormat="Long"
-								HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0" 
-								SelectedDateChanged="Start_date_dp_SelectedDateChanged" />
+		<!--<Viewbox  Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left" Width="170">-->
+		<DatePicker   Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left"  Width="170"
+								SelectedDateFormat="Long" VerticalAlignment="Center"
+								Name="start_date_dp"
+								SelectedDateChanged="Start_date_dp_SelectedDateChanged" >
+			<DatePicker.CalendarStyle>
+				<Style TargetType="Calendar">
+					<Setter Property="LayoutTransform">
+						<Setter.Value>
+							<ScaleTransform ScaleX="2" ScaleY="2"/>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</DatePicker.CalendarStyle>
+		</DatePicker>
+		<!--</Viewbox>-->
 		<local:TimePic Grid.Row="3"  Grid.Column="2"  VerticalAlignment="Center"  
 								x:Name="start_time_tp" 
 								TimeSelectionChanged="Start_time_tp_SelectedTimeChanged"   />
-
-		<!--<StackPanel Grid.Row="3" Grid.Column="4"   Orientation="Horizontal" Margin="0,8" >-->
-			<CheckBox Grid.Row="3" Grid.Column="4"   
-							Name="daylong_cb" Content="終日" HorizontalAlignment="Left" VerticalAlignment="Center" 
+		<CheckBox Grid.Row="3" Grid.Column="4"    HorizontalAlignment="Left" VerticalAlignment="Center" 
+							Name="daylong_cb" Content="終日"
 								Click="Daylong_cb_Click"/>
-			<!--<ComboBox Name="kurikaesi_cb" SelectedIndex="1" Margin="10,0,0,0" >
+		<!--<ComboBox Name="kurikaesi_cb" SelectedIndex="1" Margin="10,0,0,0" >
 				<ListBoxItem Content="繰り返さない"/>
 				<ListBoxItem Content="毎日"/>
 				<ListBoxItem Content="毎週"/>
@@ -182,16 +200,16 @@
 				<ListBoxItem Content="カスタム"/>
 			</ComboBox>-->
 		<!--</StackPanel>-->
-		<Label Grid.Row="4" Grid.Column="0"   Content="終了日時" HorizontalAlignment="Right" Margin="0,0,0,0"  />
-		<DatePicker Grid.Row="4"  Grid.Column="1"  Width="130"
-								Name="end_date_dp"  
+		<Label Grid.Row="4" Grid.Column="0"   Content="終了日時" HorizontalAlignment="Right"  />
+		<DatePicker Grid.Row="4"  Grid.Column="1" 
+							SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
+							Name="end_date_dp"  
 								SelectedDateChanged="End_date_dp_SelectedDateChanged" />
 		<local:TimePic  Grid.Row="4"  Grid.Column="2" 
 								x:Name="end_time_tp"  VerticalAlignment="Top"  
 									TimeSelectionChanged="End_time_tp_SelectedTimeChanged"   />
 
-		<Label Grid.Row="6" Grid.Column="0"   Content="●" HorizontalAlignment="Right"
-					Margin="0,0,0,0"  FontSize="18"
+		<Label Grid.Row="6" Grid.Column="0"   Content="●" HorizontalAlignment="Right" 
 						Name="Color_lb" />
 		<TextBox Grid.Row="6"  Grid.Column="1" Grid.ColumnSpan="3" 
 								Name="titol_tv" Text="タイトル"  />
@@ -204,7 +222,7 @@
 			<Button Content="メモ/ゲストを追加" />
 		</StackPanel>-->
 		<Label Grid.Row="8" Grid.Column="0" 
-						Content="場所" HorizontalAlignment="Right"  Margin="0,5,5,5" />
+						Content="場所" HorizontalAlignment="Right" />
 		<TextBox Grid.Row="8"  Grid.Column="1"   Grid.ColumnSpan="3"
 						Name="location_tb" Text="場所" />
 		<!--<StackPanel Grid.Row="4" Grid.Column="2"  Grid.RowSpan="5" VerticalAlignment="Top"  Margin="10,5,0,5" >
@@ -242,13 +260,15 @@
 					<ListBoxItem Content="週"/>
 				</ComboBox>
 			</StackPanel>
-			--><!--<Button Content="通知を追加" Margin="0,5,345,5" />--><!--
+			-->
+		<!--<Button Content="通知を追加" Margin="0,5,345,5" />-->
+		<!--
 		</StackPanel>-->
 
-		<StackPanel Grid.Row="5" Grid.Column="2"   
+		<!--<StackPanel Grid.Row="5" Grid.Column="2"   
 							Name="attendees_sp" Margin="0,21,0,23" />
 
-		<!--<StackPanel Grid.Row="6" Grid.Column="2"   Orientation="Horizontal" Margin="0,6,0,5" >
+		<StackPanel Grid.Row="6" Grid.Column="2"   Orientation="Horizontal" Margin="0,6,0,5" >
 			<Label Grid.Row="6" Grid.Column="1"   
 						Name="email_lb" Content="アカウント"  />
 		</StackPanel>-->
@@ -267,22 +287,17 @@
 			</ComboBox>
 		</StackPanel>
 		<StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal"  Margin="0,0,0,1" >
-			<ComboBox SelectedIndex="1" >
-				<ListBoxItem Content="工事イベント"/>
-				<ListBoxItem Content="工程イベント"/>
-				<ListBoxItem Content="通常イベント"/>
-			</ComboBox>
 		</StackPanel>-->
 		<Label   Grid.Row="10" Grid.Column="0"   
-					Content="案件番号" HorizontalAlignment="Right" Margin="0,5,5,5"/>
+					Content="案件番号" HorizontalAlignment="Right" />
 		<TextBox  Grid.Row="10" Grid.Column="1" 
-					Name="order_tb"  Text="PR20060001" VerticalAlignment="Center" Margin="0,11,0,9" />
-		<Label   Grid.Row="10" Grid.Column="2"  Content="管理番号" HorizontalAlignment="Right" Margin="0,5,5,5" />
+					Name="order_tb"  Text="PR20060001" VerticalAlignment="Center"  />
+		<Label   Grid.Row="10" Grid.Column="2"  Content="管理番号" HorizontalAlignment="Right" />
 		<TextBox  Grid.Row="10" Grid.Column="3" 
-						Name="management_number_tb"  Text="123456789"  VerticalAlignment="Center" Margin="0,11,0,9" />
-		<Label  Grid.Row="12" Grid.Column="0"   Content="得意先" HorizontalAlignment="Right" Margin="0,5,5,5"  />
+						Name="management_number_tb"  Text="123456789"  VerticalAlignment="Center" />
+		<Label  Grid.Row="12" Grid.Column="0"   Content="得意先" HorizontalAlignment="Right"  />
 		<TextBox  Grid.Row="12" Grid.Column="1"  Grid.ColumnSpan="3"
-						Name="customer_tb"  Text="ABCdef"   VerticalAlignment="Center" Margin="0,11,0,9" />
+						Name="customer_tb"  Text="ABCdef"   VerticalAlignment="Center"  />
 		<!--<Label Grid.Row="13" Grid.Column="0"   HorizontalAlignment="Right" VerticalAlignment="Top" Content="メモ"  Margin="0,5,5,0"  />-->
 		<!--<TextBox  Grid.Row="13"  Grid.Column="1" 
 						Name="momo_tb" Text="詳細" 
@@ -293,11 +308,11 @@
 						Language="jp" 
 						Name="description_wb"/>-->
 
-		<Button Grid.Row="14" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,4,5,5"
+		<Button Grid.Row="14" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"
 						Name="attach_bt" Content="添付ファイル" 
 								Click="Attach_bt_Click"/>
 
-		<StackPanel Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" >
+		<!--<StackPanel Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3">-->
 			<!--<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Button  Name="bold_bt" Content="太字" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
@@ -314,36 +329,52 @@
 				<Button  Name="format_clear_bt" Content="書式クリア" 
 								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
 			</ToolBar>-->
-			<StackPanel  Name="attachments_sp" Orientation="Horizontal" Margin="5,5,5,5"   HorizontalAlignment="Center" >
-				<Label Content="ファイルをドロップするか、クリックしてファイルを選択して下さい。" Width="Auto"/>
-			</StackPanel>
-
+		<Rectangle  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Fill="#FFEEF3F3" Stroke="Black" StrokeThickness="1" StrokeDashArray="5" />
+		<!--<DockPanel   Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3">-->
+		<StackPanel   Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal"  
+				HorizontalAlignment="Center" Panel.ZIndex="10" 
+				Name="attachments_sp" Drop="Attachments_sp_Drop"  AllowDrop="true">
+			<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" Name="attachments_tb"/>
+			<!--<Label Content="ファイルをドロップするか、クリックしてファイルを選択して下さい。" 
+						Name="attachments_lb"/>-->
 		</StackPanel>
-	
-	<StackPanel Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal"  Margin="0,6" >
-			<Button  HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"  Margin="0,0,20,0"
+
+		<!--</DockPanel>-->
+
+		<!--</StackPanel>-->
+
+		<!--<StackPanel Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" >-->
+		<Button   Grid.Row="15" Grid.Column="0" 
+				HorizontalAlignment="Left"  VerticalAlignment="Center" 
 							 Content="イベントをコピー" />
-			<Button   HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80" Margin="20,0,20,0"
+		<Button  Grid.Row="15" Grid.Column="1" 
+					HorizontalAlignment="Center"  VerticalAlignment="Center"
 							   Content="工程イベントを作成"/>
-			<Button   HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  Margin="20,0,20,0"
+		<Button   Grid.Row="15" Grid.Column="2" 
+					HorizontalAlignment="Center"  VerticalAlignment="Center"
 					 Content="発注書を作成" />
-			<Button   HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  Margin="20,0,0,0"
+		<Button  Grid.Row="15" Grid.Column="4" 
+						HorizontalAlignment="Right"  VerticalAlignment="Center" 
 					 Content="イベント終了" />
-		</StackPanel>
+		<!--</StackPanel>-->
 
-		<StackPanel Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal"  Background="LightBlue"  >
-			<Button  HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"  Margin="0,0,20,0"
+		<!--<StackPanel Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal"  Background="#FFF1F7F9"  />-->
+		<Rectangle  Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Fill="#FFEFF9F9"   />
+		<Button   Grid.Row="16" Grid.Column="0"
+							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
 							Name="cancel_bt" Content="cancel_bt" />
-			<Button   HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80" Margin="80,0,20,0"
+		<Button  Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2"
+						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
 							  Name="del_bt" Content="削除"/>
-			<Button   HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  Margin="95,0,20,0"
+		<Button   Grid.Row="16" Grid.Column="4"
+					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
 					Name="save_bt" Content="登録"  Click="Save_bt_Click"  />
-		</StackPanel>
+		<!--</StackPanel>-->
 		<TextBox  Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" Foreground="White" 
 								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,10,0"
 								VerticalAlignment="Top" />
 
-
-
 	</Grid>
+
+
 </Window>

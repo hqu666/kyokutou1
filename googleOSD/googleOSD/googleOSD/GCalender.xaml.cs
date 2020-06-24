@@ -119,10 +119,10 @@ namespace GoogleOSD {
 						foreach (AriadneData aData in ariadneDatas) {
 							if (parent.Equals(aData.EstimationGoogleFileID)) {
 								aData.EstimationPCPass = rFile;              // 見積ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.EstimationGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.EstimationGoogleFileID = gFileId;
 							}
 						}
 					} else if (rFile.Contains("受注")) {
@@ -130,10 +130,10 @@ namespace GoogleOSD {
 						foreach (AriadneData aData in ariadneDatas) {
 							if (parent.Equals(aData.OrderGoogleFileID)) {
 								aData.OrderPCPass = rFile;              // 受注ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.OrderGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.OrderGoogleFileID = gFileId;
 							}
 						}
 					} else if (rFile.Contains("売上")) {
@@ -141,10 +141,10 @@ namespace GoogleOSD {
 						foreach (AriadneData aData in ariadneDatas) {
 							if (parent.Equals(aData.SalesGoogleFileID)) {
 								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.SalesGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.SalesGoogleFileID = gFileId;
 							}
 						}
 					} else if (rFile.Contains("請求")) {
@@ -153,10 +153,10 @@ namespace GoogleOSD {
 							if (parent.Equals(aData.RequestGoogleFileID)) {
 								aData.RequestGoogleFileID = rFile;               //請求ファイルのGoogleDriveID
 								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.RequestGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.RequestGoogleFileID = gFileId;
 							}
 						}
 					} else if (rFile.Contains("入金")) {
@@ -165,10 +165,10 @@ namespace GoogleOSD {
 							if (parent.Equals(aData.ReceipttGoogleFileID)) {
 								aData.ReceiptPCPass = rFile;            //入金ファイルのPC保存位置
 								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.ReceipttGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.ReceipttGoogleFileID = gFileId;
 							}
 						}
 					} else if (rFile.Contains("発注")) {
@@ -177,10 +177,10 @@ namespace GoogleOSD {
 							if (parent.Equals(aData.ToOrderGoogleFileID)) {
 								aData.ToOrderPCPass = rFile;              //発注ファイルのPC保存位置
 								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.ToOrderGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.ToOrderGoogleFileID = gFileId;
 							}
 						}
 					} else if (rFile.Contains("入荷")) {
@@ -189,22 +189,22 @@ namespace GoogleOSD {
 							if (parent.Equals(aData.ToOrderGoogleFileID)) {
 								aData.StockPCPass = rFile;               // 入荷・工事消込ファイルのPC保存位置
 								aData.SalesPCPass = rFile;           // 売上ファイルのPC保存位置
-								Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-								string gFileId = gFile.Id;
-								dbMsg += "[" + gFileId + "]";
-								aData.ToOrderGoogleFileID = gFileId;
+								//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+								//string gFileId = gFile.Id;
+								//dbMsg += "[" + gFileId + "]";
+								//aData.ToOrderGoogleFileID = gFileId;
 							}
 						}
 					}else{
 						dbMsg += ">>その他";
 						OtherData oData = new OtherData();
 						oData.OFilePCPass = rFile;
-						Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-						if(gFile != null) {
-							string gFileId = gFile.Id;
-							dbMsg += "[" + gFileId + "]";
-							oData.OFileGoogleFileID = gFileId;
-						}
+						//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+						//if(gFile != null) {
+						//	string gFileId = gFile.Id;
+						//	dbMsg += "[" + gFileId + "]";
+						//	oData.OFileGoogleFileID = gFileId;
+						//}
 						ohters.Add(oData);
 					}
 

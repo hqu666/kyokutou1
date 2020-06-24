@@ -492,28 +492,28 @@ Visibility	null	string
 				}
 				dbMsg += "googleEventColor=" + Constant.googleEventColor.Count+"色";
 				Constant.GoogleEventColor colorInfo = Constant.googleEventColor[int.Parse(colorID)];
-				Color_lb.Foreground = new SolidColorBrush(colorInfo.rgb); 
-				//int serectIndex = 0;
-				//int nowCount = 0;
-				//foreach(Constant.GoogleEventColor color in Constant.googleEventColor) {
-				//	dbMsg += "\r\n" + color.id +")" + color.name+ "," + color.rgb;
-				//	//ファイルの表示名color情報をラベルに格納して
-				//	Label lb = new Label();
-				//	lb.Content = color.name;
-				//	lb.Background = new SolidColorBrush(color.rgb);
-				//	lb.Foreground = new SolidColorBrush(Color.FromRgb(255,255,255));
-				//	lb.DataContext = color;
-				//	//リストアイテムに格納
-				//	color_cb.Items.Add(lb);
-				//	if (color.id.Equals(colorID)) {
-				//		serectIndex = nowCount;
-				//		color_cb.Background = new SolidColorBrush(color.rgb);
-				//		color_cb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-				//	}
-				//	nowCount++;
-				//}
-				//dbMsg += ",serectIndex=" + serectIndex;
-				//color_cb.SelectedIndex = serectIndex;
+				Color_lb.Foreground = new SolidColorBrush(colorInfo.rgb);
+				int serectIndex = 0;
+				int nowCount = 0;
+				foreach (Constant.GoogleEventColor color in Constant.googleEventColor) {
+					dbMsg += "\r\n" + color.id + ")" + color.name + "," + color.rgb;
+					//ファイルの表示名color情報をラベルに格納して
+					Label lb = new Label();
+					lb.Content = color.name;
+					lb.Background = new SolidColorBrush(color.rgb);
+					lb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+					lb.DataContext = color;
+					//リストアイテムに格納
+					color_cb.Items.Add(lb);
+					if (color.id.Equals(colorID)) {
+						serectIndex = nowCount;
+						color_cb.Background = new SolidColorBrush(color.rgb);
+						color_cb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+					}
+					nowCount++;
+				}
+				dbMsg += ",serectIndex=" + serectIndex;
+				color_cb.SelectedIndex = serectIndex;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -624,6 +624,41 @@ Visibility	null	string
 			}
 		}
 
+		/// <summary>
+		/// ファイルのドロップ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Attachments_sp_Drop(object sender, DragEventArgs e)
+		{
+			string TAG = "Attachments_sp_Drop";
+			string dbMsg = "[GEventEdit]";
+			try {
+				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					// Note that you can have more than one file.
+					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+					var file = files[0];
+					string rFile = file.ToString();
+					dbMsg += "  ,file= " + file.ToString();
+					string[] strs = rFile.Split('\\');
+					string name = strs[strs.Length - 1];
+					dbMsg += ",name=" + name;
+					string parent = strs[strs.Length - 2];
+					dbMsg += ",parent=" + parent;
+					Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+					if (gFile == null) {
+						dbMsg += "登録なし";
+					} else {
+						string gFileId = gFile.Id;
+						dbMsg += "[" + gFileId + "]";
+					}
+
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 
 		/// <summary>
@@ -1132,6 +1167,5 @@ Visibility	null	string
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
 	}
 }
