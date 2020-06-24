@@ -569,7 +569,7 @@ Visibility	null	string
 				htmlStr += @description;
 				htmlStr += "</body></html>";
 				dbMsg = ",htmlStr="+ htmlStr;
-				description_wb.NavigateToString(htmlStr);
+		//		description_wb.NavigateToString(htmlStr);
 
 				string memoStr = description;
 				if (description.Contains( "</table>" )) {
@@ -577,7 +577,7 @@ Visibility	null	string
 					string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
 					memoStr = memoStrs[1];
 				}
-				momo_tb.Text = memoStr;
+		//		momo_tb.Text = memoStr;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -609,30 +609,14 @@ Visibility	null	string
 				description+= "<tr><td>受注No</td>" + "<td> : "+order_tb.Text + "</td></tr>";
 				description += "<tr><td>管理番号</td>" + "<td> : " + management_number_tb.Text + "</td></tr>";
 				description += "<tr><td>得意先</td>" + "<td> : " + customer_tb.Text + "</td></tr>";
-				description += "</tbody ></table><br><pre>" + momo_tb.Text+ "</pre>";
+				description += "</tbody ></table><br>";			//<pre>" + momo_tb.Text+ "</pre>";
 				dbMsg += ",description="+ description;
 				this.taregetEvent.Description = description;
 				string htmlStr = @"<html lang=""jp"" xmlns =""http://www.w3.org/1999/xhtml"">";
 				htmlStr += @"<head><meta charset=""utf-8"" /><title></title></head><body>";
 				htmlStr += @description;
 				htmlStr += "</body></html>";
-				/*
-</body></html>
-Description	"<a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing\">
-https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=sharing</a><br>
-予定議事<br><ol><li>今期予算確認<br></li><li>各課進捗報告</li></ol><br>下記の添付ファイルを各自参照できる様、持参して下さい。
-<table><tbody>
-<tr>
-<td>PR0003</td>
-<td>
-<a href=\"https://drive.google.com/uc?id=10NTpRCN5xwCIvIT-qeAUZx6T4cM2eyGY&export=download\">PR0003.txt</a></td>
-</tr>
-<tr><td>PR0001</td><td><a href=\"https://drive.google.com/uc?id=1-qsqVlHH1bfaMVJwCeBLHoXlIGpSTrjP&export=download\">PR0001.pptx</a></td></tr><tr><td>PR0003</td><td><a href=\"https://drive.google.com/uc?id=11fP9Krj48m_za3Z5IAVxEFpFQRWjLRU6&export=download\">PR0003.xlsx</a></td></tr>
-</tbody>
-</table>
-<br><a href=\"https://drive.google.com/file/d/1wuvk9-uufN87mH3Huw4VhfnJz98hG0KA/view?usp=drive_web\"><span></span><span></span></a>"	string
-*/
-				description_wb.NavigateToString(htmlStr);
+		//		description_wb.NavigateToString(htmlStr);
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
