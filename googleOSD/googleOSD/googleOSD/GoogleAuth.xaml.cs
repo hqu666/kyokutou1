@@ -204,6 +204,7 @@ namespace GoogleOSD {
 					retStr = dialog.SelectedPath;
 					MySettings.AriadneDataFolder = retStr;
 					dbMsg += ",MySettings.AriadneDataFolder=" + MySettings.AriadneDataFolder;
+					MySettings.Save();
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

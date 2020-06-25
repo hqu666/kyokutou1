@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace GoogleOSD {
 	class AriadneData {
+	/// <summary>
+	/// 案件番号
+	/// </summary>
+		public string ItemNumber { set; get; }
+		/// <summary>
+		/// 案件名　:
+		/// </summary>
+		public string ItenName { set; get; }
+
 		/// <summary>
 		/// 受注No　:
 		/// </summary>

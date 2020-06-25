@@ -67,6 +67,8 @@ namespace GoogleOSD {
 			try {
 				IList<AriadneData> ariadneDatas = new List<AriadneData>();
 				AriadneData ariadneData = new AriadneData();
+				ariadneData.ItemNumber = "PR0001";                   //案件No
+				ariadneData.ItenName = "東家改築";                   //案件名
 				ariadneData.OrderNumber = "JU20060007";                   //受注No
 				ariadneData.ManagementNumber = "工事１・現場１";		// 管理番号　:
 				ariadneData.CustomerName = "1234取引先名";              // 得意先　:
@@ -81,6 +83,8 @@ namespace GoogleOSD {
 				ariadneDatas.Add(ariadneData);
 
 				ariadneData = new AriadneData();
+				ariadneData.ItemNumber = "PR0002";                   //案件No
+				ariadneData.ItenName = "東事務所改装";                   //案件名
 				ariadneData.OrderNumber = "JU20060006";                   //受注No
 				ariadneData.ManagementNumber = "工事１・現場2";      // 管理番号　:
 				ariadneData.CustomerName = "1234取引先名";              // 得意先　:
@@ -95,6 +99,8 @@ namespace GoogleOSD {
 
 
 				ariadneData = new AriadneData();
+				ariadneData.ItemNumber = "PR0003";                   //案件No
+				ariadneData.ItenName = "元宇品商店内装";                   //案件名
 				ariadneData.OrderNumber = "JU20060007";                   //受注No
 				ariadneData.ManagementNumber = "工事2・現場1";      // 管理番号　:
 				ariadneData.CustomerName = "工事2取引先名";              // 得意先　:
@@ -211,10 +217,27 @@ namespace GoogleOSD {
 				}
 				//List<AriadneData> _ariadneData { get; set; }
 				//TreeViewのBinding作成
+				IList<TreeViewModel> treeViewModels = new List<TreeViewModel>();
+
 				foreach (AriadneData aData in ariadneDatas) {
-					aData.Children.Add(aData);
+					TreeViewModel tbm = new TreeViewModel(aData.ItenName);
+					tbm.Children.Add(new TreeViewModel(aData.ItemNumber));
+					tbm.Children.Add(new TreeViewModel(aData.OrderNumber));
+					tbm.Children.Add(new TreeViewModel(aData.ManagementNumber));
+					tbm.Children.Add(new TreeViewModel(aData.EstimationGoogleFileID));
+					tbm.Children.Add(new TreeViewModel(aData.OrderGoogleFileID));
+					tbm.Children.Add(new TreeViewModel(aData.SalesGoogleFileID));
+					tbm.Children.Add(new TreeViewModel(aData.ReceipttGoogleFileID));
+					tbm.Children.Add(new TreeViewModel(aData.RequestPCPass));
+					tbm.Children.Add(new TreeViewModel(aData.ToOrderGoogleFileID));
+					tbm.Children.Add(new TreeViewModel(aData.StockGoogleFileID));
+		//ariadneDatas.Add(ariadneData);
+
+					treeViewModels.Add(tbm);
+					//	aData.Children.Add(aData);
 				}
-				Ariadne_tv.ItemsSource = ariadneDatas;
+				Ariadne_tv.ItemsSource = treeViewModels;
+			//	Ariadne_tv.ItemsSource = ariadneDatas;
 				dbMsg += "その他" + ohters.Count + "件";
 				Ariadne_dg.ItemsSource = ohters;
 

@@ -78,7 +78,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -314,7 +314,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -550,7 +550,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -786,7 +786,7 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -1071,10 +1071,10 @@
         "lib/netstandard2.0/Google.Apis.Drive.v3.xml"
       ]
     },
-    "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.0": {
-      "sha512": "Wpvi9X+Wr3Cgcf0W+Ll6iNfPMp+KIOvu5H7yZ10s6pC6RZeUDxLqMvgqTCilF3GTW3ENSZR62ZXLOYkbgLdhlg==",
+    "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "sha512": "W1yS7AEuaSy04LZZVlcaDM40Kxooog4s6jMdLA80wlVJfFjKXIDDC+YK47mS2J8lHyDkyRmZwJlqvPVahq8p/A==",
       "type": "package",
-      "path": "microsoft.toolkit.wpf.ui.controls.webview/6.1.0",
+      "path": "microsoft.toolkit.wpf.ui.controls.webview/6.0.1",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1085,7 +1085,7 @@
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll",
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.pdb",
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.xml",
-        "microsoft.toolkit.wpf.ui.controls.webview.6.1.0.nupkg.sha512",
+        "microsoft.toolkit.wpf.ui.controls.webview.6.0.1.nupkg.sha512",
         "microsoft.toolkit.wpf.ui.controls.webview.nuspec",
         "tools/VisualStudioToolsManifest.xml"
       ]
@@ -1437,25 +1437,25 @@
     ".NETFramework,Version=v4.7.1": [
       "Google.Apis.Calendar.v3 >= 1.46.0.1986",
       "Google.Apis.Drive.v3 >= 1.46.0.1986",
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.1.0",
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.0.1",
       "Newtonsoft.Json >= 12.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hkuwayama\\.nuget\\packages\\": {}
+    "C:\\Users\\博臣\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "projectUniqueName": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
       "projectName": "GoogleOSD",
-      "projectPath": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
-      "packagesPath": "C:\\Users\\hkuwayama\\.nuget\\packages\\",
-      "outputPath": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\obj\\",
+      "projectPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "packagesPath": "C:\\Users\\博臣\\.nuget\\packages\\",
+      "outputPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
-        "C:\\Users\\hkuwayama\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\博臣\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1463,7 +1463,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://www.nuget.org/api/v2/": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net471": {
@@ -1484,7 +1484,7 @@
           },
           "Microsoft.Toolkit.Wpf.UI.Controls.WebView": {
             "target": "Package",
-            "version": "[6.1.0, )"
+            "version": "[6.0.1, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",

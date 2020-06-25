@@ -23,8 +23,8 @@
 		<Label Content="添付するファイルにチェックを入れて下さい"/>
 			<TreeView Width="300"  x:Name="Ariadne_tv" MinHeight="500">
 				<TreeView.ItemTemplate>
-					<HierarchicalDataTemplate DataType="local:ariadneDatas" ItemsSource="{Binding Children}">
-						<TextBlock Text="{Binding OrderNumber}" />
+					<HierarchicalDataTemplate DataType="local:TreeViewModel" ItemsSource="{Binding Children}">
+						<TextBlock Text="{Binding Name}" />
 					</HierarchicalDataTemplate>
 				</TreeView.ItemTemplate>
 				<!--<TreeViewItem Header="A部">
