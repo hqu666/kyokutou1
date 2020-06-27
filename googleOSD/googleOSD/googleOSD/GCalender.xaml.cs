@@ -59,6 +59,7 @@ namespace GoogleOSD {
 
 		/// <summary>
 		/// AriadneDataの登録ファイルを読み出す
+		/// 各フェイス、取り敢えず一つだけ取得
 		/// </summary>
 		private void DrowAriadneData()
 		{
@@ -220,24 +221,53 @@ namespace GoogleOSD {
 				IList<TreeViewModel> treeViewModels = new List<TreeViewModel>();
 
 				foreach (AriadneData aData in ariadneDatas) {
+					//最上位ノード
 					TreeViewModel tbm = new TreeViewModel(aData.ItenName);
+					//以降は2ノード目
 					tbm.Children.Add(new TreeViewModel(aData.ItemNumber));
 					tbm.Children.Add(new TreeViewModel(aData.OrderNumber));
 					tbm.Children.Add(new TreeViewModel(aData.ManagementNumber));
-					tbm.Children.Add(new TreeViewModel(aData.EstimationGoogleFileID));
-					tbm.Children.Add(new TreeViewModel(aData.OrderGoogleFileID));
-					tbm.Children.Add(new TreeViewModel(aData.SalesGoogleFileID));
-					tbm.Children.Add(new TreeViewModel(aData.ReceipttGoogleFileID));
-					tbm.Children.Add(new TreeViewModel(aData.RequestPCPass));
-					tbm.Children.Add(new TreeViewModel(aData.ToOrderGoogleFileID));
-					tbm.Children.Add(new TreeViewModel(aData.StockGoogleFileID));
-		//ariadneDatas.Add(ariadneData);
-
+					//それぞれの業務フローに該当するファイルをノード化
+					if (aData.EstimationPCPass != null ){
+						if (!aData.EstimationPCPass.Equals("")) {
+							string displayName = "見積：" + aData.EstimationGoogleFileID;
+							tbm.Children.Add(new TreeViewModel(displayName));
+						}
+					}
+					if (aData.OrderPCPass != null ) {
+						if (!aData.OrderPCPass.Equals("")) {
+							string displayName = "受注：" + aData.OrderGoogleFileID;
+							tbm.Children.Add(new TreeViewModel(displayName));
+						}
+					}
+					if (aData.SalesPCPass != null ) {
+						if ( !aData.SalesPCPass.Equals("")) {
+							string displayName = "売上：" + aData.SalesGoogleFileID;
+							tbm.Children.Add(new TreeViewModel(displayName));
+						}
+					}
+					if (aData.ReceiptPCPass != null ) {
+						if (!aData.ReceiptPCPass.Equals("")) {
+							string displayName = "入金：" + aData.ReceipttGoogleFileID;
+							tbm.Children.Add(new TreeViewModel(displayName));
+						}
+					}
+					if (aData.ToOrderPCPass != null ) {
+						if ( !aData.ToOrderPCPass.Equals("")) {
+							string displayName = "資材発注：" + aData.ToOrderGoogleFileID;
+							tbm.Children.Add(new TreeViewModel(displayName));
+						}
+					}
+					if (aData.StockPCPass != null) {
+						if ( !aData.StockPCPass.Equals("")) {
+							string displayName = "入荷：" + aData.ToOrderGoogleFileID;
+							tbm.Children.Add(new TreeViewModel(displayName));
+						}
+					}
+					//1ペアレントノード分の書込み
 					treeViewModels.Add(tbm);
-					//	aData.Children.Add(aData);
 				}
 				Ariadne_tv.ItemsSource = treeViewModels;
-			//	Ariadne_tv.ItemsSource = ariadneDatas;
 				dbMsg += "その他" + ohters.Count + "件";
 				Ariadne_dg.ItemsSource = ohters;
 
