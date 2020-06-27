@@ -873,6 +873,16 @@ namespace GoogleOSD {
 			string TAG = "Date_MouseDown";
 			string dbMsg = "[GCalender]";
 			try {
+				if(selectedAriadneData == null){
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "先に左のTreeから案件もしくは関連書類を選択して下さい";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+					if (result.Equals(System.Windows.MessageBoxResult.OK)) {
+						return;
+					}
+				}
+
 				Rectangle rec = sender as Rectangle;
 				Google.Apis.Calendar.v3.Data.Event taregetEvent = new Google.Apis.Calendar.v3.Data.Event();
 
@@ -1040,24 +1050,6 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
-
-
-		//private void Ariadne_tv_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-		//{
-		//	string TAG = "Ariadne_tv_SelectedItemChanged";
-		//	string dbMsg = "[GCalender]";
-		//	try {
-		//		TreeView tv = sender as TreeView;
-		//		object selectedItem = tv.SelectedItem;
-		//		dbMsg += "Node=" + selectedItem.ToString();
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
-
 
 		/// <summary>
 		/// Webで一日リストへ
