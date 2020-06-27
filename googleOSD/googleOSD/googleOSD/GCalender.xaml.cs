@@ -38,6 +38,8 @@ namespace GoogleOSD {
 		private string selectYM = "";
 		private string b_selectYM = "";
 		private string taregetURL = null;
+		private IList<AriadneData> ariadneDatas = new List<AriadneData>();
+		private AriadneData selectedAriadneData;
 
 		public GCalender()
 		{
@@ -66,7 +68,7 @@ namespace GoogleOSD {
 			string TAG = "DrowAriadneData";
 			string dbMsg = "[GCalender]";
 			try {
-				IList<AriadneData> ariadneDatas = new List<AriadneData>();
+				ariadneDatas = new List<AriadneData>();
 				AriadneData ariadneData = new AriadneData();
 				ariadneData.ItemNumber = "PR0001";                   //案件No
 				ariadneData.ItenName = "東家改築";                   //案件名
@@ -991,6 +993,71 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// TreeViewで選択された案件
+		/// XAMにはAfterSelectが無い
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Ariadne_tv_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			string TAG = "Ariadne_tv_MouseUp";
+			string dbMsg = "[GCalender]";
+			try {
+				System.Windows.Controls.TreeView tv = sender as TreeView;
+				GoogleOSD.TreeViewModel selectedItem = tv.SelectedItem as GoogleOSD.TreeViewModel;
+				string name = selectedItem.Name;
+				dbMsg += "name=" + name;
+				int childrenCount = selectedItem.Children.Count();
+				foreach (AriadneData aData in ariadneDatas) {
+					bool isHit = false;
+					if (0 < childrenCount) {
+						if (name.Equals(aData.ItenName)) {             //案件名
+							isHit = true;
+						}
+					} else {
+						if (name.Contains(aData.ItemNumber) ||          //案件No  "PR0002"; 
+							name.Contains(aData.OrderNumber) ||    // 受注No　:
+							name.Contains(aData.ManagementNumber) ||    // 管理番号　:
+							name.Contains(aData.EstimationGoogleFileID) ||        // 見積ファイルのGoogleDriveID
+							name.Contains(aData.OrderGoogleFileID) ||            // 受注ファイルのGoogleDriveID
+							name.Contains(aData.SalesGoogleFileID) ||            //売上ファイルのGoogleDriveID
+							name.Contains(aData.ReceipttGoogleFileID) || //入金ファイル NY20060001
+							name.Contains(aData.ToOrderGoogleFileID) ||          //発注ファイルHA20060001"
+							name.Contains(aData.StockGoogleFileID) ) {    // 入荷・工事消込ファイルSI20060001
+							isHit = true;
+						}
+					}
+					if (isHit) {
+						selectedAriadneData = aData;
+						break;
+					}
+				}
+				dbMsg += ">>案件[" + selectedAriadneData.ItemNumber +"]" + selectedAriadneData.ItenName;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+
+
+		//private void Ariadne_tv_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		//{
+		//	string TAG = "Ariadne_tv_SelectedItemChanged";
+		//	string dbMsg = "[GCalender]";
+		//	try {
+		//		TreeView tv = sender as TreeView;
+		//		object selectedItem = tv.SelectedItem;
+		//		dbMsg += "Node=" + selectedItem.ToString();
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
+
 
 		/// <summary>
 		/// Webで一日リストへ

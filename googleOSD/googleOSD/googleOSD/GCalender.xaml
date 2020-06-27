@@ -21,19 +21,13 @@
 
 		<StackPanel  Grid.Row="0" Grid.Column="0"   Grid.RowSpan="2"   x:Name="info_sp">
 		<Label Content="添付するファイルにチェックを入れて下さい"/>
-			<TreeView Width="300"  x:Name="Ariadne_tv" MinHeight="500">
+			<TreeView Width="300"  x:Name="Ariadne_tv" MinHeight="500" 
+								MouseUp="Ariadne_tv_MouseUp" >
 				<TreeView.ItemTemplate>
 					<HierarchicalDataTemplate DataType="local:TreeViewModel" ItemsSource="{Binding Children}">
 						<TextBlock Text="{Binding Name}" />
 					</HierarchicalDataTemplate>
 				</TreeView.ItemTemplate>
-				<!--<TreeViewItem Header="A部">
-					<TreeViewItem Header="Aグループ">
-						<TreeViewItem Header="グループ員１"/>
-						<TreeViewItem Header="グループ員２"/>
-						<TreeViewItem Header="グループ員３"/>
-					</TreeViewItem>
-				</TreeViewItem>-->
 			</TreeView>
 
 			<DataGrid  Width="300"  VerticalAlignment="Bottom"  AutoGenerateColumns="False" HorizontalContentAlignment="Right"
