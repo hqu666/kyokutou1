@@ -362,10 +362,10 @@
 		<Rectangle  Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Fill="#FFEFF9F9"   />
 		<Button   Grid.Row="16" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
-							Name="cancel_bt" Content="cancel_bt" />
+							Name="cancel_bt" Content="キャンセル" Click="Cancel_bt_Click" />
 		<Button  Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2"
 						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
-							  Name="del_bt" Content="削除"/>
+							  Name="del_bt" Content="削除" Click="Del_bt_Click"/>
 		<Button   Grid.Row="16" Grid.Column="4"
 					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
 					Name="save_bt" Content="登録"  Click="Save_bt_Click"  />

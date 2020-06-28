@@ -910,21 +910,6 @@ namespace GoogleOSD {
 				} else{ 
 					SummaryStr += "　進捗確認会";
 				}
-
-				//selectedAriadneData.ItemNumber = "PR0001";                   //案件No
-				//selectedAriadneData.ItenName = "東家改築";                   //案件名
-				//selectedAriadneData.OrderNumber = "JU20060007";                   //受注No
-				//selectedAriadneData.ManagementNumber = "工事１・現場１";       // 管理番号　:
-				//selectedAriadneData.CustomerName = "1234取引先名";              // 得意先　:
-				//selectedAriadneData.EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
-				//selectedAriadneData.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
-				//selectedAriadneData.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
-				//selectedAriadneData.RequestPCPass = "";              //請求ファイルのPC保存位置
-				//selectedAriadneData.ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
-				//selectedAriadneData.ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
-				//selectedAriadneData.StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
-
-
 				taregetEvent.Summary = SummaryStr;
 				dbMsg += "taregetEvent=" + taregetEvent.Summary;
 				DateTime startDT = (rec.DataContext as DateInfo).GetDateTime();
@@ -944,7 +929,7 @@ namespace GoogleOSD {
 				Constant.customerName = selectedAriadneData.CustomerName;             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
-					editView = new GEventEdit(taregetEvent);
+					editView = new GEventEdit(taregetEvent, selectedAriadneData);
 					editView.mainView = this;
 					editView.authWindow = authWindow;
 					editView.Show();
@@ -1006,7 +991,7 @@ namespace GoogleOSD {
 				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
-					editView = new GEventEdit(taregetEvent);
+					editView = new GEventEdit(taregetEvent , selectedAriadneData);
 					editView.mainView = this;
 					editView.authWindow = authWindow;
 					editView.Show();

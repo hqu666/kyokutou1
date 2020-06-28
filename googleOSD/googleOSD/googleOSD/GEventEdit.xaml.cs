@@ -26,6 +26,9 @@ namespace GoogleOSD {
 		public GoogleDriveBrouser driveView;
 		public WebWindow webWindow;
 
+		public AriadneData selectedAriadneData;
+		public IList<GAttachFile> sendFiles = new List<GAttachFile>();
+
 		/// <summary>
 		/// このページで編集するEvent
 		/// </summary>
@@ -35,7 +38,7 @@ namespace GoogleOSD {
 		/// この画面の開始
 		/// </summary>
 		/// <param name="taregetEvent"></param>
-		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent )
+		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent  ,AriadneData selectedAriadneData)
 		{
 			string TAG = "GEventEdit";
 			string dbMsg = "[GEventEdit]";
@@ -43,7 +46,8 @@ namespace GoogleOSD {
 				InitializeComponent();
 				this.FontSize = Constant.MyFontSize;
 				this.taregetEvent = taregetEvent;
-				EventWrite(taregetEvent);
+				this.selectedAriadneData = selectedAriadneData;
+				EventWrite(taregetEvent, selectedAriadneData);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -54,7 +58,7 @@ namespace GoogleOSD {
 		/// 開始直後、対象イベントの設定内容を読取りViewを初期構成
 		/// </summary>
 		/// <param name="taregetEvent"></param>
-		public void EventWrite(Google.Apis.Calendar.v3.Data.Event taregetEvent)
+		public void EventWrite(Google.Apis.Calendar.v3.Data.Event taregetEvent, AriadneData selectedAriadneData)
 		{
 			string TAG = "EventWrite";
 			string dbMsg = "[GEventEdit]";
@@ -100,7 +104,7 @@ namespace GoogleOSD {
 						</StackPanel>
 				*/
 				SetColor(taregetEvent.ColorId);
-				SetAttachments(taregetEvent.Attachments);
+				SetAttachments(taregetEvent.Attachments , selectedAriadneData);
 				SetDescription(taregetEvent);
 				/*
 		   AnyoneCanAddSelf	null	bool?
@@ -665,12 +669,12 @@ Visibility	null	string
 		/// 添付ファイル
 		/// </summary>
 		/// <param name="attachments"></param>
-		private void SetAttachments(IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments)
+		private void SetAttachments(IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments , AriadneData selectedAriadneData)
 		{
 			string TAG = "SetAttachments";
 			string dbMsg = "[GEventEdit]";
 			try {
-				if(attachments != null) {
+				if (attachments != null) {
 					dbMsg += "Attachments" + attachments.Count + "件";
 					if (0 < attachments.Count) {
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
@@ -866,6 +870,7 @@ Visibility	null	string
 
 		/// <summary>
 		/// 保存ボタンクリック
+		/// 案件に関連するファイルを一通りGoogleDriveへ登録する
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -893,27 +898,59 @@ Visibility	null	string
 						return;
 					}
 				string retLink = "";
-				string orderNumber = "abc987654321DEF";                  //受注No（参照項目）
-				string managementNumber = startDT.ToString();     //管理番号（参照項目）
-				string customerName = "(株)TEST建設";             //得意先（参照項目）
-				IList<GAttachFile> sendFiles = new List<GAttachFile>();
-
-				string fullPass = @"H:\develop\sample\0000\AriadneData\見積\MI20060001\見積書.xlsx";
-				string[] strs = fullPass.Split('\\');
-				string name = strs[strs.Length-1];
-				dbMsg += ",name=" + name;
-				string parent = strs[strs.Length - 2];
-				dbMsg += ",parent=" + parent;
-				File gFile = GDriveUtil.FindByNameParent(name, parent);
-				string gFileId = gFile.Id;
-				dbMsg += "[" + gFileId + "]";
-				bool isFolder = false;
-
-				GAttachFile gAttachFile = new GAttachFile(fullPass, gFileId, name, parent,  isFolder);
-				sendFiles.Add(gAttachFile);
-
-				AddInfo addInfo = new AddInfo(orderNumber, managementNumber, customerName, sendFiles);
-				retLink = GCalendarUtil.AddEventInfo(taregetEvent, addInfo);
+				if (this.selectedAriadneData.EstimationPCPass != null) {
+					dbMsg += ",見積ファイル有り" ;
+					this.selectedAriadneData.EstimationGoogleFileID = AddSendFile(this.selectedAriadneData.EstimationPCPass, Constant.TopFolderName );
+					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID +"]";
+					//EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
+				} else {
+					this.selectedAriadneData.EstimationGoogleFileID = null;
+				}
+				if (this.selectedAriadneData.OrderPCPass != null) {
+					dbMsg += ",受注ファイル有り";
+					this.selectedAriadneData.OrderGoogleFileID = AddSendFile(this.selectedAriadneData.OrderPCPass, Constant.TopFolderName);
+					//.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
+				} else {
+					this.selectedAriadneData.OrderGoogleFileID = null;
+				}
+				if (this.selectedAriadneData.SalesPCPass != null) {
+					dbMsg += ",売上ファイル有り";
+					this.selectedAriadneData.SalesGoogleFileID = AddSendFile(this.selectedAriadneData.SalesPCPass, Constant.TopFolderName);
+					//.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
+				} else {
+					this.selectedAriadneData.SalesGoogleFileID = null;
+				}
+				if (this.selectedAriadneData.RequestPCPass != null) {
+					dbMsg += ",請求ファイル有り";
+					this.selectedAriadneData.RequestGoogleFileID = AddSendFile(this.selectedAriadneData.RequestPCPass, Constant.TopFolderName);
+					//RequestPCPass = "";              //請求ファイルのPC保存位置
+				} else {
+					this.selectedAriadneData.RequestGoogleFileID = null;
+				}
+				if (this.selectedAriadneData.ReceiptPCPass != null) {
+					dbMsg += ",請求ファイル有り";
+					this.selectedAriadneData.ReceipttGoogleFileID = AddSendFile(this.selectedAriadneData.ReceiptPCPass, Constant.TopFolderName);
+					//ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
+				} else {
+					this.selectedAriadneData.ReceipttGoogleFileID = null;
+				}
+				if (this.selectedAriadneData.ToOrderPCPass != null) {
+					dbMsg += ",資材発注ファイル有り";
+					this.selectedAriadneData.ToOrderGoogleFileID = AddSendFile(this.selectedAriadneData.ToOrderPCPass, Constant.TopFolderName);
+					//ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
+				} else {
+					this.selectedAriadneData.ToOrderGoogleFileID = null;
+				}
+				if (this.selectedAriadneData.StockPCPass != null) {
+					dbMsg += ",荷・工事消込ファイル有り";
+					this.selectedAriadneData.StockGoogleFileID = AddSendFile(this.selectedAriadneData.StockPCPass, Constant.TopFolderName);
+					//StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
+				}else{
+					this.selectedAriadneData.StockGoogleFileID = null;
+				}
+				dbMsg += ",対象ファイル" + sendFiles.Count + "件";
+				this.selectedAriadneData.sendFiles = sendFiles;
+				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.selectedAriadneData);
 				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);
 				if (retLink != null) {
@@ -925,6 +962,31 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		private string AddSendFile(string fullPass , string rootFolderName)
+		{
+			string TAG = "AddSendFile";
+			string dbMsg = "[GEventEdit]";
+			string retFileID = null;
+			try {
+				dbMsg += " , " + fullPass ;
+				retFileID=GDriveUtil.AriadneDataPut(rootFolderName, rootFolderName);
+				dbMsg += "[" + retFileID + "]";
+				bool isFolder = false;
+				string[] strs = fullPass.Split('\\');
+				string name = strs[strs.Length - 1];
+				dbMsg += ",name=" + name;
+				string parent = strs[strs.Length - 2];
+				dbMsg += ",parent=" + parent;
+				GAttachFile gAttachFile = new GAttachFile(fullPass, retFileID, name, parent, isFolder);
+				sendFiles.Add(gAttachFile);
+
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retFileID;
+		}
+
 
 		/// <summary>
 		/// 新規イベント作成
@@ -1093,6 +1155,39 @@ Visibility	null	string
 			}
 		}
 
+		/// <summary>
+		/// 削除ボタンクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Del_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Del_bt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				QuitMe();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// キャンセルボタンのクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Cancel_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Cancel_bt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				QuitMe();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		private void Back_bt_Click(object sender, EventArgs e)
 		{
@@ -1105,7 +1200,6 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// WPFでクローズボックスなど、ウインドウを閉じる時に発生するイベントハンドラ
@@ -1167,5 +1261,6 @@ Visibility	null	string
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+
 	}
 }

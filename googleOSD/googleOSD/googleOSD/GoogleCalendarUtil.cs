@@ -632,7 +632,7 @@ namespace GoogleOSD {
 		/// <param name="taregetEvent">作成もしくは変更する予定</param>
 		/// <param name="addInfo">追加する情報</param>
 		/// <returns></returns>
-		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, AddInfo addInfo)
+		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, AriadneData selectedAriadneData)
 		{
 			string TAG = "AddEventInfo";
 			string dbMsg = "[WebWindow]";
@@ -653,9 +653,9 @@ namespace GoogleOSD {
 
 				//追加する項目
 				string addText = "<table><tbody>";
-				addText += "<tr><td>受注No</td>" + "<td> : " + addInfo.orderNumber + "</td></tr>";
-				addText += "<tr><td>管理番号</td>" + "<td> : " + addInfo.managementNumber + "</td></tr>";
-				addText += "<tr><td>得意先</td>" + "<td> : " + addInfo.customerName + "</td></tr>";
+				addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";
+				addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";
+				addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";
 				addText += "</tbody >";
 
 				string description = taregetEvent.Description;

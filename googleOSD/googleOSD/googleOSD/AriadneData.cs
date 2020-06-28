@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GoogleOSD {
-	class AriadneData {
+	public class AriadneData {
 	/// <summary>
 	/// 案件番号
 	/// </summary>
@@ -97,6 +97,10 @@ namespace GoogleOSD {
 		/// 入荷・工事消込ファイルのGoogleDriveID
 		/// </summary>
 		public string StockGoogleFileID { set; get; }
+
+		public IList<GAttachFile> sendFiles = null;             //送信元PCのファイルリスト
+		public static IList<string> selectFiles = null;             //送信元PCのファイルリスト
+
 
 		/// <summary>
 		/// TreeViewの階層化配列
