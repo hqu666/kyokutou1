@@ -168,7 +168,7 @@
 		<Label Grid.Row="3"  Grid.Column="0"  
 					Content="開始日時" HorizontalAlignment="Right" />
 		<!--<Viewbox  Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left" Width="170">-->
-		<DatePicker   Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left"  Width="170"
+		<DatePicker   Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left"  Width="190"
 								SelectedDateFormat="Long" VerticalAlignment="Center"
 								Name="start_date_dp"
 								SelectedDateChanged="Start_date_dp_SelectedDateChanged" >
@@ -176,7 +176,7 @@
 				<Style TargetType="Calendar">
 					<Setter Property="LayoutTransform">
 						<Setter.Value>
-							<ScaleTransform ScaleX="2" ScaleY="2"/>
+							<ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
 						</Setter.Value>
 					</Setter>
 				</Style>
@@ -202,7 +202,7 @@
 		<!--</StackPanel>-->
 		<Label Grid.Row="4" Grid.Column="0"   Content="終了日時" HorizontalAlignment="Right"  />
 		<DatePicker Grid.Row="4"  Grid.Column="1" 
-							SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="170"
+							SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
 							Name="end_date_dp"  
 								SelectedDateChanged="End_date_dp_SelectedDateChanged" />
 		<local:TimePic  Grid.Row="4"  Grid.Column="2" 

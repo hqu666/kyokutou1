@@ -279,7 +279,12 @@ namespace GoogleOSD {
 			}
 		}
 
-
+		/// <summary>
+		/// 既存スケジュールの収集
+		/// </summary>
+		/// <param name="timeMin"></param>
+		/// <param name="timeMax"></param>
+		/// <returns></returns>
 		public IList<Google.Apis.Calendar.v3.Data.Event> EventListUp(DateTime timeMin, DateTime timeMax)
 		{
 			string TAG = "EventListUp";
@@ -340,6 +345,9 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// 本日を含む機関にカレンダーを更新する
+		/// </summary>
 		private void DrowToday()
 		{
 			string TAG = "DrowToday";
@@ -892,10 +900,32 @@ namespace GoogleOSD {
 				taregetEvent.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
 				taregetEvent.Attendees = new List<Google.Apis.Calendar.v3.Data.EventAttendee>();
 				taregetEvent.Attachments = new List<Google.Apis.Calendar.v3.Data.EventAttachment>();
-	//			taregetEvent.Reminders = new List<Google.Apis.Calendar.v3.Data.RemindersData>();
-		
+
 				//Eventにセットできる項目
-				taregetEvent.Summary = "新規案件対応会議";
+				string SummaryStr = selectedAriadneData.ItenName;
+				if(selectedAriadneData.ReceiptPCPass !=null) {      //入金ファイルが有れば
+					SummaryStr += "　収支確認会";
+				} else if (selectedAriadneData.RequestPCPass != null) {      //請求ファイルが有れば
+					SummaryStr += "　請求確認会";
+				} else{ 
+					SummaryStr += "　進捗確認会";
+				}
+
+				//selectedAriadneData.ItemNumber = "PR0001";                   //案件No
+				//selectedAriadneData.ItenName = "東家改築";                   //案件名
+				//selectedAriadneData.OrderNumber = "JU20060007";                   //受注No
+				//selectedAriadneData.ManagementNumber = "工事１・現場１";       // 管理番号　:
+				//selectedAriadneData.CustomerName = "1234取引先名";              // 得意先　:
+				//selectedAriadneData.EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
+				//selectedAriadneData.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
+				//selectedAriadneData.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
+				//selectedAriadneData.RequestPCPass = "";              //請求ファイルのPC保存位置
+				//selectedAriadneData.ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
+				//selectedAriadneData.ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
+				//selectedAriadneData.StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
+
+
+				taregetEvent.Summary = SummaryStr;
 				dbMsg += "taregetEvent=" + taregetEvent.Summary;
 				DateTime startDT = (rec.DataContext as DateInfo).GetDateTime();
 				DateTime now = DateTime.Now;
@@ -909,9 +939,9 @@ namespace GoogleOSD {
 				taregetEvent.Description ="添付ファイルを参照できる様、準備して参加をお願いします。";
 				dbMsg += ",Description=" + taregetEvent.Description;
 				//Eventに無い項目
-				Constant.orderNumber = "abc987654321DEF";                  //受注No（参照項目）
-				Constant.managementNumber = "987654321";     //管理番号（参照項目）
-				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
+				Constant.orderNumber = selectedAriadneData.ItemNumber;                  //受注No（参照項目）
+				Constant.managementNumber = selectedAriadneData.ManagementNumber;     //管理番号（参照項目）
+				Constant.customerName = selectedAriadneData.CustomerName;             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
 					editView = new GEventEdit(taregetEvent);
