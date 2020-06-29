@@ -477,7 +477,9 @@ namespace GoogleOSD {
 				string rootFolderId = "";
 				if (rootFolder == null) {
 					dbMsg += ">>rootFolder作成";
-					Task<string> rr = CreateFolder(rootFolderName, Constant.RootFolderName);
+					Task<string> folder = Task<string>.Run(() => FindByName(Constant.RootFolderName, SearchFilter.FOLDER));
+					string folderId = folder.Result;
+					Task<string> rr = CreateFolder(folderId, Constant.RootFolderName);
 					if (rr == null) {
 						return retFileID;
 					}

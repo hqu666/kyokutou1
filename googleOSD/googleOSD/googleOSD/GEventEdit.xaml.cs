@@ -970,7 +970,7 @@ Visibility	null	string
 			string retFileID = null;
 			try {
 				dbMsg += " , " + fullPass ;
-				retFileID=GDriveUtil.AriadneDataPut(rootFolderName, rootFolderName);
+				retFileID=GDriveUtil.AriadneDataPut(fullPass, rootFolderName);
 				dbMsg += "[" + retFileID + "]";
 				bool isFolder = false;
 				string[] strs = fullPass.Split('\\');
