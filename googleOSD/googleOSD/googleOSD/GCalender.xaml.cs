@@ -72,31 +72,36 @@ namespace GoogleOSD {
 				AriadneData ariadneData = new AriadneData();
 				ariadneData.ItemNumber = "PR0001";                   //案件No
 				ariadneData.ItenName = "東家改築";                   //案件名
-				ariadneData.OrderNumber = "JU20060007";                   //受注No
+				ariadneData.OrderNumber = "JU20060010";                   //受注No
 				ariadneData.ManagementNumber = "工事１・現場１";		// 管理番号　:
 				ariadneData.CustomerName = "1234取引先名";              // 得意先　:
 				//伝票番号をGoogleDriveのFileIDに仮設定
 				ariadneData.EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
 				ariadneData.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
-				ariadneData.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
+				ariadneData.SalesGoogleFileID = "UR20060008";              //売上ファイルのGoogleDriveID
 				ariadneData.RequestPCPass = "";              //請求ファイルのPC保存位置
-				ariadneData.ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
-				ariadneData.ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
-				ariadneData.StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
+				ariadneData.ReceipttGoogleFileID = "NY20060004";              //入金ファイルのGoogleDriveID
+			//	ariadneData.ReceipttGoogleFileID = "NY20060003";              //入金ファイルのGoogleDriveID
+				ariadneData.ToOrderGoogleFileID = "HA20060008";              //発注ファイルのGoogleDriveID
+																			 //			ariadneData.ToOrderGoogleFileID = "HA20060009";              //発注ファイルのGoogleDriveID
+		//		ariadneData.StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
 				ariadneDatas.Add(ariadneData);
 
 				ariadneData = new AriadneData();
 				ariadneData.ItemNumber = "PR0002";                   //案件No
-				ariadneData.ItenName = "東事務所改装";                   //案件名
-				ariadneData.OrderNumber = "JU20060006";                   //受注No
-				ariadneData.ManagementNumber = "工事１・現場2";      // 管理番号　:
+				ariadneData.ItenName = "駅南カフェ店舗設備";                   //案件名
+				ariadneData.OrderNumber = "JU20060009";                   //受注No
+				ariadneData.ManagementNumber = "事務所改築";      // 管理番号　:
 				ariadneData.CustomerName = "1234取引先名";              // 得意先　:
 				ariadneData.EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
 				ariadneData.OrderGoogleFileID = "JU20060006";              // 受注ファイルのGoogleDriveID
-				ariadneData.SalesGoogleFileID = "UR20060005";              //売上ファイルのGoogleDriveID
+				ariadneData.SalesGoogleFileID = "UR20060006";              //売上ファイルのGoogleDriveID
 				ariadneData.RequestPCPass = "";              //請求ファイルのPC保存位置
-				ariadneData.ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
-				ariadneData.ToOrderGoogleFileID = "HA20060002";              //発注ファイルのGoogleDriveID
+				ariadneData.ReceipttGoogleFileID = "NY20060002";              //入金ファイルのGoogleDriveID
+				ariadneData.ToOrderGoogleFileID = "HA20060004";              //発注ファイルのGoogleDriveID
+				//ariadneData.ToOrderGoogleFileID = "HA20060005";              //発注ファイルのGoogleDriveID
+				//ariadneData.ToOrderGoogleFileID = "HA20060006";              //発注ファイルのGoogleDriveID
+				//ariadneData.ToOrderGoogleFileID = "HA20060007";              //発注ファイルのGoogleDriveID
 				ariadneData.StockGoogleFileID = "SI20060002";              // 入荷・工事消込ファイルのGoogleDriveID
 				ariadneDatas.Add(ariadneData);
 
@@ -108,7 +113,6 @@ namespace GoogleOSD {
 				ariadneData.ManagementNumber = "工事2・現場1";      // 管理番号　:
 				ariadneData.CustomerName = "工事2取引先名";              // 得意先　:
 				ariadneData.EstimationGoogleFileID = "MI20060007";              // 見積ファイルのGoogleDriveID
-				ariadneData.OrderGoogleFileID = "JU20060006";              // 受注ファイルのGoogleDriveID
 				ariadneDatas.Add(ariadneData);
 
 				dbMsg += ",AriadneDataFolder=" + Constant.AriadneDataFolder;
