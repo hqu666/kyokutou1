@@ -40,6 +40,10 @@ namespace GoogleOSD {
 		public static String parentFolderId;
 		public static string LocalPass = "";            //送信元PCフォルダ
 		public static string AriadneDataFolder = "";       //AriadneのExcel出力フォルダ
+		public static string AriadneEventAnken = "案件";
+		public static string AriadneEventKoutei = "行程";
+		public static string AriadneEventOther = "一般";
+
 
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;

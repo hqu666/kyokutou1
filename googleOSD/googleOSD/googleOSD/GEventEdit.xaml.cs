@@ -902,6 +902,12 @@ Visibility	null	string
 				string retLink = "";
 				string parentFolderName = this.selectedAriadneData.ItemNumber;
 				string parentFolderID = GDriveUtil.MakeAriadneFolder(parentFolderName, Constant.TopFolderName);
+				if (parentFolderID == null) {
+					dbMsg += ">>失敗";
+					MyLog(TAG, dbMsg);
+					return ;
+				}
+
 				dbMsg += "[" + parentFolderID  + "]" + parentFolderName;
 
 				if (this.selectedAriadneData.EstimationPCPass != null) {

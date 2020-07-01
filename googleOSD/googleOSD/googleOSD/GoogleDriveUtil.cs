@@ -173,21 +173,23 @@ namespace GoogleOSD {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
 				Task<string> folder = Task<string>.Run(() => FindByName(name, SearchFilter.FOLDER));
 				string folderId = folder.Result;
-				//	var folder = await FindByName(name, SearchFilter.FOLDER);
 				if (folderId == null) {
 					File meta = new File();
 					meta.Name = name;
 					meta.MimeType = GoogleDriveMime_Folder;
+					if (driveId != null) meta.DriveId = driveId;
 					if (parentFolderId == null || parentFolderId.Equals("")) {
-						folder = Task<string>.Run(() => FindByName(Constant.TopFolderName, SearchFilter.FOLDER));
-						parentFolderId = folder.Result;
+						//マイドライブのID
+				//		parentFolderId = Constant.MyDriveService.Drives.;						//Constant.MyDriveService.Drives.ToString();
+						//folder = Task<string>.Run(() => FindByName("マイドライブ", SearchFilter.FOLDER));
+						//	parentFolderId = folder.Result;
 						dbMsg += ",parentFolder[" + parentFolderId + "]" + Constant.TopFolderName + "を作成";
-					} else {
-
+						//}else{
 					}
 					meta.Parents = new List<string> { parentFolderId }; //特定のフォルダのサブフォルダ
 					dbMsg += ",meta=" + meta.Parents[0];
 					var request = Constant.MyDriveService.Files.Create(meta);
+					request.Fields = "id, name";
 					dbMsg += ",request=" + request.MethodName;
 					newFolder = await request.ExecuteAsync();
 					retStr = newFolder.Id;
@@ -484,14 +486,13 @@ namespace GoogleOSD {
 					return CreateFolder(Constant.RootFolderName);
 				});
 				rr.Wait();
-		//		Task<string> rr = CreateFolder( Constant.RootFolderName);
-				if (rr == null) {
+				rootFolderId = rr.Result;
+				if (rootFolderId == null) {
 					dbMsg += ">>失敗";
 					Util.MyLog(TAG, dbMsg);
 					return null;
 					}
 				//}
-				rootFolderId = rr.Result;
 				dbMsg += "[" + rootFolderId + "]" + Constant.RootFolderName;
 
 				string topFolderId = "";
