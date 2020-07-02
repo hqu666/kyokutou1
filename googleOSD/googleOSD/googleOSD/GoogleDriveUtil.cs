@@ -19,16 +19,57 @@ namespace GoogleOSD {
 		public string GoogleDriveMime_Folder = Constant.GoogleDriveMime_Folder;
 
 		/// <summary>
+		/// parents無しでもドライブ内ファイルをリストアップ
+		/// </summary>
+		/// <param name="pFolder"></param>
+		/// <returns></returns>
+		public IList<Google.Apis.Drive.v3.Data.File> GDAllFolderListUp(string pFolder = null, bool isOnlyFolder = true)
+		{
+			string TAG = "GDFolderListUp";
+			string dbMsg = "[GoogleDriveUtil]";
+			//		string pFolder = Constant.RootFolderName;
+			IList<Google.Apis.Drive.v3.Data.File> retList = new List<Google.Apis.Drive.v3.Data.File>();
+			try {
+				string pageToken = null;
+				do {
+					var request = Constant.MyDriveService.Files.List();
+					request.Q = "(trashed = false)";
+					if(isOnlyFolder) {
+						request.Q += "and (mimeType = 'application/vnd.google-apps.folder')";
+					}
+					if(pFolder != null) {
+						request.Q += "(parents = '" + pFolder + "')";
+					}
+					//	request.Q = "(mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+					request.Spaces = "drive";
+					request.Fields = "nextPageToken, files(id, name , parents ,driveId )";
+					request.PageToken = pageToken;
+					var result = request.Execute();
+					foreach (Google.Apis.Drive.v3.Data.File file in result.Files) {
+						retList.Add(file);
+						//Console.WriteLine(String.Format(
+						//		"Found file: {0} ({1})", file.Name, file.Id));
+					}
+					pageToken = result.NextPageToken;
+				} while (pageToken != null);
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return retList;
+		}
+
+		/// <summary>
 		/// 指定されたフォルダ以下の全フォルダ取得
 		/// passTreeに使用
 		/// </summary>
 		/// <param name="pFolder"></param>
 		/// <returns></returns>
-		public IList<Google.Apis.Drive.v3.Data.File> GDFolderListUp()
+		public IList<Google.Apis.Drive.v3.Data.File> GDFolderListUp(string pFolder= null)
 		{
 			string TAG = "GDFolderListUp";
 			string dbMsg = "[GoogleDriveUtil]";
-			string pFolder = Constant.RootFolderName;
+	//		string pFolder = Constant.RootFolderName;
 			IList<Google.Apis.Drive.v3.Data.File> retList = null;
 			try {
 				//			Constant.CurrentFolder = pFolder;
@@ -36,6 +77,9 @@ namespace GoogleOSD {
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
 				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
 				listRequest.Q = "(name = '" + pFolder + "') and (mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+				if (pFolder == null) {
+					listRequest.Q =  "(mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+				}
 				listRequest.Fields = "nextPageToken, files(id)";
 
 				var folderId = listRequest.Execute().Files.First().Id;
@@ -470,20 +514,23 @@ namespace GoogleOSD {
 			string dbMsg = "[GoogleDriveUtil]";
 			string targetFolderId = "";
 			try {
+
+				IList<File> rFiles = GDAllFolderListUp();
+				int fCount = rFiles.Count;
+				dbMsg += " , " + fCount + " フォルダ登録" ;
+				if(0< fCount) {
+					dbMsg += "[" + rFiles.First().Id + " ]" + rFiles.First().Name + " ;Parents;" + rFiles.First().Parents[0] + " ;DriveId;" + rFiles.First().DriveId;
+					dbMsg += "～[" + rFiles.Last().Id + " ]" + rFiles.Last().Name + " ;Parents;" + rFiles.First().Parents[0] + " ;DriveId;" + rFiles.First().DriveId;
+				}
+
+				string driveId = rFiles.First().Parents[0];
 				dbMsg += " , " + topFolderName + " に　" + targetFolderName;
-				//		string[] strs = pcFilePath.Split('\\');
-				//		string targetFileName = strs[strs.Length - 1];
-				//		dbMsg += ",name=" + targetFileName;
-				//		string parentoFolderName = strs[strs.Length - 2];
-				//		dbMsg += ",parent=" + parentoFolderName;
-				////		dbMsg += rootFolderName + "　の　" + parentoFolderName + "　に　" + targetFileName;
-				//		File rootFolder = FindByNameParent(rootFolderName, Constant.RootFolderName);
 				string rootFolderId = "";
 				//Task<string> rr = Task<string>.Run(() => FindByName(Constant.RootFolderName, SearchFilter.FOLDER));
 				//if(rr == null) {
 					dbMsg += ">>rootFolder作成";
 				Task<string> rr = Task.Run(() => {
-					return CreateFolder(Constant.RootFolderName);
+					return CreateFolder(Constant.RootFolderName, driveId, rFiles.First().DriveId);
 				});
 				rr.Wait();
 				rootFolderId = rr.Result;
