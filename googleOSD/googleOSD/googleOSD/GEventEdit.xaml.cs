@@ -901,17 +901,18 @@ Visibility	null	string
 					}
 				string retLink = "";
 				string parentFolderName = this.selectedAriadneData.ItemNumber;
-				string parentFolderID = GDriveUtil.MakeAriadneFolder(parentFolderName, Constant.TopFolderName);
-				if (parentFolderID == null) {
-					dbMsg += ">>失敗";
-					MyLog(TAG, dbMsg);
-					return ;
-				}
+				//string parentFolderID = GDriveUtil.MakeAriadneFolder(parentFolderName, Constant.TopFolderName);
+				//if (parentFolderID == null) {
+				//	dbMsg += ">>失敗";
+				//	MyLog(TAG, dbMsg);
+				//	return ;
+				//}
 
-				dbMsg += "[" + parentFolderID  + "]" + parentFolderName;
+	//			dbMsg += "[" + parentFolderID  + "]" + parentFolderName;
 
 				if (this.selectedAriadneData.EstimationPCPass != null) {
 					dbMsg += ",見積ファイル有り" ;
+					string parentFolderID = GDriveUtil.MakeAriadneFolder(this.selectedAriadneData.EstimationPCPass, Constant.AriadneAnkenFolderId);
 					this.selectedAriadneData.EstimationGoogleFileID = AddSendFile(this.selectedAriadneData.EstimationPCPass , parentFolderName,parentFolderID);
 					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID +"]";
 					//EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
@@ -920,6 +921,7 @@ Visibility	null	string
 				}
 				if (this.selectedAriadneData.OrderPCPass != null) {
 					dbMsg += ",受注ファイル有り";
+					string parentFolderID = GDriveUtil.MakeAriadneFolder(this.selectedAriadneData.EstimationPCPass, Constant.AriadneAnkenFolderId);
 					this.selectedAriadneData.OrderGoogleFileID = AddSendFile(this.selectedAriadneData.OrderPCPass, parentFolderName, parentFolderID);
 					//.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
 				} else {
@@ -927,6 +929,7 @@ Visibility	null	string
 				}
 				if (this.selectedAriadneData.SalesPCPass != null) {
 					dbMsg += ",売上ファイル有り";
+					string parentFolderID = GDriveUtil.MakeAriadneFolder(this.selectedAriadneData.EstimationPCPass, Constant.AriadneAnkenFolderId);
 					this.selectedAriadneData.SalesGoogleFileID = AddSendFile(this.selectedAriadneData.SalesPCPass, parentFolderName, parentFolderID);
 					//.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
 				} else {
@@ -934,28 +937,28 @@ Visibility	null	string
 				}
 				if (this.selectedAriadneData.RequestPCPass != null) {
 					dbMsg += ",請求ファイル有り";
-					this.selectedAriadneData.RequestGoogleFileID = AddSendFile(this.selectedAriadneData.RequestPCPass, parentFolderName, parentFolderID);
+					this.selectedAriadneData.RequestGoogleFileID = AddSendFile(this.selectedAriadneData.RequestPCPass, parentFolderName, Constant.AriadneAnkenFolderId);
 					//RequestPCPass = "";              //請求ファイルのPC保存位置
 				} else {
 					this.selectedAriadneData.RequestGoogleFileID = null;
 				}
 				if (this.selectedAriadneData.ReceiptPCPass != null) {
 					dbMsg += ",請求ファイル有り";
-					this.selectedAriadneData.ReceipttGoogleFileID = AddSendFile(this.selectedAriadneData.ReceiptPCPass, parentFolderName, parentFolderID);
+					this.selectedAriadneData.ReceipttGoogleFileID = AddSendFile(this.selectedAriadneData.ReceiptPCPass, parentFolderName, Constant.AriadneAnkenFolderId);
 					//ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
 				} else {
 					this.selectedAriadneData.ReceipttGoogleFileID = null;
 				}
 				if (this.selectedAriadneData.ToOrderPCPass != null) {
 					dbMsg += ",資材発注ファイル有り";
-					this.selectedAriadneData.ToOrderGoogleFileID = AddSendFile(this.selectedAriadneData.ToOrderPCPass, parentFolderName, parentFolderID);
+					this.selectedAriadneData.ToOrderGoogleFileID = AddSendFile(this.selectedAriadneData.ToOrderPCPass, parentFolderName, Constant.AriadneKouteiFolderId);
 					//ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
 				} else {
 					this.selectedAriadneData.ToOrderGoogleFileID = null;
 				}
 				if (this.selectedAriadneData.StockPCPass != null) {
 					dbMsg += ",荷・工事消込ファイル有り";
-					this.selectedAriadneData.StockGoogleFileID = AddSendFile(this.selectedAriadneData.StockPCPass, parentFolderName, parentFolderID);
+					this.selectedAriadneData.StockGoogleFileID = AddSendFile(this.selectedAriadneData.StockPCPass, parentFolderName, Constant.AriadneKouteiFolderId);
 					//StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
 				} else{
 					this.selectedAriadneData.StockGoogleFileID = null;

@@ -43,9 +43,17 @@ namespace GoogleOSD {
 		public static string AriadneEventAnken = "案件";
 		public static string AriadneEventKoutei = "行程";
 		public static string AriadneEventOther = "一般";
-
+		public static string[] AriadneEventNames ={AriadneEventAnken,
+																	AriadneEventKoutei,
+																	AriadneEventOther
+																	};
 
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
+		public static string driveId;
+		public static string AriadneAnkenFolderId = "";
+		public static string AriadneKouteiFolderId = "";
+		public static string AriadneOtherFolderId = "";
+
 		public static IDictionary<string, Google.Apis.Drive.v3.Data.File> GDriveFolders;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFolderMembers;
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveSelectedFiles;

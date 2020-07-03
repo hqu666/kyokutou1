@@ -15,6 +15,7 @@ using GoogleOSD.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Google.Apis.Services;
+using System.Collections.Generic;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -105,6 +106,13 @@ namespace GoogleOSD {
 						dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
 					}
 				}
+				Constant.RootFolderID = GDriveUtil.MakeAriadneGoogleFolder();
+				if (Constant.RootFolderID.Equals("")) {
+					dbMsg += ">フォルダ作成>失敗";
+				}else{
+					dbMsg += "[" + Constant.RootFolderID + "]" + Constant.RootFolderName;
+				}
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

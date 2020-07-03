@@ -22,7 +22,7 @@ namespace GoogleOSD {
 		/// parents無しでもドライブ内ファイルをリストアップ
 		/// </summary>
 		/// <param name="pFolder"></param>
-		/// <returns></returns>
+		/// <returns>IList<Google.Apis.Drive.v3.Data.File> </returns>
 		public IList<Google.Apis.Drive.v3.Data.File> GDAllFolderListUp(string pFolder = null, bool isOnlyFolder = true)
 		{
 			string TAG = "GDFolderListUp";
@@ -47,6 +47,7 @@ namespace GoogleOSD {
 					var result = request.Execute();
 					foreach (Google.Apis.Drive.v3.Data.File file in result.Files) {
 						retList.Add(file);
+						dbMsg += "\r\n" + file.DriveId + " / " + file.Parents[0] + " / " + file.Id + " = " + file.Name;
 						//Console.WriteLine(String.Format(
 						//		"Found file: {0} ({1})", file.Name, file.Id));
 					}
@@ -58,6 +59,7 @@ namespace GoogleOSD {
 			}
 			return retList;
 		}
+		//ファイルとフォルダを検索する	https://www.milk-island.net/translate/ggd/drive/api/v3/search-files.html
 
 		/// <summary>
 		/// 指定されたフォルダ以下の全フォルダ取得
@@ -508,29 +510,27 @@ namespace GoogleOSD {
 		/// <param name="pcFilePath"></param>
 		/// <param name="rootFolderName"></param>
 		/// <returns></returns>
-		public string MakeAriadneFolder(string targetFolderName, string topFolderName)
+		public string MakeAriadneGoogleFolder()
 		{
-			string TAG = "MakeAriadneFolder";
+			string TAG = "MakeAriadneGoogleFolder";
 			string dbMsg = "[GoogleDriveUtil]";
-			string targetFolderId = "";
+			string rootFolderId = "";
 			try {
-
-				IList<File> rFiles = GDAllFolderListUp();
-				int fCount = rFiles.Count;
-				dbMsg += " , " + fCount + " フォルダ登録" ;
-				if(0< fCount) {
-					dbMsg += "[" + rFiles.First().Id + " ]" + rFiles.First().Name + " ;Parents;" + rFiles.First().Parents[0] + " ;DriveId;" + rFiles.First().DriveId;
-					dbMsg += "～[" + rFiles.Last().Id + " ]" + rFiles.Last().Name + " ;Parents;" + rFiles.First().Parents[0] + " ;DriveId;" + rFiles.First().DriveId;
+				Constant.GDriveFiles = new List<Google.Apis.Drive.v3.Data.File>();
+				Constant.GDriveFiles = GDAllFolderListUp();
+				int fCount = Constant.GDriveFiles.Count;
+				dbMsg += " , " + fCount + " フォルダ登録";
+				if (0 < fCount) {
+					dbMsg += "[" + Constant.GDriveFiles.First().Id + " ]" + Constant.GDriveFiles.First().Name + " ;Parents;" + Constant.GDriveFiles.First().Parents[0] + " ;DriveId;" + Constant.GDriveFiles.First().DriveId;
+					dbMsg += "～[" + Constant.GDriveFiles.Last().Id + " ]" + Constant.GDriveFiles.Last().Name + " ;Parents;" + Constant.GDriveFiles.First().Parents[0] + " ;DriveId;" + Constant.GDriveFiles.First().DriveId;
 				}
 
-				string driveId = rFiles.First().Parents[0];
-				dbMsg += " , " + topFolderName + " に　" + targetFolderName;
-				string rootFolderId = "";
+				string driveId = Constant.GDriveFiles.First().Parents[0];
 				//Task<string> rr = Task<string>.Run(() => FindByName(Constant.RootFolderName, SearchFilter.FOLDER));
 				//if(rr == null) {
-					dbMsg += ">>rootFolder作成";
+				dbMsg += ">>rootFolder作成";
 				Task<string> rr = Task.Run(() => {
-					return CreateFolder(Constant.RootFolderName, driveId, rFiles.First().DriveId);
+					return CreateFolder(Constant.RootFolderName, driveId);
 				});
 				rr.Wait();
 				rootFolderId = rr.Result;
@@ -538,28 +538,72 @@ namespace GoogleOSD {
 					dbMsg += ">>失敗";
 					Util.MyLog(TAG, dbMsg);
 					return null;
-					}
+				}
 				//}
 				dbMsg += "[" + rootFolderId + "]" + Constant.RootFolderName;
-
-				string topFolderId = "";
-				File topFolder = FindByNameParent(topFolderName, Constant.RootFolderName);
-				if (topFolder == null) {
-					dbMsg += ">>topFolder作成";
-					rr = CreateFolder(topFolderName , rootFolderId);
-					if (rr == null) {
-						dbMsg += ">>失敗";
-						Util.MyLog(TAG, dbMsg);
-						return null;
+				foreach(string topFolderName in Constant.AriadneEventNames) {
+					string topFolderId = "";
+					File topFolder = FindByNameParent(topFolderName, Constant.RootFolderName);
+					if (topFolder == null) {
+						dbMsg += ">>topFolder作成";
+						rr = CreateFolder(topFolderName, rootFolderId);
+						if (rr == null) {
+							dbMsg += ">>失敗";
+							Util.MyLog(TAG, dbMsg);
+							return null;
+						}
+					}
+					topFolderId = rr.Result;
+					dbMsg += "[" + topFolderId + "]" + topFolderName;
+					if(topFolderName.Equals(Constant.AriadneEventAnken)){
+						Constant.AriadneAnkenFolderId = topFolderId;
+						dbMsg += "[AriadneAnkenFolderId;" + Constant.AriadneAnkenFolderId + "]" ;
+					} else if (topFolderName.Equals(Constant.AriadneEventKoutei)) {
+						Constant.AriadneKouteiFolderId = topFolderId;
+						dbMsg += "[AriadneKouteiFolderId;" + Constant.AriadneKouteiFolderId + "]";
+					} else if (topFolderName.Equals(Constant.AriadneEventOther)) {
+						Constant.AriadneOtherFolderId = topFolderId;
+						dbMsg += "[AriadneOtherFolderId;" + Constant.AriadneOtherFolderId + "]";
 					}
 				}
-				topFolderId = rr.Result;
-				dbMsg += "[" + topFolderId + "]" + topFolderName;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return rootFolderId;
+		}
 
-				File targetFolder = FindByNameParent(targetFolderName, topFolderName);
+		/// <summary>
+		/// AriadneEventFolderの中にサブフォルダを作成する
+		/// </summary>
+		/// <param name="targetFolderName"></param>
+		/// <param name="topFolderId"></param>
+		/// <returns></returns>
+		public string MakeAriadneFolder(string pcFilePath, string ariadneEventFolderID)
+		{
+			string TAG = "MakeAriadneFolder";
+			string dbMsg = "[GoogleDriveUtil]";
+			string targetFolderId = "";
+			try {
+				string[] strs = pcFilePath.Split('\\');
+				string targetFileName = strs[strs.Length - 1];
+				dbMsg += ",name=" + targetFileName;
+				string parentName = strs[strs.Length - 2];
+				dbMsg += ",parent=" + parentName;
+				string ariadneEventName = strs[strs.Length - 3];
+				dbMsg += ",parent=" + parentName;
+				//string parentId = "";
+				//Task<string> rr = CreateFolder(parentName, ariadneEventName);
+				//if (rr == null) {
+				//} else {
+				//	parentId = rr.Result;
+				//}
+
+				dbMsg += "[" + ariadneEventFolderID + "]" + ariadneEventName + "に" + parentName;
+				File targetFolder = FindByNameParent(parentName, ariadneEventName);
 				if (targetFolder == null) {
-					dbMsg += ">>targetFolder作成";
-					rr = CreateFolder(targetFolderName, topFolderId);
+					dbMsg += "を作成>>";
+					Task<string> rr = CreateFolder(parentName, ariadneEventFolderID);
 					if (rr == null) {
 						return null;
 					}else{
@@ -568,7 +612,7 @@ namespace GoogleOSD {
 				} else{
 					targetFolderId = targetFolder.Id;
 				}
-				dbMsg += "[" + targetFolderId + "]" + targetFolderName;
+				dbMsg += "[" + targetFolderId + "]" + parentName;
 
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -580,8 +624,8 @@ namespace GoogleOSD {
 		/// <summary>
 		/// Ariadnイベントのデータ登録定義に即したデータ登録
 		/// </summary>
-		/// <param name="pcFilePath"></param>
-		/// <param name="parentoFolderId"></param>
+		/// <param name="pcFilePath">作成するフォルダ名</param>
+		/// <param name="parentoFolderId">親フォルダId</param>
 		/// <returns></returns>
 		public string AriadneDataPut(string pcFilePath, string parentoFolderId, string parentoFolderName)
 		{
