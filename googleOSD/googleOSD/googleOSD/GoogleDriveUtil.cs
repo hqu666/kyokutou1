@@ -172,6 +172,8 @@ namespace GoogleOSD {
 			try {
 				dbMsg += ",pFolder=" + pFolder;
 				Constant.CurrentFolder = pFolder;
+				//親フォルダのid取得
+				string pFolderId;
 				// フォルダIDの取得
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
 				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
@@ -353,15 +355,17 @@ namespace GoogleOSD {
 			try {
 				dbMsg = "[" + parentName + "]" + name;
 				IList<File> retList = GDFileListUp(parentName, false);
-				dbMsg += ">該当＞" + retList.Count + "件";
-				foreach (File rItem in retList) {
-					string itemName = rItem.Name;
-					string mimeType = rItem.MimeType;
-					dbMsg += "\r\n" + itemName + ")" + mimeType;
-					if (@itemName.Equals(@name)) {
-						retFile = rItem;
-						dbMsg += ">＞的中";
-						break;
+				if(retList != null) {
+					dbMsg += ">該当＞" + retList.Count + "件";
+					foreach (File rItem in retList) {
+						string itemName = rItem.Name;
+						string mimeType = rItem.MimeType;
+						dbMsg += "\r\n" + itemName + ")" + mimeType;
+						if (@itemName.Equals(@name)) {
+							retFile = rItem;
+							dbMsg += ">＞的中";
+							break;
+						}
 					}
 				}
 				Util.MyLog(TAG, dbMsg);
@@ -526,8 +530,6 @@ namespace GoogleOSD {
 				}
 
 				string driveId = Constant.GDriveFiles.First().Parents[0];
-				//Task<string> rr = Task<string>.Run(() => FindByName(Constant.RootFolderName, SearchFilter.FOLDER));
-				//if(rr == null) {
 				dbMsg += ">>rootFolder作成";
 				Task<string> rr = Task.Run(() => {
 					return CreateFolder(Constant.RootFolderName, driveId);
@@ -539,7 +541,6 @@ namespace GoogleOSD {
 					Util.MyLog(TAG, dbMsg);
 					return null;
 				}
-				//}
 				dbMsg += "[" + rootFolderId + "]" + Constant.RootFolderName;
 				foreach(string topFolderName in Constant.AriadneEventNames) {
 					string topFolderId = "";
