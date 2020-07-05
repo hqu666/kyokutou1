@@ -901,7 +901,7 @@ Visibility	null	string
 					}
 				string retLink = "";
 				string parentFolderName = this.selectedAriadneData.ItemNumber;
-				//案件などAriadneEvent直下の
+				//案件などAriadneEventfフォルダ直下に案件別フォルダを作成もしくは既存IDの取得
 				string itermFolderName = this.selectedAriadneData.ItemNumber;
 				Task<string> rr = Task.Run(() => {
 					return GDriveUtil.CreateFolder(itermFolderName, Constant.AriadneAnkenFolderId);
@@ -922,11 +922,11 @@ Visibility	null	string
 				string otherFolderId = rr.Result;
 				dbMsg += ",一般名フォルダ[" + otherFolderId + "]";
 
+				//Googleドライブにファイルコピー
 				if (this.selectedAriadneData.EstimationPCPass != null) {
-					dbMsg += ",見積ファイル有り" ;
+					dbMsg += ",見積ファイル有り";                   //"MI20060006";        
 					this.selectedAriadneData.EstimationGoogleFileID = PutInFoldrFile(this.selectedAriadneData.EstimationPCPass, itemFolderId);
 					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID +"]";
-					//EstimationGoogleFileID = "MI20060006";              // 見積ファイルのGoogleDriveID
 				} else {
 					this.selectedAriadneData.EstimationGoogleFileID = null;
 				}
@@ -934,6 +934,7 @@ Visibility	null	string
 					dbMsg += ",受注ファイル有り";
 					this.selectedAriadneData.OrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.OrderPCPass, itemFolderId);
 					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID + "]";
+					//添付ファイルに追加
 					//.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
 				} else {
 					this.selectedAriadneData.OrderGoogleFileID = null;
@@ -1014,6 +1015,7 @@ Visibility	null	string
 				dbMsg += ",name=" + name;
 				string parent = strs[strs.Length - 2];
 				dbMsg += ",parent=" + parent;
+				//伝票名のフォルダ
 				Task<string> rr = Task.Run(() => {
 					return GDriveUtil.CreateFolder(parent, eventFolderID);
 				});
@@ -1031,29 +1033,29 @@ Visibility	null	string
 
 
 
-		private string AddSendFile(string fullPass , string  parentFolderName, string parentFolderID)
-		{
-			string TAG = "AddSendFile";
-			string dbMsg = "[GEventEdit]";
-			string retFileID = null;
-			try {
-				dbMsg += " , " + fullPass ;
-				retFileID=GDriveUtil.AriadneDataPut(fullPass,  parentFolderName, parentFolderID);
-				dbMsg += "[" + retFileID + "]";
-				bool isFolder = false;
-				string[] strs = fullPass.Split('\\');
-				string name = strs[strs.Length - 1];
-				dbMsg += ",name=" + name;
-				string parent = strs[strs.Length - 2];
-				dbMsg += ",parent=" + parent;
-				GAttachFile gAttachFile = new GAttachFile(fullPass, retFileID, name, parent, isFolder);
-				sendFiles.Add(gAttachFile);
+		//private string AddSendFile(string fullPass , string  parentFolderName, string parentFolderID)
+		//{
+		//	string TAG = "AddSendFile";
+		//	string dbMsg = "[GEventEdit]";
+		//	string retFileID = null;
+		//	try {
+		//		dbMsg += " , " + fullPass ;
+		//		retFileID=GDriveUtil.AriadneDataPut(fullPass,  parentFolderName, parentFolderID);
+		//		dbMsg += "[" + retFileID + "]";
+		//		bool isFolder = false;
+		//		string[] strs = fullPass.Split('\\');
+		//		string name = strs[strs.Length - 1];
+		//		dbMsg += ",name=" + name;
+		//		string parent = strs[strs.Length - 2];
+		//		dbMsg += ",parent=" + parent;
+		//		GAttachFile gAttachFile = new GAttachFile(fullPass, retFileID, name, parent, isFolder);
+		//		sendFiles.Add(gAttachFile);
 
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-			return retFileID;
-		}
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//	return retFileID;
+		//}
 
 
 		/// <summary>

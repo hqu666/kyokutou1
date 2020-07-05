@@ -49,7 +49,7 @@ namespace GoogleOSD {
 																	};
 
 		public static IList<Google.Apis.Drive.v3.Data.File> GDriveFiles;
-		public static string driveId;
+		public static string DriveId;
 		public static string AriadneAnkenFolderId = "";
 		public static string AriadneKouteiFolderId = "";
 		public static string AriadneOtherFolderId = "";
