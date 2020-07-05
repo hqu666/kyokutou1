@@ -923,33 +923,32 @@ Visibility	null	string
 				dbMsg += ",一般名フォルダ[" + otherFolderId + "]";
 
 				//Googleドライブにファイルコピー
+				taregetEvent.Attachments = new System.Collections.Generic.List<Google.Apis.Calendar.v3.Data.EventAttachment>();
 				if (this.selectedAriadneData.EstimationPCPass != null) {
 					dbMsg += ",見積ファイル有り";                   //"MI20060006";        
-					this.selectedAriadneData.EstimationGoogleFileID = PutInFoldrFile(this.selectedAriadneData.EstimationPCPass, itemFolderId);
+					this.selectedAriadneData.EstimationGoogleFileID = PutInFoldrFile(this.selectedAriadneData.EstimationPCPass, itemFolderId, taregetEvent);
 					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID +"]";
 				} else {
 					this.selectedAriadneData.EstimationGoogleFileID = null;
 				}
 				if (this.selectedAriadneData.OrderPCPass != null) {
 					dbMsg += ",受注ファイル有り";
-					this.selectedAriadneData.OrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.OrderPCPass, itemFolderId);
+					this.selectedAriadneData.OrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.OrderPCPass, itemFolderId, taregetEvent);
 					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID + "]";
-					//添付ファイルに追加
 					//.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
 				} else {
 					this.selectedAriadneData.OrderGoogleFileID = null;
 				}
 				if (this.selectedAriadneData.SalesPCPass != null) {
 					dbMsg += ",売上ファイル有り";
-					this.selectedAriadneData.SalesGoogleFileID = PutInFoldrFile(this.selectedAriadneData.SalesPCPass, itemFolderId);
-					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID + "]";
+					this.selectedAriadneData.SalesGoogleFileID = PutInFoldrFile(this.selectedAriadneData.SalesPCPass, itemFolderId, taregetEvent);
 					//.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
 				} else {
 					this.selectedAriadneData.SalesGoogleFileID = null;
 				}
 				if (this.selectedAriadneData.RequestPCPass != null) {
 					dbMsg += ",請求ファイル有り";
-					this.selectedAriadneData.RequestGoogleFileID = PutInFoldrFile(this.selectedAriadneData.RequestPCPass, itemFolderId);
+					this.selectedAriadneData.RequestGoogleFileID = PutInFoldrFile(this.selectedAriadneData.RequestPCPass, itemFolderId, taregetEvent);
 					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID + "]";
 					//RequestPCPass = "";              //請求ファイルのPC保存位置
 				} else {
@@ -957,7 +956,7 @@ Visibility	null	string
 				}
 				if (this.selectedAriadneData.ReceiptPCPass != null) {
 					dbMsg += ",入金ファイル有り";
-					this.selectedAriadneData.ReceipttGoogleFileID = PutInFoldrFile(this.selectedAriadneData.ReceiptPCPass, itemFolderId);
+					this.selectedAriadneData.ReceipttGoogleFileID = PutInFoldrFile(this.selectedAriadneData.ReceiptPCPass, itemFolderId, taregetEvent);
 					dbMsg += "[" + this.selectedAriadneData.ReceipttGoogleFileID + "]";
 					//ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
 				} else {
@@ -965,7 +964,7 @@ Visibility	null	string
 				}
 				if (this.selectedAriadneData.ToOrderPCPass != null) {
 					dbMsg += ",資材発注ファイル有り";
-					this.selectedAriadneData.ToOrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.ToOrderPCPass, processFolderId);
+					this.selectedAriadneData.ToOrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.ToOrderPCPass, processFolderId, taregetEvent);
 					dbMsg += "[" + this.selectedAriadneData.ToOrderGoogleFileID + "]";
 					//ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
 				} else {
@@ -973,7 +972,7 @@ Visibility	null	string
 				}
 				if (this.selectedAriadneData.StockPCPass != null) {
 					dbMsg += ",荷・工事消込ファイル有り";
-					this.selectedAriadneData.StockGoogleFileID = PutInFoldrFile(this.selectedAriadneData.StockPCPass, processFolderId);
+					this.selectedAriadneData.StockGoogleFileID = PutInFoldrFile(this.selectedAriadneData.StockPCPass, processFolderId , taregetEvent);
 					dbMsg += "[" + this.selectedAriadneData.ToOrderGoogleFileID + "]";
 					//StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
 				} else {
@@ -1000,16 +999,13 @@ Visibility	null	string
 		/// <param name="fullPass"></param>
 		/// <param name="eventFolderID"></param>
 		/// <returns></returns>
-		private string PutInFoldrFile(string fullPass,string eventFolderID)
+		private string PutInFoldrFile(string fullPass,string eventFolderID , Google.Apis.Calendar.v3.Data.Event taregetEvent)
 		{
 			string TAG = "PutItemEventFile";
 			string dbMsg = "[GEventEdit]";
 			string retFileID = null;
 			try {
 				dbMsg +=  eventFolderID + " に " + fullPass;
-				//retFileID = GDriveUtil.AriadneDataPut(fullPass, parentFolderName, parentFolderID);
-				//dbMsg += "[" + retFileID + "]";
-				//bool isFolder = false;
 				string[] strs = fullPass.Split('\\');
 				string name = strs[strs.Length - 1];
 				dbMsg += ",name=" + name;
@@ -1024,39 +1020,25 @@ Visibility	null	string
 				dbMsg += ",伝票番号フォルダ[" + numberFolderId + "]";
 				retFileID = GDriveUtil.UploadFile(name, fullPass, numberFolderId);
 				dbMsg += ",登録[" + retFileID + "]";
+				//添付ファイルに追加
+				File savedFile = GDriveUtil.FindById(retFileID);
+				Google.Apis.Calendar.v3.Data.EventAttachment agFile = new Google.Apis.Calendar.v3.Data.EventAttachment();
+				agFile.FileId =retFileID;
+				agFile.ETag = savedFile.ETag;
+				agFile.FileUrl = savedFile.WebContentLink;
+				agFile.IconLink = savedFile.IconLink;
+				agFile.MimeType = savedFile.MimeType;
+				agFile.Title = savedFile.Name;
+
+				taregetEvent.Attachments.Add(agFile);
+				dbMsg += ",Attachments=" + taregetEvent.Attachments.Count() + "件";
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 			return retFileID;
 		}
-
-
-
-		//private string AddSendFile(string fullPass , string  parentFolderName, string parentFolderID)
-		//{
-		//	string TAG = "AddSendFile";
-		//	string dbMsg = "[GEventEdit]";
-		//	string retFileID = null;
-		//	try {
-		//		dbMsg += " , " + fullPass ;
-		//		retFileID=GDriveUtil.AriadneDataPut(fullPass,  parentFolderName, parentFolderID);
-		//		dbMsg += "[" + retFileID + "]";
-		//		bool isFolder = false;
-		//		string[] strs = fullPass.Split('\\');
-		//		string name = strs[strs.Length - 1];
-		//		dbMsg += ",name=" + name;
-		//		string parent = strs[strs.Length - 2];
-		//		dbMsg += ",parent=" + parent;
-		//		GAttachFile gAttachFile = new GAttachFile(fullPass, retFileID, name, parent, isFolder);
-		//		sendFiles.Add(gAttachFile);
-
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//	return retFileID;
-		//}
-
 
 		/// <summary>
 		/// 新規イベント作成
