@@ -237,7 +237,7 @@ namespace GoogleOSD {
 					meta.Parents = new List<string> { parentFolderId }; //特定のフォルダのサブフォルダ
 					dbMsg += ",meta=" + meta.Parents[0];
 					var request = Constant.MyDriveService.Files.Create(meta);
-					request.Fields = "id, name";
+					request.Fields = "id, name,Parents";
 					dbMsg += ",request=" + request.MethodName;
 					newFolder = await request.ExecuteAsync();
 					retStr = newFolder.Id;
