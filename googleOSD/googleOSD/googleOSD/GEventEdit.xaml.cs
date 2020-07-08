@@ -1025,7 +1025,7 @@ Visibility	null	string
 				Google.Apis.Calendar.v3.Data.EventAttachment agFile = new Google.Apis.Calendar.v3.Data.EventAttachment();
 				agFile.FileId =retFileID;
 				agFile.ETag = savedFile.ETag;
-				agFile.FileUrl = savedFile.WebViewLink;
+				agFile.FileUrl = savedFile.WebContentLink;
 				agFile.IconLink = savedFile.IconLink;
 				agFile.MimeType = savedFile.MimeType;
 				agFile.Title = savedFile.Name;

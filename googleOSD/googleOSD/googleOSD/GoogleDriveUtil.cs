@@ -418,6 +418,7 @@ namespace GoogleOSD {
 			try {
 				dbMsg += "[id=" + id + "]";
 				retFile = Constant.MyDriveService.Files.Get(id).Execute();
+
 				retStr = retFile.Name;
 				dbMsg += retStr;
 				dbMsg += ">>[" + retStr + "]";
