@@ -641,23 +641,43 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					GDriveUtil.MakeAriadneGoogleFolder();
+					dbMsg += "  、イベント：案件[" + Constant.AriadneAnkenFolderId + "] に " + selectedAriadneData.ItemNumber;
+					dbMsg += "  ,案件= " + selectedAriadneData.ItemNumber;
+					Task<string> rr = Task<string>.Run(() => {
+						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, Constant.AriadneAnkenFolderId);
+					});
+					rr.Wait();
+					string itemFolderId = rr.Result;
+					dbMsg += "[ " + itemFolderId +"]";
 					// Note that you can have more than one file.
 					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 					var file = files[0];
 					string rFile = file.ToString();
+					dbMsg += "  ,rFile= " + rFile;
 					dbMsg += "  ,file= " + file.ToString();
 					string[] strs = rFile.Split('\\');
 					string name = strs[strs.Length - 1];
 					dbMsg += ",name=" + name;
 					string parent = strs[strs.Length - 2];
 					dbMsg += ",parent=" + parent;
-					Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-					if (gFile == null) {
-						dbMsg += "登録なし";
-					} else {
-						string gFileId = gFile.Id;
-						dbMsg += "[" + gFileId + "]";
-					}
+					//直上のフォルダ
+					rr = Task<string>.Run(() => {
+						return GDriveUtil.CreateFolder(parent, itemFolderId);
+					});
+					rr.Wait();
+					string parentFolderId = rr.Result;
+					dbMsg += "[ " + parentFolderId + "]";
+					string fileId = PutInFoldrFile(rFile, itemFolderId,  taregetEvent);
+					dbMsg += ">>作成= " + fileId;
+
+					//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
+					//if (gFile == null) {
+					//	dbMsg += "登録なし";
+					//} else {
+					//	string gFileId = gFile.Id;
+					//	dbMsg += "[" + gFileId + "]";
+					//}
 
 				}
 				MyLog(TAG, dbMsg);
@@ -1005,12 +1025,12 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			string retFileID = null;
 			try {
-				dbMsg +=  eventFolderID + " に " + fullPass;
+				dbMsg += "イベント["+ eventFolderID + "] に " + fullPass + "を作成";
 				string[] strs = fullPass.Split('\\');
 				string name = strs[strs.Length - 1];
-				dbMsg += ",name=" + name;
+				dbMsg += "　,name=" + name;
 				string parent = strs[strs.Length - 2];
-				dbMsg += ",parent=" + parent;
+				dbMsg += "　,parent=" + parent;
 				//伝票名のフォルダ
 				Task<string> rr = Task.Run(() => {
 					return GDriveUtil.CreateFolder(parent, eventFolderID);
@@ -1024,11 +1044,11 @@ Visibility	null	string
 				File savedFile = GDriveUtil.FindById(retFileID);
 				Google.Apis.Calendar.v3.Data.EventAttachment agFile = new Google.Apis.Calendar.v3.Data.EventAttachment();
 				agFile.FileId =retFileID;
+				agFile.Title = savedFile.Name;
 				agFile.ETag = savedFile.ETag;
 				agFile.FileUrl = savedFile.WebContentLink;
 				agFile.IconLink = savedFile.IconLink;
 				agFile.MimeType = savedFile.MimeType;
-				agFile.Title = savedFile.Name;
 
 				taregetEvent.Attachments.Add(agFile);
 				dbMsg += ",Attachments=" + taregetEvent.Attachments.Count() + "件";

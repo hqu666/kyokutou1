@@ -219,21 +219,18 @@ namespace GoogleOSD {
 			File newFolder = new File();
 			try {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
-				Task<string> folder = Task<string>.Run(() => FindByName(name, SearchFilter.FOLDER));
+				Task<string> folder = Task.Run(() => {
+					return FindByName(name, SearchFilter.FOLDER);
+				});
+				folder.Wait();
+				string numberFolderId = folder.Result;
+			//	Task<string> folder = Task<string>.Run(() => FindByName(name, SearchFilter.FOLDER));
 				string folderId = folder.Result;
 				if (folderId == null) {
 					File meta = new File();
 					meta.Name = name;
 					meta.MimeType = GoogleDriveMime_Folder;
 					if (driveId != null) meta.DriveId = driveId;
-				//	if (parentFolderId == null || parentFolderId.Equals("")) {
-				//		//マイドライブのID
-				////		parentFolderId = Constant.MyDriveService.Drives.;						//Constant.MyDriveService.Drives.ToString();
-				//		//folder = Task<string>.Run(() => FindByName("マイドライブ", SearchFilter.FOLDER));
-				//		//	parentFolderId = folder.Result;
-				//		dbMsg += ",parentFolder[" + parentFolderId + "]" + Constant.TopFolderName + "を作成";
-				//		//}else{
-				//	}
 					meta.Parents = new List<string> { parentFolderId }; //特定のフォルダのサブフォルダ
 					dbMsg += ",meta=" + meta.Parents[0];
 					var request = Constant.MyDriveService.Files.Create(meta);
@@ -286,26 +283,33 @@ namespace GoogleOSD {
 					dbMsg += ",消去=" + delItem.Result;
 				}
 				LocalFileUtil LFUtil = new LocalFileUtil();
+				dbMsg += " ,parentId=" + parentId;
+				dbMsg += " ,Name=" + System.IO.Path.GetFileName(filePath);
 				String MimeStr = LFUtil.GetMimeType(filePath);
-				dbMsg += ",Mime=" + MimeStr;
+				dbMsg += " ,Mime=" + MimeStr;
 				var meta = new File() {
 					Name = System.IO.Path.GetFileName(filePath),
 					MimeType = MimeStr,
 					Parents = new List<string> { parentId }
 				};
+				FilesResource.CreateMediaUpload request;
 				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
 					// Create:新規追加
-					var request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
-					//			var uploadProgress = await request.UploadAsync();
+					request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
+					request.Fields = "id, name";
+					//					request.Fields = "id, name,etag,webcontentlink,iconlink";
 					Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
+				//		return request.Upload();
 						return request.UploadAsync();
 					});
 					uploadProgress.Wait();
-					var rFile = request.ResponseBody;                           //作成結果が格納され戻される
-					retStr = rFile.Id;
-					dbMsg += ">作成したファイルID>" + retStr;
-					Util.MyLog(TAG, dbMsg);
+					IUploadProgress rProgress = uploadProgress.Result;      //		Status	Completed	Google.Apis.Upload.UploadStatus くらい
+					dbMsg += " ,uploadProgress=" + rProgress.Status;
 				}
+				var rFile = request.ResponseBody;                           //作成結果が格納され戻される
+				retStr = rFile.Id;
+				dbMsg += ">作成したファイルID>" + retStr;
+				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
@@ -445,7 +449,7 @@ namespace GoogleOSD {
 					ApplicationName = Constant.ApplicationName,
 				});
 
-				dbMsg = "queries=" + queries.ToString();
+				dbMsg += "queries=" + queries.ToString();
 				var result = await FindFilesCore(queries);
 				MyLog(TAG, dbMsg);
 				return (result.Count > 0) ? result[0] : null;
@@ -487,8 +491,8 @@ namespace GoogleOSD {
 			string TAG = "FindFilesCore";
 			string dbMsg = "[GoogleUtil]";
 			try {
-				dbMsg = "queries=" + queries.ToString();
-				dbMsg = "fields=" + fields;
+				dbMsg += "queries=" + queries.ToString();
+				dbMsg += "fields=" + fields;
 				string nextPageToken = null;
 				queries.Add("trashed = false");
 
@@ -561,13 +565,13 @@ namespace GoogleOSD {
 					dbMsg += "[" + topFolderId + "]" + topFolderName;
 					if(topFolderName.Equals(Constant.AriadneEventAnken)){
 						Constant.AriadneAnkenFolderId = topFolderId;
-						dbMsg += "[AriadneAnkenFolderId;" + Constant.AriadneAnkenFolderId + "]" ;
+						dbMsg += "[案件;" + Constant.AriadneAnkenFolderId + "]" ;
 					} else if (topFolderName.Equals(Constant.AriadneEventKoutei)) {
 						Constant.AriadneKouteiFolderId = topFolderId;
-						dbMsg += "[AriadneKouteiFolderId;" + Constant.AriadneKouteiFolderId + "]";
+						dbMsg += "[工程;" + Constant.AriadneKouteiFolderId + "]";
 					} else if (topFolderName.Equals(Constant.AriadneEventOther)) {
 						Constant.AriadneOtherFolderId = topFolderId;
-						dbMsg += "[AriadneOtherFolderId;" + Constant.AriadneOtherFolderId + "]";
+						dbMsg += "[一般;" + Constant.AriadneOtherFolderId + "]";
 					}
 					dbMsg += topFolderName;
 				}
