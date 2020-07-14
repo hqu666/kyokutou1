@@ -641,15 +641,39 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-					GDriveUtil.MakeAriadneGoogleFolder();
-					dbMsg += "  、イベント：案件[" + Constant.AriadneAnkenFolderId + "] に " + selectedAriadneData.ItemNumber;
-					dbMsg += "  ,案件= " + selectedAriadneData.ItemNumber;
+					Constant.GDriveFiles = new List<Google.Apis.Drive.v3.Data.File>();
+					Constant.GDriveFiles = GDriveUtil.GDAllFolderListUp();
+					int fCount = Constant.GDriveFiles.Count;
+					dbMsg += " , " + fCount + " フォルダ登録";
+					if (0 < fCount) {
+						dbMsg += "[" + Constant.GDriveFiles.First().Id + " ]" + Constant.GDriveFiles.First().Name + " ;Parents;" + Constant.GDriveFiles.First().Parents[0] + " ;DriveId;" + Constant.GDriveFiles.First().DriveId;
+						dbMsg += "～[" + Constant.GDriveFiles.Last().Id + " ]" + Constant.GDriveFiles.Last().Name + " ;Parents;" + Constant.GDriveFiles.First().Parents[0] + " ;DriveId;" + Constant.GDriveFiles.First().DriveId;
+					}
+					//仮処理；最初に拾えたファイルのParentsをdriveIdとする
+					Constant.DriveId = Constant.GDriveFiles.First().Parents[0];
+					Task<string> rootRes = Task<string>.Run(() => {
+						dbMsg += "  ,ルート= " + Constant.RootFolderName;
+						return GDriveUtil.CreateFolder(Constant.RootFolderName, Constant.DriveId);
+					});
+					rootRes.Wait();
+					string rootFolderId = rootRes.Result;
+					dbMsg += "[" + rootFolderId + "] ";
+					Task<string> topRes = Task<string>.Run(() => {
+						dbMsg += ",top=" + Constant.AriadneEventAnken;
+						return GDriveUtil.CreateFolder(Constant.AriadneEventAnken, rootFolderId);
+					});
+					topRes.Wait();
+					string topFolderId = topRes.Result;
+					dbMsg += "[" + topFolderId + "] ";
+
+		//			dbMsg += "  、イベント：案件[" + Constant.AriadneAnkenFolderId + "] に ";
 					Task<string> rr = Task<string>.Run(() => {
-						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, Constant.AriadneAnkenFolderId);
+						dbMsg += "  ,案件= " + selectedAriadneData.ItemNumber;
+						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, topFolderId);
 					});
 					rr.Wait();
 					string itemFolderId = rr.Result;
-					dbMsg += "[ " + itemFolderId +"]";
+					dbMsg += "[ " + itemFolderId +"]を作成";				//出来ていない
 					// Note that you can have more than one file.
 					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 					var file = files[0];

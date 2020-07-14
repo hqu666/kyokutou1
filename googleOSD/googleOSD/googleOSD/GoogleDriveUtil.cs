@@ -292,15 +292,16 @@ namespace GoogleOSD {
 					MimeType = MimeStr,
 					Parents = new List<string> { parentId }
 				};
+				//		FilesResource.CreateMediaUpload request;				//InsertMediaUpload は廃止
 				FilesResource.CreateMediaUpload request;
 				using (var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
 					// Create:新規追加
 					request = Constant.MyDriveService.Files.Create(meta, stream, MimeStr);
-					request.Fields = "id, name";
+			//		request.Fields = "id, name";
 					//					request.Fields = "id, name,etag,webcontentlink,iconlink";
 					Task<Google.Apis.Upload.IUploadProgress> uploadProgress = Task.Run(() => {
-				//		return request.Upload();
-						return request.UploadAsync();
+						return request.Upload();
+						//			return request.UploadAsync();
 					});
 					uploadProgress.Wait();
 					IUploadProgress rProgress = uploadProgress.Result;      //		Status	Completed	Google.Apis.Upload.UploadStatus くらい
@@ -513,7 +514,7 @@ namespace GoogleOSD {
 			}
 
 		}
-		////////////////////////////////////////////////////
+		////////////////////////////////////////////////////	Waitの使い方？
 		/// <summary>
 		/// Ariadneのイベントフォルダの作成
 		/// </summary>
