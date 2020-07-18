@@ -106,12 +106,12 @@ namespace GoogleOSD {
 						dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
 					}
 				}
-				//Constant.RootFolderID = GDriveUtil.MakeAriadneGoogleFolder();
-				//if (Constant.RootFolderID.Equals("")) {
-				//	dbMsg += ">フォルダ作成>失敗";
-				//}else{
-				//	dbMsg += "[" + Constant.RootFolderID + "]" + Constant.RootFolderName;
-				//}
+				Constant.RootFolderID = GDriveUtil.MakeAriadneGoogleFolder();
+				if (Constant.RootFolderID.Equals("")) {
+					dbMsg += ">フォルダ作成>失敗";
+				} else {
+					dbMsg += "[" + Constant.RootFolderID + "]" + Constant.RootFolderName;
+				}
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

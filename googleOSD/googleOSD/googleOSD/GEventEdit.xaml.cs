@@ -672,6 +672,7 @@ Visibility	null	string
 						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, topFolderId);
 					});
 					rr.Wait();
+					Task.WaitAll(rootRes,topRes, rr);
 					string itemFolderId = rr.Result;
 					dbMsg += "[ " + itemFolderId +"]を作成";				//出来ていない
 					// Note that you can have more than one file.
