@@ -110,6 +110,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition  Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
 
@@ -134,8 +135,8 @@
 					Content="イベント種類" HorizontalAlignment="Right" Margin="0,5,5,5" />
 		<ComboBox  Grid.Row="1" Grid.Column="1"  
 							Height="24" Width="Auto" HorizontalAlignment="Left"
-							SelectedIndex="1">
-			<ListBoxItem Content="工事イベント"/>
+							SelectedIndex="0">
+			<ListBoxItem Content="案件イベント"/>
 			<ListBoxItem Content="工程イベント"/>
 			<ListBoxItem Content="通常イベント"/>
 		</ComboBox>
@@ -307,70 +308,56 @@
 		<WebBrowser  Grid.Row="14"  Grid.Column="1"  
 						Language="jp" 
 						Name="description_wb"/>-->
+		<Label  Grid.Row="13" Grid.Column="0" Grid.RowSpan="3" Content="添付ファイル" 
+							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0"  />
+		<StackPanel   Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" Orientation="Horizontal"  
+								HorizontalAlignment="Stretch"  VerticalAlignment="Top"	Width="453"  Margin="0,0,0,8" 
+								Panel.ZIndex="10" 
+								Name="attachments_sp" 
+				/>
 
-		<Button Grid.Row="14" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"
-						Name="attach_bt" Content="添付ファイル" 
-								Click="Attach_bt_Click"/>
-
-		<!--<StackPanel Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3">-->
-			<!--<ToolBar HorizontalAlignment="Left" VerticalAlignment="Top">
-				<Button  Name="bold_bt" Content="太字" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-				<Button  Name="italick_bt" Content="斜体" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-				<Button  Name="under_lin_bt" Content="下線" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-				<Button  Name="num_list_bt" Content="番号" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-				<Button  Name="m_list_bt" Content="箇条" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-				<Button  Name="insert_link_bt" Content="リンク" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-				<Button  Name="format_clear_bt" Content="書式クリア" 
-								HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden" />
-			</ToolBar>-->
-		<Rectangle  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Fill="#FFEEF3F3" Stroke="Black" StrokeThickness="1" StrokeDashArray="5" />
-		<!--<DockPanel   Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3">-->
-		<StackPanel   Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal"  
-				HorizontalAlignment="Center" Panel.ZIndex="10" 
-				Name="attachments_sp" Drop="Attachments_sp_Drop"  AllowDrop="true">
-			<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" Name="attachments_tb"/>
-			<!--<Label Content="ファイルをドロップするか、クリックしてファイルを選択して下さい。" 
-						Name="attachments_lb"/>-->
+		<StackPanel   Grid.Row="14"  Grid.Column="1"  Grid.ColumnSpan="3" Orientation="Horizontal"  
+								HorizontalAlignment="Stretch"  VerticalAlignment="Top"  Margin="0" 
+								Name="drop_sp" 
+								Drop="Attachments_sp_Drop"  AllowDrop="true" 
+								MouseUp="Attachments_sp_MouseUp"
+				>
+				<Rectangle  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Height="33"  
+								Fill="#FFE1E2E2" Stroke="Black" StrokeThickness="1" StrokeDashArray="5" Width="463" Margin="0,8,0,0" >
+				</Rectangle>
 		</StackPanel>
+		<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" x:Name="attachments_tb"
+								Grid.Row="14" Grid.Column="1"  Grid.ColumnSpan="3" TextAlignment="Center" 
+								Panel.ZIndex="10" 
+								HorizontalAlignment="Center"  VerticalAlignment="Center"/>
 
-		<!--</DockPanel>-->
-
-		<!--</StackPanel>-->
-
-		<!--<StackPanel Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" >-->
-		<Button   Grid.Row="15" Grid.Column="0" 
+		<Button   Grid.Row="16" Grid.Column="0" 
 				HorizontalAlignment="Left"  VerticalAlignment="Center" 
 							 Content="イベントをコピー" />
-		<Button  Grid.Row="15" Grid.Column="1" 
+		<Button  Grid.Row="16" Grid.Column="1" 
 					HorizontalAlignment="Center"  VerticalAlignment="Center"
 							   Content="工程イベントを作成"/>
-		<Button   Grid.Row="15" Grid.Column="2" 
+		<Button   Grid.Row="16" Grid.Column="2" 
 					HorizontalAlignment="Center"  VerticalAlignment="Center"
 					 Content="発注書を作成" />
-		<Button  Grid.Row="15" Grid.Column="4" 
+		<Button  Grid.Row="16" Grid.Column="4" 
 						HorizontalAlignment="Right"  VerticalAlignment="Center" 
 					 Content="イベント終了" />
 		<!--</StackPanel>-->
 
 		<!--<StackPanel Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal"  Background="#FFF1F7F9"  />-->
-		<Rectangle  Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Fill="#FFEFF9F9"   />
-		<Button   Grid.Row="16" Grid.Column="0"
+		<!--<Rectangle  Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Fill="#FFEFF9F9"   />-->
+		<Button   Grid.Row="17" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
 							Name="cancel_bt" Content="キャンセル" Click="Cancel_bt_Click" />
-		<Button  Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2"
+		<Button  Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="2"
 						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
 							  Name="del_bt" Content="削除" Click="Del_bt_Click"/>
-		<Button   Grid.Row="16" Grid.Column="4"
+		<Button   Grid.Row="17" Grid.Column="4"
 					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
 					Name="save_bt" Content="登録"  Click="Save_bt_Click"  />
 		<!--</StackPanel>-->
-		<TextBox  Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" Foreground="White" 
+		<TextBox  Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" Foreground="White" 
 								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,10,0"
 								VerticalAlignment="Top" />
 

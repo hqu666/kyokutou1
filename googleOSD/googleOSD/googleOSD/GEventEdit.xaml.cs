@@ -695,15 +695,53 @@ Visibility	null	string
 					dbMsg += "[ " + parentFolderId + "]";
 					string fileId = PutInFoldrFile(rFile, itemFolderId,  taregetEvent);
 					dbMsg += ">>作成= " + fileId;
+					Google.Apis.Drive.v3.Data.File fileItem = GDriveUtil.FindByNameParent(name, parent);
+					if (fileItem == null) {
+						dbMsg += "登録なし";
+					} else {
+						string gFileId = fileItem.Id;
+						dbMsg += "[" + gFileId + "]";
+					}
+					AttachmentsFromDrive(fileItem);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
-					//Google.Apis.Drive.v3.Data.File gFile = GDriveUtil.FindByNameParent(name, parent);
-					//if (gFile == null) {
-					//	dbMsg += "登録なし";
-					//} else {
-					//	string gFileId = gFile.Id;
-					//	dbMsg += "[" + gFileId + "]";
-					//}
+		/// <summary>
+		/// ファイルのドロップ領域のクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Attachments_sp_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			string TAG = "Attachments_sp_MouseUp";
+			string dbMsg = "[GEventEdit]";
+			try {
+				ShowDriveBrouser();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 
+		}
+
+		/// <summary>
+		/// ShowDriveBrouserを表示
+		/// </summary>
+		private void ShowDriveBrouser()
+		{
+			string TAG = "ShowDriveBrouser";
+			string dbMsg = "[GEventEdit]";
+			try {
+				if (driveView == null) {
+					dbMsg += "GoogleDriveBrouserを再生成";
+					driveView = new GoogleDriveBrouser();
+					driveView.editView = this;
+					driveView.Show();
+					driveView.GoogleFolderListUp(Constant.TopFolderName);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -744,14 +782,21 @@ Visibility	null	string
 			string TAG = "AttachmentsFromDrive";
 			string dbMsg = "[GEventEdit]";
 			try {
+				dbMsg += ",[fileId=" + fileItem.Id + "]";
+				foreach (Google.Apis.Calendar.v3.Data.EventAttachment cf in taregetEvent.Attachments) {
+					 if(cf.FileId.Equals(fileItem.Id)) {
+						return;
+					 }
+				}
 				Google.Apis.Calendar.v3.Data.EventAttachment attachment = new Google.Apis.Calendar.v3.Data.EventAttachment();
 				attachment.Title = fileItem.Name;
 				attachment.FileId = fileItem.Id;
 				attachment.FileUrl = fileItem.WebContentLink;
-				dbMsg += "," + attachment.Title + ",fileId=" + attachment.FileId + ",fileUrl= " + attachment.FileUrl;
+				dbMsg += "," + attachment.Title + ",fileUrl= " + attachment.FileUrl;
 				attachment.MimeType = fileItem.MimeType;
 				attachment.ETag = fileItem.MimeType;
 				dbMsg += "  ,mimeType=" + attachment.MimeType + ",eTag= " + attachment.ETag;
+				attachment.IconLink = fileItem.IconLink;
 				dbMsg += "  ,iconLink= " + attachment.IconLink;
 				dbMsg += "  ,attachments= " + this.taregetEvent.Attachments.Count+"件";
 				this.taregetEvent.Attachments.Add(attachment);
@@ -902,13 +947,7 @@ Visibility	null	string
 			string TAG = "Attach_bt_Click";
 			string dbMsg = "[GEventEdit]";
 			try {
-				if (driveView == null) {
-					dbMsg += "GoogleDriveBrouserを再生成";
-					driveView = new GoogleDriveBrouser();
-					driveView.editView = this;
-					driveView.Show();
-					driveView.GoogleFolderListUp(Constant.TopFolderName);
-				}
+				ShowDriveBrouser();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1067,15 +1106,15 @@ Visibility	null	string
 				dbMsg += ",登録[" + retFileID + "]";
 				//添付ファイルに追加
 				File savedFile = GDriveUtil.FindById(retFileID);
-				Google.Apis.Calendar.v3.Data.EventAttachment agFile = new Google.Apis.Calendar.v3.Data.EventAttachment();
-				agFile.FileId =retFileID;
-				agFile.Title = savedFile.Name;
-				agFile.ETag = savedFile.ETag;
-				agFile.FileUrl = savedFile.WebContentLink;
-				agFile.IconLink = savedFile.IconLink;
-				agFile.MimeType = savedFile.MimeType;
-
-				taregetEvent.Attachments.Add(agFile);
+				AttachmentsFromDrive(savedFile);
+				//Google.Apis.Calendar.v3.Data.EventAttachment agFile = new Google.Apis.Calendar.v3.Data.EventAttachment();
+				//agFile.FileId =retFileID;
+				//agFile.Title = savedFile.Name;
+				//agFile.ETag = savedFile.ETag;
+				//agFile.FileUrl = savedFile.WebContentLink;
+				//agFile.IconLink = savedFile.IconLink;
+				//agFile.MimeType = savedFile.MimeType;
+				//	taregetEvent.Attachments.Add(agFile);
 				dbMsg += ",Attachments=" + taregetEvent.Attachments.Count() + "件";
 
 				MyLog(TAG, dbMsg);
