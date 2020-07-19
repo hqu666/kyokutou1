@@ -595,6 +595,13 @@ namespace GoogleOSD {
 				addText += "<tr><td>受注No</td>" + "<td> : " + Constant.orderNumber + "</td></tr>";
 				addText += "<tr><td>管理番号</td>" + "<td> : " + Constant.managementNumber + "</td></tr>";
 				addText += "<tr><td>得意先</td>" + "<td> : " + Constant.customerName + "</td></tr>";
+				if(0 < taregetEvent.Attachments.Count) {
+					addText += "<tr><td>添付ファイル</td>" + "<td> : ";
+					foreach (Google.Apis.Calendar.v3.Data.EventAttachment tA in taregetEvent.Attachments) {
+						addText += "<a href=" + tA.FileUrl + ">" + tA.Title + "<a></br>";
+					}
+					addText += Constant.customerName + "</td></tr>";
+				}
 				addText += "</tbody >";
 
 				string description = taregetEvent.Description;
@@ -635,7 +642,7 @@ namespace GoogleOSD {
 		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, AriadneData selectedAriadneData)
 		{
 			string TAG = "AddEventInfo";
-			string dbMsg = "[WebWindow]";
+			string dbMsg = "[GoogleCalendarUtil]";
 			string retLink = "";
 			try {
 
@@ -656,6 +663,13 @@ namespace GoogleOSD {
 				addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";
 				addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";
 				addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";
+				if (0 < taregetEvent.Attachments.Count) {
+					addText += "<tr><td>添付ファイル</td>" + "<td> : ";
+					foreach (Google.Apis.Calendar.v3.Data.EventAttachment tA in taregetEvent.Attachments) {
+						addText += "<a href=" + tA.FileUrl + ">" + tA.Title + "<a></br>";
+					}
+					addText += Constant.customerName + "</td></tr>";
+				}
 				addText += "</tbody >";
 
 				string description = taregetEvent.Description;
@@ -692,6 +706,73 @@ namespace GoogleOSD {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
 			return retLink;
+		}
+
+		public AriadneData ReedEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent)
+		{
+			string TAG = "ReedEventInfo";
+			string dbMsg = "[GoogleCalendarUtil]";
+			 AriadneData selectedAriadneData = new AriadneData();
+			try {
+				string[] delimiterStart= { "</td>" + "<td> : " };
+				string[] delimiterEnd = { "</td></tr>" };
+
+				string description = taregetEvent.Description;
+				dbMsg += ",description= " + description + "\r\n";
+				string[] delimiter = { "<table>" };
+				string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+				string prefix = memoStrs[0];
+				string suffix = memoStrs[memoStrs.Length - 1];
+				dbMsg += ",suffix= " + suffix + "\r\n";
+				string[] delimiter3 = { "得意先" };
+				memoStrs = suffix.Split(delimiter3, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				string CustomerNameStr = memoStrs[memoStrs.Length - 1];
+				string[] delimiter2 = { "管理番号" };
+				memoStrs = prefix.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				string ManagementNumberStr = memoStrs[memoStrs.Length - 1];
+
+
+				string[] delimiter1 = { "受注No" };
+				memoStrs = prefix.Split(delimiter1, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				suffix = memoStrs[memoStrs.Length - 1];
+
+				memoStrs = suffix.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				suffix = memoStrs[memoStrs.Length - 1];
+
+				dbMsg += ",prefix= " + prefix;
+				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
+				selectedAriadneData.OrderNumber = memoStrs[memoStrs.Length - 1];
+				dbMsg += ">>" + selectedAriadneData.OrderNumber;
+
+				dbMsg += "\r\n管理番号= " + ManagementNumberStr;
+				memoStrs = ManagementNumberStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				suffix = memoStrs[memoStrs.Length - 1];
+
+				dbMsg += ",prefix= " + prefix;
+				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
+				selectedAriadneData.ManagementNumber = memoStrs[memoStrs.Length - 1];
+				dbMsg += ">>" + selectedAriadneData.ManagementNumber;
+
+				dbMsg += "\r\n得意先= " + CustomerNameStr;
+				memoStrs = CustomerNameStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				suffix = memoStrs[memoStrs.Length - 1];
+
+				dbMsg += ",prefix= " + prefix;
+				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
+				selectedAriadneData.CustomerName = memoStrs[memoStrs.Length - 1];
+				dbMsg += ">>" + selectedAriadneData.CustomerName;
+				dbMsg += ",suffix= " + suffix;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+			return selectedAriadneData;
 		}
 
 

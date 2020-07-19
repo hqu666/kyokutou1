@@ -38,8 +38,8 @@ namespace GoogleOSD {
 		private string selectYM = "";
 		private string b_selectYM = "";
 		private string taregetURL = null;
-		private IList<AriadneData> ariadneDatas = new List<AriadneData>();
-		private AriadneData selectedAriadneData;
+		public IList<AriadneData> ariadneDatas = new List<AriadneData>();
+		public AriadneData selectedAriadneData;
 
 		public GCalender()
 		{

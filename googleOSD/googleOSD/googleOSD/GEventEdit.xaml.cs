@@ -46,6 +46,10 @@ namespace GoogleOSD {
 				InitializeComponent();
 				this.FontSize = Constant.MyFontSize;
 				this.taregetEvent = taregetEvent;
+				//既にスケジュール登録してあるAriadneデータの抜き出し
+				if(selectedAriadneData== null) {
+					selectedAriadneData = GCalendarUtil.ReedEventInfo(taregetEvent);
+				}
 				this.selectedAriadneData = selectedAriadneData;
 				EventWrite(taregetEvent, selectedAriadneData);
 				MyLog(TAG, dbMsg);
@@ -741,7 +745,7 @@ Visibility	null	string
 					driveView = new GoogleDriveBrouser();
 					driveView.editView = this;
 					driveView.Show();
-					driveView.GoogleFolderListUp(Constant.TopFolderName);
+				//	driveView.GoogleFolderListUp(Constant.TopFolderName);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -772,9 +776,11 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-	
+
 		/// <summary>
 		/// GoogleDriveで選択したファイルを添付する
+		/// ①PutItemEventFile
+		/// ②GoogleDriveBrouser.File_list_lv_MouseDoubleClickでファイルだった場合
 		/// </summary>
 		/// <param name="fileItem"></param>
 		public void AttachmentsFromDrive(Google.Apis.Drive.v3.Data.File fileItem)
@@ -817,58 +823,58 @@ Visibility	null	string
 			string TAG = "AddAttachmentst";
 			string dbMsg = "[GEventEdit]";
 			try {
-						string title = attachment.Title;
-						string fileId = attachment.FileId;
-						string fileUrl = attachment.FileUrl;
-						dbMsg += "\r\n" + title + ",fileId=" + fileId + ",fileUrl= " + fileUrl;
-						string mimeType = attachment.MimeType;
-						string eTag = attachment.ETag;
-						dbMsg += "  ,mimeType=" + mimeType + ",eTag= " + eTag;
-						//親になるパネルを作る
-						StackPanel psp = new StackPanel();
-						psp.Orientation = Orientation.Horizontal;
-						psp.Margin = new Thickness(-5);
+					string title = attachment.Title;
+					string fileId = attachment.FileId;
+					string fileUrl = attachment.FileUrl;
+					dbMsg += "\r\n" + title + ",fileId=" + fileId + ",fileUrl= " + fileUrl;
+					string mimeType = attachment.MimeType;
+					string eTag = attachment.ETag;
+					dbMsg += "  ,mimeType=" + mimeType + ",eTag= " + eTag;
+					//親になるパネルを作る
+					StackPanel psp = new StackPanel();
+					psp.Orientation = Orientation.Horizontal;
+					psp.Margin = new Thickness(-5);
 
-						//ボタンに見える部分
-						Button bt = new Button();
-						bt.Click += Attachment_bt_Click;
-						bt.DataContext = fileUrl;
-						bt.Style = FindResource("bt-attachment") as System.Windows.Style;
-						//横並べ
-						StackPanel sp = new StackPanel();
-						sp.Orientation = Orientation.Horizontal;
-						sp.Margin = new Thickness(-5);
-						//アイコン
-						string iconLink = attachment.IconLink;
-						dbMsg += "  ,iconLink= " + iconLink;
-						Image img = new Image();
-						img.Source = new BitmapImage(new Uri("Resources/file.png", UriKind.Relative));
-						if (iconLink == null) {
-							if(mimeType.Equals(Constant.GoogleDriveMime_Folder)) {
-								img.Source = new BitmapImage(new Uri("Resources/folder.png", UriKind.Relative));
-							}
-						} else{
-							img.Source = new BitmapImage(new Uri(iconLink));
+					//ボタンに見える部分
+					Button bt = new Button();
+					bt.Click += Attachment_bt_Click;
+					bt.DataContext = fileUrl;
+					bt.Style = FindResource("bt-attachment") as System.Windows.Style;
+					//横並べ
+					StackPanel sp = new StackPanel();
+					sp.Orientation = Orientation.Horizontal;
+					sp.Margin = new Thickness(-5);
+					//アイコン
+					string iconLink = attachment.IconLink;
+					dbMsg += "  ,iconLink= " + iconLink;
+					Image img = new Image();
+					img.Source = new BitmapImage(new Uri("Resources/file.png", UriKind.Relative));
+					if (iconLink == null) {
+						if(mimeType.Equals(Constant.GoogleDriveMime_Folder)) {
+							img.Source = new BitmapImage(new Uri("Resources/folder.png", UriKind.Relative));
 						}
-						img.Height = 10;
-						img.Width = 10;
-						sp.Children.Add(img);
-						//ファイルの表示名
-						Label lb = new Label();
-						lb.Content = title;
-						//格納
-						sp.Children.Add(lb);
-						bt.Content = sp;
-						psp.Children.Add(bt);
-						//削除ボタン
-						Button dbt = new Button();
-						dbt.Click += Del_Attachment_bt_Click;
-						dbt.DataContext = attachment;
-						dbt.Style = FindResource("bt-dell") as System.Windows.Style;
-						psp.Children.Add(dbt);
-
-						//XAMLへ格納;
-						attachments_sp.Children.Add(psp);
+					} else{
+						img.Source = new BitmapImage(new Uri(iconLink));
+					}
+					img.Height = 10;
+					img.Width = 10;
+					sp.Children.Add(img);
+					//ファイルの表示名
+					Label lb = new Label();
+					lb.Content = title;
+					lb.Margin = new Thickness(-5);
+					//格納
+					sp.Children.Add(lb);
+					bt.Content = sp;
+					psp.Children.Add(bt);
+					//削除ボタン
+					Button dbt = new Button();
+					dbt.Click += Del_Attachment_bt_Click;
+					dbt.DataContext = attachment;
+					dbt.Style = FindResource("bt-dell") as System.Windows.Style;
+					psp.Children.Add(dbt);
+					//XAMLへ格納;
+				attachments_sp.Children.Add(psp);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1063,6 +1069,9 @@ Visibility	null	string
 					this.selectedAriadneData.StockGoogleFileID = null;
 				}
 				dbMsg += ",対象ファイル" + sendFiles.Count + "件";
+				if(selectedAriadneData == null) {
+					this.selectedAriadneData = mainView.ariadneDatas[0];
+				}
 				this.selectedAriadneData.sendFiles = sendFiles;
 				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.selectedAriadneData);
 				dbMsg += ",retLink=" + retLink;
@@ -1107,14 +1116,6 @@ Visibility	null	string
 				//添付ファイルに追加
 				File savedFile = GDriveUtil.FindById(retFileID);
 				AttachmentsFromDrive(savedFile);
-				//Google.Apis.Calendar.v3.Data.EventAttachment agFile = new Google.Apis.Calendar.v3.Data.EventAttachment();
-				//agFile.FileId =retFileID;
-				//agFile.Title = savedFile.Name;
-				//agFile.ETag = savedFile.ETag;
-				//agFile.FileUrl = savedFile.WebContentLink;
-				//agFile.IconLink = savedFile.IconLink;
-				//agFile.MimeType = savedFile.MimeType;
-				//	taregetEvent.Attachments.Add(agFile);
 				dbMsg += ",Attachments=" + taregetEvent.Attachments.Count() + "件";
 
 				MyLog(TAG, dbMsg);
@@ -1283,6 +1284,10 @@ Visibility	null	string
 					msgStr += "	を登録しました";
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					dbMsg += ",result=" + result;
+					string ym = String.Format("yyyyMM", startDT.ToString());
+					msgStr += "	,ym=" + ym;
+					MonthInfo monthInfo = new MonthInfo(ym);
+					mainView.CreateCalendar(monthInfo);
 					QuitMe();
 				}
 				MyLog(TAG, dbMsg);
