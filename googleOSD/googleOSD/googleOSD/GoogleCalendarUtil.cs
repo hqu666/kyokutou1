@@ -747,6 +747,7 @@ namespace GoogleOSD {
 				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
 				selectedAriadneData.OrderNumber = memoStrs[memoStrs.Length - 1];
 				dbMsg += ">>" + selectedAriadneData.OrderNumber;
+				Constant.orderNumber = selectedAriadneData.OrderNumber;                                             //受注No
 
 				dbMsg += "\r\n管理番号= " + ManagementNumberStr;
 				memoStrs = ManagementNumberStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
@@ -757,6 +758,7 @@ namespace GoogleOSD {
 				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
 				selectedAriadneData.ManagementNumber = memoStrs[memoStrs.Length - 1];
 				dbMsg += ">>" + selectedAriadneData.ManagementNumber;
+				Constant.managementNumber = selectedAriadneData.ManagementNumber;           //管理番号
 
 				dbMsg += "\r\n得意先= " + CustomerNameStr;
 				memoStrs = CustomerNameStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
@@ -767,7 +769,7 @@ namespace GoogleOSD {
 				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
 				selectedAriadneData.CustomerName = memoStrs[memoStrs.Length - 1];
 				dbMsg += ">>" + selectedAriadneData.CustomerName;
-				dbMsg += ",suffix= " + suffix;
+				Constant.customerName = selectedAriadneData.CustomerName;                                      //得意先
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
