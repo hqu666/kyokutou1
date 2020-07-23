@@ -32,6 +32,7 @@ namespace GoogleOSD {
 		public static string DriveOtherView = "https://drive.google.com/drive/folders/";
 		public static string RootFolderName = "KSクラウド";            //保存先サーバのルートフォルダ
 		public static string RootFolderID = "";
+		public static string RootFolderURL = "https://drive.google.com/drive/my-drive";         //だとマイドライブすべてを表示
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
 		public static string WebStratUrl ="https://drive.google.com/drive/my-drive";		///Googleマイドライブ

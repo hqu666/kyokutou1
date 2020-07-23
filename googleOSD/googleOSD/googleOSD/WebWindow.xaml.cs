@@ -10,6 +10,7 @@ namespace GoogleOSD {
 	public partial class WebWindow : Window {
 		public GoogleAuth authWindow;
 		public GCalender mainView;
+		public GEventEdit eventEdit;
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 		public string b_UrlStr;
@@ -209,8 +210,10 @@ namespace GoogleOSD {
 					DateTime dt = new DateTime(int.Parse(strs[strs.Length - 3]), int.Parse(strs[strs.Length - 2]), int.Parse(strs[strs.Length - 1]));
 					yearMonth =String.Format("{0:yyyyMM}", dt);
 					MonthInfo monthInfo = new MonthInfo(yearMonth);
-					//カレンダーを更新
-					mainView.CreateCalendar(monthInfo);
+					if(mainView != null) {
+						//カレンダーを更新
+						mainView.CreateCalendar(monthInfo);
+					}
 					//webを閉じる
 					QuitMe();
 					//		}
@@ -342,6 +345,9 @@ namespace GoogleOSD {
 			string TAG = "QuitMe";
 			string dbMsg = "[WebWindow]";
 			try {
+				if (eventEdit != null) {
+					eventEdit.webWindow = null;
+				}
 				if (mainView != null) {
 					mainView.webWindow = null;
 				}

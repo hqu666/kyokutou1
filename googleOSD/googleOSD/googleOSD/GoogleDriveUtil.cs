@@ -211,7 +211,7 @@ namespace GoogleOSD {
 		/// <param name="parentFolderId">作成する位置</param>
 		/// <param name="driveId">できれば指定</param>
 		/// <returns>作成したフォルダのID</returns>
-		public string CreateFolder(string name, string parentFolderId = null, string driveId = null)
+		public File CreateFolder(string name, string parentFolderId = null, string driveId = null)
 		{
 			string TAG = "CreateFolder";
 			string dbMsg = "[GoogleDriveUtil]";
@@ -219,12 +219,16 @@ namespace GoogleOSD {
 			File newFolder = new File();
 			try {
 				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
-				Task<string> folder = Task.Run(() => {
-					return FindByName(name, SearchFilter.FOLDER);
+				SearchFilter filter = SearchFilter.NONE;
+				var queries = new List<string>() { $"name = '{ name }'" };
+				if (filter != SearchFilter.NONE) queries.Add(filter.ToQuery());
+				Task<File> folder = Task.Run(() => {
+					return FindFile(queries);
 				});
+
 				folder.Wait();
-				string numberFolderId = folder.Result;
-				string folderId = folder.Result;
+				newFolder = folder.Result;
+				string folderId = newFolder.Id;
 				if (folderId == null) {
 					File meta = new File();
 					meta.Name = name;
@@ -252,7 +256,7 @@ namespace GoogleOSD {
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
 			}
-			return retStr;
+			return newFolder;
 		}
 
 		/// <summary>
@@ -542,7 +546,7 @@ namespace GoogleOSD {
 				//仮処理；最初に拾えたファイルのParentsをdriveIdとする
 				Constant.DriveId = Constant.GDriveFiles.First().Parents[0];
 				dbMsg += ">>rootFolder作成";
-				Task<string> rr = Task.Run(() => {
+				Task<File> rr = Task<File>.Run(() => {
 					return CreateFolder(Constant.RootFolderName, Constant.DriveId);
 				});
 				rr.Wait();
@@ -551,10 +555,12 @@ namespace GoogleOSD {
 					Util.MyLog(TAG, dbMsg);
 					return null;
 				}
-				Constant.RootFolderID = rr.Result;
+				Constant.RootFolderID = rr.Result.Id;
 				dbMsg += "[" + Constant.RootFolderID + "]" + Constant.RootFolderName;
-				dbMsg += "、" + Constant.AriadneEventNames.Count() + "件";
-
+				Constant.RootFolderURL = "https://drive.google.com/drive/folders/" + Constant.RootFolderID; 
+				dbMsg +=  ". " + Constant.RootFolderURL;
+				dbMsg += "[" + Constant.AriadneEventNames.Count() + "件";
+/*
 				//案件、工程、一般　のAriadneEventフォルダ作成
 				foreach (string topFolderName in Constant.AriadneEventNames) {
 					string topFolderId = "";
@@ -580,6 +586,7 @@ namespace GoogleOSD {
 					}
 					dbMsg += topFolderName;
 				}
+				*/
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);

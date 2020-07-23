@@ -655,29 +655,29 @@ Visibility	null	string
 					}
 					//仮処理；最初に拾えたファイルのParentsをdriveIdとする
 					Constant.DriveId = Constant.GDriveFiles.First().Parents[0];
-					Task<string> rootRes = Task<string>.Run(() => {
+					Task<File> rootRes = Task<File>.Run(() => {
 						dbMsg += "  ,ルート= " + Constant.RootFolderName;
 						return GDriveUtil.CreateFolder(Constant.RootFolderName, Constant.DriveId);
 					});
 					rootRes.Wait();
-					string rootFolderId = rootRes.Result;
+					string rootFolderId = rootRes.Result.Id;
 					dbMsg += "[" + rootFolderId + "] ";
-					Task<string> topRes = Task<string>.Run(() => {
+					Task<File> topRes = Task<File>.Run(() => {
 						dbMsg += ",top=" + Constant.AriadneEventAnken;
 						return GDriveUtil.CreateFolder(Constant.AriadneEventAnken, rootFolderId);
 					});
 					topRes.Wait();
-					string topFolderId = topRes.Result;
+					string topFolderId = topRes.Result.Id;
 					dbMsg += "[" + topFolderId + "] ";
 
-		//			dbMsg += "  、イベント：案件[" + Constant.AriadneAnkenFolderId + "] に ";
-					Task<string> rr = Task<string>.Run(() => {
+					//			dbMsg += "  、イベント：案件[" + Constant.AriadneAnkenFolderId + "] に ";
+					Task<File> rr = Task<File>.Run(() => {
 						dbMsg += "  ,案件= " + selectedAriadneData.ItemNumber;
 						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, topFolderId);
 					});
 					rr.Wait();
 					Task.WaitAll(rootRes,topRes, rr);
-					string itemFolderId = rr.Result;
+					string itemFolderId = rr.Result.Id;
 					dbMsg += "[ " + itemFolderId +"]を作成";				//出来ていない
 					// Note that you can have more than one file.
 					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -695,7 +695,7 @@ Visibility	null	string
 						return GDriveUtil.CreateFolder(parent, itemFolderId);
 					});
 					rr.Wait();
-					string parentFolderId = rr.Result;
+					string parentFolderId = rr.Result.Id;
 					dbMsg += "[ " + parentFolderId + "]";
 					string fileId = PutInFoldrFile(rFile, itemFolderId,  taregetEvent);
 					dbMsg += ">>作成= " + fileId;
@@ -724,13 +724,39 @@ Visibility	null	string
 			string TAG = "Attachments_sp_MouseUp";
 			string dbMsg = "[GEventEdit]";
 			try {
-				ShowDriveBrouser();
+				//		ShowDriveBrouser();
+				ShowGoogleDrive();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 
 		}
+
+		/// <summary>
+		/// Googleドライブを開く
+		/// </summary>
+		private void ShowGoogleDrive()
+		{
+			string TAG = "ShowGoogleDrive";
+			string dbMsg = "[GEventEdit]";
+			try {
+				dbMsg += ". " + Constant.RootFolderURL;
+				string DriveURL = Constant.RootFolderURL;
+				dbMsg += "DriveURL=" + DriveURL;
+				if (webWindow == null) {
+					dbMsg += "webでGoogleDriveを表示";
+					webWindow = new WebWindow();
+					webWindow.eventEdit = this;
+					webWindow.Show();
+					webWindow.SetMyURL(new Uri(@DriveURL));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		/// <summary>
 		/// ShowDriveBrouserを表示
@@ -993,23 +1019,23 @@ Visibility	null	string
 				string parentFolderName = this.selectedAriadneData.ItemNumber;
 				//案件などAriadneEventfフォルダ直下に案件別フォルダを作成もしくは既存IDの取得
 				string itermFolderName = this.selectedAriadneData.ItemNumber;
-				Task<string> rr = Task.Run(() => {
+				Task<File> rr = Task<File>.Run(() => {
 					return GDriveUtil.CreateFolder(itermFolderName, Constant.AriadneAnkenFolderId);
 				});
 				rr.Wait();
-				string itemFolderId = rr.Result; 
+				string itemFolderId = rr.Result.Id; 
 				dbMsg += ",案件直下の案件名フォルダ[" + itemFolderId + "]";
 				rr = Task.Run(() => {
 					return GDriveUtil.CreateFolder(itermFolderName, Constant.AriadneKouteiFolderId);
 				});
 				rr.Wait();
-				string processFolderId = rr.Result;
+				string processFolderId = rr.Result.Id;
 				dbMsg += ",工程名フォルダ[" + processFolderId + "]";
 				rr = Task.Run(() => {
 					return GDriveUtil.CreateFolder(itermFolderName, Constant.AriadneOtherFolderId);
 				});
 				rr.Wait();
-				string otherFolderId = rr.Result;
+				string otherFolderId = rr.Result.Id;
 				dbMsg += ",一般名フォルダ[" + otherFolderId + "]";
 
 				//Googleドライブにファイルコピー
@@ -1105,11 +1131,11 @@ Visibility	null	string
 				string parent = strs[strs.Length - 2];
 				dbMsg += "　,parent=" + parent;
 				//伝票名のフォルダ
-				Task<string> rr = Task.Run(() => {
+				Task<File> rr = Task<File>.Run(() => {
 					return GDriveUtil.CreateFolder(parent, eventFolderID);
 				});
 				rr.Wait();
-				string numberFolderId = rr.Result;
+				string numberFolderId = rr.Result.Id;
 				dbMsg += ",伝票番号フォルダ[" + numberFolderId + "]";
 				retFileID = GDriveUtil.UploadFile(name, fullPass, numberFolderId);
 				dbMsg += ",登録[" + retFileID + "]";
