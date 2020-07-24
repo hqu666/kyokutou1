@@ -660,13 +660,14 @@ namespace GoogleOSD {
 
 				//追加する項目
 				string addText = "<table><tbody>";
+				addText += "<tr><td>案件番号</td>" + "<td> : " + selectedAriadneData.ItemNumber + "</td></tr>";
 				addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";
 				addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";
 				addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";
 				if (0 < taregetEvent.Attachments.Count) {
 					addText += "<tr><td>添付ファイル</td>" + "<td> : ";
 					foreach (Google.Apis.Calendar.v3.Data.EventAttachment tA in taregetEvent.Attachments) {
-						addText += "<a href=" + tA.FileUrl + ">" + tA.Title + "<a></br>";
+						addText += "<a href=" + tA.FileUrl + ">" + tA.Title + "</a><br>";
 					}
 					addText += Constant.customerName + "</td></tr>";
 				}
@@ -732,22 +733,45 @@ namespace GoogleOSD {
 				memoStrs = prefix.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
 				prefix = memoStrs[0];
 				string ManagementNumberStr = memoStrs[memoStrs.Length - 1];
-
-
 				string[] delimiter1 = { "受注No" };
 				memoStrs = prefix.Split(delimiter1, StringSplitOptions.RemoveEmptyEntries);
 				prefix = memoStrs[0];
-				suffix = memoStrs[memoStrs.Length - 1];
+				string OrderNumberStr = memoStrs[memoStrs.Length - 1];
+				string[] delimiter4 = { "案件番号" };
+				memoStrs = prefix.Split(delimiter4, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				string ItemNumberStr = memoStrs[memoStrs.Length - 1];
 
-				memoStrs = suffix.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
+				//suffix = memoStrs[memoStrs.Length - 1];
+				//memoStrs = suffix.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
+				//prefix = memoStrs[0];
+				//suffix = memoStrs[memoStrs.Length - 1];
+
+				//dbMsg += ",prefix= " + prefix;
+				//memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
+				//selectedAriadneData.OrderNumber = memoStrs[memoStrs.Length - 1];
+				//dbMsg += ">>" + selectedAriadneData.OrderNumber;
+				//Constant.orderNumber = selectedAriadneData.OrderNumber;                                             //受注No
+				dbMsg += "\r\n案件番号= " + ItemNumberStr;
+				memoStrs = ItemNumberStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
 				prefix = memoStrs[0];
 				suffix = memoStrs[memoStrs.Length - 1];
 
 				dbMsg += ",prefix= " + prefix;
 				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
-				selectedAriadneData.OrderNumber = memoStrs[memoStrs.Length - 1];
-				dbMsg += ">>" + selectedAriadneData.OrderNumber;
-				Constant.orderNumber = selectedAriadneData.OrderNumber;                                             //受注No
+				selectedAriadneData.ItemNumber = memoStrs[memoStrs.Length - 1];
+				dbMsg += ">>" + selectedAriadneData.ItemNumber;
+
+				dbMsg += "\r\n受注No= " + OrderNumberStr;
+				memoStrs = OrderNumberStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
+				prefix = memoStrs[0];
+				suffix = memoStrs[memoStrs.Length - 1];
+
+				dbMsg += ",prefix= " + prefix;
+				memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
+				selectedAriadneData.ManagementNumber = memoStrs[memoStrs.Length - 1];
+				dbMsg += ">>" + selectedAriadneData.ManagementNumber;
+				Constant.orderNumber = selectedAriadneData.ManagementNumber;           //受注No
 
 				dbMsg += "\r\n管理番号= " + ManagementNumberStr;
 				memoStrs = ManagementNumberStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);

@@ -72,13 +72,7 @@ namespace GoogleOSD {
 				dbMsg += "taregetEvent=" + taregetEvent.Summary;
 				titol_tv.Text = taregetEvent.Summary;
 				SetDate(taregetEvent);
-				//if(taregetEvent.OriginalStartTime !=null) {
-				//	time_zone_lb.Content += taregetEvent.OriginalStartTime.TimeZone;
-				//}
 				SetDaylong(taregetEvent);
-				/*
-				<ComboBox Name="kurikaesi_cb" Margin="10,0,0,0" >
-	*/
 				if (taregetEvent.Location != null) {
 					location_tb.Text = taregetEvent.Location;
 				}
@@ -89,24 +83,6 @@ namespace GoogleOSD {
 				//	email_lb.Content = taregetEvent.Organizer.Email;
 				//}
 
-				/*
-				<Label Grid.Row="8" Grid.Column="0"   
-										Content="予定" 
-									/>
-						<StackPanel Grid.Row="8" Grid.Column="1"   Orientation="Horizontal"
-												 Margin="0,0,5,0" >
-							<ComboBox Name="yotei_cb" SelectedIndex="1" >
-								<Button Content="予定あり"/>
-								<Button Content="予定なし"/>
-							</ComboBox>
-							<ComboBox Name="koukai_cb" SelectedIndex="1" >
-								<Button Content="デフォルトの公開設定"/>
-								<Button Content="公開"/>
-								<Button Content="非公開"/>
-							</ComboBox>
-							<Label Name="koukai" Content="デフォルトの公開予定" Margin="0,0,0,0" />
-						</StackPanel>
-				*/
 				SetColor(taregetEvent.ColorId);
 				SetAttachments(taregetEvent.Attachments , selectedAriadneData);
 				SetDescription(taregetEvent);
@@ -676,7 +652,7 @@ Visibility	null	string
 						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, topFolderId);
 					});
 					rr.Wait();
-					Task.WaitAll(rootRes,topRes, rr);
+					//Task.WaitAll(rootRes,topRes, rr);
 					string itemFolderId = rr.Result.Id;
 					dbMsg += "[ " + itemFolderId +"]を作成";				//出来ていない
 					// Note that you can have more than one file.
@@ -698,6 +674,7 @@ Visibility	null	string
 					string parentFolderId = rr.Result.Id;
 					dbMsg += "[ " + parentFolderId + "]";
 					string fileId = PutInFoldrFile(rFile, itemFolderId,  taregetEvent);
+
 					dbMsg += ">>作成= " + fileId;
 					Google.Apis.Drive.v3.Data.File fileItem = GDriveUtil.FindByNameParent(name, parent);
 					if (fileItem == null) {
@@ -734,7 +711,7 @@ Visibility	null	string
 		}
 
 		/// <summary>
-		/// Googleドライブを開く
+		/// WebViewでGoogleドライブを開く
 		/// </summary>
 		private void ShowGoogleDrive()
 		{
@@ -759,7 +736,7 @@ Visibility	null	string
 
 
 		/// <summary>
-		/// ShowDriveBrouserを表示
+		/// XAMLのDriveBrouserを表示
 		/// </summary>
 		private void ShowDriveBrouser()
 		{
@@ -822,9 +799,14 @@ Visibility	null	string
 				}
 				Google.Apis.Calendar.v3.Data.EventAttachment attachment = new Google.Apis.Calendar.v3.Data.EventAttachment();
 				attachment.Title = fileItem.Name;
+				dbMsg += "," + attachment.Title ;
 				attachment.FileId = fileItem.Id;
-				attachment.FileUrl = fileItem.WebContentLink;
-				dbMsg += "," + attachment.Title + ",fileUrl= " + attachment.FileUrl;
+				if (fileItem.WebContentLink != null){
+					attachment.FileUrl = fileItem.WebContentLink;
+				}else{
+					attachment.FileUrl = "https://drive.google.com/drive/folders/" + fileItem.Id;
+				}
+				dbMsg += ",fileUrl= " + attachment.FileUrl;
 				attachment.MimeType = fileItem.MimeType;
 				attachment.ETag = fileItem.MimeType;
 				dbMsg += "  ,mimeType=" + attachment.MimeType + ",eTag= " + attachment.ETag;
@@ -1124,7 +1106,11 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			string retFileID = null;
 			try {
-				dbMsg += "イベント["+ eventFolderID + "] に " + fullPass + "を作成";
+				dbMsg += "イベント["+ eventFolderID + "]  ";
+				string eventIDStr = String.Format("yyyyMMddhhmm", taregetEvent.Start.DateTime);
+				dbMsg += eventIDStr;
+				dbMsg += "に " + fullPass + "を作成";
+
 				string[] strs = fullPass.Split('\\');
 				string name = strs[strs.Length - 1];
 				dbMsg += "　,name=" + name;

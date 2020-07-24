@@ -218,7 +218,7 @@ namespace GoogleOSD {
 			string retStr = null;
 			File newFolder = new File();
 			try {
-				dbMsg += "[" + driveId + "][" + parentFolderId + "]" + name;
+				dbMsg += "[drive:" + driveId + "][parent:" + parentFolderId + "]" + name;
 				SearchFilter filter = SearchFilter.NONE;
 				var queries = new List<string>() { $"name = '{ name }'" };
 				if (filter != SearchFilter.NONE) queries.Add(filter.ToQuery());
@@ -228,7 +228,10 @@ namespace GoogleOSD {
 
 				folder.Wait();
 				newFolder = folder.Result;
-				string folderId = newFolder.Id;
+				string folderId = null;
+				if (newFolder != null) {
+					 folderId = newFolder.Id;
+				}
 				if (folderId == null) {
 					File meta = new File();
 					meta.Name = name;
@@ -550,7 +553,7 @@ namespace GoogleOSD {
 					return CreateFolder(Constant.RootFolderName, Constant.DriveId);
 				});
 				rr.Wait();
-				if (rootFolderId == null) {
+				if (rr == null) {
 					dbMsg += ">>失敗";
 					Util.MyLog(TAG, dbMsg);
 					return null;
@@ -560,7 +563,7 @@ namespace GoogleOSD {
 				Constant.RootFolderURL = "https://drive.google.com/drive/folders/" + Constant.RootFolderID; 
 				dbMsg +=  ". " + Constant.RootFolderURL;
 				dbMsg += "[" + Constant.AriadneEventNames.Count() + "件";
-/*
+
 				//案件、工程、一般　のAriadneEventフォルダ作成
 				foreach (string topFolderName in Constant.AriadneEventNames) {
 					string topFolderId = "";
@@ -572,7 +575,7 @@ namespace GoogleOSD {
 						dbMsg += ">>失敗";
 						Util.MyLog(TAG, dbMsg);
 					}
-					topFolderId = rr.Result;
+					topFolderId = rr.Result.Id;
 					dbMsg += "[" + topFolderId + "]" + topFolderName;
 					if(topFolderName.Equals(Constant.AriadneEventAnken)){
 						Constant.AriadneAnkenFolderId = topFolderId;
@@ -586,7 +589,7 @@ namespace GoogleOSD {
 					}
 					dbMsg += topFolderName;
 				}
-				*/
+				
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);

@@ -161,12 +161,14 @@ namespace GoogleOSD {
 				if(wv != null) {
 					dbMsg += ",sender.Source=　" + wv.Source;
 				}
+				//hrefはここ
 				dbMsg += ",args.Uri=　" + args.Uri;
 				string documentTitle = web_wb.DocumentTitle.ToString();
 				dbMsg += ",documentTitle=" + documentTitle;
 				if (web_wb.DocumentTitle != null) {
 					this.Title = web_wb.DocumentTitle;
 				}
+				//その時表示しているwebページのURL
 				string source = @web_wb.Source.ToString();
 				dbMsg += ",Source=　" + source;
 				//if (source.Contains("eventedit")) {
@@ -183,6 +185,7 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+	
 		/// <summary>
 		/// 新しいコンテンツの読み込みを開始
 		/// </summary>
