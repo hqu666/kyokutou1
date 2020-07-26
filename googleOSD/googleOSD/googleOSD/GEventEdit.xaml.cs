@@ -1277,7 +1277,24 @@ Visibility	null	string
 		{
 			string TAG = "Del_bt_Click";
 			string dbMsg = "[GEventEdit]";
+			string retLink = taregetEvent.HtmlLink;
 			try {
+				String titolStr = Constant.ApplicationName;
+				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				String msgStr = startDT + "～" + endDT;
+				msgStr += "	\r\n" + taregetEvent.Summary;
+				msgStr += "	を削除しました";
+
+				GCalendarUtil.DeleteGEvents(taregetEvent);
+
+				MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				dbMsg += ",result=" + result;
+				string ym = String.Format("{0:yyyyMM}", startDT);
+				msgStr += "	,ym=" + ym;
+				MonthInfo monthInfo = new MonthInfo(ym);
+				mainView.CreateCalendar(monthInfo);
+				dbMsg += msgStr;
 				QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

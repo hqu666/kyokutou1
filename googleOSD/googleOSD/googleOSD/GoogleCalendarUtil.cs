@@ -566,6 +566,38 @@ namespace GoogleOSD {
 			return retLink;
 		}
 
+		/// <summary>
+		/// 予定を削除
+		/// ※成功/失敗の判別不明
+		/// </summary>
+		/// <param name="eventItem"></param>
+		/// <returns></returns>
+		public void DeleteGEvents(Google.Apis.Calendar.v3.Data.Event eventItem)
+		{
+			string TAG = "DeleteGEvents";
+			string dbMsg = "[GoogleCalendarUtil]";
+			string retStr = null;
+			try {
+				dbMsg += ",Token= " + Constant.MyCalendarCredential.Token;
+				string calendarId = "primary";
+				dbMsg += "[calendarId:" + calendarId + "]";
+				String eventId = eventItem.Id;
+				dbMsg += "[eventId:" + eventId +"]";
+				CalendarService service = new CalendarService(new BaseClientService.Initializer() {
+					HttpClientInitializer = Constant.MyCalendarCredential,
+					ApplicationName = Constant.ApplicationName,
+				});
+				EventsResource.DeleteRequest request = service.Events.Delete(calendarId, eventId);
+				retStr = request.Execute();
+				//retLink = request.;
+				//dbMsg += ">>" + retLink;
+				Util.MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				Util.MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 		///webからのスケジュール操作////////////////////////////////////////////////////////
 		/// <summary>
 		/// 選択された予定へ
