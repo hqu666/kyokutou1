@@ -1086,7 +1086,8 @@ Visibility	null	string
 				MyLog(TAG, dbMsg);
 				if (retLink != null) {
 					if (!retLink.Equals("")) {
-						QuitToWeb(retLink);
+						ExecuteRes(retLink);
+						//						QuitToWeb(retLink);
 					}
 				}
 			} catch (Exception er) {
@@ -1191,58 +1192,9 @@ Visibility	null	string
 				string Summary = taregetEvent.Summary;
 				dbMsg += "," + Summary;
 				string eDescription = taregetEvent.Description;
-				//if (eDescription == null) {
-				//	eDescription = "";
-				//} else {
-				//	eDescription += "</br>";
-				//}
 				dbMsg += ",Description=" + eDescription;
-				//if (Constant.GDriveSelectedFiles != null) {
-				//	dbMsg += ",添付⁼" + Constant.GDriveSelectedFiles.Count + "件";
-				//	if (0 < Constant.GDriveSelectedFiles.Count) {
-				//		if (eDescription.Contains("添付ファイル")) {
-				//			eDescription += "<table>";
-				//		} else {
-				//			eDescription += "添付ファイル</br><table>";
-				//		}
-				//		foreach (Google.Apis.Drive.v3.Data.File fileItem in Constant.GDriveSelectedFiles) {
-				//			string fId = fileItem.Id;
-				//			dbMsg += "\r\n" + fId;
-				//			string ParentsID = fileItem.Parents[0];
-				//			dbMsg += "[Parents=" + ParentsID;
-				//			Google.Apis.Drive.v3.Data.File rFile = GDriveUtil.FindById(ParentsID);
-				//			string ParentsName = rFile.Name;
-				//			dbMsg += "]" + ParentsName;
-				//			string fName = fileItem.Name.ToString();
-				//			dbMsg += "," + fName;
-				//			string fLink = fileItem.WebContentLink.ToString();
-				//			dbMsg += "," + fLink;
-				//			eDescription += "<tr>";
-				//			eDescription += "<td>" + ParentsName + "</td>";
-				//			eDescription += "<td  style=\"padding: 10px 10px; \"><a href=\"" + fLink + "\">" + fName + "</a></td>";
-				//			eDescription += "</tr>";
-				//		}
-				//		eDescription += "</table>";
-				//		dbMsg += ",Description=\r\n" + eDescription;
-				//		Constant.eventItem.Description = eDescription;
 				retLink = GCalendarUtil.UpDateGEvents(taregetEvent);
 				dbMsg += "\r\nretLink" + retLink;
-				//		try {
-				//			System.Diagnostics.Process.Start(retLink);              //webで表示
-				//		} catch (
-				//			   System.ComponentModel.Win32Exception noBrowser) {
-				//			if (noBrowser.ErrorCode == -2147467259)
-				//				MessageBox.Show(noBrowser.Message);
-				//		} catch (System.Exception other) {
-				//			MessageBox.Show(other.Message);
-				//		}
-
-				//	} else {
-				//		dbMsg += "添付するファイルが登録されていません";
-				//	}
-				//} else {
-				//	dbMsg += "添付するファイルの情報を取得できませんでした";
-				//}
 				MyLog(TAG, dbMsg);
 				ExecuteRes(retLink);
 			} catch (Exception er) {
@@ -1251,6 +1203,11 @@ Visibility	null	string
 			return retLink;
 		}
 
+		/// <summary>
+		/// 書込み・更新結果をwebで見せる
+		/// 現在未使用
+		/// </summary>
+		/// <param name="targetUrl"></param>
 		private void QuitToWeb(string targetUrl)
 		{
 			string TAG = "QuitToWeb";
@@ -1279,8 +1236,10 @@ Visibility	null	string
 			}
 		}
 
-
-
+		/// <summary>
+		/// 書込み・更新結果をダイアログで見せてから元のVieへ
+		/// </summary>
+		/// <param name="targetUrl"></param>
 		private void ExecuteRes(string retLink)
 		{
 			string TAG = "ExecuteRes";
@@ -1296,10 +1255,11 @@ Visibility	null	string
 					msgStr += "	を登録しました";
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					dbMsg += ",result=" + result;
-					string ym = String.Format("yyyyMM", startDT.ToString());
+					string ym = String.Format("{0:yyyyMM}", startDT);
 					msgStr += "	,ym=" + ym;
 					MonthInfo monthInfo = new MonthInfo(ym);
 					mainView.CreateCalendar(monthInfo);
+					dbMsg += msgStr;
 					QuitMe();
 				}
 				MyLog(TAG, dbMsg);
@@ -1390,8 +1350,6 @@ Visibility	null	string
 			}
 			this.Close();
 		}
-
-
 
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)

@@ -361,7 +361,7 @@ namespace GoogleOSD {
 				YearMonthComboMake(now);
 				CreateCalendar(this.cbYearMonth.SelectedItem as MonthInfo);
 				string selectName = "R" + String.Format("{0:yyyyMMdd}", now);       //数字になるものは名前にならない
-				dbMsg += ":rselectNameec=" + selectName;
+				dbMsg += ":selectName=" + selectName;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -489,9 +489,9 @@ namespace GoogleOSD {
 			string retStr = null;
 			try {
 				dbMsg += "," + monthInfo.YearMonth;
-				if (monthInfo.YearMonth.Equals(b_selectYM)) {
-					dbMsg += ">>同月";
-				} else {
+		//		if (monthInfo.YearMonth.Equals(b_selectYM)) {
+				//	dbMsg += ">>同月";
+				//} else {
 					Application.Current.MainWindow = this;
 					double windowWidth = Application.Current.MainWindow.Width - Ariadne_tv.Width - 20;
 					double windowHeight = Application.Current.MainWindow.Height;
@@ -865,7 +865,7 @@ namespace GoogleOSD {
 							}
 						}
 					}
-				}
+	//			}
 				b_selectYM = monthInfo.YearMonth;
 				retStr = monthInfo.YearMonth;
 				MyLog(TAG, dbMsg);

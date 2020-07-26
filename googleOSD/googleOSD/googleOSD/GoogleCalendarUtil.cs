@@ -569,6 +569,7 @@ namespace GoogleOSD {
 		///webからのスケジュール操作////////////////////////////////////////////////////////
 		/// <summary>
 		/// 選択された予定へ
+		/// WebWindow.MakeEventから
 		/// </summary>
 		public string ModifyingEvent(Google.Apis.Calendar.v3.Data.Event taregetEvent, DateTime timeCurrent)
 		{
@@ -725,6 +726,7 @@ namespace GoogleOSD {
 				string prefix = memoStrs[0];
 				string suffix = memoStrs[memoStrs.Length - 1];
 				dbMsg += ",suffix= " + suffix + "\r\n";
+				//末尾から分離
 				string[] delimiter3 = { "得意先" };
 				memoStrs = suffix.Split(delimiter3, StringSplitOptions.RemoveEmptyEntries);
 				prefix = memoStrs[0];
@@ -742,16 +744,7 @@ namespace GoogleOSD {
 				prefix = memoStrs[0];
 				string ItemNumberStr = memoStrs[memoStrs.Length - 1];
 
-				//suffix = memoStrs[memoStrs.Length - 1];
-				//memoStrs = suffix.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
-				//prefix = memoStrs[0];
-				//suffix = memoStrs[memoStrs.Length - 1];
-
-				//dbMsg += ",prefix= " + prefix;
-				//memoStrs = prefix.Split(delimiterStart, StringSplitOptions.RemoveEmptyEntries);
-				//selectedAriadneData.OrderNumber = memoStrs[memoStrs.Length - 1];
-				//dbMsg += ">>" + selectedAriadneData.OrderNumber;
-				//Constant.orderNumber = selectedAriadneData.OrderNumber;                                             //受注No
+				//先頭から読込み
 				dbMsg += "\r\n案件番号= " + ItemNumberStr;
 				memoStrs = ItemNumberStr.Split(delimiterEnd, StringSplitOptions.RemoveEmptyEntries);
 				prefix = memoStrs[0];
