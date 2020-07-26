@@ -1,0 +1,17 @@
+﻿<Window x:Class="GoogleOSD.ProgressDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoogleOSD"
+        mc:Ignorable="d"
+        Title="ProgressDialog" Height="150" Width="400">
+	<Grid>
+		<Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100"
+					x:Name="Progress_img" Source="Resources/DarsBar.gif"
+			/>
+		<TextBlock HorizontalAlignment="Left" Margin="115,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="100" Width="267" 
+			Text="処理中です。　しばらくお待ちください。" x:Name="Progress_msg_tb"
+		/>
+	</Grid>
+</Window>

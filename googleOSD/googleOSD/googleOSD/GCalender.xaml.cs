@@ -498,9 +498,11 @@ namespace GoogleOSD {
 					dbMsg += "window[" + windowWidth + "×" + windowHeight + "]";
 
 					CalendarContainer.Children.Clear();
+				//ProgressDialog progressDialog = new ProgressDialog();
+				//progressDialog.Show();
 
-					// グループボックス
-					GroupBox calendarGroup1 = new GroupBox();
+				// グループボックス
+				GroupBox calendarGroup1 = new GroupBox();
 					calendarGroup1.Style = FindResource("gp-normal") as System.Windows.Style;
 
 					// グリッド
@@ -869,6 +871,8 @@ namespace GoogleOSD {
 				b_selectYM = monthInfo.YearMonth;
 				retStr = monthInfo.YearMonth;
 				MyLog(TAG, dbMsg);
+		//		progressDialog.Close();
+
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
