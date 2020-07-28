@@ -801,17 +801,48 @@ Visibility	null	string
 				attachment.Title = fileItem.Name;
 				dbMsg += "," + attachment.Title ;
 				attachment.FileId = fileItem.Id;
+				dbMsg += ",fileUrl= " + attachment.FileUrl;
 				if (fileItem.WebContentLink != null){
 					attachment.FileUrl = fileItem.WebContentLink;
 				}else{
-					attachment.FileUrl = "https://drive.google.com/drive/folders/" + fileItem.Id;
+					//プレビューwebへ
+					attachment.FileUrl = @"https://drive.google.com/file/d/" +  fileItem.Id + "/view?usp=drive_web";
+					dbMsg += ">>" + attachment.FileUrl;
 				}
-				dbMsg += ",fileUrl= " + attachment.FileUrl;
 				attachment.MimeType = fileItem.MimeType;
 				attachment.ETag = fileItem.MimeType;
-				dbMsg += "  ,mimeType=" + attachment.MimeType + ",eTag= " + attachment.ETag;
-				attachment.IconLink = fileItem.IconLink;
-				dbMsg += "  ,iconLink= " + attachment.IconLink;
+				dbMsg += ",eTag= " + attachment.ETag;
+				dbMsg += "  ,mimeType=" + fileItem.MimeType ;
+				if (fileItem.IconLink != null) {
+					attachment.MimeType = fileItem.MimeType;
+				} else {
+					if (attachment.Title.Contains(".xls")) {
+						attachment.MimeType = @"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					} else if (attachment.Title.Contains(".doc")) {
+						attachment.MimeType = @"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					} else if (attachment.Title.Contains(".ppt")) {
+						attachment.MimeType = @"application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					} else if (attachment.Title.Contains(".pdf")) {
+						attachment.MimeType = @"application/pdf";
+					}
+					dbMsg += ">>" + attachment.MimeType;
+				}
+				dbMsg += "  ,iconLink= " + fileItem.IconLink;
+				if (fileItem.IconLink != null) {
+					attachment.IconLink = fileItem.IconLink;
+				} else {
+					attachment.IconLink = @"https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png";
+					if (attachment.Title.Contains(".xls")) {
+						attachment.IconLink = @"https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					}else if (attachment.Title.Contains(".doc")) {
+						attachment.IconLink = @"https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					} else if (attachment.Title.Contains(".ppt")) {
+						attachment.IconLink = @"https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					} else if (attachment.Title.Contains(".pdf")) {
+						attachment.IconLink = @"https://drive-thirdparty.googleusercontent.com/16/type/application/pdf";
+					}
+					dbMsg += ">>" + attachment.IconLink;
+				}
 				dbMsg += "  ,attachments= " + this.taregetEvent.Attachments.Count+"件";
 				this.taregetEvent.Attachments.Add(attachment);
 				dbMsg += " >> " +this. taregetEvent.Attachments.Count + "件";
