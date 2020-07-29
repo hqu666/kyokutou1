@@ -570,7 +570,6 @@ Visibility	null	string
 			}
 		}
 
-
 		private void Momo_tb_LostFocus(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Momo_tb_LostFocus";
@@ -734,7 +733,6 @@ Visibility	null	string
 			}
 		}
 
-
 		/// <summary>
 		/// XAMLのDriveBrouserを表示
 		/// </summary>
@@ -755,7 +753,6 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// 添付ファイル
@@ -809,9 +806,9 @@ Visibility	null	string
 					attachment.FileUrl = @"https://drive.google.com/file/d/" +  fileItem.Id + "/view?usp=drive_web";
 					dbMsg += ">>" + attachment.FileUrl;
 				}
-				attachment.MimeType = fileItem.MimeType;
-				attachment.ETag = fileItem.MimeType;
+				attachment.ETag = fileItem.ETag;
 				dbMsg += ",eTag= " + attachment.ETag;
+
 				dbMsg += "  ,mimeType=" + fileItem.MimeType ;
 				if (fileItem.IconLink != null) {
 					attachment.MimeType = fileItem.MimeType;
@@ -827,6 +824,7 @@ Visibility	null	string
 					}
 					dbMsg += ">>" + attachment.MimeType;
 				}
+
 				dbMsg += "  ,iconLink= " + fileItem.IconLink;
 				if (fileItem.IconLink != null) {
 					attachment.IconLink = fileItem.IconLink;
@@ -844,8 +842,8 @@ Visibility	null	string
 					dbMsg += ">>" + attachment.IconLink;
 				}
 				dbMsg += "  ,attachments= " + this.taregetEvent.Attachments.Count+"件";
-				this.taregetEvent.Attachments.Add(attachment);
-				dbMsg += " >> " +this. taregetEvent.Attachments.Count + "件";
+				taregetEvent.Attachments.Add(attachment);
+				dbMsg += " >> " + taregetEvent.Attachments.Count + "件";
 				MyLog(TAG, dbMsg);
 				AddAttachmentst(attachment);
 			} catch (Exception er) {
@@ -1050,7 +1048,7 @@ Visibility	null	string
 				rr.Wait();
 				string otherFolderId = rr.Result.Id;
 				dbMsg += ",一般名フォルダ[" + otherFolderId + "]";
-
+/*
 				//Googleドライブにファイルコピー
 				taregetEvent.Attachments = new System.Collections.Generic.List<Google.Apis.Calendar.v3.Data.EventAttachment>();
 				if (this.selectedAriadneData.EstimationPCPass != null) {
@@ -1111,7 +1109,10 @@ Visibility	null	string
 				if(selectedAriadneData == null) {
 					this.selectedAriadneData = mainView.ariadneDatas[0];
 				}
-				this.selectedAriadneData.sendFiles = sendFiles;
+				//			this.selectedAriadneData.sendFiles = sendFiles;
+				*/
+				dbMsg += " >> " + taregetEvent.Attachments.Count + "件";
+
 				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.selectedAriadneData);
 				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);

@@ -691,19 +691,31 @@ namespace GoogleOSD {
 					dbMsg += "taregetEvent=" + taregetEvent.Summary;
 				}
 
+				int AttachmentsCount = taregetEvent.Attachments.Count;
+				dbMsg += ",添付=" + AttachmentsCount + "件";
+
 				//追加する項目
-				string addText = "<table><tbody>";
+				string addText = "<table><tbody valign=" + "\"" + "top" + "\"" +">";
 				addText += "<tr><td>案件番号</td>" + "<td> : " + selectedAriadneData.ItemNumber + "</td></tr>";
 				addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";
 				addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";
 				addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";
+
 				if (0 < taregetEvent.Attachments.Count) {
-					addText += "<tr><td>添付ファイル</td>" + "<td> : ";
+					addText += "<tr valign=" + "\"" + "top" + "\"" + "><td>添付ファイル</td><td> ";
+					int RowCount = 1;
 					foreach (Google.Apis.Calendar.v3.Data.EventAttachment tA in taregetEvent.Attachments) {
-						addText += "<a href=" + tA.FileUrl + ">" + tA.Title + "</a><br>";
+						addText += " :<a href=" + tA.FileUrl + ">" + tA.Title + "</a>";
+						if(RowCount < AttachmentsCount) {
+							addText += "<br>";
+						}
+						RowCount++;
 					}
-					addText += Constant.customerName + "</td></tr>";
+					addText +=  "</td></tr>";
 				}
+
+				addText += "<tr valign = " + "\"" + "top" + "\"" + "><td>メモ</td>" + "<td> : <pre>" + selectedAriadneData.Memo + "</pre></td></tr>";
+
 				addText += "</tbody >";
 
 				string description = taregetEvent.Description;

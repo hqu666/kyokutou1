@@ -27,6 +27,10 @@ namespace GoogleOSD {
 		/// 得意先　:
 		/// </summary>
 		public string CustomerName { set; get; }
+		/// <summary>
+		/// メモ
+		/// </summary>
+		public string Memo { set; get; }
 
 		/// <summary>
 		/// 見積ファイルのPC保存位置

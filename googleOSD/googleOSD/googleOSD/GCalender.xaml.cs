@@ -84,7 +84,7 @@ namespace GoogleOSD {
 			//	ariadneData.ReceipttGoogleFileID = "NY20060003";              //入金ファイルのGoogleDriveID
 				ariadneData.ToOrderGoogleFileID = "HA20060008";              //発注ファイルのGoogleDriveID
 																			 //			ariadneData.ToOrderGoogleFileID = "HA20060009";              //発注ファイルのGoogleDriveID
-		//		ariadneData.StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
+				ariadneData.Memo = "これが一件目\r\n" + "二行目"; 
 				ariadneDatas.Add(ariadneData);
 
 				ariadneData = new AriadneData();
@@ -103,6 +103,7 @@ namespace GoogleOSD {
 				//ariadneData.ToOrderGoogleFileID = "HA20060006";              //発注ファイルのGoogleDriveID
 				//ariadneData.ToOrderGoogleFileID = "HA20060007";              //発注ファイルのGoogleDriveID
 				ariadneData.StockGoogleFileID = "SI20060002";              // 入荷・工事消込ファイルのGoogleDriveID
+				ariadneData.Memo = "これが２件目\r\n" + "二行目";
 				ariadneDatas.Add(ariadneData);
 
 
@@ -113,6 +114,7 @@ namespace GoogleOSD {
 				ariadneData.ManagementNumber = "工事2・現場1";      // 管理番号　:
 				ariadneData.CustomerName = "工事2取引先名";              // 得意先　:
 				ariadneData.EstimationGoogleFileID = "MI20060007";              // 見積ファイルのGoogleDriveID
+				ariadneData.Memo = "これが３件目\r\n" + "二行目";
 				ariadneDatas.Add(ariadneData);
 
 				dbMsg += ",AriadneDataFolder=" + Constant.AriadneDataFolder;
