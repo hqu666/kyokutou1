@@ -169,23 +169,31 @@ namespace GoogleOSD {
         #line hidden
         
         
-        #line 301 "..\..\GEventEdit.xaml"
+        #line 305 "..\..\GEventEdit.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.StackPanel drop_sp;
+        internal System.Windows.Controls.Grid attachments_g;
         
         #line default
         #line hidden
         
         
-        #line 308 "..\..\GEventEdit.xaml"
+        #line 318 "..\..\GEventEdit.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.TextBlock attachments_tb;
+        internal System.Windows.Controls.DataGrid attachments_dg;
         
         #line default
         #line hidden
         
         
-        #line 330 "..\..\GEventEdit.xaml"
+        #line 353 "..\..\GEventEdit.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.TextBox memo_tb;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 373 "..\..\GEventEdit.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button cancel_bt;
         
@@ -193,7 +201,7 @@ namespace GoogleOSD {
         #line hidden
         
         
-        #line 333 "..\..\GEventEdit.xaml"
+        #line 376 "..\..\GEventEdit.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button del_bt;
         
@@ -201,7 +209,7 @@ namespace GoogleOSD {
         #line hidden
         
         
-        #line 336 "..\..\GEventEdit.xaml"
+        #line 379 "..\..\GEventEdit.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button save_bt;
         
@@ -209,7 +217,7 @@ namespace GoogleOSD {
         #line hidden
         
         
-        #line 339 "..\..\GEventEdit.xaml"
+        #line 382 "..\..\GEventEdit.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBox htmlLink_lb;
         
@@ -334,51 +342,48 @@ namespace GoogleOSD {
             this.attachments_sp = ((System.Windows.Controls.StackPanel)(target));
             return;
             case 18:
-            this.drop_sp = ((System.Windows.Controls.StackPanel)(target));
-            
-            #line 302 "..\..\GEventEdit.xaml"
-            this.drop_sp.Drop += new System.Windows.DragEventHandler(this.Attachments_sp_Drop);
-            
-            #line default
-            #line hidden
-            
-            #line 303 "..\..\GEventEdit.xaml"
-            this.drop_sp.MouseUp += new System.Windows.Input.MouseButtonEventHandler(this.Attachments_sp_MouseUp);
-            
-            #line default
-            #line hidden
+            this.attachments_g = ((System.Windows.Controls.Grid)(target));
             return;
             case 19:
-            this.attachments_tb = ((System.Windows.Controls.TextBlock)(target));
+            this.attachments_dg = ((System.Windows.Controls.DataGrid)(target));
+            
+            #line 321 "..\..\GEventEdit.xaml"
+            this.attachments_dg.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(this.DataGrid1_SelectionChanged);
+            
+            #line default
+            #line hidden
             return;
             case 20:
+            this.memo_tb = ((System.Windows.Controls.TextBox)(target));
+            return;
+            case 21:
             this.cancel_bt = ((System.Windows.Controls.Button)(target));
             
-            #line 330 "..\..\GEventEdit.xaml"
+            #line 373 "..\..\GEventEdit.xaml"
             this.cancel_bt.Click += new System.Windows.RoutedEventHandler(this.Cancel_bt_Click);
             
             #line default
             #line hidden
             return;
-            case 21:
+            case 22:
             this.del_bt = ((System.Windows.Controls.Button)(target));
             
-            #line 333 "..\..\GEventEdit.xaml"
+            #line 376 "..\..\GEventEdit.xaml"
             this.del_bt.Click += new System.Windows.RoutedEventHandler(this.Del_bt_Click);
             
             #line default
             #line hidden
             return;
-            case 22:
+            case 23:
             this.save_bt = ((System.Windows.Controls.Button)(target));
             
-            #line 336 "..\..\GEventEdit.xaml"
+            #line 379 "..\..\GEventEdit.xaml"
             this.save_bt.Click += new System.Windows.RoutedEventHandler(this.Save_bt_Click);
             
             #line default
             #line hidden
             return;
-            case 23:
+            case 24:
             this.htmlLink_lb = ((System.Windows.Controls.TextBox)(target));
             return;
             }

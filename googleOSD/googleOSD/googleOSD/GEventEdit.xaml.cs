@@ -765,9 +765,11 @@ Visibility	null	string
 			try {
 				if (attachments != null) {
 					dbMsg += "Attachments" + attachments.Count + "件";
+
+
 					if (0 < attachments.Count) {
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
-							AddAttachmentst(attachment);
+				//			AddAttachmentst(attachment);
 						}
 					}
 				}

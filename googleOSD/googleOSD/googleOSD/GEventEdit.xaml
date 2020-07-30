@@ -277,8 +277,8 @@
 		<Label   Grid.Row="10" Grid.Column="2"  Content="管理番号" HorizontalAlignment="Right" />
 		<TextBox  Grid.Row="10" Grid.Column="3" 
 						Name="management_number_tb"  Text="123456789"  VerticalAlignment="Center" />
-		<Label  Grid.Row="12" Grid.Column="0"   Content="得意先" HorizontalAlignment="Right"  />
-		<TextBox  Grid.Row="12" Grid.Column="1"  Grid.ColumnSpan="3"
+		<Label  Grid.Row="11" Grid.Column="0"   Content="得意先" HorizontalAlignment="Right"  />
+		<TextBox  Grid.Row="11" Grid.Column="1"  Grid.ColumnSpan="3"
 						Name="customer_tb"  Text="ABCdef"   VerticalAlignment="Center"  />
 		<!--<Label Grid.Row="13" Grid.Column="0"   HorizontalAlignment="Right" VerticalAlignment="Top" Content="メモ"  Margin="0,5,5,0"  />-->
 		<!--<TextBox  Grid.Row="13"  Grid.Column="1" 
@@ -289,25 +289,68 @@
 		<WebBrowser  Grid.Row="14"  Grid.Column="1"  
 						Language="jp" 
 						Name="description_wb"/>-->
-		<Label  Grid.Row="13" Grid.Column="0" Grid.RowSpan="3" Content="添付ファイル" 
-							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0"  />
-		<StackPanel   Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" Orientation="Horizontal"  
+		<Label  Grid.Row="12" Grid.Column="0" Grid.RowSpan="3" Content="添付ファイル" 
+							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
+		<StackPanel   Grid.Row="12" Grid.Column="1"   Grid.ColumnSpan="3" Orientation="Horizontal"  
 								HorizontalAlignment="Stretch"  VerticalAlignment="Top"	Width="453"  Margin="0,0,0,8" 
 								Panel.ZIndex="10" 
 								Name="attachments_sp" 
 				/>
-		<StackPanel   Grid.Row="14"  Grid.Column="1"  Grid.ColumnSpan="3" Orientation="Horizontal"  
+		<!--<DataGrid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
+								 Height="56" Background="#FFE0DFDF" Grid.RowSpan="2"
+								 x:Name="attachments_dg" 
+								 Drop="Attachments_sp_Drop"  AllowDrop="true" 
+								MouseUp="Attachments_sp_MouseUp" VerticalAlignment="Center"/>-->
+		<Grid  Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
+			x:Name="attachments_g" Background="LightGray">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<!-- DataGrid（画面左側）：双方向バインド（UI上での変更がデータに反映される） -->
+			<DataGrid x:Name="attachments_dg"
+              AutoGenerateColumns="False" HorizontalAlignment="Left" 
+              ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
+              SelectionChanged="DataGrid1_SelectionChanged"
+              >
+				<DataGrid.Columns>
+					<DataGridTextColumn Binding="{Binding Index}" Header="Title" MinWidth="210" Width="Auto" />
+					<DataGridTextColumn Binding="{Binding Value}" Header="modifi" MinWidth="100" Width="Auto"  />
+					<DataGridTextColumn Binding="{Binding Value}" Header="サイズ" MinWidth="100" />
+					<DataGridTextColumn Binding="{Binding Value}" Header="削除" MinWidth="50" />
+				</DataGrid.Columns>
+			</DataGrid>
+			</Grid>
+			<!--
+		<ListView Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
+								 Height="56" Background="#FFE0DFDF" Grid.RowSpan="2"
+								 Name="attachments_lv" 
+								 Drop="Attachments_sp_Drop"  AllowDrop="true" 
+								MouseUp="Attachments_sp_MouseUp" VerticalAlignment="Center"
+						/>-->
+
+		<!--<StackPanel   Grid.Row="14"  Grid.Column="1"  Grid.ColumnSpan="3" Orientation="Horizontal"  
 								HorizontalAlignment="Stretch"  VerticalAlignment="Top"  Margin="0" 
 								Name="drop_sp" 
 								Drop="Attachments_sp_Drop"  AllowDrop="true" 
 								MouseUp="Attachments_sp_MouseUp"
-				>
-			<Rectangle  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Height="33"  
+				>-->
+		<!--<Rectangle  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Height="33"  
 								Fill="#FFE1E2E2" Stroke="Black" StrokeThickness="1" StrokeDashArray="5" Width="463" />
-		</StackPanel>
-		<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" x:Name="attachments_tb"
+		</StackPanel>-->
+		<!--<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" x:Name="attachments_tb"
 								Grid.Row="14" Grid.Column="1"  Grid.ColumnSpan="3" TextAlignment="Center" 
-								HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+								HorizontalAlignment="Center"  VerticalAlignment="Top"/>-->
+		<Label  Grid.Row="15" Grid.Column="0"   Content="メモ" HorizontalAlignment="Right" VerticalAlignment="Top"  />
+		<TextBox  Grid.Row="15" Grid.Column="1"  Grid.ColumnSpan="3" Height="56"
+						Name="memo_tb"  Text="ABCdef"   VerticalAlignment="Center"  />
 
 		<Button   Grid.Row="16" Grid.Column="0" 
 				HorizontalAlignment="Left"  VerticalAlignment="Center" 
