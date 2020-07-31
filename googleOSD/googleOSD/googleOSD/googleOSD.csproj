@@ -79,6 +79,7 @@
     </ApplicationDefinition>
     <Compile Include="AddInfo.cs" />
     <Compile Include="AriadneData.cs" />
+    <Compile Include="AttachmentData.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />

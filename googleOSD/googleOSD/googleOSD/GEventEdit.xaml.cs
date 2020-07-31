@@ -754,6 +754,8 @@ Visibility	null	string
 			}
 		}
 
+		private AttachmentDataCollection attachmentDataCollection = new AttachmentDataCollection();
+
 		/// <summary>
 		/// 添付ファイル
 		/// </summary>
@@ -764,13 +766,27 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				if (attachments != null) {
-					dbMsg += "Attachments" + attachments.Count + "件";
+					dbMsg += ",Attachments" + attachments.Count + "件";
 
 
 					if (0 < attachments.Count) {
+				//		foreach (AttachmentData attachment in attachments) {
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
-				//			AddAttachmentst(attachment);
+							AttachmentData attachmentData = new AttachmentData();
+							attachmentData.Title = attachment.Title;
+							attachmentData.FileId = attachment.FileId;
+							attachmentData.FileUrl = attachment.FileUrl;
+							attachmentData.MimeType = attachment.MimeType;
+							attachmentData.IconLink = attachment.IconLink;
+							attachmentData.ETag = attachment.ETag;
+							attachmentDataCollection.Add(attachmentData);
+							//			AddAttachmentst(attachment);
 						}
+						dbMsg += ",attachmentData=" + attachmentDataCollection.Count + "件";
+
+						// データをそのままセットする
+						this.Attachments_dg.DataContext = attachmentDataCollection;
+
 					}
 				}
 				MyLog(TAG, dbMsg);
@@ -778,6 +794,30 @@ Visibility	null	string
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 添付ファイルの選択
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Attachments_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "Attachments_SelectionChanged";
+			string dbMsg = "[GEventEdit]";
+			try {
+				var selectedData = this.Attachments_dg.SelectedItem as AttachmentData;
+				if (selectedData == null) {
+					dbMsg += "データ取得失敗";
+				} else {
+					dbMsg += ",Title=" + selectedData.Title;
+					dbMsg += ",FileUrl= " + selectedData.FileUrl;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		/// <summary>
 		/// GoogleDriveで選択したファイルを添付する
@@ -1423,6 +1463,5 @@ Visibility	null	string
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
 	}
 }

@@ -74,9 +74,9 @@ namespace GoogleOSD {
 		public AttachmentDataCollection()
 		{
 			// 初期データ
-			this.Add(new AttachmentData() { Title = "1", Modifi = "202011/22", Size = "222KB" });
-			this.Add(new AttachmentData() { Title = "2", Modifi = "202011/22", Size = "22KB" });
-			this.Add(new AttachmentData() { Title = "3", Modifi = "202011/22", Size = "22KB" });
+			//this.Add(new AttachmentData() { Title = "1", Modifi = "202011/22", Size = "222KB" });
+			//this.Add(new AttachmentData() { Title = "2", Modifi = "202011/22", Size = "22KB" });
+			//this.Add(new AttachmentData() { Title = "3", Modifi = "202011/22", Size = "22KB" });
 		}
 	}
 }
