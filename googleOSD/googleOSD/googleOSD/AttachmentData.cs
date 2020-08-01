@@ -20,8 +20,8 @@ namespace GoogleOSD {
 		//Sizeプロパティ
 		string _size;
 		public string Size {
-			get { return _modifi; }
-			set { _modifi = value; OnPropertyChanged("Size"); }
+			get { return _size; }
+			set { _size = value; OnPropertyChanged("Size"); }
 		}
 
 		// FileIdプロパティ
@@ -41,8 +41,8 @@ namespace GoogleOSD {
 		//IconLinkプロパティ
 		string _iconLink;
 		public string IconLink {
-			get { return _fileUrl; }
-			set { _fileUrl = value; OnPropertyChanged("IconLink"); }
+			get { return _iconLink; }
+			set { _iconLink = value; OnPropertyChanged("IconLink"); }
 		}
 
 		//MimeTypeプロパティ

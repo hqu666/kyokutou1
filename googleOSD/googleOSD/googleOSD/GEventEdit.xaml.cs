@@ -767,10 +767,7 @@ Visibility	null	string
 			try {
 				if (attachments != null) {
 					dbMsg += ",Attachments" + attachments.Count + "件";
-
-
 					if (0 < attachments.Count) {
-				//		foreach (AttachmentData attachment in attachments) {
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
 							AttachmentData attachmentData = new AttachmentData();
 							attachmentData.Title = attachment.Title;
@@ -781,8 +778,9 @@ Visibility	null	string
 							attachmentData.ETag = attachment.ETag;
 							attachmentDataCollection.Add(attachmentData);
 							//			AddAttachmentst(attachment);
+							dbMsg += "\r\n" + attachmentDataCollection.Count + ")" + attachmentData.Title + " :  " + attachmentData.FileId;
+							dbMsg += "  " + attachmentData.FileUrl;
 						}
-						dbMsg += ",attachmentData=" + attachmentDataCollection.Count + "件";
 
 						// データをそのままセットする
 						this.Attachments_dg.DataContext = attachmentDataCollection;
@@ -810,6 +808,7 @@ Visibility	null	string
 					dbMsg += "データ取得失敗";
 				} else {
 					dbMsg += ",Title=" + selectedData.Title;
+					dbMsg += ",FileId= " + selectedData.FileId;
 					dbMsg += ",FileUrl= " + selectedData.FileUrl;
 				}
 				MyLog(TAG, dbMsg);
@@ -818,6 +817,107 @@ Visibility	null	string
 			}
 		}
 
+		/// <summary>
+		/// 添付解除ボタン
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Release_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Release_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				var selectedData = this.Attachments_dg.SelectedItem as AttachmentData;
+				if (selectedData == null) {
+					dbMsg += "データ取得失敗";
+				} else {
+					dbMsg += ",Title=" + selectedData.Title;
+					string delFileId = selectedData.FileId;
+					dbMsg += ",FileId= " + delFileId;
+					dbMsg += ",FileUrl= " + selectedData.FileUrl;
+					int delIndex = AttachmentRelease(delFileId, false);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void RemoveAt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "RemoveAt_Click";
+			string dbMsg = "[GEventEdit]";
+			try {
+				var selectedData = this.Attachments_dg.SelectedItem as AttachmentData;
+				if (selectedData == null) {
+					dbMsg += "データ取得失敗";
+				} else {
+					dbMsg += ",Title=" + selectedData.Title;
+					string delFileId = selectedData.FileId;
+					dbMsg += ",FileId= " + delFileId;
+					dbMsg += ",FileUrl= " + selectedData.FileUrl;
+					int delIndex = AttachmentRelease(delFileId, true);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 添付ファイルの解除処理
+		/// </summary>
+		/// <param name="delFileId">解除対象</param>
+		/// <param name="isDel">削除</param>
+		private int AttachmentRelease(string delFileId , bool isDel)
+		{
+			string TAG = "AttachmentRelease";
+			string dbMsg = "[GEventEdit]";
+			int delIndex = -1;
+			try {
+				//string delFileId = delAttachment.FileId;
+				//dbMsg += "  ,Del;Title=" + delAttachment.Title + "  ,Id=" + delAttachment.FileId;
+				dbMsg +=  "  ,Id=" + delFileId + ")";
+				IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments = this.taregetEvent.Attachments;
+				dbMsg += "Attachments" + attachments.Count + "件";
+				string title = "";
+				if (0 < attachments.Count) {
+					delIndex = 0;
+					foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
+						title = attachment.Title;
+						string fileId = attachment.FileId;
+						dbMsg += "\r\n" + delIndex + ")" + title + ",fileId=" + fileId;
+						if (fileId.Equals(delFileId)) {
+							break;
+						}
+						delIndex++;
+					}
+					dbMsg += ",delIndex=" + delIndex;
+					attachments.RemoveAt(delIndex);
+					dbMsg += ">削除：添付>" + attachments.Count + "件";
+					//添付表示も削除
+				}
+				this.Attachments_dg.Items.Clear();
+				this.Attachments_dg.ItemsSource = null;
+				this.Attachments_dg.Items.Refresh();
+
+				SetAttachments(attachments,  selectedAriadneData);
+				if(isDel) {
+					String titolStr = Constant.ApplicationName;
+					String msgStr = title + "を削除しますか？：" ;
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+					if(result == MessageBoxResult.Yes) { 
+					
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+				throw new NotImplementedException();
+			}
+			return delIndex;
+		}
 
 		/// <summary>
 		/// GoogleDriveで選択したファイルを添付する
@@ -961,7 +1061,7 @@ Visibility	null	string
 		}
 
 		/// <summary>
-		/// 添付解除
+		/// 添付ファイルボタンの解除ボタンのクリック
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -974,23 +1074,9 @@ Visibility	null	string
 				Google.Apis.Calendar.v3.Data.EventAttachment delAttachment = bt.DataContext as Google.Apis.Calendar.v3.Data.EventAttachment;
 				string delFileId = delAttachment.FileId;
 				dbMsg += "  ,Del;Title=" + delAttachment.Title + "  ,Id=" + delAttachment.FileId;
-				IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments = this.taregetEvent.Attachments;
-				dbMsg += "Attachments" + attachments.Count + "件";
-				int delIndex = 0;
-				if (0 < attachments.Count) {
-					foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
-						string title = attachment.Title;
-						string fileId = attachment.FileId;
-						dbMsg += "\r\n" + delIndex + ")" + title + ",fileId=" + fileId;
-						if(fileId.Equals(delFileId)) {
-							break;
-						}
-						delIndex++;
-					}
-					dbMsg += ",delIndex=" + delIndex;
-					attachments.RemoveAt(delIndex);
-					dbMsg += ">削除：添付>" +attachments.Count + "件";
-					//添付表示も削除
+				int delIndex = AttachmentRelease(delFileId,false);
+				if(0 < delIndex) {
+					//	//添付表示も削除
 					attachments_sp.Children.RemoveAt(delIndex);
 				}
 				MyLog(TAG, dbMsg);
@@ -1343,7 +1429,7 @@ Visibility	null	string
 		}
 
 		/// <summary>
-		/// 削除ボタンクリック
+		/// イベント削除ボタンクリック
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
