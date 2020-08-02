@@ -984,7 +984,7 @@ Visibility	null	string
 
 
 		/// <summary>
-		/// 添付ファイルのボタン化
+		/// 添付ファイルのリストアイテム化	（ボタン化）
 		/// </summary>
 		/// <param name="attachment"></param>
 		private void AddAttachmentst(Google.Apis.Calendar.v3.Data.EventAttachment attachment)
@@ -995,30 +995,58 @@ Visibility	null	string
 					string title = attachment.Title;
 					string fileId = attachment.FileId;
 					string fileUrl = attachment.FileUrl;
-					dbMsg += "\r\n" + title + ",fileId=" + fileId + ",fileUrl= " + fileUrl;
+					dbMsg += "," + title + ",fileId=" + fileId + ",fileUrl= " + fileUrl;
 					string mimeType = attachment.MimeType;
 					string eTag = attachment.ETag;
 					dbMsg += "  ,mimeType=" + mimeType + ",eTag= " + eTag;
 
-					if(attachmentDataCollection.Count() < 1 ) {
+					if(attachmentDataCollection.Count < 1 ) {
+						dbMsg += "  ,作成";
 						attachmentDataCollection = new AttachmentDataCollection();
 					}
 					AttachmentData attachmentData = new AttachmentData();
-					attachmentData.Title = attachment.Title;
-					attachmentData.FileId = attachment.FileId;
-					attachmentData.FileUrl = attachment.FileUrl;
-					attachmentData.MimeType = attachment.MimeType;
+					attachmentData.Title = title;
+					attachmentData.FileId = fileId; 
+					attachmentData.FileUrl = fileUrl; 
+					attachmentData.MimeType = mimeType;
 					attachmentData.IconLink = attachment.IconLink;
 					attachmentData.ETag = attachment.ETag;
+
+					//var queries = new List<string>() { $"id = '{ fileId }'" };           //	 , $"id = '{ fileId }'"
+					//Task<File> rr = Task<File>.Run(() => {
+					//		//SearchFilter filter = SearchFilter.NONE;
+					//		//queries.Add(filter.ToQuery());
+					//		return GoogleDriveUtil.FindFile(queries);
+					//});
+					//rr.Wait();
+					//if (rr != null) {
+				//		File fInfo = rr.Result;
+						File fInfo = GDriveUtil.FindById(fileId);
+						if(fInfo != null) {
+							dbMsg += "  ,ModifiedTime=" + fInfo.ModifiedTime;
+							attachmentData.Modifi = String.Format("{0:yyyy/MM/dd hh:mm}", fInfo.ModifiedTime);
+							dbMsg += "  >>" + attachmentData.Modifi;
+							long? fSIze = fInfo.Size;
+							dbMsg += "  ,fSIze=" + fSIze;
+							attachmentData.Size = fSIze + "KB";
+							if (0 < fSIze) {
+								attachmentData.Size = Math.Round(double.Parse(fSIze.ToString()) / 1000, 3) + "KB";
+							} else if (999 < fSIze) {
+								attachmentData.Size = Math.Round(double.Parse(fSIze.ToString()) / 1000, 0) + "KB";
+							} else if (999999 < fSIze) {
+								attachmentData.Size = Math.Round(double.Parse(fSIze.ToString()) / 1000000, 0) + "MB";
+							}
+						}
+				//	}
 					attachmentDataCollection.Add(attachmentData);
 
-				// データをそのままセットする
-				this.Attachments_dg.DataContext = attachmentDataCollection;
-				//更新時はこれが必須
-				this.Attachments_dg.Items.Refresh();
+					// データをそのままセットする
+					this.Attachments_dg.DataContext = attachmentDataCollection;
+					//更新時はこれが必須
+					this.Attachments_dg.Items.Refresh();
 
-				int cCount = attachmentDataCollection.Count;
-				attachments_count_lb.Content = cCount.ToString();
+					int cCount = attachmentDataCollection.Count;
+					attachments_count_lb.Content = cCount.ToString();
 
 				/*			
 							//親になるパネルを作る

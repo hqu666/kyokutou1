@@ -435,7 +435,18 @@ namespace GoogleOSD {
 				dbMsg += "[id=" + id + "]";
 				retFile = Constant.MyDriveService.Files.Get(id).Execute();
 
-				retStr = retFile.Name;
+				//var queries = new List<string>() { $"id = '{ id }'" };           //	 , $"id = '{ fileId }'"
+				//Task<File> rr = Task<File>.Run(() => {
+				//	//SearchFilter filter = SearchFilter.NONE;
+				//	//queries.Add(filter.ToQuery());
+				//	return FindFile(queries);
+				//});
+				//rr.Wait();
+				//if (rr != null) {
+				//	retFile = rr.Result;
+				//}
+
+					retStr = retFile.Name;
 				dbMsg += retStr;
 				dbMsg += ">>[" + retStr + "]";
 				Util.MyLog(TAG, dbMsg);
