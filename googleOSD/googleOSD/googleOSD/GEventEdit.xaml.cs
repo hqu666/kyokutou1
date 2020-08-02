@@ -761,7 +761,7 @@ Visibility	null	string
 
 
 		/// <summary>
-		/// 添付ファイル
+		/// 添付ファイル配列の書き写し
 		/// </summary>
 		/// <param name="attachments"></param>
 		private void SetAttachments(IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments , AriadneData selectedAriadneData)
@@ -774,25 +774,10 @@ Visibility	null	string
 					dbMsg += ",Attachments" + attachments.Count + "件";
 					if (0 < attachments.Count) {
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
-							AttachmentData attachmentData = new AttachmentData();
-							attachmentData.Title = attachment.Title;
-							attachmentData.FileId = attachment.FileId;
-							attachmentData.FileUrl = attachment.FileUrl;
-							attachmentData.MimeType = attachment.MimeType;
-							attachmentData.IconLink = attachment.IconLink;
-							attachmentData.ETag = attachment.ETag;
-							attachmentDataCollection.Add(attachmentData);
-							//			AddAttachmentst(attachment);
-							dbMsg += "\r\n" + attachmentDataCollection.Count + ")" + attachmentData.Title + " :  " + attachmentData.FileId;
-							dbMsg += "  " + attachmentData.FileUrl;
+							AddAttachmentst(attachment);
 						}
-						// データをそのままセットする
-						this.Attachments_dg.DataContext = attachmentDataCollection;
-						//更新時はこれが必須
-						this.Attachments_dg.Items.Refresh();
 					}
 				}
-				attachments_count_lb.Content = attachmentDataCollection.Count.ToString();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -887,9 +872,9 @@ Visibility	null	string
 				IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments = this.taregetEvent.Attachments;
 				dbMsg += "Attachments" + attachments.Count + "件";
 				string title = "";
-				if (0 < attachments.Count) {
+				if (-1 < attachmentDataCollection.Count) {
 					delIndex = 0;
-					foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
+					foreach (AttachmentData attachment in attachmentDataCollection) {
 						title = attachment.Title;
 						string fileId = attachment.FileId;
 						dbMsg += "\r\n" + delIndex + ")" + title + ",fileId=" + fileId;
@@ -899,16 +884,12 @@ Visibility	null	string
 						delIndex++;
 					}
 					dbMsg += ",delIndex=" + delIndex;
-					attachments.RemoveAt(delIndex);
-					dbMsg += ">削除：添付>" + attachments.Count + "件";
-					//添付表示も削除
+					attachmentDataCollection.RemoveAt(delIndex);
+					dbMsg += ">削除：添付>" + attachmentDataCollection.Count + "件";
 				}
-			//	this.Attachments_dg.Items.Clear();
-				//this.Attachments_dg.ItemsSource = null;
-
-				SetAttachments(attachments, selectedAriadneData);
 				this.Attachments_dg.Items.Refresh();
-
+				int cCount = attachmentDataCollection.Count;
+				attachments_count_lb.Content = cCount.ToString();
 				if (isDel) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = title + "を削除しますか？：" ;
@@ -1000,6 +981,8 @@ Visibility	null	string
 			}
 		}
 
+
+
 		/// <summary>
 		/// 添付ファイルのボタン化
 		/// </summary>
@@ -1016,51 +999,74 @@ Visibility	null	string
 					string mimeType = attachment.MimeType;
 					string eTag = attachment.ETag;
 					dbMsg += "  ,mimeType=" + mimeType + ",eTag= " + eTag;
-					//親になるパネルを作る
-					StackPanel psp = new StackPanel();
-					psp.Orientation = Orientation.Horizontal;
-					psp.Margin = new Thickness(-5);
 
-					//ボタンに見える部分
-					Button bt = new Button();
-					bt.Click += Attachment_bt_Click;
-					bt.DataContext = fileUrl;
-					bt.Style = FindResource("bt-attachment") as System.Windows.Style;
-					//横並べ
-					StackPanel sp = new StackPanel();
-					sp.Orientation = Orientation.Horizontal;
-					sp.Margin = new Thickness(-5);
-					//アイコン
-					string iconLink = attachment.IconLink;
-					dbMsg += "  ,iconLink= " + iconLink;
-					Image img = new Image();
-					img.Source = new BitmapImage(new Uri("Resources/file.png", UriKind.Relative));
-					if (iconLink == null) {
-						if(mimeType.Equals(Constant.GoogleDriveMime_Folder)) {
-							img.Source = new BitmapImage(new Uri("Resources/folder.png", UriKind.Relative));
-						}
-					} else{
-						img.Source = new BitmapImage(new Uri(iconLink));
+					if(attachmentDataCollection.Count() < 1 ) {
+						attachmentDataCollection = new AttachmentDataCollection();
 					}
-					img.Height = 10;
-					img.Width = 10;
-					sp.Children.Add(img);
-					//ファイルの表示名
-					Label lb = new Label();
-					lb.Content = title;
-					lb.Margin = new Thickness(-5);
-					//格納
-					sp.Children.Add(lb);
-					bt.Content = sp;
-					psp.Children.Add(bt);
-					//削除ボタン
-					Button dbt = new Button();
-					dbt.Click += Del_Attachment_bt_Click;
-					dbt.DataContext = attachment;
-					dbt.Style = FindResource("bt-dell") as System.Windows.Style;
-					psp.Children.Add(dbt);
-					//XAMLへ格納;
-				attachments_sp.Children.Add(psp);
+					AttachmentData attachmentData = new AttachmentData();
+					attachmentData.Title = attachment.Title;
+					attachmentData.FileId = attachment.FileId;
+					attachmentData.FileUrl = attachment.FileUrl;
+					attachmentData.MimeType = attachment.MimeType;
+					attachmentData.IconLink = attachment.IconLink;
+					attachmentData.ETag = attachment.ETag;
+					attachmentDataCollection.Add(attachmentData);
+
+				// データをそのままセットする
+				this.Attachments_dg.DataContext = attachmentDataCollection;
+				//更新時はこれが必須
+				this.Attachments_dg.Items.Refresh();
+
+				int cCount = attachmentDataCollection.Count;
+				attachments_count_lb.Content = cCount.ToString();
+
+				/*			
+							//親になるパネルを作る
+							StackPanel psp = new StackPanel();
+							psp.Orientation = Orientation.Horizontal;
+							psp.Margin = new Thickness(-5);
+
+							//ボタンに見える部分
+							Button bt = new Button();
+							bt.Click += Attachment_bt_Click;
+							bt.DataContext = fileUrl;
+							bt.Style = FindResource("bt-attachment") as System.Windows.Style;
+							//横並べ
+							StackPanel sp = new StackPanel();
+							sp.Orientation = Orientation.Horizontal;
+							sp.Margin = new Thickness(-5);
+							//アイコン
+							string iconLink = attachment.IconLink;
+							dbMsg += "  ,iconLink= " + iconLink;
+							Image img = new Image();
+							img.Source = new BitmapImage(new Uri("Resources/file.png", UriKind.Relative));
+							if (iconLink == null) {
+								if(mimeType.Equals(Constant.GoogleDriveMime_Folder)) {
+									img.Source = new BitmapImage(new Uri("Resources/folder.png", UriKind.Relative));
+								}
+							} else{
+								img.Source = new BitmapImage(new Uri(iconLink));
+							}
+							img.Height = 10;
+							img.Width = 10;
+							sp.Children.Add(img);
+							//ファイルの表示名
+							Label lb = new Label();
+							lb.Content = title;
+							lb.Margin = new Thickness(-5);
+							//格納
+							sp.Children.Add(lb);
+							bt.Content = sp;
+							psp.Children.Add(bt);
+							//削除ボタン
+							Button dbt = new Button();
+							dbt.Click += Del_Attachment_bt_Click;
+							dbt.DataContext = attachment;
+							dbt.Style = FindResource("bt-dell") as System.Windows.Style;
+							psp.Children.Add(dbt);
+							//XAMLへ格納;
+						attachments_sp.Children.Add(psp);
+						*/
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

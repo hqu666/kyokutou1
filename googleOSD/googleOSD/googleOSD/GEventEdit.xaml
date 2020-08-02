@@ -277,9 +277,6 @@
 								Panel.ZIndex="10" 
 								Name="attachments_sp" 
 				/>
-		<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" x:Name="attachments_tb"
-								Grid.Row="13" Grid.Column="1"  Grid.ColumnSpan="3" TextAlignment="Center" 
-								HorizontalAlignment="Center"  VerticalAlignment="Center" Height="56" Margin="99,61,100,5" />
 		<Grid x:Name="attachments_g" 
 					 Drop="Attachments_sp_Drop"  AllowDrop="true" 
 					Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
@@ -297,18 +294,27 @@
 			</Grid.ColumnDefinitions>
 
 			<!-- DataGrid（画面左側）：双方向バインド（UI上での変更がデータに反映される）Grid.ColumnSpan="4"  
-			AutoGenerateColumns="False" CanUserDeleteRows="True" 
+			 CanUserDeleteRows="True"		
 			-->
+			<!--AutoGenerateColumns	;	Columnsで定義していないBindingを表示しない-->
 			<DataGrid x:Name="Attachments_dg"
-               HorizontalAlignment="Left" 
-			  Height="120"  Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
-              ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
-              SelectionChanged="Attachments_SelectionChanged" SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
-              >
+				   HorizontalAlignment="Left" 
+				  Height="110"  Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
+				  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
+				  SelectionChanged="Attachments_SelectionChanged" SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
+				  AutoGenerateColumns="False" Background="#55F0F0F0"
+				  >
 				<DataGrid.Columns>
-					<DataGridTextColumn Binding="{Binding Title}" Header="Title" MinWidth="200" Width="Auto"  IsReadOnly="True"/>
-					<DataGridTextColumn Binding="{Binding Modifi}" Header="modifi" MinWidth="95" Width="Auto"  IsReadOnly="True"/>
-					<DataGridTextColumn Binding="{Binding Size}" Header="サイズ" MinWidth="95"  IsReadOnly="True"/>
+					<DataGridTemplateColumn Header=" " >
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate >
+								<Image Source="{Binding IconLink}" Margin="5,0,5,0" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Binding="{Binding Title}" Header="ファイル名" IsReadOnly="True"/>
+					<DataGridTextColumn Binding="{Binding Modifi}" Header="更新日" IsReadOnly="True" />
+					<DataGridTextColumn Binding="{Binding Size}" Header="サイズ"  IsReadOnly="True"/>
 					<DataGridTemplateColumn Header="解除" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate >
@@ -327,13 +333,9 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</Grid>
-		<!--
-		<ListView Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
-								 Height="56" Background="#FFE0DFDF" Grid.RowSpan="2"
-								 Name="attachments_lv" 
-								 Drop="Attachments_sp_Drop"  AllowDrop="true" 
-								MouseUp="Attachments_sp_MouseUp" VerticalAlignment="Center"
-						/>-->
+		<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" x:Name="attachments_tb"
+								Grid.Row="13" Grid.Column="1"  Grid.ColumnSpan="3" TextAlignment="Center" 
+								HorizontalAlignment="Center"  VerticalAlignment="Center" Height="56" Margin="99,61,100,5" Panel.ZIndex="-1"  />
 
 		<!--<StackPanel   Grid.Row="14"  Grid.Column="1"  Grid.ColumnSpan="3" Orientation="Horizontal"  
 								HorizontalAlignment="Stretch"  VerticalAlignment="Top"  Margin="0" 
