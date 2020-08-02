@@ -263,8 +263,15 @@
 		<WebBrowser  Grid.Row="14"  Grid.Column="1"  
 						Language="jp" 
 						Name="description_wb"/>-->
-		<Label  Grid.Row="12" Grid.Column="0" Grid.RowSpan="3" Content="添付ファイル" 
+		<Label  Grid.Row="12" Grid.Column="0" Content="添付ファイル" 
 							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
+		<StackPanel Orientation="Horizontal" 	HorizontalAlignment="Right" Grid.Row="12" Grid.Column="3" >
+			<Label  x:Name="attachments_count_lb" Content="999" 
+						VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
+			<Label  Grid.Row="12" Grid.Column="3" Content="件" 
+							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
+
+		</StackPanel>
 		<StackPanel   Grid.Row="12" Grid.Column="1"   Grid.ColumnSpan="3" Orientation="Horizontal"  
 								HorizontalAlignment="Stretch"  VerticalAlignment="Top"	Width="453"  Margin="0,0,0,8" 
 								Panel.ZIndex="10" 
@@ -289,17 +296,19 @@
 				<ColumnDefinition Width="Auto"  />
 			</Grid.ColumnDefinitions>
 
-			<!-- DataGrid（画面左側）：双方向バインド（UI上での変更がデータに反映される）Grid.ColumnSpan="4"  -->
+			<!-- DataGrid（画面左側）：双方向バインド（UI上での変更がデータに反映される）Grid.ColumnSpan="4"  
+			AutoGenerateColumns="False" CanUserDeleteRows="True" 
+			-->
 			<DataGrid x:Name="Attachments_dg"
-              AutoGenerateColumns="False" HorizontalAlignment="Left" 
-			  Height="120"
+               HorizontalAlignment="Left" 
+			  Height="120"  Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
               ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
-              SelectionChanged="Attachments_SelectionChanged" SelectionMode="Single" VerticalAlignment="Center" Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
+              SelectionChanged="Attachments_SelectionChanged" SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
               >
 				<DataGrid.Columns>
 					<DataGridTextColumn Binding="{Binding Title}" Header="Title" MinWidth="200" Width="Auto"  IsReadOnly="True"/>
-					<DataGridTextColumn Binding="{Binding Modifi}" Header="modifi" MinWidth="100" Width="Auto"  IsReadOnly="True"/>
-					<DataGridTextColumn Binding="{Binding Size}" Header="サイズ" MinWidth="100"  IsReadOnly="True"/>
+					<DataGridTextColumn Binding="{Binding Modifi}" Header="modifi" MinWidth="95" Width="Auto"  IsReadOnly="True"/>
+					<DataGridTextColumn Binding="{Binding Size}" Header="サイズ" MinWidth="95"  IsReadOnly="True"/>
 					<DataGridTemplateColumn Header="解除" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate >

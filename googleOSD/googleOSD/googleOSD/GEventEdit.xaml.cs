@@ -28,6 +28,11 @@ namespace GoogleOSD {
 
 		public AriadneData selectedAriadneData;
 		public IList<GAttachFile> sendFiles = new List<GAttachFile>();
+		/// <summary>
+		/// 添付ファイル　モデル
+		/// </summary>
+		private AttachmentDataCollection attachmentDataCollection;
+
 
 		/// <summary>
 		/// このページで編集するEvent
@@ -754,7 +759,6 @@ Visibility	null	string
 			}
 		}
 
-		private AttachmentDataCollection attachmentDataCollection = new AttachmentDataCollection();
 
 		/// <summary>
 		/// 添付ファイル
@@ -765,6 +769,7 @@ Visibility	null	string
 			string TAG = "SetAttachments";
 			string dbMsg = "[GEventEdit]";
 			try {
+				attachmentDataCollection = new AttachmentDataCollection();
 				if (attachments != null) {
 					dbMsg += ",Attachments" + attachments.Count + "件";
 					if (0 < attachments.Count) {
@@ -781,12 +786,13 @@ Visibility	null	string
 							dbMsg += "\r\n" + attachmentDataCollection.Count + ")" + attachmentData.Title + " :  " + attachmentData.FileId;
 							dbMsg += "  " + attachmentData.FileUrl;
 						}
-
 						// データをそのままセットする
 						this.Attachments_dg.DataContext = attachmentDataCollection;
-
+						//更新時はこれが必須
+						this.Attachments_dg.Items.Refresh();
 					}
 				}
+				attachments_count_lb.Content = attachmentDataCollection.Count.ToString();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -897,12 +903,13 @@ Visibility	null	string
 					dbMsg += ">削除：添付>" + attachments.Count + "件";
 					//添付表示も削除
 				}
-				this.Attachments_dg.Items.Clear();
-				this.Attachments_dg.ItemsSource = null;
+			//	this.Attachments_dg.Items.Clear();
+				//this.Attachments_dg.ItemsSource = null;
+
+				SetAttachments(attachments, selectedAriadneData);
 				this.Attachments_dg.Items.Refresh();
 
-				SetAttachments(attachments,  selectedAriadneData);
-				if(isDel) {
+				if (isDel) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = title + "を削除しますか？：" ;
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
