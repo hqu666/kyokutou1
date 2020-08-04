@@ -773,11 +773,21 @@ Visibility	null	string
 				if (attachments != null) {
 					dbMsg += ",Attachments" + attachments.Count + "件";
 					if (0 < attachments.Count) {
+						ProgressDialog progressWindow = new ProgressDialog();
+						progressWindow.Show();
+						//Task.Run(() => {
+
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
+							dbMsg += ",Title=" + attachment.Title;
+							progressWindow.Dispatcher.Invoke(new Action(() => progressWindow.SetMsg(attachment.Title)));
 							AddAttachmentst(attachment);
 						}
+						//}).ContinueWith(task => {
+						progressWindow.Close();
+						//}, System.Threading.CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
 					}
 				}
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

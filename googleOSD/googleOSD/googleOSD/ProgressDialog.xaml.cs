@@ -23,16 +23,31 @@ namespace GoogleOSD {
 			string TAG = "ProgressDialog";
 			string dbMsg = "[ProgressDialog]";
 			try {
-
 				InitializeComponent();
-				dbMsg += " ,ProgressMsg= " + ProgressMsg;
-				Progress_msg_tb.Text = ProgressMsg;
-				//		dbMsg += " ,[" + retFileID + "]" + targetFileName;
+	//			ContentRendered += (s, e) => { MessageBox.Show("ContentRendered", "TEST"); };
+				//dbMsg += " ,ProgressMsg= " + ProgressMsg;
+				//Progress_msg_tb.Content = ProgressMsg;
+				////		dbMsg += " ,[" + retFileID + "]" + targetFileName;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		public void SetMsg(string ProgressMsg)
+		{
+			string TAG = "SetMsg";
+			string dbMsg = "[ProgressDialog]";
+			try {
+				dbMsg += " ,ProgressMsg= " + ProgressMsg;
+				Progress_msg_tb.Content = ProgressMsg;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{

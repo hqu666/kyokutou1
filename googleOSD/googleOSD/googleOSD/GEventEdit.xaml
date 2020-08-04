@@ -65,6 +65,7 @@
 
 	</Window.Resources>
 
+
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition  Width="Auto"  />
@@ -96,6 +97,7 @@
 			<RowDefinition  Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
+
 
 		<Label Content="イベント種類" Grid.Row="1" Grid.Column="0"   
 					HorizontalAlignment="Right" Margin="0,5,5,5" />
