@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Drawing;
+using System.Windows.Forms;
+using Application = System.Windows.Forms.Application;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace GoogleOSD {
 	/// <summary>
 	/// ProgressDialog.xaml の相互作用ロジック
 	/// </summary>
 	public partial class ProgressDialog : Window {
+		private Bitmap _image = null;
 
 		public ProgressDialog(string ProgressMsg = null)
 		{
@@ -47,6 +41,35 @@ namespace GoogleOSD {
 			}
 		}
 
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			// フォームを表示するときの処理
+
+			// 画像ファイルをロードする
+			_image = new Bitmap("Resources/DarsBar.gif", true);
+
+			// pictureBox1の背景画像としてセット
+			pictureBox1.BackgroundImage = _image;
+			//サイズを合わせる
+			pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+			// 描画(Paint)イベントハンドラを追加
+			pictureBox1.Paint += pictureBox1_Paint;
+			// アニメーション開始
+			ImageAnimator.Animate(_image, new EventHandler(Image_FrameChanged));
+
+		}
+
+		private void Image_FrameChanged(object o, EventArgs e)
+		{
+			// Paintイベントハンドラを呼び出す
+			pictureBox1.Invalidate();
+		}
+
+		void pictureBox1_Paint(object sender, PaintEventArgs e)
+		{
+			// イベントハンドラ：ピクチャボックスの描画
+			ImageAnimator.UpdateFrames(_image);
+		}
 
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
@@ -62,3 +85,6 @@ namespace GoogleOSD {
 		}
 	}
 }
+
+
+//XMALでFormツールを使う	 https://gist.github.com/arosh/3213108

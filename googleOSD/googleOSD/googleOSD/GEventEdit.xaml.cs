@@ -625,6 +625,9 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					ProgressDialog progressWindow = new ProgressDialog();
+					progressWindow.Show();
+
 					Constant.GDriveFiles = new List<Google.Apis.Drive.v3.Data.File>();
 					Constant.GDriveFiles = GDriveUtil.GDAllFolderListUp();
 					int fCount = Constant.GDriveFiles.Count;
@@ -688,6 +691,7 @@ Visibility	null	string
 						dbMsg += "[" + gFileId + "]";
 					}
 					AttachmentsFromDrive(fileItem);
+					progressWindow.Close();
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
