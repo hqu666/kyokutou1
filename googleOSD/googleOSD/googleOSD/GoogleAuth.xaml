@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:GoogleOSD"
-    	WindowStartupLocation="CenterScreen" 
+  		xmlns:cont="clr-namespace:GoogleOSD.Controls"
+  	WindowStartupLocation="CenterScreen" 
 		mc:Ignorable="d"
-        Title="Google認証"  FontSize="12"  Height="300" Width="512">
+		 FontSize="12"  
+        Title="Google認証" Height="300" Width="512">
 
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -97,17 +99,17 @@
 		<DataGrid Grid.Row="6"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
 						VerticalAlignment="Top"
 						Name="Setting_dg" />
-		<Label Grid.Row="4" Grid.Column="0"  HorizontalAlignment="Right" VerticalAlignment="Top" Content="プログレス" />
+		<!--<Label Grid.Row="4" Grid.Column="0"  HorizontalAlignment="Right" VerticalAlignment="Top" Content="プログレス" />
 		<GroupBox Header="アニメーション"  Grid.Row="4" Grid.Column="1"  >
 			<StackPanel Orientation="Horizontal" >
 				<RadioButton Content="Canvas"   Checked="Prg_type_RadioButton_Checked"/>
 				<RadioButton Content="GIFアニメ" Checked="Prg_type_RadioButton_Checked"  Margin="10,0,10,0"/>
-				<!--<TextBlock x:Name="textBlockSelected" />-->
+				--><!--<TextBlock x:Name="textBlockSelected" />--><!--
 			</StackPanel>
 		</GroupBox>
 		<StackPanel Orientation="Horizontal"  Grid.Row="4" Grid.Column="2"  >
-			<local:WaitingCircle  Margin="10,0,0,0" Width="50" />
-			<local:AnimeGifView  Margin="10,0,0,0" Width="50" />
-		</StackPanel>
+			<cont:WaitingCircle  Grid.Row="0" Grid.Column="0"    Margin="10,0,0,0" Width="50" />
+			--><!--<cont:AnimeGifView  Margin="10,0,0,0" Width="50" />--><!--
+		</StackPanel>-->
 	</Grid>
 </Window>

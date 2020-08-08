@@ -364,17 +364,6 @@ namespace GoogleOSD {
 			}
 		}
 
-		private void Prg_type_RadioButton_Checked(object sender, RoutedEventArgs e)
-		{
-			RadioButton radioButton = (RadioButton)sender;
-			//string ConsStr = radioButton.Content.ToString();
-
-			//if (){
-
-			//}
-			Constant.MyProgresType = 0;
-	//		this.textBlockSelected.Text = radioButton.Content.ToString();
-		}
 
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)

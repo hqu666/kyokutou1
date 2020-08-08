@@ -625,7 +625,7 @@ Visibility	null	string
 			string dbMsg = "[GEventEdit]";
 			try {
 				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-					ProgressDialog progressWindow = new ProgressDialog();
+					Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
 					progressWindow.Show();
 
 					Constant.GDriveFiles = new List<Google.Apis.Drive.v3.Data.File>();
@@ -777,13 +777,13 @@ Visibility	null	string
 				if (attachments != null) {
 					dbMsg += ",Attachments" + attachments.Count + "件";
 					if (0 < attachments.Count) {
-						ProgressDialog progressWindow = new ProgressDialog();
+						Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
 						progressWindow.Show();
 						//Task.Run(() => {
 
 						foreach (Google.Apis.Calendar.v3.Data.EventAttachment attachment in attachments) {
 							dbMsg += ",Title=" + attachment.Title;
-							progressWindow.Dispatcher.Invoke(new Action(() => progressWindow.SetMsg(attachment.Title)));
+			//				progressWindow.Dispatcher.Invoke(new Action(() => progressWindow.SetMsg(attachment.Title)));
 							AddAttachmentst(attachment);
 						}
 						//}).ContinueWith(task => {
