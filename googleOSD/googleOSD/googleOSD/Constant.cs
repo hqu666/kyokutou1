@@ -10,6 +10,7 @@ namespace GoogleOSD {
 		public static bool debugNow = true;
 		public static bool errorCheckNow = true;
 		public static int MyFontSize = 12;
+		public static int MyProgresType = 0;				//0:Canvas , 1:GIFアニメ
 
 		//認証情報/API キー
 		public static string ApplicationName = "kyokuto4";                                        //	アプリケーション名

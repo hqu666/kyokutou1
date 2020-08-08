@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GoogleOSD"
+		xmlns:local="clr-namespace:GoogleOSD"
     	WindowStartupLocation="CenterScreen" 
 		mc:Ignorable="d"
         Title="Google認証"  FontSize="12"  Height="300" Width="512">
@@ -94,9 +94,20 @@
 						Name="Google_Password_tb" />
 		<Button  Grid.Row="2" Grid.Column="2" Width="200" HorizontalAlignment="Right"
 						x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click" />
-		<DataGrid Grid.Row="3"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
+		<DataGrid Grid.Row="6"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
 						VerticalAlignment="Top"
 						Name="Setting_dg" />
-
+		<Label Grid.Row="4" Grid.Column="0"  HorizontalAlignment="Right" VerticalAlignment="Top" Content="プログレス" />
+		<GroupBox Header="アニメーション"  Grid.Row="4" Grid.Column="1"  >
+			<StackPanel Orientation="Horizontal" >
+				<RadioButton Content="Canvas"   Checked="Prg_type_RadioButton_Checked"/>
+				<RadioButton Content="GIFアニメ" Checked="Prg_type_RadioButton_Checked"  Margin="10,0,10,0"/>
+				<!--<TextBlock x:Name="textBlockSelected" />-->
+			</StackPanel>
+		</GroupBox>
+		<StackPanel Orientation="Horizontal"  Grid.Row="4" Grid.Column="2"  >
+			<local:WaitingCircle  Margin="10,0,0,0" Width="50" />
+			<local:AnimeGifView  Margin="10,0,0,0" Width="50" />
+		</StackPanel>
 	</Grid>
 </Window>

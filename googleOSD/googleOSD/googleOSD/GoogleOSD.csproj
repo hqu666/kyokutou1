@@ -79,6 +79,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AddInfo.cs" />
+    <Compile Include="AnimeGifView.xaml.cs">
+      <DependentUpon>AnimeGifView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AriadneData.cs" />
     <Compile Include="AttachmentData.cs" />
     <Compile Include="Constant.cs" />
@@ -115,9 +118,16 @@
       <DependentUpon>TimePic.xaml</DependentUpon>
     </Compile>
     <Compile Include="TreeViewModel.cs" />
+    <Compile Include="WaitingCircle.xaml.cs">
+      <DependentUpon>WaitingCircle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WebWindow.xaml.cs">
       <DependentUpon>WebWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="AnimeGifView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GCalender.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -164,6 +174,10 @@
     <Page Include="TimePic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WaitingCircle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WebWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
