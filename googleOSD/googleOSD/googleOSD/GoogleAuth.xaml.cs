@@ -79,10 +79,17 @@ namespace GoogleOSD {
 					JsonRead();
 				}else{
 					dbMsg += ",接続へ";
+
+					Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
+					progressWindow.Show();
+					progressWindow.SetMes("Googleサービス接続中...");
 					Task<UserCredential> userCredential = Task.Run(() => {
 						return MakeAllCredentialAsync();
 					});
 					userCredential.Wait();
+
+					progressWindow.Close();
+
 					Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
 					if (Constant.MyDriveCredential==null) {
 						//メッセージボックスを表示する

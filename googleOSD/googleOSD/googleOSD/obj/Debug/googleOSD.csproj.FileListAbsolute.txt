@@ -202,3 +202,4 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CoreC
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CopyComplete
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csprojAssemblyReference.cache
