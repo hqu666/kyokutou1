@@ -903,7 +903,6 @@ Visibility	null	string
 				}
 				this.Attachments_dg.Items.Refresh();
 				int cCount = attachmentDataCollection.Count;
-				attachments_count_lb.Content = cCount.ToString();
 				if (isDel) {
 					String titolStr = Constant.ApplicationName;
 					String msgStr = title + "を削除しますか？：" ;

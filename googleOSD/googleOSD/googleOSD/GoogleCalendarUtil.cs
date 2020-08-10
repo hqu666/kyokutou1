@@ -517,7 +517,9 @@ namespace GoogleOSD {
 					ApplicationName = Constant.ApplicationName,
 				});
 				string calendarId = "primary";
+
 				EventsResource.UpdateRequest request = service.Events.Update(body, calendarId, eventId);
+				request.SupportsAttachments = true;
 				Event createdEvent = request.Execute();
 				retLink = createdEvent.HtmlLink;
 				dbMsg += ">>" + retLink;
@@ -554,11 +556,22 @@ namespace GoogleOSD {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
 				});
+				// Optional query parameters	supportsAttachments
+				//をtrueにする
 				string calendarId = "primary";
 				EventsResource.InsertRequest request = service.Events.Insert(body, calendarId);
+
+
 				Event createdEvent = request.Execute();
+				eventId = createdEvent.Id;
+				dbMsg += "," + eventId + ")";
 				retLink = createdEvent.HtmlLink;
 				dbMsg += ">>" + retLink;
+
+				EventsResource.PatchRequest EPatch = service.Events.Patch(eventItem, calendarId, eventId);
+				EPatch.SupportsAttachments = true;
+				EPatch.Execute();
+
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
@@ -877,6 +890,9 @@ namespace GoogleOSD {
 
 /*
  * https://developers.google.com/calendar/v3/reference/events
- 追加		http://sloppy-content.blog.jp/archives/16488560.html
+ 追加							http://sloppy-content.blog.jp/archives/16488560.html
  イベントを作成する		https://developers.google.com/calendar/create-events#java	
+Events: insert				https://pentan.info/doc/google_developers/calendar/v3/reference/events/insert.html
+
+
  */
