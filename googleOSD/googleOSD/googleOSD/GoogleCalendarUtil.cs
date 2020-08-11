@@ -519,10 +519,13 @@ namespace GoogleOSD {
 				string calendarId = "primary";
 
 				EventsResource.UpdateRequest request = service.Events.Update(body, calendarId, eventId);
-				request.SupportsAttachments = true;
 				Event createdEvent = request.Execute();
 				retLink = createdEvent.HtmlLink;
 				dbMsg += ">>" + retLink;
+				//添付許可を出す Optional query parameters	supportsAttachments　をtrueにする
+				EventsResource.PatchRequest EPatch = service.Events.Patch(eventItem, calendarId, eventId);
+				EPatch.SupportsAttachments = true;
+				EPatch.Execute();
 				Util.MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				Util.MyErrorLog(TAG, dbMsg, er);
@@ -556,18 +559,14 @@ namespace GoogleOSD {
 					HttpClientInitializer = Constant.MyCalendarCredential,
 					ApplicationName = Constant.ApplicationName,
 				});
-				// Optional query parameters	supportsAttachments
-				//をtrueにする
 				string calendarId = "primary";
 				EventsResource.InsertRequest request = service.Events.Insert(body, calendarId);
-
-
 				Event createdEvent = request.Execute();
 				eventId = createdEvent.Id;
 				dbMsg += "," + eventId + ")";
 				retLink = createdEvent.HtmlLink;
 				dbMsg += ">>" + retLink;
-
+				//添付許可を出す Optional query parameters	supportsAttachments　をtrueにする
 				EventsResource.PatchRequest EPatch = service.Events.Patch(eventItem, calendarId, eventId);
 				EPatch.SupportsAttachments = true;
 				EPatch.Execute();
@@ -893,6 +892,6 @@ namespace GoogleOSD {
  追加							http://sloppy-content.blog.jp/archives/16488560.html
  イベントを作成する		https://developers.google.com/calendar/create-events#java	
 Events: insert				https://pentan.info/doc/google_developers/calendar/v3/reference/events/insert.html
-
+Create Events				https://developers.google.com/calendar/create-events?utm_campaign=calendarAPI-615&utm_medium=blog&utm_source=gadbc#python_1
 
  */

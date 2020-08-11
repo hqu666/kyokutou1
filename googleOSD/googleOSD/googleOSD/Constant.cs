@@ -122,4 +122,5 @@ Install-Package Google.Apis.Drive.v3
 Install-Package Google.Apis.Calendar.v3
 Install-Package Microsoft.Toolkit.Wpf.UI.Controls.WebView -Version 6.0.1
 Newtonsoft.Json
+MySql.Data
  */

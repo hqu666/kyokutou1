@@ -134,12 +134,11 @@ C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\Infragistic
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.DataPresenter.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.Editors.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.v12.2.resources.dll
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Company.mdf
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Company_log.ldf
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Resources\DarsBar.gif
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.exe.config
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.exe
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.pdb
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\BouncyCastle.Crypto.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.PlatformServices.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.pdb
@@ -152,9 +151,21 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.Core.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.Core.pdb
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.Drive.v3.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.Drive.v3.pdb
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Protobuf.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\K4os.Compression.LZ4.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\K4os.Compression.LZ4.Streams.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\K4os.Hash.xxHash.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Microsoft.Toolkit.Wpf.UI.Controls.WebView.pdb
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\MySql.Data.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Ubiety.Dns.Core.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Zstandard.Net.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Newtonsoft.Json.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Renci.SshNet.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Buffers.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Memory.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Numerics.Vectors.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Data.Common.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Diagnostics.StackTrace.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Diagnostics.Tracing.dll
@@ -167,6 +178,7 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Security.Crypto
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Security.SecureString.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Threading.Overlapped.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Xml.XPath.XDocument.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csprojAssemblyReference.cache
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe.config
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\Controls\WaitingDLog.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GCalender.g.cs
@@ -179,7 +191,6 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\TimePic.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\Controls\WaitingCircle.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\WebWindow.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\App.g.cs
-H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD_Content.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GeneratedInternalTypeHelper.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD_MarkupCompile.cache
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD_MarkupCompile.lref
@@ -202,4 +213,3 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CoreC
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CopyComplete
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
-H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csprojAssemblyReference.cache
