@@ -1,25 +1,26 @@
 ﻿CREATE TABLE [dbo].[t_events] (
-    [Id]                INT            IDENTITY (1, 1) NOT NULL,
-    [m_contract_id]     INT            NULL,
-    [t_project_base_id] INT            NULL,
-    [event_type]        TINYINT        NULL,
-    [event_date_start]  DATE           NULL DEFAULT now(),
-    [event_time_start]  TINYINT        NULL,
-    [event_date_end]    DATE           NULL DEFAULT now(),
-    [event_time_end]    TINYINT        NULL,
-    [event_is_daylong]  TINYINT        NULL DEFAULT 0,
-    [event_title]       NVARCHAR (100) DEFAULT ('案件') NULL,
-    [event_place]       NVARCHAR(100)  NULL,
-    [event_memo]        NVARCHAR(4000) NULL,
-    [event_status]      TINYINT        NULL,
-    [google_id]         VARCHAR (100)  NULL,
-    [event_bg_color]    VARCHAR (10)   NULL DEFAULT '2',
-    [event_font_color]  VARCHAR (10)   NULL DEFAULT '1',
-    [project_name]      NVARCHAR(100)           NULL,
-    [project_number]    VARCHAR (255)  NULL,
-    [order_number]      VARCHAR (255)  NULL,
-    [management_number] VARCHAR (255)  NULL,
-    [owner_name]        NVARCHAR(100)  NULL,
+    [Id]                INT             IDENTITY (1, 1) NOT NULL,
+    [m_contract_id]     INT             NULL,
+    [t_project_base_id] INT             NULL,
+    [event_type]        TINYINT         NULL DEFAULT (1),
+    [event_date_start]  DATE            NULL DEFAULT (now()),
+    [event_time_start]  TINYINT         NULL DEFAULT (09),
+    [event_date_end]    DATE            NULL DEFAULT (now()),
+    [event_time_end]    TINYINT         NULL DEFAULT (10),
+    [event_is_daylong]  TINYINT         NULL DEFAULT (0),
+    [event_title]       NVARCHAR (100)  DEFAULT ('案件') NULL,
+    [event_place]       NVARCHAR (100)  DEFAULT ('??') NULL,
+    [event_memo]        NVARCHAR (4000) DEFAULT ('??') NULL,
+    [event_status]      TINYINT         NULL,
+    [google_id]         VARCHAR (100)   NULL,
+    [event_bg_color]    VARCHAR (10)    NULL DEFAULT ('2'),
+    [event_font_color]  VARCHAR (10)    NULL DEFAULT ('1'),
+    [project_name]      NVARCHAR (100)  NULL,
+    [project_number]    VARCHAR (20)    NULL,
+    [order_number]      VARCHAR (20)    NULL,
+    [management_number] VARCHAR (20)    NULL,
+    [owner_name]        NVARCHAR (100)  NULL,
+    [modify]            DATETIME        NULL DEFAULT (now()),
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
@@ -102,4 +103,8 @@ EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'管理番�
 
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'施主名', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N't_events', @level2type = N'COLUMN', @level2name = N'owner_name';
+
+
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'更新日', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N't_events', @level2type = N'COLUMN', @level2name = N'modify';
 
