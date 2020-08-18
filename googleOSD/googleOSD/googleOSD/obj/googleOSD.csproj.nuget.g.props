@@ -17,5 +17,6 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_Toolkit_Wpf_UI_Controls_WebView Condition=" '$(PkgMicrosoft_Toolkit_Wpf_UI_Controls_WebView)' == '' ">C:\Users\博臣\.nuget\packages\microsoft.toolkit.wpf.ui.controls.webview\6.0.1</PkgMicrosoft_Toolkit_Wpf_UI_Controls_WebView>
+    <PkgEntityFramework Condition=" '$(PkgEntityFramework)' == '' ">C:\Users\博臣\.nuget\packages\entityframework\6.2.0</PkgEntityFramework>
   </PropertyGroup>
 </Project>

@@ -2,6 +2,34 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.7.1": {
+      "EntityFramework/6.2.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        }
+      },
+      "EntityFramework.ja/6.2.0": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.2.0]"
+        },
+        "resource": {
+          "lib/net45/ja/EntityFramework.SqlServer.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net45/ja/EntityFramework.resources.dll": {
+            "locale": "ja"
+          }
+        }
+      },
       "Google.Apis/1.46.0": {
         "type": "package",
         "dependencies": {
@@ -238,6 +266,34 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win": {
+      "EntityFramework/6.2.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        }
+      },
+      "EntityFramework.ja/6.2.0": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.2.0]"
+        },
+        "resource": {
+          "lib/net45/ja/EntityFramework.SqlServer.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net45/ja/EntityFramework.resources.dll": {
+            "locale": "ja"
+          }
+        }
+      },
       "Google.Apis/1.46.0": {
         "type": "package",
         "dependencies": {
@@ -474,6 +530,34 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win-x64": {
+      "EntityFramework/6.2.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        }
+      },
+      "EntityFramework.ja/6.2.0": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.2.0]"
+        },
+        "resource": {
+          "lib/net45/ja/EntityFramework.SqlServer.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net45/ja/EntityFramework.resources.dll": {
+            "locale": "ja"
+          }
+        }
+      },
       "Google.Apis/1.46.0": {
         "type": "package",
         "dependencies": {
@@ -710,6 +794,34 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win-x86": {
+      "EntityFramework/6.2.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.SqlServer.dll": {},
+          "lib/net45/EntityFramework.dll": {}
+        }
+      },
+      "EntityFramework.ja/6.2.0": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.2.0]"
+        },
+        "resource": {
+          "lib/net45/ja/EntityFramework.SqlServer.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net45/ja/EntityFramework.resources.dll": {
+            "locale": "ja"
+          }
+        }
+      },
       "Google.Apis/1.46.0": {
         "type": "package",
         "dependencies": {
@@ -947,6 +1059,55 @@
     }
   },
   "libraries": {
+    "EntityFramework/6.2.0": {
+      "sha512": "ptGyXOf26qLrtn+2doAmylIlCxOnBJANwlyyLrXDmqIk9O18IzLWHyxDwwAyhgXkxmbiaA0WNpRy67WRReInBw==",
+      "type": "package",
+      "path": "entityframework/6.2.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/net40/App.config.transform",
+        "content/net40/Web.config.transform",
+        "entityframework.6.2.0.nupkg.sha512",
+        "entityframework.nuspec",
+        "lib/net40/EntityFramework.SqlServer.dll",
+        "lib/net40/EntityFramework.SqlServer.xml",
+        "lib/net40/EntityFramework.dll",
+        "lib/net40/EntityFramework.xml",
+        "lib/net45/EntityFramework.SqlServer.dll",
+        "lib/net45/EntityFramework.SqlServer.xml",
+        "lib/net45/EntityFramework.dll",
+        "lib/net45/EntityFramework.xml",
+        "tools/EntityFramework.PowerShell.Utility.dll",
+        "tools/EntityFramework.PowerShell.dll",
+        "tools/EntityFramework.psd1",
+        "tools/EntityFramework.psm1",
+        "tools/about_EntityFramework.help.txt",
+        "tools/init.ps1",
+        "tools/install.ps1",
+        "tools/migrate.exe"
+      ]
+    },
+    "EntityFramework.ja/6.2.0": {
+      "sha512": "raUI8hYM/68EkXgdV8pxTXiEBkFdGWaaUON8UBtz7E6WBXNeD9r+/fitbHjAL6mYRQfEu2HOEtt87VxUL9w5eA==",
+      "type": "package",
+      "path": "entityframework.ja/6.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "entityframework.ja.6.2.0.nupkg.sha512",
+        "entityframework.ja.nuspec",
+        "lib/net40/ja/EntityFramework.SqlServer.resources.dll",
+        "lib/net40/ja/EntityFramework.SqlServer.xml",
+        "lib/net40/ja/EntityFramework.resources.dll",
+        "lib/net40/ja/EntityFramework.xml",
+        "lib/net45/ja/EntityFramework.SqlServer.resources.dll",
+        "lib/net45/ja/EntityFramework.SqlServer.xml",
+        "lib/net45/ja/EntityFramework.resources.dll",
+        "lib/net45/ja/EntityFramework.xml"
+      ]
+    },
     "Google.Apis/1.46.0": {
       "sha512": "W6ZKacMAkZHOjQFv6iWpoADOgmZMUggnz+nPFYF8a4lRtAHD6nur4EcwtzU9IEZF+KeQz0DQLO6jVjMP1iXqPQ==",
       "type": "package",
@@ -1435,6 +1596,8 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.7.1": [
+      "EntityFramework >= 6.2.0",
+      "EntityFramework.ja >= 6.2.0",
       "Google.Apis.Calendar.v3 >= 1.46.0.1986",
       "Google.Apis.Drive.v3 >= 1.46.0.1986",
       "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.0.1",
@@ -1474,6 +1637,14 @@
     "frameworks": {
       "net471": {
         "dependencies": {
+          "EntityFramework": {
+            "target": "Package",
+            "version": "[6.2.0, )"
+          },
+          "EntityFramework.ja": {
+            "target": "Package",
+            "version": "[6.2.0, )"
+          },
           "Google.Apis.Calendar.v3": {
             "target": "Package",
             "version": "[1.46.0.1986, )"

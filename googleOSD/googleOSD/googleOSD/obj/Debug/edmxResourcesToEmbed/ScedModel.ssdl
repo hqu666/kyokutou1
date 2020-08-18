@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ScedModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Companys">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+    </Key>
+    <Property Name="CompanyId" Type="int" Nullable="false" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="t_events">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="m_contract_id" Type="int" />
+    <Property Name="t_project_base_id" Type="int" />
+    <Property Name="event_type" Type="tinyint" />
+    <Property Name="event_date_start" Type="date" />
+    <Property Name="event_time_start" Type="tinyint" />
+    <Property Name="event_date_end" Type="date" />
+    <Property Name="event_time_end" Type="tinyint" />
+    <Property Name="event_is_daylong" Type="tinyint" />
+    <Property Name="event_title" Type="varchar" MaxLength="255" />
+    <Property Name="event_place" Type="varchar" MaxLength="255" />
+    <Property Name="event_memo" Type="varchar" MaxLength="4000" />
+    <Property Name="event_status" Type="tinyint" />
+    <Property Name="google_id" Type="varchar" MaxLength="100" />
+    <Property Name="event_bg_color" Type="varchar" MaxLength="10" />
+    <Property Name="event_font_color" Type="varchar" MaxLength="10" />
+    <Property Name="project_name" Type="varchar" MaxLength="255" />
+    <Property Name="project_number" Type="varchar" MaxLength="255" />
+    <Property Name="order_number" Type="varchar" MaxLength="255" />
+    <Property Name="management_number" Type="varchar" MaxLength="255" />
+    <Property Name="owner_name" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityContainer Name="ScedModelStoreContainer">
+    <EntitySet Name="Companys" EntityType="Self.Companys" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="t_events" EntityType="Self.t_events" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
