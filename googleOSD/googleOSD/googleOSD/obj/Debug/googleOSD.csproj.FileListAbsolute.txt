@@ -137,6 +137,13 @@ C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\Infragis
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Company.mdf
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Company_log.ldf
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Resources\DarsBar.gif
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.exe.config
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.exe
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.pdb
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\EntityFramework.SqlServer.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\EntityFramework.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\ja\EntityFramework.SqlServer.resources.dll
+H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\ja\EntityFramework.resources.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.PlatformServices.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\Google.Apis.pdb
@@ -166,6 +173,7 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Threading.Overl
 H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\System.Xml.XPath.XDocument.dll
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe.config
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\Controls\WaitingDLog.g.cs
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\EventAdd.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GCalender.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GEventDayList.g.cs
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GEventEdit.g.cs
@@ -182,6 +190,7 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD_MarkupCompil
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD_MarkupCompile.lref
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\App.baml
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\Controls\WaitingDLog.baml
+H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\EventAdd.baml
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GCalender.baml
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GEventDayList.baml
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GEventEdit.baml
@@ -199,11 +208,3 @@ H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CoreC
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CopyComplete
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.exe
 H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\googleOSD.pdb
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.exe.config
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.exe
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\googleOSD.pdb
-H:\develop\sample\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csprojAssemblyReference.cache
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\EntityFramework.SqlServer.dll
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\EntityFramework.dll
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\ja\EntityFramework.SqlServer.resources.dll
-H:\develop\sample\googleOSD\googleOSD\googleOSD\bin\Debug\ja\EntityFramework.resources.dll

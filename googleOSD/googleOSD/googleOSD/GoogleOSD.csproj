@@ -89,6 +89,9 @@
     </Compile>
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
+    <Compile Include="EventAdd.xaml.cs">
+      <DependentUpon>EventAdd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GAttachFile.cs" />
     <Compile Include="GCalender.xaml.cs">
       <DependentUpon>GCalender.xaml</DependentUpon>
@@ -124,6 +127,10 @@
       <DependentUpon>WebWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\WaitingDLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EventAdd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
