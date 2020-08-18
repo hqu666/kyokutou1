@@ -85,7 +85,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/timepic.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/timepic.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\TimePic.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

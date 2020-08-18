@@ -142,20 +142,29 @@ namespace GoogleOSD.Properties {
                 this["auth_providerX509CertUrl"] = value;
             }
         }
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("")]
-		public string AriadneDataFolder {
-			get {
-				return ((string)(this["AriadneDataFolder"]));
-			}
-			set {
-				this["AriadneDataFolder"] = value;
-			}
-		}
-
-
-
-	}
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string redirectUris {
+            get {
+                return ((string)(this["redirectUris"]));
+            }
+            set {
+                this["redirectUris"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AriadneDataFolder {
+            get {
+                return ((string)(this["AriadneDataFolder"]));
+            }
+            set {
+                this["AriadneDataFolder"] = value;
+            }
+        }
+    }
 }

@@ -77,7 +77,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/googledrivebrouser.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/googledrivebrouser.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\GoogleDriveBrouser.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

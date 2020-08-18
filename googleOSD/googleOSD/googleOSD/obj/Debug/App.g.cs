@@ -59,7 +59,7 @@ namespace GoogleOSD {
             
             #line default
             #line hidden
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

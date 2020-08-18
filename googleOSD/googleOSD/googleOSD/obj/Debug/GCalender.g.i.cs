@@ -173,7 +173,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/gcalender.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/gcalender.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\GCalender.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -53,7 +53,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/geventdaylist.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/geventdaylist.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\GEventDayList.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

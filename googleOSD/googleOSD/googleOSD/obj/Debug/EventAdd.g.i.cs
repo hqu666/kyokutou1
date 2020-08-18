@@ -77,7 +77,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/eventadd.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/eventadd.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\EventAdd.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

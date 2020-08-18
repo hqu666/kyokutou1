@@ -253,7 +253,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/geventedit.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/geventedit.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\GEventEdit.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

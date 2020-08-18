@@ -118,7 +118,7 @@ namespace GoogleOSD {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/webwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/webwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\WebWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

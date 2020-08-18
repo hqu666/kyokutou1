@@ -69,7 +69,7 @@ namespace GoogleOSD.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/googleOSD;component/controls/waitingcircle.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GoogleOSD;component/controls/waitingcircle.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Controls\WaitingCircle.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
