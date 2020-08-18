@@ -83,9 +83,6 @@
     <Compile Include="AddInfo.cs" />
     <Compile Include="AriadneData.cs" />
     <Compile Include="AttachmentData.cs" />
-    <Compile Include="Company.cs">
-      <DependentUpon>ScedModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Controls\WaitingDLog.xaml.cs">
       <DependentUpon>WaitingDLog.xaml</DependentUpon>
@@ -112,21 +109,6 @@
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
     <Compile Include="OtherData.cs" />
-    <Compile Include="ScedModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScedModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ScedModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScedModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ScedModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ScedModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Style\StyleDic.xaml.cs">
       <DependentUpon>StyleDic.xaml</DependentUpon>
@@ -137,9 +119,6 @@
     <Compile Include="TreeViewModel.cs" />
     <Compile Include="Controls\WaitingCircle.xaml.cs">
       <DependentUpon>WaitingCircle.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="t_events.cs">
-      <DependentUpon>ScedModel.tt</DependentUpon>
     </Compile>
     <Compile Include="WebWindow.xaml.cs">
       <DependentUpon>WebWindow.xaml</DependentUpon>
@@ -222,13 +201,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <EntityDeploy Include="ScedModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ScedModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="ScedModel.edmx.diagram">
-      <DependentUpon>ScedModel.edmx</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -240,16 +212,6 @@
     <Content Include="Company_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Company.mdf</DependentUpon>
-    </Content>
-    <Content Include="ScedModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ScedModel.edmx</DependentUpon>
-      <LastGenOutput>ScedModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="ScedModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ScedModel.edmx</DependentUpon>
-      <LastGenOutput>ScedModel.cs</LastGenOutput>
     </Content>
     <None Include="Resources\DarsBar.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -10,7 +10,5 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("company.mdf")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("company_log.ldf")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("scedmodel.context.tt")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("scedmodel.tt")]
 
 
