@@ -26,7 +26,8 @@ namespace GoogleOSD {
 		GoogleAuthUtil GAuthUtil = new GoogleAuthUtil();
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
-
+		
+		public EventAdd EADlog;
 		public GEventEdit editView;
 		public GEventDayList dayListView;
 		public WebWindow webWindow;
@@ -891,7 +892,20 @@ namespace GoogleOSD {
 			string TAG = "Date_MouseDown";
 			string dbMsg = "[GCalender]";
 			try {
-				if(selectedAriadneData == null){
+				Rectangle rec = sender as Rectangle;
+				DateTime startDT = (rec.DataContext as DateInfo).GetDateTime();
+				if (EADlog == null) {
+					dbMsg += "案件リストを再生成";
+					EADlog = new EventAdd();
+					EADlog.ownerView = this;
+					EADlog.startDT = startDT;
+					EADlog.Show();
+				}
+
+				
+/*
+
+				if (selectedAriadneData == null){
 					String titolStr = Constant.ApplicationName;
 					String msgStr = "先に左のTreeから案件もしくは関連書類を選択して下さい";
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
@@ -901,7 +915,6 @@ namespace GoogleOSD {
 					}
 				}
 
-				Rectangle rec = sender as Rectangle;
 				Google.Apis.Calendar.v3.Data.Event taregetEvent = new Google.Apis.Calendar.v3.Data.Event();
 
 				//作成直後はNullなので生成が必要
@@ -944,7 +957,7 @@ namespace GoogleOSD {
 					editView.authWindow = authWindow;
 					editView.Show();
 				}
-
+*/
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

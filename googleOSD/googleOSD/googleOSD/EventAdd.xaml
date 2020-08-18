@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:GoogleOSD"
   		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
 	    WindowStartupLocation="CenterScreen"  Topmost="True"
-      mc:Ignorable="d"
-        Title="EventAdd" Height="Auto" Width="Auto" d:DesignWidth="339" d:DesignHeight="427">
-	
+		mc:Ignorable="d"
+        Title="EventAdd" Height="222" Width="420"
+		Loaded="Window_Loaded" Closed="Window_Closed">
+
 	<Window.Resources>
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
@@ -63,11 +64,8 @@
 
 	</Window.Resources>
 
-	<Grid>
+	<Grid Margin="0,0,0,0">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto"  />
 			<ColumnDefinition  Width="Auto"  />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
@@ -77,40 +75,29 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<Label Content="0" x:Name="prject_count"
-					Grid.Row="0" Grid.Column="2"   
-					HorizontalAlignment="Right" />
-		<Label Content="件" Grid.Row="0" Grid.Column="3"   
-					HorizontalAlignment="Left"/>
-
-		<Grid x:Name="project_g" 
-					Grid.Row="2" Grid.Column="0"   Grid.ColumnSpan="4"   
-					Background="#55D3D3D3">
-			<!--<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto"  />
-				<ColumnDefinition Width="Auto"  />
-			</Grid.ColumnDefinitions>-->
-			<DataGrid x:Name="Project_dg"
-				   HorizontalAlignment="Left" 
-				  Height="300"  
-				  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
-				  SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
-				  AutoGenerateColumns="False" Background="#55F0F0F0"
-				  >
+		<StackPanel 	Grid.Row="0" Grid.Column="0"   Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,-10,0,-10">
+			<Label Content="0" x:Name="prject_count"/>
+			<Label Content="件" />
+		</StackPanel>
+		<DataGrid x:Name="Project_dg" 
+						Grid.Row="1" Grid.Column="0"   Width="Auto" MinWidth="300" MinHeight="130"
+				ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
+				AutoGenerateColumns="False" 
+				SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
+			>
 				<DataGrid.Columns>
-					<DataGridTextColumn Binding="{Binding Title}" Header="案件管理番号" IsReadOnly="True"/>
-					<DataGridTextColumn Binding="{Binding Modifi}" Header="案件名" IsReadOnly="True" />
-					<DataGridTextColumn Binding="{Binding Size}" Header="納期"  IsReadOnly="True"/>
+				<DataGridTextColumn Binding="{Binding project_manage_code}" Header="案件管理番号" IsReadOnly="True"/>
+				<DataGridTextColumn Binding="{Binding project_name}" Header="案件名" MinWidth="200" IsReadOnly="True" />
+				<DataGridTextColumn Binding="{Binding delivery_date, StringFormat={}{0:yyyy/MM/dd}, ConverterCulture=ja-JP}" Header="納期"  MinWidth="100" IsReadOnly="True"/>
 				</DataGrid.Columns>
 			</DataGrid>
-		</Grid>
+		<!--</Grid>-->
+		<Button Grid.Row="4" Grid.Column="0"
+							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
+							Name="cancel_bt" Content="キャンセル" Click="Cancel_bt_Click" />
+		<Button Grid.Row="4" Grid.Column="0"
+							HorizontalAlignment="Right"  VerticalAlignment="Center"
+							Name="add_sced_bt" Content="通常イベントを作成" Click="add_sced_bt_Click" />
 
 	</Grid>
 </Window>

@@ -10,5 +10,8 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("company.mdf")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("company_log.ldf")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("projectmodel.context.tt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("projectmodel.tt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("scedmodel.tt")]
 
 
