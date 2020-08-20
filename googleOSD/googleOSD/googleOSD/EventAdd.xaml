@@ -83,7 +83,7 @@
 						Grid.Row="1" Grid.Column="0"   Width="Auto" MinWidth="300" MinHeight="130"
 				ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
 				AutoGenerateColumns="False" 
-				SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
+				SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None" MouseDoubleClick="Project_dg_MouseDoubleClick"
 			>
 				<DataGrid.Columns>
 				<DataGridTextColumn Binding="{Binding project_manage_code}" Header="案件管理番号" IsReadOnly="True"/>

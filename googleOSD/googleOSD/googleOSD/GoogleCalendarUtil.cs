@@ -684,7 +684,7 @@ namespace GoogleOSD {
 		/// <param name="taregetEvent">作成もしくは変更する予定</param>
 		/// <param name="addInfo">追加する情報</param>
 		/// <returns></returns>
-		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, AriadneData selectedAriadneData)
+		public string AddEventInfo(Google.Apis.Calendar.v3.Data.Event taregetEvent, t_events tEvents)
 		{
 			string TAG = "AddEventInfo";
 			string dbMsg = "[GoogleCalendarUtil]";
@@ -708,11 +708,14 @@ namespace GoogleOSD {
 
 				//追加する項目
 				string addText = "<table><tbody valign=" + "\"" + "top" + "\"" +">";
-				addText += "<tr><td>案件番号</td>" + "<td> : " + selectedAriadneData.ItemNumber + "</td></tr>";
-				addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";
-				addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";
-				addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";
-
+				if(tEvents.event_type ==1) {
+/*
+					addText += "<tr><td>案件番号</td>" + "<td> : " + selectedAriadneData.ItemNumber + "</td></tr>";                 // selectedAriadneData.ItemNumber
+					addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";                    //OrderNumber
+					addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";       //ManagementNumber
+					addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";                        //CustomerName
+	*/	
+					}
 				if (0 < taregetEvent.Attachments.Count) {
 					addText += "<tr valign=" + "\"" + "top" + "\"" + "><td>添付ファイル</td><td> ";
 					int RowCount = 1;
@@ -726,7 +729,7 @@ namespace GoogleOSD {
 					addText +=  "</td></tr>";
 				}
 
-				addText += "<tr valign = " + "\"" + "top" + "\"" + "><td>メモ</td>" + "<td> : <pre>" + selectedAriadneData.Memo + "</pre></td></tr>";
+				addText += "<tr valign = " + "\"" + "top" + "\"" + "><td>メモ</td>" + "<td> : <pre>" + tEvents.event_memo + "</pre></td></tr>";             //Memo
 
 				addText += "</tbody >";
 

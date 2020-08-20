@@ -35,5 +35,8 @@ namespace GoogleOSD
         public string order_number { get; set; }
         public string management_number { get; set; }
         public string owner_name { get; set; }
-    }
+		public Nullable<byte> status { get; set; }
+		public Nullable<System.DateTime> modifier_on { get; set; }
+		public Nullable<System.DateTime> deleted_on { get; set; }
+	}
 }

@@ -19,6 +19,8 @@ namespace GoogleOSD {
 	public partial class EventAdd : Window {
 
 		CompanyEntities dataEntities = new CompanyEntities();
+		public ProjecDataCollection projecDataCollection;
+
 		public GCalender ownerView;
 		public DateTime startDT;
 
@@ -34,43 +36,91 @@ namespace GoogleOSD {
 			}
 		}
 
+		//DataGrid操作/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>
+		/// t_project_baseをDataGridに表示
+		/// 		//https://docs.microsoft.com/ja-jp/dotnet/framework/wpf/controls/walkthrough-display-data-from-a-sql-server-database-in-a-datagrid-control
+		/// </summary>
+		private void ListDrow()
+		{
+			string TAG = "ListDrow";
+			string dbMsg = "[EventAdd]";
+			try {
+				Project_dg.ItemsSource = projecDataCollection.ToList();
+				//該当件数を表示
+				prject_count.Content = projecDataCollection.Count().ToString();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// リストアイテムクリック
+		/// 新規案件イベント
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Project_dg_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			string TAG = "Project_dg_MouseDoubleClick";
+			string dbMsg = "[EventAdd]";
+			try {
+				DataGrid dGrid = sender as DataGrid;
+				//		t_project_base selectedData = this.Project_dg.SelectedItem as t_project_base;
+
+				t_project_base currentItems = dGrid.CurrentCell.Item as t_project_base;
+				t_events nEvents = new t_events();
+				nEvents.m_contract_id = currentItems.m_contract_id;                                         //契約ID
+				nEvents.event_type = 1;																						//案件
+				nEvents.t_project_base_id = currentItems.Id; 
+				dbMsg += "案件:[" + nEvents.t_project_base_id + "]";
+				nEvents.event_title = currentItems.owner_name + "様　" + currentItems.project_name;
+				dbMsg += nEvents.event_title;
+				nEvents.event_date_start = startDT;
+				nEvents.event_date_end = currentItems.delivery_date;
+				dbMsg += "," + nEvents.event_date_start + "～" + nEvents.event_date_end;
+				nEvents.event_is_daylong = 1;																	//終日
+				nEvents.event_place = currentItems.project_place;                                      //場所
+				nEvents.event_bg_color = "2";                                                                   //背景
+				nEvents.event_font_color = "1";                                                                   //文字色
+																												/*    public Nullable<int> m_contract_id { get; set; }
+																																public Nullable<byte> event_time_start { get; set; }
+																																public Nullable<System.DateTime> event_date_end { get; set; }
+																																public Nullable<byte> event_time_end { get; set; }
+																																public string event_memo { get; set; }
+																																public Nullable<byte> event_status { get; set; }
+																																public string google_id { get; set; }
+																																public Nullable<byte> status { get; set; }
+																																public Nullable<System.DateTime> modifier_on { get; set; }
+																																public Nullable<System.DateTime> deleted_on { get; set; }*/
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		///////////////////////////////////////////////////////////////////////////////////////////////
+
+		/// <summary>
+		/// window生成後
+		/// DataGrid作成へ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			string TAG = "Window_Loaded";
 			string dbMsg = "[EventAdd]";
 			try {
 				dbMsg += ",startDT=" + startDT;
+				//タイトルを記載
 				this.Title = String.Format("{0:yyyy/MM/dd}", startDT) + "に新しい予定を追加します";
-				var query =
-							from project in dataEntities.t_project_base
-							where project.status != 9 & project.deleted_on == null
-							orderby project.delivery_date
-							select new { project.project_manage_code, 
-												project.project_name, 
-												project.delivery_date,
-												project.Id,
-												project.m_contract_id,
-												project.m_property_id,
-												project.project_number,
-												project.order_number,
-												project.project_code,
-												project.management_number,
-												project.supplier_name,
-												project.owner_name,
-												project.project_place,
-												project.status,
-												project.modifier_on
-							};
-				//							select new { project };
-				// CategoryName = product.ProductCategory.Name, product.ListPrice
-				Project_dg.ItemsSource = query.ToList();
-				prject_count.Content = query.Count().ToString();
+				ListDrow();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		//https://docs.microsoft.com/ja-jp/dotnet/framework/wpf/controls/walkthrough-display-data-from-a-sql-server-database-in-a-datagrid-control
 
 		private void add_sced_bt_Click(object sender, RoutedEventArgs e)
 		{

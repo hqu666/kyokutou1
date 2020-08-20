@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7DA786F8-A377-4E1E-AA95-7E279F3F9587}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>googleOSD</RootNamespace>
-    <AssemblyName>googleOSD</AssemblyName>
+    <RootNamespace>GoogleOSD</RootNamespace>
+    <AssemblyName>GoogleOSD</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -92,6 +92,9 @@
     </Compile>
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
+    <Compile Include="EventAdd.xaml.cs">
+      <DependentUpon>EventAdd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GAttachFile.cs" />
     <Compile Include="GCalender.xaml.cs">
       <DependentUpon>GCalender.xaml</DependentUpon>
@@ -112,20 +115,30 @@
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
     <Compile Include="OtherData.cs" />
-    <Compile Include="ScedModel.Context.cs">
+    <Compile Include="ProjectModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ScedModel.Context.tt</DependentUpon>
+      <DependentUpon>ProjectModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProjectModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProjectModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="ScedModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>ScedModel.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="ScedModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>ScedModel.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Style\StyleDic.xaml.cs">
@@ -141,10 +154,17 @@
     <Compile Include="t_events.cs">
       <DependentUpon>ScedModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_project_base.cs">
+      <DependentUpon>ProjectModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="WebWindow.xaml.cs">
       <DependentUpon>WebWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\WaitingDLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EventAdd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,16 +238,20 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <EntityDeploy Include="ProjectModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ProjectModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <EntityDeploy Include="ScedModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ScedModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="ScedModel.edmx.diagram">
-      <DependentUpon>ScedModel.edmx</DependentUpon>
+    <None Include="ProjectModel.edmx.diagram">
+      <DependentUpon>ProjectModel.edmx</DependentUpon>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -241,14 +265,19 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Company.mdf</DependentUpon>
     </Content>
-    <Content Include="ScedModel.Context.tt">
+    <Content Include="ProjectModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ScedModel.edmx</DependentUpon>
-      <LastGenOutput>ScedModel.Context.cs</LastGenOutput>
+      <DependentUpon>ProjectModel.edmx</DependentUpon>
+      <LastGenOutput>ProjectModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ProjectModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ProjectModel.edmx</DependentUpon>
+      <LastGenOutput>ProjectModel.cs</LastGenOutput>
     </Content>
     <Content Include="ScedModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ScedModel.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ScedModel.cs</LastGenOutput>
     </Content>
     <None Include="Resources\DarsBar.gif">

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,13 @@ namespace GoogleOSD {
 		private string b_selectYM = "";
 		private string taregetURL = null;
 		public IList<AriadneData> ariadneDatas = new List<AriadneData>();
-		public AriadneData selectedAriadneData;
+		public ProjecDataCollection projecDataCollection ;
+		public DbSet<t_project_base> Projects { get; set; }
+
+		public t_events tEvents;
+		public t_project_base tProject;
+
+	//	public AriadneData selectedAriadneData;
 
 		public GCalender()
 		{
@@ -54,11 +61,75 @@ namespace GoogleOSD {
 
 				DrowAriadneData();
 				DrowToday();
+
+				ReadProject();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// projectデータテーブルの読み込み
+		/// </summary>
+		public void ReadProject()
+		{
+			string TAG = "ReadProject";
+			string dbMsg = "[GCalender]";
+			try {
+				projecDataCollection = new ProjecDataCollection();
+				CompanyEntities dataEntities = new CompanyEntities();
+				var query =
+					from project in dataEntities.t_project_base
+					where project.status != 9 & project.deleted_on == null
+					orderby project.delivery_date
+					select new {
+						project.project_manage_code,
+						project.project_name,
+						project.delivery_date,
+						project.Id,
+						project.m_contract_id,
+						project.m_property_id,
+						project.project_number,
+						project.order_number,
+						project.project_code,
+						project.management_number,
+						project.supplier_name,
+						project.owner_name,
+						project.project_place,
+						project.status,
+						project.modifier_on
+					};
+				var projctList = query.ToList();
+				////リストにデータを書き込み
+				foreach (var rVar in projctList) {
+					t_project_base rProject = new t_project_base();
+					rProject.Id = rVar.Id;
+					rProject.project_manage_code = rVar.project_manage_code;
+					rProject.project_name = rVar.project_name;
+					rProject.delivery_date = rVar.delivery_date;
+					rProject.m_contract_id = rVar.m_contract_id;
+					rProject.m_property_id = rVar.m_property_id;
+					rProject.project_number = rVar.project_number;
+					rProject.order_number = rVar.order_number;
+					rProject.project_code = rVar.project_code;
+					rProject.management_number = rVar.management_number;
+					rProject.supplier_name = rVar.supplier_name;
+					rProject.owner_name = rVar.owner_name;
+					rProject.project_place = rVar.project_place;
+					rProject.status = rVar.status;
+					rProject.modifier_on = rVar.modifier_on;
+
+					projecDataCollection.Add(rProject);
+				}
+				dbMsg += "案件" + projecDataCollection.Count + "件";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// AriadneDataの登録ファイルを読み出す
@@ -883,7 +954,7 @@ namespace GoogleOSD {
 		}
 
 		/// <summary>
-		/// 新規スケジュール作成
+		/// 空白部分のクリック
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -899,22 +970,38 @@ namespace GoogleOSD {
 					EADlog = new EventAdd();
 					EADlog.ownerView = this;
 					EADlog.startDT = startDT;
+					EADlog.projecDataCollection = this.projecDataCollection;
 					EADlog.Show();
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
-				
-/*
+		/// <summary>
+		/// 新規スケジュール作成
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void SetNewEvent(t_events nEvents)
+		{
+			string TAG = "SetNewEvent";
+			string dbMsg = "[GCalender]";
+			try {
 
-				if (selectedAriadneData == null){
-					String titolStr = Constant.ApplicationName;
-					String msgStr = "先に左のTreeから案件もしくは関連書類を選択して下さい";
-					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
-					dbMsg += ",result=" + result;
-					if (result.Equals(System.Windows.MessageBoxResult.OK)) {
-						return;
-					}
-				}
 
+				/*
+								if (selectedAriadneData == null){
+									String titolStr = Constant.ApplicationName;
+									String msgStr = "先に左のTreeから案件もしくは関連書類を選択して下さい";
+									MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+									dbMsg += ",result=" + result;
+									if (result.Equals(System.Windows.MessageBoxResult.OK)) {
+										return;
+									}
+								}
+				*/
 				Google.Apis.Calendar.v3.Data.Event taregetEvent = new Google.Apis.Calendar.v3.Data.Event();
 
 				//作成直後はNullなので生成が必要
@@ -923,46 +1010,36 @@ namespace GoogleOSD {
 				taregetEvent.OriginalStartTime = new Google.Apis.Calendar.v3.Data.EventDateTime();
 				taregetEvent.Attendees = new List<Google.Apis.Calendar.v3.Data.EventAttendee>();
 				taregetEvent.Attachments = new List<Google.Apis.Calendar.v3.Data.EventAttachment>();
-
-				//Eventにセットできる項目
-				string SummaryStr = selectedAriadneData.ItenName;
-				if(selectedAriadneData.ReceiptPCPass !=null) {      //入金ファイルが有れば
-					SummaryStr += "　収支確認会";
-				} else if (selectedAriadneData.RequestPCPass != null) {      //請求ファイルが有れば
-					SummaryStr += "　請求確認会";
-				} else{ 
-					SummaryStr += "　進捗確認会";
-				}
-				taregetEvent.Summary = SummaryStr;
+				taregetEvent.Summary = nEvents.event_title;
 				dbMsg += "taregetEvent=" + taregetEvent.Summary;
-				DateTime startDT = (rec.DataContext as DateInfo).GetDateTime();
+				DateTime startDT =(DateTime)nEvents.event_date_start ;                        //(rec.DataContext as DateInfo).GetDateTime();
 				DateTime now = DateTime.Now;
 				TimeSpan nowTime = new TimeSpan(now.Hour, 0, 0);
 				startDT=startDT.Add(nowTime);
 				dbMsg += "startDT=" + startDT;
 				taregetEvent.Start.DateTime = startDT;
 				dbMsg += "Start=" + taregetEvent.Start.DateTime;
-				taregetEvent.End.DateTime = startDT.AddHours(1);
+				taregetEvent.End.DateTime = (DateTime)nEvents.event_date_start;                        //startDT.AddHours(1);
 				dbMsg += "～" + taregetEvent.End.DateTime;
 				taregetEvent.Description ="添付ファイルを参照できる様、準備して参加をお願いします。";
 				dbMsg += ",Description=" + taregetEvent.Description;
 				//Eventに無い項目
-				Constant.orderNumber = selectedAriadneData.ItemNumber;                  //受注No（参照項目）
-				Constant.managementNumber = selectedAriadneData.ManagementNumber;     //管理番号（参照項目）
-				Constant.customerName = selectedAriadneData.CustomerName;             //得意先（参照項目）
+				Constant.orderNumber = tProject.order_number;			//selectedAriadneData.ItemNumber;                  //受注No（参照項目）
+				Constant.managementNumber = tProject.management_number;          //selectedAriadneData.ManagementNumber;     //管理番号（参照項目）
+				Constant.customerName = tProject.owner_name;          //selectedAriadneData.CustomerName;             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
-					editView = new GEventEdit(taregetEvent, selectedAriadneData);
+					editView = new GEventEdit(taregetEvent, tEvents);
 					editView.mainView = this;
 					editView.authWindow = authWindow;
 					editView.Show();
 				}
-*/
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		/// <summary>
 		/// セル（日）をクリックした際のイベントハンドラ.
@@ -1014,7 +1091,7 @@ namespace GoogleOSD {
 				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
-					editView = new GEventEdit(taregetEvent , selectedAriadneData);
+					editView = new GEventEdit(taregetEvent , tEvents);
 					editView.mainView = this;
 					editView.authWindow = authWindow;
 					editView.Show();
@@ -1078,40 +1155,16 @@ namespace GoogleOSD {
 						}
 					}
 					if (isHit) {
-						selectedAriadneData = aData;
+				//		selectedAriadneData = aData;
 						break;
 					}
 				}
-				dbMsg += ">>案件[" + selectedAriadneData.ItemNumber +"]" + selectedAriadneData.ItenName;
+		//		dbMsg += ">>案件[" + selectedAriadneData.ItemNumber +"]" + selectedAriadneData.ItenName;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-		/// <summary>
-		/// Webで一日リストへ
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		//private void Button_Click(object sender, RoutedEventArgs e)
-		//{
-		//	string TAG = "Button_Click";
-		//	string dbMsg = "[GCalender]";
-		//	try {
-		//		dbMsg += "taregetURL=" + taregetURL;
-		//		if (webWindow == null) {
-		//			dbMsg += "一日リストを生成";
-		//			webWindow = new WebWindow();
-		//			webWindow.mainView = this;
-		//			webWindow.Show();
-		//			webWindow.SetMyURL(new Uri(@taregetURL));
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
 
 		/// <summary>
 		/// webでGoogleDriveを表示

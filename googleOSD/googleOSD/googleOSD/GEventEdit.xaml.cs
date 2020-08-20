@@ -26,7 +26,8 @@ namespace GoogleOSD {
 		public GoogleDriveBrouser driveView;
 		public WebWindow webWindow;
 
-		public AriadneData selectedAriadneData;
+		public t_events tEvents;
+		public t_project_base tProject;
 		public IList<GAttachFile> sendFiles = new List<GAttachFile>();
 		/// <summary>
 		/// 添付ファイル　モデル
@@ -43,7 +44,7 @@ namespace GoogleOSD {
 		/// この画面の開始
 		/// </summary>
 		/// <param name="taregetEvent"></param>
-		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent  ,AriadneData selectedAriadneData)
+		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent, t_events tEvents)
 		{
 			string TAG = "GEventEdit";
 			string dbMsg = "[GEventEdit]";
@@ -52,11 +53,38 @@ namespace GoogleOSD {
 				this.FontSize = Constant.MyFontSize;
 				this.taregetEvent = taregetEvent;
 				//既にスケジュール登録してあるAriadneデータの抜き出し
-				if(selectedAriadneData== null) {
-					selectedAriadneData = GCalendarUtil.ReedEventInfo(taregetEvent);
-				}
-				this.selectedAriadneData = selectedAriadneData;
-				EventWrite(taregetEvent, selectedAriadneData);
+				//if(selectedAriadneData== null) {
+				//	selectedAriadneData = GCalendarUtil.ReedEventInfo(taregetEvent);
+				//}
+				this.tEvents = tEvents;
+
+				CompanyEntities dataEntities = new CompanyEntities();
+				var query =
+							from project in dataEntities.t_project_base
+							where project.Id == tEvents.t_project_base_id
+							select new {
+								project.project_manage_code,
+								project.project_name,
+								project.delivery_date,
+								project.Id,
+								project.m_contract_id,
+								project.m_property_id,
+								project.project_number,
+								project.order_number,
+								project.project_code,
+								project.management_number,
+								project.supplier_name,
+								project.owner_name,
+								project.project_place,
+								project.status,
+								project.modifier_on
+							};
+				//リストにデータを書き込み
+				tProject = new t_project_base();
+	//			tProject = (t_project_base)query[0];
+				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
+
+				EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -67,7 +95,7 @@ namespace GoogleOSD {
 		/// 開始直後、対象イベントの設定内容を読取りViewを初期構成
 		/// </summary>
 		/// <param name="taregetEvent"></param>
-		public void EventWrite(Google.Apis.Calendar.v3.Data.Event taregetEvent, AriadneData selectedAriadneData)
+		public void EventWrite(Google.Apis.Calendar.v3.Data.Event taregetEvent, t_events tEvents)
 		{
 			string TAG = "EventWrite";
 			string dbMsg = "[GEventEdit]";
@@ -81,73 +109,11 @@ namespace GoogleOSD {
 				if (taregetEvent.Location != null) {
 					location_tb.Text = taregetEvent.Location;
 				}
-				/*
-						<!--通知  / ゲスト-->
-				*/
-				//if(taregetEvent.Organizer!=null) {
-				//	email_lb.Content = taregetEvent.Organizer.Email;
-				//}
 
 				SetColor(taregetEvent.ColorId);
-				SetAttachments(taregetEvent.Attachments , selectedAriadneData);
+				SetAttachments(taregetEvent.Attachments );
 				SetDescription(taregetEvent);
-				/*
-		   AnyoneCanAddSelf	null	bool?
-▶ 列ビュー		
-◢ Attendees	Count = 4	System.Collections.Generic.IList<Google.Apis.Calendar.v3.Data.EventAttendee> {System.Collections.Generic.List<Google.Apis.Calendar.v3.Data.EventAttendee>}
-◢ [0]	{Google.Apis.Calendar.v3.Data.EventAttendee}	Google.Apis.Calendar.v3.Data.EventAttendee
-AdditionalGuests	null	int?
-Comment	null	string
-DisplayName	null	string
-ETag	null	string
-Id	null	string
-Optional	null	bool?
-Organizer	null	bool?
-Resource	null	bool?
-ResponseStatus	"needsAction"	string
-Self	null	bool?
-▶ [1]	{Google.Apis.Calendar.v3.Data.EventAttendee}	Google.Apis.Calendar.v3.Data.EventAttendee
-▶ [2]	{Google.Apis.Calendar.v3.Data.EventAttendee}	Google.Apis.Calendar.v3.Data.EventAttendee
-▶ [3]	{Google.Apis.Calendar.v3.Data.EventAttendee}	Google.Apis.Calendar.v3.Data.EventAttendee
-▶ 列ビュー		
-AttendeesOmitted	null	bool?
-ConferenceData	null	Google.Apis.Calendar.v3.Data.ConferenceData
-▶ Created	{2020/05/02 10:58:35}	System.DateTime?
-CreatedRaw	"2020-05-02T01:58:35.000Z"	string
-▶ Creator	{Google.Apis.Calendar.v3.Data.Event.CreatorData}	Google.Apis.Calendar.v3.Data.Event.CreatorData
-ETag	"\"3180052441811000\""	string
-ExtendedProperties	null	Google.Apis.Calendar.v3.Data.Event.ExtendedPropertiesData
-Gadget	null	Google.Apis.Calendar.v3.Data.Event.GadgetData
-GuestsCanInviteOthers	null	bool?
-GuestsCanModify	null	bool?
-GuestsCanSeeOtherGuests	null	bool?
-HangoutLink	null	string
-ICalUID	"5q8qbifpcm5j7skslte8u0hute@google.com"	string
-Id	"5q8qbifpcm5j7skslte8u0hute_20200506T010000Z"	string
-Kind	"calendar#event"	string
-Locked	null	bool?
-◢ Organizer	{Google.Apis.Calendar.v3.Data.Event.OrganizerData}	Google.Apis.Calendar.v3.Data.Event.OrganizerData
-DisplayName	null	string
-Email	"hkuwauama@gmail.com"	string
-Id	null	string
-Self	TRUE	bool?
-Method	"popup"	string
-Minutes	60	int?
-◢ [1]	{Google.Apis.Calendar.v3.Data.EventReminder}	Google.Apis.Calendar.v3.Data.EventReminder
-ETag	null	string
-Method	"email"	string
-Minutes	1440	int?
-▶ 列ビュー		
-UseDefault	FALSE	bool?
-Sequence	5	int?
-Source	null	Google.Apis.Calendar.v3.Data.Event.SourceData
-Status	"confirmed"	string
-Transparency	null	string
-▶ Updated	{2020/05/21 11:12:09}	System.DateTime?
-UpdatedRaw	"2020-05-21T02:12:09.700Z"	string
-Visibility	null	string
 
-				 */
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -655,8 +621,10 @@ Visibility	null	string
 
 					//			dbMsg += "  、イベント：案件[" + Constant.AriadneAnkenFolderId + "] に ";
 					Task<File> rr = Task<File>.Run(() => {
-						dbMsg += "  ,案件= " + selectedAriadneData.ItemNumber;
-						return GDriveUtil.CreateFolder(selectedAriadneData.ItemNumber, topFolderId);
+						t_project_base tProject = new t_project_base();
+
+						dbMsg += "  ,案件= " + tProject.project_manage_code;
+						return GDriveUtil.CreateFolder(tProject.project_manage_code, topFolderId);
 					});
 					rr.Wait();
 					//Task.WaitAll(rootRes,topRes, rr);
@@ -768,7 +736,7 @@ Visibility	null	string
 		/// 添付ファイル配列の書き写し
 		/// </summary>
 		/// <param name="attachments"></param>
-		private void SetAttachments(IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments , AriadneData selectedAriadneData)
+		private void SetAttachments(IList<Google.Apis.Calendar.v3.Data.EventAttachment> attachments)
 		{
 			string TAG = "SetAttachments";
 			string dbMsg = "[GEventEdit]";
@@ -1209,9 +1177,9 @@ Visibility	null	string
 						return;
 					}
 				string retLink = "";
-				string parentFolderName = this.selectedAriadneData.ItemNumber;
+				string parentFolderName = tProject.project_manage_code;				// this.selectedAriadneData.ItemNumber;
 				//案件などAriadneEventfフォルダ直下に案件別フォルダを作成もしくは既存IDの取得
-				string itermFolderName = this.selectedAriadneData.ItemNumber;
+				string itermFolderName = tProject.project_manage_code;					//this.selectedAriadneData.ItemNumber;
 				Task<File> rr = Task<File>.Run(() => {
 					return GDriveUtil.CreateFolder(itermFolderName, Constant.AriadneAnkenFolderId);
 				});
@@ -1295,7 +1263,7 @@ Visibility	null	string
 				*/
 				dbMsg += " >> " + taregetEvent.Attachments.Count + "件";
 
-				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.selectedAriadneData);
+				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.tEvents);
 				dbMsg += ",retLink=" + retLink;
 				MyLog(TAG, dbMsg);
 				if (retLink != null) {

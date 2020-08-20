@@ -9,12 +9,24 @@
 
 namespace GoogleOSD
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class t_project_base
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Data;
+	using System.Data.Entity;
+
+	public partial class t_project_base
     {
-        public int Id { get; set; }
+		public t_project_base()
+		{
+
+		}
+		public t_project_base(DataRow row)
+		{
+
+		}
+
+		public int Id { get; set; }
         public Nullable<int> m_contract_id { get; set; }
         public Nullable<int> m_property_id { get; set; }
         public string project_number { get; set; }
@@ -31,4 +43,15 @@ namespace GoogleOSD
         public Nullable<System.DateTime> modifier_on { get; set; }
         public Nullable<System.DateTime> deleted_on { get; set; }
     }
+
+	public class ProjectContext : DbContext {
+		public DbSet<t_project_base> Projects { get; set; }
+	}
+
+	public class ProjecDataCollection : ObservableCollection<t_project_base> {
+		public ProjecDataCollection()
+		{
+		}
+	}
+
 }
