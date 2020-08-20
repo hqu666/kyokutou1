@@ -84,16 +84,64 @@ namespace GoogleOSD {
 				nEvents.event_place = currentItems.project_place;                                      //場所
 				nEvents.event_bg_color = "2";                                                                   //背景
 				nEvents.event_font_color = "1";                                                                   //文字色
-																												/*    public Nullable<int> m_contract_id { get; set; }
-																																public Nullable<byte> event_time_start { get; set; }
-																																public Nullable<System.DateTime> event_date_end { get; set; }
-																																public Nullable<byte> event_time_end { get; set; }
-																																public string event_memo { get; set; }
-																																public Nullable<byte> event_status { get; set; }
-																																public string google_id { get; set; }
-																																public Nullable<byte> status { get; set; }
-																																public Nullable<System.DateTime> modifier_on { get; set; }
-																																public Nullable<System.DateTime> deleted_on { get; set; }*/
+																												  /*    public Nullable<int> m_contract_id { get; set; }
+																																  public Nullable<byte> event_time_start { get; set; }
+																																  public Nullable<System.DateTime> event_date_end { get; set; }
+																																  public Nullable<byte> event_time_end { get; set; }
+																																  public string event_memo { get; set; }
+																																  public Nullable<byte> event_status { get; set; }
+																																  public string google_id { get; set; }
+																																  public Nullable<byte> status { get; set; }
+																																  public Nullable<System.DateTime> modifier_on { get; set; }
+																																  public Nullable<System.DateTime> deleted_on { get; set; }*/
+				if (ownerView != null) {
+					ownerView.tProject = currentItems;					//選択された案件を返して
+					ownerView.SetNewEvent(nEvents);						//	イベント作成へ
+				}
+				QuitMe();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 通常イベントを追加
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void add_sced_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "add_sced_bt_Click";
+			string dbMsg = "[EventAdd]";
+			try {
+				t_events nEvents = new t_events();
+				nEvents.m_contract_id = 0;                                         //契約ID
+				nEvents.event_type = 3;                                                                                     //通常
+				nEvents.t_project_base_id = 0;
+				dbMsg += "通常:" ;
+				nEvents.event_title =  "予定" ;
+				dbMsg += nEvents.event_title;
+				nEvents.event_date_start = startDT;
+				nEvents.event_date_end = startDT.AddHours(1);													//一時間加算
+				dbMsg += "," + nEvents.event_date_start + "～" + nEvents.event_date_end;
+				nEvents.event_is_daylong = 0;                                                                   //終日
+				nEvents.event_bg_color = "2";                                                                   //背景
+				nEvents.event_font_color = "1";                                                                   //文字色
+																												  /*    public Nullable<int> m_contract_id { get; set; }
+																																  public Nullable<byte> event_time_start { get; set; }
+																																  public Nullable<System.DateTime> event_date_end { get; set; }
+																																  public Nullable<byte> event_time_end { get; set; }
+																																  public string event_memo { get; set; }
+																																  public Nullable<byte> event_status { get; set; }
+																																  public string google_id { get; set; }
+																																  public Nullable<byte> status { get; set; }
+																																  public Nullable<System.DateTime> modifier_on { get; set; }
+																																  public Nullable<System.DateTime> deleted_on { get; set; }*/
+				if (ownerView != null) {
+					ownerView.SetNewEvent(nEvents);
+				}
+				QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -116,18 +164,6 @@ namespace GoogleOSD {
 				//タイトルを記載
 				this.Title = String.Format("{0:yyyy/MM/dd}", startDT) + "に新しい予定を追加します";
 				ListDrow();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		private void add_sced_bt_Click(object sender, RoutedEventArgs e)
-		{
-			string TAG = "add_sced_bt_Click";
-			string dbMsg = "[EventAdd]";
-			try {
-				QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

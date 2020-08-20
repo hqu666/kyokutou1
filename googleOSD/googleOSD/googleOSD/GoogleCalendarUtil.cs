@@ -478,6 +478,7 @@ namespace GoogleOSD {
 			try {
 				Constant.googleEventColor = new List<Constant.GoogleEventColor>();
 				dbMsg += ":googleEventColor=" + Constant.googleEventColor.Count + "件";
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("0", "文字", Color.FromRgb(255, 255, 255)));       //,#FF7986CB
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("1", "ラベンダー", Color.FromRgb(121, 134, 203)));       //,#FF7986CB
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("2", "セージ", Color.FromRgb(1, 182, 121)));                   //#FF01B679
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("3", "ブドウ", Color.FromRgb(142, 36, 170)));                  //#FF8E24AA

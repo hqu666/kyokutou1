@@ -984,12 +984,12 @@ namespace GoogleOSD {
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void SetNewEvent(t_events nEvents)
+		public void SetNewEvent(t_events nEvents)
 		{
 			string TAG = "SetNewEvent";
 			string dbMsg = "[GCalender]";
 			try {
-
+				tEvents = nEvents;
 
 				/*
 								if (selectedAriadneData == null){
@@ -1002,6 +1002,7 @@ namespace GoogleOSD {
 									}
 								}
 				*/
+
 				Google.Apis.Calendar.v3.Data.Event taregetEvent = new Google.Apis.Calendar.v3.Data.Event();
 
 				//作成直後はNullなので生成が必要
@@ -1024,12 +1025,12 @@ namespace GoogleOSD {
 				taregetEvent.Description ="添付ファイルを参照できる様、準備して参加をお願いします。";
 				dbMsg += ",Description=" + taregetEvent.Description;
 				//Eventに無い項目
-				Constant.orderNumber = tProject.order_number;			//selectedAriadneData.ItemNumber;                  //受注No（参照項目）
-				Constant.managementNumber = tProject.management_number;          //selectedAriadneData.ManagementNumber;     //管理番号（参照項目）
-				Constant.customerName = tProject.owner_name;          //selectedAriadneData.CustomerName;             //得意先（参照項目）
+				//Constant.orderNumber = tProject.order_number;			//selectedAriadneData.ItemNumber;                  //受注No（参照項目）
+				//Constant.managementNumber = tProject.management_number;          //selectedAriadneData.ManagementNumber;     //管理番号（参照項目）
+				//Constant.customerName = tProject.owner_name;          //selectedAriadneData.CustomerName;             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
-					editView = new GEventEdit(taregetEvent, tEvents);
+					editView = new GEventEdit(taregetEvent, tEvents, tProject);
 					editView.mainView = this;
 					editView.authWindow = authWindow;
 					editView.Show();
@@ -1086,12 +1087,12 @@ namespace GoogleOSD {
 				Google.Apis.Calendar.v3.Data.Event taregetEvent = bt.DataContext as Google.Apis.Calendar.v3.Data.Event;
 				dbMsg += "taregetEvent=" + taregetEvent.Summary;
 				//Eventに無い項目
-				Constant.orderNumber = "abc987654321DEF";                  //受注No（参照項目）
-				Constant.managementNumber = "987654321";     //管理番号（参照項目）
-				Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
+				//Constant.orderNumber = "abc987654321DEF";                  //受注No（参照項目）
+				//Constant.managementNumber = "987654321";     //管理番号（参照項目）
+				//Constant.customerName = "(株)TEST建設";             //得意先（参照項目）
 				if (editView == null) {
 					dbMsg += "Editを再生成";
-					editView = new GEventEdit(taregetEvent , tEvents);
+					editView = new GEventEdit(taregetEvent , tEvents, tProject);
 					editView.mainView = this;
 					editView.authWindow = authWindow;
 					editView.Show();

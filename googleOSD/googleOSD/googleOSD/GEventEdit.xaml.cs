@@ -44,7 +44,7 @@ namespace GoogleOSD {
 		/// この画面の開始
 		/// </summary>
 		/// <param name="taregetEvent"></param>
-		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent, t_events tEvents)
+		public GEventEdit(Google.Apis.Calendar.v3.Data.Event taregetEvent, t_events tEvents , t_project_base tProject)
 		{
 			string TAG = "GEventEdit";
 			string dbMsg = "[GEventEdit]";
@@ -52,36 +52,8 @@ namespace GoogleOSD {
 				InitializeComponent();
 				this.FontSize = Constant.MyFontSize;
 				this.taregetEvent = taregetEvent;
-				//既にスケジュール登録してあるAriadneデータの抜き出し
-				//if(selectedAriadneData== null) {
-				//	selectedAriadneData = GCalendarUtil.ReedEventInfo(taregetEvent);
-				//}
 				this.tEvents = tEvents;
-
-				CompanyEntities dataEntities = new CompanyEntities();
-				var query =
-							from project in dataEntities.t_project_base
-							where project.Id == tEvents.t_project_base_id
-							select new {
-								project.project_manage_code,
-								project.project_name,
-								project.delivery_date,
-								project.Id,
-								project.m_contract_id,
-								project.m_property_id,
-								project.project_number,
-								project.order_number,
-								project.project_code,
-								project.management_number,
-								project.supplier_name,
-								project.owner_name,
-								project.project_place,
-								project.status,
-								project.modifier_on
-							};
-				//リストにデータを書き込み
-				tProject = new t_project_base();
-	//			tProject = (t_project_base)query[0];
+				this.tProject = tProject;
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
 
 				EventWrite(taregetEvent, tEvents);
@@ -110,7 +82,7 @@ namespace GoogleOSD {
 					location_tb.Text = taregetEvent.Location;
 				}
 
-				SetColor(taregetEvent.ColorId);
+				SetColor(tEvents.event_bg_color);                             //taregetEvent.ColorId
 				SetAttachments(taregetEvent.Attachments );
 				SetDescription(taregetEvent);
 
@@ -516,25 +488,26 @@ namespace GoogleOSD {
 			string TAG = "SetDescription";
 			string dbMsg = "[GEventEdit]";
 			try {
-				order_tb.Text = Constant.orderNumber;                                               //受注No
-				management_number_tb.Text = Constant.managementNumber;           //管理番号
-				customer_tb.Text = Constant.customerName;                                       //得意先
-				string description = taregetEvent.Description;
+				order_tb.Text = tProject.order_number;           //Constant.orderNumber;                                               //受注No
+				management_number_tb.Text = tProject.management_number;           //Constant.managementNumber;           //管理番号
+				customer_tb.Text = tProject.supplier_name;           //Constant.customerName;                                       //得意先
+				memo_tb.Text = tEvents.event_memo;
 
-				string htmlStr = @"<html lang=""jp"" xmlns =""http://www.w3.org/1999/xhtml"">";
-				htmlStr += @"<head><meta charset=""utf-8"" /><title></title></head><body>";
-				htmlStr += @description;
-				htmlStr += "</body></html>";
-				dbMsg = ",htmlStr="+ htmlStr;
-		//		description_wb.NavigateToString(htmlStr);
+		//		string description = taregetEvent.Description;
 
-				string memoStr = description;
-				if (description.Contains( "</table>" )) {
-					string[] delimiter = { "</table>" };
-					string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					memoStr = memoStrs[1];
-				}
-		//		momo_tb.Text = memoStr;
+		//		string htmlStr = @"<html lang=""jp"" xmlns =""http://www.w3.org/1999/xhtml"">";
+		//		htmlStr += @"<head><meta charset=""utf-8"" /><title></title></head><body>";
+		//		htmlStr += @description;
+		//		htmlStr += "</body></html>";
+		//		dbMsg = ",htmlStr="+ htmlStr;
+		////		description_wb.NavigateToString(htmlStr);
+
+		//		string memoStr = description;
+		//		if (description.Contains( "</table>" )) {
+		//			string[] delimiter = { "</table>" };
+		//			string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+		//			memoStr = memoStrs[1];
+		//		}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
