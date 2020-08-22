@@ -476,17 +476,32 @@ namespace GoogleOSD {
 					lb.Background = new SolidColorBrush(color.rgb);
 					lb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 					lb.DataContext = color;
-					//リストアイテムに格納
+					//規定色をリストアイテムに格納
 					color_cb.Items.Add(lb);
 					if (color.id.Equals(colorID)) {
+						//指定されたインデックスと一致したらコンボボックス上のインデックスを記録し
 						serectIndex = nowCount;
+						//タイトル入力枠に着色
+						titol_tv.Background = new SolidColorBrush(color.rgb);
 						color_cb.Background = new SolidColorBrush(color.rgb);
-						color_cb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 					}
 					nowCount++;
 				}
+				Label lbe = new Label();
+				lbe.Content = "その他...";
+				//規定色をリストアイテムに格納
+				color_cb.Items.Add(lbe);
+
 				dbMsg += ",serectIndex=" + serectIndex;
 				color_cb.SelectedIndex = serectIndex;
+
+				if (serectIndex == 0) {      //規定色でなく
+					if (colorID.Contains('#')) {      //カラーコード指定なら：https://www.ipentec.com/document/csharp-htmlcolor-to-color
+						System.Drawing.Color ccolor = System.Drawing.ColorTranslator.FromHtml(colorID);
+						titol_tv.Background = new SolidColorBrush(Color.FromRgb(ccolor.R, ccolor.G, ccolor.B));
+					}
+				}
+				titol_tv.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -503,7 +518,9 @@ namespace GoogleOSD {
 			string TAG = "Color_cb_SelectionChanged";
 			string dbMsg = "[GEventEdit]";
 			try {
-			//※　作成時も発生する
+				//※　作成時も発生する
+				dbMsg += ",event_bg_color=" + tEvents.event_bg_color;
+
 				ComboBox cb = sender as ComboBox;
 				int serectIndex = cb.SelectedIndex;
 				dbMsg += ",serectIndex=" + serectIndex;
@@ -512,12 +529,20 @@ namespace GoogleOSD {
 				//colorObj = selectedItem.DataContext;
 				Constant.GoogleEventColor color = Constant.googleEventColor[serectIndex];
 				dbMsg += "," + color.id + ")" + color.name + "," + color.rgb;
-				if(taregetEvent != null) {
-					if (!taregetEvent.ColorId.Equals(color.id)) {
-						//			color_cb.Background = new SolidColorBrush(color.rgb);
-						taregetEvent.ColorId = color.id;
-					}
+		//	System.Drawing.Color ccolor = System.Drawing.ColorTranslator.FromHtml(colorID);
+				titol_tv.Background = new SolidColorBrush(color.rgb);
+				if(serectIndex < cb.Items.Count) {              //
+					tEvents.event_bg_color = (serectIndex + 1).ToString();
+				}else{
+					tEvents.event_bg_color = (color.rgb).ToString();
 				}
+				dbMsg += ">>" + tEvents.event_bg_color;
+				//if(taregetEvent != null) {
+				//	if (!taregetEvent.ColorId.Equals(color.id)) {
+				//		//			color_cb.Background = new SolidColorBrush(color.rgb);
+				//		taregetEvent.ColorId = color.id;
+				//	}
+				//}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

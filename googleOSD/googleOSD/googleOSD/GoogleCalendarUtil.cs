@@ -478,14 +478,14 @@ namespace GoogleOSD {
 			try {
 				Constant.googleEventColor = new List<Constant.GoogleEventColor>();
 				dbMsg += ":googleEventColor=" + Constant.googleEventColor.Count + "件";
-				Constant.googleEventColor.Add(new Constant.GoogleEventColor("0", "文字", Color.FromRgb(255, 255, 255)));       //,#FF7986CB
+		//		Constant.googleEventColor.Add(new Constant.GoogleEventColor("0", "文字", Color.FromRgb(255, 255, 255)));       //,#FF7986CB
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("1", "ラベンダー", Color.FromRgb(121, 134, 203)));       //,#FF7986CB
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("2", "セージ", Color.FromRgb(1, 182, 121)));                   //#FF01B679
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("3", "ブドウ", Color.FromRgb(142, 36, 170)));                  //#FF8E24AA
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("4", "フラミンゴ", Color.FromRgb(230, 124, 115)));       //#FFE67C73
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("5", "バナナ", Color.FromRgb(246, 192, 40)));               //#FFF6C028
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("6", "ミカン", Color.FromRgb(244, 81, 30)));                   //#FFF4511E
-				Constant.googleEventColor.Add(new Constant.GoogleEventColor("7", "ピーコック", Color.FromRgb(121, 134, 203)));           //
+				Constant.googleEventColor.Add(new Constant.GoogleEventColor("7", "ピーコック", Color.FromRgb(121, 134, 203)));           //#7986cb
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("8", "ブルーベリー", Color.FromRgb(63, 81, 181)));            //#FF3F51B5
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("9", "グラファイト", Color.FromRgb(97, 97, 97)));         //#FF616161
 				Constant.googleEventColor.Add(new Constant.GoogleEventColor("10", "バジル", Color.FromRgb(11, 128, 67)));                //#FF0B8043
