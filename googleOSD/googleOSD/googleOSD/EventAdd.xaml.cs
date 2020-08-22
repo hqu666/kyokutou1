@@ -78,8 +78,13 @@ namespace GoogleOSD {
 				nEvents.event_title = currentItems.owner_name + "様　" + currentItems.project_name;
 				dbMsg += nEvents.event_title;
 				nEvents.event_date_start = startDT;
+				DateTime dt = DateTime.Now;
+				nEvents.event_time_start = (byte)dt.TimeOfDay.Hours;
+				dbMsg += "," + nEvents.event_date_start + " " + nEvents.event_time_start;
 				nEvents.event_date_end = currentItems.delivery_date;
-				dbMsg += "," + nEvents.event_date_start + "～" + nEvents.event_date_end;
+				nEvents.event_time_end = (byte)dt.AddHours(1).TimeOfDay.Hours;
+				dbMsg += "～" + nEvents.event_date_end + " " + nEvents.event_time_end;
+
 				nEvents.event_is_daylong = 1;																	//終日
 				nEvents.event_place = currentItems.project_place;                                      //場所
 				nEvents.event_bg_color = "2";                                                                   //背景
@@ -123,8 +128,12 @@ namespace GoogleOSD {
 				nEvents.event_title =  "予定" ;
 				dbMsg += nEvents.event_title;
 				nEvents.event_date_start = startDT;
-				nEvents.event_date_end = startDT.AddHours(1);													//一時間加算
-				dbMsg += "," + nEvents.event_date_start + "～" + nEvents.event_date_end;
+				DateTime dt = DateTime.Now;
+				nEvents.event_time_start = (byte)dt.TimeOfDay.Hours;
+				dbMsg += "," + nEvents.event_date_start + " " + nEvents.event_time_start;
+				nEvents.event_date_end = startDT.AddHours(1);                                                   //一時間加算
+				nEvents.event_time_end = (byte)dt.AddHours(1).TimeOfDay.Hours;
+				dbMsg += "～" + nEvents.event_date_end + " " + nEvents.event_time_end;
 				nEvents.event_is_daylong = 0;                                                                   //終日
 				nEvents.event_bg_color = "2";                                                                   //背景
 				nEvents.event_font_color = "1";                                                                   //文字色
