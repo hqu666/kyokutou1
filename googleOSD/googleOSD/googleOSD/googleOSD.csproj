@@ -84,7 +84,7 @@
     <Compile Include="AriadneData.cs" />
     <Compile Include="AttachmentData.cs" />
     <Compile Include="Company.cs">
-      <DependentUpon>ScedModel.tt</DependentUpon>
+      <DependentUpon>ProjectModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Controls\WaitingDLog.xaml.cs">
@@ -140,6 +140,7 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="SceduleModel.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Style\StyleDic.xaml.cs">
       <DependentUpon>StyleDic.xaml</DependentUpon>
@@ -152,7 +153,7 @@
       <DependentUpon>WaitingCircle.xaml</DependentUpon>
     </Compile>
     <Compile Include="t_events.cs">
-      <DependentUpon>ScedModel.tt</DependentUpon>
+      <DependentUpon>ProjectModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_project_base.cs">
       <DependentUpon>ProjectModel.tt</DependentUpon>

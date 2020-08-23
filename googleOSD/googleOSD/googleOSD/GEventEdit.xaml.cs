@@ -1202,12 +1202,12 @@ namespace GoogleOSD {
 			string TAG = "Save_bt_Click";
 			string dbMsg = "[GEventEdit]";
 			try {
-				DateTime endDT = GCalendarUtil.EventDateTime2DT(taregetEvent.End);
-				DateTime startDT = GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				DateTime endDT = new DateTime(tEvents.event_date_end.Value.Year, tEvents.event_date_end.Value.Month, tEvents.event_date_end.Value.Day, (int)tEvents.event_time_end, 0, 0);          //GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				DateTime startDT = new DateTime(tEvents.event_date_start.Value.Year, tEvents.event_date_start.Value.Month, tEvents.event_date_start.Value.Day, (int)tEvents.event_time_start, 0, 0);          // GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
 				dbMsg += ",元の設定：" + startDT + "～" + endDT;
-				long endLong = GCalendarUtil.EventDateTime2Long(taregetEvent.End);
-				long starLong = GCalendarUtil.EventDateTime2Long(taregetEvent.Start);
-				if (endLong < starLong) {
+				//long endLong = GCalendarUtil.EventDateTime2Long(taregetEvent.End);
+				//long starLong = GCalendarUtil.EventDateTime2Long(taregetEvent.Start);
+				if (endDT < startDT) {
 					dbMsg += ">終了日以降になっている>";
 					TimeSpan startDTT = startDT.TimeOfDay;
 					TimeSpan endDTT = endDT.TimeOfDay;
@@ -1221,7 +1221,12 @@ namespace GoogleOSD {
 					return;
 				}
 				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
-
+				using (var context = new EventContext()) {
+					// Addした段階ではSql文はDBに発行されない
+					context.Events.Add(tEvents);
+					// SaveChangesが呼び出された段階で初めてInsert文が発行される
+					context.SaveChanges();
+				}
 
 				///////////////////////////////////////////////////////////////////////////////////////
 				string retLink = "";

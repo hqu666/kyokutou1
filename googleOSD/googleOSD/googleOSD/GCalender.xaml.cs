@@ -78,6 +78,18 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				projecDataCollection = new ProjecDataCollection();
+
+			//	using (var context = new ProjectContext()) {
+			//		var Projects = context.Projects
+			//								.AsNoTracking()
+			//								.ToArray();
+			//		foreach (var rProject in Projects) {
+			////			foreach (var rProject in context.Projects) {
+			//			dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
+			//			projecDataCollection.Add(rProject);
+			//		}
+			//	}
+
 				CompanyEntities dataEntities = new CompanyEntities();
 				var query =
 					from project in dataEntities.t_project_base
