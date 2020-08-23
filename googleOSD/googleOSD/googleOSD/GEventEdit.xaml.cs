@@ -465,7 +465,7 @@ namespace GoogleOSD {
 				}
 				dbMsg += "googleEventColor=" + Constant.googleEventColor.Count+"色";
 				Constant.GoogleEventColor colorInfo = Constant.googleEventColor[int.Parse(colorID)];
-				Color_lb.Foreground = new SolidColorBrush(colorInfo.rgb);
+		//		Color_lb.Foreground = new SolidColorBrush(colorInfo.rgb);
 				int serectIndex = 0;
 				int nowCount = 0;
 				foreach (Constant.GoogleEventColor color in Constant.googleEventColor) {
@@ -1208,18 +1208,22 @@ namespace GoogleOSD {
 				long endLong = GCalendarUtil.EventDateTime2Long(taregetEvent.End);
 				long starLong = GCalendarUtil.EventDateTime2Long(taregetEvent.Start);
 				if (endLong < starLong) {
-						dbMsg += ">終了日以降になっている>";
-						TimeSpan startDTT = startDT.TimeOfDay;
-						TimeSpan endDTT = endDT.TimeOfDay;
-						dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
-						String titolStr = Constant.ApplicationName;
-						String msgStr = "	開始：" + startDT;
-						msgStr += "	\r\n終了：" + endDT;
-						msgStr += "	開始日時が終了日時以降に設定されています。\r\n修正して下さい。";
-						MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-						dbMsg += ",result=" + result;
-						return;
-					}
+					dbMsg += ">終了日以降になっている>";
+					TimeSpan startDTT = startDT.TimeOfDay;
+					TimeSpan endDTT = endDT.TimeOfDay;
+					dbMsg += ",元の設定：" + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "	開始：" + startDT;
+					msgStr += "	\r\n終了：" + endDT;
+					msgStr += "	開始日時が終了日時以降に設定されています。\r\n修正して下さい。";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+					return;
+				}
+				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
+
+
+				///////////////////////////////////////////////////////////////////////////////////////
 				string retLink = "";
 				string parentFolderName = tProject.project_manage_code;				// this.selectedAriadneData.ItemNumber;
 				//案件などAriadneEventfフォルダ直下に案件別フォルダを作成もしくは既存IDの取得
@@ -1242,8 +1246,11 @@ namespace GoogleOSD {
 				rr.Wait();
 				string otherFolderId = rr.Result.Id;
 				dbMsg += ",一般名フォルダ[" + otherFolderId + "]";
+
+
+
 /*
-				//Googleドライブにファイルコピー
+				//Ariadne5の生成フォルダをGoogleドライブにファイルコピー
 				taregetEvent.Attachments = new System.Collections.Generic.List<Google.Apis.Calendar.v3.Data.EventAttachment>();
 				if (this.selectedAriadneData.EstimationPCPass != null) {
 					dbMsg += ",見積ファイル有り";                   //"MI20060006";        

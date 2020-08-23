@@ -124,29 +124,37 @@
 
 		<Label Content="開始日時" Grid.Row="3"  Grid.Column="0"  
 					HorizontalAlignment="Right" />
-		<!--<Viewbox  Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left" Width="170">-->
-		<DatePicker   Grid.Row="3"  Grid.Column="1"  HorizontalAlignment="Left"  Width="190"
+		<StackPanel  Grid.Row="3"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
+			<DatePicker    HorizontalAlignment="Left"  Width="190"
 								SelectedDateFormat="Long" VerticalAlignment="Center"
 								Name="start_date_dp"
 								SelectedDateChanged="Start_date_dp_SelectedDateChanged" >
-			<DatePicker.CalendarStyle>
-				<Style TargetType="Calendar">
-					<Setter Property="LayoutTransform">
-						<Setter.Value>
-							<ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</DatePicker.CalendarStyle>
-		</DatePicker>
-		<!--</Viewbox>-->
-		<local:TimePic Grid.Row="3"  Grid.Column="2"  VerticalAlignment="Center"  
-								x:Name="start_time_tp" 
+				<DatePicker.CalendarStyle>
+					<Style TargetType="Calendar">
+						<Setter Property="LayoutTransform">
+							<Setter.Value>
+								<ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DatePicker.CalendarStyle>
+			</DatePicker>
+			<local:TimePic x:Name="start_time_tp"   VerticalAlignment="Center"  
 								TimeSelectionChanged="Start_time_tp_SelectedTimeChanged"   />
-		<CheckBox Name="daylong_cb" Content="終日" Click="Daylong_cb_Click"
-							Grid.Row="3" Grid.Column="4"    HorizontalAlignment="Left" VerticalAlignment="Center" 
+			<CheckBox Name="daylong_cb" Content="終日" Click="Daylong_cb_Click"
+								 HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
 								/>
-		<!--<ComboBox Name="kurikaesi_cb" SelectedIndex="1" Margin="10,0,0,0" >
+		</StackPanel>
+
+		<Label Content="終了日時"  Grid.Row="4" Grid.Column="0"  HorizontalAlignment="Right"  />
+		<StackPanel  Grid.Row="4"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
+
+			<DatePicker SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
+								Name="end_date_dp"  
+									SelectedDateChanged="End_date_dp_SelectedDateChanged" />
+			<local:TimePic  x:Name="end_time_tp"  VerticalAlignment="Top"  
+										TimeSelectionChanged="End_time_tp_SelectedTimeChanged"   />
+			<!--<ComboBox Name="kurikaesi_cb" SelectedIndex="1" Margin="10,0,0,0" >
 				<ListBoxItem Content="繰り返さない"/>
 				<ListBoxItem Content="毎日"/>
 				<ListBoxItem Content="毎週"/>
@@ -156,18 +164,9 @@
 				<ListBoxItem Content="毎週平日（月～金）"/>
 				<ListBoxItem Content="カスタム"/>
 			</ComboBox>-->
-		<!--</StackPanel>-->
+		</StackPanel>
 
-		<Label Content="終了日時"  Grid.Row="4" Grid.Column="0"  HorizontalAlignment="Right"  />
-		<DatePicker Grid.Row="4"  Grid.Column="1" 
-							SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
-							Name="end_date_dp"  
-								SelectedDateChanged="End_date_dp_SelectedDateChanged" />
-		<local:TimePic  Grid.Row="4"  Grid.Column="2" 
-								x:Name="end_time_tp"  VerticalAlignment="Top"  
-									TimeSelectionChanged="End_time_tp_SelectedTimeChanged"   />
-
-		<Label Name="Color_lb" Grid.Row="6" Grid.Column="0"   Content="●" HorizontalAlignment="Right" 
+		<Label Name="Color_lb" Grid.Row="6" Grid.Column="0"   Content="タイトル" HorizontalAlignment="Right" 
 						 />
 		<TextBox Name="titol_tv" Text="タイトル" Grid.Row="6"  Grid.Column="1" Grid.ColumnSpan="3" 
 								 />

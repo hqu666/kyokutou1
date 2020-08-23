@@ -87,18 +87,14 @@ namespace GoogleOSD {
 
 				nEvents.event_is_daylong = 1;																	//終日
 				nEvents.event_place = currentItems.project_place;                                      //場所
-				nEvents.event_bg_color = "2";                                                                   //背景
+				nEvents.event_bg_color = "7";                                                                   //背景
 				nEvents.event_font_color = "1";                                                                   //文字色
-																												  /*    public Nullable<int> m_contract_id { get; set; }
-																																  public Nullable<byte> event_time_start { get; set; }
-																																  public Nullable<System.DateTime> event_date_end { get; set; }
-																																  public Nullable<byte> event_time_end { get; set; }
-																																  public string event_memo { get; set; }
-																																  public Nullable<byte> event_status { get; set; }
-																																  public string google_id { get; set; }
-																																  public Nullable<byte> status { get; set; }
-																																  public Nullable<System.DateTime> modifier_on { get; set; }
-																																  public Nullable<System.DateTime> deleted_on { get; set; }*/
+				nEvents.event_status = 1;
+				nEvents.status = 1;
+				nEvents.event_memo = "";
+				/* 					public string google_id { get; set; }
+									public Nullable<System.DateTime> modifier_on { get; set; }
+									public Nullable<System.DateTime> deleted_on { get; set; }*/
 				if (ownerView != null) {
 					ownerView.tProject = currentItems;					//選択された案件を返して
 					ownerView.SetNewEvent(nEvents);						//	イベント作成へ
@@ -136,17 +132,13 @@ namespace GoogleOSD {
 				dbMsg += "～" + nEvents.event_date_end + " " + nEvents.event_time_end;
 				nEvents.event_is_daylong = 0;                                                                   //終日
 				nEvents.event_bg_color = "2";                                                                   //背景
-				nEvents.event_font_color = "1";                                                                   //文字色
-																												  /*    public Nullable<int> m_contract_id { get; set; }
-																																  public Nullable<byte> event_time_start { get; set; }
-																																  public Nullable<System.DateTime> event_date_end { get; set; }
-																																  public Nullable<byte> event_time_end { get; set; }
-																																  public string event_memo { get; set; }
-																																  public Nullable<byte> event_status { get; set; }
-																																  public string google_id { get; set; }
-																																  public Nullable<byte> status { get; set; }
-																																  public Nullable<System.DateTime> modifier_on { get; set; }
-																																  public Nullable<System.DateTime> deleted_on { get; set; }*/
+				nEvents.event_font_color = "7";                                                                   //文字色
+				nEvents.event_status = 1;
+				nEvents.status = 1;
+				nEvents.event_memo = "";
+				/*		public string google_id { get; set; }
+								public Nullable<System.DateTime> modifier_on { get; set; }
+								public Nullable<System.DateTime> deleted_on { get; set; }*/
 				if (ownerView != null) {
 					ownerView.SetNewEvent(nEvents);
 				}
