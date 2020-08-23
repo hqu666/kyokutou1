@@ -70,6 +70,7 @@ namespace GoogleOSD {
 				//		t_project_base selectedData = this.Project_dg.SelectedItem as t_project_base;
 
 				t_project_base currentItems = dGrid.CurrentCell.Item as t_project_base;
+				//新しい予定を作成
 				t_events nEvents = new t_events();
 				nEvents.m_contract_id = currentItems.m_contract_id;                                         //契約ID
 				nEvents.event_type = 1;																						//案件
@@ -90,7 +91,7 @@ namespace GoogleOSD {
 				nEvents.event_bg_color = "7";                                                                   //背景
 				nEvents.event_font_color = "1";                                                                   //文字色
 				nEvents.event_status = 1;
-				nEvents.status = 1;
+		//		nEvents.status = 1;
 				nEvents.event_memo = "";
 				/* 					public string google_id { get; set; }
 									public Nullable<System.DateTime> modifier_on { get; set; }
@@ -134,7 +135,7 @@ namespace GoogleOSD {
 				nEvents.event_bg_color = "2";                                                                   //背景
 				nEvents.event_font_color = "7";                                                                   //文字色
 				nEvents.event_status = 1;
-				nEvents.status = 1;
+		//		nEvents.status = 1;
 				nEvents.event_memo = "";
 				/*		public string google_id { get; set; }
 								public Nullable<System.DateTime> modifier_on { get; set; }
