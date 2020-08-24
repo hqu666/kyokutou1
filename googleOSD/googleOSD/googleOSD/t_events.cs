@@ -10,7 +10,7 @@
 namespace GoogleOSD
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     
     public partial class t_events
     {
@@ -30,12 +30,6 @@ namespace GoogleOSD
         public string google_id { get; set; }
         public string event_bg_color { get; set; }
         public string event_font_color { get; set; }
-        public string project_name { get; set; }
-        public string project_number { get; set; }
-        public string order_number { get; set; }
-        public string management_number { get; set; }
-        public string owner_name { get; set; }
-        public Nullable<byte> status { get; set; }
         public Nullable<System.DateTime> modifier_on { get; set; }
         public Nullable<System.DateTime> deleted_on { get; set; }
     }

@@ -95,6 +95,9 @@
     <Compile Include="EventAdd.xaml.cs">
       <DependentUpon>EventAdd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EventList.xaml.cs">
+      <DependentUpon>EventList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GAttachFile.cs" />
     <Compile Include="GCalender.xaml.cs">
       <DependentUpon>GCalender.xaml</DependentUpon>
@@ -166,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EventAdd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EventList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,6 +257,9 @@
     <None Include="ProjectModel.edmx.diagram">
       <DependentUpon>ProjectModel.edmx</DependentUpon>
     </None>
+    <None Include="Properties\DataSources\EventList.datasource" />
+    <None Include="Properties\DataSources\SceduleModel.datasource" />
+    <None Include="Properties\DataSources\t_project_base.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

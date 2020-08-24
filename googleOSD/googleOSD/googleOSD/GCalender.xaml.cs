@@ -42,12 +42,11 @@ namespace GoogleOSD {
 		private string taregetURL = null;
 		public IList<AriadneData> ariadneDatas = new List<AriadneData>();
 		public ProjecDataCollection projecDataCollection ;
-		public DbSet<t_project_base> Projects { get; set; }
+		public EventDataCollection eventDataCollection;
+	//	public DbSet<t_project_base> Projects { get; set; }
 
 		public t_events tEvents;
 		public t_project_base tProject;
-
-	//	public AriadneData selectedAriadneData;
 
 		public GCalender()
 		{
@@ -63,6 +62,7 @@ namespace GoogleOSD {
 				DrowToday();
 
 				ReadProject();
+				ReadEvent();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -79,62 +79,41 @@ namespace GoogleOSD {
 			try {
 				projecDataCollection = new ProjecDataCollection();
 
-			//	using (var context = new ProjectContext()) {
-			//		var Projects = context.Projects
-			//								.AsNoTracking()
-			//								.ToArray();
-			//		foreach (var rProject in Projects) {
-			////			foreach (var rProject in context.Projects) {
-			//			dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
-			//			projecDataCollection.Add(rProject);
-			//		}
-			//	}
-
-				CompanyEntities dataEntities = new CompanyEntities();
-				var query =
-					from project in dataEntities.t_project_base
-					where project.status != 9 & project.deleted_on == null
-					orderby project.delivery_date
-					select new {
-						project.project_manage_code,
-						project.project_name,
-						project.delivery_date,
-						project.Id,
-						project.m_contract_id,
-						project.m_property_id,
-						project.project_number,
-						project.order_number,
-						project.project_code,
-						project.management_number,
-						project.supplier_name,
-						project.owner_name,
-						project.project_place,
-						project.status,
-						project.modifier_on
-					};
-				var projctList = query.ToList();
-				////リストにデータを書き込み
-				foreach (var rVar in projctList) {
-					t_project_base rProject = new t_project_base();
-					rProject.Id = rVar.Id;
-					rProject.project_manage_code = rVar.project_manage_code;
-					rProject.project_name = rVar.project_name;
-					rProject.delivery_date = rVar.delivery_date;
-					rProject.m_contract_id = rVar.m_contract_id;
-					rProject.m_property_id = rVar.m_property_id;
-					rProject.project_number = rVar.project_number;
-					rProject.order_number = rVar.order_number;
-					rProject.project_code = rVar.project_code;
-					rProject.management_number = rVar.management_number;
-					rProject.supplier_name = rVar.supplier_name;
-					rProject.owner_name = rVar.owner_name;
-					rProject.project_place = rVar.project_place;
-					rProject.status = rVar.status;
-					rProject.modifier_on = rVar.modifier_on;
-
-					projecDataCollection.Add(rProject);
+				using (var context = new CompanyEntities()) {
+					foreach (var rProject in context.t_project_base) {
+						dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
+						projecDataCollection.Add(rProject);
+					}
 				}
 				dbMsg += "案件" + projecDataCollection.Count + "件";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		public void ReadEvent()
+		{
+			string TAG = "ReadEvent";
+			string dbMsg = "[GCalender]";
+			try {
+				eventDataCollection = new EventDataCollection();
+
+				using (var context = new CompanyEntities()) {
+					//SQL Server への接続を確立しているときにネットワーク関連またはインスタンス固有のエラーが発生しました。
+					//サーバーが見つからないかアクセスできません。インスタンス名が正しいこと、および SQL Server がリモート接続を許可するように構成されていることを確認してください。 (provider: SQL Network Interfaces, error: 26 - 指定されたサーバーまたはインスタンスの位置を特定しているときにエラーが発生しました)
+					//var Projects = context.Projects
+					//						.AsNoTracking()
+					//						.ToArray();
+					//foreach (var rProject in Projects) {
+					if( context.t_events != null) {
+						foreach (var rEvent in context.t_events) {
+							dbMsg += "[" + rEvent.Id + "]" + rEvent.event_title;
+							eventDataCollection.Add(rEvent);
+						}
+					}
+				}
+				dbMsg += "イベント" + eventDataCollection.Count + "件";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

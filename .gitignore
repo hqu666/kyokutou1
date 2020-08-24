@@ -3,3 +3,6 @@
 ################################################################################
 
 /googleOSD/googleOSD/.vs/googleOSD/v15/Server/sqlite3/db.lock
+/googleOSD/googleOSD/googleOSD/Properties/DataSources/EventList.datasource
+/googleOSD/googleOSD/googleOSD/Properties/DataSources/SceduleModel.datasource
+/googleOSD/googleOSD/googleOSD/Properties/DataSources/t_project_base.datasource

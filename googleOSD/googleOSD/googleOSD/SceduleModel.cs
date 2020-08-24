@@ -18,10 +18,6 @@ namespace GoogleOSD {
 		}
 	}
 
-	public class EventContext : DbContext {
-		public DbSet<t_events> Events { get; set; }
-	}
-
 	/// <summary>
 	/// 案件情報の読込み
 	/// </summary>
@@ -29,10 +25,6 @@ namespace GoogleOSD {
 		public ProjecDataCollection()
 		{
 		}
-	}
-
-	public class ProjectContext : DbContext {
-		public DbSet<t_project_base> Projects { get; set; }
 	}
 
 }
