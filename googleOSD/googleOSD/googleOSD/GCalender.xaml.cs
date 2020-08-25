@@ -100,14 +100,13 @@ namespace GoogleOSD {
 				eventDataCollection = new EventDataCollection();
 
 				using (var context = new CompanyEntities()) {
-					//SQL Server への接続を確立しているときにネットワーク関連またはインスタンス固有のエラーが発生しました。
-					//サーバーが見つからないかアクセスできません。インスタンス名が正しいこと、および SQL Server がリモート接続を許可するように構成されていることを確認してください。 (provider: SQL Network Interfaces, error: 26 - 指定されたサーバーまたはインスタンスの位置を特定しているときにエラーが発生しました)
 					//var Projects = context.Projects
 					//						.AsNoTracking()
 					//						.ToArray();
 					//foreach (var rProject in Projects) {
 					if( context.t_events != null) {
 						foreach (var rEvent in context.t_events) {
+							//;System.InvalidOperationException: エンティティ型 t_events は、現在のコンテキストのモデルに含まれていません。
 							dbMsg += "[" + rEvent.Id + "]" + rEvent.event_title;
 							eventDataCollection.Add(rEvent);
 						}

@@ -7,26 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GoogleOSD
-{
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
-    
-    public partial class CompanyEntities : DbContext
-    {
-        public CompanyEntities()
-            : base("name=CompanyEntities")
-        {
-        }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
-        public virtual DbSet<Company> Companys { get; set; }
-        public virtual DbSet<t_events> t_events { get; set; }
-        public virtual DbSet<t_project_base> t_project_base { get; set; }
-    }
+namespace GoogleOSD {
+	using System;
+	using System.Data.Entity;
+	using System.Data.Entity.Infrastructure;
+
+	public partial class CompanyEntities : DbContext {
+		public CompanyEntities()
+			: base("name=CompanyEntities")
+		{
+		}
+
+		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+		{
+			throw new UnintentionalCodeFirstException();
+		}
+
+		public virtual DbSet<Company> Companys { get; set; }
+		public virtual DbSet<t_events> t_events { get; set; }
+		public virtual DbSet<t_project_base> t_project_base { get; set; }
+	}
 }

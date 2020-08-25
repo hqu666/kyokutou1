@@ -257,7 +257,8 @@
     <None Include="ProjectModel.edmx.diagram">
       <DependentUpon>ProjectModel.edmx</DependentUpon>
     </None>
-    <None Include="Properties\DataSources\t_events.datasource" />
+    <None Include="Properties\DataSources\EventList.datasource" />
+    <None Include="Properties\DataSources\SceduleModel.datasource" />
     <None Include="Properties\DataSources\t_project_base.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
