@@ -697,12 +697,36 @@ namespace GoogleOSD {
 					dbMsg += ",timeCurrent= " + timeCurrent;
 					taregetEvent = MakeNewEvent(timeCurrent);
 				}
+				dbMsg += ",tEvents：" + tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")" + tEvents.event_title;
 				dbMsg += "  ,targetEvent=" + taregetEvent.Id;
+				DateTime dateTime = DateTime.Parse(tEvents.event_date_start.ToString());
+				dateTime.AddHours((int)tEvents.event_time_start);
+				taregetEvent.Start.DateTime = dateTime;
+				//taregetEvent.Start.DateTime = taregetEvent.Start.DateTime.        DateTime.Parse(tEvents.event_date_start.ToString() + " " + tEvents.event_time_start.ToString() + ":00");
+				dbMsg += "  ," + taregetEvent.Start.DateTime;
+				dateTime = DateTime.Parse(tEvents.event_date_end.ToString());
+				dateTime.AddHours((int)tEvents.event_time_end);
+				taregetEvent.End.DateTime = dateTime;				// DateTime.Parse(tEvents.event_date_end.ToString() + " " + tEvents.event_date_end.ToString() + ":00");
+				dbMsg += "～" + taregetEvent.End.DateTime;
+				taregetEvent.OriginalStartTime.DateTime = taregetEvent.Start.DateTime;
+				dbMsg += ",OriginalStartTime=" + taregetEvent.OriginalStartTime.DateTime;
+				dbMsg += ",終日=" + tEvents.event_is_daylong;
+				if (tEvents.event_is_daylong == 0) {
+					taregetEvent.Start.Date = String.Format("yyyy-MM-dd" , taregetEvent.Start.DateTime);
+					dbMsg += ">>" + taregetEvent.Start.Date;
+				}else{
+
+				}
+
+				taregetEvent.Summary = tEvents.event_title;
 				dbMsg += " ; " + taregetEvent.Summary;
 				if (taregetEvent.Summary == null) {
-					taregetEvent.Summary = "新規案件対応会議";
-					dbMsg += "taregetEvent=" + taregetEvent.Summary;
+					taregetEvent.Summary = "予定";
+					dbMsg += ">>" + taregetEvent.Summary;
 				}
+				taregetEvent.Location = tEvents.event_place;
+				taregetEvent.ColorId = tEvents.event_bg_color;
+
 
 				int AttachmentsCount = taregetEvent.Attachments.Count;
 				dbMsg += ",添付=" + AttachmentsCount + "件";
@@ -710,13 +734,16 @@ namespace GoogleOSD {
 				//追加する項目
 				string addText = "<table><tbody valign=" + "\"" + "top" + "\"" +">";
 				if(tEvents.event_type ==1) {
-/*
-					addText += "<tr><td>案件番号</td>" + "<td> : " + selectedAriadneData.ItemNumber + "</td></tr>";                 // selectedAriadneData.ItemNumber
-					addText += "<tr><td>受注No</td>" + "<td> : " + selectedAriadneData.OrderNumber + "</td></tr>";                    //OrderNumber
-					addText += "<tr><td>管理番号</td>" + "<td> : " + selectedAriadneData.ManagementNumber + "</td></tr>";       //ManagementNumber
-					addText += "<tr><td>得意先</td>" + "<td> : " + selectedAriadneData.CustomerName + "</td></tr>";                        //CustomerName
-	*/	
+					using (var context = new EventEntities()) {
+						var rProject = context.t_project_base.Single(x => x.Id == tEvents.t_project_base_id);
+						dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
+						addText += "<tr><td>案件番号</td>" + "<td> : " + rProject.project_manage_code + "</td></tr>";                 // selectedAriadneData.ItemNumber
+						addText += "<tr><td>受注No</td>" + "<td> : " + rProject.order_number + "</td></tr>";                    //OrderNumber
+						addText += "<tr><td>管理番号</td>" + "<td> : " + rProject.management_number + "</td></tr>";       //ManagementNumber
+						addText += "<tr><td>得意先</td>" + "<td> : " + rProject.owner_name + "</td></tr>";                        //CustomerName
 					}
+
+				}
 				if (0 < taregetEvent.Attachments.Count) {
 					addText += "<tr valign=" + "\"" + "top" + "\"" + "><td>添付ファイル</td><td> ";
 					int RowCount = 1;
@@ -732,26 +759,26 @@ namespace GoogleOSD {
 
 				addText += "<tr valign = " + "\"" + "top" + "\"" + "><td>メモ</td>" + "<td> : <pre>" + tEvents.event_memo + "</pre></td></tr>";             //Memo
 
-				addText += "</tbody >";
+				addText += "</tbody ></table>";
 
-				string description = taregetEvent.Description;
-				dbMsg += ",Description=" + description;
-				string memoStr = description;
-				//Descriptionのエディターから入力できないタグで既に追記が有るかどうかを判定
-				if (description == null) {
-					description = "添付ファイルを参照できる様、準備して参加をお願いします。</p>" + addText;
-				} else if (description.Contains("<table>")) {
-					string[] delimiter = { "<table>" };
-					string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-					string prefix = memoStrs[0];
-					string suffix = memoStrs[memoStrs.Length - 1];
-					string[] delimiter2 = { "</table>" };
-					string[] prefixs = suffix.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
-					suffix = memoStrs[memoStrs.Length - 1];
-					description = "< pre > " + prefix + " </ pre >" + addText + "<br><pre>" + suffix + "</pre>";
-				} else {
-					description = description + addText;
-				}
+				string description = addText;
+				//dbMsg += ",Description=" + description;
+				//string memoStr = description;
+				////Descriptionのエディターから入力できないタグで既に追記が有るかどうかを判定
+				//if (description == null) {
+				//	description = addText + "</p>" +;
+				//} else if (description.Contains("<table>")) {
+				//	string[] delimiter = { "<table>" };
+				//	string[] memoStrs = description.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+				//	string prefix = memoStrs[0];
+				//	string suffix = memoStrs[memoStrs.Length - 1];
+				//	string[] delimiter2 = { "</table>" };
+				//	string[] prefixs = suffix.Split(delimiter2, StringSplitOptions.RemoveEmptyEntries);
+				//	suffix = memoStrs[memoStrs.Length - 1];
+				//	description = "< pre > " + prefix + " </ pre >" + addText + "<br><pre>" + suffix + "</pre>";
+				//} else {
+				//	description = description + addText;
+				//}
 				dbMsg += ",description=" + description;
 				taregetEvent.Description = description;
 				if (taregetEvent.Id == null) {

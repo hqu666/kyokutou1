@@ -1223,6 +1223,7 @@ namespace GoogleOSD {
 				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
 				using (var context = new EventEntities()) {
 					// Addした段階ではSql文はDBに発行されない
+					dbMsg += ",：" + tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")" + tEvents.event_title;
 					context.t_events.Add(tEvents);
 					// SaveChangesが呼び出された段階で初めてInsert文が発行される
 					context.SaveChanges();
