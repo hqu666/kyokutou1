@@ -1221,7 +1221,7 @@ namespace GoogleOSD {
 					return;
 				}
 				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
-				using (var context = new CompanyEntities()) {
+				using (var context = new EventEntities()) {
 					// Addした段階ではSql文はDBに発行されない
 					context.t_events.Add(tEvents);
 					// SaveChangesが呼び出された段階で初めてInsert文が発行される

@@ -79,7 +79,7 @@ namespace GoogleOSD {
 			try {
 				projecDataCollection = new ProjecDataCollection();
 
-				using (var context = new CompanyEntities()) {
+				using (var context = new EventEntities()) {
 					foreach (var rProject in context.t_project_base) {
 						dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
 						projecDataCollection.Add(rProject);
@@ -99,7 +99,7 @@ namespace GoogleOSD {
 			try {
 				eventDataCollection = new EventDataCollection();
 
-				using (var context = new CompanyEntities()) {
+				using (var context = new EventEntities()) {
 					//var Projects = context.Projects
 					//						.AsNoTracking()
 					//						.ToArray();
