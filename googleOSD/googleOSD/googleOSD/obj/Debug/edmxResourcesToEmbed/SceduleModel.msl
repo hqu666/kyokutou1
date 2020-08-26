@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SceduleModelStoreContainer" CdmEntityContainer="SceduleEntities1">
+    <EntitySetMapping Name="Color">
+      <EntityTypeMapping TypeName="SceduleModel.Color">
+        <MappingFragment StoreEntitySet="Color">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Color_var" ColumnName="Color_var" />
+          <ScalarProperty Name="Color_name" ColumnName="Color_name" />
+          <ScalarProperty Name="google_Color_id" ColumnName="google_Color_id" />
+          <ScalarProperty Name="modifier_on" ColumnName="modifier_on" />
+          <ScalarProperty Name="deleted_on" ColumnName="deleted_on" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Companys">
+      <EntityTypeMapping TypeName="SceduleModel.Companys">
+        <MappingFragment StoreEntitySet="Companys">
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="t_events">
+      <EntityTypeMapping TypeName="SceduleModel.t_events">
+        <MappingFragment StoreEntitySet="t_events">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="m_contract_id" ColumnName="m_contract_id" />
+          <ScalarProperty Name="t_project_base_id" ColumnName="t_project_base_id" />
+          <ScalarProperty Name="event_type" ColumnName="event_type" />
+          <ScalarProperty Name="event_date_start" ColumnName="event_date_start" />
+          <ScalarProperty Name="event_time_start" ColumnName="event_time_start" />
+          <ScalarProperty Name="event_date_end" ColumnName="event_date_end" />
+          <ScalarProperty Name="event_time_end" ColumnName="event_time_end" />
+          <ScalarProperty Name="event_is_daylong" ColumnName="event_is_daylong" />
+          <ScalarProperty Name="event_title" ColumnName="event_title" />
+          <ScalarProperty Name="event_place" ColumnName="event_place" />
+          <ScalarProperty Name="event_memo" ColumnName="event_memo" />
+          <ScalarProperty Name="event_status" ColumnName="event_status" />
+          <ScalarProperty Name="google_id" ColumnName="google_id" />
+          <ScalarProperty Name="event_bg_color" ColumnName="event_bg_color" />
+          <ScalarProperty Name="event_font_color" ColumnName="event_font_color" />
+          <ScalarProperty Name="modifier_on" ColumnName="modifier_on" />
+          <ScalarProperty Name="deleted_on" ColumnName="deleted_on" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="t_project_base">
+      <EntityTypeMapping TypeName="SceduleModel.t_project_base">
+        <MappingFragment StoreEntitySet="t_project_base">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="m_contract_id" ColumnName="m_contract_id" />
+          <ScalarProperty Name="m_property_id" ColumnName="m_property_id" />
+          <ScalarProperty Name="project_number" ColumnName="project_number" />
+          <ScalarProperty Name="order_number" ColumnName="order_number" />
+          <ScalarProperty Name="project_code" ColumnName="project_code" />
+          <ScalarProperty Name="project_manage_code" ColumnName="project_manage_code" />
+          <ScalarProperty Name="project_name" ColumnName="project_name" />
+          <ScalarProperty Name="management_number" ColumnName="management_number" />
+          <ScalarProperty Name="delivery_date" ColumnName="delivery_date" />
+          <ScalarProperty Name="supplier_name" ColumnName="supplier_name" />
+          <ScalarProperty Name="owner_name" ColumnName="owner_name" />
+          <ScalarProperty Name="project_place" ColumnName="project_place" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="modifier_on" ColumnName="modifier_on" />
+          <ScalarProperty Name="deleted_on" ColumnName="deleted_on" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
