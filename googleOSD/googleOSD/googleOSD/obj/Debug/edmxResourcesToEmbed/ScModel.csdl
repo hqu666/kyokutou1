@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ScModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Color">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Color_var" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Color_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="google_Color_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="modifier_on" Type="DateTime" Precision="3" />
+    <Property Name="deleted_on" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Companys">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+    </Key>
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="t_events">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="m_contract_id" Type="Int32" />
+    <Property Name="t_project_base_id" Type="Int32" />
+    <Property Name="event_type" Type="Byte" />
+    <Property Name="event_date_start" Type="DateTime" Precision="0" />
+    <Property Name="event_time_start" Type="Byte" />
+    <Property Name="event_date_end" Type="DateTime" Precision="0" />
+    <Property Name="event_time_end" Type="Byte" />
+    <Property Name="event_is_daylong" Type="Byte" />
+    <Property Name="event_title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="event_place" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="event_memo" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="event_status" Type="Byte" />
+    <Property Name="google_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="event_bg_color" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="event_font_color" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="modifier_on" Type="DateTime" Precision="3" />
+    <Property Name="deleted_on" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="t_project_base">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="m_contract_id" Type="Int32" />
+    <Property Name="m_property_id" Type="Int32" />
+    <Property Name="project_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="order_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="project_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="project_manage_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="project_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="management_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="delivery_date" Type="DateTime" Precision="0" />
+    <Property Name="supplier_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="owner_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="project_place" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="Byte" />
+    <Property Name="modifier_on" Type="DateTime" Precision="3" />
+    <Property Name="deleted_on" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityContainer Name="SceduleEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Color" EntityType="Self.Color" />
+    <EntitySet Name="Companys" EntityType="Self.Companys" />
+    <EntitySet Name="t_events" EntityType="Self.t_events" />
+    <EntitySet Name="t_project_base" EntityType="Self.t_project_base" />
+  </EntityContainer>
+</Schema>

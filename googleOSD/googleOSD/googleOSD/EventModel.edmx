@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EventModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Companys">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="f_Color">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Color_var" Type="nchar" MaxLength="10" />
+          <Property Name="Color_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="google_Color_id" Type="varchar" MaxLength="100" />
+          <Property Name="modifier_on" Type="datetime" />
+          <Property Name="deleted_on" Type="datetime" />
+        </EntityType>
+        <EntityType Name="t_events">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="m_contract_id" Type="int" />
+          <Property Name="t_project_base_id" Type="int" />
+          <Property Name="event_type" Type="tinyint" />
+          <Property Name="event_date_start" Type="date" />
+          <Property Name="event_time_start" Type="tinyint" />
+          <Property Name="event_date_end" Type="date" />
+          <Property Name="event_time_end" Type="tinyint" />
+          <Property Name="event_is_daylong" Type="tinyint" />
+          <Property Name="event_title" Type="nvarchar" MaxLength="100" />
+          <Property Name="event_place" Type="nvarchar" MaxLength="255" />
+          <Property Name="event_memo" Type="nvarchar" MaxLength="4000" />
+          <Property Name="event_status" Type="tinyint" />
+          <Property Name="google_id" Type="varchar" MaxLength="100" />
+          <Property Name="event_bg_color" Type="varchar" MaxLength="10" />
+          <Property Name="event_font_color" Type="varchar" MaxLength="10" />
+          <Property Name="modifier_on" Type="datetime" />
+          <Property Name="deleted_on" Type="datetime" />
+        </EntityType>
+        <EntityType Name="t_project_base">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="m_contract_id" Type="int" />
+          <Property Name="m_property_id" Type="int" />
+          <Property Name="project_number" Type="varchar" MaxLength="10" />
+          <Property Name="order_number" Type="varchar" MaxLength="10" />
+          <Property Name="project_code" Type="varchar" MaxLength="10" />
+          <Property Name="project_manage_code" Type="varchar" MaxLength="10" />
+          <Property Name="project_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="management_number" Type="varchar" MaxLength="10" />
+          <Property Name="delivery_date" Type="date" />
+          <Property Name="supplier_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="owner_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="project_place" Type="nvarchar" MaxLength="255" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="modifier_on" Type="datetime" />
+          <Property Name="deleted_on" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="EventModelStoreContainer">
+          <EntitySet Name="Companys" EntityType="Self.Companys" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="f_Color" EntityType="Self.f_Color" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_events" EntityType="Self.t_events" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_project_base" EntityType="Self.t_project_base" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EventModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Companys">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="f_Color">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Color_var" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Color_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="google_Color_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="modifier_on" Type="DateTime" Precision="3" />
+          <Property Name="deleted_on" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="t_events">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="m_contract_id" Type="Int32" />
+          <Property Name="t_project_base_id" Type="Int32" />
+          <Property Name="event_type" Type="Byte" />
+          <Property Name="event_date_start" Type="DateTime" Precision="0" />
+          <Property Name="event_time_start" Type="Byte" />
+          <Property Name="event_date_end" Type="DateTime" Precision="0" />
+          <Property Name="event_time_end" Type="Byte" />
+          <Property Name="event_is_daylong" Type="Byte" />
+          <Property Name="event_title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="event_place" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="event_memo" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="event_status" Type="Byte" />
+          <Property Name="google_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="event_bg_color" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="event_font_color" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="modifier_on" Type="DateTime" Precision="3" />
+          <Property Name="deleted_on" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="t_project_base">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="m_contract_id" Type="Int32" />
+          <Property Name="m_property_id" Type="Int32" />
+          <Property Name="project_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="order_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="project_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="project_manage_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="project_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="management_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="delivery_date" Type="DateTime" Precision="0" />
+          <Property Name="supplier_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="owner_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="project_place" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="modifier_on" Type="DateTime" Precision="3" />
+          <Property Name="deleted_on" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="EventEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companys" EntityType="Self.Companys" />
+          <EntitySet Name="f_Color" EntityType="Self.f_Color" />
+          <EntitySet Name="t_events" EntityType="Self.t_events" />
+          <EntitySet Name="t_project_base" EntityType="Self.t_project_base" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EventModelStoreContainer" CdmEntityContainer="EventEntities">
+          <EntitySetMapping Name="Companys">
+            <EntityTypeMapping TypeName="EventModel.Companys">
+              <MappingFragment StoreEntitySet="Companys">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="f_Color">
+            <EntityTypeMapping TypeName="EventModel.f_Color">
+              <MappingFragment StoreEntitySet="f_Color">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Color_var" ColumnName="Color_var" />
+                <ScalarProperty Name="Color_name" ColumnName="Color_name" />
+                <ScalarProperty Name="google_Color_id" ColumnName="google_Color_id" />
+                <ScalarProperty Name="modifier_on" ColumnName="modifier_on" />
+                <ScalarProperty Name="deleted_on" ColumnName="deleted_on" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_events">
+            <EntityTypeMapping TypeName="EventModel.t_events">
+              <MappingFragment StoreEntitySet="t_events">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="m_contract_id" ColumnName="m_contract_id" />
+                <ScalarProperty Name="t_project_base_id" ColumnName="t_project_base_id" />
+                <ScalarProperty Name="event_type" ColumnName="event_type" />
+                <ScalarProperty Name="event_date_start" ColumnName="event_date_start" />
+                <ScalarProperty Name="event_time_start" ColumnName="event_time_start" />
+                <ScalarProperty Name="event_date_end" ColumnName="event_date_end" />
+                <ScalarProperty Name="event_time_end" ColumnName="event_time_end" />
+                <ScalarProperty Name="event_is_daylong" ColumnName="event_is_daylong" />
+                <ScalarProperty Name="event_title" ColumnName="event_title" />
+                <ScalarProperty Name="event_place" ColumnName="event_place" />
+                <ScalarProperty Name="event_memo" ColumnName="event_memo" />
+                <ScalarProperty Name="event_status" ColumnName="event_status" />
+                <ScalarProperty Name="google_id" ColumnName="google_id" />
+                <ScalarProperty Name="event_bg_color" ColumnName="event_bg_color" />
+                <ScalarProperty Name="event_font_color" ColumnName="event_font_color" />
+                <ScalarProperty Name="modifier_on" ColumnName="modifier_on" />
+                <ScalarProperty Name="deleted_on" ColumnName="deleted_on" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_project_base">
+            <EntityTypeMapping TypeName="EventModel.t_project_base">
+              <MappingFragment StoreEntitySet="t_project_base">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="m_contract_id" ColumnName="m_contract_id" />
+                <ScalarProperty Name="m_property_id" ColumnName="m_property_id" />
+                <ScalarProperty Name="project_number" ColumnName="project_number" />
+                <ScalarProperty Name="order_number" ColumnName="order_number" />
+                <ScalarProperty Name="project_code" ColumnName="project_code" />
+                <ScalarProperty Name="project_manage_code" ColumnName="project_manage_code" />
+                <ScalarProperty Name="project_name" ColumnName="project_name" />
+                <ScalarProperty Name="management_number" ColumnName="management_number" />
+                <ScalarProperty Name="delivery_date" ColumnName="delivery_date" />
+                <ScalarProperty Name="supplier_name" ColumnName="supplier_name" />
+                <ScalarProperty Name="owner_name" ColumnName="owner_name" />
+                <ScalarProperty Name="project_place" ColumnName="project_place" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="modifier_on" ColumnName="modifier_on" />
+                <ScalarProperty Name="deleted_on" ColumnName="deleted_on" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="なし" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

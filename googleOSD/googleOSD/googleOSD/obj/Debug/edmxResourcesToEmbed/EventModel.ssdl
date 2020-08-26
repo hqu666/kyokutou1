@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EventModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Companys">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+    </Key>
+    <Property Name="CompanyId" Type="int" Nullable="false" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="f_Color">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Color_var" Type="nchar" MaxLength="10" />
+    <Property Name="Color_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="google_Color_id" Type="varchar" MaxLength="100" />
+    <Property Name="modifier_on" Type="datetime" />
+    <Property Name="deleted_on" Type="datetime" />
+  </EntityType>
+  <EntityType Name="t_events">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="m_contract_id" Type="int" />
+    <Property Name="t_project_base_id" Type="int" />
+    <Property Name="event_type" Type="tinyint" />
+    <Property Name="event_date_start" Type="date" />
+    <Property Name="event_time_start" Type="tinyint" />
+    <Property Name="event_date_end" Type="date" />
+    <Property Name="event_time_end" Type="tinyint" />
+    <Property Name="event_is_daylong" Type="tinyint" />
+    <Property Name="event_title" Type="nvarchar" MaxLength="100" />
+    <Property Name="event_place" Type="nvarchar" MaxLength="255" />
+    <Property Name="event_memo" Type="nvarchar" MaxLength="4000" />
+    <Property Name="event_status" Type="tinyint" />
+    <Property Name="google_id" Type="varchar" MaxLength="100" />
+    <Property Name="event_bg_color" Type="varchar" MaxLength="10" />
+    <Property Name="event_font_color" Type="varchar" MaxLength="10" />
+    <Property Name="modifier_on" Type="datetime" />
+    <Property Name="deleted_on" Type="datetime" />
+  </EntityType>
+  <EntityType Name="t_project_base">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="m_contract_id" Type="int" />
+    <Property Name="m_property_id" Type="int" />
+    <Property Name="project_number" Type="varchar" MaxLength="10" />
+    <Property Name="order_number" Type="varchar" MaxLength="10" />
+    <Property Name="project_code" Type="varchar" MaxLength="10" />
+    <Property Name="project_manage_code" Type="varchar" MaxLength="10" />
+    <Property Name="project_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="management_number" Type="varchar" MaxLength="10" />
+    <Property Name="delivery_date" Type="date" />
+    <Property Name="supplier_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="owner_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="project_place" Type="nvarchar" MaxLength="255" />
+    <Property Name="status" Type="tinyint" />
+    <Property Name="modifier_on" Type="datetime" />
+    <Property Name="deleted_on" Type="datetime" />
+  </EntityType>
+  <EntityContainer Name="EventModelStoreContainer">
+    <EntitySet Name="Companys" EntityType="Self.Companys" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="f_Color" EntityType="Self.f_Color" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="t_events" EntityType="Self.t_events" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="t_project_base" EntityType="Self.t_project_base" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
