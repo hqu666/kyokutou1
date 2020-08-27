@@ -1220,16 +1220,6 @@ namespace GoogleOSD {
 					dbMsg += ",result=" + result;
 					return;
 				}
-				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
-				using (var context = new EventEntities()) {
-					// Addした段階ではSql文はDBに発行されない
-					dbMsg += ",：" + tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")" + tEvents.event_title;
-					context.t_events.Add(tEvents);
-					// SaveChangesが呼び出された段階で初めてInsert文が発行される
-					context.SaveChanges();
-				}
-
-				///////////////////////////////////////////////////////////////////////////////////////
 				string retLink = "";
 				string parentFolderName = tProject.project_manage_code;				// this.selectedAriadneData.ItemNumber;
 				//案件などAriadneEventfフォルダ直下に案件別フォルダを作成もしくは既存IDの取得
@@ -1255,73 +1245,30 @@ namespace GoogleOSD {
 
 
 
-/*
-				//Ariadne5の生成フォルダをGoogleドライブにファイルコピー
-				taregetEvent.Attachments = new System.Collections.Generic.List<Google.Apis.Calendar.v3.Data.EventAttachment>();
-				if (this.selectedAriadneData.EstimationPCPass != null) {
-					dbMsg += ",見積ファイル有り";                   //"MI20060006";        
-					this.selectedAriadneData.EstimationGoogleFileID = PutInFoldrFile(this.selectedAriadneData.EstimationPCPass, itemFolderId, taregetEvent);
-					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID +"]";
-				} else {
-					this.selectedAriadneData.EstimationGoogleFileID = null;
-				}
-				if (this.selectedAriadneData.OrderPCPass != null) {
-					dbMsg += ",受注ファイル有り";
-					this.selectedAriadneData.OrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.OrderPCPass, itemFolderId, taregetEvent);
-					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID + "]";
-					//.OrderGoogleFileID = "JU20060007";              // 受注ファイルのGoogleDriveID
-				} else {
-					this.selectedAriadneData.OrderGoogleFileID = null;
-				}
-				if (this.selectedAriadneData.SalesPCPass != null) {
-					dbMsg += ",売上ファイル有り";
-					this.selectedAriadneData.SalesGoogleFileID = PutInFoldrFile(this.selectedAriadneData.SalesPCPass, itemFolderId, taregetEvent);
-					//.SalesGoogleFileID = "UR20060004";              //売上ファイルのGoogleDriveID
-				} else {
-					this.selectedAriadneData.SalesGoogleFileID = null;
-				}
-				if (this.selectedAriadneData.RequestPCPass != null) {
-					dbMsg += ",請求ファイル有り";
-					this.selectedAriadneData.RequestGoogleFileID = PutInFoldrFile(this.selectedAriadneData.RequestPCPass, itemFolderId, taregetEvent);
-					dbMsg += "[" + this.selectedAriadneData.EstimationGoogleFileID + "]";
-					//RequestPCPass = "";              //請求ファイルのPC保存位置
-				} else {
-					this.selectedAriadneData.RequestGoogleFileID = null;
-				}
-				if (this.selectedAriadneData.ReceiptPCPass != null) {
-					dbMsg += ",入金ファイル有り";
-					this.selectedAriadneData.ReceipttGoogleFileID = PutInFoldrFile(this.selectedAriadneData.ReceiptPCPass, itemFolderId, taregetEvent);
-					dbMsg += "[" + this.selectedAriadneData.ReceipttGoogleFileID + "]";
-					//ReceipttGoogleFileID = "NY20060001";              //入金ファイルのGoogleDriveID
-				} else {
-					this.selectedAriadneData.ReceipttGoogleFileID = null;
-				}
-				if (this.selectedAriadneData.ToOrderPCPass != null) {
-					dbMsg += ",資材発注ファイル有り";
-					this.selectedAriadneData.ToOrderGoogleFileID = PutInFoldrFile(this.selectedAriadneData.ToOrderPCPass, processFolderId, taregetEvent);
-					dbMsg += "[" + this.selectedAriadneData.ToOrderGoogleFileID + "]";
-					//ToOrderGoogleFileID = "HA20060001";              //発注ファイルのGoogleDriveID
-				} else {
-					this.selectedAriadneData.ToOrderGoogleFileID = null;
-				}
-				if (this.selectedAriadneData.StockPCPass != null) {
-					dbMsg += ",荷・工事消込ファイル有り";
-					this.selectedAriadneData.StockGoogleFileID = PutInFoldrFile(this.selectedAriadneData.StockPCPass, processFolderId , taregetEvent);
-					dbMsg += "[" + this.selectedAriadneData.ToOrderGoogleFileID + "]";
-					//StockGoogleFileID = "SI20060001";              // 入荷・工事消込ファイルのGoogleDriveID
-				} else {
-					this.selectedAriadneData.StockGoogleFileID = null;
-				}
-				dbMsg += ",対象ファイル" + sendFiles.Count + "件";
-				if(selectedAriadneData == null) {
-					this.selectedAriadneData = mainView.ariadneDatas[0];
-				}
-				//			this.selectedAriadneData.sendFiles = sendFiles;
-				*/
-				dbMsg += " >> " + taregetEvent.Attachments.Count + "件";
-
 				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.tEvents);
 				dbMsg += ",retLink=" + retLink;
+				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
+				string[] delimiter = { "eid=" };
+				string[] idStrs = retLink.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+				string prefix = idStrs[0];
+				string suffix = idStrs[1];
+				tEvents.google_id = suffix;
+				tEvents.modifier_on = DateTime.Now;
+
+				using (var context = new EventEntities()) {
+					// Addした段階ではSql文はDBに発行されない
+					dbMsg += ",：" + tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")" + tEvents.event_title;
+					dbMsg += ",google_id=" + tEvents.google_id + " ,modifier_on=" + tEvents.modifier_on;
+					context.t_events.Add(tEvents);
+					// SaveChangesが呼び出された段階で初めてInsert文が発行される
+					context.SaveChanges();
+				}
+
+				///////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				MyLog(TAG, dbMsg);
 				if (retLink != null) {
 					if (!retLink.Equals("")) {

@@ -789,7 +789,7 @@ namespace GoogleOSD {
 										//TodayEvent.Add(eventItem);
 										string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
 										string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
-										string colorId = eventItem.ColorId;
+										string colorId = eventItem.ColorId + 2;
 										dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
 										string Summary = eventItem.Summary;
 										dbMsg += "  ," + Summary;
@@ -882,7 +882,7 @@ namespace GoogleOSD {
 										string startTimeStr = "";
 										string startStr = GCalendarUtil.EventDateTime2Str(eventItem.Start);
 										string endStr = GCalendarUtil.EventDateTime2Str(eventItem.End);
-										string colorId = eventItem.ColorId;
+										string colorId = eventItem.ColorId +2;
 										dbMsg += "\r\n" + startStr + "～" + endStr + "、colorId=" + colorId;
 										string Summary = eventItem.Summary;
 										dbMsg += "  ," + Summary;
