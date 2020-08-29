@@ -53,6 +53,7 @@
     <Reference Include="InfragisticsWPF4.DataPresenter.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.Editors.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data, Version=8.0.21.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -138,6 +139,9 @@
     <Compile Include="GOAuthModel.cs" />
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="MonthInfo.cs" />
+    <Compile Include="MySQLBase.xaml.cs">
+      <DependentUpon>MySQLBase.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OtherData.cs" />
     <Compile Include="ProjectModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -232,6 +236,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MySQLBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Style\StyleDic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

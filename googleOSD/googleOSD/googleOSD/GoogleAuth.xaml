@@ -96,6 +96,8 @@
 						Name="Google_Password_tb" />
 		<Button  Grid.Row="2" Grid.Column="2" Width="200" HorizontalAlignment="Right"
 						x:Name="Json_read_bt" Content="認証ファイル読込み" Click="Json_read_bt_Click" />
+		<Button  Grid.Row="4" Grid.Column="2" Width="200" HorizontalAlignment="Right"
+						x:Name="MySQLTest_bt" Content="MySQL" Click="my_sql_bt_Click" />
 		<DataGrid Grid.Row="6"  Grid.Column="0"  Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="Auto" Width="Auto"
 						VerticalAlignment="Top"
 						Name="Setting_dg" />

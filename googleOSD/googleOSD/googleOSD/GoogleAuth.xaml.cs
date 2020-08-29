@@ -371,6 +371,23 @@ namespace GoogleOSD {
 			}
 		}
 
+		private void my_sql_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "my_sql_bt_Click";
+			string dbMsg = "[GoogleAuth]";
+			try {
+				//			if (webWindow == null) {
+				//				dbMsg += "案件フォルダへ";
+				MySQLBase mySQLBase = new MySQLBase();
+				//		webWindow.authWindow = this;
+				mySQLBase.Show();
+			//		webWindow.SetMyURL(new Uri(Constant.WebStratUrl));
+	//			}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		////////////////////////////////////////////////////
 		public void MyLog(string TAG, string dbMsg)
@@ -393,6 +410,7 @@ namespace GoogleOSD {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+
 
 
 
