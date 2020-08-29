@@ -4,9 +4,111 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GoogleOSD"
-        mc:Ignorable="d"
+ 		Topmost="True"
+		mc:Ignorable="d"
         Title="MySQLBase" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+	<!--WindowStartupLocation="CenterScreen"-->
+	<Window.Resources>
+		<Style TargetType="StackPanel">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,5,0,5"/>
+		</Style>
+
+		<Style TargetType="Label">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+
+		<Style TargetType="TextBox">
+			<Setter Property="Margin" Value="0,5,0,5"/>
+			<Setter Property="VerticalContentAlignment"  Value="Center"/>
+		</Style>
+
+		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="2"
+                BorderBrush="DarkGray"
+				 Padding="5"
+                Background="{TemplateBinding Background}"
+                CornerRadius="2">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
+		<Style TargetType="Button">
+			<Setter Property="MinWidth" Value="95"/>
+
+			<Setter Property="Margin" Value="5,5,5,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
+		</Style>
+
+		<!--添付ファイル-->
+		<Style x:Key="bt-attachment" TargetType="Button">
+			<Setter Property="HorizontalContentAlignment" Value="Left" />
+			<Setter Property="Margin" Value="3,3,3,3" />
+			<Setter Property="Padding" Value="8,5,10,5" />
+			<Setter Property="Panel.ZIndex" Value="90" />
+		</Style>
+		<Style x:Key="bt-dell" TargetType="Button">
+			<Setter Property="HorizontalContentAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Margin" Value="0,0,10,0" />
+			<Setter Property="Content" Value="×" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="Panel.ZIndex" Value="90" />
+		</Style>
+
+	</Window.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  />
+			<ColumnDefinition />
+			<ColumnDefinition  />
+			<!--<ColumnDefinition Width="*"/>-->
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition x:Name="titol_row" Height="Auto" />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
+			<RowDefinition  Height="Auto"/>
+			<RowDefinition x:Name="attach_row" Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Button   Grid.Row="16" Grid.Column="0"
+							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
+							Name="cancel_bt" Content="キャンセル" />
+		<Button  Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2"
+						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
+							  Name="del_bt" Content="削除"/>
+		<Button   Grid.Row="16" Grid.Column="4"
+					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
+					Name="save_bt" Content="登録" />
+
+
+		<Button   Grid.Row="17" Grid.Column="0"
+							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
+							Name="dis_conect_bt" Content="接続解除" Click="Dis_conect_bt_Click"/>
+		<Button   Grid.Row="17" Grid.Column="3"
+					HorizontalAlignment="Right"  VerticalAlignment="Bottom" Width="80"  
+					Name="conect_bt" Content="接続" Margin="0,0,5,6" Click="Conect_bt_Click"  />
+
+	</Grid>
 </Window>

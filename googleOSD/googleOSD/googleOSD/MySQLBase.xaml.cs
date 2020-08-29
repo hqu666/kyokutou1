@@ -18,14 +18,18 @@ namespace GoogleOSD {
 	/// MySQLBase.xaml の相互作用ロジック
 	/// </summary>
 	public partial class MySQLBase : Window {
+
+		public MySqlConnection connection = null;
+		public string titolStr = "MySQL";
+
 		public MySQLBase()
 		{
 			InitializeComponent();
-			string[] args = null;
-			SqlConnect( args);
+			dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
+			conect_bt.Visibility = System.Windows.Visibility.Visible;
 		}
 
-		static void SqlConnect(string[] args)
+		public void SqlConnect(string[] args)
 		{
 			string TAG = "SqlConnect";
 			string dbMsg = "[GCalender]";
@@ -38,24 +42,59 @@ namespace GoogleOSD {
 				string connectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", server, database, user, pass);
 				// MySQLへの接続
 				try {
-					MySqlConnection connection = new MySqlConnection(connectionString);
+					connection = new MySqlConnection(connectionString);
 					connection.Open();
-					Console.WriteLine("MySQLに接続しました！");
+					string msgStr = "MySQLに接続しました\r\n";
+					msgStr = "MySQLに接続しました\r\n";
+					dbMsg += ",msgStr=" + msgStr;
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dis_conect_bt.Visibility = System.Windows.Visibility.Visible;
+					conect_bt.Visibility = System.Windows.Visibility.Hidden;
+
 					// 接続の解除
-					connection.Close();
+					//connection.Close();
 				} catch (MySqlException me) {
-					Console.WriteLine("ERROR: " + me.Message);
+					MyErrorLog(TAG, dbMsg, me);
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		public void DisConnect()
+		{
+			string TAG = "DisConnect";
+			string dbMsg = "[GCalender]";
+			try {
+				try {
+					connection.Close();
+					string msgStr = "MySQLの接続を解除しました";
+					dbMsg += ",msgStr=" + msgStr;
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += "接続の解除";
+					dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
+					conect_bt.Visibility = System.Windows.Visibility.Visible;
+				} catch (MySqlException me) {
+					MyErrorLog(TAG, dbMsg, me);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-
-
-
-
-			
 		}
+		private void Dis_conect_bt_Click(object sender, RoutedEventArgs e)
+		{
+			DisConnect();
+		}
+
+		private void Conect_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string[] args = null;
+			SqlConnect(args);
+		}
+
 
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
@@ -79,6 +118,10 @@ namespace GoogleOSD {
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
 
-
 	}
+
 }
+/*
+ C#からMySQLに接続する		https://dianxnao.com/c%E3%81%8B%E3%82%89mysql%E3%81%AB%E6%8E%A5%E7%B6%9A%E3%81%99%E3%82%8B/
+
+ */
