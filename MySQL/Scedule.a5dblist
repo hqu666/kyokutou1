@@ -1,0 +1,4 @@
+﻿# A5:SQL Mk-2 Database list
+
+[DatabaseList]
+localhost/Scedule=__ConnectionType=Internal;ProviderName=MySQL;SavePassword=True;UseUnicodeMetaData=True;ServerName=localhost;Port=3306;Database=mysql;UserName=root;Password=;UseUnicode=True;EnableSSL=False
