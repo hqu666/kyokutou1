@@ -21,6 +21,11 @@ namespace GoogleOSD {
 
 		public MySqlConnection connection = null;
 		public string titolStr = "MySQL";
+		private static readonly string Server = "localhost";             // MySQLサーバホスト名
+		private static readonly int Port = 3306;                  // ポート番号
+		private static readonly string Database = "sample";       // データベース名
+		private static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
+		private static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
 
 		public MySQLBase()
 		{
@@ -35,13 +40,16 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				// MySQLへの接続情報
-				string server = "localhost";        // MySQLサーバホスト名
-				string user = "root";           // MySQLユーザ名
-				string pass = "";           // MySQLパスワード
 				string database = "mysql";      // 接続するデータベース名
-				string connectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", server, database, user, pass);
+				string connectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Server, database, Uid, Pwd);
 				// MySQLへの接続
 				try {
+					server_lb.Content = Server;
+					port_lb.Content = Port;
+					uid_lb.Content = Uid;
+					password_lb.Content = Pwd;
+					connectionString_lb.Content = connectionString;
+
 					connection = new MySqlConnection(connectionString);
 					connection.Open();
 					string msgStr = "MySQLに接続しました\r\n";
@@ -95,6 +103,7 @@ namespace GoogleOSD {
 			SqlConnect(args);
 		}
 
+		////////////////////////////////////////////////////
 
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)

@@ -64,9 +64,9 @@
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  />
-			<ColumnDefinition />
-			<ColumnDefinition  />
+			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  Width="Auto"  />
 			<!--<ColumnDefinition Width="*"/>-->
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
@@ -92,6 +92,32 @@
 			<RowDefinition  Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
+		<Label Content="Server "
+		   Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" />
+		<Label x:Name="server_lb"
+		   Grid.Row="1" Grid.Column="1"  />
+
+		<Label Content="Port"
+		   Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" />
+		<Label  x:Name="port_lb"
+		   Grid.Row="1"  Grid.Column="3"  />
+
+		<Label Content="Uid "
+		   Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" />
+		<Label x:Name="uid_lb"
+		   Grid.Row="2" Grid.Column="1"  />
+
+		<Label Content="password"
+		   Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" />
+		<Label  x:Name="password_lb"
+		   Grid.Row="2"  Grid.Column="3"  />
+
+		<Label Content="接続文字列"
+		   Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" />
+		<Label x:Name="connectionString_lb"
+		   Grid.Row="3" Grid.Column="1"  />
+
+
 		<Button   Grid.Row="16" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
 							Name="cancel_bt" Content="キャンセル" />
