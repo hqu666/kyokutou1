@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,14 @@ namespace GoogleOSD {
 	/// </summary>
 	public partial class MySQLBase : Window {
 
-		public MySqlConnection connection = null;
+		public MySqlConnection Connection = null;
 		public string titolStr = "MySQL";
 		private static readonly string Server = "localhost";             // MySQLサーバホスト名
 		private static readonly int Port = 3306;                  // ポート番号
 		private static readonly string Database = "sample";       // データベース名
 		private static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
 		private static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
+		private string ConnectionString;
 
 		public MySQLBase()
 		{
@@ -34,6 +36,10 @@ namespace GoogleOSD {
 			conect_bt.Visibility = System.Windows.Visibility.Visible;
 		}
 
+		/// <summary>
+		///データベースに接続
+		/// </summary>
+		/// <param name="args"></param>
 		public void SqlConnect(string[] args)
 		{
 			string TAG = "SqlConnect";
@@ -41,26 +47,27 @@ namespace GoogleOSD {
 			try {
 				// MySQLへの接続情報
 				string database = "mysql";      // 接続するデータベース名
-				string connectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Server, database, Uid, Pwd);
+				ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Server, database, Uid, Pwd);
 				// MySQLへの接続
 				try {
 					server_lb.Content = Server;
 					port_lb.Content = Port;
 					uid_lb.Content = Uid;
 					password_lb.Content = Pwd;
-					connectionString_lb.Content = connectionString;
+					connectionString_lb.Content = ConnectionString;
 
-					connection = new MySqlConnection(connectionString);
-					connection.Open();
+					Connection = new MySqlConnection(ConnectionString);
+					Connection.Open();
 					string msgStr = "MySQLに接続しました\r\n";
 					msgStr = "MySQLに接続しました\r\n";
 					dbMsg += ",msgStr=" + msgStr;
-					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					dis_conect_bt.Visibility = System.Windows.Visibility.Visible;
 					conect_bt.Visibility = System.Windows.Visibility.Hidden;
 
-					// 接続の解除
-					//connection.Close();
+					MakeTable();
+					ReadTable();
+
 				} catch (MySqlException me) {
 					MyErrorLog(TAG, dbMsg, me);
 				}
@@ -71,13 +78,16 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// データベース接続解除
+		/// </summary>
 		public void DisConnect()
 		{
 			string TAG = "DisConnect";
 			string dbMsg = "[GCalender]";
 			try {
 				try {
-					connection.Close();
+					Connection.Close();
 					string msgStr = "MySQLの接続を解除しました";
 					dbMsg += ",msgStr=" + msgStr;
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -104,6 +114,163 @@ namespace GoogleOSD {
 		}
 
 		////////////////////////////////////////////////////
+		public void MakeTable()
+		{
+			string TAG = "MakeTable";
+			string dbMsg = "[GCalender]";
+			try {
+				// コネクションオブジェクトとコマンドオブジェクトを生成します。
+				//using (var connection = new MySqlConnection(ConnectionString))
+				using (var command = new MySqlCommand()) {
+					// コネクションをオープンします。
+					//Connection.Open();
+
+					// テーブル作成SQLを実行します。
+					command.Connection = Connection;
+//案件基本
+					string CreateTableSql = "CREATE TABLE IF NOT EXISTS t_project_base (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+					CreateTableSql += " m_contract_id INT,";            //契約ID
+					CreateTableSql += " m_property_id INT,";            //案件基本
+					CreateTableSql += " project_number VARCHAR (10),";            //案件番号
+					CreateTableSql += " order_number VARCHAR (10),";            //注文番号
+					CreateTableSql += " project_code VARCHAR (10),";            //
+					CreateTableSql += " project_manage_code VARCHAR (10),";            //案件管理番号
+					CreateTableSql += " project_name NVARCHAR (50),";            //案件名
+					CreateTableSql += " management_number VARCHAR (10),";            //
+					CreateTableSql += " delivery_date DATE,";            //     DEFAULT (dateadd(month,(1),getdate())) NULL,		納期
+					CreateTableSql += " supplier_name NVARCHAR (255),";            //得意先名
+					CreateTableSql += " owner_name VARCHAR (50),";            //施主
+					CreateTableSql += " project_place VARCHAR (255),";            //場所
+					CreateTableSql += " status TINYINT,";            //  DEFAULT ((1))	ステータス
+					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
+					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
+					CreateTableSql += ")";
+
+					command.CommandText = CreateTableSql;
+					command.ExecuteNonQuery();
+					CreateTableSql = "alter table t_project_base convert to character set utf8;";            //日本語対応「
+					command.CommandText = CreateTableSql;
+					command.ExecuteNonQuery();
+	
+					//カラーテーブル
+					 CreateTableSql = "CREATE TABLE IF NOT EXISTS f_Color (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+					CreateTableSql += " Color_var NCHAR (10),";         
+					CreateTableSql += " Color_name  NVARCHAR (255),";
+					CreateTableSql += " google_Color_id VARCHAR (100),";  
+					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
+					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
+					CreateTableSql += ")";
+					command.CommandText = CreateTableSql;
+					command.ExecuteNonQuery();
+					CreateTableSql = "alter table f_Color convert to character set utf8;";            //日本語対応「
+					command.CommandText = CreateTableSql;
+					command.ExecuteNonQuery();
+					//イベント
+					CreateTableSql = "CREATE TABLE IF NOT EXISTS t_events (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+					CreateTableSql += " m_contract_id INT,";            //契約ID
+					CreateTableSql += " t_project_base_id INT,";            //案件基本
+					CreateTableSql += " event_type TINYINT,";
+					CreateTableSql += " event_date_start DATE,";
+					CreateTableSql += " event_time_start TINYINT,";                 //  DEFAULT ((10)) 
+					CreateTableSql += " event_date_end DATE,";
+					CreateTableSql += " event_time_end TINYINT,";                 //  DEFAULT ((11)) 
+					CreateTableSql += " event_is_daylong TINYINT,";                 //  DEFAULT ((1)) 
+					CreateTableSql += " event_title NVARCHAR (100),";            //注文番号
+					CreateTableSql += " event_place NVARCHAR (255),";            //
+					CreateTableSql += " event_memo NVARCHAR (4000),";            //案件管理番号
+					CreateTableSql += " google_id NVARCHAR (255),";            //案件名
+					CreateTableSql += " event_status TINYINT,";
+					CreateTableSql += " event_bg_color VARCHAR (10),";            //
+					CreateTableSql += " event_font_color VARCHAR (10),";            //得意先名
+					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
+					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
+					CreateTableSql += ")";
+
+					command.CommandText = CreateTableSql;
+					command.ExecuteNonQuery();
+					CreateTableSql = "alter table t_events convert to character set utf8;";            //日本語対応「
+					command.CommandText = CreateTableSql;
+					command.ExecuteNonQuery();
+
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		public void ReadTable()
+		{
+			string TAG = "ReadTable";
+			string dbMsg = "[GCalender]";
+			try {
+				string tableName = "t_project_base";
+				if(Connection.State != ConnectionState.Open) {
+					dbMsg += ",Openしてない";
+					Connection.Open();
+				}
+
+				//MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter("SELECT * FROM " + tableName, Connection);               //"select * from t_project_base",
+				//DataSet DS = new DataSet();
+				//mySqlDataAdapter.Fill(DS);
+				//table_dg.DataContext = DS.Tables[0];
+
+				ProjecDataCollection projecDataCollection = new ProjecDataCollection();
+
+				DataTable tbl = new DataTable();
+				using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString)) {
+					mySqlConnection.Open();
+					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
+						command.CommandText = $"SELECT * FROM {tableName}";
+						using (MySqlDataReader reader = command.ExecuteReader()) {
+							tbl.Load(reader);
+							table_dg.DataContext = tbl;
+						}
+					}
+				}
+
+
+				////カラム名出力
+				//string[] names = new string[reader.FieldCount];
+				//for (int i = 0; i < reader.FieldCount; i++){
+				//	names[i] = reader.GetName(i);
+				//	Type rType = reader.GetFieldType(i);
+				//}
+				//dbMsg += ",FieldCount=" + reader.FieldCount;
+				////テーブル出力
+				//while (reader.Read()) {
+				//	string[] row = new string[reader.FieldCount];
+				//	for (int i = 0; i < reader.FieldCount; i++)
+				//	row[i] = reader.GetString(i);
+				//	Console.WriteLine(string.Join("\t", row));
+				//}
+
+				//				MySqlDataAdapter da = new MySqlDataAdapter("SELECT * FROM t_project_base", Connection);
+				//				/*
+				//					DataTable dt = new DataTable();
+				//// 検索
+				//			da.Fill(dt);
+				//			// 表示
+				//			table_dg.DataContext = dt;
+				//			*/
+				//					DataSet ds = new DataSet();
+				//					// 検索
+				//					da.Fill(ds);
+				//					// 表示
+				//					table_dg.DataContext = ds; 
+		
+				// データをそのままセットする
+				this.table_dg.DataContext = projecDataCollection;
+				//更新時はこれが必須
+				this.table_dg.Items.Refresh();
+
+				Connection.Close();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)

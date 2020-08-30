@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GoogleOSD"
  		Topmost="True"
 		mc:Ignorable="d"
-        Title="MySQLBase" Height="450" Width="800">
+        Title="MySQLBase" Height="450" Width="600">
 	<!--WindowStartupLocation="CenterScreen"-->
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -64,9 +64,9 @@
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition/>
+			<ColumnDefinition />
+			<ColumnDefinition />
 			<!--<ColumnDefinition Width="*"/>-->
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
@@ -117,6 +117,9 @@
 		<Label x:Name="connectionString_lb"
 		   Grid.Row="3" Grid.Column="1"  />
 
+		<DataGrid x:Name ="table_dg"
+		  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
+		   Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Height="200"/>
 
 		<Button   Grid.Row="16" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
