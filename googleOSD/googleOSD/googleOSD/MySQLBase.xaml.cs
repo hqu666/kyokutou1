@@ -224,8 +224,51 @@ namespace GoogleOSD {
 					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
 						command.CommandText = $"SELECT * FROM {tableName}";
 						using (MySqlDataReader reader = command.ExecuteReader()) {
-							tbl.Load(reader);
-							table_dg.DataContext = tbl;
+							while (reader.Read()) {
+								string[] row = new string[reader.FieldCount];
+								t_project_base rProject = new t_project_base();
+								for (int i = 0; i < reader.FieldCount; i++) {
+									string rName = reader.GetName(i);
+									Type rType = reader.GetFieldType(i);
+									if (rType == null) {
+									}else if(rName.Equals("Id")) {
+										rProject.Id = reader.GetInt32(i);
+									} else if (rName.Equals("m_contract_id")) {
+										rProject.m_contract_id = reader.GetInt32(i);
+									} else if (rName.Equals("m_property_id")) {
+										rProject.m_property_id = reader.GetInt32(i);
+									} else if (rName.Equals("project_number")) {
+										rProject.project_number = reader.GetString(i);
+									} else if (rName.Equals("order_number")) {
+										rProject.order_number = reader.GetString(i);
+									} else if (rName.Equals("project_code")) {
+										rProject.project_code = reader.GetString(i);
+									} else if (rName.Equals("project_manage_code")) {
+										rProject.project_manage_code = reader.GetString(i);
+									} else if (rName.Equals("management_number")) {
+										rProject.management_number = reader.GetString(i);
+									} else if (rName.Equals("project_name")) {
+										rProject.project_name = reader.GetString(i);
+									} else if (rName.Equals("delivery_date")) {
+										rProject.delivery_date = reader.GetDateTime(i);
+									} else if (rName.Equals("supplier_name")) {
+										rProject.supplier_name = reader.GetString(i);
+									} else if (rName.Equals("owner_name")) {
+										rProject.owner_name = reader.GetString(i);
+									} else if (rName.Equals("project_place")) {
+										rProject.project_place = reader.GetString(i);
+									} else if (rName.Equals("status")) {
+										rProject.status = reader.GetByte(i);
+									} else if (rName.Equals("modifier_on")) {
+										rProject.modifier_on = reader.GetDateTime(i);
+									//} else if (rName.Equals("deleted_on")) {
+									//	rProject.deleted_on = reader.GetDateTime(i);
+									}
+								}
+								projecDataCollection.Add(rProject);
+							}
+							//tbl.Load(reader);
+							//table_dg.DataContext = tbl;
 						}
 					}
 				}
@@ -259,7 +302,8 @@ namespace GoogleOSD {
 				//					da.Fill(ds);
 				//					// 表示
 				//					table_dg.DataContext = ds; 
-		
+
+				dbMsg += ",projecDataCollection=" + projecDataCollection.Count();
 				// データをそのままセットする
 				this.table_dg.DataContext = projecDataCollection;
 				//更新時はこれが必須

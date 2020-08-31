@@ -9,10 +9,11 @@
 
 namespace GoogleOSD
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class t_project_base
+	using System;
+	using System.Collections.Generic;
+	using MySql.Data.MySqlClient;
+
+	public partial class t_project_base
     {
         public int Id { get; set; }
         public Nullable<int> m_contract_id { get; set; }
@@ -30,5 +31,6 @@ namespace GoogleOSD
         public Nullable<byte> status { get; set; }
         public Nullable<System.DateTime> modifier_on { get; set; }
         public Nullable<System.DateTime> deleted_on { get; set; }
-    }
+
+	}
 }

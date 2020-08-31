@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GoogleOSD"
  		Topmost="True"
 		mc:Ignorable="d"
-        Title="MySQLBase" Height="450" Width="600">
+        Title="MySQLBase" Height="450" Width="Auto" d:DesignWidth="334">
 	<!--WindowStartupLocation="CenterScreen"-->
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -63,10 +63,10 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition  Width="Auto"  />
-			<ColumnDefinition/>
-			<ColumnDefinition />
-			<ColumnDefinition />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
 			<!--<ColumnDefinition Width="*"/>-->
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
@@ -118,8 +118,9 @@
 		   Grid.Row="3" Grid.Column="1"  />
 
 		<DataGrid x:Name ="table_dg"
-		  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
-		   Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Height="200"/>
+				ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}"
+				Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Height="200" Width="Auto"/>
+		<!--ItemsSource="{Binding DataContext, Mode=TwoWay}"-->
 
 		<Button   Grid.Row="16" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
