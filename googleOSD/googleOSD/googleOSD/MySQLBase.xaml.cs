@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
+using System.Reflection;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -211,12 +212,9 @@ namespace GoogleOSD {
 					Connection.Open();
 				}
 
-				//MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter("SELECT * FROM " + tableName, Connection);               //"select * from t_project_base",
-				//DataSet DS = new DataSet();
-				//mySqlDataAdapter.Fill(DS);
-				//table_dg.DataContext = DS.Tables[0];
-
 				ProjecDataCollection projecDataCollection = new ProjecDataCollection();
+				EventDataCollection eventDataCollection = new EventDataCollection();
+				Object wModel = null;
 
 				DataTable tbl = new DataTable();
 				using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString)) {
@@ -227,85 +225,63 @@ namespace GoogleOSD {
 							while (reader.Read()) {
 								string[] row = new string[reader.FieldCount];
 								t_project_base rProject = new t_project_base();
+								if (tableName.Equals("t_project_base")) {
+									wModel = new t_project_base();
+								} else if (tableName.Equals("t_events")) {
+									wModel = new t_events();
+								} else if (tableName.Equals("f_Color")) {
+									wModel = new f_Color();
+								}
+
 								for (int i = 0; i < reader.FieldCount; i++) {
 									string rName = reader.GetName(i);
-									Type rType = reader.GetFieldType(i);
-									if (rType == null) {
-									}else if(rName.Equals("Id")) {
-										rProject.Id = reader.GetInt32(i);
-									} else if (rName.Equals("m_contract_id")) {
-										rProject.m_contract_id = reader.GetInt32(i);
-									} else if (rName.Equals("m_property_id")) {
-										rProject.m_property_id = reader.GetInt32(i);
-									} else if (rName.Equals("project_number")) {
-										rProject.project_number = reader.GetString(i);
-									} else if (rName.Equals("order_number")) {
-										rProject.order_number = reader.GetString(i);
-									} else if (rName.Equals("project_code")) {
-										rProject.project_code = reader.GetString(i);
-									} else if (rName.Equals("project_manage_code")) {
-										rProject.project_manage_code = reader.GetString(i);
-									} else if (rName.Equals("management_number")) {
-										rProject.management_number = reader.GetString(i);
-									} else if (rName.Equals("project_name")) {
-										rProject.project_name = reader.GetString(i);
-									} else if (rName.Equals("delivery_date")) {
-										rProject.delivery_date = reader.GetDateTime(i);
-									} else if (rName.Equals("supplier_name")) {
-										rProject.supplier_name = reader.GetString(i);
-									} else if (rName.Equals("owner_name")) {
-										rProject.owner_name = reader.GetString(i);
-									} else if (rName.Equals("project_place")) {
-										rProject.project_place = reader.GetString(i);
-									} else if (rName.Equals("status")) {
-										rProject.status = reader.GetByte(i);
-									} else if (rName.Equals("modifier_on")) {
-										rProject.modifier_on = reader.GetDateTime(i);
-									//} else if (rName.Equals("deleted_on")) {
-									//	rProject.deleted_on = reader.GetDateTime(i);
+									string rType = reader.GetFieldType(i).Name;
+									dbMsg += ",rName=" + rName + ",rType=" + rType;
+									var rVar = reader.GetValue(i);
+									dbMsg += ",rVar=" + rVar;
+									if (rVar != null) {
+										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+											if (rFeild.Name.Equals(rName)) {
+												if (rType.Equals("Int32")) {
+													rFeild.SetValue(wModel, reader.GetInt32(i));
+												} else if (rType.Equals("String")) {
+													rFeild.SetValue(wModel, reader.GetString(i));
+												} else if (rType.Equals("DateTime")) {
+													rFeild.SetValue(wModel, reader.GetDateTime(i));
+												} else if (rType.Equals("SByte")) {
+													rFeild.SetValue(wModel, reader.GetSByte(i));
+												} else if (rType.Equals("MySqlDecimal")) {
+													rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
+												}
+											}
+										}
+									}
+
+									if (tableName.Equals("t_project_base")) {
+										projecDataCollection.Add(wModel as t_project_base);
+										this.table_dg.DataContext = projecDataCollection;
+									} else if (tableName.Equals("t_events")) {
+										eventDataCollection.Add(wModel as t_events);
+										//} else if (tableName.Equals("f_Color")) {
+										//	this.table_dg.DataContext = projecDataCollection;
+										//	wModel = new f_Color();
 									}
 								}
-								projecDataCollection.Add(rProject);
 							}
-							//tbl.Load(reader);
-							//table_dg.DataContext = tbl;
 						}
 					}
+
 				}
-
-
-				////カラム名出力
-				//string[] names = new string[reader.FieldCount];
-				//for (int i = 0; i < reader.FieldCount; i++){
-				//	names[i] = reader.GetName(i);
-				//	Type rType = reader.GetFieldType(i);
-				//}
-				//dbMsg += ",FieldCount=" + reader.FieldCount;
-				////テーブル出力
-				//while (reader.Read()) {
-				//	string[] row = new string[reader.FieldCount];
-				//	for (int i = 0; i < reader.FieldCount; i++)
-				//	row[i] = reader.GetString(i);
-				//	Console.WriteLine(string.Join("\t", row));
-				//}
-
-				//				MySqlDataAdapter da = new MySqlDataAdapter("SELECT * FROM t_project_base", Connection);
-				//				/*
-				//					DataTable dt = new DataTable();
-				//// 検索
-				//			da.Fill(dt);
-				//			// 表示
-				//			table_dg.DataContext = dt;
-				//			*/
-				//					DataSet ds = new DataSet();
-				//					// 検索
-				//					da.Fill(ds);
-				//					// 表示
-				//					table_dg.DataContext = ds; 
-
 				dbMsg += ",projecDataCollection=" + projecDataCollection.Count();
 				// データをそのままセットする
-				this.table_dg.DataContext = projecDataCollection;
+				if (tableName.Equals("t_project_base")) {
+					this.table_dg.DataContext = projecDataCollection;
+				} else if (tableName.Equals("t_events")) {
+					this.table_dg.DataContext = eventDataCollection;
+				//} else if (tableName.Equals("f_Color")) {
+				//	this.table_dg.DataContext = projecDataCollection;
+				//	wModel = new f_Color();
+				}
 				//更新時はこれが必須
 				this.table_dg.Items.Refresh();
 
