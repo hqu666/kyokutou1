@@ -239,7 +239,7 @@ namespace GoogleOSD {
 									dbMsg += ",rName=" + rName + ",rType=" + rType;
 									var rVar = reader.GetValue(i);
 									dbMsg += ",rVar=" + rVar;
-									if (rVar != null) {
+									if (!reader.IsDBNull(i)) {
 										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
 											if (rFeild.Name.Equals(rName)) {
 												if (rType.Equals("Int32")) {
@@ -248,24 +248,28 @@ namespace GoogleOSD {
 													rFeild.SetValue(wModel, reader.GetString(i));
 												} else if (rType.Equals("DateTime")) {
 													rFeild.SetValue(wModel, reader.GetDateTime(i));
+												} else if (rType.Equals("Boolean")) {						//tinyInt(1)
+												//	rFeild.SetValue(wModel, reader.GetValue(i));
 												} else if (rType.Equals("SByte")) {
-													rFeild.SetValue(wModel, reader.GetSByte(i));
+													rFeild.SetValue(wModel, reader.GetValue(i));
+													//						rFeild.SetValue(wModel, int.Parse( rVar.ToString()));          // 'System.Nullable`1[System.Byte]'
+													//	rFeild.SetValue(wModel, reader.GetSByte(i));
 												} else if (rType.Equals("MySqlDecimal")) {
 													rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
 												}
 											}
 										}
 									}
+								}
 
-									if (tableName.Equals("t_project_base")) {
-										projecDataCollection.Add(wModel as t_project_base);
-										this.table_dg.DataContext = projecDataCollection;
-									} else if (tableName.Equals("t_events")) {
-										eventDataCollection.Add(wModel as t_events);
-										//} else if (tableName.Equals("f_Color")) {
-										//	this.table_dg.DataContext = projecDataCollection;
-										//	wModel = new f_Color();
-									}
+								if (tableName.Equals("t_project_base")) {
+									projecDataCollection.Add(wModel as t_project_base);
+									this.table_dg.DataContext = projecDataCollection;
+								} else if (tableName.Equals("t_events")) {
+									eventDataCollection.Add(wModel as t_events);
+									//} else if (tableName.Equals("f_Color")) {
+									//	this.table_dg.DataContext = projecDataCollection;
+									//	wModel = new f_Color();
 								}
 							}
 						}
