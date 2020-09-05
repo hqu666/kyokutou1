@@ -138,6 +138,7 @@
     <Compile Include="GoogleDriveUtil.cs" />
     <Compile Include="GOAuthModel.cs" />
     <Compile Include="LocalFileUtil.cs" />
+    <Compile Include="Model\f_color.cs" />
     <Compile Include="MonthInfo.cs" />
     <Compile Include="MySQLBase.xaml.cs">
       <DependentUpon>MySQLBase.xaml</DependentUpon>

@@ -255,20 +255,10 @@ namespace GoogleOSD {
 												} else if (rType.Equals("DateTime")) {
 													rFeild.SetValue(wModel, reader.GetDateTime(i));
 												} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
-																											//							Booleans.Add(rName, rVar.ToString());
-
-													//		rFeild.SetValue(wModel, propertyInfo.GetValue());
 													rFeild.SetValue(wModel, reader.GetBoolean(i));
-													//	rFeild.SetValue(wModel, reader.GetValue(i));	
-													//	rFeild.SetValue(wModel, true); 
-													//System.ArgumentException: 型 'System.Boolean' のオブジェクトを型 'System.Nullable`1[System.Byte]' に変換できません。
-													//	rFeild.SetValue(wModel, reader.GetBoolean(reader.GetOrdinal(rName)));       //System.ArgumentException: 型 'System.Boolean' のオブジェクトを型 'System.Nullable`1[System.Byte]' に変換できません。
-													//		rFeild.SetValue(wModel, reader.GetSByte(i));   
-													//	rFeild.SetValue(wModel,int.Parse( 1.ToString()));       //System.ArgumentException: 型 'System.Int32' のオブジェクトを型 'System.Nullable`1[System.Byte]' に変換できません。
 												} else if (rType.Equals("SByte")) {
 													rFeild.SetValue(wModel, reader.GetValue(i));
-													//						rFeild.SetValue(wModel, int.Parse( rVar.ToString()));          // 'System.Nullable`1[System.Byte]'
-													//	rFeild.SetValue(wModel, reader.GetSByte(i));
+													rFeild.SetValue(wModel, reader.GetSByte(i));
 												} else if (rType.Equals("MySqlDecimal")) {
 													rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
 												}
@@ -278,13 +268,6 @@ namespace GoogleOSD {
 								}
 								if (tableName.Equals("t_project_base")) {
 									projecDataCollection.Add(wModel as t_project_base);
-									t_project_base projectBase = projecDataCollection[projecDataCollection.Count() - 1];
-									//foreach (var rItem in Booleans) {
-									//	foreach (var wItem in ) {
-									//		projectBase[i].
-									//		wItem.status = bool.Parse(rItem.Value);
-									//	}
-									//}
 								} else if (tableName.Equals("t_events")) {
 									eventDataCollection.Add(wModel as t_events);
 									//} else if (tableName.Equals("f_Color")) {

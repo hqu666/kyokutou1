@@ -63,15 +63,15 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="100" />
+			<ColumnDefinition Width="110" />
 			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
 			<!--<ColumnDefinition Width="*"/>-->
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
-			<RowDefinition x:Name="titol_row" Height="Auto" />
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -109,7 +109,13 @@
 		<Label Content="接続文字列" Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Right" />
 			<Label x:Name="connectionString_lb"  MinWidth="100" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 		<Label Content="テーブル選択" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0" />
-
+		<ComboBox  Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="3"
+							Height="24" Width="Auto" HorizontalAlignment="Left"
+							SelectedIndex="0">
+			<ListBoxItem Content="案件"/>
+			<ListBoxItem Content="イベント"/>
+			<ListBoxItem Content="カラー"/>
+		</ComboBox>
 		<DataGrid x:Name ="table_dg"
 				ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}"
 				Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Height="200" Width="Auto"/>
