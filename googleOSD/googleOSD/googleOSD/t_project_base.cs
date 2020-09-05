@@ -16,21 +16,24 @@ namespace GoogleOSD
 	public partial class t_project_base
     {
         public int Id { get; set; }
-        public Nullable<int> m_contract_id { get; set; }
-        public Nullable<int> m_property_id { get; set; }
+        public int m_contract_id { get; set; }
+        public int m_property_id { get; set; }
         public string project_number { get; set; }
         public string order_number { get; set; }
         public string project_code { get; set; }
         public string project_manage_code { get; set; }
         public string project_name { get; set; }
         public string management_number { get; set; }
-        public Nullable<System.DateTime> delivery_date { get; set; }
+		public DateTime delivery_date { get; set; }
         public string supplier_name { get; set; }
         public string owner_name { get; set; }
         public string project_place { get; set; }
-        public Nullable<byte> status { get; set; }
-        public Nullable<System.DateTime> modifier_on { get; set; }
-        public Nullable<System.DateTime> deleted_on { get; set; }
+
+		public bool status { get; set; }
+		//      public Nullable<byte> status { get; set; }
+		public DateTime modifier_on { get; set; }
+        public DateTime deleted_on { get; set; }
 
 	}
 }
+//H:\develop\sample\googleOSD\googleOSD\googleOSD\t_project_base.cs

@@ -86,11 +86,11 @@ namespace GoogleOSD {
 				nEvents.event_time_end = (byte)dt.AddHours(1).TimeOfDay.Hours;
 				dbMsg += "～" + nEvents.event_date_end + " " + nEvents.event_time_end;
 
-				nEvents.event_is_daylong = 1;																	//終日
+				nEvents.event_is_daylong = true;																	//終日
 				nEvents.event_place = currentItems.project_place;                                      //場所
 				nEvents.event_bg_color = "7";                                                                   //背景
 				nEvents.event_font_color = "1";                                                                   //文字色
-				nEvents.event_status = 1;
+				nEvents.event_status = true;
 		//		nEvents.status = 1;
 				nEvents.event_memo = "";
 				/* 					public string google_id { get; set; }
@@ -131,10 +131,10 @@ namespace GoogleOSD {
 				nEvents.event_date_end = startDT.AddHours(1);                                                   //一時間加算
 				nEvents.event_time_end = (byte)dt.AddHours(1).TimeOfDay.Hours;
 				dbMsg += "～" + nEvents.event_date_end + " " + nEvents.event_time_end;
-				nEvents.event_is_daylong = 0;                                                                   //終日
+				nEvents.event_is_daylong = false;                                                                   //終日
 				nEvents.event_bg_color = "2";                                                                   //背景
 				nEvents.event_font_color = "7";                                                                   //文字色
-				nEvents.event_status = 1;
+				nEvents.event_status = true;
 		//		nEvents.status = 1;
 				nEvents.event_memo = "";
 				/*		public string google_id { get; set; }

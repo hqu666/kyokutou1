@@ -711,7 +711,7 @@ namespace GoogleOSD {
 				taregetEvent.OriginalStartTime.DateTime = taregetEvent.Start.DateTime;
 				dbMsg += ",OriginalStartTime=" + taregetEvent.OriginalStartTime.DateTime;
 				dbMsg += ",終日=" + tEvents.event_is_daylong;
-				if (tEvents.event_is_daylong == 0) {
+				if (tEvents.event_is_daylong == false) {
 					taregetEvent.Start.Date = String.Format("yyyy-MM-dd" , taregetEvent.Start.DateTime);
 					dbMsg += ">>" + taregetEvent.Start.Date;
 				}else{

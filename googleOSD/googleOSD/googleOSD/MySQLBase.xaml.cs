@@ -35,6 +35,9 @@ namespace GoogleOSD {
 			InitializeComponent();
 			dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
 			conect_bt.Visibility = System.Windows.Visibility.Visible;
+			// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
+			this.SizeToContent = SizeToContent.WidthAndHeight;
+
 		}
 
 		/// <summary>
@@ -95,6 +98,8 @@ namespace GoogleOSD {
 					dbMsg += "接続の解除";
 					dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
 					conect_bt.Visibility = System.Windows.Visibility.Visible;
+					// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
+					this.SizeToContent = SizeToContent.WidthAndHeight;
 				} catch (MySqlException me) {
 					MyErrorLog(TAG, dbMsg, me);
 				}
@@ -232,13 +237,14 @@ namespace GoogleOSD {
 								} else if (tableName.Equals("f_Color")) {
 									wModel = new f_Color();
 								}
-
+								Dictionary<string, string> Booleans = new Dictionary<string, string>();
 								for (int i = 0; i < reader.FieldCount; i++) {
 									string rName = reader.GetName(i);
 									string rType = reader.GetFieldType(i).Name;
-									dbMsg += ",rName=" + rName + ",rType=" + rType;
+									dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
 									var rVar = reader.GetValue(i);
 									dbMsg += ",rVar=" + rVar;
+
 									if (!reader.IsDBNull(i)) {
 										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
 											if (rFeild.Name.Equals(rName)) {
@@ -248,8 +254,17 @@ namespace GoogleOSD {
 													rFeild.SetValue(wModel, reader.GetString(i));
 												} else if (rType.Equals("DateTime")) {
 													rFeild.SetValue(wModel, reader.GetDateTime(i));
-												} else if (rType.Equals("Boolean")) {						//tinyInt(1)
-												//	rFeild.SetValue(wModel, reader.GetValue(i));
+												} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
+																											//							Booleans.Add(rName, rVar.ToString());
+
+													//		rFeild.SetValue(wModel, propertyInfo.GetValue());
+													rFeild.SetValue(wModel, reader.GetBoolean(i));
+													//	rFeild.SetValue(wModel, reader.GetValue(i));	
+													//	rFeild.SetValue(wModel, true); 
+													//System.ArgumentException: 型 'System.Boolean' のオブジェクトを型 'System.Nullable`1[System.Byte]' に変換できません。
+													//	rFeild.SetValue(wModel, reader.GetBoolean(reader.GetOrdinal(rName)));       //System.ArgumentException: 型 'System.Boolean' のオブジェクトを型 'System.Nullable`1[System.Byte]' に変換できません。
+													//		rFeild.SetValue(wModel, reader.GetSByte(i));   
+													//	rFeild.SetValue(wModel,int.Parse( 1.ToString()));       //System.ArgumentException: 型 'System.Int32' のオブジェクトを型 'System.Nullable`1[System.Byte]' に変換できません。
 												} else if (rType.Equals("SByte")) {
 													rFeild.SetValue(wModel, reader.GetValue(i));
 													//						rFeild.SetValue(wModel, int.Parse( rVar.ToString()));          // 'System.Nullable`1[System.Byte]'
@@ -261,10 +276,15 @@ namespace GoogleOSD {
 										}
 									}
 								}
-
 								if (tableName.Equals("t_project_base")) {
 									projecDataCollection.Add(wModel as t_project_base);
-									this.table_dg.DataContext = projecDataCollection;
+									t_project_base projectBase = projecDataCollection[projecDataCollection.Count() - 1];
+									//foreach (var rItem in Booleans) {
+									//	foreach (var wItem in ) {
+									//		projectBase[i].
+									//		wItem.status = bool.Parse(rItem.Value);
+									//	}
+									//}
 								} else if (tableName.Equals("t_events")) {
 									eventDataCollection.Add(wModel as t_events);
 									//} else if (tableName.Equals("f_Color")) {
@@ -290,10 +310,20 @@ namespace GoogleOSD {
 				this.table_dg.Items.Refresh();
 
 				Connection.Close();
+				// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
+				this.SizeToContent = SizeToContent.WidthAndHeight;
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+		}
+
+		public static PropertyInfo GetPropertyInfo(Type type, string name)
+		{
+			var property = type.GetProperty(name);
+
+			return property;
 		}
 
 		////////////////////////////////////////////////////

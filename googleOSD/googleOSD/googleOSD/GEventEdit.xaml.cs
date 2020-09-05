@@ -126,7 +126,7 @@ namespace GoogleOSD {
 				selectedHours = (int)tEvents.event_time_end;
 				selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
 				end_time_tp.SetMyTimeSpan(selectedTime);
-				if(tEvents.event_is_daylong == 0) {
+				if(tEvents.event_is_daylong == true) {
 					dbMsg += ">終日>";
 					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 					end_time_tp.Visibility = System.Windows.Visibility.Hidden;
@@ -398,7 +398,7 @@ namespace GoogleOSD {
 				if (isChecked) {
 					//		//trueからfaleseに変わったらDateを記入
 					dbMsg += ">終日>";
-					tEvents.event_is_daylong = 1;
+					tEvents.event_is_daylong = true;
 					//		string StartDTStr = String.Format("{0:yyyy-MM-dd}", startDT);
 					//		taregetEvent.Start.Date = StartDTStr;
 					//		taregetEvent.Start.DateTime = null;
@@ -409,7 +409,7 @@ namespace GoogleOSD {
 					start_time_tp.Visibility = System.Windows.Visibility.Hidden;
 					end_time_tp.Visibility = System.Windows.Visibility.Hidden;
 				} else {
-					tEvents.event_is_daylong = 0;
+					tEvents.event_is_daylong = false;
 					//		//aleseからtruefに変わったらDateTimeを記入
 					dbMsg += ">時刻指定>" + tEvents.event_time_start + "～" + tEvents.event_time_end;
 					//		taregetEvent.Start.Date = null;
@@ -1202,8 +1202,8 @@ namespace GoogleOSD {
 			string TAG = "Save_bt_Click";
 			string dbMsg = "[GEventEdit]";
 			try {
-				DateTime endDT = new DateTime(tEvents.event_date_end.Value.Year, tEvents.event_date_end.Value.Month, tEvents.event_date_end.Value.Day, (int)tEvents.event_time_end, 0, 0);          //GCalendarUtil.EventDateTime2DT(taregetEvent.End);
-				DateTime startDT = new DateTime(tEvents.event_date_start.Value.Year, tEvents.event_date_start.Value.Month, tEvents.event_date_start.Value.Day, (int)tEvents.event_time_start, 0, 0);          // GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
+				DateTime endDT = new DateTime(tEvents.event_date_end.Year, tEvents.event_date_end.Month, tEvents.event_date_end.Day, (int)tEvents.event_time_end, 0, 0);          //GCalendarUtil.EventDateTime2DT(taregetEvent.End);
+				DateTime startDT = new DateTime(tEvents.event_date_start.Year, tEvents.event_date_start.Month, tEvents.event_date_start.Day, (int)tEvents.event_time_start, 0, 0);          // GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
 				dbMsg += ",元の設定：" + startDT + "～" + endDT;
 				//long endLong = GCalendarUtil.EventDateTime2Long(taregetEvent.End);
 				//long starLong = GCalendarUtil.EventDateTime2Long(taregetEvent.Start);
