@@ -24,12 +24,7 @@ namespace GoogleOSD {
 
 		public MySqlConnection Connection = null;
 		public string titolStr = "MySQL";
-		//private static readonly string Server = "localhost";             // MySQLサーバホスト名
-		//private static readonly int Port = 3306;                  // ポート番号
-		//private static readonly string Database = "sample";       // データベース名
-		//private static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
-		//private static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
-		//private string ConnectionString;
+
 		public Dictionary<string, string> TableCombo { get; set; }
 
 		public MySQLBase()
@@ -48,7 +43,6 @@ namespace GoogleOSD {
 			conect_bt.Visibility = System.Windows.Visibility.Visible;
 			// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
 			this.SizeToContent = SizeToContent.WidthAndHeight;
-
 		}
 
 		/// <summary>
@@ -61,13 +55,12 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				// MySQLへの接続情報
-				//		string database = "mysql";      // 接続するデータベース名
 				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.database, Constant.Uid, Constant.Pwd);
 				// MySQLへの接続
 				try {
 					server_lb.Content = Constant.Server;
 					port_lb.Content = Constant.Port;
-					uid_lb.Content = Uid;
+					uid_lb.Content = Constant.Uid;
 					password_lb.Content = Constant.Pwd;
 					connectionString_lb.Content = Constant.ConnectionString;
 
@@ -241,7 +234,10 @@ namespace GoogleOSD {
 			}
 		}
 
-
+		/// <summary>
+		/// 指定されたテーブルの読出し
+		/// </summary>
+		/// <param name="tableName"></param>
 		public void ReadTable(string tableName)
 		{
 			string TAG = "ReadTable";
