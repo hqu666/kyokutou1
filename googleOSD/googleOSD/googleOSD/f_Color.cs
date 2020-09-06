@@ -18,7 +18,7 @@ namespace GoogleOSD
         public string Color_var { get; set; }
         public string Color_name { get; set; }
         public string google_Color_id { get; set; }
-        public Nullable<System.DateTime> modifier_on { get; set; }
-        public Nullable<System.DateTime> deleted_on { get; set; }
+        public DateTime modifier_on { get; set; }
+        public DateTime deleted_on { get; set; }
     }
 }

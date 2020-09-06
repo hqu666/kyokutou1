@@ -109,13 +109,19 @@
 		<Label Content="接続文字列" Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Right" />
 			<Label x:Name="connectionString_lb"  MinWidth="100" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 		<Label Content="テーブル選択" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0" />
-		<ComboBox  Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="3"
+		<!--<ComboBox  Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="3"
 							Height="24" Width="Auto" HorizontalAlignment="Left"
 							SelectedIndex="0">
-			<ListBoxItem Content="案件"/>
+			--><!--<ListBoxItem Content="案件"/>
 			<ListBoxItem Content="イベント"/>
-			<ListBoxItem Content="カラー"/>
-		</ComboBox>
+			<ListBoxItem Content="カラー"/>--><!--
+		</ComboBox>-->
+		<ComboBox x:Name="table_combo"
+							ItemsSource="{Binding TableCombo}" SelectedValuePath="Value" DisplayMemberPath="Key"
+							Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="3"
+							Height="24" Width="Auto" HorizontalAlignment="Left" SelectionChanged="Table_combo_SelectionChanged"
+		/>
+
 		<DataGrid x:Name ="table_dg"
 				ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}"
 				Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Height="200" Width="Auto"/>

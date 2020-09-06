@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Reflection;
+using GoogleOSD.Model;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -29,10 +30,19 @@ namespace GoogleOSD {
 		private static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
 		private static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
 		private string ConnectionString;
+		public Dictionary<string, string> TableCombo { get; set; }
 
 		public MySQLBase()
 		{
+			TableCombo = new Dictionary<string, string>()
+			 {
+				{ "案件", "t_project_base" },
+				{ "イベント", "t_event" },
+				{ "カラー", "f_color" },
+			};
 			InitializeComponent();
+			DataContext = this;
+
 			dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
 			conect_bt.Visibility = System.Windows.Visibility.Visible;
 			// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
@@ -70,7 +80,8 @@ namespace GoogleOSD {
 					conect_bt.Visibility = System.Windows.Visibility.Hidden;
 
 					MakeTable();
-					ReadTable();
+
+	//				ReadTable();
 
 				} catch (MySqlException me) {
 					MyErrorLog(TAG, dbMsg, me);
@@ -108,6 +119,7 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 		private void Dis_conect_bt_Click(object sender, RoutedEventArgs e)
 		{
 			DisConnect();
@@ -117,6 +129,28 @@ namespace GoogleOSD {
 		{
 			string[] args = null;
 			SqlConnect(args);
+		}
+	
+		/// <summary>
+		/// テーブル選択
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Table_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "Table_combo_SelectionChanged";
+			string dbMsg = "[GCalender]";
+			try {
+				ComboBox combo = sender as ComboBox;
+				int selectedIndex = combo.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				string selectedValue = combo.SelectedValue.ToString();
+				dbMsg +=  selectedValue;
+				MyLog(TAG, dbMsg);
+				ReadTable(selectedValue);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		////////////////////////////////////////////////////
@@ -206,19 +240,23 @@ namespace GoogleOSD {
 		}
 
 
-		public void ReadTable()
+		public void ReadTable(string tableName)
 		{
 			string TAG = "ReadTable";
 			string dbMsg = "[GCalender]";
 			try {
-				string tableName = "t_project_base";
-				if(Connection.State != ConnectionState.Open) {
+				//	string tableName = "t_project_base";
+				dbMsg += ",tableName=" + tableName;
+				if (Connection.State != ConnectionState.Open) {
 					dbMsg += ",Openしてない";
 					Connection.Open();
 				}
+				this.table_dg.DataContext = null;
+				this.table_dg.Items.Refresh();
 
 				ProjecDataCollection projecDataCollection = new ProjecDataCollection();
 				EventDataCollection eventDataCollection = new EventDataCollection();
+				FColorCollection fColorCollection = new FColorCollection();
 				Object wModel = null;
 
 				DataTable tbl = new DataTable();
@@ -229,13 +267,13 @@ namespace GoogleOSD {
 						using (MySqlDataReader reader = command.ExecuteReader()) {
 							while (reader.Read()) {
 								string[] row = new string[reader.FieldCount];
-								t_project_base rProject = new t_project_base();
+						//		t_project_base rProject = new t_project_base();
 								if (tableName.Equals("t_project_base")) {
 									wModel = new t_project_base();
 								} else if (tableName.Equals("t_events")) {
 									wModel = new t_events();
-								} else if (tableName.Equals("f_Color")) {
-									wModel = new f_Color();
+								} else if (tableName.Equals("f_color")) {
+									wModel = new f_color();
 								}
 								Dictionary<string, string> Booleans = new Dictionary<string, string>();
 								for (int i = 0; i < reader.FieldCount; i++) {
@@ -270,9 +308,8 @@ namespace GoogleOSD {
 									projecDataCollection.Add(wModel as t_project_base);
 								} else if (tableName.Equals("t_events")) {
 									eventDataCollection.Add(wModel as t_events);
-									//} else if (tableName.Equals("f_Color")) {
-									//	this.table_dg.DataContext = projecDataCollection;
-									//	wModel = new f_Color();
+								} else if (tableName.Equals("f_color")) {
+									fColorCollection.Add(wModel as f_color);
 								}
 							}
 						}
@@ -285,9 +322,8 @@ namespace GoogleOSD {
 					this.table_dg.DataContext = projecDataCollection;
 				} else if (tableName.Equals("t_events")) {
 					this.table_dg.DataContext = eventDataCollection;
-				//} else if (tableName.Equals("f_Color")) {
-				//	this.table_dg.DataContext = projecDataCollection;
-				//	wModel = new f_Color();
+				} else if (tableName.Equals("f_color")) {
+					this.table_dg.DataContext = fColorCollection;
 				}
 				//更新時はこれが必須
 				this.table_dg.Items.Refresh();
