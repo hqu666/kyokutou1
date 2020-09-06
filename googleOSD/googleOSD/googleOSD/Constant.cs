@@ -79,6 +79,15 @@ namespace GoogleOSD {
 		}
 		public static IList<GoogleEventColor> googleEventColor;
 
+		//MySQL//////////////////////////////////////////////////////////////////////////
+		public static string database = "mysql";      // 接続するデータベース名
+		public static readonly string Server = "localhost";             // MySQLサーバホスト名
+		public static readonly int Port = 3306;                  // ポート番号
+		public static readonly string Database = "sample";       // データベース名
+		public static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
+		public static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
+		public static string ConnectionString;
+		//////////////////////////////////////////////////////////////////////////MySQL//
 		/// <summary>
 		/// 受注No　:　GoogleEventに無い追加項目
 		/// </summary>

@@ -24,12 +24,12 @@ namespace GoogleOSD {
 
 		public MySqlConnection Connection = null;
 		public string titolStr = "MySQL";
-		private static readonly string Server = "localhost";             // MySQLサーバホスト名
-		private static readonly int Port = 3306;                  // ポート番号
-		private static readonly string Database = "sample";       // データベース名
-		private static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
-		private static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
-		private string ConnectionString;
+		//private static readonly string Server = "localhost";             // MySQLサーバホスト名
+		//private static readonly int Port = 3306;                  // ポート番号
+		//private static readonly string Database = "sample";       // データベース名
+		//private static readonly string Uid = "root";           // MySQLユーザ名"user";              // ユーザ名
+		//private static readonly string Pwd = "";           // MySQLパスワード"password";          // パスワード
+		//private string ConnectionString;
 		public Dictionary<string, string> TableCombo { get; set; }
 
 		public MySQLBase()
@@ -61,17 +61,17 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				// MySQLへの接続情報
-				string database = "mysql";      // 接続するデータベース名
-				ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Server, database, Uid, Pwd);
+				//		string database = "mysql";      // 接続するデータベース名
+				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.database, Constant.Uid, Constant.Pwd);
 				// MySQLへの接続
 				try {
-					server_lb.Content = Server;
-					port_lb.Content = Port;
+					server_lb.Content = Constant.Server;
+					port_lb.Content = Constant.Port;
 					uid_lb.Content = Uid;
-					password_lb.Content = Pwd;
-					connectionString_lb.Content = ConnectionString;
+					password_lb.Content = Constant.Pwd;
+					connectionString_lb.Content = Constant.ConnectionString;
 
-					Connection = new MySqlConnection(ConnectionString);
+					Connection = new MySqlConnection(Constant.ConnectionString);
 					Connection.Open();
 					string msgStr = "MySQLに接続しました\r\n";
 					msgStr = "MySQLに接続しました\r\n";
@@ -262,7 +262,7 @@ namespace GoogleOSD {
 				Object wModel = null;
 
 				DataTable tbl = new DataTable();
-				using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString)) {
+				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
 					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
 						command.CommandText = $"SELECT * FROM {tableName}";
@@ -276,7 +276,7 @@ namespace GoogleOSD {
 								} else if (tableName.Equals("f_color")) {
 									wModel = new f_color();
 								}
-								Dictionary<string, string> Booleans = new Dictionary<string, string>();
+						//		Dictionary<string, string> Booleans = new Dictionary<string, string>();
 								for (int i = 0; i < reader.FieldCount; i++) {
 									string rName = reader.GetName(i);
 									string rType = reader.GetFieldType(i).Name;

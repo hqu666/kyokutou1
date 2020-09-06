@@ -1,9 +1,12 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -78,19 +81,59 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				projecDataCollection = new ProjecDataCollection();
-
-				using (var context = new EventEntities()) {
-					foreach (var rProject in context.t_project_base) {
-						dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
-						projecDataCollection.Add(rProject);
+				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+					mySqlConnection.Open();
+					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
+						command.CommandText = $"SELECT * FROM t_project_base";
+						using (MySqlDataReader reader = command.ExecuteReader()) {
+							while (reader.Read()) {
+								t_project_base wModel = new t_project_base();
+								for (int i = 0; i < reader.FieldCount; i++) {
+									string rName = reader.GetName(i);
+									string rType = reader.GetFieldType(i).Name;
+									dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
+									var rVar = reader.GetValue(i);
+									dbMsg += ",rVar=" + rVar;
+									if (!reader.IsDBNull(i)) {
+										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+											if (rFeild.Name.Equals(rName)) {
+												if (rType.Equals("Int32")) {
+													rFeild.SetValue(wModel, reader.GetInt32(i));
+												} else if (rType.Equals("String")) {
+													rFeild.SetValue(wModel, reader.GetString(i));
+												} else if (rType.Equals("DateTime")) {
+													rFeild.SetValue(wModel, reader.GetDateTime(i));
+												} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
+													rFeild.SetValue(wModel, reader.GetBoolean(i));
+												} else if (rType.Equals("SByte")) {
+													rFeild.SetValue(wModel, reader.GetValue(i));
+													rFeild.SetValue(wModel, reader.GetSByte(i));
+												} else if (rType.Equals("MySqlDecimal")) {
+													rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
+												}
+											}
+										}
+									}
+								}
+								projecDataCollection.Add(wModel);
+							}
+						}
 					}
 				}
-				dbMsg += "案件" + projecDataCollection.Count + "件";
+							//Sql Server
+							//using (var context = new EventEntities()) {
+							//	foreach (var rProject in context.t_project_base) {
+							//		dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
+							//		projecDataCollection.Add(rProject);
+							//	}
+							//}
+							dbMsg += "案件" + projecDataCollection.Count + "件";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		public void ReadEvent()
 		{
