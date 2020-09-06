@@ -43,6 +43,7 @@ namespace GoogleOSD {
 			InitializeComponent();
 			DataContext = this;
 
+			table_combo.Visibility = System.Windows.Visibility.Hidden;
 			dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
 			conect_bt.Visibility = System.Windows.Visibility.Visible;
 			// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
@@ -75,14 +76,11 @@ namespace GoogleOSD {
 					string msgStr = "MySQLに接続しました\r\n";
 					msgStr = "MySQLに接続しました\r\n";
 					dbMsg += ",msgStr=" + msgStr;
-		//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					table_combo.Visibility = System.Windows.Visibility.Visible;
 					dis_conect_bt.Visibility = System.Windows.Visibility.Visible;
 					conect_bt.Visibility = System.Windows.Visibility.Hidden;
 
 					MakeTable();
-
-	//				ReadTable();
-
 				} catch (MySqlException me) {
 					MyErrorLog(TAG, dbMsg, me);
 				}
@@ -107,8 +105,12 @@ namespace GoogleOSD {
 					dbMsg += ",msgStr=" + msgStr;
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					dbMsg += "接続の解除";
+					table_combo.Visibility = System.Windows.Visibility.Hidden;
 					dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
 					conect_bt.Visibility = System.Windows.Visibility.Visible;
+					this.table_dg.DataContext = null;
+					this.table_dg.Items.Refresh();
+
 					// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
 					this.SizeToContent = SizeToContent.WidthAndHeight;
 				} catch (MySqlException me) {
@@ -267,7 +269,6 @@ namespace GoogleOSD {
 						using (MySqlDataReader reader = command.ExecuteReader()) {
 							while (reader.Read()) {
 								string[] row = new string[reader.FieldCount];
-						//		t_project_base rProject = new t_project_base();
 								if (tableName.Equals("t_project_base")) {
 									wModel = new t_project_base();
 								} else if (tableName.Equals("t_events")) {
