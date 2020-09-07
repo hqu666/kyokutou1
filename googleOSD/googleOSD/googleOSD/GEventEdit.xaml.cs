@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Google.Apis.Drive.v3.Data;
+using MySql.Data.MySqlClient;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -1247,27 +1249,67 @@ namespace GoogleOSD {
 
 				retLink = GCalendarUtil.AddEventInfo(taregetEvent, this.tEvents);
 				dbMsg += ",retLink=" + retLink;
-				//イベントテーブルに書き込み///////////////////////////////////////////////////////////////////////////////////////
-				string[] delimiter = { "eid=" };
-				string[] idStrs = retLink.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-				string prefix = idStrs[0];
-				string suffix = idStrs[1];
-				tEvents.google_id = suffix;
+				//イベントテーブルに書き込み/////////////////////////////////////////////////////////////////////////////////////// retLink != null||
+				if (!retLink.Equals("")) {
+					string[] delimiter = { "eid=" };
+					string[] idStrs = retLink.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+					string prefix = idStrs[0];
+					string suffix = idStrs[1];
+					tEvents.google_id = suffix;
+				}
 				tEvents.modifier_on = DateTime.Now;
 
-				using (var context = new EventEntities()) {
-					// Addした段階ではSql文はDBに発行されない
-					dbMsg += ",：" + tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")" + tEvents.event_title;
-					dbMsg += ",google_id=" + tEvents.google_id + " ,modifier_on=" + tEvents.modifier_on;
-					context.t_events.Add(tEvents);
-					// SaveChangesが呼び出された段階で初めてInsert文が発行される
-					context.SaveChanges();
+				//using (var context = new EventEntities()) {
+				//	// Addした段階ではSql文はDBに発行されない
+				//	dbMsg += ",：" + tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")" + tEvents.event_title;
+				//	dbMsg += ",google_id=" + tEvents.google_id + " ,modifier_on=" + tEvents.modifier_on;
+				//	context.t_events.Add(tEvents);
+				//	// SaveChangesが呼び出された段階で初めてInsert文が発行される
+				//	context.SaveChanges();
+				//}
+				dbMsg += ",ConnectionString=" + Constant.ConnectionString;
+				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+					// コマンドを作成
+					MySqlCommand cmd =
+						new MySqlCommand("insert into t_project_base (m_contract_id,t_project_base_id,event_type,event_date_start,event_time_start,event_date_end,event_time_end" +
+														"event_is_daylong,event_title,event_place,event_memo,event_status,google_id,event_bg_color,event_font_color,modifier_on" +
+														") values (" +
+														"@m_contract_id,@t_project_base_id,@event_type,event_date_start,@event_time_start,@event_date_end,@event_time_end" +
+														"@event_is_daylong,@event_title,@event_place,@event_memo,@event_status,@google_id,@event_bg_color,@event_font_color,@modifier_on" +
+												 ")", mySqlConnection);
+					// パラメータ設定
+					cmd.Parameters.Add(new MySqlParameter("m_contract_id", tEvents.m_contract_id));
+					cmd.Parameters.Add(new MySqlParameter("t_project_base_id", tEvents.t_project_base_id));
+					cmd.Parameters.Add(new MySqlParameter("event_type", tEvents.event_type));
+					cmd.Parameters.Add(new MySqlParameter("event_date_start", tEvents.event_date_start));
+					cmd.Parameters.Add(new MySqlParameter("event_time_start", tEvents.event_time_start));
+					cmd.Parameters.Add(new MySqlParameter("event_date_end", tEvents.event_date_end));
+					cmd.Parameters.Add(new MySqlParameter("event_time_end", tEvents.event_time_end));
+					cmd.Parameters.Add(new MySqlParameter("event_is_daylong", tEvents.event_is_daylong));
+					cmd.Parameters.Add(new MySqlParameter("event_title", tEvents.event_title));
+					cmd.Parameters.Add(new MySqlParameter("event_place", tEvents.event_place));
+					cmd.Parameters.Add(new MySqlParameter("event_memo", tEvents.event_memo));
+					cmd.Parameters.Add(new MySqlParameter("event_status", tEvents.event_status));
+					cmd.Parameters.Add(new MySqlParameter("google_id", tEvents.google_id));
+					cmd.Parameters.Add(new MySqlParameter("event_bg_color", tEvents.event_bg_color));
+					cmd.Parameters.Add(new MySqlParameter("event_font_color", tEvents.event_font_color));
+					cmd.Parameters.Add(new MySqlParameter("modifier_on", DateTime.Now));
+					MySqlCommand cmd2 =new MySqlCommand("SELECT LAST_INSERT_ID()", mySqlConnection);
+					try {
+						// オープン
+						cmd.Connection.Open();
+						// 実行
+						cmd.ExecuteNonQuery();
+						// 更新IDを取得
+						var id = cmd2.ExecuteScalar();
+						dbMsg += ",更新ID=" + id;
+						// クローズ
+						cmd.Connection.Close();
+					} catch (SqlException ex) {
+						// 例外処理
+						MessageBox.Show("例外発生:" + ex.Message);
+					}
 				}
-
-				///////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 				MyLog(TAG, dbMsg);
 				if (retLink != null) {

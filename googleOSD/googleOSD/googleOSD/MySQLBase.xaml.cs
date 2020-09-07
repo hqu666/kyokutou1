@@ -75,6 +75,9 @@ namespace GoogleOSD {
 
 					MakeTable();
 				} catch (MySqlException me) {
+					string titolStr = TAG;
+					string msgStr = "XAMPPもしくはMySQLデータベースの起動確認を";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					MyErrorLog(TAG, dbMsg, me);
 				}
 

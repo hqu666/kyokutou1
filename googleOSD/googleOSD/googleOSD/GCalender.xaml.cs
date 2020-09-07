@@ -78,9 +78,10 @@ namespace GoogleOSD {
 		public void ReadProject()
 		{
 			string TAG = "ReadProject";
-			string dbMsg = "[GCalender]";
+			string dbMsg = "[GCalender]" ;
 			try {
 				projecDataCollection = new ProjecDataCollection();
+				dbMsg += ",ConnectionString=" + Constant.ConnectionString;
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
 					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
@@ -119,17 +120,22 @@ namespace GoogleOSD {
 							}
 						}
 					}
+					mySqlConnection.Close();
 				}
-							//Sql Server
-							//using (var context = new EventEntities()) {
-							//	foreach (var rProject in context.t_project_base) {
-							//		dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
-							//		projecDataCollection.Add(rProject);
-							//	}
-							//}
-							dbMsg += "案件" + projecDataCollection.Count + "件";
+				//Sql Server
+				//using (var context = new EventEntities()) {
+				//	foreach (var rProject in context.t_project_base) {
+				//		dbMsg += "[" + rProject.Id + "]" + rProject.project_name;
+				//		projecDataCollection.Add(rProject);
+				//	}
+				//}
+				dbMsg += "案件" + projecDataCollection.Count + "件";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
+				string titolStr = TAG;
+				string msgStr = "XAMPPもしくはMySQLデータベースの起動確認を";
+				MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
