@@ -1213,9 +1213,11 @@ namespace GoogleOSD {
 			string TAG = "Save_bt_Click";
 			string dbMsg = "[GEventEdit]";
 			try {
+				dbMsg += ",元の設定：" +tEvents.event_date_start + "(" + tEvents.event_time_start + ")～" + tEvents.event_date_end + "(" + tEvents.event_time_end + ")[" + tEvents.event_is_daylong + "]";
+
 				DateTime endDT = new DateTime(tEvents.event_date_end.Year, tEvents.event_date_end.Month, tEvents.event_date_end.Day, (int)tEvents.event_time_end, 0, 0);          //GCalendarUtil.EventDateTime2DT(taregetEvent.End);
 				DateTime startDT = new DateTime(tEvents.event_date_start.Year, tEvents.event_date_start.Month, tEvents.event_date_start.Day, (int)tEvents.event_time_start, 0, 0);          // GCalendarUtil.EventDateTime2DT(taregetEvent.Start);
-				dbMsg += ",元の設定：" + startDT + "～" + endDT;
+				dbMsg += ",>>：" + startDT + "～" + endDT;
 				//long endLong = GCalendarUtil.EventDateTime2Long(taregetEvent.End);
 				//long starLong = GCalendarUtil.EventDateTime2Long(taregetEvent.Start);
 				if (endDT < startDT) {
@@ -1279,35 +1281,38 @@ namespace GoogleOSD {
 				dbMsg += ",ConnectionString=" + Constant.ConnectionString;
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					// コマンドを作成
-					MySqlCommand cmd =
-						new MySqlCommand("insert into t_event values (" +
-														"@m_contract_id,@t_project_base_id,@event_type,event_date_start,@event_time_start,@event_date_end,@event_time_end" +
-														"@event_is_daylong,@event_title,@event_place,@event_memo,@event_status,@google_id,@event_bg_color,@event_font_color,@modifier_on" +
+					MySqlCommand cmd =new MySqlCommand("insert into t_events values (" +
+														"@m_contract_id,@t_project_base_id,@event_type,@event_date_start,@event_time_start,@event_date_end,@event_time_end,@event_is_daylong," +
+														"@event_title,@event_place,@event_memo,@event_status,@google_id,@event_bg_color,@event_font_color,@modifier_on" +
 												 ")", mySqlConnection);
-					//MySqlCommand cmd =
-					//	new MySqlCommand("insert into t_event (m_contract_id,t_project_base_id,event_type,event_date_start,event_time_start,event_date_end,event_time_end" +
+					//MySqlCommand cmd = new MySqlCommand("insert into t_event (m_contract_id,t_project_base_id,event_type,event_date_start,event_time_start,event_date_end,event_time_end," +
 					//									"event_is_daylong,event_title,event_place,event_memo,event_status,google_id,event_bg_color,event_font_color,modifier_on" +
 					//									") values (" +
-					//									"@m_contract_id,@t_project_base_id,@event_type,event_date_start,@event_time_start,@event_date_end,@event_time_end" +
+					//									"@m_contract_id,@t_project_base_id,@event_type,@event_date_start,@event_time_start,@event_date_end,@event_time_end," +
 					//									"@event_is_daylong,@event_title,@event_place,@event_memo,@event_status,@google_id,@event_bg_color,@event_font_color,@modifier_on" +
 					//							 ")", mySqlConnection);
 					// パラメータ設定
-					cmd.Parameters.Add(new MySqlParameter("m_contract_id", tEvents.m_contract_id));
-					cmd.Parameters.Add(new MySqlParameter("t_project_base_id", tEvents.t_project_base_id));
-					cmd.Parameters.Add(new MySqlParameter("event_type", tEvents.event_type));
-					cmd.Parameters.Add(new MySqlParameter("event_date_start", tEvents.event_date_start));
-					cmd.Parameters.Add(new MySqlParameter("event_time_start", tEvents.event_time_start));
-					cmd.Parameters.Add(new MySqlParameter("event_date_end", tEvents.event_date_end));
-					cmd.Parameters.Add(new MySqlParameter("event_time_end", tEvents.event_time_end));
-					cmd.Parameters.Add(new MySqlParameter("event_is_daylong", tEvents.event_is_daylong));
-					cmd.Parameters.Add(new MySqlParameter("event_title", tEvents.event_title));
-					cmd.Parameters.Add(new MySqlParameter("event_place", tEvents.event_place));
-					cmd.Parameters.Add(new MySqlParameter("event_memo", tEvents.event_memo));
-					cmd.Parameters.Add(new MySqlParameter("event_status", tEvents.event_status));
-					cmd.Parameters.Add(new MySqlParameter("google_id", tEvents.google_id));
-					cmd.Parameters.Add(new MySqlParameter("event_bg_color", tEvents.event_bg_color));
-					cmd.Parameters.Add(new MySqlParameter("event_font_color", tEvents.event_font_color));
-					cmd.Parameters.Add(new MySqlParameter("modifier_on", DateTime.Now));
+					//;MySql.Data.MySqlClient.MySqlException (0x80004005): Column count doesn't match value count at row 1
+					//指定したテーブル内のカラム数とそれに与えるVALUEの数が一致しない
+					//tEvents.event_time_end = 0;
+					//tEvents.event_is_daylong = true;
+					//dbMsg += ",event_time_end=" + tEvents.event_time_end + " ,_is_daylong=" + tEvents.event_is_daylong;
+					cmd.Parameters.Add(new MySqlParameter("@m_contract_id", tEvents.m_contract_id));
+					cmd.Parameters.Add(new MySqlParameter("@t_project_base_id", tEvents.t_project_base_id));
+					cmd.Parameters.Add(new MySqlParameter("@event_type", tEvents.event_type));
+					cmd.Parameters.Add(new MySqlParameter("@event_date_start", tEvents.event_date_start));
+					cmd.Parameters.Add(new MySqlParameter("@event_time_start", tEvents.event_time_start));
+					cmd.Parameters.Add(new MySqlParameter("@event_date_end", tEvents.event_date_end));
+					cmd.Parameters.Add(new MySqlParameter("@event_time_end", tEvents.event_time_end));
+					cmd.Parameters.Add(new MySqlParameter("@event_is_daylong", tEvents.event_is_daylong));
+					cmd.Parameters.Add(new MySqlParameter("@event_title", tEvents.event_title));
+					cmd.Parameters.Add(new MySqlParameter("@event_place", tEvents.event_place));
+					cmd.Parameters.Add(new MySqlParameter("@event_memo", tEvents.event_memo));
+					cmd.Parameters.Add(new MySqlParameter("@event_status", tEvents.event_status));
+					cmd.Parameters.Add(new MySqlParameter("@google_id", tEvents.google_id));
+					cmd.Parameters.Add(new MySqlParameter("@event_bg_color", tEvents.event_bg_color));
+					cmd.Parameters.Add(new MySqlParameter("@event_font_color", tEvents.event_font_color));
+					cmd.Parameters.Add(new MySqlParameter("@modifier_on", DateTime.Now));
 					MySqlCommand cmd2 =new MySqlCommand("SELECT LAST_INSERT_ID()", mySqlConnection);
 					try {
 						// オープン

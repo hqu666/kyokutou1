@@ -44,7 +44,7 @@ namespace GoogleOSD {
 		{
 			InitializeComponent();
 			ReadSetting();
-			Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.database, Constant.Uid, Constant.Pwd);
+			Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.Database, Constant.Uid, Constant.Pwd);
 		}
 
 		/// <summary>

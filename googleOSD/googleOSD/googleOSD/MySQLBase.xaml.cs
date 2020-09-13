@@ -31,8 +31,8 @@ namespace GoogleOSD {
 		{
 			TableCombo = new Dictionary<string, string>()
 			 {
-				{ "案件", "t_project_base" },
-				{ "イベント", "t_event" },
+				{ "案件", "t_project_bases" },
+				{ "イベント", "t_events" },
 				{ "カラー", "f_color" },
 			};
 			InitializeComponent();
@@ -55,10 +55,11 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				// MySQLへの接続情報
-				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.database, Constant.Uid, Constant.Pwd);
+				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.Database, Constant.Uid, Constant.Pwd);
 				// MySQLへの接続
 				try {
 					server_lb.Content = Constant.Server;
+					database_lb.Content = Constant.Database;
 					port_lb.Content = Constant.Port;
 					uid_lb.Content = Constant.Uid;
 					password_lb.Content = Constant.Pwd;
@@ -166,7 +167,7 @@ namespace GoogleOSD {
 					// テーブル作成SQLを実行します。
 					command.Connection = Connection;
 //案件基本
-					string CreateTableSql = "CREATE TABLE IF NOT EXISTS t_project_base (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+					string CreateTableSql = "CREATE TABLE IF NOT EXISTS t_project_bases (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
 					CreateTableSql += " m_contract_id INT,";            //契約ID
 					CreateTableSql += " m_property_id INT,";            //案件基本
 					CreateTableSql += " project_number VARCHAR (10),";            //案件番号
@@ -186,7 +187,7 @@ namespace GoogleOSD {
 
 					command.CommandText = CreateTableSql;
 					command.ExecuteNonQuery();
-					CreateTableSql = "alter table t_project_base convert to character set utf8;";            //日本語対応「
+					CreateTableSql = "alter table t_project_bases convert to character set utf8;";            //日本語対応「
 					command.CommandText = CreateTableSql;
 					command.ExecuteNonQuery();
 	
@@ -246,7 +247,6 @@ namespace GoogleOSD {
 			string TAG = "ReadTable";
 			string dbMsg = "[GCalender]";
 			try {
-				//	string tableName = "t_project_base";
 				dbMsg += ",tableName=" + tableName;
 				if (Connection.State != ConnectionState.Open) {
 					dbMsg += ",Openしてない";
@@ -268,7 +268,7 @@ namespace GoogleOSD {
 						using (MySqlDataReader reader = command.ExecuteReader()) {
 							while (reader.Read()) {
 								string[] row = new string[reader.FieldCount];
-								if (tableName.Equals("t_project_base")) {
+								if (tableName.Equals("t_project_bases")) {
 									wModel = new t_project_base();
 								} else if (tableName.Equals("t_events")) {
 									wModel = new t_events();
@@ -304,7 +304,7 @@ namespace GoogleOSD {
 										}
 									}
 								}
-								if (tableName.Equals("t_project_base")) {
+								if (tableName.Equals("t_project_bases")) {
 									projecDataCollection.Add(wModel as t_project_base);
 								} else if (tableName.Equals("t_events")) {
 									eventDataCollection.Add(wModel as t_events);
@@ -318,7 +318,7 @@ namespace GoogleOSD {
 				}
 				dbMsg += ",projecDataCollection=" + projecDataCollection.Count();
 				// データをそのままセットする
-				if (tableName.Equals("t_project_base")) {
+				if (tableName.Equals("t_project_bases")) {
 					this.table_dg.DataContext = projecDataCollection;
 				} else if (tableName.Equals("t_events")) {
 					this.table_dg.DataContext = eventDataCollection;

@@ -96,6 +96,9 @@
 		<StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
 			<Label x:Name="server_lb" MinWidth="50"/>
 
+			<Label Content="Database" HorizontalAlignment="Right" />
+			<Label  x:Name="database_lb" MinWidth="50"/>
+
 			<Label Content="Port" HorizontalAlignment="Right" />
 			<Label  x:Name="port_lb" MinWidth="50"/>
 

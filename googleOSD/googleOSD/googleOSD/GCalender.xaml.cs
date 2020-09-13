@@ -46,7 +46,6 @@ namespace GoogleOSD {
 		public IList<AriadneData> ariadneDatas = new List<AriadneData>();
 		public ProjecDataCollection projecDataCollection ;
 		public EventDataCollection eventDataCollection;
-	//	public DbSet<t_project_base> Projects { get; set; }
 
 		public t_events tEvents;
 		public t_project_base tProject;
@@ -85,7 +84,7 @@ namespace GoogleOSD {
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
 					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
-						command.CommandText = $"SELECT * FROM t_project_base";
+						command.CommandText = $"SELECT * FROM t_project_bases";
 						using (MySqlDataReader reader = command.ExecuteReader()) {
 							while (reader.Read()) {
 								t_project_base wModel = new t_project_base();
