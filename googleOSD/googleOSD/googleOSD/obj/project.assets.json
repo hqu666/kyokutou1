@@ -2,7 +2,16 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.7.1": {
-      "EntityFramework/6.2.0": {
+      "BouncyCastle/1.8.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        },
+        "runtime": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        }
+      },
+      "EntityFramework/6.4.4": {
         "type": "package",
         "frameworkAssemblies": [
           "System.ComponentModel.DataAnnotations"
@@ -14,6 +23,10 @@
         "runtime": {
           "lib/net45/EntityFramework.SqlServer.dll": {},
           "lib/net45/EntityFramework.dll": {}
+        },
+        "build": {
+          "build/EntityFramework.props": {},
+          "build/EntityFramework.targets": {}
         }
       },
       "EntityFramework.ja/6.2.0": {
@@ -30,10 +43,10 @@
           }
         }
       },
-      "Google.Apis/1.46.0": {
+      "Google.Apis/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -47,11 +60,11 @@
           "lib/net45/Google.Apis.dll": {}
         }
       },
-      "Google.Apis.Auth/1.46.0": {
+      "Google.Apis.Auth/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -65,11 +78,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.46.0.1986": {
+      "Google.Apis.Calendar.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -78,7 +91,7 @@
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
         }
       },
-      "Google.Apis.Core/1.46.0": {
+      "Google.Apis.Core/1.49.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3"
@@ -93,11 +106,11 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1986": {
+      "Google.Apis.Drive.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Drive.v3.dll": {}
@@ -106,7 +119,53 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Google.Protobuf/3.6.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Google.Protobuf.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Google.Protobuf.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4.Streams/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        }
+      },
+      "K4os.Hash.xxHash/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -228,6 +287,43 @@
           "build/Microsoft.Windows.SDK.Contracts.targets": {}
         }
       },
+      "MySql.Data/8.0.21": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle": "1.8.3.1",
+          "Google.Protobuf": "3.6.1",
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Compression.LZ4.Streams": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6",
+          "SSH.NET": "2016.1.0",
+          "System.Buffers": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.6.0"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Configuration.Install",
+          "System.Data",
+          "System.Drawing",
+          "System.Drawing.Design",
+          "System.Management",
+          "System.Transactions",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        },
+        "runtime": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        }
+      },
       "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
@@ -235,6 +331,63 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "SSH.NET/2016.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Renci.SshNet.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Renci.SshNet.dll": {}
+        }
+      },
+      "System.Buffers/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Buffers.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.Numerics.Vectors": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        }
+      },
+      "System.Numerics.Vectors/4.4.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {}
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.6.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Runtime.WindowsRuntime/4.6.0": {
@@ -266,7 +419,16 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win": {
-      "EntityFramework/6.2.0": {
+      "BouncyCastle/1.8.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        },
+        "runtime": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        }
+      },
+      "EntityFramework/6.4.4": {
         "type": "package",
         "frameworkAssemblies": [
           "System.ComponentModel.DataAnnotations"
@@ -278,6 +440,10 @@
         "runtime": {
           "lib/net45/EntityFramework.SqlServer.dll": {},
           "lib/net45/EntityFramework.dll": {}
+        },
+        "build": {
+          "build/EntityFramework.props": {},
+          "build/EntityFramework.targets": {}
         }
       },
       "EntityFramework.ja/6.2.0": {
@@ -294,10 +460,10 @@
           }
         }
       },
-      "Google.Apis/1.46.0": {
+      "Google.Apis/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -311,11 +477,11 @@
           "lib/net45/Google.Apis.dll": {}
         }
       },
-      "Google.Apis.Auth/1.46.0": {
+      "Google.Apis.Auth/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -329,11 +495,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.46.0.1986": {
+      "Google.Apis.Calendar.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -342,7 +508,7 @@
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
         }
       },
-      "Google.Apis.Core/1.46.0": {
+      "Google.Apis.Core/1.49.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3"
@@ -357,11 +523,11 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1986": {
+      "Google.Apis.Drive.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Drive.v3.dll": {}
@@ -370,7 +536,53 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Google.Protobuf/3.6.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Google.Protobuf.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Google.Protobuf.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4.Streams/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        }
+      },
+      "K4os.Hash.xxHash/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -492,6 +704,43 @@
           "build/Microsoft.Windows.SDK.Contracts.targets": {}
         }
       },
+      "MySql.Data/8.0.21": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle": "1.8.3.1",
+          "Google.Protobuf": "3.6.1",
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Compression.LZ4.Streams": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6",
+          "SSH.NET": "2016.1.0",
+          "System.Buffers": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.6.0"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Configuration.Install",
+          "System.Data",
+          "System.Drawing",
+          "System.Drawing.Design",
+          "System.Management",
+          "System.Transactions",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        },
+        "runtime": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        }
+      },
       "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
@@ -499,6 +748,63 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "SSH.NET/2016.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Renci.SshNet.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Renci.SshNet.dll": {}
+        }
+      },
+      "System.Buffers/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Buffers.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.Numerics.Vectors": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        }
+      },
+      "System.Numerics.Vectors/4.4.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {}
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.6.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Runtime.WindowsRuntime/4.6.0": {
@@ -530,7 +836,16 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win-x64": {
-      "EntityFramework/6.2.0": {
+      "BouncyCastle/1.8.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        },
+        "runtime": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        }
+      },
+      "EntityFramework/6.4.4": {
         "type": "package",
         "frameworkAssemblies": [
           "System.ComponentModel.DataAnnotations"
@@ -542,6 +857,10 @@
         "runtime": {
           "lib/net45/EntityFramework.SqlServer.dll": {},
           "lib/net45/EntityFramework.dll": {}
+        },
+        "build": {
+          "build/EntityFramework.props": {},
+          "build/EntityFramework.targets": {}
         }
       },
       "EntityFramework.ja/6.2.0": {
@@ -558,10 +877,10 @@
           }
         }
       },
-      "Google.Apis/1.46.0": {
+      "Google.Apis/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -575,11 +894,11 @@
           "lib/net45/Google.Apis.dll": {}
         }
       },
-      "Google.Apis.Auth/1.46.0": {
+      "Google.Apis.Auth/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -593,11 +912,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.46.0.1986": {
+      "Google.Apis.Calendar.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -606,7 +925,7 @@
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
         }
       },
-      "Google.Apis.Core/1.46.0": {
+      "Google.Apis.Core/1.49.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3"
@@ -621,11 +940,11 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1986": {
+      "Google.Apis.Drive.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Drive.v3.dll": {}
@@ -634,7 +953,53 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Google.Protobuf/3.6.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Google.Protobuf.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Google.Protobuf.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4.Streams/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        }
+      },
+      "K4os.Hash.xxHash/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -756,6 +1121,43 @@
           "build/Microsoft.Windows.SDK.Contracts.targets": {}
         }
       },
+      "MySql.Data/8.0.21": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle": "1.8.3.1",
+          "Google.Protobuf": "3.6.1",
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Compression.LZ4.Streams": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6",
+          "SSH.NET": "2016.1.0",
+          "System.Buffers": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.6.0"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Configuration.Install",
+          "System.Data",
+          "System.Drawing",
+          "System.Drawing.Design",
+          "System.Management",
+          "System.Transactions",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        },
+        "runtime": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        }
+      },
       "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
@@ -763,6 +1165,63 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "SSH.NET/2016.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Renci.SshNet.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Renci.SshNet.dll": {}
+        }
+      },
+      "System.Buffers/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Buffers.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.Numerics.Vectors": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        }
+      },
+      "System.Numerics.Vectors/4.4.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {}
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.6.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Runtime.WindowsRuntime/4.6.0": {
@@ -794,7 +1253,16 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win-x86": {
-      "EntityFramework/6.2.0": {
+      "BouncyCastle/1.8.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        },
+        "runtime": {
+          "lib/BouncyCastle.Crypto.dll": {}
+        }
+      },
+      "EntityFramework/6.4.4": {
         "type": "package",
         "frameworkAssemblies": [
           "System.ComponentModel.DataAnnotations"
@@ -806,6 +1274,10 @@
         "runtime": {
           "lib/net45/EntityFramework.SqlServer.dll": {},
           "lib/net45/EntityFramework.dll": {}
+        },
+        "build": {
+          "build/EntityFramework.props": {},
+          "build/EntityFramework.targets": {}
         }
       },
       "EntityFramework.ja/6.2.0": {
@@ -822,10 +1294,10 @@
           }
         }
       },
-      "Google.Apis/1.46.0": {
+      "Google.Apis/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -839,11 +1311,11 @@
           "lib/net45/Google.Apis.dll": {}
         }
       },
-      "Google.Apis.Auth/1.46.0": {
+      "Google.Apis.Auth/1.49.0": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Core": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Core": "1.49.0"
         },
         "frameworkAssemblies": [
           "System.Net.Http"
@@ -857,11 +1329,11 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.46.0.1986": {
+      "Google.Apis.Calendar.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
@@ -870,7 +1342,7 @@
           "lib/net45/Google.Apis.Calendar.v3.dll": {}
         }
       },
-      "Google.Apis.Core/1.46.0": {
+      "Google.Apis.Core/1.49.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3"
@@ -885,11 +1357,11 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.46.0.1986": {
+      "Google.Apis.Drive.v3/1.49.0.2072": {
         "type": "package",
         "dependencies": {
-          "Google.Apis": "1.46.0",
-          "Google.Apis.Auth": "1.46.0"
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Auth": "1.49.0"
         },
         "compile": {
           "lib/net45/Google.Apis.Drive.v3.dll": {}
@@ -898,7 +1370,53 @@
           "lib/net45/Google.Apis.Drive.v3.dll": {}
         }
       },
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
+      "Google.Protobuf/3.6.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Google.Protobuf.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Google.Protobuf.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.dll": {}
+        }
+      },
+      "K4os.Compression.LZ4.Streams/1.1.11": {
+        "type": "package",
+        "dependencies": {
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6"
+        },
+        "compile": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Compression.LZ4.Streams.dll": {}
+        }
+      },
+      "K4os.Hash.xxHash/1.0.6": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        },
+        "runtime": {
+          "lib/net46/K4os.Hash.xxHash.dll": {}
+        }
+      },
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.18362.2005"
@@ -1020,6 +1538,43 @@
           "build/Microsoft.Windows.SDK.Contracts.targets": {}
         }
       },
+      "MySql.Data/8.0.21": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle": "1.8.3.1",
+          "Google.Protobuf": "3.6.1",
+          "K4os.Compression.LZ4": "1.1.11",
+          "K4os.Compression.LZ4.Streams": "1.1.11",
+          "K4os.Hash.xxHash": "1.0.6",
+          "SSH.NET": "2016.1.0",
+          "System.Buffers": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.6.0"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Configuration.Install",
+          "System.Data",
+          "System.Drawing",
+          "System.Drawing.Design",
+          "System.Management",
+          "System.Transactions",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        },
+        "runtime": {
+          "lib/net452/MySql.Data.dll": {},
+          "lib/net452/Ubiety.Dns.Core.dll": {},
+          "lib/net452/Zstandard.Net.dll": {}
+        }
+      },
       "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
@@ -1027,6 +1582,63 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "SSH.NET/2016.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Renci.SshNet.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Renci.SshNet.dll": {}
+        }
+      },
+      "System.Buffers/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Buffers.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.Numerics.Vectors": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Memory.dll": {}
+        }
+      },
+      "System.Numerics.Vectors/4.4.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {}
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {}
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.6.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "System.Runtime.WindowsRuntime/4.6.0": {
@@ -1059,17 +1671,43 @@
     }
   },
   "libraries": {
-    "EntityFramework/6.2.0": {
-      "sha512": "ptGyXOf26qLrtn+2doAmylIlCxOnBJANwlyyLrXDmqIk9O18IzLWHyxDwwAyhgXkxmbiaA0WNpRy67WRReInBw==",
+    "BouncyCastle/1.8.3.1": {
+      "sha512": "YReOMI3d7GN7pTeLm5m//55Mhw8W23YB+/3DJj8uWZr2z0IuFvEM0KznogeXWDDfZXy0OoEgxySidFcH1xB9fw==",
       "type": "package",
-      "path": "entityframework/6.2.0",
+      "path": "bouncycastle/1.8.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "bouncycastle.1.8.3.1.nupkg.sha512",
+        "bouncycastle.nuspec",
+        "lib/BouncyCastle.Crypto.dll"
+      ]
+    },
+    "EntityFramework/6.4.4": {
+      "sha512": "yj1+/4tci7Panu3jKDHYizxwVm0Jvm7b7m057b5h4u8NUHGCR8WIWirBTw+8EptRffwftIWPBeIRGNKD1ewEMQ==",
+      "type": "package",
+      "path": "entityframework/6.4.4",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "Icon.png",
+        "build/EntityFramework.DefaultItems.props",
+        "build/EntityFramework.props",
+        "build/EntityFramework.targets",
+        "build/Microsoft.Data.Entity.Build.Tasks.dll",
+        "build/netcoreapp3.0/EntityFramework.props",
+        "build/netcoreapp3.0/EntityFramework.targets",
+        "buildTransitive/EntityFramework.props",
+        "buildTransitive/EntityFramework.targets",
+        "buildTransitive/netcoreapp3.0/EntityFramework.props",
+        "buildTransitive/netcoreapp3.0/EntityFramework.targets",
+        "content/net40/App.config.install.xdt",
         "content/net40/App.config.transform",
+        "content/net40/Web.config.install.xdt",
         "content/net40/Web.config.transform",
-        "entityframework.6.2.0.nupkg.sha512",
+        "entityframework.6.4.4.nupkg.sha512",
         "entityframework.nuspec",
         "lib/net40/EntityFramework.SqlServer.dll",
         "lib/net40/EntityFramework.SqlServer.xml",
@@ -1079,14 +1717,28 @@
         "lib/net45/EntityFramework.SqlServer.xml",
         "lib/net45/EntityFramework.dll",
         "lib/net45/EntityFramework.xml",
-        "tools/EntityFramework.PowerShell.Utility.dll",
-        "tools/EntityFramework.PowerShell.dll",
-        "tools/EntityFramework.psd1",
-        "tools/EntityFramework.psm1",
-        "tools/about_EntityFramework.help.txt",
+        "lib/netstandard2.1/EntityFramework.SqlServer.dll",
+        "lib/netstandard2.1/EntityFramework.SqlServer.xml",
+        "lib/netstandard2.1/EntityFramework.dll",
+        "lib/netstandard2.1/EntityFramework.xml",
+        "tools/EntityFramework6.PS2.psd1",
+        "tools/EntityFramework6.PS2.psm1",
+        "tools/EntityFramework6.psd1",
+        "tools/EntityFramework6.psm1",
+        "tools/about_EntityFramework6.help.txt",
         "tools/init.ps1",
         "tools/install.ps1",
-        "tools/migrate.exe"
+        "tools/net40/any/ef6.exe",
+        "tools/net40/any/ef6.pdb",
+        "tools/net40/win-x86/ef6.exe",
+        "tools/net40/win-x86/ef6.pdb",
+        "tools/net45/any/ef6.exe",
+        "tools/net45/any/ef6.pdb",
+        "tools/net45/win-x86/ef6.exe",
+        "tools/net45/win-x86/ef6.pdb",
+        "tools/netcoreapp3.0/any/ef6.dll",
+        "tools/netcoreapp3.0/any/ef6.pdb",
+        "tools/netcoreapp3.0/any/ef6.runtimeconfig.json"
       ]
     },
     "EntityFramework.ja/6.2.0": {
@@ -1108,16 +1760,16 @@
         "lib/net45/ja/EntityFramework.xml"
       ]
     },
-    "Google.Apis/1.46.0": {
-      "sha512": "W6ZKacMAkZHOjQFv6iWpoADOgmZMUggnz+nPFYF8a4lRtAHD6nur4EcwtzU9IEZF+KeQz0DQLO6jVjMP1iXqPQ==",
+    "Google.Apis/1.49.0": {
+      "sha512": "fmXQQTxZFOBlnvokvdQMzq0Lt+g2QzpZ4H6U8lMMFHgAR8ZqxQnPN5yHDpoHf7a++hJHb5W3pALxauGsq+afKQ==",
       "type": "package",
-      "path": "google.apis/1.46.0",
+      "path": "google.apis/1.49.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
         "NuGetIcon.png",
-        "google.apis.1.46.0.nupkg.sha512",
+        "google.apis.1.49.0.nupkg.sha512",
         "google.apis.nuspec",
         "lib/net45/Google.Apis.PlatformServices.dll",
         "lib/net45/Google.Apis.dll",
@@ -1131,16 +1783,16 @@
         "lib/netstandard2.0/Google.Apis.xml"
       ]
     },
-    "Google.Apis.Auth/1.46.0": {
-      "sha512": "Mc/qDXb5Xg599Q7kzsecloOQeHwTI+/PmeucmcJurZSFsPYziaPaejHy+Z+52evj54H/zGc5ohcyABrT32vmGQ==",
+    "Google.Apis.Auth/1.49.0": {
+      "sha512": "3V9ohvixQtjaEvk7T9Ac7E/KvwEPa7eL4aMNreJDI0CEPzCdQdk2zCvaJPRrNIjhe+UuBeOeom1oAOMFB74JHg==",
       "type": "package",
-      "path": "google.apis.auth/1.46.0",
+      "path": "google.apis.auth/1.49.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
         "NuGetIcon.png",
-        "google.apis.auth.1.46.0.nupkg.sha512",
+        "google.apis.auth.1.49.0.nupkg.sha512",
         "google.apis.auth.nuspec",
         "lib/net45/Google.Apis.Auth.PlatformServices.dll",
         "lib/net45/Google.Apis.Auth.dll",
@@ -1156,15 +1808,15 @@
         "lib/netstandard2.0/Google.Apis.Auth.xml"
       ]
     },
-    "Google.Apis.Calendar.v3/1.46.0.1986": {
-      "sha512": "NQBurb/zq6DLTSnXaDNPeMB2gUP0FwXBnMae+TXiE59O1ePpiSZ6dE/R0k6Hk0/3V7GB1W40hd3CL5S8NUpFaw==",
+    "Google.Apis.Calendar.v3/1.49.0.2072": {
+      "sha512": "RvP4r4lP9zlGkg3wadW46rLIoPIkICW2mDaDMmHcbFfzwlQ9fPk87pmIneGvY22HXYQgv3D1ZHC9A6rsDlFY9A==",
       "type": "package",
-      "path": "google.apis.calendar.v3/1.46.0.1986",
+      "path": "google.apis.calendar.v3/1.49.0.2072",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.calendar.v3.1.46.0.1986.nupkg.sha512",
+        "google.apis.calendar.v3.1.49.0.2072.nupkg.sha512",
         "google.apis.calendar.v3.nuspec",
         "lib/net40/Google.Apis.Calendar.v3.dll",
         "lib/net40/Google.Apis.Calendar.v3.pdb",
@@ -1183,16 +1835,16 @@
         "lib/netstandard2.0/Google.Apis.Calendar.v3.xml"
       ]
     },
-    "Google.Apis.Core/1.46.0": {
-      "sha512": "I7tUKeY70MJxHnYu4cRzug90e2oaClhgRAwYIrqWnqIvojF2DTB3D5DeGbrEcgKGHEGL5ADgjBMFIhdnAO2Iqg==",
+    "Google.Apis.Core/1.49.0": {
+      "sha512": "9DgGdtyzgrCfHWwc/HiDXDbykNMeKQozbEHYEUEcezRuH+YR3fvq7YGVBDmUM8g6qEL3kDk6h5EU4h0IJwue1w==",
       "type": "package",
-      "path": "google.apis.core/1.46.0",
+      "path": "google.apis.core/1.49.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
         "NuGetIcon.png",
-        "google.apis.core.1.46.0.nupkg.sha512",
+        "google.apis.core.1.49.0.nupkg.sha512",
         "google.apis.core.nuspec",
         "lib/net45/Google.Apis.Core.dll",
         "lib/net45/Google.Apis.Core.pdb",
@@ -1205,15 +1857,15 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "Google.Apis.Drive.v3/1.46.0.1986": {
-      "sha512": "YO504lH1syICTJRnXLYCc8yPecQnOXlyeh2P3xNvSmNjtVc/GcqDrCvcZs4eGCQecyrd/YqFZ9CCN2CfVnxZuQ==",
+    "Google.Apis.Drive.v3/1.49.0.2072": {
+      "sha512": "Zz2ZFk26en7xUu8cy67hbjqnWBrXRglxHBdOl/YzHdapP34mWLOKFw6kBatTscinQvtbCw9OFfCjX1Em9lxHiQ==",
       "type": "package",
-      "path": "google.apis.drive.v3/1.46.0.1986",
+      "path": "google.apis.drive.v3/1.49.0.2072",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.drive.v3.1.46.0.1986.nupkg.sha512",
+        "google.apis.drive.v3.1.49.0.2072.nupkg.sha512",
         "google.apis.drive.v3.nuspec",
         "lib/net40/Google.Apis.Drive.v3.dll",
         "lib/net40/Google.Apis.Drive.v3.pdb",
@@ -1232,10 +1884,82 @@
         "lib/netstandard2.0/Google.Apis.Drive.v3.xml"
       ]
     },
-    "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.0.1": {
-      "sha512": "W1yS7AEuaSy04LZZVlcaDM40Kxooog4s6jMdLA80wlVJfFjKXIDDC+YK47mS2J8lHyDkyRmZwJlqvPVahq8p/A==",
+    "Google.Protobuf/3.6.1": {
+      "sha512": "741fGeDQjixBJaU2j+0CbrmZXsNJkTn/hWbOh4fLVXndHsCclJmWznCPWrJmPoZKvajBvAz3e8ECJOUvRtwjNQ==",
       "type": "package",
-      "path": "microsoft.toolkit.wpf.ui.controls.webview/6.0.1",
+      "path": "google.protobuf/3.6.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "google.protobuf.3.6.1.nupkg.sha512",
+        "google.protobuf.nuspec",
+        "lib/net45/Google.Protobuf.dll",
+        "lib/net45/Google.Protobuf.xml",
+        "lib/netstandard1.0/Google.Protobuf.dll",
+        "lib/netstandard1.0/Google.Protobuf.xml"
+      ]
+    },
+    "K4os.Compression.LZ4/1.1.11": {
+      "sha512": "RNvJw0UGkedPhCqVBNIogtfQebY+bQt0PN7xDbVe5LWLra0ZEqPfjPSl7iStj3rgDnkqkkTTpm+vCX3hU1qKmA==",
+      "type": "package",
+      "path": "k4os.compression.lz4/1.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "k4os.compression.lz4.1.1.11.nupkg.sha512",
+        "k4os.compression.lz4.nuspec",
+        "lib/net45/K4os.Compression.LZ4.dll",
+        "lib/net45/K4os.Compression.LZ4.xml",
+        "lib/net46/K4os.Compression.LZ4.dll",
+        "lib/net46/K4os.Compression.LZ4.xml",
+        "lib/netstandard1.6/K4os.Compression.LZ4.dll",
+        "lib/netstandard1.6/K4os.Compression.LZ4.xml",
+        "lib/netstandard2.0/K4os.Compression.LZ4.dll",
+        "lib/netstandard2.0/K4os.Compression.LZ4.xml"
+      ]
+    },
+    "K4os.Compression.LZ4.Streams/1.1.11": {
+      "sha512": "x+BidXriYsNP4HNTHKx+5cVQguHHwbfs6nM79fDHOCOrcNwnaBms4dwzAV/ZALmKsNKcHmY74PeUZiCC4qLKwQ==",
+      "type": "package",
+      "path": "k4os.compression.lz4.streams/1.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "k4os.compression.lz4.streams.1.1.11.nupkg.sha512",
+        "k4os.compression.lz4.streams.nuspec",
+        "lib/net45/K4os.Compression.LZ4.Streams.dll",
+        "lib/net45/K4os.Compression.LZ4.Streams.xml",
+        "lib/net46/K4os.Compression.LZ4.Streams.dll",
+        "lib/net46/K4os.Compression.LZ4.Streams.xml",
+        "lib/netstandard1.6/K4os.Compression.LZ4.Streams.dll",
+        "lib/netstandard1.6/K4os.Compression.LZ4.Streams.xml",
+        "lib/netstandard2.0/K4os.Compression.LZ4.Streams.dll",
+        "lib/netstandard2.0/K4os.Compression.LZ4.Streams.xml"
+      ]
+    },
+    "K4os.Hash.xxHash/1.0.6": {
+      "sha512": "jCfNP0inx1sGcP3KSbpiDEH3km2e1sVBjMfKo+V92jr1dL4ZYgA1uhRMl1wAtdGZcbObXIikKqtVlgx3j/CW6g==",
+      "type": "package",
+      "path": "k4os.hash.xxhash/1.0.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "k4os.hash.xxhash.1.0.6.nupkg.sha512",
+        "k4os.hash.xxhash.nuspec",
+        "lib/net45/K4os.Hash.xxHash.dll",
+        "lib/net45/K4os.Hash.xxHash.xml",
+        "lib/net46/K4os.Hash.xxHash.dll",
+        "lib/net46/K4os.Hash.xxHash.xml",
+        "lib/netstandard1.6/K4os.Hash.xxHash.dll",
+        "lib/netstandard1.6/K4os.Hash.xxHash.xml",
+        "lib/netstandard2.0/K4os.Hash.xxHash.dll",
+        "lib/netstandard2.0/K4os.Hash.xxHash.xml"
+      ]
+    },
+    "Microsoft.Toolkit.Wpf.UI.Controls.WebView/6.1.2": {
+      "sha512": "Y4fiZvQbbQkG4eC9l+Dc+LfKOG8OHnVTquVWwkHG2I3mliP4MEFWDdaz+HsmZ1E3Av+cuIJJaV30NzBN2qTWwA==",
+      "type": "package",
+      "path": "microsoft.toolkit.wpf.ui.controls.webview/6.1.2",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1246,7 +1970,7 @@
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll",
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.pdb",
         "lib/netcoreapp3.0/Microsoft.Toolkit.Wpf.UI.Controls.WebView.xml",
-        "microsoft.toolkit.wpf.ui.controls.webview.6.0.1.nupkg.sha512",
+        "microsoft.toolkit.wpf.ui.controls.webview.6.1.2.nupkg.sha512",
         "microsoft.toolkit.wpf.ui.controls.webview.nuspec",
         "tools/VisualStudioToolsManifest.xml"
       ]
@@ -1422,6 +2146,33 @@
         "ref/netstandard2.0/en/Windows.Web.Http.Diagnostics.HttpDiagnosticsContract.xml"
       ]
     },
+    "MySql.Data/8.0.21": {
+      "sha512": "mKARhpOOn4rQ6PPdY98UVHq00v/4vDCfluR2Xrr5VNQgtyVzjzorcvQjYArHLRwKLEkBRxgHWRfg0+hS96FI3Q==",
+      "type": "package",
+      "path": "mysql.data/8.0.21",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/MySql.Data.dll",
+        "lib/net452/MySql.Data.xml",
+        "lib/net452/Ubiety.Dns.Core.dll",
+        "lib/net452/Zstandard.Net.dll",
+        "lib/net48/MySql.Data.dll",
+        "lib/net48/MySql.Data.xml",
+        "lib/net48/Ubiety.Dns.Core.dll",
+        "lib/net48/Zstandard.Net.dll",
+        "lib/netstandard2.0/MySql.Data.dll",
+        "lib/netstandard2.0/MySql.Data.xml",
+        "lib/netstandard2.0/Ubiety.Dns.Core.dll",
+        "lib/netstandard2.0/Zstandard.Net.dll",
+        "lib/netstandard2.1/MySql.Data.dll",
+        "lib/netstandard2.1/MySql.Data.xml",
+        "lib/netstandard2.1/Ubiety.Dns.Core.dll",
+        "lib/netstandard2.1/Zstandard.Net.dll",
+        "mysql.data.8.0.21.nupkg.sha512",
+        "mysql.data.nuspec"
+      ]
+    },
     "Newtonsoft.Json/12.0.3": {
       "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "type": "package",
@@ -1451,6 +2202,151 @@
         "newtonsoft.json.12.0.3.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
+      ]
+    },
+    "SSH.NET/2016.1.0": {
+      "sha512": "b0fcFFOE044KNRhq1uGujmK04ab+OzA9xARdeVCoZrY6I4D1IIaR6dn6qBIa+er4bJapGBhznDitwcRQpSRC0w==",
+      "type": "package",
+      "path": "ssh.net/2016.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/Renci.SshNet.dll",
+        "lib/net35/Renci.SshNet.xml",
+        "lib/net40/Renci.SshNet.dll",
+        "lib/net40/Renci.SshNet.xml",
+        "lib/netstandard1.3/Renci.SshNet.dll",
+        "lib/netstandard1.3/Renci.SshNet.xml",
+        "lib/sl4/Renci.SshNet.dll",
+        "lib/sl4/Renci.SshNet.xml",
+        "lib/sl5/Renci.SshNet.dll",
+        "lib/sl5/Renci.SshNet.xml",
+        "lib/uap10/Renci.SshNet.dll",
+        "lib/uap10/Renci.SshNet.xml",
+        "lib/wp71/Renci.SshNet.dll",
+        "lib/wp71/Renci.SshNet.xml",
+        "lib/wp8/Renci.SshNet.dll",
+        "lib/wp8/Renci.SshNet.xml",
+        "ssh.net.2016.1.0.nupkg.sha512",
+        "ssh.net.nuspec"
+      ]
+    },
+    "System.Buffers/4.5.0": {
+      "sha512": "pL2ChpaRRWI/p4LXyy4RgeWlYF2sgfj/pnVMvBqwNFr5cXg7CXNnWZWxrOONLg8VGdFB8oB+EG2Qw4MLgTOe+A==",
+      "type": "package",
+      "path": "system.buffers/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.1/System.Buffers.dll",
+        "lib/netstandard1.1/System.Buffers.xml",
+        "lib/netstandard2.0/System.Buffers.dll",
+        "lib/netstandard2.0/System.Buffers.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net45/System.Buffers.dll",
+        "ref/net45/System.Buffers.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.1/System.Buffers.dll",
+        "ref/netstandard1.1/System.Buffers.xml",
+        "ref/netstandard2.0/System.Buffers.dll",
+        "ref/netstandard2.0/System.Buffers.xml",
+        "ref/uap10.0.16299/_._",
+        "system.buffers.4.5.0.nupkg.sha512",
+        "system.buffers.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Memory/4.5.3": {
+      "sha512": "3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "type": "package",
+      "path": "system.memory/4.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.3.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Numerics.Vectors/4.4.0": {
+      "sha512": "UiLzLW+Lw6HLed1Hcg+8jSRttrbuXv7DANVj0DkL9g6EnnzbL75EB7EWsw5uRbhxd/4YdG8li5XizGWepmG3PQ==",
+      "type": "package",
+      "path": "system.numerics.vectors/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Numerics.Vectors.dll",
+        "lib/net46/System.Numerics.Vectors.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.0/System.Numerics.Vectors.dll",
+        "lib/netstandard1.0/System.Numerics.Vectors.xml",
+        "lib/netstandard2.0/System.Numerics.Vectors.dll",
+        "lib/netstandard2.0/System.Numerics.Vectors.xml",
+        "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.dll",
+        "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.xml",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Numerics.Vectors.dll",
+        "ref/net46/System.Numerics.Vectors.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.0/System.Numerics.Vectors.dll",
+        "ref/netstandard1.0/System.Numerics.Vectors.xml",
+        "ref/netstandard2.0/System.Numerics.Vectors.dll",
+        "ref/netstandard2.0/System.Numerics.Vectors.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "system.numerics.vectors.4.4.0.nupkg.sha512",
+        "system.numerics.vectors.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.6.0": {
+      "sha512": "HxozeSlipUK7dAroTYwIcGwKDeOVpQnJlpVaOkBz7CM4TsE5b/tKlQBZecTjh6FzcSbxndYaxxpsBMz+wMJeyw==",
+      "type": "package",
+      "path": "system.runtime.compilerservices.unsafe/4.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Runtime.WindowsRuntime/4.6.0": {
@@ -1596,29 +2492,30 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.7.1": [
-      "EntityFramework >= 6.2.0",
+      "EntityFramework >= 6.4.4",
       "EntityFramework.ja >= 6.2.0",
-      "Google.Apis.Calendar.v3 >= 1.46.0.1986",
-      "Google.Apis.Drive.v3 >= 1.46.0.1986",
-      "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.0.1",
+      "Google.Apis.Calendar.v3 >= 1.49.0.2072",
+      "Google.Apis.Drive.v3 >= 1.49.0.2072",
+      "Microsoft.Toolkit.Wpf.UI.Controls.WebView >= 6.1.2",
+      "MySql.Data >= 8.0.21",
       "Newtonsoft.Json >= 12.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\博臣\\.nuget\\packages\\": {}
+    "C:\\Users\\hkuwayama\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "projectUniqueName": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
       "projectName": "GoogleOSD",
-      "projectPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
-      "packagesPath": "C:\\Users\\博臣\\.nuget\\packages\\",
-      "outputPath": "H:\\develop\\sample\\googleOSD\\googleOSD\\googleOSD\\obj\\",
+      "projectPath": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\GoogleOSD.csproj",
+      "packagesPath": "C:\\Users\\hkuwayama\\.nuget\\packages\\",
+      "outputPath": "C:\\work\\2020\\kyokuto\\samples\\googleOSD\\googleOSD\\googleOSD\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
-        "C:\\Users\\博臣\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hkuwayama\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1626,7 +2523,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://www.nuget.org/api/v2/": {}
       },
       "frameworks": {
         "net471": {
@@ -1639,7 +2536,7 @@
         "dependencies": {
           "EntityFramework": {
             "target": "Package",
-            "version": "[6.2.0, )"
+            "version": "[6.4.4, )"
           },
           "EntityFramework.ja": {
             "target": "Package",
@@ -1647,15 +2544,19 @@
           },
           "Google.Apis.Calendar.v3": {
             "target": "Package",
-            "version": "[1.46.0.1986, )"
+            "version": "[1.49.0.2072, )"
           },
           "Google.Apis.Drive.v3": {
             "target": "Package",
-            "version": "[1.46.0.1986, )"
+            "version": "[1.49.0.2072, )"
           },
           "Microsoft.Toolkit.Wpf.UI.Controls.WebView": {
             "target": "Package",
-            "version": "[6.0.1, )"
+            "version": "[6.1.2, )"
+          },
+          "MySql.Data": {
+            "target": "Package",
+            "version": "[8.0.21, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
@@ -1680,5 +2581,20 @@
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "依存関係の制約外で検出されたパッケージのバージョン: EntityFramework.ja 6.2.0 では EntityFramework (= 6.2.0) が必要ですが、バージョン EntityFramework 6.4.4 は解決されました。",
+      "libraryId": "EntityFramework",
+      "targetGraphs": [
+        ".NETFramework,Version=v4.7.1",
+        ".NETFramework,Version=v4.7.1/win",
+        ".NETFramework,Version=v4.7.1/win-x64",
+        ".NETFramework,Version=v4.7.1/win-x86"
+      ]
+    }
+  ]
 }

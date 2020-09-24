@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("company.mdf")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("company_log.ldf")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("eventmodel.context.tt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("eventmodel.tt")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("projectmodel.context.tt")]

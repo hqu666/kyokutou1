@@ -94,19 +94,19 @@
 		</Grid.RowDefinitions>
 		<Label Content="Server " HorizontalAlignment="Right"  Grid.Row="0" Grid.Column="0"/>
 		<StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
-			<Label x:Name="server_lb" MinWidth="50"/>
+			<TextBox x:Name="server_lb" MinWidth="50"/>
 
 			<Label Content="Database" HorizontalAlignment="Right" />
-			<Label  x:Name="database_lb" MinWidth="50"/>
-
+			<!--<Label  x:Name="database_lb" MinWidth="50"/>-->
+			<TextBox  x:Name="database_lb" MinWidth="50"/>
 			<Label Content="Port" HorizontalAlignment="Right" />
-			<Label  x:Name="port_lb" MinWidth="50"/>
+			<TextBox  x:Name="port_lb" MinWidth="50"/>
 
 			<Label Content="Uid " HorizontalAlignment="Right" />
-			<Label x:Name="uid_lb"  MinWidth="50"/>
+			<TextBox x:Name="uid_lb"  MinWidth="50"/>
 
 			<Label Content="password" HorizontalAlignment="Right" />
-			<Label  x:Name="password_lb"  MinWidth="50"/>
+			<TextBox  x:Name="password_lb"  MinWidth="50"/>
 
 		</StackPanel>
 		<Label Content="接続文字列" Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Right" />

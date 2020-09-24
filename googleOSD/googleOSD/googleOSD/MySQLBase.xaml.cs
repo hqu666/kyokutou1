@@ -35,6 +35,7 @@ namespace GoogleOSD {
 				{ "イベント", "t_events" },
 				{ "カラー", "f_color" },
 			};
+
 			InitializeComponent();
 			DataContext = this;
 
@@ -43,6 +44,12 @@ namespace GoogleOSD {
 			conect_bt.Visibility = System.Windows.Visibility.Visible;
 			// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
 			this.SizeToContent = SizeToContent.WidthAndHeight;
+			server_lb.Text = Constant.Server;
+			database_lb.Text = Constant.Database;
+			port_lb.Text = Constant.Port.ToString();
+			uid_lb.Text = Constant.Uid;
+			password_lb.Text = Constant.Pwd;
+
 		}
 
 		/// <summary>
@@ -55,15 +62,15 @@ namespace GoogleOSD {
 			string dbMsg = "[GCalender]";
 			try {
 				// MySQLへの接続情報
-				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", Constant.Server, Constant.Database, Constant.Uid, Constant.Pwd);
+				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", server_lb.Text, database_lb.Text, uid_lb.Text, password_lb.Text);
 				// MySQLへの接続
 				try {
-					server_lb.Content = Constant.Server;
-					database_lb.Content = Constant.Database;
-					port_lb.Content = Constant.Port;
-					uid_lb.Content = Constant.Uid;
-					password_lb.Content = Constant.Pwd;
-					connectionString_lb.Content = Constant.ConnectionString;
+					//server_lb.Text = Constant.Server;
+					//database_lb.Text = Constant.Database;
+					//port_lb.Text = Constant.Port.ToString();
+					//uid_lb.Text = Constant.Uid;
+					//password_lb.Text = Constant.Pwd;
+					//connectionString_lb.Content = Constant.ConnectionString;
 
 					Connection = new MySqlConnection(Constant.ConnectionString);
 					Connection.Open();
@@ -127,6 +134,8 @@ namespace GoogleOSD {
 		private void Conect_bt_Click(object sender, RoutedEventArgs e)
 		{
 			string[] args = null;
+
+
 			SqlConnect(args);
 		}
 	
