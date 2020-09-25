@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using GoogleOSD.Models;
+using System.Globalization;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -29,13 +20,6 @@ namespace GoogleOSD {
 
 		public MySQLBase()
 		{
-			//TableCombo = new Dictionary<string, string>()
-			// {
-			//	{ "案件", "t_project_bases" },
-			//	{ "イベント", "t_events" },
-			//	{ "カラー", "f_color" },
-			//};
-
 			InitializeComponent();
 			DataContext = this;
 
@@ -119,23 +103,16 @@ namespace GoogleOSD {
 					if (reader.HasRows) {
 						dbMsg += ",reader=" + reader.RecordsAffected + "テーブル " ;
 						TableCombo = new Dictionary<string, string>();
-							// {
-							//	{ "案件", "t_project_bases" },
-							//	{ "イベント", "t_events" },
-							//	{ "カラー", "f_color" },
-							//};
-
 						// データがある間繰り返します。
 						while (reader.Read()) {
 							// 取得したテーブル名を表示します。
-							string key = reader.GetString(0);
+							string key = reader.GetString(0);                   //テーブル名（日）に記載した　日本語の名称は?
 							string name = reader.GetString(0);
 							dbMsg += "," + key + " : " + name;
 							TableCombo.Add( key,name);
 						}
 						dbMsg += ",取得結果：" + TableCombo.Count + "テーブル ";
 						table_combo.ItemsSource = TableCombo;
-
 					}
 				}
 				MyLog(TAG, dbMsg);
@@ -144,38 +121,36 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// データベース接続解除
+		/// </summary>
+		public void DisConnect()
+				{
+					string TAG = "DisConnect";
+					string dbMsg = "[MySQLBase]";
+					try {
+						try {
+							Connection.Close();
+							string msgStr = "MySQLの接続を解除しました";
+							dbMsg += ",msgStr=" + msgStr;
+							MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+							dbMsg += "接続の解除";
+							table_combo.Visibility = System.Windows.Visibility.Hidden;
+							dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
+							conect_bt.Visibility = System.Windows.Visibility.Visible;
+							this.table_dg.DataContext = null;
+							this.table_dg.Items.Refresh();
 
-
-/// <summary>
-/// データベース接続解除
-/// </summary>
-public void DisConnect()
-		{
-			string TAG = "DisConnect";
-			string dbMsg = "[MySQLBase]";
-			try {
-				try {
-					Connection.Close();
-					string msgStr = "MySQLの接続を解除しました";
-					dbMsg += ",msgStr=" + msgStr;
-					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-					dbMsg += "接続の解除";
-					table_combo.Visibility = System.Windows.Visibility.Hidden;
-					dis_conect_bt.Visibility = System.Windows.Visibility.Hidden;
-					conect_bt.Visibility = System.Windows.Visibility.Visible;
-					this.table_dg.DataContext = null;
-					this.table_dg.Items.Refresh();
-
-					// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
-					this.SizeToContent = SizeToContent.WidthAndHeight;
-				} catch (MySqlException me) {
-					MyErrorLog(TAG, dbMsg, me);
+							// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
+							this.SizeToContent = SizeToContent.WidthAndHeight;
+						} catch (MySqlException me) {
+							MyErrorLog(TAG, dbMsg, me);
+						}
+						MyLog(TAG, dbMsg);
+					} catch (Exception er) {
+						MyErrorLog(TAG, dbMsg, er);
+					}
 				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
 
 		private void Dis_conect_bt_Click(object sender, RoutedEventArgs e)
 		{
@@ -308,6 +283,7 @@ public void DisConnect()
 			string dbMsg = "[MySQLBase]";
 			try {
 				dbMsg += ",tableName=" + tableName;
+
 				if (Connection.State != ConnectionState.Open) {
 					dbMsg += ",Openしてない";
 					Connection.Open();
@@ -315,11 +291,22 @@ public void DisConnect()
 				this.table_dg.DataContext = null;
 				this.table_dg.Items.Refresh();
 
-				ProjecDataCollection projecDataCollection = new ProjecDataCollection();
-				EventDataCollection eventDataCollection = new EventDataCollection();
-				FColorCollection fColorCollection = new FColorCollection();
-				Object wModel = null;
+				string[] rStrs = tableName.Split('_');
+				TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
 
+				Type myType = typeof(MySQLBase);
+				string modelName = myType.Namespace + ".Models.";                 // "GoogleOSD.Models."
+				for (int i = 1; i < rStrs.Length; i++) {
+					string rStr = ti.ToTitleCase(rStrs[i]);
+					modelName += rStr;
+				}
+				dbMsg += ",modelName=" + modelName;
+
+				Type type = Type.GetType(modelName);
+				dbMsg += ",type=" + type.FullName;
+				Object wModel = (Object)Activator.CreateInstance(type);
+				type = Type.GetType(modelName + "Collection");
+				Object wCollection = (Object)Activator.CreateInstance(type);
 				DataTable tbl = new DataTable();
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
@@ -327,15 +314,6 @@ public void DisConnect()
 						command.CommandText = $"SELECT * FROM {tableName}";
 						using (MySqlDataReader reader = command.ExecuteReader()) {
 							while (reader.Read()) {
-								string[] row = new string[reader.FieldCount];
-								if (tableName.Equals("t_project_bases")) {
-									wModel = new t_project_base();
-								} else if (tableName.Equals("t_events")) {
-									wModel = new t_events();
-								} else if (tableName.Equals("f_color")) {
-									wModel = new f_color();
-								}
-						//		Dictionary<string, string> Booleans = new Dictionary<string, string>();
 								for (int i = 0; i < reader.FieldCount; i++) {
 									string rName = reader.GetName(i);
 									string rType = reader.GetFieldType(i).Name;
@@ -364,27 +342,14 @@ public void DisConnect()
 										}
 									}
 								}
-								if (tableName.Equals("t_project_bases")) {
-									projecDataCollection.Add(wModel as t_project_base);
-								} else if (tableName.Equals("t_events")) {
-									eventDataCollection.Add(wModel as t_events);
-								} else if (tableName.Equals("f_color")) {
-									fColorCollection.Add(wModel as f_color);
-								}
 							}
 						}
 					}
 
 				}
-				dbMsg += ",projecDataCollection=" + projecDataCollection.Count();
+		//		dbMsg += ",projecDataCollection=" + wCollection.
 				// データをそのままセットする
-				if (tableName.Equals("t_project_bases")) {
-					this.table_dg.DataContext = projecDataCollection;
-				} else if (tableName.Equals("t_events")) {
-					this.table_dg.DataContext = eventDataCollection;
-				} else if (tableName.Equals("f_color")) {
-					this.table_dg.DataContext = fColorCollection;
-				}
+				this.table_dg.DataContext = wCollection;
 				//更新時はこれが必須
 				this.table_dg.Items.Refresh();
 

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GoogleOSD"
  		Topmost="True"
 		mc:Ignorable="d"
-        Title="MySQLBase">
+		Width="Auto"
+        Title="MySQLBase" MinWidth="1000" HorizontalAlignment="Left" VerticalAlignment="Top" MinHeight="600" MaxWidth="1920" MaxHeight="1080" FontSize="14">
 	<!--WindowStartupLocation="CenterScreen"-->
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -61,7 +62,7 @@
 		</Style>
 
 	</Window.Resources>
-	<Grid>
+	<Grid Margin="0,0,-10,0">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="110" />
 			<ColumnDefinition Width="Auto" />
@@ -116,12 +117,22 @@
 		<ComboBox x:Name="table_combo"
 							ItemsSource="{Binding TableCombo}" SelectedValuePath="Value" DisplayMemberPath="Key"
 							Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="3"
-							Height="24" Width="Auto" HorizontalAlignment="Left" SelectionChanged="Table_combo_SelectionChanged"
-		/>
+							Height="24" Width="Auto" HorizontalAlignment="Left" 
+							SelectionChanged="Table_combo_SelectionChanged">
+
+			<!--<ComboBox.ItemTemplate>-->
+				<!--<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding name}" Margin="2.5"/>
+						<TextBlock Text="{Binding value}" Margin="2.5"/>
+					</StackPanel>
+				</DataTemplate>-->
+			<!--</ComboBox.ItemTemplate>-->
+		</ComboBox>
 
 		<DataGrid x:Name ="table_dg"
 				ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}"
-				Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Height="200" Width="Auto"/>
+				Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Width="Auto" MinWidth="750" MinHeight="400"/>
 		<!--ItemsSource="{Binding DataContext, Mode=TwoWay}"-->
 
 		<Button   Grid.Row="16" Grid.Column="0"
