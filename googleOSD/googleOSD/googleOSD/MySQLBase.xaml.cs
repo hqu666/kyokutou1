@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using GoogleOSD.Model;
+using GoogleOSD.Models;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -29,12 +29,12 @@ namespace GoogleOSD {
 
 		public MySQLBase()
 		{
-			TableCombo = new Dictionary<string, string>()
-			 {
-				{ "案件", "t_project_bases" },
-				{ "イベント", "t_events" },
-				{ "カラー", "f_color" },
-			};
+			//TableCombo = new Dictionary<string, string>()
+			// {
+			//	{ "案件", "t_project_bases" },
+			//	{ "イベント", "t_events" },
+			//	{ "カラー", "f_color" },
+			//};
 
 			InitializeComponent();
 			DataContext = this;
@@ -59,7 +59,7 @@ namespace GoogleOSD {
 		public void SqlConnect(string[] args)
 		{
 			string TAG = "SqlConnect";
-			string dbMsg = "[GCalender]";
+			string dbMsg = "GetAllTable";
 			try {
 				// MySQLへの接続情報
 				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}", server_lb.Text, database_lb.Text, uid_lb.Text, password_lb.Text);
@@ -80,8 +80,8 @@ namespace GoogleOSD {
 					table_combo.Visibility = System.Windows.Visibility.Visible;
 					dis_conect_bt.Visibility = System.Windows.Visibility.Visible;
 					conect_bt.Visibility = System.Windows.Visibility.Hidden;
-
-					MakeTable();
+					GetAllTable();
+				//	MakeTable();
 				} catch (MySqlException me) {
 					string titolStr = TAG;
 					string msgStr = "XAMPPもしくはMySQLデータベースの起動確認を";
@@ -96,12 +96,63 @@ namespace GoogleOSD {
 		}
 
 		/// <summary>
-		/// データベース接続解除
+		/// 接続したデータベースの全テーブルデータ取得
 		/// </summary>
-		public void DisConnect()
+		public void GetAllTable()
+		{
+			string TAG = "GetAllTable";
+			string dbMsg = "[MySQLBase]";
+			try {
+				// テーブル一覧取得SQL
+				string TableListSql = $"SHOW TABLES FROM {Constant.Database}";
+				// コネクションオブジェクトとコマンドオブジェクトを生成します。
+			//	using (var connection = new MySqlConnection(Constant.ConnectionString))
+				using (var command = new MySqlCommand()) {
+					// コネクションをオープンします。
+			//		connection.Open();
+
+					// テーブル一覧取得SQLを実行します。
+					command.Connection = Connection;
+					command.CommandText = TableListSql;
+					var reader = command.ExecuteReader();
+					// データがある場合
+					if (reader.HasRows) {
+						dbMsg += ",reader=" + reader.RecordsAffected + "テーブル " ;
+						TableCombo = new Dictionary<string, string>();
+							// {
+							//	{ "案件", "t_project_bases" },
+							//	{ "イベント", "t_events" },
+							//	{ "カラー", "f_color" },
+							//};
+
+						// データがある間繰り返します。
+						while (reader.Read()) {
+							// 取得したテーブル名を表示します。
+							string key = reader.GetString(0);
+							string name = reader.GetString(0);
+							dbMsg += "," + key + " : " + name;
+							TableCombo.Add( key,name);
+						}
+						dbMsg += ",取得結果：" + TableCombo.Count + "テーブル ";
+						table_combo.ItemsSource = TableCombo;
+
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+
+/// <summary>
+/// データベース接続解除
+/// </summary>
+public void DisConnect()
 		{
 			string TAG = "DisConnect";
-			string dbMsg = "[GCalender]";
+			string dbMsg = "[MySQLBase]";
 			try {
 				try {
 					Connection.Close();
@@ -147,7 +198,7 @@ namespace GoogleOSD {
 		private void Table_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			string TAG = "Table_combo_SelectionChanged";
-			string dbMsg = "[GCalender]";
+			string dbMsg = "[MySQLBase]";
 			try {
 				ComboBox combo = sender as ComboBox;
 				int selectedIndex = combo.SelectedIndex;
@@ -165,7 +216,7 @@ namespace GoogleOSD {
 		public void MakeTable()
 		{
 			string TAG = "MakeTable";
-			string dbMsg = "[GCalender]";
+			string dbMsg = "[MySQLBase]";
 			try {
 				// コネクションオブジェクトとコマンドオブジェクトを生成します。
 				//using (var connection = new MySqlConnection(ConnectionString))
@@ -254,7 +305,7 @@ namespace GoogleOSD {
 		public void ReadTable(string tableName)
 		{
 			string TAG = "ReadTable";
-			string dbMsg = "[GCalender]";
+			string dbMsg = "[MySQLBase]";
 			try {
 				dbMsg += ",tableName=" + tableName;
 				if (Connection.State != ConnectionState.Open) {

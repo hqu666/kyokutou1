@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoogleOSD.Model {
+namespace GoogleOSD.Models {
 	public partial class f_color {
 		public int Id { get; set; }
 		public string Color_var { get; set; }
