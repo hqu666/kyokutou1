@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Globalization;
+using Windows.UI.ViewManagement;
+using Windows.ApplicationModel.Core;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -54,7 +56,7 @@ namespace GoogleOSD {
 					//port_lb.Text = Constant.Port.ToString();
 					//uid_lb.Text = Constant.Uid;
 					//password_lb.Text = Constant.Pwd;
-					//connectionString_lb.Content = Constant.ConnectionString;
+					connectionString_lb.Content = Constant.ConnectionString;
 
 					Connection = new MySqlConnection(Constant.ConnectionString);
 					Connection.Open();
@@ -140,9 +142,10 @@ namespace GoogleOSD {
 							conect_bt.Visibility = System.Windows.Visibility.Visible;
 							this.table_dg.DataContext = null;
 							this.table_dg.Items.Refresh();
+							connectionString_lb.Content ="";
 
-							// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
-							this.SizeToContent = SizeToContent.WidthAndHeight;
+					// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
+					this.SizeToContent = SizeToContent.WidthAndHeight;
 						} catch (MySqlException me) {
 							MyErrorLog(TAG, dbMsg, me);
 						}
