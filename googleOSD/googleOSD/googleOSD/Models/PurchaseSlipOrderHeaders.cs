@@ -33,13 +33,13 @@ namespace GoogleOSD.Models{
 		///作成者
 		public int created_user { get; set; }
 		///作成日時:
-		DateTime created_at { get; set; }
+		public DateTime created_at { get; set; }
 		///更新者
 		public int updated_user { get; set; }
 		///更新日時:
-		DateTime updated_at { get; set; }
+		public DateTime updated_at { get; set; }
 		///削除日時:
-		DateTime deleted_at { get; set; }
+		public DateTime deleted_at { get; set; }
 	}
 
 	public class PurchaseSlipOrderHeadersCollection : ObservableCollection<PurchaseSlipOrderHeaders> {

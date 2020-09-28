@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Globalization;
 using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
+using System.Windows.Data;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -15,7 +16,26 @@ namespace GoogleOSD {
 	/// </summary>
 	public partial class MySQLBase : Window {
 
+		/// <summary>
+		/// 接続情報
+		/// </summary>
 		public MySqlConnection Connection = null;
+		/// <summary>
+		/// 選択しているテーブルのモデル
+		/// </summary>
+		public Object wModel;
+		/// <summary>
+		/// "GoogleOSD.Models."を含むモデル名
+		/// </summary>
+		public string modelName;
+		/// <summary>
+		/// DataGridのソース
+		/// </summary>
+		public List<object> wCollection;
+		/// <summary>
+		/// 対象テーブルの列数
+		/// </summary>
+		public int FieldCount;
 		public string titolStr = "MySQL";
 
 		public Dictionary<string, string> TableCombo { get; set; }
@@ -75,48 +95,6 @@ namespace GoogleOSD {
 					MyErrorLog(TAG, dbMsg, me);
 				}
 
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		/// <summary>
-		/// 接続したデータベースの全テーブルデータ取得
-		/// </summary>
-		public void GetAllTable()
-		{
-			string TAG = "GetAllTable";
-			string dbMsg = "[MySQLBase]";
-			try {
-				// テーブル一覧取得SQL
-				string TableListSql = $"SHOW TABLES FROM {Constant.Database}";
-				// コネクションオブジェクトとコマンドオブジェクトを生成します。
-			//	using (var connection = new MySqlConnection(Constant.ConnectionString))
-				using (var command = new MySqlCommand()) {
-					// コネクションをオープンします。
-			//		connection.Open();
-
-					// テーブル一覧取得SQLを実行します。
-					command.Connection = Connection;
-					command.CommandText = TableListSql;
-					var reader = command.ExecuteReader();
-					// データがある場合
-					if (reader.HasRows) {
-						dbMsg += ",reader=" + reader.RecordsAffected + "テーブル " ;
-						TableCombo = new Dictionary<string, string>();
-						// データがある間繰り返します。
-						while (reader.Read()) {
-							// 取得したテーブル名を表示します。
-							string key = reader.GetString(0);                   //テーブル名（日）に記載した　日本語の名称は?
-							string name = reader.GetString(0);
-							dbMsg += "," + key + " : " + name;
-							TableCombo.Add( key,name);
-						}
-						dbMsg += ",取得結果：" + TableCombo.Count + "テーブル ";
-						table_combo.ItemsSource = TableCombo;
-					}
-				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -190,7 +168,133 @@ namespace GoogleOSD {
 			}
 		}
 
-		////////////////////////////////////////////////////
+		/// <summary>
+		/// レコード選択時の確認
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Table_dg_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+		{
+			string TAG = "Table_dg_SelectedCellsChanged";
+			string dbMsg = "[MySQLBase]";
+			try {
+				Type TypeDateTime = typeof(System.DateTime);
+				Type TypeInt32 = typeof(System.Int32);
+				// 行番号(0起算)
+				var rowIndex = table_dg.Items.IndexOf(table_dg.CurrentItem);
+				dbMsg += "[R" + rowIndex;
+				int ItemCount = table_dg.Columns.Count;
+				dbMsg += "×C" + ItemCount + "]";
+				for (int i = 0; i < ItemCount; i++) {
+					dbMsg += "[" + i + "/" + ItemCount + "]";
+					//// DataGridにフォーカスし, 指定行、列のDataGridCellInfoを生成
+					DataGridCellInfo cellInfo = new DataGridCellInfo(table_dg.Items[rowIndex], table_dg.Columns[i]);
+					//します。
+					string fealdName = table_dg.Columns[i].Header.ToString();
+					dbMsg += fealdName;
+					table_dg.CurrentCell = cellInfo;
+					string cVar = ((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text;
+					dbMsg += "=" + cVar;
+					Type cType = table_dg.CurrentCell.GetType();
+					dbMsg += "(" + cType + ")";
+					if (cVar.Equals("") || cVar.Equals(null)) {
+						if (cType.Equals(TypeDateTime)) {
+							if (fealdName.Equals("deleted_at")) {
+								((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = "";
+							} else {
+								string wVar = System.DateTime.Today.ToString();
+								((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = wVar;
+							}
+						} else if (cType.Equals(TypeInt32)) {
+							((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = "";
+						}
+						//			}else if (cVar.Equals("")) {
+					}
+				}
+					MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		/// <summary>
+		/// 登録ボタンのクリック
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Save_bt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "Save_bt_Click";
+			string dbMsg = "[MySQLBase]";
+			try {
+				// 行番号(0起算)
+				var rowIndex = table_dg.Items.IndexOf(table_dg.CurrentItem);
+				dbMsg += "[R" + rowIndex ;
+				// 列番号(0起算)
+				//var columnIndex = table_dg.CurrentCell.Column.DisplayIndex;
+				//dbMsg +=  "C" + columnIndex + "]";
+				if(table_dg.SelectedItem != null){
+					// 列番号(0起算)
+					var columnIndex = table_dg.SelectedIndex;
+					dbMsg += "C" + columnIndex + "]";
+					MessageBox.Show(table_dg.Columns[columnIndex].Header.ToString() + ": " +
+					((TextBlock)table_dg.Columns[columnIndex].GetCellContent(table_dg.SelectedItem)).Text + "を選択") ; 
+				}else{
+					MessageBox.Show("値を入力して下さい");
+				}
+				dbMsg += ":id," + ((TextBlock)table_dg.Columns[0].GetCellContent(table_dg.Columns[0])).Text;
+				dbMsg += ":作成日時," + ((TextBlock)table_dg.Columns[0].GetCellContent(table_dg.Columns[FieldCount-4])).Text;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		//MySQL//////////////////////////////////////////////////
+
+		/// <summary>
+		/// 接続したデータベースの全テーブルデータ取得し、テーブル選択コンボボックスを形成
+		/// </summary>
+		public void GetAllTable()
+		{
+			string TAG = "GetAllTable";
+			string dbMsg = "[MySQLBase]";
+			try {
+				// テーブル一覧取得SQL
+				string TableListSql = $"SHOW TABLES FROM {Constant.Database}";
+				// コネクションオブジェクトとコマンドオブジェクトを生成します。
+				//	using (var connection = new MySqlConnection(Constant.ConnectionString))
+				using (var command = new MySqlCommand()) {
+					// コネクションをオープンします。
+					//		connection.Open();
+
+					// テーブル一覧取得SQLを実行します。
+					command.Connection = Connection;
+					command.CommandText = TableListSql;
+					var reader = command.ExecuteReader();
+					// データがある場合
+					if (reader.HasRows) {
+						dbMsg += ",reader=" + reader.RecordsAffected + "テーブル ";
+						TableCombo = new Dictionary<string, string>();
+						// データがある間繰り返します。
+						while (reader.Read()) {
+							// 取得したテーブル名を表示します。
+							string key = reader.GetString(0);                   //テーブル名（日）に記載した　日本語の名称は?
+							string name = reader.GetString(0);
+							dbMsg += "," + key + " : " + name;
+							TableCombo.Add(key, name);
+						}
+						dbMsg += ",取得結果：" + TableCombo.Count + "テーブル ";
+						table_combo.ItemsSource = TableCombo;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		public void MakeTable()
 		{
 			string TAG = "MakeTable";
@@ -304,20 +408,22 @@ namespace GoogleOSD {
 					modelName += rStr;
 				}
 				dbMsg += ",modelName=" + modelName;
+				Type modelType = Type.GetType(modelName);
+				dbMsg += ",type=" + modelType.FullName;
+				wModel = (Object)Activator.CreateInstance(modelType);
+				//ObservableCollectionを変数化するとAddが使えない
+				wCollection = new List<object>();
 
-				Type type = Type.GetType(modelName);
-				dbMsg += ",type=" + type.FullName;
-				Object wModel = (Object)Activator.CreateInstance(type);
-				type = Type.GetType(modelName + "Collection");
-				Object wCollection = (Object)Activator.CreateInstance(type);
-				DataTable tbl = new DataTable();
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
 					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
 						command.CommandText = $"SELECT * FROM {tableName}";
 						using (MySqlDataReader reader = command.ExecuteReader()) {
 							while (reader.Read()) {
-								for (int i = 0; i < reader.FieldCount; i++) {
+								FieldCount = reader.FieldCount;
+								dbMsg += "," + FieldCount + "項目";
+								wModel = (Object)Activator.CreateInstance(modelType);
+								for (int i = 0; i < FieldCount; i++) {
 									string rName = reader.GetName(i);
 									string rType = reader.GetFieldType(i).Name;
 									dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
@@ -336,23 +442,33 @@ namespace GoogleOSD {
 												} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
 													rFeild.SetValue(wModel, reader.GetBoolean(i));
 												} else if (rType.Equals("SByte")) {
-													rFeild.SetValue(wModel, reader.GetValue(i));
 													rFeild.SetValue(wModel, reader.GetSByte(i));
 												} else if (rType.Equals("MySqlDecimal")) {
 													rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
+												//} else {
+												//	dbMsg += ",該当型無し" ;
+												//	rFeild.SetValue(wModel, reader.GetValue(i));
 												}
 											}
 										}
 									}
 								}
+								wCollection.Add(wModel);
 							}
 						}
 					}
-
 				}
-		//		dbMsg += ",projecDataCollection=" + wCollection.
-				// データをそのままセットする
-				this.table_dg.DataContext = wCollection;
+				dbMsg += ",wCollection=" + wCollection.Count + "件";
+				if(wCollection.Count < 1) {
+					dbMsg += ",データ入力無し";        //ObservableCollectionから該当モデルのフィールドのみを引き当てる
+					Type CollectionType = Type.GetType(modelName + "Collection");
+					Object bCollection = (Object)Activator.CreateInstance(CollectionType);
+		//			dbMsg += ",wCollection=" + bCollection.FullName;
+					this.table_dg.DataContext = bCollection;
+				} else {
+					// データをそのままセットする
+					this.table_dg.DataContext = wCollection;
+				}
 				//更新時はこれが必須
 				this.table_dg.Items.Refresh();
 
@@ -366,14 +482,27 @@ namespace GoogleOSD {
 			}
 		}
 
+		/// <summary>
+		/// 選択されたテーブルの全レコード書き出し
+		/// </summary>
+		public void WriteOneRecord()
+		{
+			string TAG = "WriteOneRecord";
+			string dbMsg = "[MySQLBase]";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		public static PropertyInfo GetPropertyInfo(Type type, string name)
 		{
 			var property = type.GetProperty(name);
-
 			return property;
 		}
 
-		////////////////////////////////////////////////////
+		//////////////////////////////////////////////////MySQL//
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
