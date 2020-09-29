@@ -9,6 +9,7 @@ using System.Globalization;
 using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
 using System.Windows.Data;
+using System.Collections;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -24,6 +25,10 @@ namespace GoogleOSD {
 		/// 選択しているテーブルのモデル
 		/// </summary>
 		public Object wModel;
+		/// <summary>
+		/// モデルの再生用
+		/// </summary>
+		public Type modelType;
 		/// <summary>
 		/// "GoogleOSD.Models."を含むモデル名
 		/// </summary>
@@ -169,7 +174,7 @@ namespace GoogleOSD {
 		}
 
 		/// <summary>
-		/// レコード選択時の確認
+		/// DataGirdでレコードが選択された
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -178,44 +183,37 @@ namespace GoogleOSD {
 			string TAG = "Table_dg_SelectedCellsChanged";
 			string dbMsg = "[MySQLBase]";
 			try {
-				Type TypeDateTime = typeof(System.DateTime);
-				Type TypeInt32 = typeof(System.Int32);
-				// 行番号(0起算)
 				var rowIndex = table_dg.Items.IndexOf(table_dg.CurrentItem);
-				dbMsg += "[R" + rowIndex;
-				int ItemCount = table_dg.Columns.Count;
-				dbMsg += "×C" + ItemCount + "]";
-				for (int i = 0; i < ItemCount; i++) {
-					dbMsg += "[" + i + "/" + ItemCount + "]";
-					//// DataGridにフォーカスし, 指定行、列のDataGridCellInfoを生成
-					DataGridCellInfo cellInfo = new DataGridCellInfo(table_dg.Items[rowIndex], table_dg.Columns[i]);
-					//します。
-					string fealdName = table_dg.Columns[i].Header.ToString();
-					dbMsg += fealdName;
-					table_dg.CurrentCell = cellInfo;
-					string cVar = ((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text;
-					dbMsg += "=" + cVar;
-					Type cType = table_dg.CurrentCell.GetType();
-					dbMsg += "(" + cType + ")";
-					if (cVar.Equals("") || cVar.Equals(null)) {
-						if (cType.Equals(TypeDateTime)) {
-							if (fealdName.Equals("deleted_at")) {
-								((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = "";
-							} else {
-								string wVar = System.DateTime.Today.ToString();
-								((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = wVar;
-							}
-						} else if (cType.Equals(TypeInt32)) {
-							((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = "";
-						}
-						//			}else if (cVar.Equals("")) {
-					}
-				}
-					MyLog(TAG, dbMsg);
+				dbMsg += rowIndex + "/" + wCollection.Count + "レコード目";
+				DefoltValueCheck(rowIndex);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+
+		/// <summary>
+		/// 一行分の編集修正
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Table_dg_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+		{
+			string TAG = "Table_dg_RowEditEnding";
+			string dbMsg = "[MySQLBase]";
+			try {
+				var rowIndex = table_dg.Items.IndexOf(table_dg.CurrentItem);
+				dbMsg += rowIndex+ "/"+ wCollection.Count+ "レコード目";
+				string Msg = dbMsg;
+				MessageBoxResult result = MessageShowWPF(titolStr, Msg, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+				dbMsg += ",result=" + result;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 
 		/// <summary>
@@ -252,6 +250,69 @@ namespace GoogleOSD {
 		}
 
 		//MySQL//////////////////////////////////////////////////
+
+		/// <summary>
+		/// 初期値修正：DateTimeの1/1/0001などの修正
+		/// </summary>
+		private void DefoltValueCheck(int rowIndex)
+		{
+			string TAG = "DefoltValueCheck";
+			string dbMsg = "[MySQLBase]";
+			try {
+				//Type TypeDateTime = typeof(System.DateTime);
+				//Type TypeInt32 = typeof(System.Int32);
+				// 行番号(0起算)
+				if (-1 < rowIndex) {
+					dbMsg += "[R" + rowIndex;
+					int ItemCount = table_dg.Columns.Count;
+					dbMsg += "×C" + ItemCount + "]";
+					wModel = (Object)Activator.CreateInstance(modelType);
+					if (wCollection.Count < rowIndex) {
+						wModel = wCollection[rowIndex];
+					}
+					for (int i = 0; i < ItemCount; i++) {
+						dbMsg += "\r\n[" + i + "/" + ItemCount + "]";
+						//// DataGridにフォーカスし, 指定行、列のDataGridCellInfoを生成
+						DataGridCellInfo cellInfo = new DataGridCellInfo(table_dg.Items[rowIndex], table_dg.Columns[i]);
+						//します。
+						string fealdName = table_dg.Columns[i].Header.ToString();
+						dbMsg += fealdName;
+						table_dg.CurrentCell = cellInfo;
+						string cVar = ((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text;
+						dbMsg += "=" + cVar;
+						string cType = null;
+						foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+							if (rFeild.Name.Equals(fealdName)) {
+								cType = rFeild.PropertyType.Name;
+								goto ExitTypeForeach;
+							}
+						}
+					ExitTypeForeach:
+						dbMsg += "(" + cType + ")";
+						if (fealdName.Equals("deleted_at")) {
+							cVar = "";
+						}
+						if (cVar.Equals("") || cVar.Equals(null)) {
+							dbMsg += "未設定";
+							if (cType.Equals("DateTime")) {           //TypeDateTime
+								string wVar = System.DateTime.Now.ToString();
+								if (fealdName.Equals("created_at") || fealdName.Equals("updated_at")) {
+									((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = wVar;
+								} else {
+									((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = "";
+								}
+							} else if (cType.Equals("int32")) {        //TypeInt32
+								((TextBlock)table_dg.Columns[i].GetCellContent(table_dg.SelectedItem)).Text = "";
+							}
+							//			}else if (cVar.Equals("")) {
+						}
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		/// <summary>
 		/// 接続したデータベースの全テーブルデータ取得し、テーブル選択コンボボックスを形成
@@ -408,7 +469,7 @@ namespace GoogleOSD {
 					modelName += rStr;
 				}
 				dbMsg += ",modelName=" + modelName;
-				Type modelType = Type.GetType(modelName);
+				modelType = Type.GetType(modelName);
 				dbMsg += ",type=" + modelType.FullName;
 				wModel = (Object)Activator.CreateInstance(modelType);
 				//ObservableCollectionを変数化するとAddが使えない
@@ -419,9 +480,21 @@ namespace GoogleOSD {
 					using (MySqlCommand command = mySqlConnection.CreateCommand()) {
 						command.CommandText = $"SELECT * FROM {tableName}";
 						using (MySqlDataReader reader = command.ExecuteReader()) {
+							FieldCount = reader.FieldCount;
+							dbMsg += "," + FieldCount + "項目";
+							////ヘッダー作成：型の確定
+							//while (reader.Read()) {
+							//	for (int i = 0; i < FieldCount; i++) {
+							//		string rName = reader.GetName(i);
+							//		string rType = reader.GetFieldType(i).Name;
+							//		dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
+							//		//var rVar = reader.GetValue(i);
+							//		//dbMsg += ",rVar=" + rVar;
+							//		wCollection[i].
+							//	}
+							//}
+							//一行づつデータを読み取りモデルに書込む
 							while (reader.Read()) {
-								FieldCount = reader.FieldCount;
-								dbMsg += "," + FieldCount + "項目";
 								wModel = (Object)Activator.CreateInstance(modelType);
 								for (int i = 0; i < FieldCount; i++) {
 									string rName = reader.GetName(i);
@@ -430,10 +503,14 @@ namespace GoogleOSD {
 									var rVar = reader.GetValue(i);
 									dbMsg += ",rVar=" + rVar;
 
-									if (!reader.IsDBNull(i)) {
+									if (reader.IsDBNull(i) || rVar.Equals("")) {
+										dbMsg += "null";
+									} else { 
 										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
 											if (rFeild.Name.Equals(rName)) {
-												if (rType.Equals("Int32")) {
+												if (rFeild.Name.Equals("deleted_at")) {
+													rFeild.SetValue(wModel, null);
+												}else if (rType.Equals("Int32")) {
 													rFeild.SetValue(wModel, reader.GetInt32(i));
 												} else if (rType.Equals("String")) {
 													rFeild.SetValue(wModel, reader.GetString(i));
@@ -458,8 +535,9 @@ namespace GoogleOSD {
 						}
 					}
 				}
-				dbMsg += ",wCollection=" + wCollection.Count + "件";
-				if(wCollection.Count < 1) {
+				int rCount = wCollection.Count;
+				dbMsg += ",wCollection=" + rCount + "件";
+				if(rCount < 1) {
 					dbMsg += ",データ入力無し";        //ObservableCollectionから該当モデルのフィールドのみを引き当てる
 					Type CollectionType = Type.GetType(modelName + "Collection");
 					Object bCollection = (Object)Activator.CreateInstance(CollectionType);
@@ -468,10 +546,12 @@ namespace GoogleOSD {
 				} else {
 					// データをそのままセットする
 					this.table_dg.DataContext = wCollection;
+					for(int i=0;i< rCount;i++) {
+						DefoltValueCheck(i);
+					}
 				}
 				//更新時はこれが必須
 				this.table_dg.Items.Refresh();
-
 				Connection.Close();
 				// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
 				this.SizeToContent = SizeToContent.WidthAndHeight;
