@@ -19,7 +19,7 @@ namespace GoogleOSD.Models{
 		///有効期間(TO)
 		public DateTime rental_end { get; set; }
 		///配信停止 :1:配信停止
-		public int is_unsubscribe { get; set; }
+		public bool is_unsubscribe { get; set; }
 		///メモ
 		public string memo { get; set; }
 		///作成者

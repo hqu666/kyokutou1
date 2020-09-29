@@ -17,7 +17,7 @@ namespace GoogleOSD.Models{
 		///並び順
 		public int order { get; set; }
 		///案件管理 :0：無効、1：有効
-		public int project_management { get; set; }
+		public bool project_management { get; set; }
 		///物件管理 :0：無効、1：有効
 		public int property_management { get; set; }
 		///伝票作成 :0：無制限、1以上：指定枚数

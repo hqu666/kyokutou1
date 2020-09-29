@@ -35,7 +35,7 @@ namespace GoogleOSD.Models{
 		///請求振込先情報 :=振込先マスタ．ID
 		public int billing_transfer_target_information { get; set; }
 		///ロックフラグ :0：未ロック、1：ロック中
-		public int lock_flag { get; set; }
+		public bool lock_flag { get; set; }
 		///作成者
 		public int created_user { get; set; }
 		///作成日時:

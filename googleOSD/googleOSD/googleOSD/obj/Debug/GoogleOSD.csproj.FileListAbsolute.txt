@@ -55,6 +55,7 @@ C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\Infragistic
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.DataPresenter.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.Editors.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\bin\Debug\ja\InfragisticsWPF4.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.exe.config
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\Controls\WaitingDLog.g.cs
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\EventAdd.g.cs
@@ -96,4 +97,3 @@ C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.c
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.exe
 C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.pdb
-C:\work\2020\kyokuto\samples\googleOSD\googleOSD\googleOSD\obj\Debug\GoogleOSD.csprojAssemblyReference.cache

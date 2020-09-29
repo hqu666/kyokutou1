@@ -17,7 +17,7 @@ namespace GoogleOSD.Models{
 		///行番号
 		public int col_number { get; set; }
 		///見出し :0：見出し以外、1：見出し
-		public int heading_flag { get; set; }
+		public bool heading_flag { get; set; }
 		///区分
 		public int name_type { get; set; }
 		///場所
@@ -63,7 +63,7 @@ namespace GoogleOSD.Models{
 		///消費税
 		public decimal tax_amount { get; set; }
 		///表示フラグ :0：非表示、1：表示
-		public int display_flag { get; set; }
+		public bool display_flag { get; set; }
 		///必要係数
 		public float required_factor_cost { get; set; }
 		///作成者

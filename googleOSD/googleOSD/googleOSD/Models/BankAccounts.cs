@@ -15,13 +15,13 @@ namespace GoogleOSD.Models{
 		///振込先区分 :=固定値：振込先区分
 		public int bank_account_type { get; set; }
 		///番号 :（自社）1～3、（部門）4
-		public int bank_account_code { get; set; }
+		public bool bank_account_code { get; set; }
 		///部門ID :=部門マスタ.ID　（部門の振込先の場合）
 		public int m_department_id { get; set; }
 		///銀行ID :=銀行マスタ.ID
 		public int m_bank_id { get; set; }
 		///預金種別 :=固定値：預金種別
-		public int deposit_type { get; set; }
+		public bool deposit_type { get; set; }
 		///名義人
 		public string bank_account_name { get; set; }
 		///口座番号

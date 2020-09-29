@@ -39,27 +39,27 @@ namespace GoogleOSD.Models{
 		///ステータス :0：有効、1：無効
 		public int status { get; set; }
 		///案件管理 (権限) :1：R/W、2：R/O、9：NOT ※固定値：権限
-		public int project_management_permission { get; set; }
+		public bool project_management_permission { get; set; }
 		///原価明細 (権限) :1：R/W、2：R/O、9：NOT ※固定値：権限
-		public int cost_item_permission { get; set; }
+		public bool cost_item_permission { get; set; }
 		///発注管理 (権限) :1：R/W、2：R/O、9：NOT ※固定値：権限
-		public int order_management_permission { get; set; }
+		public bool order_management_permission { get; set; }
 		///請求・売掛締め、入金管理 (権限) :1：R/W、2：R/O、9：NOT ※固定値：権限
-		public int bill_closing_deposit_mng_permission { get; set; }
+		public bool bill_closing_deposit_mng_permission { get; set; }
 		///支払・買掛締め、出金管理 (権限) :1：R/W、2：R/O、9：NOT ※固定値：権限
-		public int pay_closing_withdrawal_mng_permission { get; set; }
+		public bool pay_closing_withdrawal_mng_permission { get; set; }
 		///取引先設定 (権限) :1：R/W、2：R/O ※固定値：権限
-		public int account_setting_permission { get; set; }
+		public bool account_setting_permission { get; set; }
 		///自社設定１ (権限) :1：R/W、2：R/O ※固定値：権限
-		public int own_company_setting_1_permission { get; set; }
+		public bool own_company_setting_1_permission { get; set; }
 		///自社設定２ (権限) :1：R/W、2：R/O ※固定値：権限
-		public int own_company_setting_2_permission { get; set; }
+		public bool own_company_setting_2_permission { get; set; }
 		///予算設定 (権限) :1：R/W、2：R/O ※固定値：権限
-		public int budget_setting_permission { get; set; }
+		public bool budget_setting_permission { get; set; }
 		///名称設定 (権限) :1：R/W、2：R/O ※固定値：権限
-		public int name_setting_permission { get; set; }
+		public bool name_setting_permission { get; set; }
 		///システム設定 (権限) :1：R/W、2：R/O ※固定値：権限
-		public int sysytem_setting_permission { get; set; }
+		public bool sysytem_setting_permission { get; set; }
 		///作成者
 		public int created_user { get; set; }
 		///作成日時:

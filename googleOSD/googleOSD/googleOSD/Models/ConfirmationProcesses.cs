@@ -13,7 +13,7 @@ namespace GoogleOSD.Models{
 		///契約ID :=契約マスタ.ID
 		public int m_contract_id { get; set; }
 		///自社締区分 :固定値：自社締区分
-		public int confirmation_processes_type { get; set; }
+		public bool confirmation_processes_type { get; set; }
 		///締日
 		public DateTime closing_date { get; set; }
 		///作成者

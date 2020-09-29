@@ -45,9 +45,9 @@ namespace GoogleOSD.Models{
 		///請求振込先情報 :=振込先マスタ．ID
 		public int billing_transfer_target_information { get; set; }
 		///入金完了フラグ :0：未完了、1：完了
-		public int payment_complete_flag { get; set; }
+		public bool payment_complete_flag { get; set; }
 		///ロックフラグ :0：未ロック、1：ロック中
-		public int lock_flag { get; set; }
+		public bool lock_flag { get; set; }
 		///請求締対象日
 		public DateTime billing_closing_target_date { get; set; }
 		///請求書発行フラグ :0：未発行、1：発行済

@@ -25,7 +25,7 @@ namespace GoogleOSD.Models{
 		///イベント終了時刻 :※固定値：イベント時刻
 		public int event_time_end { get; set; }
 		///終日
-		public int event_is_daylong { get; set; }
+		public bool event_is_daylong { get; set; }
 		///タイトル
 		public string event_title { get; set; }
 		///場所

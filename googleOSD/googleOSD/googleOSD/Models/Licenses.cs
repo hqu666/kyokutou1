@@ -13,7 +13,7 @@ namespace GoogleOSD.Models{
 		///ライセンスキー
 		public string license_key { get; set; }
 		///停止フラグ
-		public int stop_flag { get; set; }
+		public bool stop_flag { get; set; }
 		///有効期限（FROM)
 		public DateTime effective_period_from { get; set; }
 		///有効期限（TO）

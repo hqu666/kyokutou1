@@ -43,7 +43,7 @@ namespace GoogleOSD.Models{
 		///案件粗利金額
 		public int project_gross_profit_amount { get; set; }
 		///ロックフラグ :0：未ロック、1：ロック中
-		public int lock_flag { get; set; }
+		public bool lock_flag { get; set; }
 		///作成者
 		public int created_user { get; set; }
 		///作成日時:

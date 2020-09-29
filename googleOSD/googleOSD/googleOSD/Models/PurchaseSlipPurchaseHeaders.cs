@@ -29,7 +29,7 @@ namespace GoogleOSD.Models{
 		///値引金額
 		public int discount_amount { get; set; }
 		///ロックフラグ :0：未ロック、1：ロック中
-		public int lock_flag { get; set; }
+		public bool lock_flag { get; set; }
 		///支払締対象日
 		public DateTime payment_closing_target_date { get; set; }
 		///支払書発行フラグ :0：未発行、1：発行済
