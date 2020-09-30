@@ -10,6 +10,10 @@ using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
 using System.Windows.Data;
 using System.Collections;
+using System.Windows.Markup;
+using System.Windows.Media;
+using System.Drawing;
+using Brushes = System.Drawing.Brushes;
 
 namespace GoogleOSD {
 	/// <summary>
@@ -360,90 +364,92 @@ namespace GoogleOSD {
 			}
 		}
 
-//		public void MakeTable()
-//		{
-//			string TAG = "MakeTable";
-//			string dbMsg = "[MySQLBase]";
-//			try {
-//				// コネクションオブジェクトとコマンドオブジェクトを生成します。
-//				//using (var connection = new MySqlConnection(ConnectionString))
-//				using (var command = new MySqlCommand()) {
-//					// コネクションをオープンします。
-//					//Connection.Open();
+		//		public void MakeTable()
+		//		{
+		//			string TAG = "MakeTable";
+		//			string dbMsg = "[MySQLBase]";
+		//			try {
+		//				// コネクションオブジェクトとコマンドオブジェクトを生成します。
+		//				//using (var connection = new MySqlConnection(ConnectionString))
+		//				using (var command = new MySqlCommand()) {
+		//					// コネクションをオープンします。
+		//					//Connection.Open();
 
-//					// テーブル作成SQLを実行します。
-//					command.Connection = Connection;
-////案件基本
-//					string CreateTableSql = "CREATE TABLE IF NOT EXISTS t_project_bases (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
-//					CreateTableSql += " m_contract_id INT,";            //契約ID
-//					CreateTableSql += " m_property_id INT,";            //案件基本
-//					CreateTableSql += " project_number VARCHAR (10),";            //案件番号
-//					CreateTableSql += " order_number VARCHAR (10),";            //注文番号
-//					CreateTableSql += " project_code VARCHAR (10),";            //
-//					CreateTableSql += " project_manage_code VARCHAR (10),";            //案件管理番号
-//					CreateTableSql += " project_name NVARCHAR (50),";            //案件名
-//					CreateTableSql += " management_number VARCHAR (10),";            //
-//					CreateTableSql += " delivery_date DATE,";            //     DEFAULT (dateadd(month,(1),getdate())) NULL,		納期
-//					CreateTableSql += " supplier_name NVARCHAR (255),";            //得意先名
-//					CreateTableSql += " owner_name VARCHAR (50),";            //施主
-//					CreateTableSql += " project_place VARCHAR (255),";            //場所
-//					CreateTableSql += " status TINYINT,";            //  DEFAULT ((1))	ステータス
-//					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
-//					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
-//					CreateTableSql += ")";
+		//					// テーブル作成SQLを実行します。
+		//					command.Connection = Connection;
+		////案件基本
+		//					string CreateTableSql = "CREATE TABLE IF NOT EXISTS t_project_bases (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+		//					CreateTableSql += " m_contract_id INT,";            //契約ID
+		//					CreateTableSql += " m_property_id INT,";            //案件基本
+		//					CreateTableSql += " project_number VARCHAR (10),";            //案件番号
+		//					CreateTableSql += " order_number VARCHAR (10),";            //注文番号
+		//					CreateTableSql += " project_code VARCHAR (10),";            //
+		//					CreateTableSql += " project_manage_code VARCHAR (10),";            //案件管理番号
+		//					CreateTableSql += " project_name NVARCHAR (50),";            //案件名
+		//					CreateTableSql += " management_number VARCHAR (10),";            //
+		//					CreateTableSql += " delivery_date DATE,";            //     DEFAULT (dateadd(month,(1),getdate())) NULL,		納期
+		//					CreateTableSql += " supplier_name NVARCHAR (255),";            //得意先名
+		//					CreateTableSql += " owner_name VARCHAR (50),";            //施主
+		//					CreateTableSql += " project_place VARCHAR (255),";            //場所
+		//					CreateTableSql += " status TINYINT,";            //  DEFAULT ((1))	ステータス
+		//					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
+		//					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
+		//					CreateTableSql += ")";
 
-//					command.CommandText = CreateTableSql;
-//					command.ExecuteNonQuery();
-//					CreateTableSql = "alter table t_project_bases convert to character set utf8;";            //日本語対応「
-//					command.CommandText = CreateTableSql;
-//					command.ExecuteNonQuery();
-	
-//					//カラーテーブル
-//					 CreateTableSql = "CREATE TABLE IF NOT EXISTS f_Color (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
-//					CreateTableSql += " Color_var NCHAR (10),";         
-//					CreateTableSql += " Color_name  NVARCHAR (255),";
-//					CreateTableSql += " google_Color_id VARCHAR (100),";  
-//					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
-//					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
-//					CreateTableSql += ")";
-//					command.CommandText = CreateTableSql;
-//					command.ExecuteNonQuery();
-//					CreateTableSql = "alter table f_Color convert to character set utf8;";            //日本語対応「
-//					command.CommandText = CreateTableSql;
-//					command.ExecuteNonQuery();
-//					//イベント
-//					CreateTableSql = "CREATE TABLE IF NOT EXISTS t_events (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
-//					CreateTableSql += " m_contract_id INT,";            //契約ID
-//					CreateTableSql += " t_project_base_id INT,";            //案件基本
-//					CreateTableSql += " event_type TINYINT,";
-//					CreateTableSql += " event_date_start DATE,";
-//					CreateTableSql += " event_time_start TINYINT,";                 //  DEFAULT ((10)) 
-//					CreateTableSql += " event_date_end DATE,";
-//					CreateTableSql += " event_time_end TINYINT,";                 //  DEFAULT ((11)) 
-//					CreateTableSql += " event_is_daylong TINYINT,";                 //  DEFAULT ((1)) 
-//					CreateTableSql += " event_title NVARCHAR (100),";            //注文番号
-//					CreateTableSql += " event_place NVARCHAR (255),";            //
-//					CreateTableSql += " event_memo NVARCHAR (4000),";            //案件管理番号
-//					CreateTableSql += " google_id NVARCHAR (255),";            //案件名
-//					CreateTableSql += " event_status TINYINT,";
-//					CreateTableSql += " event_bg_color VARCHAR (10),";            //
-//					CreateTableSql += " event_font_color VARCHAR (10),";            //得意先名
-//					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
-//					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
-//					CreateTableSql += ")";
+		//					command.CommandText = CreateTableSql;
+		//					command.ExecuteNonQuery();
+		//					CreateTableSql = "alter table t_project_bases convert to character set utf8;";            //日本語対応「
+		//					command.CommandText = CreateTableSql;
+		//					command.ExecuteNonQuery();
 
-//					command.CommandText = CreateTableSql;
-//					command.ExecuteNonQuery();
-//					CreateTableSql = "alter table t_events convert to character set utf8;";            //日本語対応「
-//					command.CommandText = CreateTableSql;
-//					command.ExecuteNonQuery();
+		//					//カラーテーブル
+		//					 CreateTableSql = "CREATE TABLE IF NOT EXISTS f_Color (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+		//					CreateTableSql += " Color_var NCHAR (10),";         
+		//					CreateTableSql += " Color_name  NVARCHAR (255),";
+		//					CreateTableSql += " google_Color_id VARCHAR (100),";  
+		//					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
+		//					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
+		//					CreateTableSql += ")";
+		//					command.CommandText = CreateTableSql;
+		//					command.ExecuteNonQuery();
+		//					CreateTableSql = "alter table f_Color convert to character set utf8;";            //日本語対応「
+		//					command.CommandText = CreateTableSql;
+		//					command.ExecuteNonQuery();
+		//					//イベント
+		//					CreateTableSql = "CREATE TABLE IF NOT EXISTS t_events (id INT,";       //     IDENTITY (1, 1) NOT NULL,	PRIMARY KEY CLUSTERED ([Id] ASC)
+		//					CreateTableSql += " m_contract_id INT,";            //契約ID
+		//					CreateTableSql += " t_project_base_id INT,";            //案件基本
+		//					CreateTableSql += " event_type TINYINT,";
+		//					CreateTableSql += " event_date_start DATE,";
+		//					CreateTableSql += " event_time_start TINYINT,";                 //  DEFAULT ((10)) 
+		//					CreateTableSql += " event_date_end DATE,";
+		//					CreateTableSql += " event_time_end TINYINT,";                 //  DEFAULT ((11)) 
+		//					CreateTableSql += " event_is_daylong TINYINT,";                 //  DEFAULT ((1)) 
+		//					CreateTableSql += " event_title NVARCHAR (100),";            //注文番号
+		//					CreateTableSql += " event_place NVARCHAR (255),";            //
+		//					CreateTableSql += " event_memo NVARCHAR (4000),";            //案件管理番号
+		//					CreateTableSql += " google_id NVARCHAR (255),";            //案件名
+		//					CreateTableSql += " event_status TINYINT,";
+		//					CreateTableSql += " event_bg_color VARCHAR (10),";            //
+		//					CreateTableSql += " event_font_color VARCHAR (10),";            //得意先名
+		//					CreateTableSql += " modifier_on DATETIME,";            //  DEFAULT (getdate())		更新日時,
+		//					CreateTableSql += " deleted_on DATETIME";            //   削除日時,
+		//					CreateTableSql += ")";
 
-//				}
-//				MyLog(TAG, dbMsg);
-//			} catch (Exception er) {
-//				MyErrorLog(TAG, dbMsg, er);
-//			}
-//		}
+		//					command.CommandText = CreateTableSql;
+		//					command.ExecuteNonQuery();
+		//					CreateTableSql = "alter table t_events convert to character set utf8;";            //日本語対応「
+		//					command.CommandText = CreateTableSql;
+		//					command.ExecuteNonQuery();
+
+		//				}
+		//				MyLog(TAG, dbMsg);
+		//			} catch (Exception er) {
+		//				MyErrorLog(TAG, dbMsg, er);
+		//			}
+		//		}
+
+
 
 		/// <summary>
 		/// 指定されたテーブルの読出し
@@ -494,16 +500,34 @@ namespace GoogleOSD {
 							Binding = new Binding(rName)
 						});
 					} else if (rType.Equals("DateTime")) {
-						table_dg.Columns.Add(new DataGridTextColumn() {
-							Header = rName,
-							Binding = new Binding(rName) { StringFormat = "yyyy/MM/dd hh:mm" }
-						});
-					}else{
+
+						//table_dg.Columns.Add(new DataGridTextColumn() {
+						//	Header = rName,
+						//	Binding = new Binding(rName) { StringFormat = "yyyy/MM/dd hh:mm" }
+						//});
+						DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
+						templateColumn.Header = rName;
+
+						Binding bnding = new Binding(rName);
+						//表示をラベルに
+						FrameworkElementFactory DateLabel = new FrameworkElementFactory(typeof(DateLabel));
+						DateLabel.SetBinding(Label.ContentProperty, new Binding(rName));
+						//DateLabel.SetBinding(TextBlock.TextProperty, new Binding(rName));
+						templateColumn.CellTemplate = new DataTemplate { VisualTree = DateLabel };
+
+						//入力をDatePickerに
+						FrameworkElementFactory cTextBox = new FrameworkElementFactory(typeof(CustomDatePicker));
+						SetBinding(DatePicker.SelectedDateProperty, bnding);
+						templateColumn.CellEditingTemplate = new DataTemplate { VisualTree = cTextBox };
+
+						table_dg.Columns.Add(templateColumn); 
+
+					} else{
 						table_dg.Columns.Add(new DataGridTextColumn() {
 							Header = rName,
 							//HeaderStyle = headerStyle,
-							//ElementStyle = textStyle,
-							//IsReadOnly = true,
+							//ElementStyle = textStyle,		DataGridTemplateColumn
+							//IsReadOnly = true,				TargetType
 							//CanUserSort = true,
 							Binding = new Binding(rName)
 						});
@@ -592,6 +616,33 @@ namespace GoogleOSD {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// DataGrid内で日付を表示
+		/// フォーマットでカスタム定義
+		/// </summary>
+		internal class DateLabel : Label {
+			public DateLabel() { ContentStringFormat = "yyyy/MM/dd hh:mm";
+				//TargetNullValue = '';
+				//FallbackValue = '';
+		}
+	//	public DateLabel() : base() => ContentStringFormat = "yyyy/MM/dd hh:mm" ,TargetNullValue='()', FallbackValue='()'};
+		}
+
+		/// <summary>
+		/// DataGrid内で日付を入力
+		/// </summary>
+		internal class CustomDatePicker : DatePicker {
+			public CustomDatePicker() { }
+			//: base()
+			//{
+			//	SelectedDateFormat = "Short";
+			//}
+		}
+
+		//internal class CustomTextBox : TextBox {
+		//	public CustomTextBox() : base() => Background = Brushes.LightSkyBlue;
+		//}
 
 		/// <summary>
 		/// 選択されたテーブルの全レコード書き出し
