@@ -96,7 +96,6 @@
     </Compile>
     <Compile Include="CS_Util.cs" />
     <Compile Include="DateInfo.cs" />
-    <Compile Include="DGTC_Date.cs" />
     <Compile Include="EventAdd.xaml.cs">
       <DependentUpon>EventAdd.xaml</DependentUpon>
     </Compile>
