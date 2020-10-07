@@ -1,0 +1,12 @@
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\NaviWindow.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Child_Page.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Child_Window.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\NaviWindow.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Views\ChildView.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Views\Window2.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\ViewTabControl.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\WindowTabContentUC.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\App.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\TabCon_MarkupCompile.cache
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\TabCon_MarkupCompile.lref
