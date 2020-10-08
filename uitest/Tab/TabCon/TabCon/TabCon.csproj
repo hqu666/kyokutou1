@@ -84,15 +84,6 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
-    <Compile Include="Child_Page.xaml.cs">
-      <DependentUpon>Child_Page.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Child_Window.xaml.cs">
-      <DependentUpon>Child_Window.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="NaviWindow.xaml.cs">
-      <DependentUpon>NaviWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\ChildPageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ChildViewModel.cs" />
@@ -101,6 +92,12 @@
     </Compile>
     <Compile Include="Views\ChildView.xaml.cs">
       <DependentUpon>ChildView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Child_Page.xaml.cs">
+      <DependentUpon>Child_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Child_Window.xaml.cs">
+      <DependentUpon>Child_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -114,27 +111,23 @@
     <Compile Include="WindowTabContentUC.xaml.cs">
       <DependentUpon>WindowTabContentUC.xaml</DependentUpon>
     </Compile>
-    <Page Include="Child_Page.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Child_Window.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NaviWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ChildPageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ChildView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Child_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Child_Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

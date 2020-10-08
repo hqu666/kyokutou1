@@ -41,6 +41,7 @@ namespace TabCon
 
 		private void TabAdd_Click(object sender, RoutedEventArgs e)
 		{
+			string dbMsg = "";
 			MainTab.Visibility = Visibility.Visible;
 
 			//	AddCount++;
@@ -51,35 +52,39 @@ namespace TabCon
 			//②Viewの読込ができるTabContentを生成する
 			WindowTabContentUC tabContent = new WindowTabContentUC();
 			if (IsPage) {
-				Child_Page rContent = new Child_Page();
+				dbMsg += "PageクラスのXAMLを\r\n";
+				Views.Child_Page rContent = new Views.Child_Page();
 				//読込んだページを操作
 				rContent.MW = this;
-				rContent.CInfo_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
+				rContent.CInfo_lb.Content = dbMsg+ (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				//		rContent.CwindowCloss_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
 				////frame.Navigate(rContent);
 				tabContent.TabContent.Navigate(rContent);
 			} else if (IsWindow) {
-				Child_Window rContent = new Child_Window();
+				dbMsg += "WindowクラスのXAMLを\r\n";
+				Views.Child_Window rContent = new Views.Child_Window();
 				Window rWindow = Window.GetWindow(rContent);
 				rContent.MW = this;
-				rContent.CInfo_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
+				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				tabContent.TabContent.Navigate(rContent);
 			} else if (IsVM) {
+				dbMsg += "WindowクラスのViewを\r\n";
 				//System.InvalidOperationException: ''TabCon.Views.ChildView' ルート要素は、ナビゲーションに対して無効です。'
 				Views.ChildView rContent = new Views.ChildView();
 				Type gType = rContent.GetType();
-				rContent.CInfo_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したViewです";
+				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				//		ViewModels.ChildViewModel rContent = new ViewModels.ChildViewModel();
 				rContent.MW = this;
 			//	rContent.CInfo_lb = (MainTab.Items.Count + 1) + "番目に追加したViewです";
 				tabContent.TabContent.Navigate(rContent);
 			} else if (IsVP) {
+				dbMsg += "PageクラスのViewを\r\n";
 				Views.ChildPageView rContent = new Views.ChildPageView();
 				//読込んだページを操作；ViewModelをタブ生成時時に生成してパラメータを渡す
 				ViewModels.ChildPageViewModel VM = new ViewModels.ChildPageViewModel();
 				VM.MW = this;
 				rContent.DataContext = VM; 
-				rContent.CInfo_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したViewページです";
+				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				tabContent.TabContent.Navigate(rContent);
 			}
 
@@ -149,10 +154,10 @@ namespace TabCon
 		public Views.NaviWindow naviWindow;
 		private void NaniWindow_Click(object sender, RoutedEventArgs e)
 		{
-			//			bool IsNaviWindowOpen = false;
-			//		Child_Window rContent = new Child_Window();
+			string dbMsg = "";
 			Views.ChildPageView rContent = new Views.ChildPageView();
-				//Child_Page rContent = new Child_Page();
+			dbMsg += "PageクラスのViewを\r\n";
+			//Views.Child_Page rContent = new Views.Child_Page();
 			//	Uri tUri = new Uri("Child_Page.xaml", UriKind.Relative);
 
 			Uri tUri = new Uri("ChildPageView.xaml", UriKind.Relative);
@@ -163,12 +168,11 @@ namespace TabCon
 				//	IsNaviWindowOpen = true;
 			}
 			AddCount++;
-			rContent.CInfo_lb.Content = AddCount + "番目に呼び出したページです";
+			rContent.CInfo_lb.Content = dbMsg+ AddCount + "番目に呼び出したページです\r\nNaniWindowでは左上のボタンとドロップリストで読み出している画面を遷移して下さい";
 			ViewModels.ChildPageViewModel VM = new ViewModels.ChildPageViewModel();
 			VM.MW = this;
 			rContent.DataContext = VM;
-			naviWindow.Navigate(rContent);
-		//	naviWindow.Source = tUri;
+			naviWindow.Navigate(rContent);		//	.Source だと Uriしか指定できない
 			//		if(! naviWindow.IsActive) {
 			//ここで「System.IO.IOException: 'リソース 'views.childview.xaml' を検索できません。'」
 			naviWindow.Show();
@@ -187,11 +191,13 @@ namespace TabCon
 		/// <param name="e"></param>
 		private void OpenWindow_Click(object sender, RoutedEventArgs e)
 		{
+			string dbMsg = "";
 			Views.ChildView rContent = new Views.ChildView();
-		//	Child_Window rContent = new Child_Window();
-		//	rContent.MW = this;
+			dbMsg += "WindowクラスのViewを\r\n";
+			//	Views.Child_Window rContent = new Views.Child_Window();
+			//	rContent.MW = this;
 			AddCount++;
-			rContent.CInfo_lb.Content = AddCount + "番目に表示したWindowです";
+			rContent.CInfo_lb.Content = dbMsg +  AddCount + "番目に表示したWindowです";
 			rContent.Show();
 		}
 
@@ -202,12 +208,14 @@ namespace TabCon
 		/// <param name="e"></param>
 		private void OpenDialog_Click(object sender, RoutedEventArgs e)
 		{
+			string dbMsg = "";
 			Views.ChildView rContent = new Views.ChildView();
-	//		Child_Window rContent = new Child_Window();
+			dbMsg += "WindowクラスのViewを\r\n";
+			//		Views.Child_Window rContent = new Views.Child_Window();
 			//		rContent.Owner = MainWindow;
 			rContent.MW = this;
 			AddCount++;
-			rContent.CInfo_lb.Content = AddCount + "番目に表示したダイアログです";
+			rContent.CInfo_lb.Content = AddCount + "番目に表示したダイアログです\r\nダイアログは複数表示されません";
 			rContent.ShowDialog();
 		}
 

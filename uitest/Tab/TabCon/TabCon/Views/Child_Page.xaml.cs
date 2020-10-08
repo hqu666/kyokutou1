@@ -13,14 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TabCon {
+namespace TabCon.Views {
 	/// <summary>
 	/// Child_Page.xaml の相互作用ロジック
 	/// </summary>
 	public partial class Child_Page : Page {
-
 		public ViewTabControl MW;
-		
+
 		public Child_Page()
 		{
 			InitializeComponent();

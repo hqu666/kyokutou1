@@ -31,7 +31,7 @@
 				<RadioButton x:Name="VM_rb" Content="ViewModel" GroupName="RTyps"  Checked="ReadType_Checked"/>
 				<RadioButton x:Name="VP_rb" Content="View(page)" GroupName="RTyps"  Checked="ReadType_Checked" IsChecked="True"/>
 				<RadioButton x:Name="Page_rb" Content="Page" GroupName="RTyps" Checked="ReadType_Checked"/>
-				<RadioButton x:Name="Window_rb" Content="Windou" GroupName="RTyps"  Checked="ReadType_Checked"/>
+				<RadioButton x:Name="Window_rb" Content="Window" GroupName="RTyps"  Checked="ReadType_Checked"/>
 			</StackPanel>
 			<Label Content="画面遷移確認"  HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" />
 			<Button  x:Name="OpenVM"  Content="ViewModel遷移" HorizontalAlignment="Left" Margin="20,5,0,6"  Click="OpenVM_Click"/>
@@ -39,10 +39,6 @@
 			<Button  x:Name="OpenDialog"  Content="ダイアログ" HorizontalAlignment="Left" Margin="20,5,0,6" MinWidth="100" Click="OpenDialog_Click"/>
 			<Button  x:Name="NaniWindow"  Content="Navigation" HorizontalAlignment="Left" Margin="20,5,0,6"  MinWidth="100" Click="NaniWindow_Click"/>
 		</StackPanel>
-
-		<!--<local:WindowTabControl x:Name="MainTab"   ItemsSource="{Binding TabItems}"
-				 Grid.Row="1" Grid.Column="1" SelectionChanged="MainTab_SelectionChanged">
-		</local:WindowTabControl>-->
 
 		<igWPF:XamTabControl  x:Name="MainTab" 
 				ItemsSource="{Binding TabItems}" 
@@ -60,19 +56,6 @@
 				 Margin="21,0,21,10"
 				 ScrollViewer.CanContentScroll="True" SelectionChanged="MainTab_SelectionChanged"
 				 >
-			<!--<ContentControl  Content="{Binding}">
-				<ContentControl.Resources>
-					-->
-			<!-- 中身がViewModel1の時のView定義 -->
-			<!--
-					<DataTemplate DataType="{x:Type vm:ChildViewModel}">
-						-->
-			<!--<Label Content="ChildView" Background="PaleGreen"/>-->
-			<!--
-					</DataTemplate>
-				</ContentControl.Resources>
-			</ContentControl>-->
-			<!--ItemsSource="{Binding TabItems}" SelectionChanged="WindowTab_SelectionChanged"-->
 		</igWPF:XamTabControl>
 		<!--<TabControl x:Name="MainTab" ItemsSource="{Binding TabItems}"
 				 Grid.Row="1" Grid.Column="1" SelectionChanged="MainTab_SelectionChanged" IsSynchronizedWithCurrentItem="False">

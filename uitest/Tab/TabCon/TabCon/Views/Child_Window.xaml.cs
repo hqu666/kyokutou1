@@ -12,16 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TabCon {
+namespace TabCon.Views {
 	/// <summary>
 	/// Child_Window.xaml の相互作用ロジック
-	/// 
-	/// Child_Page クラスと同じ読み出し方をしても「ルート要素は、ナビゲーションに対して無効です。'」というエラーになる
 	/// </summary>
 	public partial class Child_Window : Window {
-
 		public ViewTabControl MW;
-
 		public Child_Window()
 		{
 			InitializeComponent();
@@ -31,5 +27,6 @@ namespace TabCon {
 		{
 			MW.DrelTabItem();
 		}
+
 	}
 }
