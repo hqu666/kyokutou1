@@ -24,7 +24,13 @@ namespace TabCon.Views
 		{
 			InitializeComponent();
 			//ViewとViewModelの紐付け
-			this.DataContext = new MainViewModel();
+			ViewModels.MainViewModel VM = new ViewModels.MainViewModel();
+			//VM.MenuTree = this.MenuTree;
+			//VM.InfoLavel = InfoLavel;
+			// Window_Loaded, Window_Activated,Window_Initialized,Window_GotFocusなどどのタイミングでも割り付ける事ができなかった
+
+			this.DataContext = VM;
+
 		}
 
 	}

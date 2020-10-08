@@ -84,6 +84,7 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
+    <Compile Include="Models\MyMenu.cs" />
     <Compile Include="ViewModels\ChildPageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ChildViewModel.cs" />
@@ -194,9 +195,7 @@
       <Version>3.0.40218</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>

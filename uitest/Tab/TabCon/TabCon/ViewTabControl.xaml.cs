@@ -23,21 +23,50 @@ namespace TabCon
     /// </summary>
     public partial class ViewTabControl : UserControl
     {
+		/// <summary>
+		/// 読込対象
+		/// </summary>
+		public Dictionary<string, string> RTyps { get; set; }
+
+		/// <summary>
+		/// 別ウインドウ
+		/// </summary>
+		public Dictionary<string, string> WindowTyps { get; set; }
+		public string WindowSelected;
 
 		private int AddCount;
+
+		public bool IsPage = false;
+		public bool IsWindow = false;
+		public bool IsVM = false;
+		public bool IsVP = false;
 
 
 		public ViewTabControl()
         {
             InitializeComponent();
 			AddCount = 0;
+			RTyps = new Dictionary<string, string>()
+			{
+				{ "VM_rb", "WindowクラスのView" },
+				{ "VP_rb", "PageクラスのView" },
+				{ "Page_rb","PageクラスのXAML" },
+				{ "Window_rb","WindowクラスのXAML" },
+			};
+			TypeSerect.ItemsSource = RTyps;
+			TypeSerect.SelectedValue = "VP_rb";
 
+			WindowTyps = new Dictionary<string, string>()
+			{
+				{ "OpenVM", "ViewModel遷移" },
+				{ "OpenWindow", "Window遷移" },
+				{ "OpenDialog","ダイアログで表示" },
+				{ "NaniWindow","NavigationWindow" },
+			};
+			WindowSerect.ItemsSource = WindowTyps;
+	//		WindowSerect.SelectedValue = "OpenVM";
+			AddWindow.Visibility = Visibility.Hidden;
 		}
-
-		public bool IsPage = false;
-		public bool IsWindow = false;
-		public bool IsVM = false;
-		public bool IsVP = false;
 
 		private void TabAdd_Click(object sender, RoutedEventArgs e)
 		{
@@ -64,18 +93,19 @@ namespace TabCon
 				dbMsg += "WindowクラスのXAMLを\r\n";
 				Views.Child_Window rContent = new Views.Child_Window();
 				Window rWindow = Window.GetWindow(rContent);
-				rContent.MW = this;
+				rContent.TC = this;
 				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				tabContent.TabContent.Navigate(rContent);
 			} else if (IsVM) {
 				dbMsg += "WindowクラスのViewを\r\n";
-				//System.InvalidOperationException: ''TabCon.Views.ChildView' ルート要素は、ナビゲーションに対して無効です。'
 				Views.ChildView rContent = new Views.ChildView();
+				Window rWindow = Window.GetWindow(rContent);
 				Type gType = rContent.GetType();
 				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
-				//		ViewModels.ChildViewModel rContent = new ViewModels.ChildViewModel();
-				rContent.MW = this;
-			//	rContent.CInfo_lb = (MainTab.Items.Count + 1) + "番目に追加したViewです";
+				ViewModels.ChildViewModel VM = new ViewModels.ChildViewModel();
+				VM.TC = this;
+				rContent.DataContext = VM;
+				//System.InvalidOperationException: ''TabCon.Views.ChildView' ルート要素は、ナビゲーションに対して無効です。'
 				tabContent.TabContent.Navigate(rContent);
 			} else if (IsVP) {
 				dbMsg += "PageクラスのViewを\r\n";
@@ -85,6 +115,7 @@ namespace TabCon
 				VM.MW = this;
 				rContent.DataContext = VM; 
 				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
+				tab.Header = rContent.Title + "(" + (MainTab.Items.Count + 1) + ")";
 				tabContent.TabContent.Navigate(rContent);
 			}
 
@@ -115,44 +146,123 @@ namespace TabCon
 			InfoLavel.Content = NowInfo;
 		}
 
-		private void ReadType_Checked(object sender, RoutedEventArgs e)
-		{
-			var radioButton = sender as RadioButton;
 
+		private void TypeSerect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ComboBox cb = sender as ComboBox;
+			int serectIndex = cb.SelectedIndex;
+			string selectedValue = (string)cb.SelectedValue;
 			IsPage = false;
 			IsWindow = false;
 			IsVM = false;
 			IsVP = false;
 
-			//			foreach (RadioButton rb in RTyps.Controls.OfType<RadioButton>()) {
-			if (radioButton == Page_rb) {
+			if (selectedValue == "Page_rb") {
 				IsPage = true;
-			} else if (radioButton == Window_rb) {
+			} else if (selectedValue == "Window_rb") {
 				IsWindow = true;
-			} else if (radioButton == VM_rb) {
+			} else if (selectedValue == "VM_rb") {
 				IsVM = true;
-			} else if (radioButton == VP_rb) {
+			} else if (selectedValue == "VP_rb") {
 				IsVP = true;
 			}
-			//		}
 		}
+
+		/// <summary>
+		/// ラジオボタンの場合
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		//private void ReadType_Checked(object sender, RoutedEventArgs e)
+		//{
+		//	var radioButton = sender as RadioButton;
+
+		//	IsPage = false;
+		//	IsWindow = false;
+		//	IsVM = false;
+		//	IsVP = false;
+
+		//	//			foreach (RadioButton rb in RTyps.Controls.OfType<RadioButton>()) {
+		//	if (radioButton == Page_rb) {
+		//		IsPage = true;
+		//	} else if (radioButton == Window_rb) {
+		//		IsWindow = true;
+		//	} else if (radioButton == VM_rb) {
+		//		IsVM = true;
+		//	} else if (radioButton == VP_rb) {
+		//		IsVP = true;
+		//	}
+		//	//		}
+		//}
 
 
 		//Windowクラスを読み込む方法
-
-
-		private void OpenVM_Click(object sender, RoutedEventArgs e)
+	
+		
+		private void WindowSerect_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			ViewModels.ChildViewModel rContent = new ViewModels.ChildViewModel();
-			rContent.MW = this;
-			rContent.CInfo_lb = "呼び出されたViewModelです";
-			//Messenger	が使えない
-			//		Messenger.Raise(new TransitionMessage(new ViewModels.ChildViewModel() { NeedHideOwner = true }, "MessageKey2"));
+			ComboBox cb = sender as ComboBox;
+			int serectIndex = cb.SelectedIndex;
+			WindowSelected = (string)cb.SelectedValue;
+			AddWindow.Visibility = Visibility.Visible;
+			if (WindowSelected == "OpenVM") {
+				OpenVM();
+			} else if (WindowSelected == "OpenWindow") {
+				OpenWindow();
+			} else if (WindowSelected == "OpenDialog") {
+				AddWindow.Visibility = Visibility.Hidden;
+				OpenDialog();
+			} else if (WindowSelected == "NaniWindow") {
+				ShowNaniWindow();
+			}
+		}
+
+		/// <summary>
+		/// Windowを追加
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void AddWindow_Click(object sender, RoutedEventArgs e)
+		{
+			if (WindowSelected == "OpenVM") {
+				OpenVM();
+			} else if (WindowSelected == "OpenWindow") {
+				OpenWindow();
+			} else if (WindowSelected == "OpenDialog") {
+				OpenDialog();
+			} else if (WindowSelected == "NaniWindow") {
+				ShowNaniWindow();
+			}
 
 		}
 
+		/// <summary>
+		/// 		private void OpenVM_Click(object sender, RoutedEventArgs e)
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OpenVM()
+		{
+			string dbMsg = "";
+			Views.ChildView rContent = new Views.ChildView();
+			dbMsg += "WindowクラスのViewを\r\n";
+			ViewModels.ChildViewModel VM = new ViewModels.ChildViewModel();
+			//	VM.MW = (Views.MainWindow)Application.Current.Windows.OfType<Window>().SingleOrDefault((w) => w.IsActive);
+			AddCount++;
+			VM.CInfo_lb = dbMsg + AddCount + "番目に表示したWindowです";
+			rContent.DataContext = VM;
+			//TransitionMessage message = new TransitionMessage(rContent.GetType(), VM, TransitionMode.Modal);
+			//Messenger.Raise(message);
+			rContent.Show();
+		}
+
 		public Views.NaviWindow naviWindow;
-		private void NaniWindow_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// private void NaniWindow_Click
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ShowNaniWindow()
 		{
 			string dbMsg = "";
 			Views.ChildPageView rContent = new Views.ChildPageView();
@@ -186,16 +296,18 @@ namespace TabCon
 
 		/// <summary>
 		///   Windowクラスをそのまま表示する
+		///   private void OpenWindow_Click
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OpenWindow_Click(object sender, RoutedEventArgs e)
+		private void OpenWindow()
 		{
 			string dbMsg = "";
 			Views.ChildView rContent = new Views.ChildView();
 			dbMsg += "WindowクラスのViewを\r\n";
-			//	Views.Child_Window rContent = new Views.Child_Window();
-			//	rContent.MW = this;
+			ViewModels.ChildViewModel VM = new ViewModels.ChildViewModel();
+			VM.TC = this;
+			rContent.DataContext = VM;
 			AddCount++;
 			rContent.CInfo_lb.Content = dbMsg +  AddCount + "番目に表示したWindowです";
 			rContent.Show();
@@ -203,22 +315,22 @@ namespace TabCon
 
 		/// <summary>
 		///  Windowクラスをダイアログ表示する
+		///  private void OpenDialog_Click
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OpenDialog_Click(object sender, RoutedEventArgs e)
+		private void OpenDialog()
 		{
 			string dbMsg = "";
 			Views.ChildView rContent = new Views.ChildView();
 			dbMsg += "WindowクラスのViewを\r\n";
-			//		Views.Child_Window rContent = new Views.Child_Window();
-			//		rContent.Owner = MainWindow;
-			rContent.MW = this;
+			ViewModels.ChildViewModel VM = new ViewModels.ChildViewModel();
+			VM.TC = this;
+			rContent.DataContext = VM;
 			AddCount++;
 			rContent.CInfo_lb.Content = AddCount + "番目に表示したダイアログです\r\nダイアログは複数表示されません";
 			rContent.ShowDialog();
 		}
-
 
 	}
 }

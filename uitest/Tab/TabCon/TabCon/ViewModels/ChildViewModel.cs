@@ -8,7 +8,8 @@ using Livet;
 namespace TabCon.ViewModels {
 	public class ChildViewModel : ViewModel {
 
-		public ViewTabControl MW { get; set; }
+		public Views.MainWindow MW { get; set; }
+		public ViewTabControl TC { get; set; }
 		public string CInfo_lb { get; set; }
 
 		public ChildViewModel()
@@ -58,7 +59,11 @@ namespace TabCon.ViewModels {
 
 		private void CPageCloss()
 		{
-			MW.DrelTabItem();
+			if(TC != null) {
+				TC.DrelTabItem();
+			}else{
+				this.Close();
+			}
 		}
 	}
 }

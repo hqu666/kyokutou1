@@ -30,33 +30,28 @@
                 CommandParameter="{Binding Mode=OneTime,RelativeSource=
                 {RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"/>
 		</i:EventTrigger>
-
-		<!--<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
-			<l:WindowInteractionMessageAction/>
-		</l:InteractionMessageTrigger>-->
 	</i:Interaction.Triggers>
 
 	<i:Interaction.Behaviors>
 		<b:CloseButtonBehavior IsWindowCloseEnable="{Binding ElementName=CloseCheck,   Path=IsChecked}"/>
-
 	</i:Interaction.Behaviors>
 
 
 	<Grid>
 
 		<Label Name="CInfo_lb" Content="{Binding CInfo_lb}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="365"/>
-		<Button x:Name="CCloss_bt" Content="閉じる" HorizontalAlignment="Left" Height="29" Margin="670,380,0,0"
+		<!--<Button x:Name="CCloss_bt" Content="閉じる" HorizontalAlignment="Left" Height="29" Margin="670,380,0,0"
 						VerticalAlignment="Top" Width="112">
 			<i:Interaction.Triggers>
 					<i:EventTrigger EventName="Click">
-					<!--<ei:CallMethodAction TargetObject="{Binding}" MethodName="CPageCloss"/>-->
-			<!--<l:LivetCallMethodAction  TargetAction="{Binding}" MethodName="TabAdd" />-->
+					--><!--<ei:CallMethodAction TargetObject="{Binding}" MethodName="CPageCloss"/>-->
+			<!--<l:LivetCallMethodAction  TargetAction="{Binding}" MethodName="TabAdd" />--><!--
 					</i:EventTrigger>
 				</i:Interaction.Triggers>
-		</Button>
+		</Button>-->
 
 		<Button Command="{Binding CloseCommand}" Content="閉じる" Height="32"
-                HorizontalAlignment="Left" Margin="20,20,20,20" Name="button1"
+                HorizontalAlignment="Right" Margin="20,20,20,20" Name="button1"
                 VerticalAlignment="Bottom" MinWidth="100" />
 
 	</Grid>

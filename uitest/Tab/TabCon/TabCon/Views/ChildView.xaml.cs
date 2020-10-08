@@ -10,10 +10,6 @@ namespace TabCon.Views {
 		public ChildView()
 		{
 			InitializeComponent();
-			this.DataContext = new ViewModels.ChildViewModel();
-
 		}
-
-		public ViewTabControl MW { get; internal set; }
 	}
 }

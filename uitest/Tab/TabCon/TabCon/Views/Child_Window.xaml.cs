@@ -17,7 +17,7 @@ namespace TabCon.Views {
 	/// Child_Window.xaml の相互作用ロジック
 	/// </summary>
 	public partial class Child_Window : Window {
-		public ViewTabControl MW;
+		public ViewTabControl TC;
 		public Child_Window()
 		{
 			InitializeComponent();
@@ -25,7 +25,7 @@ namespace TabCon.Views {
 
 		private void CwindowCloss_bt_Click(object sender, RoutedEventArgs e)
 		{
-			MW.DrelTabItem();
+			TC.DrelTabItem();
 		}
 
 	}
