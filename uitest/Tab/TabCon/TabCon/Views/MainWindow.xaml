@@ -11,7 +11,7 @@
 		xmlns:b="clr-namespace:TabCon.Behaviors"
 		xmlns:ig="http://schemas.infragistics.com/xaml"
 		Title="画面遷移確認"
-		Height="800" Width="1195"
+		Height="Auto" Width="Auto"
 		FontSize="14" WindowStartupLocation="CenterScreen" 
 		>
 	<!--<Window.DataContext>
@@ -47,41 +47,36 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<StackPanel  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+		<TreeView x:Name="Menu_tv"
+			Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+			Margin="10,0,5,0" Padding="5,5,5,5" MinHeight="710"   MinWidth="120"   Height="Auto" Width="Auto"
+			ItemsSource="{Binding _MyMenu}" >
+			<i:Interaction.Triggers>
+				<i:EventTrigger EventName="MouseDoubleClick">
+					<ei:CallMethodAction MethodName="MenuSelected" TargetObject="{Binding}"/>
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
+			<TreeView.Resources>
+				<Style TargetType="TreeViewItem">
+					<Setter Property="IsSelected" Value="{Binding Path=IsSelected,Mode=TwoWay}"/>
+				</Style>
+			</TreeView.Resources>
+			<TreeView.ItemTemplate>
+				<HierarchicalDataTemplate DataType= "local:MyMenu" ItemsSource="{Binding Child}">
+					<TextBlock Text="{Binding Name}">
+					</TextBlock>
+				</HierarchicalDataTemplate>
+			</TreeView.ItemTemplate>
+		</TreeView>
 
-			<TreeView x:Name="MenuTree"
-				Margin="10,0,5,0" Padding="5,5,5,5" MinHeight="710"   MinWidth="120"   Height="Auto" Width="Auto"
-				ItemsSource="{Binding _MyMenu}" >
-				<i:Interaction.Triggers>
-					<i:EventTrigger EventName="MouseDoubleClick">
-						<ei:CallMethodAction MethodName="MenuSelected" TargetObject="{Binding}"/>
-					</i:EventTrigger>
-				</i:Interaction.Triggers>
-				<TreeView.Resources>
-					<Style TargetType="TreeViewItem">
-						<Setter Property="IsSelected" Value="{Binding Path=IsSelected,Mode=TwoWay}"/>
-					</Style>
-				</TreeView.Resources>
-				<TreeView.ItemTemplate>
-					<HierarchicalDataTemplate DataType= "local:MyMenu" ItemsSource="{Binding Child}">
-						<TextBlock Text="{Binding Name}">
-						</TextBlock>
-					</HierarchicalDataTemplate>
-				</TreeView.ItemTemplate>
-			</TreeView>
-
-			<!--<Button Command="{Binding TreeSelect}"  Content="選択"
-				HorizontalAlignment="Left" 
-                Height="32" MinWidth="100" Margin="10,10,0,0"
-                Name="TreeSelect" VerticalAlignment="Bottom" />-->
-
-		</StackPanel>
-		<Label x:Name="InfoLavel" Content="{Binding InfoLavel}"  
+		<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
 						Grid.Row="0" Grid.Column="1" 
-						Height="30"  Width="Auto"
-						HorizontalAlignment="Left" Margin="10,5,0,0"/>
+						Height="Auto"  Width="Auto"
+						MinHeight="50"
+						HorizontalAlignment="Left" Margin="5,5,5,5"/>
 
-		<local:ViewTabControl Grid.Row="1" Grid.Column="1"/>
+		<local:ViewTabControl x:Name="ViewTab" 
+					Grid.Row="1" Grid.Column="1"/>
 	</Grid>
 
 </Window>

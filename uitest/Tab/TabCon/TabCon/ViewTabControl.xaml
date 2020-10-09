@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:TabCon"
 			 xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
 			 mc:Ignorable="d" 
-			 Width="Auto" 
-             d:DesignHeight="450" d:DesignWidth="1000">
+			 Width="Auto" Height="Auto"
+             d:DesignHeight="600" d:DesignWidth="1000">
 
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
@@ -18,9 +18,10 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+		<StackPanel x:Name="SelfConpane" Visibility="Hidden"
+			Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
 			<Label x:Name="InfoLavel" Content="{Binding InfoLavel}"  
-						Height="30"  Width="300"
+						Height="Auto"  Width="300"
 						HorizontalAlignment="Left" Margin="10,5,0,0"/>
 			<StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
 				<ComboBox x:Name="TypeSerect"
@@ -41,14 +42,6 @@
 						MinWidth="100" Margin="10,5,5,5" SelectionChanged="WindowSerect_SelectionChanged"/>
 				<Button  x:Name="AddWindow"  Content="追加"
 							HorizontalAlignment="Right" Margin="20,5,5,5" Width="100" Click="AddWindow_Click" />
-				<!--<StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
-
-			<Label Content="画面遷移確認"  HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" />
-			<Button  x:Name="OpenVM"  Content="ViewModel遷移" HorizontalAlignment="Left" Margin="20,5,0,6"  Click="OpenVM_Click"/>
-			<Button  x:Name="OpenWindow"  Content="Window遷移" HorizontalAlignment="Left" Margin="20,5,0,6" Click="OpenWindow_Click"/>
-			<Button  x:Name="OpenDialog"  Content="ダイアログ" HorizontalAlignment="Left" Margin="20,5,0,6" MinWidth="100" Click="OpenDialog_Click"/>
-			<Button  x:Name="NaniWindow"  Content="Navigation" HorizontalAlignment="Left" Margin="20,5,0,6"  MinWidth="100" Click="NaniWindow_Click"/>
-		-->
 			</StackPanel>
 		</StackPanel>
 
@@ -70,21 +63,6 @@
 				 ScrollViewer.CanContentScroll="True"
 				 >
 		</igWPF:XamTabControl>
-		<!--<TabControl x:Name="MainTab" ItemsSource="{Binding TabItems}"
-				 Grid.Row="1" Grid.Column="1" SelectionChanged="MainTab_SelectionChanged" IsSynchronizedWithCurrentItem="False">
-		</TabControl>-->
-		<!--<ContentControl  Content="{Binding}">
-			<ContentControl.Resources>
-				-->
-		<!-- 中身がViewModel1の時のView定義 -->
-		<!--
-				<DataTemplate DataType="{x:Type vm:ChildViewModel}">
-					-->
-		<!--<Label Content="ChildView" Background="PaleGreen"/>-->
-		<!--
-				</DataTemplate>
-			</ContentControl.Resources>
-		</ContentControl>-->
 	</Grid>
 
 </UserControl>

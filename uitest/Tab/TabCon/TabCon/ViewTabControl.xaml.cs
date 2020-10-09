@@ -70,6 +70,11 @@ namespace TabCon
 
 		private void TabAdd_Click(object sender, RoutedEventArgs e)
 		{
+			AddTab();
+		}
+
+		public void AddTab()
+		{
 			string dbMsg = "";
 			MainTab.Visibility = Visibility.Visible;
 
@@ -85,7 +90,7 @@ namespace TabCon
 				Views.Child_Page rContent = new Views.Child_Page();
 				//読込んだページを操作
 				rContent.MW = this;
-				rContent.CInfo_lb.Content = dbMsg+ (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
+				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				//		rContent.CwindowCloss_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
 				////frame.Navigate(rContent);
 				tabContent.TabContent.Navigate(rContent);
@@ -113,7 +118,7 @@ namespace TabCon
 				//読込んだページを操作；ViewModelをタブ生成時時に生成してパラメータを渡す
 				ViewModels.ChildPageViewModel VM = new ViewModels.ChildPageViewModel();
 				VM.MW = this;
-				rContent.DataContext = VM; 
+				rContent.DataContext = VM;
 				rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				tab.Header = rContent.Title + "(" + (MainTab.Items.Count + 1) + ")";
 				tabContent.TabContent.Navigate(rContent);
@@ -167,33 +172,6 @@ namespace TabCon
 				IsVP = true;
 			}
 		}
-
-		/// <summary>
-		/// ラジオボタンの場合
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		//private void ReadType_Checked(object sender, RoutedEventArgs e)
-		//{
-		//	var radioButton = sender as RadioButton;
-
-		//	IsPage = false;
-		//	IsWindow = false;
-		//	IsVM = false;
-		//	IsVP = false;
-
-		//	//			foreach (RadioButton rb in RTyps.Controls.OfType<RadioButton>()) {
-		//	if (radioButton == Page_rb) {
-		//		IsPage = true;
-		//	} else if (radioButton == Window_rb) {
-		//		IsWindow = true;
-		//	} else if (radioButton == VM_rb) {
-		//		IsVM = true;
-		//	} else if (radioButton == VP_rb) {
-		//		IsVP = true;
-		//	}
-		//	//		}
-		//}
 
 
 		//Windowクラスを読み込む方法
@@ -262,7 +240,7 @@ namespace TabCon
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void ShowNaniWindow()
+		public void ShowNaniWindow()
 		{
 			string dbMsg = "";
 			Views.ChildPageView rContent = new Views.ChildPageView();
@@ -300,7 +278,7 @@ namespace TabCon
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OpenWindow()
+		public void OpenWindow()
 		{
 			string dbMsg = "";
 			Views.ChildView rContent = new Views.ChildView();
@@ -313,17 +291,22 @@ namespace TabCon
 			rContent.Show();
 		}
 
+//		public static readonly DependencyProperty MyDoubleValue1Property = DependencyProperty.Register(nameof(MyDoubleValue1), typeof(double), typeof(SimpleUserControl), new PropertyMetadata(0.0));
+
+		public ViewModelCommand OpDialog {
+			get { return new Livet.Commands.ViewModelCommand(OpenDialog); }
+		}
 		/// <summary>
 		///  Windowクラスをダイアログ表示する
 		///  private void OpenDialog_Click
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OpenDialog()
+		public void OpenDialog()
 		{
 			string dbMsg = "";
 			Views.ChildView rContent = new Views.ChildView();
-			dbMsg += "WindowクラスのViewを\r\n";
+			dbMsg += "TabConからWindowクラスのViewを\r\n";
 			ViewModels.ChildViewModel VM = new ViewModels.ChildViewModel();
 			VM.TC = this;
 			rContent.DataContext = VM;
@@ -332,9 +315,5 @@ namespace TabCon
 			rContent.ShowDialog();
 		}
 
-		//private void MainTab_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		//{
-
-		//}
 	}
 }

@@ -28,9 +28,14 @@ namespace TabCon.Views
 			//VM.MenuTree = this.MenuTree;
 			//VM.InfoLavel = InfoLavel;
 			// Window_Loaded, Window_Activated,Window_Initialized,Window_GotFocusなどどのタイミングでも割り付ける事ができなかった
-
 			this.DataContext = VM;
-
+			this.Loaded += this_loaded;
 		}
+		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
+		private void this_loaded(object sender, RoutedEventArgs e)
+		{
+			((ViewModels.MainViewModel)this.DataContext).MyView =this;
+		}
+
 	}
 }
