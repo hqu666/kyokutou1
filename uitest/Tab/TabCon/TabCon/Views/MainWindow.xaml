@@ -9,6 +9,7 @@
 		xmlns:v="clr-namespace:TabCon.Views"
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		xmlns:b="clr-namespace:TabCon.Behaviors"
+		xmlns:ig="http://schemas.infragistics.com/xaml"
 		Title="画面遷移確認"
 		Height="800" Width="1195"
 		FontSize="14" WindowStartupLocation="CenterScreen" 
@@ -47,36 +48,32 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+
 			<TreeView x:Name="MenuTree"
-				Margin="0,0,10,0" MinHeight="400" Width="Auto"
-				ItemsSource="{Binding _MyMenu}">
+				Margin="10,0,5,0" Padding="5,5,5,5" MinHeight="710"   MinWidth="120"   Height="Auto" Width="Auto"
+				ItemsSource="{Binding _MyMenu}" >
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="MouseDoubleClick">
+						<ei:CallMethodAction MethodName="MenuSelected" TargetObject="{Binding}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
 				<TreeView.Resources>
 					<Style TargetType="TreeViewItem">
 						<Setter Property="IsSelected" Value="{Binding Path=IsSelected,Mode=TwoWay}"/>
 					</Style>
 				</TreeView.Resources>
 				<TreeView.ItemTemplate>
-					<HierarchicalDataTemplate DataType= "local:Person" ItemsSource="{Binding Child}">
-						<TextBlock Text="{Binding Name}"/>
+					<HierarchicalDataTemplate DataType= "local:MyMenu" ItemsSource="{Binding Child}">
+						<TextBlock Text="{Binding Name}">
+						</TextBlock>
 					</HierarchicalDataTemplate>
 				</TreeView.ItemTemplate>
 			</TreeView>
 
-			<Button Command="{Binding TabTest}"  Content="Tabテスト"
+			<!--<Button Command="{Binding TreeSelect}"  Content="選択"
 				HorizontalAlignment="Left" 
                 Height="32" MinWidth="100" Margin="10,10,0,0"
-                Name="TabTest" VerticalAlignment="Top" />
-
-
-			<Button Command="{Binding GotoCommand2}"  Content="ChildViewへ"
-				HorizontalAlignment="Left" 
-                Height="32" MinWidth="100" Margin="10,10,0,0"
-                Name="button2" VerticalAlignment="Bottom" />
-
-			<Button Command="{Binding CloseCommand}" Content="終了"
-				 HorizontalAlignment="Left" 
-                Height="32" MinWidth="100" Margin="10,10,20,0"
-                Name="button1" VerticalAlignment="Bottom" />
+                Name="TreeSelect" VerticalAlignment="Bottom" />-->
 
 		</StackPanel>
 		<Label x:Name="InfoLavel" Content="{Binding InfoLavel}"  

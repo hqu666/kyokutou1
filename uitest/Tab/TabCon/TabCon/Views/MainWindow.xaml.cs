@@ -32,6 +32,5 @@ namespace TabCon.Views
 			this.DataContext = VM;
 
 		}
-
 	}
 }

@@ -332,5 +332,9 @@ namespace TabCon
 			rContent.ShowDialog();
 		}
 
+		//private void MainTab_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		//{
+
+		//}
 	}
 }

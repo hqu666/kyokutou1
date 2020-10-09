@@ -10,10 +10,11 @@ using Livet.Commands;
 using Livet.Messaging;
 
 using TabCon.Models;
+using System.ComponentModel;
 
 namespace TabCon.ViewModels {
 	//.ViewModel
-	public class MainViewModel : ViewModel {
+	public class MainViewModel : ViewModel, INotifyPropertyChanged {
 
 		public List<Models.MyMenu> _MyMenu { get; set; }
 
@@ -23,7 +24,8 @@ namespace TabCon.ViewModels {
 
 		public Label InfoLavel { get; set; }
 		public TreeView MenuTree { get; set; }
-
+		/// <summary>TreeViewItemが選択されているかを取得・設定します。</summary>
+	//	public ReactivePropertySlim<bool> IsSelected { get; set; }
 		//public bool NeedHideOwner { get; set; }
 
 		//		int AddCount;
@@ -80,28 +82,54 @@ namespace TabCon.ViewModels {
 					}
 				}
 			};
+
 		}
+
+
+
+		//private ViewModelCommand _aChildCommand;
+		//public ViewModelCommand AChildCommand {
+		////	get { return new Livet.Commands.ViewModelCommand(MenuSelected); }
+		//	get {
+		//		if (_aChildCommand == null)
+		//			_aChildCommand = new Livet.Commands.ViewModelCommand(MenuSelected);
+		//		return _aChildCommand;
+		//	}
+		//}
+		//public ViewModelCommand TreeSelect {
+		//	get { return new Livet.Commands.ViewModelCommand(MenuSelected); }
+		//}
 
 		/// <summary>
 		/// Treeの選択動作
 		/// </summary>
-
-
-
-		public ViewModelCommand MenuSelectedItemChanged {
-			get { return new Livet.Commands.ViewModelCommand(MenuSelected); }
-		}
 		public void MenuSelected()
 		{
-			string selectedValue = (string)MenuTree.SelectedValue;
+			string selectedValue =  MenuselectLoop(_MyMenu);
 			if (selectedValue == "CloseCommand") {
 				Close();
 			}else if(selectedValue == "GotoCommand2") {
 				Goto2();
 			}
 		}
-
-
+		public string MenuselectLoop(List<Models.MyMenu> tMenu)
+		{
+			string selectedValue = "";
+			foreach (Models.MyMenu sele in tMenu) {
+				string rName = sele.Name;
+				bool rIsSelected = sele.IsSelected;
+				 if ( sele.Child != null) {
+					selectedValue = MenuselectLoop(sele.Child);
+					if(selectedValue != "") {
+						break;
+					}
+				} else if (rIsSelected) {
+					selectedValue = sele.Value;
+					break;
+				}
+			}
+			return selectedValue;
+		}
 
 		public ViewModelCommand GotoCommand2 {
 			get { return new Livet.Commands.ViewModelCommand(Goto2); }
