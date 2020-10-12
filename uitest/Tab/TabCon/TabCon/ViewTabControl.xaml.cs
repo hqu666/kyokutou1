@@ -130,6 +130,34 @@ namespace TabCon
 			this.MainTab.Items.Add(tab);
 		}
 
+		/// <summary>
+		/// View名で指定した画面をタブに読込む
+		/// </summary>
+		/// <param name="ViewName"></param>
+		public void Add2Tab(string ViewName)
+		{
+			string dbMsg = "";
+			TabItem tab = new TabItem();
+			tab.Header = "Tab" + (MainTab.Items.Count + 1);
+			////フレームを生成して設置したタブコントロールのContentにする場合
+			////var frame = new Frame();
+			//②Viewの読込ができるTabContentを生成する
+			WindowTabContentUC tabContent = new WindowTabContentUC();
+			dbMsg += "PageクラスのXAMLを\r\n";
+			Views.Child_Page rContent = new Views.Child_Page();
+			//読込んだページを操作
+			rContent.MW = this;
+			rContent.CInfo_lb.Content = dbMsg + (MainTab.Items.Count + 1) + "番目に追加したTabItemです";
+			//		rContent.CwindowCloss_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
+			////frame.Navigate(rContent);
+			tabContent.TabContent.Navigate(rContent);
+			tab.Content = tabContent;
+			//追加した物を選択状態にしてタブコントロールに追加
+			tab.IsSelected = true;
+			this.MainTab.Items.Add(tab);
+		}
+
+
 		private void TabDrel_Click(object sender, RoutedEventArgs e)
 		{
 			DrelTabItem();

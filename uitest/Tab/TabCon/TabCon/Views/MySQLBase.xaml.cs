@@ -10,25 +10,21 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TabCon.ViewModels;
 
-namespace TabCon.Views
-{
-    /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-		ViewModels.MainViewModel VM;
-		public MainWindow()
+namespace TabCon.Views {
+	/// <summary>
+	/// MySQLBase.xaml の相互作用ロジック
+	/// </summary>
+	public partial class MySQLBase : Page {
+
+		ViewModels.MySQLBaseViewModel VM;
+		public MySQLBase()
 		{
 			InitializeComponent();
 			//ViewとViewModelの紐付け
-			VM = new ViewModels.MainViewModel();
-			//VM.MenuTree = this.MenuTree;
-			//VM.InfoLavel = InfoLavel;
-			// Window_Loaded, Window_Activated,Window_Initialized,Window_GotFocusなどどのタイミングでも割り付ける事ができなかった
+			VM = new ViewModels.MySQLBaseViewModel();
 			this.DataContext = VM;
 			this.Loaded += this_loaded;
 		}
@@ -36,8 +32,7 @@ namespace TabCon.Views
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			VM.MyView = this;
-		//	((ViewModels.MainViewModel)this.DataContext).MyView =this;
+			//((ViewModels.MySQLBaseViewModel)this.DataContext).MyView = this;
 		}
-
 	}
 }

@@ -61,7 +61,7 @@ namespace TabCon.ViewModels {
 					Name = "MVVMテスト",
 					Child = new List<MyMenu>()
 					{
-						new MyMenu() { Name = "test1-1" },
+						new MyMenu() { Name = "MySQL",Value="MySQL" },
 						new MyMenu() { Name = "test1-2" },
 						new MyMenu() { Name = "test1-3" },
 					}
@@ -103,6 +103,7 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public void MenuSelected()
 		{
+			string dbMsg = "";
 			string selectedValue =  MenuselectLoop(_MyMenu);
 			if (selectedValue == "CloseCommand") {
 				Close();
@@ -125,6 +126,21 @@ namespace TabCon.ViewModels {
 			} else if (selectedValue == "TabCon_AddTab") {
 				MyView.ViewTab.AddTab();
 				MyView.Info_lv.Content = "ViewTabControl : UserControlからPageクラスのViewをTabに読込みます";
+
+			} else if (selectedValue == "MySQL") {
+				dbMsg = "MySQLデータベースに接続し、コンボボックスで選択したテーブルを操作します\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.MySQLBase rContent = new Views.MySQLBase();
+				//読込んだページを操作
+				//		rContent.MW = this;
+				//rContent.CInfo_lb.Content = dbMsg + (MyView.ViewTab.MainTab.Items.Count + 1) + "番目に追加したTabItemです";
+				//			rContent.CwindowCloss_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
+				//MyView.ViewTab.MainTab.Height = rContent.MaxHeight;
+				//MyView.ViewTab.MainTab.Width = rContent.MaxWidth;
+				//dbMsg += "サイズは" + MyView.ViewTab.MainTab.Width +"×"+ MyView.ViewTab.MainTab.Height + "]です";
+				//MyView.Info_lv.Content = dbMsg;
+
+				Add2Tab(rContent);
 			}
 		}
 		public string MenuselectLoop(List<Models.MyMenu> tMenu)
@@ -144,6 +160,31 @@ namespace TabCon.ViewModels {
 				}
 			}
 			return selectedValue;
+		}
+
+		/// <summary>
+		/// View名で指定した画面をタブに読込む
+		/// </summary>
+		/// <param name="ViewName"></param>
+		public void Add2Tab(Page rContent)
+		{
+			MyView.ViewTab.MainTab.Height = rContent.MaxHeight;
+			MyView.ViewTab.MainTab.Width = rContent.MaxWidth;
+			MyView.Info_lv.Content += "サイズは" + MyView.ViewTab.MainTab.Width + "×" + MyView.ViewTab.MainTab.Height + "]です";
+
+			TabItem tab = new TabItem();
+			tab.Header = rContent.Title;                        ///"Tab" + (MyView.ViewTab.MainTab.Items.Count + 1);
+			////フレームを生成して設置したタブコントロールのContentにする場合
+			////var frame = new Frame();
+			//②Viewの読込ができるTabContentを生成する
+			WindowTabContentUC tabContent = new WindowTabContentUC();
+	//		dbMsg += "PageクラスのXAMLを\r\n";
+			////frame.Navigate(rContent);
+			tabContent.TabContent.Navigate(rContent);
+			tab.Content = tabContent;
+			//追加した物を選択状態にしてタブコントロールに追加
+			tab.IsSelected = true;
+			MyView.ViewTab.MainTab.Items.Add(tab);
 		}
 
 		/// <summary>

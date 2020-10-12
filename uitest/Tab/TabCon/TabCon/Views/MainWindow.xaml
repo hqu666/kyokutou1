@@ -11,72 +11,73 @@
 		xmlns:b="clr-namespace:TabCon.Behaviors"
 		xmlns:ig="http://schemas.infragistics.com/xaml"
 		Title="画面遷移確認"
-		Height="Auto" Width="Auto"
+		SizeToContent="WidthAndHeight"
 		FontSize="14" WindowStartupLocation="CenterScreen" 
 		>
 	<!--<Window.DataContext>
 		<vm:MainViewModel />
 	</Window.DataContext>-->
+	<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+		<!--<i:Interaction.Triggers>
+			<i:EventTrigger EventName="ContentRendered">
+				--><!--<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />--><!--
+			</i:EventTrigger>
 
-	<!--<i:Interaction.Triggers>
-		<i:EventTrigger EventName="ContentRendered">
-			--><!--<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />--><!--
-		</i:EventTrigger>
+			--><!--<l:livetInteractionMessageTrigger MessageKey="MessageKey2" Messenger="{Binding MessageKey2}">
+				<l:TransitionInteractionMessageAction WindowType="{x:Type v:ChildView}" Mode="Modal"
+													  InvokeActionOnlyWhenWindowIsActive="False" />
+			</l:livetInteractionMessageTrigger>-->
 
-		--><!--<l:livetInteractionMessageTrigger MessageKey="MessageKey2" Messenger="{Binding MessageKey2}">
-			<l:TransitionInteractionMessageAction WindowType="{x:Type v:ChildView}" Mode="Modal"
-                                                  InvokeActionOnlyWhenWindowIsActive="False" />
-		</l:livetInteractionMessageTrigger>-->
+			<!--
+			 "livetInteractionMessageTrigger" は名前空間 "http://schemas.livet-mvvm.net/2011/wpf" に存在しません。	
+			--><!--
+		</i:Interaction.Triggers>
 
-		<!--
-		 "livetInteractionMessageTrigger" は名前空間 "http://schemas.livet-mvvm.net/2011/wpf" に存在しません。	
-		--><!--
-	</i:Interaction.Triggers>
+		<i:Interaction.Behaviors>
+			<b:CloseButtonBehavior IsWindowCloseEnable="{Binding ElementName=CloseCheck, Path=IsChecked}"/>
+		</i:Interaction.Behaviors>-->
 
-	<i:Interaction.Behaviors>
-		<b:CloseButtonBehavior IsWindowCloseEnable="{Binding ElementName=CloseCheck, Path=IsChecked}"/>
-	</i:Interaction.Behaviors>-->
+		<Grid Margin="0,0,0,0" >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions >
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
 
-	<Grid Margin="0,0,0,0" >
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="Auto"/>
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions >
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+			<TreeView x:Name="Menu_tv"
+				Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+				Margin="10,0,5,0" Padding="5,5,5,5" MinHeight="710"   MinWidth="120"   Height="Auto" Width="Auto"
+				ItemsSource="{Binding _MyMenu}" >
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="MouseDoubleClick">
+						<ei:CallMethodAction MethodName="MenuSelected" TargetObject="{Binding}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+				<TreeView.Resources>
+					<Style TargetType="TreeViewItem">
+						<Setter Property="IsSelected" Value="{Binding Path=IsSelected,Mode=TwoWay}"/>
+					</Style>
+				</TreeView.Resources>
+				<TreeView.ItemTemplate>
+					<HierarchicalDataTemplate DataType= "local:MyMenu" ItemsSource="{Binding Child}">
+						<TextBlock Text="{Binding Name}">
+						</TextBlock>
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+			</TreeView>
 
-		<TreeView x:Name="Menu_tv"
-			Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-			Margin="10,0,5,0" Padding="5,5,5,5" MinHeight="710"   MinWidth="120"   Height="Auto" Width="Auto"
-			ItemsSource="{Binding _MyMenu}" >
-			<i:Interaction.Triggers>
-				<i:EventTrigger EventName="MouseDoubleClick">
-					<ei:CallMethodAction MethodName="MenuSelected" TargetObject="{Binding}"/>
-				</i:EventTrigger>
-			</i:Interaction.Triggers>
-			<TreeView.Resources>
-				<Style TargetType="TreeViewItem">
-					<Setter Property="IsSelected" Value="{Binding Path=IsSelected,Mode=TwoWay}"/>
-				</Style>
-			</TreeView.Resources>
-			<TreeView.ItemTemplate>
-				<HierarchicalDataTemplate DataType= "local:MyMenu" ItemsSource="{Binding Child}">
-					<TextBlock Text="{Binding Name}">
-					</TextBlock>
-				</HierarchicalDataTemplate>
-			</TreeView.ItemTemplate>
-		</TreeView>
+			<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
+							Grid.Row="0" Grid.Column="1" 
+							Height="Auto"  Width="Auto"
+							MinHeight="50"
+							HorizontalAlignment="Left" Margin="5,5,5,5"/>
 
-		<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
-						Grid.Row="0" Grid.Column="1" 
-						Height="Auto"  Width="Auto"
-						MinHeight="50"
-						HorizontalAlignment="Left" Margin="5,5,5,5"/>
-
-		<local:ViewTabControl x:Name="ViewTab" 
-					Grid.Row="1" Grid.Column="1"/>
-	</Grid>
-
+			<local:ViewTabControl x:Name="ViewTab" 
+						Width="Auto" Height="Auto"
+						Grid.Row="1" Grid.Column="1"/>
+		</Grid>
+	</ScrollViewer>
 </Window>

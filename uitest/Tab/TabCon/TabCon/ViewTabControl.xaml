@@ -58,11 +58,10 @@
 				 MinimumTabExtent="100"
 				 InterTabSpacing="2" 
 				 InterRowSpacing="2"
-				 AllowTabClosing="True"  ShowTabHeaderCloseButton="True"
+				 AllowTabClosing="False"  ShowTabHeaderCloseButton="True"
 				 Margin="10,0,10,10"
 				 ScrollViewer.CanContentScroll="True"
-				 >
-		</igWPF:XamTabControl>
-	</Grid>
+				 />
+    </Grid>
 
 </UserControl>
