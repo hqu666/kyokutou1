@@ -87,6 +87,7 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
+    <Compile Include="Constant.cs" />
     <Compile Include="Models\AccountsPayableSummaries.cs" />
     <Compile Include="Models\AccountsReceivableSummaries.cs" />
     <Compile Include="Models\AdminUsers.cs" />
@@ -279,6 +280,12 @@
     <PackageReference Include="Expression.Interaction">
       <Version>3.0.40218</Version>
     </PackageReference>
+    <PackageReference Include="Google.Apis.Calendar.v3">
+      <Version>1.49.0.2087</Version>
+    </PackageReference>
+    <PackageReference Include="Google.Apis.Drive.v3">
+      <Version>1.49.0.2091</Version>
+    </PackageReference>
     <PackageReference Include="LivetCask">
       <Version>3.2.3.1</Version>
     </PackageReference>
@@ -290,6 +297,9 @@
     </PackageReference>
     <PackageReference Include="MicrosoftExpressionInteractions">
       <Version>3.0.40218</Version>
+    </PackageReference>
+    <PackageReference Include="MySql.Data">
+      <Version>8.0.21</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
