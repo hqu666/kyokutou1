@@ -5,7 +5,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Drive.v3;
 
-namespace GoogleOSD {
+namespace TabCon {
 	class Constant {
 		public static bool debugNow = true;
 		public static bool errorCheckNow = true;

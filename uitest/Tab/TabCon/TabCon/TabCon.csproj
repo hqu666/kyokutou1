@@ -88,6 +88,7 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="CS_Util.cs" />
     <Compile Include="Models\AccountsPayableSummaries.cs" />
     <Compile Include="Models\AccountsReceivableSummaries.cs" />
     <Compile Include="Models\AdminUsers.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ChildViewModel.cs" />
     <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
+    <Compile Include="ViewModels\SQLTablesViewModel.cs" />
     <Compile Include="Views\ChildPageView.xaml.cs">
       <DependentUpon>ChildPageView.xaml</DependentUpon>
     </Compile>

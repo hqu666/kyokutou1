@@ -24,7 +24,7 @@ namespace TabCon.ViewModels {
 		public System.Collections.IEnumerable TabItems { get; set; }
 
 		public string InfoLavel { get; set; }
-		public TreeView MenuTree { get; set; }
+	//	public TreeView MenuTree { get; set; }
 		/// <summary>TreeViewItemが選択されているかを取得・設定します。</summary>
 	//	public ReactivePropertySlim<bool> IsSelected { get; set; }
 		//public bool NeedHideOwner { get; set; }
@@ -134,12 +134,6 @@ namespace TabCon.ViewModels {
 				//読込んだページを操作
 				//		rContent.MW = this;
 				//rContent.CInfo_lb.Content = dbMsg + (MyView.ViewTab.MainTab.Items.Count + 1) + "番目に追加したTabItemです";
-				//			rContent.CwindowCloss_lb.Content = (MainTab.Items.Count + 1) + "番目に追加したページです";
-				//MyView.ViewTab.MainTab.Height = rContent.MaxHeight;
-				//MyView.ViewTab.MainTab.Width = rContent.MaxWidth;
-				//dbMsg += "サイズは" + MyView.ViewTab.MainTab.Width +"×"+ MyView.ViewTab.MainTab.Height + "]です";
-				//MyView.Info_lv.Content = dbMsg;
-
 				Add2Tab(rContent);
 			}
 		}

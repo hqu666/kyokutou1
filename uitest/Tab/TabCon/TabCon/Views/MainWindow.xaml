@@ -20,17 +20,21 @@
 	<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 		<!--<i:Interaction.Triggers>
 			<i:EventTrigger EventName="ContentRendered">
-				--><!--<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />--><!--
+				-->
+		<!--<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />-->
+		<!--
 			</i:EventTrigger>
 
-			--><!--<l:livetInteractionMessageTrigger MessageKey="MessageKey2" Messenger="{Binding MessageKey2}">
+			-->
+		<!--<l:livetInteractionMessageTrigger MessageKey="MessageKey2" Messenger="{Binding MessageKey2}">
 				<l:TransitionInteractionMessageAction WindowType="{x:Type v:ChildView}" Mode="Modal"
 													  InvokeActionOnlyWhenWindowIsActive="False" />
 			</l:livetInteractionMessageTrigger>-->
 
-			<!--
+		<!--
 			 "livetInteractionMessageTrigger" は名前空間 "http://schemas.livet-mvvm.net/2011/wpf" に存在しません。	
-			--><!--
+			-->
+		<!--
 		</i:Interaction.Triggers>
 
 		<i:Interaction.Behaviors>
@@ -72,11 +76,9 @@
 			<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
 							Grid.Row="0" Grid.Column="1" 
 							Height="Auto"  Width="Auto"
-							MinHeight="50"
-							HorizontalAlignment="Left" Margin="5,5,5,5"/>
+							MinHeight="50" Margin="5,5,965,5"/>
 
-			<local:ViewTabControl x:Name="ViewTab" 
-						Width="Auto" Height="Auto"
+			<local:ViewTabControl x:Name="ViewTab" Height="Auto"
 						Grid.Row="1" Grid.Column="1"/>
 		</Grid>
 	</ScrollViewer>
