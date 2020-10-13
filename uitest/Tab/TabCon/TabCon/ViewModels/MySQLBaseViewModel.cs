@@ -418,15 +418,17 @@ namespace TabCon.ViewModels{
 				MyView.table_dg.DataContext = null;
 				MyView.table_dg.Items.Refresh();
 
-				string[] rStrs = tableName.Split('_');
-				TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
 
 				Type myType = typeof(MySQLBase);
-				string modelName = myType.Namespace + ".Models.";                 // "GoogleOSD.Models."
-				for (int i = 1; i < rStrs.Length; i++) {
-					string rStr = ti.ToTitleCase(rStrs[i]);
-					modelName += rStr;
-				}
+				string Namespace = myType.Namespace;
+				string[] rStrs = Namespace.Split('.');
+				//		TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+				Namespace = rStrs[0];
+				string modelName = Namespace + ".Models."+ tableName;                 // "GoogleOSD.Models."
+				//for (int i = 1; i < rStrs.Length; i++) {
+				//	string rStr = ti.ToTitleCase(rStrs[i]);
+				//	modelName += rStr;
+				//}
 				dbMsg += ",modelName=" + modelName;
 				modelType = Type.GetType(modelName);
 				dbMsg += ",type=" + modelType.FullName;
