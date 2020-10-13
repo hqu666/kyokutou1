@@ -14,6 +14,9 @@ using Livet.Messaging.Windows;
 using TabCon.Models;
 
 namespace TabCon.ViewModels {
+	/// <summary>
+	/// https://qiita.com/sukobuto/items/ebeb646ba5ecbff4f798
+	/// </summary>
 	public class SQLTablesViewModel : ViewModel {
 		public void Initialize()
 		{

@@ -27,6 +27,8 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using TabCon.Views;
+using System.Windows.Input;
+using TabCon.Infrastructures;
 
 namespace TabCon.ViewModels{
 	public class MySQLBaseViewModel : ViewModel {
@@ -81,8 +83,6 @@ namespace TabCon.ViewModels{
 
 		public MySQLBaseViewModel()
 		{
-			////InitializeComponent();
-			////DataContext = this;
 			//TableComboVisibility = System.Windows.Visibility.Hidden;
 			//disConectBtVisibility = System.Windows.Visibility.Hidden;
 			//conectBtVisibility = System.Windows.Visibility.Visible;
@@ -173,44 +173,6 @@ namespace TabCon.ViewModels{
 			}
 		}
 
-		/// <summary>
-		/// テーブル選択
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Table_combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			string TAG = "Table_combo_SelectionChanged";
-			string dbMsg = "[MySQLBase]";
-			try {
-				ComboBox combo = sender as ComboBox;
-				int selectedIndex = combo.SelectedIndex;
-				dbMsg += "[" + selectedIndex + "]";
-				string selectedTableName = combo.SelectedValue.ToString();
-				dbMsg += selectedTableName;
-				MyLog(TAG, dbMsg);
-				ReadTable(selectedTableName);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		#region TableComboSelectedValueChanged
-		private string _TCSelectedValue;
-		public string TCSelectedValue {
-			get {
-				return _TCSelectedValue;
-			}
-			set {
-				if (value == _TCSelectedValue)
-					return;
-
-				_TCSelectedValue = value;
-				RaisePropertyChanged("TCSelectedValue");
-				ReadTable(TCSelectedValue);
-			}
-		}
-		#endregion
 
 		/// <summary>
 		/// DataGirdでレコードが選択された
@@ -415,7 +377,28 @@ namespace TabCon.ViewModels{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-	
+
+		/// <summary>
+		/// テーブル選択
+		/// </summary>
+		#region TCSelectedValueChanged
+		private string _TCSelectedValue;
+		public string TCSelectedValue {
+			get {
+				return _TCSelectedValue;
+			}
+			set {
+				if (value == _TCSelectedValue)
+					return;
+
+				_TCSelectedValue = value;
+				RaisePropertyChanged();
+				if(value != null) {
+					ReadTable(value);
+				}
+			}
+		}
+		#endregion
 
 		/// <summary>
 		/// 指定されたテーブルの読出し

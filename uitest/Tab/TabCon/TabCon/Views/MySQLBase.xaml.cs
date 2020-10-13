@@ -34,5 +34,26 @@ namespace TabCon.Views {
 			VM.MyView = this;
 			//((ViewModels.MySQLBaseViewModel)this.DataContext).MyView = this;
 		}
+
+		///// <summary>
+		///// テーブル選択
+		///// </summary>
+		///// <param name="sender"></param>
+		///// <param name="e"></param>
+
+		//private void Table_combo_SelectionChanged(object sender, SelectionChangedEventArgs e){ 
+		//	string TAG = "Table_combo_SelectionChanged";
+		//	string dbMsg = "[MySQLBase]";
+		//	try {
+		//		ComboBox combo = sender as ComboBox;
+		//		int selectedIndex = combo.SelectedIndex;
+		//		dbMsg += "[" + selectedIndex + "]";
+		//		string selectedTableName = combo.SelectedValue.ToString();
+		//		dbMsg += selectedTableName;
+		//		VM.ReadTable(selectedTableName);
+		//	} catch (Exception er) {
+		//		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 	}
 }

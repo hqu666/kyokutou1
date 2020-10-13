@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TabCon.Models {
+
+/// <summary>
+/// MainWindowのTreeView用
+/// </summary>
 	public class MyMenu : INotifyPropertyChanged {
 
 		private bool _IsSelected = false;

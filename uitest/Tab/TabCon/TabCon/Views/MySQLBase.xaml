@@ -13,14 +13,6 @@
 		MinHeight="600" MaxWidth="1600" MaxHeight="800" FontSize="14">
 
 	<Page.Resources>
-		<!--<ResourceDictionary>
-			<vm:XComboBoxEmptyItemConverter x:Key="XComboBoxEmptyItemConverter"/>
-			--><!--<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Resources/Styles.xaml"/>
-				<ResourceDictionary Source="/Resources/Styles2.xaml"/>
-				<ResourceDictionary Source="/Resources/StylesBG.xaml"/>
-			</ResourceDictionary.MergedDictionaries>--><!--
-		</ResourceDictionary>-->
 
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
@@ -105,8 +97,8 @@
 			<RowDefinition  Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="Auto"/>
 		</Grid.RowDefinitions>
-	
-	<Label Content="Server " HorizontalAlignment="Right"  Grid.Row="0" Grid.Column="0"/>
+
+		<Label Content="Server " HorizontalAlignment="Right"  Grid.Row="0" Grid.Column="0"/>
 		<StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
 			<TextBox x:Name="server_lb" Text="{Binding server}"  
 							MinWidth="50"/>
@@ -131,15 +123,12 @@
 
 		<ComboBox x:Name="table_combo"
 							ItemsSource="{Binding TableCombo}"
-							SelectedValuePath="Value" DisplayMemberPath="name"
-							SelectedValue="{Binding TableComboSelectedValueChanged, Mode=TwoWay}"
+							SelectedValuePath="key"
+							DisplayMemberPath="name"
+							SelectedValue="{Binding TCSelectedValue}"
 							Visibility="{Binding TableComboVisibility}"
-							Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="3"
-							Height="24" Width="Auto" HorizontalAlignment="Left" >
-			<!--SelectionChanged="Table_combo_SelectionChanged">
-			 Converter={StaticResource XComboBoxEmptyItemConverter}
-			-->
-
+							Grid.Row="2" Grid.Column="1"   Grid.ColumnSpan="2"
+							Height="24" Width="Auto" >
 		</ComboBox>
 
 
@@ -163,7 +152,7 @@
 		<Button   Grid.Row="16" Grid.Column="4"
 					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
 					Name="save_bt" Content="登録" Margin="5,5,10,5"/>
-					<!--Click="Save_bt_Click" />-->
+		<!--Click="Save_bt_Click" />-->
 
 
 		<Button   Grid.Row="17" Grid.Column="0"
@@ -172,7 +161,7 @@
 							Command="{Binding DisConectClicked}"
 							Visibility="{Binding disConectBtVisibility}"
 							>
-							<!--Click="Dis_conect_bt_Click"/>-->
+			<!--Click="Dis_conect_bt_Click"/>-->
 			<!--<i:Interaction.Triggers>
 				<i:EventTrigger EventName="Click">
 					<l:OpenFileDialogInteractionMessageAction>
