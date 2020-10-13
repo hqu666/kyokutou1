@@ -189,6 +189,7 @@
     <Compile Include="ViewModels\ChildViewModel.cs" />
     <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
+    <Compile Include="ViewModels\XComboBoxEmptyItemConverter.cs" />
     <Compile Include="Views\ChildPageView.xaml.cs">
       <DependentUpon>ChildPageView.xaml</DependentUpon>
     </Compile>

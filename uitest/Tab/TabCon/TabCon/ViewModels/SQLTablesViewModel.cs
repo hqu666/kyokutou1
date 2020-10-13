@@ -2,10 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+
+using Livet;
+using Livet.Commands;
+using Livet.Messaging;
+using Livet.Messaging.IO;
+using Livet.EventListeners;
+using Livet.Messaging.Windows;
+
+using TabCon.Models;
 
 namespace TabCon.ViewModels {
-	public class SQLTablesViewModel {
+	public class SQLTablesViewModel : ViewModel {
+		public void Initialize()
+		{
+		}
+
 		#region テーブル名
 		private string _key;
 		public string key {
@@ -14,7 +27,7 @@ namespace TabCon.ViewModels {
 				if (_key == value)
 					return;
 				_key = value;
-					//		RaisePropertyChanged();
+				RaisePropertyChanged();
 			}
 		}
 		#endregion
@@ -27,7 +40,7 @@ namespace TabCon.ViewModels {
 				if (_name == value)
 					return;
 				_name = value;
-				//		RaisePropertyChanged();
+				RaisePropertyChanged();
 			}
 		}
 		#endregion

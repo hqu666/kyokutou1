@@ -28,8 +28,8 @@ using Livet.Messaging.Windows;
 
 using TabCon.Views;
 
-namespace TabCon.ViewModels {
-	public class MySQLBaseViewModel {
+namespace TabCon.ViewModels{
+	public class MySQLBaseViewModel : ViewModel {
 		public Views.MySQLBase MyView { get; set; }
 
 		public string server { get; set; }
@@ -41,7 +41,6 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// テーブル選択コンボボックス
 		/// </summary>
-		public Dictionary<string, string> TableCombo { get; set; }
 		public System.Windows.Visibility TableComboVisibility { get; set; }
 		public System.Windows.Visibility disConectBtVisibility { get; set; }
 		public System.Windows.Visibility conectBtVisibility { get; set; }
@@ -196,6 +195,23 @@ namespace TabCon.ViewModels {
 			}
 		}
 
+		#region TableComboSelectedValueChanged
+		private string _TCSelectedValue;
+		public string TCSelectedValue {
+			get {
+				return _TCSelectedValue;
+			}
+			set {
+				if (value == _TCSelectedValue)
+					return;
+
+				_TCSelectedValue = value;
+				RaisePropertyChanged("TCSelectedValue");
+				ReadTable(TCSelectedValue);
+			}
+		}
+		#endregion
+
 		/// <summary>
 		/// DataGirdでレコードが選択された
 		/// </summary>
@@ -337,6 +353,20 @@ namespace TabCon.ViewModels {
 			}
 		}
 
+//	public Dictionary<string, string> TableCombo { get; set; }
+		#region SQLTablesViewModel変更通知プロパティ
+		private ObservableCollection<SQLTablesViewModel> _TableCombo;
+		public ObservableCollection<SQLTablesViewModel> TableCombo {
+			get { return _TableCombo; }
+			set {
+				if (_TableCombo == value)
+					return;
+				_TableCombo = value;
+				RaisePropertyChanged();
+			}
+		}
+		#endregion
+
 		/// <summary>
 		/// 接続したデータベースの全テーブルデータ取得し、テーブル選択コンボボックスを形成
 		/// </summary>
@@ -360,22 +390,24 @@ namespace TabCon.ViewModels {
 					// データがある場合
 					if (reader.HasRows) {
 						dbMsg += ",reader=" + reader.RecordsAffected + "テーブル ";
-								TableCombo = new Dictionary<string, string>();
-				//		TableCombo =new ObservableCollection<SQLTablesViewModel>();
+						//Binding出来ない場合は書込み配列に築盛
+						//		TableCombo = new Dictionary<string, string>();
+						TableCombo = new ObservableCollection<SQLTablesViewModel>();
 						// データがある間繰り返します。
 						while (reader.Read()) {
 							SQLTablesViewModel SQLT = new SQLTablesViewModel();
 							// 取得したテーブル名を表示します。
 							SQLT.key = reader.GetString(0);
 							SQLT.name = reader.GetString(0);
-							//	string key = reader.GetString(0);                   //テーブル名（日）に記載した　日本語の名称は?
-						//	string name = reader.GetString(0);
 							dbMsg += "," + SQLT.key + " : " + SQLT.name;
-							//	TableCombo.Add(SQLT);
-							TableCombo.Add(SQLT.key, SQLT.name);
+							TableCombo.Add(SQLT);
+							//Binding出来ない場合
+							//		TableCombo.Add(SQLT.key, SQLT.name);
 						}
 						dbMsg += ",取得結果：" + TableCombo.Count + "テーブル ";
-						MyView.table_combo.ItemsSource = TableCombo;
+						RaisePropertyChanged();
+						//Binding出来ない場合はViewへの参照で書き込む
+						//		MyView.table_combo.ItemsSource = TableCombo;
 					}
 				}
 				MyLog(TAG, dbMsg);
@@ -383,19 +415,7 @@ namespace TabCon.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-	//	#region SQLTablesViewModel変更通知プロパティ
-		//private ObservableCollection<SQLTablesViewModel> _TableCombo;
-		//public ObservableCollection<SQLTablesViewModel> TableCombo {
-		//	get { return _TableCombo; }
-		//	set {
-		//		if (_TableCombo == value)
-		//			return;
-		//		_TableCombo = value;
-		////		RaisePropertyChanged();
-		//	}
-		//}
-		//#endregion
-
+	
 
 		/// <summary>
 		/// 指定されたテーブルの読出し
