@@ -541,48 +541,51 @@ namespace TabCon.ViewModels{
 								for (int i = 0; i < FieldCount; i++) {
 									string rName = reader.GetName(i);
 									string rType = reader.GetFieldType(i).Name;
-									dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
+									dbMsg += "\r\n(" + i +")"+ rName + ",rType=" + rType;
 									var rVar = reader.GetValue(i);
 									dbMsg += ",rVar=" + rVar;
 
-									if (reader.IsDBNull(i) || rVar.Equals("")) {
-										dbMsg += "null";
-									} else {
+									//if (reader.IsDBNull(i) ) {
+									//} else {
 										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
-											if (rFeild.Name.Equals("deleted_at")) {
-												rFeild.SetValue(wModel, null);
-											} else if (rVar==null || rVar.Equals("")) {
+											if (rFeild.Name.Equals(rName)) {
 												if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
-													rFeild.SetValue(wModel, null);
-												} else if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
-													rFeild.SetValue(wModel, dt);
-												} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
-													rFeild.SetValue(wModel, modifier);
-												} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
-													rFeild.SetValue(wModel, dt);
-												} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
-													rFeild.SetValue(wModel, creater);
-												}
-											} else if (rFeild.Name.Equals(rName)) {
-												if (rType.Equals("Int32")) {
-													rFeild.SetValue(wModel, reader.GetInt32(i));
-												} else if (rType.Equals("String")) {
-													rFeild.SetValue(wModel, reader.GetString(i));
-												} else if (rType.Equals("DateTime")) {
-													rFeild.SetValue(wModel, reader.GetDateTime(i));
-												} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
-													rFeild.SetValue(wModel, reader.GetBoolean(i));
-												} else if (rType.Equals("SByte")) {
-													rFeild.SetValue(wModel, reader.GetSByte(i));
-												} else if (rType.Equals("MySqlDecimal")) {
-													rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
-													//} else {
-													//	dbMsg += ",該当型無し" ;
-													//	rFeild.SetValue(wModel, reader.GetValue(i));
+												//	rFeild.SetValue(wModel, "");
+												} else if (rVar == null || rVar.Equals("") || reader.IsDBNull(i)) {
+													dbMsg += "null";
+													if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+														rFeild.SetValue(wModel, dt);
+													} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+														rFeild.SetValue(wModel, modifier);
+													} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+														rFeild.SetValue(wModel, dt);
+													} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+														rFeild.SetValue(wModel, creater);
+													}else{
+										//				rFeild.SetValue(wModel, "");
+													}
+												} else {
+													if (rType.Equals("Int32")) {
+														rFeild.SetValue(wModel, reader.GetInt32(i));
+													} else if (rType.Equals("String")) {
+														rFeild.SetValue(wModel, reader.GetString(i));
+													} else if (rType.Equals("DateTime")) {
+														rFeild.SetValue(wModel, reader.GetDateTime(i));
+													} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
+														rFeild.SetValue(wModel, reader.GetBoolean(i));
+													} else if (rType.Equals("SByte")) {
+														rFeild.SetValue(wModel, reader.GetSByte(i));
+													} else if (rType.Equals("MySqlDecimal")) {
+														rFeild.SetValue(wModel, reader.GetMySqlDecimal(i));
+													} else {
+														dbMsg += ",該当型無し" ;
+														//	rFeild.SetValue(wModel, reader.GetValue(i));
+													}
 												}
 											}
-										}
-									}
+										}	//フィールド名照合
+										dbMsg += ">>読取";
+									//	}
 								}
 								wCollection.Add(wModel);
 							}
