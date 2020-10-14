@@ -12,9 +12,11 @@
 		xmlns:ig="http://schemas.infragistics.com/xaml"
 		Title="画面遷移確認"
 		SizeToContent="WidthAndHeight"
-		FontSize="14" WindowStartupLocation="CenterScreen" 
+		FontSize="14" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing" 
 		>
-	<!--<Window.DataContext>
+	<!--
+	WindowStartupLocation="CenterScreen" 
+	<Window.DataContext>
 		<vm:MainViewModel />
 	</Window.DataContext>-->
 	<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

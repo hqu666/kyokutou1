@@ -31,7 +31,7 @@ using System.Windows.Input;
 using TabCon.Infrastructures;
 
 namespace TabCon.ViewModels{
-	public class MySQLBaseViewModel : ViewModel {
+	public class MySQLBaseViewModel : ViewModel, IBindingList {
 		public Views.MySQLBase MyView { get; set; }
 
 		public string server { get; set; }
@@ -39,6 +39,10 @@ namespace TabCon.ViewModels{
 		public string port { get; set; }
 		public string uid { get; set; }
 		public string password { get; set; }
+		public string connectionString { get; set; }
+		public object tablDataContext { get; set; }
+
+		
 
 		/// <summary>
 		/// テーブル選択コンボボックス
@@ -79,22 +83,39 @@ namespace TabCon.ViewModels{
 		/// </summary>
 		public int FieldCount;
 		public string titolStr = "MySQL";
+		public Int32 creater = 132;
+		public Int32 modifier = 123;
 
 
 		public MySQLBaseViewModel()
 		{
-			//TableComboVisibility = System.Windows.Visibility.Hidden;
-			//disConectBtVisibility = System.Windows.Visibility.Hidden;
-			//conectBtVisibility = System.Windows.Visibility.Visible;
+			TableComboVisibility = System.Windows.Visibility.Hidden;
+			disConectBtVisibility = System.Windows.Visibility.Hidden;
+			conectBtVisibility = System.Windows.Visibility.Visible;
+			RaisePropertyChanged();
 			//// コンテンツに合わせて自動的にWindow幅と高さをリサイズする(Windowプロパティ)
-			//MyView.SizeToContent = SizeToContent.WidthAndHeight;
+			//MyView.SizeToContent = SizeToContent.WidthAndHeight; はPageに無し
 			server = Constant.Server;
 			database = Constant.Database;
 			port = Constant.Port.ToString();
 			uid = Constant.Uid;
 			password = Constant.Pwd;
-	}
+	//		connectionString = "てきとうな初期値";
+		}
 
+		event ListChangedEventHandler IBindingList.ListChanged {
+			add {
+				throw new NotImplementedException();
+			}
+
+			remove {
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// 接続ボタンクリック
+		/// </summary>
 		public ViewModelCommand ConectClicked {
 			get { return new Livet.Commands.ViewModelCommand(MySqlConnection); }
 		}
@@ -109,29 +130,33 @@ namespace TabCon.ViewModels{
 			string dbMsg = "GetAllTable";
 			try {
 				// MySQLへの接続情報
-				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}",
-					MyView.server_lb.Text, MyView.database_lb.Text, MyView.uid_lb.Text, MyView.password_lb.Text);
+				Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}",server, database, uid, password);
 				// MySQLへの接続
 				try {
-					MyView.connectionString_lb.Content = Constant.ConnectionString;
+					connectionString = Constant.ConnectionString.ToString();
+					RaisePropertyChanged("connectionString");
 
-					Connection = new MySqlConnection(Constant.ConnectionString);
+					Connection = new MySqlConnection(connectionString);
 					Connection.Open();
 					string msgStr = "MySQLに接続しました\r\n";
 					msgStr = "MySQLに接続しました\r\n";
 					dbMsg += ",msgStr=" + msgStr;
 					GetAllTable();
 					TableComboVisibility = System.Windows.Visibility.Visible;
+					RaisePropertyChanged("TableComboVisibility");
 					disConectBtVisibility = System.Windows.Visibility.Visible;
-			//		conectBtVisibility = System.Windows.Visibility.Hidden;
+					RaisePropertyChanged("disConectBtVisibility");
+					conectBtVisibility = System.Windows.Visibility.Hidden;
+					RaisePropertyChanged("conectBtVisibility");
 				} catch (MySqlException me) {
 					string titolStr = TAG;
-					string msgStr = "XAMPPもしくはMySQLデータベースの起動確認を";
+					string msgStr = "XAMPPもしくはMySQLデータベースの起動など、接続可能な事を確認して下さい";
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					MyErrorLog(TAG, dbMsg, me);
 				}
 
 				MyLog(TAG, dbMsg);
+
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -155,12 +180,18 @@ namespace TabCon.ViewModels{
 					dbMsg += ",msgStr=" + msgStr;
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 					dbMsg += "接続の解除";
-					//TableComboVisibility = System.Windows.Visibility.Hidden;
-					//disConectBtVisibility = System.Windows.Visibility.Hidden;
-					//conectBtVisibility = System.Windows.Visibility.Visible;
-					MyView.table_dg.DataContext = null;
-					MyView.table_dg.Items.Refresh();
-					MyView.connectionString_lb.Content = "";
+					TableComboVisibility = System.Windows.Visibility.Hidden;
+					RaisePropertyChanged("TableComboVisibility");
+					disConectBtVisibility = System.Windows.Visibility.Hidden;
+					RaisePropertyChanged("disConectBtVisibility");
+					conectBtVisibility = System.Windows.Visibility.Visible;
+					RaisePropertyChanged("conectBtVisibility");
+
+					TableCombo.Clear();
+					tablDataContext = null;
+					RaisePropertyChanged("tablDataContext");
+					connectionString = "";
+					RaisePropertyChanged("connectionString");
 
 					//// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
 					//this.SizeToContent = SizeToContent.WidthAndHeight;
@@ -172,8 +203,7 @@ namespace TabCon.ViewModels{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
+		
 		/// <summary>
 		/// DataGirdでレコードが選択された
 		/// </summary>
@@ -184,9 +214,9 @@ namespace TabCon.ViewModels{
 			string TAG = "Table_dg_SelectedCellsChanged";
 			string dbMsg = "[MySQLBase]";
 			try {
-				var rowIndex = MyView.table_dg.Items.IndexOf(MyView.table_dg.CurrentItem);
-				dbMsg += rowIndex + "/" + wCollection.Count + "レコード目";
-				DefoltValueCheck(rowIndex);
+				//var rowIndex = MyView.table_dg.Items.IndexOf(MyView.table_dg.CurrentItem);
+				//dbMsg += rowIndex + "/" + wCollection.Count + "レコード目";
+				//DefoltValueCheck(rowIndex);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -203,11 +233,11 @@ namespace TabCon.ViewModels{
 			string TAG = "Table_dg_RowEditEnding";
 			string dbMsg = "[MySQLBase]";
 			try {
-				var rowIndex = MyView.table_dg.Items.IndexOf(MyView.table_dg.CurrentItem);
-				dbMsg += rowIndex + "/" + wCollection.Count + "レコード目";
-				string Msg = dbMsg;
-				MessageBoxResult result = MessageShowWPF(titolStr, Msg, MessageBoxButton.OKCancel, MessageBoxImage.Information);
-				dbMsg += ",result=" + result;
+				//var rowIndex = MyView.table_dg.Items.IndexOf(MyView.table_dg.CurrentItem);
+				//dbMsg += rowIndex + "/" + wCollection.Count + "レコード目";
+				//string Msg = dbMsg;
+				//MessageBoxResult result = MessageShowWPF(titolStr, Msg, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+				//dbMsg += ",result=" + result;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -224,23 +254,23 @@ namespace TabCon.ViewModels{
 			string TAG = "Save_bt_Click";
 			string dbMsg = "[MySQLBase]";
 			try {
-				// 行番号(0起算)
-				var rowIndex = MyView.table_dg.Items.IndexOf(MyView.table_dg.CurrentItem);
-				dbMsg += "[R" + rowIndex;
-				// 列番号(0起算)
-				//var columnIndex = table_dg.CurrentCell.Column.DisplayIndex;
-				//dbMsg +=  "C" + columnIndex + "]";
-				if (MyView.table_dg.SelectedItem != null) {
-					// 列番号(0起算)
-					var columnIndex = MyView.table_dg.SelectedIndex;
-					dbMsg += "C" + columnIndex + "]";
-					MessageBox.Show(MyView.table_dg.Columns[columnIndex].Header.ToString() + ": " +
-					((TextBlock)MyView.table_dg.Columns[columnIndex].GetCellContent(MyView.table_dg.SelectedItem)).Text + "を選択");
-				} else {
-					MessageBox.Show("値を入力して下さい");
-				}
-				dbMsg += ":id," + ((TextBlock)MyView.table_dg.Columns[0].GetCellContent(MyView.table_dg.Columns[0])).Text;
-				dbMsg += ":作成日時," + ((TextBlock)MyView.table_dg.Columns[0].GetCellContent(MyView.table_dg.Columns[FieldCount - 4])).Text;
+				//// 行番号(0起算)
+				//var rowIndex = MyView.table_dg.Items.IndexOf(MyView.table_dg.CurrentItem);
+				//dbMsg += "[R" + rowIndex;
+				//// 列番号(0起算)
+				////var columnIndex = table_dg.CurrentCell.Column.DisplayIndex;
+				////dbMsg +=  "C" + columnIndex + "]";
+				//if (MyView.table_dg.SelectedItem != null) {
+				//	// 列番号(0起算)
+				//	var columnIndex = MyView.table_dg.SelectedIndex;
+				//	dbMsg += "C" + columnIndex + "]";
+				//	MessageBox.Show(MyView.table_dg.Columns[columnIndex].Header.ToString() + ": " +
+				//	((TextBlock)MyView.table_dg.Columns[columnIndex].GetCellContent(MyView.table_dg.SelectedItem)).Text + "を選択");
+				//} else {
+				//	MessageBox.Show("値を入力して下さい");
+				//}
+				//dbMsg += ":id," + ((TextBlock)MyView.table_dg.Columns[0].GetCellContent(MyView.table_dg.Columns[0])).Text;
+				//dbMsg += ":作成日時," + ((TextBlock)MyView.table_dg.Columns[0].GetCellContent(MyView.table_dg.Columns[FieldCount - 4])).Text;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -257,58 +287,58 @@ namespace TabCon.ViewModels{
 			string TAG = "DefoltValueCheck";
 			string dbMsg = "[MySQLBase]";
 			try {
-				//Type TypeDateTime = typeof(System.DateTime);
-				//Type TypeInt32 = typeof(System.Int32);
-				// 行番号(0起算)
-				if (-1 < rowIndex) {
-					dbMsg += "[R" + rowIndex;
-					int ItemCount = MyView.table_dg.Columns.Count;
-					dbMsg += "×C" + ItemCount + "]";
-					wModel = (Object)Activator.CreateInstance(modelType);
-					if (wCollection.Count < rowIndex) {
-						wModel = wCollection[rowIndex];
-					}
-					for (int i = 0; i < ItemCount; i++) {
-						dbMsg += "\r\n[" + i + "/" + ItemCount + "]";
-						//// DataGridにフォーカスし, 指定行、列のDataGridCellInfoを生成
-						DataGridCellInfo cellInfo = new DataGridCellInfo(MyView.table_dg.Items[rowIndex], MyView.table_dg.Columns[i]);
-						if (cellInfo == null) {
-						} else {
-							string fealdName = MyView.table_dg.Columns[i].Header.ToString();
-							dbMsg += fealdName;
-							MyView.table_dg.CurrentCell = cellInfo;
-							string cVar = ((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text;
-							dbMsg += "=" + cVar;
-							string cType = null;
-							foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
-								if (rFeild.Name.Equals(fealdName)) {
-									cType = rFeild.PropertyType.Name;
-									goto ExitTypeForeach;
-								}
-							}
-						ExitTypeForeach:
-							dbMsg += "(" + cType + ")";
-							if (fealdName.Equals("deleted_at") || cVar.Contains("1/1/0001") || cVar.Contains("0001/1/1")) {
-								//Nullにしなければならない場合
-								cVar = "";
-							}
-							if (cVar.Equals("") || cVar.Equals(null)) {
-								dbMsg += "未設定";
-								if (cType.Equals("DateTime")) {           //TypeDateTime
-									string wVar = System.DateTime.Now.ToString();
-									if (fealdName.Equals("created_at") || fealdName.Equals("updated_at")) {
-										((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text = wVar;
-									} else {
-										((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text = "";
-									}
-								} else if (cType.Equals("int32")) {        //TypeInt32
-									((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text = "";
-								}
-								//			}else if (cVar.Equals("")) {
-							}
-						}
-					}
-				}
+				////Type TypeDateTime = typeof(System.DateTime);
+				////Type TypeInt32 = typeof(System.Int32);
+				//// 行番号(0起算)
+				//if (-1 < rowIndex) {
+				//	dbMsg += "[R" + rowIndex;
+				//	int ItemCount = MyView.table_dg.Columns.Count;
+				//	dbMsg += "×C" + ItemCount + "]";
+				//	wModel = (Object)Activator.CreateInstance(modelType);
+				//	if (wCollection.Count < rowIndex) {
+				//		wModel = wCollection[rowIndex];
+				//	}
+				//	for (int i = 0; i < ItemCount; i++) {
+				//		dbMsg += "\r\n[" + i + "/" + ItemCount + "]";
+				//		//// DataGridにフォーカスし, 指定行、列のDataGridCellInfoを生成
+				//		DataGridCellInfo cellInfo = new DataGridCellInfo(MyView.table_dg.Items[rowIndex], MyView.table_dg.Columns[i]);
+				//		if (cellInfo == null) {
+				//		} else {
+				//			string fealdName = MyView.table_dg.Columns[i].Header.ToString();
+				//			dbMsg += fealdName;
+				//			MyView.table_dg.CurrentCell = cellInfo;
+				//			string cVar = ((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text;
+				//			dbMsg += "=" + cVar;
+				//			string cType = null;
+				//			foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+				//				if (rFeild.Name.Equals(fealdName)) {
+				//					cType = rFeild.PropertyType.Name;
+				//					goto ExitTypeForeach;
+				//				}
+				//			}
+				//		ExitTypeForeach:
+				//			dbMsg += "(" + cType + ")";
+				//			if (fealdName.Equals("deleted_at") || cVar.Contains("1/1/0001") || cVar.Contains("0001/1/1")) {
+				//				//Nullにしなければならない場合
+				//				cVar = "";
+				//			}
+				//			if (cVar.Equals("") || cVar.Equals(null)) {
+				//				dbMsg += "未設定";
+				//				if (cType.Equals("DateTime")) {           //TypeDateTime
+				//					string wVar = System.DateTime.Now.ToString();
+				//					if (fealdName.Equals("created_at") || fealdName.Equals("updated_at")) {
+				//						((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text = wVar;
+				//					} else {
+				//						((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text = "";
+				//					}
+				//				} else if (cType.Equals("int32")) {        //TypeInt32
+				//					((TextBlock)MyView.table_dg.Columns[i].GetCellContent(MyView.table_dg.SelectedItem)).Text = "";
+				//				}
+				//				//			}else if (cVar.Equals("")) {
+				//			}
+				//		}
+				//	}
+				//}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -383,6 +413,9 @@ namespace TabCon.ViewModels{
 		/// </summary>
 		#region TCSelectedValueChanged
 		private string _TCSelectedValue;
+
+		public event ListChangedEventHandler ListChanged;
+
 		public string TCSelectedValue {
 			get {
 				return _TCSelectedValue;
@@ -409,15 +442,15 @@ namespace TabCon.ViewModels{
 			string TAG = "ReadTable";
 			string dbMsg = "[MySQLBase]";
 			try {
+				DateTime dt = DateTime.Now;
 				dbMsg += ",tableName=" + tableName;
-
+				selectedTableName = tableName;
 				if (Connection.State != ConnectionState.Open) {
 					dbMsg += ",Openしてない";
 					Connection.Open();
 				}
-				MyView.table_dg.DataContext = null;
-				MyView.table_dg.Items.Refresh();
-
+				tablDataContext = null;
+				RaisePropertyChanged("tablDataContext");
 
 				Type myType = typeof(MySQLBase);
 				string Namespace = myType.Namespace;
@@ -434,56 +467,65 @@ namespace TabCon.ViewModels{
 				dbMsg += ",type=" + modelType.FullName;
 				wModel = (Object)Activator.CreateInstance(modelType);
 				//ObservableCollectionを変数化するとAddが使えない
+				//			wCollection = new <object>();
 				wCollection = new List<object>();
-				//ヘッダー作成：型の確定;	列定義を書き換え
-				MyView.table_dg.Columns.Clear();       //全列削除
+				////ヘッダー作成：型の確定;	列定義を書き換え
+				//MyView.table_dg.Columns.Clear();       //全列削除
 				var viewModel = this;
-				// リソースからスタイルを取得
-				//var headerStyle = (Style)table_dg.FindResource("HeaderStyle");
-				//var textStyle = (Style)table_dg.FindResource("TextStyle");
-				foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
-					string rName = rFeild.Name;
-					string rType = rFeild.PropertyType.Name;
-					dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
-					if (rType.Equals("Boolean")) {
-						MyView.table_dg.Columns.Add(new DataGridCheckBoxColumn() {
-							Header = rName,
-							Binding = new Binding(rName)
-						});
-					} else if (rType.Equals("DateTime")) {
 
-						//table_dg.Columns.Add(new DataGridTextColumn() {
-						//	Header = rName,
-						//	Binding = new Binding(rName) { StringFormat = "yyyy/MM/dd hh:mm" }
-						//});
-						DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
-						templateColumn.Header = rName;
+				/*
+								// リソースからスタイルを取得
+								//var headerStyle = (Style)table_dg.FindResource("HeaderStyle");
+								//var textStyle = (Style)table_dg.FindResource("TextStyle");
+								foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+									string rName = rFeild.Name;
+									string rType = rFeild.PropertyType.Name;
+									dbMsg += "\r\nrName=" + rName + ",rType=" + rType;
+									if (rType.Equals("Boolean")) {
+										//MyView.table_dg.Columns.Add(new DataGridCheckBoxColumn() {
+										//	Header = rName,
+										//	Binding = new Binding(rName)
+										//});
+									} else if (rType.Equals("DateTime")) {
 
-						Binding bnding = new Binding(rName);
-						//表示をラベルに
-						FrameworkElementFactory DateLabel = new FrameworkElementFactory(typeof(DateLabel));
-						DateLabel.SetBinding(Label.ContentProperty, new Binding(rName));
-						//DateLabel.SetBinding(TextBlock.TextProperty, new Binding(rName));
-						templateColumn.CellTemplate = new DataTemplate { VisualTree = DateLabel };
+										//table_dg.Columns.Add(new DataGridTextColumn() {
+										//	Header = rName,
+										//	Binding = new Binding(rName) { StringFormat = "yyyy/MM/dd hh:mm" }
+										//});
+										DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
+										templateColumn.Header = rName;
 
-						//入力をDatePickerに
-						FrameworkElementFactory cTextBox = new FrameworkElementFactory(typeof(CustomDatePicker));
-		//				SetBinding(DatePicker.SelectedDateProperty, bnding);
-						templateColumn.CellEditingTemplate = new DataTemplate { VisualTree = cTextBox };
+										Binding bnding = new Binding(rName);
+										//表示をラベルに
+										FrameworkElementFactory DateLabel = new FrameworkElementFactory(typeof(DateLabel));
+										DateLabel.SetBinding(Label.ContentProperty, new Binding(rName));
+										//DateLabel.SetBinding(TextBlock.TextProperty, new Binding(rName));
+										templateColumn.CellTemplate = new DataTemplate { VisualTree = DateLabel };
 
-						MyView.table_dg.Columns.Add(templateColumn);
+										//入力をDatePickerに
+										FrameworkElementFactory cTextBox = new FrameworkElementFactory(typeof(CustomDatePicker));
+						//				SetBinding(DatePicker.SelectedDateProperty, bnding);
+										templateColumn.CellEditingTemplate = new DataTemplate { VisualTree = cTextBox };
 
-					} else {
-						MyView.table_dg.Columns.Add(new DataGridTextColumn() {
-							Header = rName,
-							//HeaderStyle = headerStyle,
-							//ElementStyle = textStyle,		DataGridTemplateColumn
-							//IsReadOnly = true,				TargetType
-							//CanUserSort = true,
-							Binding = new Binding(rName)
-						});
-					}
-				}
+							//			MyView.table_dg.Columns.Add(templateColumn);
+
+									} else {
+										//MyView.table_dg.Columns.Add(new DataGridTextColumn() {
+										//	Header = rName,
+										//	//HeaderStyle = headerStyle,
+										//	//ElementStyle = textStyle,		DataGridTemplateColumn
+										//	//IsReadOnly = true,				TargetType
+										//	//CanUserSort = true,
+										//	Binding = new Binding(rName)
+										//});
+									}
+								}
+				*/
+				//フィールド名と型を指定する
+				Type CollectionType = Type.GetType(modelName + "Collection");
+				Object bCollection = (Object)Activator.CreateInstance(CollectionType);
+				tablDataContext = bCollection;
+				RaisePropertyChanged("tablDataContext");
 
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
@@ -507,10 +549,22 @@ namespace TabCon.ViewModels{
 										dbMsg += "null";
 									} else {
 										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
-											if (rFeild.Name.Equals(rName)) {
-												if (rFeild.Name.Equals("deleted_at")) {
+											if (rFeild.Name.Equals("deleted_at")) {
+												rFeild.SetValue(wModel, null);
+											} else if (rVar==null || rVar.Equals("")) {
+												if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
 													rFeild.SetValue(wModel, null);
-												} else if (rType.Equals("Int32")) {
+												} else if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+													rFeild.SetValue(wModel, dt);
+												} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+													rFeild.SetValue(wModel, modifier);
+												} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+													rFeild.SetValue(wModel, dt);
+												} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+													rFeild.SetValue(wModel, creater);
+												}
+											} else if (rFeild.Name.Equals(rName)) {
+												if (rType.Equals("Int32")) {
 													rFeild.SetValue(wModel, reader.GetInt32(i));
 												} else if (rType.Equals("String")) {
 													rFeild.SetValue(wModel, reader.GetString(i));
@@ -539,13 +593,13 @@ namespace TabCon.ViewModels{
 				dbMsg += ",wCollection=" + rCount + "件";
 				if (rCount < 1) {
 					dbMsg += ",データ入力無し";        //ObservableCollectionから該当モデルのフィールドのみを引き当てる
-					Type CollectionType = Type.GetType(modelName + "Collection");
-					Object bCollection = (Object)Activator.CreateInstance(CollectionType);
-					//			dbMsg += ",wCollection=" + bCollection.FullName;
-					MyView.table_dg.DataContext = bCollection;
+					//Type CollectionType = Type.GetType(modelName + "Collection");
+					//Object bCollection = (Object)Activator.CreateInstance(CollectionType);
+					////			dbMsg += ",wCollection=" + bCollection.FullName;
+					//tablDataContext = bCollection;
 				} else {
 					// データをそのままセットする
-					MyView.table_dg.DataContext = wCollection;
+					tablDataContext = wCollection;
 					//for(int i=0;i< rCount;i++) {
 					//	// DataGridにフォーカスします。
 					//	table_dg.Focus();
@@ -557,7 +611,7 @@ namespace TabCon.ViewModels{
 					//}
 				}
 				//更新時はこれが必須
-				MyView.table_dg.Items.Refresh();
+				RaisePropertyChanged("tablDataContext");
 				Connection.Close();
 				//// コンテンツに合わせて自動的にWindow幅と高さをリサイズする
 				//SizeToContent = SizeToContent.WidthAndHeight;
@@ -617,6 +671,46 @@ namespace TabCon.ViewModels{
 			return property;
 		}
 
+
+		//レコード追加/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand AddRecord {
+			get { return new Livet.Commands.ViewModelCommand(RecordAdd); }
+		}
+
+		public void RecordAdd()
+		{
+			string TAG = "RecordAdd";
+			string dbMsg = "[MySQLBase]";
+			try {
+
+				DateTime dt = DateTime.Now;
+				wModel = (Object)Activator.CreateInstance(modelType);
+					foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+					dbMsg += "\r\nrName=" + rFeild.Name + ",rType=" + rFeild.PropertyType;
+					if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
+						rFeild.SetValue(wModel, null);
+					} else if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+						rFeild.SetValue(wModel, dt);
+					} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+						rFeild.SetValue(wModel, modifier);
+					} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+						rFeild.SetValue(wModel, dt);
+					} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+						rFeild.SetValue(wModel, creater);
+					}else{
+						rFeild.SetValue(wModel, null);
+					}
+					dbMsg += "=" + rFeild.ToString();
+				}
+				wCollection.Add(wModel);
+				tablDataContext = (IBindingList)wCollection;
+				RaisePropertyChanged("tablDataContext");
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 		//////////////////////////////////////////////////MySQL//
 		public static void MyLog(string TAG, string dbMsg)
 		{
@@ -639,6 +733,123 @@ namespace TabCon.ViewModels{
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
 
+
+		//レコードの追加は、データ ソースが IBindingList インターフェイスを実装して AllowNew プロパティから True を返す場合に限ってサポートされます。
+		//レコードの追加はすべてのビュー (たとえばカルーセル ビュー) でサポートされるわけではありません。
+
+		bool IBindingList.AllowNew => throw new NotImplementedException();
+
+		bool IBindingList.AllowEdit => throw new NotImplementedException();
+
+		bool IBindingList.AllowRemove => throw new NotImplementedException();
+		bool IBindingList.SupportsChangeNotification => false;		//	throw new NotImplementedException();
+
+		//bool IBindingList.SupportsChangeNotification()
+		//{
+		//	return new ArrayEnumerator();       //throw new NotImplementedException();
+		//}
+
+		bool IBindingList.SupportsSearching => throw new NotImplementedException();
+
+		bool IBindingList.SupportsSorting => throw new NotImplementedException();
+
+		bool IBindingList.IsSorted => throw new NotImplementedException();
+
+		PropertyDescriptor IBindingList.SortProperty => throw new NotImplementedException();
+
+		ListSortDirection IBindingList.SortDirection => throw new NotImplementedException();
+
+		bool IList.IsReadOnly => throw new NotImplementedException();
+
+		bool IList.IsFixedSize => throw new NotImplementedException();
+
+		int ICollection.Count => throw new NotImplementedException();
+
+		object ICollection.SyncRoot => throw new NotImplementedException();
+
+		bool ICollection.IsSynchronized => throw new NotImplementedException();
+
+		object IList.this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		object IBindingList.AddNew()
+		{
+			throw new NotImplementedException();
+		}
+
+		void IBindingList.AddIndex(PropertyDescriptor property)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction)
+		{
+			throw new NotImplementedException();
+		}
+
+		int IBindingList.Find(PropertyDescriptor property, object key)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IBindingList.RemoveIndex(PropertyDescriptor property)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IBindingList.RemoveSort()
+		{
+			throw new NotImplementedException();
+		}
+
+		int IList.Add(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		bool IList.Contains(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IList.Clear()
+		{
+			throw new NotImplementedException();
+		}
+
+		int IList.IndexOf(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IList.Insert(int index, object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IList.Remove(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IList.RemoveAt(int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new ArrayEnumerator();
+			//			throw new NotImplementedException();   だとSystem.NotImplementedException: 'メソッドまたは操作は実装されていません。'
+		}
+		class ArrayEnumerator : IEnumerator {
+			public Object Current { get; }
+			public bool MoveNext() { return true; }
+			public void Reset() { }
+		}
 	}
 
 }

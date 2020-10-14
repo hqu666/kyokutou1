@@ -108,15 +108,22 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\System.Threading
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\System.Xml.XPath.XDocument.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.DataManager.v12.2.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.DataPresenter.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.DragDrop.v12.2.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Editors.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2.xml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.DataManager.v12.2.xml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.DataPresenter.v12.2.xml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.DragDrop.v12.2.xml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Editors.v12.2.xml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.v12.2.xml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.DataManager.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.DataPresenter.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.Editors.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.exe.config
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Views\NaviWindow.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Views\ChildPageView.g.cs
@@ -147,4 +154,3 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csproj.Co
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.exe
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.pdb
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csprojAssemblyReference.cache
