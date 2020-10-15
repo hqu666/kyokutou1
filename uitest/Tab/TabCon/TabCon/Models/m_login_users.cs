@@ -301,6 +301,22 @@ namespace TabCon.Models
 		}
 
 		///<summary>
+		///仕入管理（権限） :1：R/W、2：R/O、9：NOT ※固定値：権限
+		///</summary>
+		private bool _purchase_management_permission;
+		public bool purchase_management_permission
+		{
+			get => _purchase_management_permission;
+			set
+			{
+				if (_purchase_management_permission == value)
+					return;
+				_purchase_management_permission = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		///<summary>
 		///請求・売掛締め、入金管理 (権限) :1：R/W、2：R/O、9：NOT ※固定値：権限
 		///</summary>
 		private bool _bill_closing_deposit_mng_permission;

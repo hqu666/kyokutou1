@@ -429,38 +429,6 @@ namespace TabCon.Models
 		}
 
 		///<summary>
-		///•½‹Ï˜J–±”ïŠz
-		///</summary>
-		private decimal _average_labor_cost_amount;
-		public decimal average_labor_cost_amount
-		{
-			get => _average_labor_cost_amount;
-			set
-			{
-				if (_average_labor_cost_amount == value)
-					return;
-				_average_labor_cost_amount = value;
-				RaisePropertyChanged();
-			}
-		}
-
-		///<summary>
-		///•½‹Ï•àŠ|—¦
-		///</summary>
-		private decimal _average_productivity_rate;
-		public decimal average_productivity_rate
-		{
-			get => _average_productivity_rate;
-			set
-			{
-				if (_average_productivity_rate == value)
-					return;
-				_average_productivity_rate = value;
-				RaisePropertyChanged();
-			}
-		}
-
-		///<summary>
 		///ŽÐ‰ï•ÛŒ¯—¿—¦
 		///</summary>
 		private decimal _social_insurance_charge_rate;

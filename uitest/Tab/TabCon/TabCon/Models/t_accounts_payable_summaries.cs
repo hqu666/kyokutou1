@@ -47,15 +47,15 @@ namespace TabCon.Models
 		///<summary>
 		///仕入先ID :=取引先マスタ.ID
 		///</summary>
-		private int _m_suppliers_id;
-		public int m_suppliers_id
+		private int _m_supplier_id;
+		public int m_supplier_id
 		{
-			get => _m_suppliers_id;
+			get => _m_supplier_id;
 			set
 			{
-				if (_m_suppliers_id == value)
+				if (_m_supplier_id == value)
 					return;
-				_m_suppliers_id = value;
+				_m_supplier_id = value;
 				RaisePropertyChanged();
 			}
 		}

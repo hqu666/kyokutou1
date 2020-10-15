@@ -271,15 +271,15 @@ namespace TabCon.Models
 		///<summary>
 		///作成者
 		///</summary>
-		private int _creater;
-		public int creater
+		private int _created_user;
+		public int created_user
 		{
-			get => _creater;
+			get => _created_user;
 			set
 			{
-				if (_creater == value)
+				if (_created_user == value)
 					return;
-				_creater = value;
+				_created_user = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -287,15 +287,15 @@ namespace TabCon.Models
 		///<summary>
 		///作成日時
 		///</summary>
-		private DateTime _created_on;
-		public DateTime created_on
+		private DateTime _created_at;
+		public DateTime created_at
 		{
-			get => _created_on;
+			get => _created_at;
 			set
 			{
-				if (_created_on == value)
+				if (_created_at == value)
 					return;
-				_created_on = value;
+				_created_at = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -303,15 +303,15 @@ namespace TabCon.Models
 		///<summary>
 		///更新者
 		///</summary>
-		private int _modifier;
-		public int modifier
+		private int _updated_user;
+		public int updated_user
 		{
-			get => _modifier;
+			get => _updated_user;
 			set
 			{
-				if (_modifier == value)
+				if (_updated_user == value)
 					return;
-				_modifier = value;
+				_updated_user = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -319,15 +319,15 @@ namespace TabCon.Models
 		///<summary>
 		///更新日時
 		///</summary>
-		private DateTime _modifier_on;
-		public DateTime modifier_on
+		private DateTime _updated_at;
+		public DateTime updated_at
 		{
-			get => _modifier_on;
+			get => _updated_at;
 			set
 			{
-				if (_modifier_on == value)
+				if (_updated_at == value)
 					return;
-				_modifier_on = value;
+				_updated_at = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -335,15 +335,15 @@ namespace TabCon.Models
 		///<summary>
 		///削除日時
 		///</summary>
-		private DateTime _deleted_on;
-		public DateTime deleted_on
+		private DateTime _deleted_at;
+		public DateTime deleted_at
 		{
-			get => _deleted_on;
+			get => _deleted_at;
 			set
 			{
-				if (_deleted_on == value)
+				if (_deleted_at == value)
 					return;
-				_deleted_on = value;
+				_deleted_at = value;
 				RaisePropertyChanged();
 			}
 		}

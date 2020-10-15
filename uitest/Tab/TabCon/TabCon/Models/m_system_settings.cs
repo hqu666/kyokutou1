@@ -269,7 +269,7 @@ namespace TabCon.Models
 		}
 
 		///<summary>
-		///物件管理フラグ
+		///物件管理フラグ :0：使用しない、1：使用する
 		///</summary>
 		private int _property_management_flag;
 		public int property_management_flag
@@ -285,7 +285,7 @@ namespace TabCon.Models
 		}
 
 		///<summary>
-		///原価フラグ
+		///原価フラグ :0：使用しない、1：使用する
 		///</summary>
 		private int _cost_function_flag;
 		public int cost_function_flag
@@ -397,7 +397,7 @@ namespace TabCon.Models
 		}
 
 		///<summary>
-		///法定福利費算出の使用フラグ
+		///法定福利費算出の使用フラグ :0：使用しない、1：使用する
 		///</summary>
 		private int _legal_welfare_expenses_flag;
 		public int legal_welfare_expenses_flag
@@ -413,7 +413,7 @@ namespace TabCon.Models
 		}
 
 		///<summary>
-		///法定福利費算出のパターン
+		///法定福利費算出のパターン :1：Aパターン、2：Bパターン、3：Cパターン
 		///</summary>
 		private int _legal_welfare_expenses_pattern;
 		public int legal_welfare_expenses_pattern

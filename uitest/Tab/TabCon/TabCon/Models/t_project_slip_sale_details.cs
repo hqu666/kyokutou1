@@ -63,15 +63,15 @@ namespace TabCon.Models
 		///<summary>
 		///çsî‘çÜ
 		///</summary>
-		private int _col_number;
-		public int col_number
+		private int _row_number;
+		public int row_number
 		{
-			get => _col_number;
+			get => _row_number;
 			set
 			{
-				if (_col_number == value)
+				if (_row_number == value)
 					return;
-				_col_number = value;
+				_row_number = value;
 				RaisePropertyChanged();
 			}
 		}

@@ -301,6 +301,22 @@ namespace TabCon.Models
 		}
 
 		///<summary>
+		///•½‹Ï˜J–±”ï—¦
+		///</summary>
+		private decimal _average_labor_cost_rate;
+		public decimal average_labor_cost_rate
+		{
+			get => _average_labor_cost_rate;
+			set
+			{
+				if (_average_labor_cost_rate == value)
+					return;
+				_average_labor_cost_rate = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		///<summary>
 		///•½‹Ï•àŠ|—¦
 		///</summary>
 		private decimal _average_productivity_rate;
