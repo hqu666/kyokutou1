@@ -190,8 +190,10 @@
     <Compile Include="ViewModels\ChildPageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ChildViewModel.cs" />
+    <Compile Include="ViewModels\MyIBindingList.cs" />
     <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
+    <Compile Include="ViewModels\Widget .cs" />
     <Compile Include="Views\ChildPageView.xaml.cs">
       <DependentUpon>ChildPageView.xaml</DependentUpon>
     </Compile>

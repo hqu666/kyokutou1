@@ -25,13 +25,15 @@ using Livet.Messaging;
 using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
-
+using Infragistics;
 using TabCon.Views;
 using System.Windows.Input;
 using TabCon.Infrastructures;
+using MySql.Data.Types;
+using System.Windows.Documents;
 
 namespace TabCon.ViewModels{
-	public class MySQLBaseViewModel : ViewModel, IBindingList {
+	public class MySQLBaseViewModel : ViewModel {
 		public Views.MySQLBase MyView { get; set; }
 
 		public string server { get; set; }
@@ -40,9 +42,6 @@ namespace TabCon.ViewModels{
 		public string uid { get; set; }
 		public string password { get; set; }
 		public string connectionString { get; set; }
-		public object tablDataContext { get; set; }
-
-		
 
 		/// <summary>
 		/// テーブル選択コンボボックス
@@ -77,7 +76,17 @@ namespace TabCon.ViewModels{
 		/// <summary>
 		/// DataGridのソース
 		/// </summary>
-		public List<object> wCollection;
+		public ObservableCollection<object> wCollection;
+		//	public MyIBindingList tablDataContext { get; set; }
+		//		public List<object> tablDataContext { get; set; }
+			public object tablDataContext { get; set; }
+		//		public ObservableCollection<object> tablDataContext { get; set; }
+		/// <summary>
+		/// 選択されたレコード
+		/// </summary>
+		public Infragistics.Windows.DataPresenter.DataRecord tablActiveRecord { get; set; }
+
+		
 		/// <summary>
 		/// 対象テーブルの列数
 		/// </summary>
@@ -103,15 +112,6 @@ namespace TabCon.ViewModels{
 	//		connectionString = "てきとうな初期値";
 		}
 
-		event ListChangedEventHandler IBindingList.ListChanged {
-			add {
-				throw new NotImplementedException();
-			}
-
-			remove {
-				throw new NotImplementedException();
-			}
-		}
 
 		/// <summary>
 		/// 接続ボタンクリック
@@ -465,13 +465,14 @@ namespace TabCon.ViewModels{
 				dbMsg += ",modelName=" + modelName;
 				modelType = Type.GetType(modelName);
 				dbMsg += ",type=" + modelType.FullName;
-				wModel = (Object)Activator.CreateInstance(modelType);
+				wModel = (object)Activator.CreateInstance(modelType);
 				//ObservableCollectionを変数化するとAddが使えない
-				//			wCollection = new <object>();
-				wCollection = new List<object>();
+			//	tablDataContext = new MyIBindingList();
+
+			wCollection = new ObservableCollection<object>();
 				////ヘッダー作成：型の確定;	列定義を書き換え
 				//MyView.table_dg.Columns.Clear();       //全列削除
-				var viewModel = this;
+		//		var viewModel = this;
 
 				/*
 								// リソースからスタイルを取得
@@ -522,10 +523,10 @@ namespace TabCon.ViewModels{
 								}
 				*/
 				//フィールド名と型を指定する
-				Type CollectionType = Type.GetType(modelName + "Collection");
-				Object bCollection = (Object)Activator.CreateInstance(CollectionType);
-				tablDataContext = bCollection;
-				RaisePropertyChanged("tablDataContext");
+				//Type CollectionType = Type.GetType(modelName + "Collection");
+				//Object bCollection = (Object)Activator.CreateInstance(CollectionType);
+				//tablDataContext = bCollection;
+				//RaisePropertyChanged("tablDataContext");
 
 				using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 					mySqlConnection.Open();
@@ -596,10 +597,9 @@ namespace TabCon.ViewModels{
 				dbMsg += ",wCollection=" + rCount + "件";
 				if (rCount < 1) {
 					dbMsg += ",データ入力無し";        //ObservableCollectionから該当モデルのフィールドのみを引き当てる
-					//Type CollectionType = Type.GetType(modelName + "Collection");
-					//Object bCollection = (Object)Activator.CreateInstance(CollectionType);
-					////			dbMsg += ",wCollection=" + bCollection.FullName;
-					//tablDataContext = bCollection;
+					Type CollectionType = Type.GetType(modelName + "Collection");
+					ICollection bCollection = (ICollection)Activator.CreateInstance(CollectionType);
+					tablDataContext = bCollection;
 				} else {
 					// データをそのままセットする
 					tablDataContext = wCollection;
@@ -674,6 +674,90 @@ namespace TabCon.ViewModels{
 			return property;
 		}
 
+		//登録/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand RegistrationRecord {
+			get { return new Livet.Commands.ViewModelCommand(RegistRecord); }
+		}
+
+		/// <summary>
+		/// 新規登録・更新
+		/// </summary>
+		public void RegistRecord()
+		{
+			string TAG = "RegistRecord";
+			string dbMsg = "[MySQLBase]";
+			try {
+				RaisePropertyChanged("tablActiveRecord");
+				//				RaisePropertyChanged("tableSelectorSelected");
+				if(tablActiveRecord != null) {
+					int seleIndex = tablActiveRecord.Index;
+					dbMsg += "選択行=" + seleIndex;
+					List<object> rRecords = new List<object>();
+					List<object> wC = wCollection.ToList();
+					//	IList<object> rDataContex = new List<object>(tablDataContext );
+					if (0< wCollection.Count) {
+						foreach (var rRec in wCollection) {
+							rRecords.Add(rRec);
+						}
+						object rRecord = tablActiveRecord.DataPresenter.ActiveDataItem; // rRecords[seleIndex];//
+						wModel = (Object)Activator.CreateInstance(modelType);
+						DateTime dt = DateTime.Now;
+						int FieldCount = 0;
+						foreach (var rFeild in rRecord.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField)) {
+
+							//					foreach (var rFeild in wCollection[seleIndex].GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+							dbMsg += "\r\n(" + FieldCount + ")" + rFeild.Name ;
+					//		Type rTypet = rFeild.PropertyType;
+							string rType = rFeild.PropertyType.Name;
+							dbMsg += ",rType=" + rType;
+							dbMsg += ",rFeild=" + rFeild.ToString();
+									var rValue = rFeild.GetValue(rRecord);                 ///.GetValue(FieldCount);はオブジェクトがターゲットの型と一致しません。
+						//	var rValue = wCollection.ToList();		[seleIndex][FieldCount];
+							foreach (var wFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+								if (rFeild.Name.Equals(wFeild.Name)) {
+									if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
+										wFeild.SetValue(wModel, null);
+									} else if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+										wFeild.SetValue(wModel, dt);
+									} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+										wFeild.SetValue(wModel, modifier);
+									} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+										wFeild.SetValue(wModel, dt);
+									} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+										wFeild.SetValue(wModel, creater);
+									} else {
+										
+										if (rType.Contains("Int32")) {
+											rFeild.SetValue(wModel, (Int32)rValue);
+										} else if (rType.Contains("String")) {
+											rFeild.SetValue(wModel, (String)rValue);
+										} else if (rType.Contains("DateTime")) {
+											rFeild.SetValue(wModel, (DateTime)rValue);
+										} else if (rType.Contains("Boolean")) {                       //tinyInt(1)
+											rFeild.SetValue(wModel, (Boolean)rValue);
+										} else if (rType.Contains("SByte")) {
+											rFeild.SetValue(wModel, (SByte)rValue);
+										} else if (rType.Contains("MySqlDecimal")) {
+											rFeild.SetValue(wModel, (MySqlDecimal)rValue);
+										} else {
+											dbMsg += ",該当型無し";
+											//	rFeild.SetValue(wModel, reader.GetValue(i));
+										}
+									}
+								}
+							}
+							FieldCount++;
+						}
+					}
+				}else{
+					dbMsg += ",選択行無し";
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		//レコード追加/////////////////////////////////////////////////////////////////////////
 		public ViewModelCommand AddRecord {
@@ -688,7 +772,7 @@ namespace TabCon.ViewModels{
 
 				DateTime dt = DateTime.Now;
 				wModel = (Object)Activator.CreateInstance(modelType);
-					foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+				foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
 					dbMsg += "\r\nrName=" + rFeild.Name + ",rType=" + rFeild.PropertyType;
 					if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
 						rFeild.SetValue(wModel, null);
@@ -706,7 +790,7 @@ namespace TabCon.ViewModels{
 					dbMsg += "=" + rFeild.ToString();
 				}
 				wCollection.Add(wModel);
-				tablDataContext = (IBindingList)wCollection;
+				tablDataContext = wCollection;
 				RaisePropertyChanged("tablDataContext");
 
 				MyLog(TAG, dbMsg);
@@ -740,119 +824,119 @@ namespace TabCon.ViewModels{
 		//レコードの追加は、データ ソースが IBindingList インターフェイスを実装して AllowNew プロパティから True を返す場合に限ってサポートされます。
 		//レコードの追加はすべてのビュー (たとえばカルーセル ビュー) でサポートされるわけではありません。
 
-		bool IBindingList.AllowNew => throw new NotImplementedException();
+	//	bool IBindingList.AllowNew => throw new NotImplementedException();
 
-		bool IBindingList.AllowEdit => throw new NotImplementedException();
+	//	bool IBindingList.AllowEdit => throw new NotImplementedException();
 
-		bool IBindingList.AllowRemove => throw new NotImplementedException();
-		bool IBindingList.SupportsChangeNotification => false;		//	throw new NotImplementedException();
+	//	bool IBindingList.AllowRemove => throw new NotImplementedException();
+	//	bool IBindingList.SupportsChangeNotification => false;		//	throw new NotImplementedException();
 
-		//bool IBindingList.SupportsChangeNotification()
-		//{
-		//	return new ArrayEnumerator();       //throw new NotImplementedException();
-		//}
+	//	//bool IBindingList.SupportsChangeNotification()
+	//	//{
+	//	//	return new ArrayEnumerator();       //throw new NotImplementedException();
+	//	//}
 
-		bool IBindingList.SupportsSearching => throw new NotImplementedException();
+	//	bool IBindingList.SupportsSearching => throw new NotImplementedException();
 
-		bool IBindingList.SupportsSorting => throw new NotImplementedException();
+	//	bool IBindingList.SupportsSorting => throw new NotImplementedException();
 
-		bool IBindingList.IsSorted => throw new NotImplementedException();
+	//	bool IBindingList.IsSorted => throw new NotImplementedException();
 
-		PropertyDescriptor IBindingList.SortProperty => throw new NotImplementedException();
+	//	PropertyDescriptor IBindingList.SortProperty => throw new NotImplementedException();
 
-		ListSortDirection IBindingList.SortDirection => throw new NotImplementedException();
+	//	ListSortDirection IBindingList.SortDirection => throw new NotImplementedException();
 
-		bool IList.IsReadOnly => throw new NotImplementedException();
+	//	bool IList.IsReadOnly => throw new NotImplementedException();
 
-		bool IList.IsFixedSize => throw new NotImplementedException();
+	//	bool IList.IsFixedSize => throw new NotImplementedException();
 
-		int ICollection.Count => throw new NotImplementedException();
+	//	int ICollection.Count => throw new NotImplementedException();
 
-		object ICollection.SyncRoot => throw new NotImplementedException();
+	//	object ICollection.SyncRoot => throw new NotImplementedException();
 
-		bool ICollection.IsSynchronized => throw new NotImplementedException();
+	//	bool ICollection.IsSynchronized => throw new NotImplementedException();
 
-		object IList.this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-		object IBindingList.AddNew()
-		{
-			throw new NotImplementedException();
-		}
+	//	object IList.this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+	//	object IBindingList.AddNew()
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IBindingList.AddIndex(PropertyDescriptor property)
-		{
-			throw new NotImplementedException();
-		}
+	//	void IBindingList.AddIndex(PropertyDescriptor property)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction)
-		{
-			throw new NotImplementedException();
-		}
+	//	void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		int IBindingList.Find(PropertyDescriptor property, object key)
-		{
-			throw new NotImplementedException();
-		}
+	//	int IBindingList.Find(PropertyDescriptor property, object key)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IBindingList.RemoveIndex(PropertyDescriptor property)
-		{
-			throw new NotImplementedException();
-		}
+	//	void IBindingList.RemoveIndex(PropertyDescriptor property)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IBindingList.RemoveSort()
-		{
-			throw new NotImplementedException();
-		}
+	//	void IBindingList.RemoveSort()
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		int IList.Add(object value)
-		{
-			throw new NotImplementedException();
-		}
+	//	int IList.Add(object value)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		bool IList.Contains(object value)
-		{
-			throw new NotImplementedException();
-		}
+	//	bool IList.Contains(object value)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IList.Clear()
-		{
-			throw new NotImplementedException();
-		}
+	//	void IList.Clear()
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		int IList.IndexOf(object value)
-		{
-			throw new NotImplementedException();
-		}
+	//	int IList.IndexOf(object value)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IList.Insert(int index, object value)
-		{
-			throw new NotImplementedException();
-		}
+	//	void IList.Insert(int index, object value)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IList.Remove(object value)
-		{
-			throw new NotImplementedException();
-		}
+	//	void IList.Remove(object value)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void IList.RemoveAt(int index)
-		{
-			throw new NotImplementedException();
-		}
+	//	void IList.RemoveAt(int index)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		void ICollection.CopyTo(Array array, int index)
-		{
-			throw new NotImplementedException();
-		}
+	//	void ICollection.CopyTo(Array array, int index)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return new ArrayEnumerator();
-			//			throw new NotImplementedException();   だとSystem.NotImplementedException: 'メソッドまたは操作は実装されていません。'
-		}
-		class ArrayEnumerator : IEnumerator {
-			public Object Current { get; }
-			public bool MoveNext() { return true; }
-			public void Reset() { }
-		}
+	//	IEnumerator IEnumerable.GetEnumerator()
+	//	{
+	//		return new ArrayEnumerator();
+	//		//			throw new NotImplementedException();   だとSystem.NotImplementedException: 'メソッドまたは操作は実装されていません。'
+	//	}
+	//	class ArrayEnumerator : IEnumerator {
+	//		public Object Current { get; }
+	//		public bool MoveNext() { return true; }
+	//		public void Reset() { }
+	//	}
 	}
 
 }
