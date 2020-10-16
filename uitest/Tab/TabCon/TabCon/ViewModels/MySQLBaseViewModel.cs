@@ -31,6 +31,7 @@ using System.Windows.Input;
 using TabCon.Infrastructures;
 using MySql.Data.Types;
 using System.Windows.Documents;
+using System.Data.SqlClient;
 
 namespace TabCon.ViewModels{
 	public class MySQLBaseViewModel : ViewModel {
@@ -551,9 +552,10 @@ namespace TabCon.ViewModels{
 									//} else {
 										foreach (var rFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
 											if (rFeild.Name.Equals(rName)) {
-												if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
-												//	rFeild.SetValue(wModel, "");
-												} else if (rVar == null || rVar.Equals("") || reader.IsDBNull(i)) {
+												//if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
+												////	rFeild.SetValue(wModel, "");
+												//} else 
+												if (rVar == null || rVar.Equals("") || reader.IsDBNull(i)) {
 													dbMsg += "null";
 													if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
 														rFeild.SetValue(wModel, dt);
@@ -568,11 +570,19 @@ namespace TabCon.ViewModels{
 													}
 												} else {
 													if (rType.Equals("Int32")) {
-														rFeild.SetValue(wModel, reader.GetInt32(i));
+														if(rVar==null) {
+															rFeild.SetValue(wModel,null);
+														} else {
+															rFeild.SetValue(wModel, reader.GetInt32(i));
+														}
 													} else if (rType.Equals("String")) {
 														rFeild.SetValue(wModel, reader.GetString(i));
 													} else if (rType.Equals("DateTime")) {
-														rFeild.SetValue(wModel, reader.GetDateTime(i));
+														if ((DateTime)rVar < DateTime.Now.AddYears(-1000)) {
+															rFeild.SetValue(wModel, null);
+														} else {
+															rFeild.SetValue(wModel, reader.GetDateTime(i));
+														}
 													} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
 														rFeild.SetValue(wModel, reader.GetBoolean(i));
 													} else if (rType.Equals("SByte")) {
@@ -688,72 +698,202 @@ namespace TabCon.ViewModels{
 			string TAG = "RegistRecord";
 			string dbMsg = "[MySQLBase]";
 			try {
+				String msgStr = "";
 				RaisePropertyChanged("tablActiveRecord");
-				//				RaisePropertyChanged("tableSelectorSelected");
 				if(tablActiveRecord != null) {
 					int seleIndex = tablActiveRecord.Index;
 					dbMsg += "選択行=" + seleIndex;
-					List<object> rRecords = new List<object>();
-					List<object> wC = wCollection.ToList();
-					//	IList<object> rDataContex = new List<object>(tablDataContext );
-					if (0< wCollection.Count) {
-						foreach (var rRec in wCollection) {
-							rRecords.Add(rRec);
-						}
-						object rRecord = tablActiveRecord.DataPresenter.ActiveDataItem; // rRecords[seleIndex];//
+					if(-1< seleIndex) { 
+						object rRecord = tablActiveRecord.DataPresenter.ActiveDataItem;
 						wModel = (Object)Activator.CreateInstance(modelType);
-						DateTime dt = DateTime.Now;
-						int FieldCount = 0;
-						foreach (var rFeild in rRecord.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField)) {
+						using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+							string cmdStr = "";
+							string nameStr = "";
+							string valeStr = "";
+							bool isInsret = false;
+							FieldCount = 0;
+							foreach (var rFeild in rRecord.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField)) {
+								dbMsg += "\r\n(" + FieldCount + ")" + rFeild.Name;
+								var rValue = rFeild.GetValue(rRecord);
+								if (rFeild.Name.Equals("id")) {
+									if((Int32)rValue < 1) {
+										dbMsg += ">>追加" ;
+										isInsret = true;
+									//}else{
+									//	dbMsg += ">>更新";
+									//	nameStr += rFeild.Name + ",";
+									//	valeStr += "@" + rFeild.Name + ",";
+									}
+								} else{
+									nameStr += rFeild.Name + ",";
+									valeStr += "@" + rFeild.Name + ",";
+								}
+							}
+							if(isInsret) {
+								 cmdStr = "insert into " + selectedTableName + " ( ";
+								cmdStr += nameStr.Substring(0, nameStr.Length-1) + ") values (";
+								cmdStr += valeStr.Substring(0, valeStr.Length - 1) + ")";
+								dbMsg += "\r\ncmdStr=" + cmdStr;
+							} else {
+								cmdStr = "UPDATE " + selectedTableName + " \r\nSET ";
+							}
+							FieldCount = 0;
+							// コマンドを作成
+							MySqlCommand cmd = new MySqlCommand(cmdStr, mySqlConnection);
+							DateTime dt = DateTime.Now;
+							int idVar = -1;
+							foreach (var rFeild in rRecord.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField)) {
+								string rName = (String)rFeild.Name;
+								dbMsg += "\r\n(" + FieldCount + ")" + rName;
+								string rType = rFeild.PropertyType.Name;
+								dbMsg += ",rType=" + rType;
+								dbMsg += ",rFeild=" + rFeild.ToString();
+								var rValue = rFeild.GetValue(rRecord);
+								foreach (var wFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+									if (rFeild.Name.Equals(wFeild.Name)) {
+										if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+											if (isInsret) {
+												cmd.Parameters.Add(new MySqlParameter(rName, dt));
+											} else {
+												cmdStr += rFeild.Name + "='" + dt + "'";
+											}
+										} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+											if (isInsret) {
+												cmd.Parameters.Add(new MySqlParameter(rName, modifier));
+											} else {
+												cmdStr += rFeild.Name + "='" + modifier + "' , ";
+											}
+										} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+											if (isInsret) {
+												cmd.Parameters.Add(new MySqlParameter(rName, dt));
+											} else {
+												cmdStr += rFeild.Name + "='" + dt + "' , ";
+											}
+										} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+											if (isInsret) {
+												cmd.Parameters.Add(new MySqlParameter(rName, creater));
+											} else {
+												cmdStr += rFeild.Name + "=" + creater + " , ";
+											}
+										} else if (rFeild.Name.Equals("id")) {
+											if (isInsret) {
+												if ((Int32)rValue < 1) {
+													cmd.Parameters.Add(new MySqlParameter(rName, null));
+												} else {
+													cmd.Parameters.Add(new MySqlParameter(rName, (Int32)rValue));
+												}
+											} else {
+												if ((Int32)rValue < 1) {
+												} else {
+													idVar = (Int32)rValue;
+												}
+											}
+										} else {// if(rValue != null)
+											if (rType.Contains("Int32")) {
+												if (isInsret) {
+													if ((Int32)rValue < 1) {
+														cmd.Parameters.Add(new MySqlParameter(rName, null));
+													} else {
+														cmd.Parameters.Add(new MySqlParameter(rName, (Int32)rValue));
+													}
+												} else {
+													if ((Int32)rValue < 1) {
+													} else {
+														cmdStr += rFeild.Name + "=" + (Int32)rValue + " , ";
+													}
+												}
+											} else if (rType.Contains("String")) {
+												if (isInsret) {
+													cmd.Parameters.Add(new MySqlParameter(rName, (String)rValue));
+												} else {
+													cmdStr += rFeild.Name + "=" + (String)rValue + " , ";
+												}
+											} else if (rType.Contains("DateTime")) {
+												if (isInsret) {
+													if ((DateTime)rValue < DateTime.Now.AddYears(-1000)) {
+														cmd.Parameters.Add(new MySqlParameter(rName, null));
+													} else {
+														cmd.Parameters.Add(new MySqlParameter(rName, (DateTime)rValue));
+													}
+												} else {
+													if ((DateTime)rValue < DateTime.Now.AddYears(-1000)) {
+									//					cmdStr += rFeild.Name + " = " + null;
+													} else {
+														cmdStr += rFeild.Name + "='" + (DateTime)rValue + "'";
+													}
+													if (!rFeild.Name.Contains("deleted_")) {
+														cmdStr += " , ";
+													}
+												}
 
-							//					foreach (var rFeild in wCollection[seleIndex].GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
-							dbMsg += "\r\n(" + FieldCount + ")" + rFeild.Name ;
-					//		Type rTypet = rFeild.PropertyType;
-							string rType = rFeild.PropertyType.Name;
-							dbMsg += ",rType=" + rType;
-							dbMsg += ",rFeild=" + rFeild.ToString();
-									var rValue = rFeild.GetValue(rRecord);                 ///.GetValue(FieldCount);はオブジェクトがターゲットの型と一致しません。
-						//	var rValue = wCollection.ToList();		[seleIndex][FieldCount];
-							foreach (var wFeild in wModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
-								if (rFeild.Name.Equals(wFeild.Name)) {
-									if (rFeild.Name.Equals("deleted_at") || rFeild.Name.Equals("deleted_on")) {
-										wFeild.SetValue(wModel, null);
-									} else if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
-										wFeild.SetValue(wModel, dt);
-									} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
-										wFeild.SetValue(wModel, modifier);
-									} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
-										wFeild.SetValue(wModel, dt);
-									} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
-										wFeild.SetValue(wModel, creater);
-									} else {
-										
-										if (rType.Contains("Int32")) {
-											rFeild.SetValue(wModel, (Int32)rValue);
-										} else if (rType.Contains("String")) {
-											rFeild.SetValue(wModel, (String)rValue);
-										} else if (rType.Contains("DateTime")) {
-											rFeild.SetValue(wModel, (DateTime)rValue);
-										} else if (rType.Contains("Boolean")) {                       //tinyInt(1)
-											rFeild.SetValue(wModel, (Boolean)rValue);
-										} else if (rType.Contains("SByte")) {
-											rFeild.SetValue(wModel, (SByte)rValue);
-										} else if (rType.Contains("MySqlDecimal")) {
-											rFeild.SetValue(wModel, (MySqlDecimal)rValue);
-										} else {
-											dbMsg += ",該当型無し";
-											//	rFeild.SetValue(wModel, reader.GetValue(i));
+											} else if (rType.Contains("Boolean")) {
+												if (isInsret) {
+													cmd.Parameters.Add(new MySqlParameter(rName, (Boolean)rValue));
+												} else {
+													cmdStr += rFeild.Name + "=" + (Boolean)rValue + " , ";
+												}
+											} else if (rType.Contains("SByte")) {
+												if (isInsret) {
+													cmd.Parameters.Add(new MySqlParameter(rName, (SByte)rValue));
+												} else {
+													cmdStr += rFeild.Name + "=" + (SByte)rValue + " , ";
+												}
+											} else if (rType.Contains("MySqlDecimal")) {
+												if (isInsret) {
+													cmd.Parameters.Add(new MySqlParameter(rName, (MySqlDecimal)rValue));
+												} else {
+													cmdStr += rFeild.Name + "=" + (MySqlDecimal)rValue + " , ";
+												}
+											} else {
+												dbMsg += ",該当型無し";
+											}
 										}
 									}
 								}
 							}
-							FieldCount++;
+
+							if (isInsret) {
+							} else {
+								cmdStr += " \r\n WHERE id='" + idVar + "'";
+								dbMsg += "\r\ncmdStr=" + cmdStr;
+								// コマンドを変更
+								cmd = new MySqlCommand(cmdStr, mySqlConnection);
+							}
+
+							MySqlCommand cmd2 =new MySqlCommand("SELECT LAST_INSERT_ID()", mySqlConnection);
+							try {
+								dbMsg += ",オープン";
+								cmd.Connection.Open();
+								dbMsg += ",実行";
+								cmd.ExecuteNonQuery();
+								var id = cmd2.ExecuteScalar();
+								dbMsg += ",更新ID" + id;
+								dbMsg += ",クローズ";
+								cmd.Connection.Close();
+								ReadTable(selectedTableName);
+								msgStr = "id" + id;
+								if (isInsret) {
+									msgStr += "で登録";
+								} else {
+									msgStr += "で更新";
+								}
+								msgStr += "できました(更新日時をご確認ください)";
+							} catch (SqlException ex) {
+								MyErrorLog(TAG, dbMsg, ex);
+								msgStr += "失敗しました" + ex;
+								MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Error);
+							}
 						}
+					} else{
+						msgStr = "登録/更新するレコードを選択して下さい。";
 					}
-				}else{
-					dbMsg += ",選択行無し";
+				} else{
+					msgStr = "登録/更新するレコードが選択されていません。";
 				}
 
+				if(!msgStr.Equals("")) {
+					MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -785,7 +925,9 @@ namespace TabCon.ViewModels{
 						rFeild.SetValue(wModel, dt);
 					} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
 						rFeild.SetValue(wModel, creater);
-					}else{
+					} else if (rFeild.Name.Equals("id")) {
+						rFeild.SetValue(wModel, null);
+					} else {
 						rFeild.SetValue(wModel, null);
 					}
 					dbMsg += "=" + rFeild.ToString();
@@ -838,127 +980,10 @@ namespace TabCon.ViewModels{
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
 
-
-		//レコードの追加は、データ ソースが IBindingList インターフェイスを実装して AllowNew プロパティから True を返す場合に限ってサポートされます。
-		//レコードの追加はすべてのビュー (たとえばカルーセル ビュー) でサポートされるわけではありません。
-
-	//	bool IBindingList.AllowNew => throw new NotImplementedException();
-
-	//	bool IBindingList.AllowEdit => throw new NotImplementedException();
-
-	//	bool IBindingList.AllowRemove => throw new NotImplementedException();
-	//	bool IBindingList.SupportsChangeNotification => false;		//	throw new NotImplementedException();
-
-	//	//bool IBindingList.SupportsChangeNotification()
-	//	//{
-	//	//	return new ArrayEnumerator();       //throw new NotImplementedException();
-	//	//}
-
-	//	bool IBindingList.SupportsSearching => throw new NotImplementedException();
-
-	//	bool IBindingList.SupportsSorting => throw new NotImplementedException();
-
-	//	bool IBindingList.IsSorted => throw new NotImplementedException();
-
-	//	PropertyDescriptor IBindingList.SortProperty => throw new NotImplementedException();
-
-	//	ListSortDirection IBindingList.SortDirection => throw new NotImplementedException();
-
-	//	bool IList.IsReadOnly => throw new NotImplementedException();
-
-	//	bool IList.IsFixedSize => throw new NotImplementedException();
-
-	//	int ICollection.Count => throw new NotImplementedException();
-
-	//	object ICollection.SyncRoot => throw new NotImplementedException();
-
-	//	bool ICollection.IsSynchronized => throw new NotImplementedException();
-
-	//	object IList.this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-	//	object IBindingList.AddNew()
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IBindingList.AddIndex(PropertyDescriptor property)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	int IBindingList.Find(PropertyDescriptor property, object key)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IBindingList.RemoveIndex(PropertyDescriptor property)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IBindingList.RemoveSort()
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	int IList.Add(object value)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	bool IList.Contains(object value)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IList.Clear()
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	int IList.IndexOf(object value)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IList.Insert(int index, object value)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IList.Remove(object value)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void IList.RemoveAt(int index)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	void ICollection.CopyTo(Array array, int index)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	IEnumerator IEnumerable.GetEnumerator()
-	//	{
-	//		return new ArrayEnumerator();
-	//		//			throw new NotImplementedException();   だとSystem.NotImplementedException: 'メソッドまたは操作は実装されていません。'
-	//	}
-	//	class ArrayEnumerator : IEnumerator {
-	//		public Object Current { get; }
-	//		public bool MoveNext() { return true; }
-	//		public void Reset() { }
-	//	}
 	}
 
 }
 /*
  C#からMySQLに接続する		https://dianxnao.com/c%E3%81%8B%E3%82%89mysql%E3%81%AB%E6%8E%A5%E7%B6%9A%E3%81%99%E3%82%8B/
-
+ C#からMySQLを扱う	https://www.moonmile.net/blog/archives/1298
  */

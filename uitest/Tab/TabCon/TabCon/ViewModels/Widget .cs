@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TabCon.ViewModels {
 	/// <summary>
-	/// Widget クラス。
+	/// IBindingListで使用されるWidget クラス。
 	/// </summary>
 	public class Widget {
 		/// <summary>

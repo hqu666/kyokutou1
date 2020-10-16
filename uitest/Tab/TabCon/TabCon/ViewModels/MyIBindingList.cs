@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 namespace TabCon.ViewModels {
 	/// <summary>
 	/// カスタム コレクション
+	/// レコードの追加は、データ ソースが IBindingList インターフェイスを実装して AllowNew プロパティから True を返す場合に限ってサポートされます。
+	///レコードの追加はすべてのビュー (たとえばカルーセル ビュー) でサポートされるわけではありません。　という注意書きで作成
 	/// </summary>
 	public class MyIBindingList : CollectionBase, IBindingList {
 		/// <summary>
