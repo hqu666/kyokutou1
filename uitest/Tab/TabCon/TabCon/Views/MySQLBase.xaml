@@ -149,7 +149,9 @@
 				/>-->
 		<Button   Grid.Row="16" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
-							Name="cancel_bt" Content="キャンセル" />
+							Name="cancel_bt" Content="キャンセル"
+							Command="{Binding CancelCommand}"
+							/>
 		<Button  Grid.Row="16" Grid.Column="1" 
 						HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"
 							  Name="del_bt" Content="削除"

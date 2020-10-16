@@ -132,7 +132,7 @@ namespace TabCon.ViewModels {
 				MyView.Info_lv.Content = dbMsg;
 				Views.MySQLBase rContent = new Views.MySQLBase();
 				//読込んだページを操作
-				//		rContent.MW = this;
+				rContent.VM.RootViewModel = this;
 				//rContent.CInfo_lb.Content = dbMsg + (MyView.ViewTab.MainTab.Items.Count + 1) + "番目に追加したTabItemです";
 				Add2Tab(rContent);
 			}

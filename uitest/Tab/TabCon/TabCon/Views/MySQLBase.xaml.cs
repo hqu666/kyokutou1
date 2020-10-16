@@ -19,7 +19,7 @@ namespace TabCon.Views {
 	/// </summary>
 	public partial class MySQLBase : Page {
 
-		ViewModels.MySQLBaseViewModel VM;
+		public ViewModels.MySQLBaseViewModel VM;
 		public MySQLBase()
 		{
 			InitializeComponent();

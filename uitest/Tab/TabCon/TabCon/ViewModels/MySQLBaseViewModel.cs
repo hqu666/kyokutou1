@@ -35,6 +35,7 @@ using System.Windows.Documents;
 namespace TabCon.ViewModels{
 	public class MySQLBaseViewModel : ViewModel {
 		public Views.MySQLBase MyView { get; set; }
+		public ViewModels.MainViewModel RootViewModel { get; set; }
 
 		public string server { get; set; }
 		public string database { get; set; }
@@ -798,7 +799,24 @@ namespace TabCon.ViewModels{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		//////////////////////////////////////////////////MySQL//
+		//キャンセル///////////////////////////////////////////////MySQL//
+		public ViewModelCommand CancelCommand {
+			get { return new Livet.Commands.ViewModelCommand(QuitMe); }
+		}
+		public void QuitMe()
+		{
+			string TAG = "QuitMe";
+			string dbMsg = "[MySQLBase]";
+			try {
+				DisConnect();
+				RootViewModel.MyView.ViewTab.DrelTabItem();
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		//////////////////////////////////////////////////キャンセル//
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
