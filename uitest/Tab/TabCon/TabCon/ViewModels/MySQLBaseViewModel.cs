@@ -941,6 +941,78 @@ namespace TabCon.ViewModels{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+		//レコード削除/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand DelCommand {
+			get { return new Livet.Commands.ViewModelCommand(RecordDel); }
+		}
+		public void RecordDel()
+		{
+			string TAG = "RecordDel";
+			string dbMsg = "[MySQLBase]";
+			try {
+				String msgStr = "";
+				RaisePropertyChanged("tablActiveRecord");
+				if (tablActiveRecord != null) {
+					int seleIndex = tablActiveRecord.Index;
+					dbMsg += "選択行=" + seleIndex;
+					if (-1 < seleIndex) {
+						using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+							bool isInsret = false;
+							MySqlCommand cmd = new MySqlCommand("delete from " + selectedTableName + " where id = @id", mySqlConnection);
+							object rRecord = tablActiveRecord.DataPresenter.ActiveDataItem;
+							wModel = (Object)Activator.CreateInstance(modelType);
+							foreach (var rFeild in rRecord.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField)) {
+								dbMsg += "\r\n(" + FieldCount + ")" + rFeild.Name;
+								var rValue = rFeild.GetValue(rRecord);
+								if (rFeild.Name.Equals("id")) {
+									if ((Int32)rValue < 1) {
+										dbMsg += ">>追加";
+										isInsret = true;
+									} else{
+										cmd.Parameters.Add(new MySqlParameter("id", (Int32)rValue));
+									}
+								}
+							}
+							if(!isInsret) {
+								MySqlCommand cmd2 = new MySqlCommand("SELECT LAST_INSERT_ID()", mySqlConnection);
+								try {
+									dbMsg += ",オープン";
+									cmd.Connection.Open();
+									dbMsg += ",実行";
+									cmd.ExecuteNonQuery();
+									var id = cmd2.ExecuteScalar();
+									dbMsg += ",更新ID" + id;
+									dbMsg += ",クローズ";
+									cmd.Connection.Close();
+									ReadTable(selectedTableName);
+									msgStr = "id" + id;
+									msgStr += "を削除";
+									msgStr += "できました";
+								} catch (SqlException ex) {
+									MyErrorLog(TAG, dbMsg, ex);
+									msgStr += "失敗しました" + ex;
+									MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Error);
+								}
+							}else{
+								msgStr = "未登録レコードです";
+							}
+						}
+					} else {
+						msgStr = "登録/更新するレコードを選択して下さい。";
+					}
+				} else {
+					msgStr = "登録/更新するレコードが選択されていません。";
+				}
+
+				if (!msgStr.Equals("")) {
+					MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				}
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 		//キャンセル///////////////////////////////////////////////MySQL//
 		public ViewModelCommand CancelCommand {
 			get { return new Livet.Commands.ViewModelCommand(QuitMe); }

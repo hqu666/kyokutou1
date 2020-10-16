@@ -156,7 +156,8 @@
 						HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"
 							  Name="del_bt" Content="削除"
 							  Visibility="{Binding delBtVisibility}"
-							  />
+							Command="{Binding DelCommand}"
+						  />
 		<Button  Grid.Row="16" Grid.Column="2" 
 						HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"
 							  Name="add_bt" Content="追加"
