@@ -91,6 +91,9 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="Controls\X_1_Control.xaml.cs">
+      <DependentUpon>X_1_Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CS_Util.cs" />
     <Compile Include="Infrastructures\ViewModelBase .cs" />
     <Compile Include="Models\MyMenu.cs" />
@@ -232,6 +235,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\X_1_Control.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Style\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

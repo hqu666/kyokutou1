@@ -162,3 +162,5 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsW
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Style\App.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Style\StyleDic.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Views\X-1-3.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\X_1_Control.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\X_1_Control.baml

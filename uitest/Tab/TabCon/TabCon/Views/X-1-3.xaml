@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TabCon.Views"
 	  xmlns:ig="http://schemas.infragistics.com/xaml"
+	  xmlns:controls="clr-namespace:TabCon.Controls"
 	  mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="月別表示">
@@ -23,54 +24,10 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" 
-							Grid.Row="0" Grid.Column="0">
-			<Button x:Name="UpDateBT" Content="更新" 
-							Width="40" Margin="5,5,5,5" VerticalAlignment="Center"  
-							/>
-			<Label Content="イベント種類" Margin="5,5,5,5" VerticalAlignment="Center"  />
-			<ComboBox x:Name="EventCombo" 
-								HorizontalAlignment="Left" Margin="5,5,5,5" VerticalAlignment="Center"  
-								FontSize="18"/>
-			<!--SelectionChanged="cbYearMonth_SelectionChanged"-->
-			<Label x:Name="CurrentDate" Content="2020年10月" Margin="5,5,5,5" VerticalAlignment="Center"  />
-			<Button x:Name="Back_bt" Content="▲" 
-							Margin="5,5,5,5" VerticalAlignment="Center"  
-							Width="29" RenderTransformOrigin="0.387,0.485" />
-			<Button x:Name="today_bt" Content="本日" 
-							Margin="5,5,5,5" VerticalAlignment="Center"  
-							Width="75" RenderTransformOrigin="0.387,0.485"/>
-			<Button x:Name="Next_bt" Content="▼" 
-							HorizontalAlignment="Left" 
-							Margin="5,5,5,5" VerticalAlignment="Center"  
-							Width="29" RenderTransformOrigin="0.387,0.485"/>
-			<Button  x:Name="Print_bt" Content="印刷" 
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						 />
-			<Button  x:Name="GoogleClender_bt" Content="Googleカレンダーに反映" 
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						 />
-			<Button Name="Dayly_bt" Content="日別"
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
-						 />
-			<Button Name="Weekly_bt"  Content="週別" 
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
-						/>
-			<Button Name="Monthly_bt"  Content="月別" 
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
-						/>
-			<Button Name="ScedList_bt"  Content="リスト" 
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						RenderTransformOrigin="0.485,-0.162" AutomationProperties.HelpText="作成中"
-						/>
-			<Button  x:Name="GDrive_bt" Content="ドライブを表示" Width="75"
-						Margin="5,5,5,5" VerticalAlignment="Center"  
-						 />
-		</StackPanel>
-		<ig:XamCalendar
+		<controls:X_1_Control x:Name="ControlPanel"
+										Grid.Row="0" Grid.Column="0"/>
+
+		<ig:XamCalendar x:Name="Calendar"
 			Grid.Row="1" Grid.Column="0"
 		/>
 	</Grid>
