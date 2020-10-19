@@ -1,9 +1,11 @@
-﻿using Livet;
+﻿using Infragistics.Controls.Schedules;
+using Livet;
 using Livet.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,9 +31,14 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public string CurrentDate { get; set; }
 
+		public Infragistics.DataManagerProvider CalendarDataManager{ get; set; }
+		public ObservableCollection<Resource> Resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
+		public ObservableCollection<Resource> calendars { get; set; }               //ResourceCalendarItemsSource
+		public ObservableCollection<Resource> appointments { get; set; }               //AppointmentItemsSource
+		public ObservableCollection<Resource> tasks { get; set; }               //TaskItemsSource
+		public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
 
-
-		public X_1_3ViewModel()
+	public X_1_3ViewModel()
 		{
 			Initialize();
 		}
@@ -46,6 +53,14 @@ namespace TabCon.ViewModels {
 				{ "3", "通常イベント" },
 			};
 			ToDaySet();
+
+			var dataConnector = new ListScheduleDataConnector();
+			dataConnector.ResourceItemsSource = Resources;
+			dataConnector.ResourceCalendarItemsSource = calendars;
+			dataConnector.AppointmentItemsSource = appointments;
+			dataConnector.TaskItemsSource = tasks;
+			dataConnector.JournalItemsSource = journals;
+
 		}
 
 		/// <summary>

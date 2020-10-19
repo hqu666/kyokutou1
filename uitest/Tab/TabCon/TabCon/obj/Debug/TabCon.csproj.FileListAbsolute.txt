@@ -164,3 +164,9 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Style\StyleDic.b
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Views\X-1-3.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\X_1_Control.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\X_1_Control.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Controls.Menus.XamMenu.v12.2.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Controls.Schedules.v12.2.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Controls.Menus.XamMenu.v12.2.xml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\InfragisticsWPF4.Controls.Schedules.v12.2.xml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.Controls.Menus.XamMenu.v12.2.resources.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\ja\InfragisticsWPF4.Controls.Schedules.v12.2.resources.dll

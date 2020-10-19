@@ -12,7 +12,9 @@
 using Infragistics;
 using Infragistics.Controls;
 using Infragistics.Controls.Editors;
+using Infragistics.Controls.Layouts;
 using Infragistics.Controls.Menus;
+using Infragistics.Controls.Schedules;
 using Infragistics.DragDrop;
 using Livet;
 using Livet.Behaviors;

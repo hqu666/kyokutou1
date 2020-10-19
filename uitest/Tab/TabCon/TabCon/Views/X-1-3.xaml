@@ -7,7 +7,7 @@
 	  xmlns:ig="http://schemas.infragistics.com/xaml"
 	  xmlns:controls="clr-namespace:TabCon.Controls"
 	  mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="750" d:DesignWidth="1000"
       Title="月別表示">
 
 	<!--<Page.Resources>
@@ -26,9 +26,37 @@
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
+		<ig:XamMonthView x:Name="Calendar"
+									Grid.Row="1" Grid.Column="0"
+									DataManager="{Binding ElementName=dataManager}"
+								 >
+		</ig:XamMonthView>
+		<ig:XamScheduleDataManager x:Name="dataManager"
+             DataConnector="{Binding ElementName=dataConnector}">
+			<ig:XamScheduleDataManager.CalendarGroups>
+				<ig:CalendarGroup InitialCalendarIds="own1[cal1]"/>
+			</ig:XamScheduleDataManager.CalendarGroups>
+		</ig:XamScheduleDataManager>
+		<ig:ListScheduleDataConnector x:Name="dataConnector" 
+													  ResourceItemsSource="{Binding resources}"
+													  ResourceCalendarItemsSource="{Binding calendars}"
+													  AppointmentItemsSource="{Binding appointments}"
+													  TaskItemsSource="{Binding tasks}"
+													  JournalItemsSource="{Binding journals}"
+													  />
 
-		<ig:XamCalendar x:Name="Calendar"
-			Grid.Row="1" Grid.Column="0"
-		/>
+		<!--
+		DataManager="{Binding ElementName=xamScheduleDataManager1}"/>
+		<ig:XamScheduleDataManager Name="xamScheduleDataManager1"
+                   DataConnector="{Binding ElementName=wcfListScheduleDataConnector1}"
+                   CurrentUserId="R0001" />
+		<ig:WcfListScheduleDataConnector Name="wcfListScheduleDataConnector1"
+															EndpointConfigurationName="CustomBinding_IWcfListConnectorService"
+															PollingInterval="00:00:30"
+															PollingMode="Detailed" />-->
+		<!--
+		https://codezine.jp/article/detail/5677?p=4
+		DataContext="{Binding  CalendarDataContext, Mode=TwoWay}"-->
+
 	</Grid>
 </Page>
