@@ -62,8 +62,26 @@ namespace TabCon.ViewModels {
 					Child = new List<MyMenu>()
 					{
 						new MyMenu() { Name = "MySQL",Value="MySQL" },
-						new MyMenu() { Name = "test1-2" },
-						new MyMenu() { Name = "test1-3" },
+						new MyMenu() { Name = "Googleドライブ",Value="W-1" },
+						new MyMenu()
+						{
+							Name = "スケジュール",
+							Child = new List<MyMenu>()
+							{
+								new MyMenu() { Name = "日別表示",Value="X-1-1" },
+								new MyMenu() { Name = "週別表示",Value="X-1-2" },
+								new MyMenu() { Name = "月別表示",Value="X-1-3" },
+								new MyMenu() { Name = "スケジュール",Value="X-1-4" },
+							}
+						},
+						new MyMenu()
+						{
+							Name = "システム管理",
+							Child = new List<MyMenu>()
+							{
+								new MyMenu() { Name = "Googleアカウント認証",Value="Z-1-5" },
+							}
+						},
 					}
 				},
 				new MyMenu()
@@ -127,6 +145,13 @@ namespace TabCon.ViewModels {
 				MyView.ViewTab.AddTab();
 				MyView.Info_lv.Content = "ViewTabControl : UserControlからPageクラスのViewをTabに読込みます";
 
+			} else if (selectedValue == "X-1-3") {
+				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダにスケジュールを書き込みます\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.X_1_3 rContent = new Views.X_1_3();
+				//読込んだページを操作
+				rContent.VM.RootViewModel = this;
+				Add2Tab(rContent);
 			} else if (selectedValue == "MySQL") {
 				dbMsg = "MySQLデータベースに接続し、コンボボックスで選択したテーブルを操作します\r\n";
 				MyView.Info_lv.Content = dbMsg;
@@ -162,9 +187,9 @@ namespace TabCon.ViewModels {
 		/// <param name="ViewName"></param>
 		public void Add2Tab(Page rContent)
 		{
-			MyView.ViewTab.MainTab.Height = rContent.MaxHeight;
-			MyView.ViewTab.MainTab.Width = rContent.MaxWidth;
-			MyView.Info_lv.Content += "サイズは" + MyView.ViewTab.MainTab.Width + "×" + MyView.ViewTab.MainTab.Height + "]です";
+			//MyView.ViewTab.MainTab.Height = rContent.MaxHeight;
+			//MyView.ViewTab.MainTab.Width = rContent.MaxWidth;
+			//MyView.Info_lv.Content += "サイズは" + MyView.ViewTab.MainTab.Width + "×" + MyView.ViewTab.MainTab.Height + "]です";
 
 			TabItem tab = new TabItem();
 			tab.Header = rContent.Title;                        ///"Tab" + (MyView.ViewTab.MainTab.Items.Count + 1);

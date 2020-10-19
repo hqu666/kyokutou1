@@ -11,6 +11,7 @@
 
 using Infragistics;
 using Infragistics.Controls;
+using Infragistics.Controls.Editors;
 using Infragistics.Controls.Menus;
 using Infragistics.DragDrop;
 using Livet;
