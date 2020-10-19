@@ -10,16 +10,19 @@
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		xmlns:b="clr-namespace:TabCon.Behaviors"
 		xmlns:ig="http://schemas.infragistics.com/xaml"
+		FontSize="14" 
+		WindowStartupLocation="CenterScreen"
+		Topmost="true" Height="1000" Width="1800"
+		Loaded="Window_Loaded" Closing="Window_Closing" 
 		Title="画面遷移確認"
-		SizeToContent="WidthAndHeight"
-		FontSize="14" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing" 
 		>
 	<!--
-	WindowStartupLocation="CenterScreen" 
+			SizeToContent="WidthAndHeight"
+WindowStartupLocation="CenterScreen" 
 	<Window.DataContext>
 		<vm:MainViewModel />
 	</Window.DataContext>-->
-	<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+	<!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">-->
 		<!--<i:Interaction.Triggers>
 			<i:EventTrigger EventName="ContentRendered">
 				-->
@@ -80,8 +83,11 @@
 							Height="Auto"  Width="Auto"
 							MinHeight="50" Margin="5,5,965,5"/>
 
-			<local:ViewTabControl x:Name="ViewTab" Height="Auto"
-						Grid.Row="1" Grid.Column="1"/>
+			<local:ViewTabControl x:Name="ViewTab" Height="Auto" Width="Auto"
+						Grid.Row="1" Grid.Column="1"
+						VerticalAlignment="Stretch" 
+						HorizontalAlignment="Stretch" 
+						/>
 		</Grid>
-	</ScrollViewer>
+	<!--</ScrollViewer>-->
 </Window>
