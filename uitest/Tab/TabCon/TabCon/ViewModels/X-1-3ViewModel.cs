@@ -1,4 +1,5 @@
 ﻿using Livet;
+using Livet.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,11 +45,7 @@ namespace TabCon.ViewModels {
 				{ "2", "工程イベント" },
 				{ "3", "通常イベント" },
 			};
-			//EventComboSelectedIndex = (0).ToString();
-			//RaisePropertyChanged("EventComboSelectedIndex");
-
-			SelectedDateTime = DateTime.Now;
-			CurrentDate = String.Format("yyyy年MM月", SelectedDateTime);
+			ToDaySet();
 		}
 
 		/// <summary>
@@ -78,6 +75,95 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
+
+		//戻し/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand BackDate {
+			get { return new Livet.Commands.ViewModelCommand(DateBack); }
+		}
+		/// <summary>
+		/// 戻る
+		/// </summary>
+		public void DateBack()
+		{
+			string TAG = "DateBack";
+			string dbMsg = "[MySQLBase]";
+			try {
+				SelectedDateTime = SelectedDateTime.AddMonths(-1);
+				dbMsg += SelectedDateTime + "に戻す";
+				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
+				dbMsg += ">>" + CurrentDate;
+				RaisePropertyChanged("CurrentDate");
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		//本日/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand SetToDay {
+			get { return new Livet.Commands.ViewModelCommand(ToDaySet); }
+		}
+		/// <summary>
+		/// 本日に指定
+		/// </summary>
+		public void ToDaySet()
+		{
+			string TAG = "ToDaySet";
+			string dbMsg = "[MySQLBase]";
+			try {
+				SelectedDateTime = DateTime.Now;
+				dbMsg += "今日は" + SelectedDateTime;
+				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
+				dbMsg += ">>" + CurrentDate;
+				RaisePropertyChanged("CurrentDate");
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		//進める/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand SendDate {
+			get { return new Livet.Commands.ViewModelCommand(DateSend); }
+		}
+		/// <summary>
+		/// 進める
+		/// </summary>
+		public void DateSend()
+		{
+			string TAG = "DateSend";
+			string dbMsg = "[MySQLBase]";
+			try {
+				SelectedDateTime = SelectedDateTime.AddMonths(1);
+				dbMsg += SelectedDateTime + "に進める";
+				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
+				dbMsg += ">>" + CurrentDate;
+				RaisePropertyChanged("CurrentDate");
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		//登録/////////////////////////////////////////////////////////////////////////
+		public ViewModelCommand RegistrationEvent {
+			get { return new Livet.Commands.ViewModelCommand(EventRegistration); }
+		}
+		/// <summary>
+		/// Googleカレンダーに反映
+		/// </summary>
+		public void EventRegistration()
+		{
+			string TAG = "EventRegistration";
+			string dbMsg = "[MySQLBase]";
+			try {
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		//////////////////////////////////////////////////キャンセル//
 		public static void MyLog(string TAG, string dbMsg)

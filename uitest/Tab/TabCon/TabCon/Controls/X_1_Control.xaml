@@ -17,13 +17,11 @@
 								SelectedIndex="{Binding EventComboSelectedIndex , Mode=TwoWay}" 
 								SelectedValuePath="Key" DisplayMemberPath="Value"
 								HorizontalAlignment="Left" Margin="5,5,5,5" VerticalAlignment="Center" Width="100" />
-			<!--
-															SelectedItem="{Binding EventComboSelectedItem , Mode=TwoWay}" 
-				 
-			SelectionChanged="cbYearMonth_SelectionChanged"-->
-			<Label x:Name="CurrentDate" Content="{Binding CurrentDate}" 
+
+			<Label x:Name="CurrentDate" Content="{Binding CurrentDate , Mode=TwoWay}" 
 						Margin="5,5,5,5" VerticalAlignment="Center"  MinWidth="100" />
 			<Button x:Name="Back_bt" Content="▲" 
+					Command="{Binding BackDate}"
 							Margin="5,5,5,-35" VerticalAlignment="Center"  
 							Width="20" Height="20">
 				<Button.RenderTransform>
@@ -36,10 +34,11 @@
 				</Button.RenderTransform>
 			</Button>
 			<Button x:Name="today_bt" Content="本日" 
-							Margin="5,5,5,5" VerticalAlignment="Center"  
+							Command="{Binding SetToDay}"
+						Margin="5,5,5,5" VerticalAlignment="Center"  
 							Width="50" RenderTransformOrigin="0.387,0.485"/>
 			<Button x:Name="Next_bt" Content="▼" 
-							HorizontalAlignment="Left" 
+							Command="{Binding SendDate}"
 							Margin="5,5,5,-35" VerticalAlignment="Center"  
 							Width="20" Height="20">
 				<Button.RenderTransform>
@@ -56,6 +55,7 @@
 						 />
 			<Button  x:Name="GoogleClender_bt" Content="Googleカレンダーに反映" 
 						Margin="5,5,5,5" VerticalAlignment="Center"  
+						Command="{Binding RegistrationEvent}"
 						 />
 			<Button Name="Dayly_bt" Content="日別"
 						Margin="5,5,5,5" VerticalAlignment="Center"  
