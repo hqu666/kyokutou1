@@ -35,7 +35,7 @@ namespace TabCon.Views {
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			VM.MyView = this;
-			//		VM.Control = ControlPanel;
+		//	VM.Control = ControlPanel;
 		}
 
 	}

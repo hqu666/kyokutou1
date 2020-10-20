@@ -28,20 +28,26 @@
 										Grid.Row="0" Grid.Column="0"/>
 		<ig:XamMonthView x:Name="MyCalendar"
 									Grid.Row="1" Grid.Column="0"
-									ShowCalendarCloseButton="False" ShowCalendarOverlayButton="False" WorkingDaysSource="AllResourcesInGroups"
-									DataManager="{Binding ElementName=dataManager}"
-								/>
-		<ig:XamScheduleDataManager x:Name="dataManager"
-             DataConnector="{Binding ElementName=dataConnector}">
+									ShowCalendarCloseButton="False" 
+									ShowCalendarOverlayButton="False"
+									CalendarDisplayMode="Overlay" WorkingDaysSource="AllResourcesInGroups"
+									DataManager="{Binding dataManager}" 
+									/>
+		<!--
+									DataManager="{Binding ElementName=dataManager}" の場合
+		<ig:XamScheduleDataManager x:Name="dataManager" 
+             DataConnector="{Binding dataConnector}">
 			<ig:XamScheduleDataManager.CalendarGroups>
 				<ig:CalendarGroup InitialCalendarIds="own1[cal1]"/>
 			</ig:XamScheduleDataManager.CalendarGroups>
-		</ig:XamScheduleDataManager>
+		</ig:XamScheduleDataManager>-->
+		<!--
+		 DataConnector="{Binding ElementName=dataConnector}"の場合
 		<ig:ListScheduleDataConnector x:Name="dataConnector" 
 													  ResourceItemsSource="{Binding resources}"
 													  ResourceCalendarItemsSource="{Binding calendars}"
 													  AppointmentItemsSource="{Binding appointments}"
-													  />
+													  />-->
 		<!--TaskItemsSource="{Binding tasks}"
 													  JournalItemsSource="{Binding journals}"-->
 

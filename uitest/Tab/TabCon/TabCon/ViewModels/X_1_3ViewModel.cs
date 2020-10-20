@@ -31,12 +31,16 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public string CurrentDate { get; set; }
 
-		public Infragistics.DataManagerProvider CalendarDataManager{ get; set; }
+		public XamScheduleDataManager dataManager { get; set; }
+		public　ListScheduleDataConnector dataConnector { get; set; }
 		public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
 		public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
 		public ObservableCollection<Appointment> appointments { get; set; }               //AppointmentItemsSource
-		//public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
-		//public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
+																						  //public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
+																						  //public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
+
+
+
 
 		public X_1_3ViewModel()
 		{
@@ -53,26 +57,59 @@ namespace TabCon.ViewModels {
 				{ "3", "通常イベント" },
 			};
 			ToDaySet();
-			caleenderWrite();
-
-
-
+			CalenderWrite();
 		}
 
-		public void caleenderWrite() {
-			string TAG = "caleenderWrite";
+		public void CalenderWrite() {
+			string TAG = "CalenderWrite";
 			string dbMsg = "[MySQLBase]";
 			try {
 				//リソースとカレンダー
 				resources = new ObservableCollection<Resource>();
+
 				Resource resAmanda = new Resource() { Id = "own1", Name = "Amanda" };
 				resources.Add(resAmanda);
+
 				calendars = new ObservableCollection<ResourceCalendar>();
 				ResourceCalendar calAmanda = new ResourceCalendar() {
 					Id = "cal1",
 					OwningResourceId = "own1"
 				};
 				calendars.Add(calAmanda);
+				appointments = WriteEvent();
+
+
+				dataConnector =new ListScheduleDataConnector();
+				dataConnector.ResourceItemsSource = resources;
+				dataConnector.ResourceCalendarItemsSource = calendars;
+				dataConnector.AppointmentItemsSource = appointments;
+				 //カレンダー グループを作成し、初期カレンダーを設定
+				 dataManager = new XamScheduleDataManager();
+				dataManager.DataConnector = dataConnector;
+				CalendarGroupCollection calGroups = dataManager.CalendarGroups;
+				CalendarGroup calGroup = new CalendarGroup();
+				calGroup.InitialCalendarIds = "own1[cal1]";
+				calGroups.Add(calGroup);
+				/**
+				 * 
+//最後にコントロールを生成する場合は
+XamDayView dayView = new XamDayView();
+dayView.DataManager = dataManager;
+this.PageRoot.Children.Add(dayView);
+*/
+				RaisePropertyChanged();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		public ObservableCollection<Appointment> WriteEvent()
+		{
+			string TAG = "WriteEvent";
+			string dbMsg = "[MySQLBase]";
+			try {
+
 				//予定作成///////////////////////////////////////////
 				appointments = new ObservableCollection<Appointment>();
 				Appointment app1 = new Appointment() {
@@ -104,8 +141,8 @@ namespace TabCon.ViewModels {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return appointments;
 		}
-
 
 
 		/// <summary>
