@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Infragistics.Controls.Schedules;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +20,9 @@ namespace TabCon.Views {
 	/// X_1_3.xaml の相互作用ロジック
 	/// </summary>
 	public partial class X_1_3 : Page {
+
 		public ViewModels.X_1_3ViewModel VM;
+
 		public X_1_3()
 		{
 			InitializeComponent();
@@ -31,10 +35,8 @@ namespace TabCon.Views {
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			VM.MyView = this;
-			VM.Control = ControlPanel;
-			//((ViewModels.MySQLBaseViewModel)this.DataContext).MyView = this;
+			//		VM.Control = ControlPanel;
 		}
-
 
 	}
 }

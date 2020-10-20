@@ -32,13 +32,13 @@ namespace TabCon.ViewModels {
 		public string CurrentDate { get; set; }
 
 		public Infragistics.DataManagerProvider CalendarDataManager{ get; set; }
-		public ObservableCollection<Resource> Resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
-		public ObservableCollection<Resource> calendars { get; set; }               //ResourceCalendarItemsSource
-		public ObservableCollection<Resource> appointments { get; set; }               //AppointmentItemsSource
-		public ObservableCollection<Resource> tasks { get; set; }               //TaskItemsSource
-		public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
+		public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
+		public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
+		public ObservableCollection<Appointment> appointments { get; set; }               //AppointmentItemsSource
+		//public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
+		//public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
 
-	public X_1_3ViewModel()
+		public X_1_3ViewModel()
 		{
 			Initialize();
 		}
@@ -53,15 +53,60 @@ namespace TabCon.ViewModels {
 				{ "3", "通常イベント" },
 			};
 			ToDaySet();
+			caleenderWrite();
 
-			var dataConnector = new ListScheduleDataConnector();
-			dataConnector.ResourceItemsSource = Resources;
-			dataConnector.ResourceCalendarItemsSource = calendars;
-			dataConnector.AppointmentItemsSource = appointments;
-			dataConnector.TaskItemsSource = tasks;
-			dataConnector.JournalItemsSource = journals;
+
 
 		}
+
+		public void caleenderWrite() {
+			string TAG = "caleenderWrite";
+			string dbMsg = "[MySQLBase]";
+			try {
+				//リソースとカレンダー
+				resources = new ObservableCollection<Resource>();
+				Resource resAmanda = new Resource() { Id = "own1", Name = "Amanda" };
+				resources.Add(resAmanda);
+				calendars = new ObservableCollection<ResourceCalendar>();
+				ResourceCalendar calAmanda = new ResourceCalendar() {
+					Id = "cal1",
+					OwningResourceId = "own1"
+				};
+				calendars.Add(calAmanda);
+				//予定作成///////////////////////////////////////////
+				appointments = new ObservableCollection<Appointment>();
+				Appointment app1 = new Appointment() {
+					Id = "t1",
+					OwningResourceId = "own1",
+					OwningCalendarId = "cal1",
+					Subject = "Appointment 1",
+					Description = "My first appointment",
+					// タイムゾーンはこのスニペットで設定しないため、
+					// 日付をグリニッジ標準時へ変換します
+					Start = DateTime.Today.AddHours(9).AddMinutes(12).ToUniversalTime(),
+					End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
+				};
+				appointments.Add(app1);
+				Appointment app2 = new Appointment() {
+					Id = "t2",
+					OwningResourceId = "own1",
+					OwningCalendarId = "cal1",
+					Subject = "Appointment 2",
+					Description = "My second appointment",
+					// タイムゾーンはこのスニペットで設定しないため、
+					// 日付をグリニッジ標準時へ変換します
+					Start = DateTime.Today.AddHours(10).AddMinutes(12).ToUniversalTime(),
+					End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
+				};
+				appointments.Add(app2);
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 
 		/// <summary>
 		/// イベント選択

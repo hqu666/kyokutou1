@@ -26,11 +26,11 @@
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
-		<ig:XamMonthView x:Name="Calendar"
+		<ig:XamMonthView x:Name="MyCalendar"
 									Grid.Row="1" Grid.Column="0"
+									ShowCalendarCloseButton="False" ShowCalendarOverlayButton="False" WorkingDaysSource="AllResourcesInGroups"
 									DataManager="{Binding ElementName=dataManager}"
-								 >
-		</ig:XamMonthView>
+								/>
 		<ig:XamScheduleDataManager x:Name="dataManager"
              DataConnector="{Binding ElementName=dataConnector}">
 			<ig:XamScheduleDataManager.CalendarGroups>
@@ -41,22 +41,9 @@
 													  ResourceItemsSource="{Binding resources}"
 													  ResourceCalendarItemsSource="{Binding calendars}"
 													  AppointmentItemsSource="{Binding appointments}"
-													  TaskItemsSource="{Binding tasks}"
-													  JournalItemsSource="{Binding journals}"
 													  />
-
-		<!--
-		DataManager="{Binding ElementName=xamScheduleDataManager1}"/>
-		<ig:XamScheduleDataManager Name="xamScheduleDataManager1"
-                   DataConnector="{Binding ElementName=wcfListScheduleDataConnector1}"
-                   CurrentUserId="R0001" />
-		<ig:WcfListScheduleDataConnector Name="wcfListScheduleDataConnector1"
-															EndpointConfigurationName="CustomBinding_IWcfListConnectorService"
-															PollingInterval="00:00:30"
-															PollingMode="Detailed" />-->
-		<!--
-		https://codezine.jp/article/detail/5677?p=4
-		DataContext="{Binding  CalendarDataContext, Mode=TwoWay}"-->
+		<!--TaskItemsSource="{Binding tasks}"
+													  JournalItemsSource="{Binding journals}"-->
 
 	</Grid>
 </Page>

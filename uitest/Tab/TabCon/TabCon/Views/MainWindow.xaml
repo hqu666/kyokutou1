@@ -81,7 +81,7 @@ WindowStartupLocation="CenterScreen"
 			<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
 							Grid.Row="0" Grid.Column="1" 
 							Height="Auto"  Width="Auto"
-							MinHeight="50" Margin="5,5,965,5"/>
+							MinHeight="50" Margin="5,5,5,5"/>
 
 			<local:ViewTabControl x:Name="ViewTab" Height="Auto" Width="Auto"
 						Grid.Row="1" Grid.Column="1"
