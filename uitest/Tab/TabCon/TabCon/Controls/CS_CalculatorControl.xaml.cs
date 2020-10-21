@@ -54,14 +54,11 @@ namespace TabCon.Controls {
 			}
 		}
 
-		private void ClearBt_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			Initialize();
-		}
 		private void ClearFunc()
 		{
 			if (0 < BeforeVal.Length) {
 				BeforeVal = BeforeVal.Substring(0, BeforeVal.Length - 1);
+				CalcProcess.Text = BeforeVal;
 			}
 			//if(0<BeforeVals.Count) {
 			//	if (BeforeOperation.Equals("Plus")) {
@@ -80,6 +77,7 @@ namespace TabCon.Controls {
 		private void EnterFunc()
 		{
 			if(CalcOperation.Content.Equals("")) {
+
 				MyCallBack();
 				rootView.CalcWindowCloss();
 			} else{
@@ -104,11 +102,19 @@ namespace TabCon.Controls {
 		private void DivideFunc()
 		{
 			BeforeOperation = "Slash";
-			BeforeVals.Add(Double.Parse( BeforeVal));
-			if (ProcessVal == 0) {
-				MessageBox.Show("0は除算できません");
-			} else{ 
-				ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+			//割る値が有る
+			if (!BeforeVal.Equals("")) {
+				BeforeVals.Add(Double.Parse(BeforeVal));
+				//割られる値が有る；0除算にならない
+				if (ProcessVal != 0) {
+				//割り算を既に指定されている
+					if (CalcOperation.Content.Equals("÷")) {
+						ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+					}
+				} else {
+					//	MessageBox.Show("0は除算できません");
+					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+				}
 				CalcResult.Content = ProcessVal.ToString();
 				CalcOperation.Content = "÷";
 				BeforeVal = "";
@@ -121,12 +127,18 @@ namespace TabCon.Controls {
 		private void MultiplyFunc()
 		{
 			BeforeOperation = "Asterisk";
-			BeforeVals.Add(Double.Parse(BeforeVal));
-			ProcessVal *= BeforeVals[BeforeVals.Count - 1];
-			CalcResult.Content = ProcessVal.ToString();
-			CalcOperation.Content = "×";
-			BeforeVal = "";
-			CalcProcess.Text = BeforeVal;
+			if (!BeforeVal.Equals("")) {
+				BeforeVals.Add(Double.Parse(BeforeVal));
+				if (ProcessVal != 0) {
+					ProcessVal *= BeforeVals[BeforeVals.Count - 1];
+				} else {
+					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+				}
+				CalcResult.Content = ProcessVal.ToString();
+				CalcOperation.Content = "×";
+				BeforeVal = "";
+				CalcProcess.Text = BeforeVal;
+			}
 		}
 		/// <summary>
 		/// 減算
@@ -134,12 +146,18 @@ namespace TabCon.Controls {
 		private void MinusFunc()
 		{
 			BeforeOperation = "Minus";
-			BeforeVals.Add(Double.Parse(BeforeVal));
-			ProcessVal -= BeforeVals[BeforeVals.Count - 1];
-			CalcResult.Content = ProcessVal.ToString();
-			CalcOperation.Content = "―";
-			BeforeVal = "";
-			CalcProcess.Text = BeforeVal;
+			if (!BeforeVal.Equals("")) {
+				BeforeVals.Add(Double.Parse(BeforeVal));
+				if (ProcessVal != 0) {
+					ProcessVal -= BeforeVals[BeforeVals.Count - 1];
+				} else {
+					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+				}
+				CalcResult.Content = ProcessVal.ToString();
+				CalcOperation.Content = "―";
+				BeforeVal = "";
+				CalcProcess.Text = BeforeVal;
+			}
 		}
 		/// <summary>
 		/// 加算
@@ -147,12 +165,18 @@ namespace TabCon.Controls {
 		private void PlusFunc()
 		{
 			BeforeOperation = "Plus";
-			BeforeVals.Add(Double.Parse(BeforeVal));
-			ProcessVal += BeforeVals[BeforeVals.Count - 1];
-			CalcResult.Content = ProcessVal.ToString();
-			CalcOperation.Content = "＋";
-			BeforeVal = "";
-			CalcProcess.Text = BeforeVal;
+			if (!BeforeVal.Equals("")) {
+				BeforeVals.Add(Double.Parse(BeforeVal));
+				if (ProcessVal != 0) {
+					ProcessVal += BeforeVals[BeforeVals.Count - 1];
+				} else {
+					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+				}
+				CalcResult.Content = ProcessVal.ToString();
+				CalcOperation.Content = "＋";
+				BeforeVal = "";
+				CalcProcess.Text = BeforeVal;
+			}
 		}
 		/// <summary>
 		/// 小数点
@@ -186,6 +210,10 @@ namespace TabCon.Controls {
 		private void ClearBt_Click(object sender, RoutedEventArgs e)
 		{
 			ClearFunc();
+		}
+		private void ClearAllBt_Click(object sender, RoutedEventArgs e)
+		{
+			Initialize();
 		}
 
 		private void PeriodBt_Click(object sender, RoutedEventArgs e)
@@ -312,9 +340,11 @@ namespace TabCon.Controls {
 				case Key.Divide:
 					DivideFunc();
 					break;
-				//		case Key.OemClear:
-				case Key.Delete:
+				case Key.Back:
 					ClearFunc();
+					break;
+				case Key.Delete:
+					Initialize();
 					break;
 				case Key.Enter:
 					EnterFunc();
@@ -327,6 +357,7 @@ namespace TabCon.Controls {
 		{
 			MyCallBack();
 		}
+
 
 		//private void CalcProcess_TextChanged(object sender, TextChangedEventArgs e)
 		//{

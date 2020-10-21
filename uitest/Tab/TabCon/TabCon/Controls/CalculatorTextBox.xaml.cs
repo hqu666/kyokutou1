@@ -24,6 +24,7 @@ namespace TabCon.Controls {
 		public Window CalcWindow;
 		public string CalcText { get; set; }
 		public int FieldFontSize { get; set; }
+		public int FieldWidth { get; set; }
 		public string ViewTitle { get; set; }
 
 		public CalculatorTextBox()
@@ -32,17 +33,25 @@ namespace TabCon.Controls {
 			ViewTitle = "";
 			this.Loaded += this_loaded;
 		}
-		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
+		//リソースの読込みが終わったら
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			Initialize();
 		}
+
+		/// <summary>
+		/// パラメータを取得して、このコントローラのリソースを調整
+		/// </summary>
 		public void Initialize()
 		{
 			string TAG = "Initialize";
 			string dbMsg = "[CalculatorTextBox]";
 			try {
 				dbMsg += ",FieldFontSize=" + FieldFontSize;
+				CalcTB.FontSize = (int)FieldFontSize;
+				dbMsg += ",FieldWidth=" + FieldWidth;
+				CalcTB.Width = (int)FieldWidth;
+				dbMsg += ",ViewTitle=" + ViewTitle;
 				CalcText = CalcTB.Text;
 				dbMsg += ",元の書込み=" + CalcText;
 				MyLog(TAG, dbMsg);
@@ -51,6 +60,11 @@ namespace TabCon.Controls {
 			}
 		}
 
+		/// <summary>
+		/// 電卓アイコンボタン押下
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CalcBT_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "CalcBT_Click";
@@ -91,9 +105,12 @@ namespace TabCon.Controls {
 			}
 		}
 
+
 		public  void CalcWindowCloss()
 		{
-			CalcWindow.Close();
+			if(CalcWindow.IsLoaded) {
+				CalcWindow.Close();
+			}
 		}
 
 		//////////////////////////////////////////////////電卓//

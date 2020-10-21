@@ -37,21 +37,21 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Label x:Name="CalcResult" Content="C/CAボタンは1クリックで1文字、"
+		<Label x:Name="CalcResult" Content="C(BackSpace)ボタンは1クリックで1文字、"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
 							/>
 		<Label x:Name="CalcOperation" Content=""
 							Grid.Row="1" Grid.Column="0"
 							Width="Auto"
 							/>
-		<TextBox x:Name="CalcProcess" Text="ダブルクリックで全消去"
+		<TextBox x:Name="CalcProcess" Text="CA(Delete)で全消去"
 							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
 							FontSize="18"
 							/>
 		<!--Content="{Binding process ,Mode=TwoWay}"-->
-		<Button x:Name="ClearBt" Content="C/CA" 
-					Grid.Row="2" Grid.Column="0" FontSize="12"
-					Command="{Binding ClearClick}" Click="ClearBt_Click" MouseDoubleClick="ClearBt_MouseDoubleClick"  />
+		<Button x:Name="ClearBt" Content="C"
+					Grid.Row="2" Grid.Column="0" 
+					Command="{Binding ClearClick}" Click="ClearBt_Click" />
 
 		<Button x:Name="SlashBt" Content="/" 
 					Grid.Row="2" Grid.Column="1" FontSize="14"
@@ -93,8 +93,12 @@
 					Grid.Row="5" Grid.Column="2"
 					Command="{Binding ThreeClick}" Click="ThreeBt_Click"  />
 
+		<Button x:Name="ClearAllBt" Content="CA" 
+					Grid.Row="6" Grid.Column="0"  Background="#FFFBF3F3"
+					Click="ClearAllBt_Click"
+					/>
 		<Button x:Name="ZeroBt" Content="0" 
-					Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+					Grid.Row="6" Grid.Column="1"
 					Command="{Binding ZeroClick}" Click="ZeroBt_Click"  />
 		<Button x:Name="PeriodBt" Content="." 
 					Grid.Row="6" Grid.Column="2"

@@ -10,26 +10,59 @@
 
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="120" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Button x:Name="ShowCalc_bt" Content="電卓を表示" 
+
+		<Label  Content="電卓を表示" 
+						Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+							Margin="5,5,5,5" VerticalAlignment="Center"  
+							/>
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
+							Margin="0,5,5,5">
+			<Label  Content="フォントサイズ" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextFontSize" Text="18"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextFontSize_TextChanged"  
+						/>
+			<Label  Content="幅" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTexWidth" Text="120"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTexWidth_TextChanged"  
+						/>
+			<Label  Content="ダイアログタイトル" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextDLogTitol" Text="電卓を表示するフィールドから"
+						Margin="5,5,5,5" VerticalAlignment="Center"  
+						/>
+
+			<!--<Button x:Name="ShowCalc_bt" Content="電卓を表示" 
 							Command="{Binding ShowCalc}"
 							Grid.Row="0" Grid.Column="0"
 							Margin="5,5,5,5" VerticalAlignment="Center"  
 							/>
+															FieldFontSize="{Binding ElementName=CalcTextFontSize}"
+																	FieldWidth="{Binding ElementName=CalcTexWidth}"
+			
+							-->
+		</StackPanel>
 			<Controls:CalculatorTextBox x:Name="CalcTextSammple"
-				FieldFontSize="18"
-				Width="200"
-				Grid.Row="1" Grid.Column="1"
-			/>
+													Grid.Row="1" Grid.Column="1"
+													FieldFontSize="18"
+													FieldWidth="120"
+													ViewTitle="電卓を表示するフィールドから"
+														/>
 		<Label Content=">参照>"
 					Grid.Row="1" Grid.Column="2"
 			/>

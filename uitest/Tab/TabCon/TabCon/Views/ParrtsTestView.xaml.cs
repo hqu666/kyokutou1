@@ -35,8 +35,16 @@ namespace TabCon.Views {
 			//	VM.Control = ControlPanel;
 		}
 
+		private void CalcTextFontSize_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			TextBox TB = sender as TextBox;
+		//	CalcTextSammple.FieldFontSize = int.Parse(TB.Text);
+		}
 
-
-
+		private void CalcTexWidth_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			TextBox TB = sender as TextBox;
+	//		CalcTextSammple.FieldWidth = int.Parse(TB.Text);
+		}
 	}
 }

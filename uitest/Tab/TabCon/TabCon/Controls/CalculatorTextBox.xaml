@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TabCon.Controls"
              mc:Ignorable="d" 
-			 FontSize="{Binding FieldFontSize}"
 			 Width="Auto" Height="Auto">
 	<UserControl.Resources>
+
 		<Style TargetType="Button" >
 			<Setter Property="Background" Value="White" />
 			<Setter Property="Foreground" Value="#FF056096" />
@@ -74,10 +74,16 @@
 				</VisualStateManager.VisualStateGroups>
 		</Grid>
 		</ControlTemplate>
+
+		<!--<ResourceDictionary>
+			<BitmapImage x:Key="ImageSource1" UriSource="./Resources/CalcIcon.png" />
+		</ResourceDictionary>-->
 	</UserControl.Resources>
+
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
@@ -85,11 +91,22 @@
 		</Grid.RowDefinitions>
 		<TextBox x:Name="CalcTB"
 			Text="{Binding CalcText ,Mode=TwoWay}"
-			MinWidth="100"
+			MinWidth="120"
 			Grid.Row="0" Grid.Column="0"
 			/>
-		<Button x:Name="CalcBT" Content="電卓"
-			Grid.Row="0" Grid.Column="1" Click="CalcBT_Click"
-			/>
+		<!--FontSize="{Binding FieldFontSize}"-->
+
+		<Button x:Name="CalcBT"
+			Height="Auto"
+			Grid.Row="0" Grid.Column="1" 
+			Click="CalcBT_Click"	>
+			<Grid >
+				<Image x:Name="image0" Source="/TabCon;component/Resources/CalcIcon.png"
+							Height="12"
+							HorizontalAlignment="Stretch"
+							VerticalAlignment="Stretch" />
+			</Grid>
+		</Button>
+
 	</Grid>
 </UserControl>
