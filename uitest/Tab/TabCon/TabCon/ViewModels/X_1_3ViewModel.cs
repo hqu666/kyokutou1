@@ -262,7 +262,7 @@ this.PageRoot.Children.Add(dayView);
 			}
 		}
 
-		//////////////////////////////////////////////////キャンセル//
+		//////////////////////////////////////////////////登録//
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();

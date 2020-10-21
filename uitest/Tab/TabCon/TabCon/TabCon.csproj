@@ -95,6 +95,12 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="Controls\CalculatorTextBox.xaml.cs">
+      <DependentUpon>CalculatorTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CS_CalculatorControl.xaml.cs">
+      <DependentUpon>CS_CalculatorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\X_1_Control.xaml.cs">
       <DependentUpon>X_1_Control.xaml</DependentUpon>
     </Compile>
@@ -202,6 +208,7 @@
     <Compile Include="ViewModels\ChildViewModel.cs" />
     <Compile Include="ViewModels\MyIBindingList.cs" />
     <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
+    <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
     <Compile Include="ViewModels\Widget .cs" />
     <Compile Include="ViewModels\X_1_3ViewModel.cs" />
@@ -226,6 +233,9 @@
     <Compile Include="Views\NaviWindow.xaml.cs">
       <DependentUpon>NaviWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ParrtsTestView.xaml.cs">
+      <DependentUpon>ParrtsTestView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\X_1_3.xaml.cs">
       <DependentUpon>X_1_3.xaml</DependentUpon>
     </Compile>
@@ -239,6 +249,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\CalculatorTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CS_CalculatorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\X_1_Control.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -278,6 +296,10 @@
     <Page Include="Views\NaviWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ParrtsTestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\X_1_3.xaml">
       <SubType>Designer</SubType>

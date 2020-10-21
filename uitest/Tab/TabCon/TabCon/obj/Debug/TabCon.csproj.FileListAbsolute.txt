@@ -171,3 +171,9 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csproj.Co
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.exe
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.pdb
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csprojAssemblyReference.cache
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Views\ParrtsTestView.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Views\ParrtsTestView.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\CS_CalculatorControl.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\CS_CalculatorControl.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\CalculatorTextBox.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\Controls\CalculatorTextBox.baml

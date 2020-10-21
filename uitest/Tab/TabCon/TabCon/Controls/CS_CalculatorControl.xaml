@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="TabCon.Controls.CS_CalculatorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TabCon.Controls"
+             mc:Ignorable="d" 
+			 Height="Auto" FontSize="16"
+             d:DesignHeight="350" d:DesignWidth="300" 
+			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
+			 KeyDown="UserControl_KeyDown" Unloaded="UserControl_Unloaded">
+
+	<UserControl.Resources>
+		<Style TargetType="Button">
+			<Setter Property="FontSize" Value="24" />
+			<Setter Property="Foreground" Value="Black" />
+			<Setter Property="Margin" Value="2" />
+			<Setter Property="VerticalAlignment" Value="Stretch" />
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+		</Style>
+
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Label x:Name="CalcResult" Content="C/CAボタンは1クリックで1文字、"
+							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+							/>
+		<Label x:Name="CalcOperation" Content=""
+							Grid.Row="1" Grid.Column="0"
+							Width="Auto"
+							/>
+		<TextBox x:Name="CalcProcess" Text="ダブルクリックで全消去"
+							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
+							FontSize="18"
+							/>
+		<!--Content="{Binding process ,Mode=TwoWay}"-->
+		<Button x:Name="ClearBt" Content="C/CA" 
+					Grid.Row="2" Grid.Column="0" FontSize="12"
+					Command="{Binding ClearClick}" Click="ClearBt_Click" MouseDoubleClick="ClearBt_MouseDoubleClick"  />
+
+		<Button x:Name="SlashBt" Content="/" 
+					Grid.Row="2" Grid.Column="1" FontSize="14"
+					Command="{Binding SlashClick}" Click="SlashBt_Click"  />
+		<Button x:Name="AsteriskBt" Content="*" 
+					Grid.Row="2" Grid.Column="2"
+					Command="{Binding AsteriskClick}" Click="AsteriskBt_Click"  />
+		<Button x:Name="MinusBt" Content="-" 
+					Grid.Row="2" Grid.Column="3"
+					Command="{Binding MinusClick}" Click="MinusBt_Click" />
+
+		<Button x:Name="SevenBt" Content="7" 
+					Grid.Row="3" Grid.Column="0"
+					Command="{Binding SevenClick}" Click="SevenBt_Click"  />
+		<Button x:Name="EightBt" Content="8" 
+					Grid.Row="3" Grid.Column="1"
+					Command="{Binding EightClick}" Click="EightBt_Click"  />
+		<Button x:Name="NineBt" Content="9" 
+					Grid.Row="3" Grid.Column="2"
+					Command="{Binding NineClick}" Click="NineBt_Click"  />
+
+		<Button x:Name="FourBt" Content="4" 
+					Grid.Row="4" Grid.Column="0"
+					Command="{Binding FourBtClick}" Click="FourBt_Click"  />
+		<Button x:Name="FiveBt" Content="5" 
+					Grid.Row="4" Grid.Column="1"
+					Command="{Binding FiveClick}"  Click="FiveBt_Click"  />
+		<Button x:Name="SixBt" Content="6" 
+					Grid.Row="4" Grid.Column="2"
+					Command="{Binding SixClick}" Click="SixBt_Click"  />
+
+		<Button x:Name="OneBt" Content="1" 
+					Grid.Row="5" Grid.Column="0"
+					Command="{Binding FOneBtClick}" Click="OneBt_Click"  />
+		<Button x:Name="TwoBt" Content="2" 
+					Grid.Row="5" Grid.Column="1"
+					Command="{Binding TwoClick}" Click="TwoBt_Click"  />
+		<Button x:Name="ThreeBt" Content="3" 
+					Grid.Row="5" Grid.Column="2"
+					Command="{Binding ThreeClick}" Click="ThreeBt_Click"  />
+
+		<Button x:Name="ZeroBt" Content="0" 
+					Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+					Command="{Binding ZeroClick}" Click="ZeroBt_Click"  />
+		<Button x:Name="PeriodBt" Content="." 
+					Grid.Row="6" Grid.Column="2"
+					Command="{Binding PeriodClick}" Click="PeriodBt_Click"  />
+		
+		<Button x:Name="PlusBt" Content="+" 
+					Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"
+					Command="{Binding PlusClick}" Click="PlusBt_Click"  />
+		<Button x:Name="EnterBt" Content="Enter"  FontSize="12"
+					Grid.Row="5" Grid.Column="3" Grid.RowSpan="2"
+					Command="{Binding PlusClick}" Click="EnterBt_Click"  />
+
+	</Grid>
+
+</UserControl>

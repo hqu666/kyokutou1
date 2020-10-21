@@ -84,6 +84,7 @@ namespace TabCon.ViewModels {
 						},
 					}
 				},
+				new MyMenu() { Name = "パーツテスト",Value="ParrtsTest" },
 				new MyMenu()
 				{
 					Name = "簡易テスト",
@@ -110,8 +111,12 @@ namespace TabCon.ViewModels {
 								new MyMenu() { Name = "閉じる",Value="CloseCommand" },
 							}
 						}
+
+
+
 					}
 				}
+
 			};
 
 		}
@@ -145,6 +150,13 @@ namespace TabCon.ViewModels {
 				MyView.ViewTab.AddTab();
 				MyView.Info_lv.Content = "ViewTabControl : UserControlからPageクラスのViewをTabに読込みます";
 
+			} else if (selectedValue == "ParrtsTest") {
+				dbMsg = "カスタムコントロールのテストです\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.ParrtsTestView rContent = new Views.ParrtsTestView();
+				//読込んだページを操作
+				rContent.VM.RootViewModel = this;
+				Add2Tab(rContent);
 			} else if (selectedValue == "X-1-3") {
 				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダにスケジュールを書き込みます\r\n";
 				MyView.Info_lv.Content = dbMsg;
