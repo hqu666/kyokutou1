@@ -7,80 +7,12 @@
              mc:Ignorable="d" 
 			 Width="Auto" Height="Auto">
 	<UserControl.Resources>
-
-		<Style TargetType="Button" >
-			<Setter Property="Background" Value="White" />
-			<Setter Property="Foreground" Value="#FF056096" />
-		</Style>
-		<!--フラットボタン用のコントロールテンプレート-->
-		
-		<ControlTemplate  x:Key="ButtonTemplate" TargetType="Button">
-			<!--角の丸みを取りたいためGridを使用-->
-			<Grid x:Name="MyButton" Background="{TemplateBinding Background}">
-				<!--ボタンの枠線-->
-				<Border x:Name="MyBorder" BorderBrush="#1570A6" BorderThickness="1"/>
-				<!--ボタン内のコンテンツ（テキストなど）-->
-				<ContentPresenter x:Name="Presenter"
-                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                         Margin="10" />
-				<!--各イベントで表示を変えたいためVisualStateManagerを使用する-->
-				<VisualStateManager.VisualStateGroups>
-					<VisualStateGroup Name="CommonStates">
-						<!--通常時（これが無いとマウスが外れても表示が戻らない）-->
-						<VisualState Name="Normal" />
-						<!--マウスオーバー時-->
-						<VisualState Name="MouseOver">
-							<Storyboard>
-								<ColorAnimation Storyboard.TargetName="MyButton"
-                                       Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="#1570A6" />
-								<ColorAnimation Storyboard.TargetName="Presenter"
-                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="white" />
-							</Storyboard>
-						</VisualState>
-						<!--ボタン押下時-->
-						<VisualState Name="Pressed">
-							<Storyboard>
-								<ColorAnimation Storyboard.TargetName="MyButton"
-                                       Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="#2580B6" />
-								<ColorAnimation Storyboard.TargetName="Presenter"
-                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="white" />
-								<ThicknessAnimation Storyboard.TargetName="MyButton"
-                                            Storyboard.TargetProperty="Margin"
-                                            Duration="00:00:00.1"
-                                            To="0,0,0,0" />
-							</Storyboard>
-						</VisualState>
-						<!--ボタン無効化時-->
-						<VisualState Name="Disabled">
-							<Storyboard>
-								<ColorAnimation Storyboard.TargetName="MyBorder"
-                                       Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)"
-                                       To="Gray"/>
-								<ColorAnimation Storyboard.TargetName="Presenter"
-                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                       To="Gray"/>
-							</Storyboard>
-						</VisualState>
-					</VisualStateGroup>
-				</VisualStateManager.VisualStateGroups>
-		</Grid>
-		</ControlTemplate>
-
 		<!--<ResourceDictionary>
 			<BitmapImage x:Key="ImageSource1" UriSource="./Resources/CalcIcon.png" />
 		</ResourceDictionary>-->
 	</UserControl.Resources>
 
-	<Grid>
+	<Grid Background="White">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="Auto" />
@@ -92,20 +24,31 @@
 		<TextBox x:Name="CalcTB"
 			Text="{Binding CalcText ,Mode=TwoWay}"
 			MinWidth="120"
+			MinHeight="18"
 			Grid.Row="0" Grid.Column="0"
 			/>
 		<!--FontSize="{Binding FieldFontSize}"-->
 
 		<Button x:Name="CalcBT"
+			Grid.Row="0" Grid.Column="1"
 			Height="Auto"
-			Grid.Row="0" Grid.Column="1" 
+			MinWidth="20"
 			Click="CalcBT_Click"	>
-			<Grid >
+			<Button.Background>
+				<ImageBrush ImageSource="CalcIcon.png" Stretch="UniformToFill"/>
+			</Button.Background>
+			<!--<Grid  Height="14">
 				<Image x:Name="image0" Source="/TabCon;component/Resources/CalcIcon.png"
-							Height="12"
-							HorizontalAlignment="Stretch"
-							VerticalAlignment="Stretch" />
-			</Grid>
+							StretchDirection="DownOnly"
+							Stretch="UniformToFill"
+							/>
+				-->
+			<!--Width="{Binding RelativeSource={RelativeSource Self},Path=Source.PixelWidth}"
+							 Height="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelHeight}"
+							 Height="{Binding ElementName=CalcTB.Height}"
+							 -->
+			<!--
+			</Grid>-->
 		</Button>
 
 	</Grid>

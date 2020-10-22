@@ -8,7 +8,7 @@
 			 Height="Auto" FontSize="16"
              d:DesignHeight="350" d:DesignWidth="300" 
 			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
-			 KeyDown="UserControl_KeyDown" Unloaded="UserControl_Unloaded">
+			 Unloaded="UserControl_Unloaded" KeyDown="UserControl_KeyDown" >
 
 	<UserControl.Resources>
 		<Style TargetType="Button">
@@ -19,7 +19,73 @@
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 		</Style>
 
+		<ControlTemplate  x:Key="ButtonTemplate" TargetType="Button">
+				<!--角の丸みを取りたいためGridを使用-->
+				<Grid x:Name="MyButton" Background="{TemplateBinding Background}">
+					<!--ボタンの枠線-->
+					<Border x:Name="MyBorder" BorderBrush="#1570A6" BorderThickness="1"/>
+					<!--ボタン内のコンテンツ（テキストなど）-->
+					<ContentPresenter x:Name="Presenter"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         Margin="10" />
+					<!--各イベントで表示を変えたいためVisualStateManagerを使用する-->
+					<VisualStateManager.VisualStateGroups>
+						<VisualStateGroup Name="CommonStates">
+							<!--通常時（これが無いとマウスが外れても表示が戻らない）-->
+							<VisualState Name="Normal" />
+							<!--マウスオーバー時-->
+							<VisualState Name="MouseOver">
+								<Storyboard>
+									<ColorAnimation Storyboard.TargetName="MyButton"
+                                       Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                       Duration="00:00:00.1"
+                                       To="#1570A6" />
+									<ColorAnimation Storyboard.TargetName="Presenter"
+                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                       Duration="00:00:00.1"
+                                       To="white" />
+								<!--To="white"-->
+							</Storyboard>
+							</VisualState>
+							<!--ボタン押下時-->
+							<VisualState Name="Pressed">
+								<Storyboard>
+									<ColorAnimation Storyboard.TargetName="MyButton"
+                                       Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                       Duration="00:00:00.1"
+                                       To="DarkGray" />
+								<!--To="#2580B6"-->
+								<ColorAnimation Storyboard.TargetName="Presenter"
+                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                       Duration="00:00:00.1"
+                                       To="white" />
+									<ThicknessAnimation Storyboard.TargetName="MyButton"
+                                            Storyboard.TargetProperty="Margin"
+                                            Duration="00:00:00.1"
+                                            To="0,0,0,0" />
+								</Storyboard>
+							</VisualState>
+							<!--ボタン無効化時-->
+							<VisualState Name="Disabled">
+								<Storyboard>
+									<ColorAnimation Storyboard.TargetName="MyBorder"
+                                       Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)"
+                                       To="Gray"/>
+									<ColorAnimation Storyboard.TargetName="Presenter"
+                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                       To="Gray"/>
+								</Storyboard>
+							</VisualState>
+						</VisualStateGroup>
+					</VisualStateManager.VisualStateGroups>
+				</Grid>
+			</ControlTemplate>
 	</UserControl.Resources>
+	<!--<UserControl.InputBindings>
+		<KeyBinding Command="{Binding ElementName=ClearBt ,TargetNullValue=Click}"
+              Gesture="Back" />
+	</UserControl.InputBindings>-->
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -37,18 +103,21 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Label x:Name="CalcResult" Content="C(BackSpace)ボタンは1クリックで1文字、"
-							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-							/>
-		<Label x:Name="CalcOperation" Content=""
-							Grid.Row="1" Grid.Column="0"
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
+			<Label x:Name="CalcResult" Content="C(BackSpace)ボタンは1クリックで1文字、"/>
+			<Label x:Name="CalcMemo" Content=""/>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
+			<Label x:Name="CalcOperation" Content=""
 							Width="Auto"
 							/>
-		<TextBox x:Name="CalcProcess" Text="CA(Delete)で全消去"
-							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
-							FontSize="18"
+			<TextBox x:Name="CalcProcess" Text="CA(Delete)で全消去"
+							FontSize="18" MinWidth="280"
 							/>
-		<!--Content="{Binding process ,Mode=TwoWay}"-->
+			<!--Content="{Binding process ,Mode=TwoWay}"-->
+		</StackPanel>
 		<Button x:Name="ClearBt" Content="C"
 					Grid.Row="2" Grid.Column="0" 
 					Command="{Binding ClearClick}" Click="ClearBt_Click" />
@@ -85,7 +154,7 @@
 
 		<Button x:Name="OneBt" Content="1" 
 					Grid.Row="5" Grid.Column="0"
-					Command="{Binding FOneBtClick}" Click="OneBt_Click"  />
+					Command="{Binding OneBtClick}" Click="OneBt_Click"  />
 		<Button x:Name="TwoBt" Content="2" 
 					Grid.Row="5" Grid.Column="1"
 					Command="{Binding TwoClick}" Click="TwoBt_Click"  />

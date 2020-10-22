@@ -50,7 +50,7 @@ namespace TabCon.Controls {
 				dbMsg += ",FieldFontSize=" + FieldFontSize;
 				CalcTB.FontSize = (int)FieldFontSize;
 				dbMsg += ",FieldWidth=" + FieldWidth;
-				CalcTB.Width = (int)FieldWidth;
+				CalcTB.Width = (int)FieldWidth+20;
 				dbMsg += ",ViewTitle=" + ViewTitle;
 				CalcText = CalcTB.Text;
 				dbMsg += ",元の書込み=" + CalcText;
@@ -74,8 +74,8 @@ namespace TabCon.Controls {
 				calculatorControl.rootView = this;
 				CalcText = CalcTB.Text;
 				dbMsg += ",元の書込み=" + CalcText;
-				calculatorControl.BeforeVal += (string)CalcText;
-				calculatorControl.CalcProcess.Text = calculatorControl.BeforeVal;
+				calculatorControl.InputStr += (string)CalcText;
+				calculatorControl.CalcProcess.Text = calculatorControl.InputStr;
 
 				CalcWindow = new Window {
 					Title = CalcTB.Name,

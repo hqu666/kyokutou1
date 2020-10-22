@@ -20,45 +20,67 @@ namespace TabCon.Controls {
 	public partial class CS_CalculatorControl : UserControl {
 
 		public CalculatorTextBox rootView;
+		/// <summary>
+		/// 計算結果
+		/// </summary>
 		public double ProcessVal = 0.0;
-		public string BeforeVal = "";
+		/// <summary>
+		/// キーボードもしくはボタンクリックで入力される値
+		/// </summary>
+		public string InputStr = "";
+		/// <summary>
+		/// 入力確定値の配列
+		/// </summary>
+		public IList<double> BeforeVals;
+		/// <summary>
+		/// 小数点以下の処理が必要
+		/// </summary>
 		public bool isDecimal = false;
+		/// <summary>
+		/// 直前の演算
+		/// </summary>
 		public string BeforeOperation ="";
-		public IList<double> BeforeVals ;
+		/// <summary>
+		/// 入力した演算子
+		/// </summary>
+		public string NowOperation = "";
 
+		/// <summary>
+		/// 最初の入力か
+		/// </summary>
+		private bool IsBegin = true;
+		/// <summary>
+		/// 表示直後のコメント
+		/// </summary>
+		private static string ProcessStartComment2 = "CA(Delete)で全消去";
 
 		public CS_CalculatorControl()
 		{
 			InitializeComponent();
 			Initialize();
+			CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
 		}
 
 		public void Initialize()
 		{
 			ProcessVal = 0.0;
-			BeforeVal = "";
+			InputStr = "";
 			isDecimal = false;
 			BeforeOperation = "";
 			BeforeVals = new List<double>();
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
-			CalcProcess.Text = "0";
+			CalcMemo.Content = "";
+			CalcProcess.Text = "";
 			CalcProcess.Focus();
+			IsBegin = true;
 		}
-
-		public void MyCallBack()
-		{
-			if(!CalcResult.Content.Equals("")) {
-				rootView.CalcTB.Text = (string)CalcResult.Content;
-			}
-		}
-
 		private void ClearFunc()
 		{
-			if (0 < BeforeVal.Length) {
-				BeforeVal = BeforeVal.Substring(0, BeforeVal.Length - 1);
-				CalcProcess.Text = BeforeVal;
+			if (0 < InputStr.Length) {
+				InputStr = InputStr.Substring(0, InputStr.Length - 1);
+				CalcProcess.Text = InputStr;
 			}
 			//if(0<BeforeVals.Count) {
 			//	if (BeforeOperation.Equals("Plus")) {
@@ -77,106 +99,229 @@ namespace TabCon.Controls {
 		private void EnterFunc()
 		{
 			if(CalcOperation.Content.Equals("")) {
-
-				MyCallBack();
-				rootView.CalcWindowCloss();
-			} else{
-				if (BeforeOperation.Equals("Plus")) {
-					ProcessVal += BeforeVals[BeforeVals.Count - 1];
-				} else if (BeforeOperation.Equals("Minus")) {
-					ProcessVal -= BeforeVals[BeforeVals.Count - 1];
-				} else if (BeforeOperation.Equals("Asterisk")) {
-					ProcessVal *= BeforeVals[BeforeVals.Count - 1];
-				} else if (BeforeOperation.Equals("Slash")) {
-					ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+				if(1 < BeforeVals.Count) {
+					//演算した経過が有れば終了
+					MyCallBack();
+					rootView.CalcWindowCloss();
+				}else if(IsContinuation()) {
+					//無ければ入力の有無を確認して継続
+					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+					SetResult("");
 				}
-				CalcResult.Content = ProcessVal.ToString();
-				CalcOperation.Content = "";
-				CalcProcess.Text = "0";
+			} else {
+				if (BeforeOperation.Equals("＋")) {
+					PlusFunc();
+			//		ProcessVal += BeforeVals[BeforeVals.Count - 1];
+				} else if (BeforeOperation.Equals("－")) {
+					MinusFunc();
+					//ProcessVal -= BeforeVals[BeforeVals.Count - 1];
+				} else if (BeforeOperation.Equals("×")) {
+					MultiplyFunc();
+				//	ProcessVal *= BeforeVals[BeforeVals.Count - 1];
+				} else if (BeforeOperation.Equals("÷")) {
+					DivideFunc();
+				//	ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+				}
+				//CalcResult.Content = ProcessVal.ToString();
+				//CalcOperation.Content = "";
+				//CalcProcess.Text = "0";
 			}
 		}
+	
+		/// <summary>
+		/// 最初の入力ではない
+		/// 各演算開始前に最初の入力値か否かを返す
+		/// </summary>
+		/// <returns></returns>
+		public bool IsContinuation()
+		{
+			bool retBool = false;
+			if (!InputStr.Equals("")) {
+				//演算値が有れば配列格納
+				BeforeVals.Add(Double.Parse(InputStr));
+				if (IsBegin) {
+					IsBegin = false;
+				}else{
+					retBool = true;
+				}
+			}
+			return retBool;
+		}
+
+		/// <summary>
+		/// 演算結果を表示し、次の入力を待つ
+		/// </summary>
+		/// <param name="OperationStr"></param>
+		public void SetResult(string OperationStr)
+		{
+			CalcResult.Content = ProcessVal.ToString();
+			CalcOperation.Content = OperationStr;
+			if(!InputStr.Equals("")) {
+				if (CalcMemo.Content.Equals("")) {
+					CalcMemo.Content += "=" + InputStr;
+				} else {
+					CalcMemo.Content += OperationStr + InputStr;
+				}
+			}
+			InputStr = "";
+			CalcProcess.Text = InputStr;
+		}
+
+		/// <summary>
+		/// 演算子キーが押された時点で前の演算を処理して、値の入力を待つ
+		/// </summary>
+		private void ProcessedFunc(string NextOperation)
+		{
+			if (!InputStr.Equals("")) {
+				//演算値が有れば配列格納
+				BeforeVals.Add(Double.Parse(InputStr));
+
+				if (BeforeOperation.Equals("")) {
+					//演算子が無ければそのまま格納
+					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+				} else{
+					//演算子が有れば演算
+					if (BeforeOperation.Equals("＋")) {
+						ProcessVal += BeforeVals[BeforeVals.Count - 1];
+					} else if (BeforeOperation.Equals("－")) {
+						ProcessVal -= BeforeVals[BeforeVals.Count - 1];
+					} else if (BeforeOperation.Equals("×")) {
+						ProcessVal *= BeforeVals[BeforeVals.Count - 1];
+					} else if (BeforeOperation.Equals("÷")) {
+						if(ProcessVal !=0) {
+							ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+						}
+					}
+				}
+				BeforeOperation = NextOperation;
+				SetResult(NextOperation);
+			} else {
+				//演算値が無ければ入力する値の演算区分だけを記入
+				BeforeOperation = NextOperation;
+				CalcOperation.Content = NextOperation;
+			}
+		}
+
 
 		/// <summary>
 		/// 除算
 		/// </summary>
 		private void DivideFunc()
 		{
-			BeforeOperation = "Slash";
-			//割る値が有る
-			if (!BeforeVal.Equals("")) {
-				BeforeVals.Add(Double.Parse(BeforeVal));
-				//割られる値が有る；0除算にならない
-				if (ProcessVal != 0) {
-				//割り算を既に指定されている
-					if (CalcOperation.Content.Equals("÷")) {
-						ProcessVal /= BeforeVals[BeforeVals.Count - 1];
-					}
-				} else {
-					//	MessageBox.Show("0は除算できません");
-					ProcessVal = BeforeVals[BeforeVals.Count - 1];
-				}
-				CalcResult.Content = ProcessVal.ToString();
-				CalcOperation.Content = "÷";
-				BeforeVal = "";
-				CalcProcess.Text = BeforeVal;
-			}
+			string NextOperation = "÷";
+			ProcessedFunc(NextOperation);
+
+			//BeforeOperation = "÷";
+			//if (!InputStr.Equals("")) {
+			//	//演算値が有れば配列格納
+			//	BeforeVals.Add(Double.Parse(InputStr));
+			//	if (1 == BeforeVals.Count) {
+			//		//それが最初の入力ならそのまま結果へ
+			//		ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			//	} else {
+			//		//既に結果が有れば演算
+			//		if (ProcessVal != 0) {
+			//			//割られる値が有る；0除算にならない
+			//			ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+			//		}
+			//	}
+			//}
+			//SetResult(BeforeOperation);
+			//////割る値が有る
+			////if (IsContinuation()) {
+			////	//割られる値が有る；0除算にならない
+			////	if (ProcessVal != 0) {
+			////	//割り算を既に指定されている
+			////		if (CalcOperation.Content.Equals("÷")) {
+			////			ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+			////		}
+			////	} else {
+			////		//	MessageBox.Show("0は除算できません");
+			////		ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			////	}
+			////	SetResult(BeforeOperation);
+			////}
 		}
+
 		/// <summary>
 		/// 積算
 		/// </summary>
 		private void MultiplyFunc()
 		{
-			BeforeOperation = "Asterisk";
-			if (!BeforeVal.Equals("")) {
-				BeforeVals.Add(Double.Parse(BeforeVal));
-				if (ProcessVal != 0) {
-					ProcessVal *= BeforeVals[BeforeVals.Count - 1];
-				} else {
-					ProcessVal = BeforeVals[BeforeVals.Count - 1];
-				}
-				CalcResult.Content = ProcessVal.ToString();
-				CalcOperation.Content = "×";
-				BeforeVal = "";
-				CalcProcess.Text = BeforeVal;
-			}
+			string NextOperation = "×";
+			ProcessedFunc(NextOperation);
+
+			//BeforeOperation = "×";
+			//if (!InputStr.Equals("")) {
+			//	//演算値が有れば配列格納
+			//	BeforeVals.Add(Double.Parse(InputStr));
+			//	if (1 == BeforeVals.Count) {
+			//		//それが最初の入力ならそのまま結果へ
+			//		ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			//	} else {
+			//		//既に結果が有れば演算
+			//		ProcessVal *= BeforeVals[BeforeVals.Count - 1];
+			//	}
+			//}
+			//SetResult(BeforeOperation);
+			////if (IsContinuation()) {
+			////	ProcessVal *= BeforeVals[BeforeVals.Count - 1];
+			////} else {
+			////	ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			////}
+			////SetResult(BeforeOperation);
 		}
 		/// <summary>
 		/// 減算
 		/// </summary>
 		private void MinusFunc()
 		{
-			BeforeOperation = "Minus";
-			if (!BeforeVal.Equals("")) {
-				BeforeVals.Add(Double.Parse(BeforeVal));
-				if (ProcessVal != 0) {
-					ProcessVal -= BeforeVals[BeforeVals.Count - 1];
-				} else {
-					ProcessVal = BeforeVals[BeforeVals.Count - 1];
-				}
-				CalcResult.Content = ProcessVal.ToString();
-				CalcOperation.Content = "―";
-				BeforeVal = "";
-				CalcProcess.Text = BeforeVal;
-			}
+			string NextOperation = "－";
+			ProcessedFunc(NextOperation);
+
+			//BeforeOperation = "－";
+			//if (!InputStr.Equals("")) {
+			//	//演算値が有れば配列格納
+			//	BeforeVals.Add(Double.Parse(InputStr));
+			//	if (1 == BeforeVals.Count) {
+			//		//それが最初の入力ならそのまま結果へ
+			//		ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			//	} else {
+			//		//既に結果が有れば演算
+			//		ProcessVal -= BeforeVals[BeforeVals.Count - 1];
+			//	}
+			//}
+			//SetResult(BeforeOperation);
+
+
+			////if (IsContinuation()) {
+			////	ProcessVal -= BeforeVals[BeforeVals.Count - 1];
+			////} else {
+			////	ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			////}
+			//SetResult(BeforeOperation);
 		}
 		/// <summary>
 		/// 加算
 		/// </summary>
 		private void PlusFunc()
 		{
-			BeforeOperation = "Plus";
-			if (!BeforeVal.Equals("")) {
-				BeforeVals.Add(Double.Parse(BeforeVal));
-				if (ProcessVal != 0) {
-					ProcessVal += BeforeVals[BeforeVals.Count - 1];
-				} else {
-					ProcessVal = BeforeVals[BeforeVals.Count - 1];
-				}
-				CalcResult.Content = ProcessVal.ToString();
-				CalcOperation.Content = "＋";
-				BeforeVal = "";
-				CalcProcess.Text = BeforeVal;
-			}
+			string NextOperation = "＋";
+			ProcessedFunc(NextOperation);
+
+			//BeforeOperation = "＋";
+			//if (!InputStr.Equals("")) {
+			//	//演算値が有れば配列格納
+			//	BeforeVals.Add(Double.Parse(InputStr));
+			//	if (1 == BeforeVals.Count) {
+			//		//それが最初の入力ならそのまま結果へ
+			//		ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			//	} else {
+			//		//既に結果が有れば演算
+			//		ProcessVal += BeforeVals[BeforeVals.Count - 1];
+			//	}
+			//}
+			//SetResult(BeforeOperation);
 		}
 		/// <summary>
 		/// 小数点
@@ -184,8 +329,8 @@ namespace TabCon.Controls {
 		private void DecimalFunc()
 		{
 			isDecimal = true;
-			BeforeVal += ".";
-			CalcProcess.Text = BeforeVal;
+			InputStr += ".";
+			CalcProcess.Text = InputStr;
 		}
 		private void PlusBt_Click(object sender, RoutedEventArgs e)
 		{
@@ -222,150 +367,257 @@ namespace TabCon.Controls {
 		}
 		private void ZeroBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "0";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "0";
+			CalcProcess.Text = InputStr;
 		}
 		private void OneBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "1";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "1";
+			CalcProcess.Text = InputStr;
 		}
 		private void TwoBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "2";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "2";
+			CalcProcess.Text = InputStr;
 		}
 		private void ThreeBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "3";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "3";
+			CalcProcess.Text = InputStr;
 		}
 		private void FourBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "4";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "4";
+			CalcProcess.Text = InputStr;
 		}
 		private void FiveBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "5";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "5";
+			CalcProcess.Text = InputStr;
 		}
 		private void SixBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "6";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "6";
+			CalcProcess.Text = InputStr;
 		}
 		private void SevenBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "7";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "7";
+			CalcProcess.Text = InputStr;
 		}
 		private void EightBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "8";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "8";
+			CalcProcess.Text = InputStr;
 		}
 		private void NineBt_Click(object sender, RoutedEventArgs e)
 		{
-			BeforeVal += "9";
-			CalcProcess.Text = BeforeVal;
+			InputStr += "9";
+			CalcProcess.Text = InputStr;
 		}
 
-		private void UserControl_KeyDown(object sender, KeyEventArgs e)
+		//private void UserControl_KeyDown(object sender, KeyEventArgs e)
+		//{
+		//	Key key = e.Key;
+		//	switch (key) {
+		//		case Key.NumPad1:
+		//		case Key.D1:
+		//			OneBt_Click(new object(),new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad2:
+		//		case Key.D2:
+		//			TwoBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad3:
+		//		case Key.D3:
+		//			ThreeBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad4:
+		//		case Key.D4:
+		//			FourBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad5:
+		//		case Key.D5:
+		//			FiveBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad6:
+		//		case Key.D6:
+		//			SixBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad7:
+		//		case Key.D7:
+		//			SevenBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad8:
+		//		case Key.D8:
+		//			EightBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad9:
+		//		case Key.D9:
+		//			NineBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.NumPad0:
+		//		case Key.D0:
+		//			ZeroBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.Decimal:
+		//			PeriodBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.Add:
+		//			PlusBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.Subtract:
+		//			MinusBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.Multiply:
+		//			AsteriskBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.Divide:
+		//			SlashBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//		case Key.Back:
+		//			ClearBt_Click(new object(), new RoutedEventArgs());
+		//		//	ClearFunc();
+		//			break;
+		//		case Key.Delete:
+		//			ClearAllBt_Click(new object(), new RoutedEventArgs());
+		////			Initialize();
+		//			break;
+		//		case Key.Enter:
+		//			EnterBt_Click(new object(), new RoutedEventArgs());
+		//			break;
+		//	}
+		//	CalcProcess.Focus();
+		//}
+
+		//private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
+		//{
+		//	var key = e.Source;
+		//	switch (key) {
+		//		case Key.Back:
+		//			ClearBt_Click(new object(), new RoutedEventArgs());
+		//			//	ClearFunc();
+		//			break;
+		//		case Key.Delete:
+		//			ClearAllBt_Click(new object(), new RoutedEventArgs());
+		//			//			Initialize();
+		//			break;
+		//	}
+		//}
+
+
+			public void MyCallBack()
 		{
-			var key = e.Key;
-			switch (key) {
-				case Key.NumPad1:
-				case Key.D1:
-					BeforeVal += "1";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad2:
-				case Key.D2:
-					BeforeVal += "2";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad3:
-				case Key.D3:
-					BeforeVal += "3";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad4:
-				case Key.D4:
-					BeforeVal += "4";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad5:
-				case Key.D5:
-					BeforeVal += "5";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad6:
-				case Key.D6:
-					BeforeVal += "6";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad7:
-				case Key.D7:
-					BeforeVal += "7";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad8:
-				case Key.D8:
-					BeforeVal += "8";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad9:
-				case Key.D9:
-					BeforeVal += "9";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.NumPad0:
-				case Key.D0:
-					BeforeVal += "0";
-					CalcProcess.Text = BeforeVal;
-					break;
-				case Key.Decimal:
-					DecimalFunc();
-					break;
-				case Key.Add:
-					PlusFunc();
-					break;
-				case Key.Subtract:
-					MinusFunc();
-					break;
-				case Key.Multiply:
-					MultiplyFunc();
-					break;
-				case Key.Divide:
-					DivideFunc();
-					break;
-				case Key.Back:
-					ClearFunc();
-					break;
-				case Key.Delete:
-					Initialize();
-					break;
-				case Key.Enter:
-					EnterFunc();
-					break;
+			if (!CalcResult.Content.Equals("")) {
+				rootView.CalcTB.Text = (string)CalcResult.Content;
 			}
-			CalcProcess.Focus();
 		}
+
 
 		private void UserControl_Unloaded(object sender, RoutedEventArgs e)
 		{
 			MyCallBack();
 		}
 
+		private void UserControl_KeyDown(object sender, KeyEventArgs e)
+		{
+			Key key = e.Key;
+			switch (key) {
+				case Key.NumPad1:
+				case Key.D1:
+					OneBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad2:
+				case Key.D2:
+					TwoBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad3:
+				case Key.D3:
+					ThreeBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad4:
+				case Key.D4:
+					FourBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad5:
+				case Key.D5:
+					FiveBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad6:
+				case Key.D6:
+					SixBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad7:
+				case Key.D7:
+					SevenBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad8:
+				case Key.D8:
+					EightBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad9:
+				case Key.D9:
+					NineBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.NumPad0:
+				case Key.D0:
+					ZeroBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.Decimal:
+					PeriodBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.Add:
+					PlusBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.Subtract:
+					MinusBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.Multiply:
+					AsteriskBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.Divide:
+					SlashBt_Click(new object(), new RoutedEventArgs());
+					break;
+				case Key.Back:
+					ClearBt_Click(new object(), new RoutedEventArgs());
+					//	ClearFunc();
+					break;
+				case Key.Delete:
+					ClearAllBt_Click(new object(), new RoutedEventArgs());
+					//			Initialize();
+					break;
+				case Key.Enter:
+					EnterBt_Click(new object(), new RoutedEventArgs());
+					break;
+			}
+			CalcProcess.Focus();
+		}
+
+		//private void CalcProcess_KeyDown(object sender, KeyEventArgs e)
+		//{
+		//	//Key key = e.Key;
+		//	//switch (key) {
+		//	//	case key.back:
+		//	//		clearbt_click(new object(), new routedeventargs());
+		//	//		//	clearfunc();
+		//	//		break;
+		//	//	case key.delete:
+		//	//		clearallbt_click(new object(), new routedeventargs());
+		//	//		//			initialize();
+		//	//		break;
+		//	//}
+
+		//}
+
+
 
 		//private void CalcProcess_TextChanged(object sender, TextChangedEventArgs e)
 		//{
-		//	BeforeVal = CalcProcess.Text;
+		//	InputStr = CalcProcess.Text;
 		//}
 		//private void CalcProcess_SelectionChanged(object sender, RoutedEventArgs e)
 		//{
-		//	BeforeVal = CalcProcess.Text;
+		//	InputStr = CalcProcess.Text;
 		//}
 
 
