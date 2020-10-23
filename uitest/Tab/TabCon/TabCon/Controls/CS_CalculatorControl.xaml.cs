@@ -1,17 +1,9 @@
-﻿using System;
+﻿using Livet.Commands;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TabCon.Controls {
 	/// <summary>
@@ -60,8 +52,8 @@ namespace TabCon.Controls {
 			Initialize();
 			CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
-			//CalcMemo.Multiline = True;
-			//CalcMemo.ScrollBars = ScrollBars.Vertical
+			//var window = Window.GetWindow(this);
+			//window.KeyDown += HandleKeyPress;
 		}
 
 		public void Initialize()
@@ -77,6 +69,10 @@ namespace TabCon.Controls {
 			CalcProcess.Text = "";
 			CalcProcess.Focus();
 			IsBegin = true;
+		}
+
+		public ViewModelCommand ClearClick {
+			get { return new Livet.Commands.ViewModelCommand(ClearFunc); }
 		}
 		private void ClearFunc()
 		{
@@ -466,20 +462,25 @@ namespace TabCon.Controls {
 					//			Initialize();
 					break;
 				case Key.Enter:
+		//			EnterBt.PerformClick();は参照できない
 					EnterBt_Click(new object(), new RoutedEventArgs());
 					break;
 			}
 			CalcProcess.Focus();
 		}
 
-		private void ClearAllBt_KeyDown(object sender, KeyEventArgs e)
-		{
-			ClearAllBt_Click(new object(), new RoutedEventArgs());
-		}
-
 		private void ClearBt_KeyDown(object sender, KeyEventArgs e)
 		{
-			ClearBt_Click(new object(), new RoutedEventArgs());
+			if (e.Key == Key.Back) {
+				ClearAllBt_Click(new object(), new RoutedEventArgs());
+			}
+		}
+
+		private void ClearAllBt_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Delete) {
+				ClearAllBt_Click(new object(), new RoutedEventArgs());
+			}
 		}
 		//private void CalcProcess_TextChanged(object sender, TextChangedEventArgs e)
 		//{

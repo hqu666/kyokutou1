@@ -8,8 +8,9 @@
 			 Height="Auto" FontSize="16"
              d:DesignHeight="350" d:DesignWidth="300" 
 			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
-			 Unloaded="UserControl_Unloaded" KeyDown="UserControl_KeyDown" >
-
+			 Unloaded="UserControl_Unloaded" 
+			 KeyDown="UserControl_KeyDown">
+	<!---->
 	<UserControl.Resources>
 		<Style TargetType="Button">
 			<Setter Property="FontSize" Value="24" />
@@ -37,7 +38,7 @@
                          Value="True">
 					<Setter TargetName="border"
                             Property="Background"
-                            Value="Green" />
+                            Value="#FFEFFFFF" />
 				</Trigger>
 
 				<!--クリック時-->
@@ -45,7 +46,7 @@
                          Value="True">
 					<Setter TargetName="border"
                             Property="Background"
-                            Value="Red" />
+                            Value="#FFD7E7FB" />
 				</Trigger>
 
 				<!--キーボード フォーカス状態-->
@@ -99,7 +100,13 @@
 		<Button x:Name="ClearBt" Content="C"
 					Grid.Row="2" Grid.Column="0" 
 					Template="{StaticResource Calcbutton}"
-					Command="{Binding ClearClick}" Click="ClearBt_Click" />
+					KeyDown="ClearBt_KeyDown"
+					Command="{Binding ClearClick}" 
+					Click="ClearBt_Click">
+			<!--<Button.InputBindings>
+				<KeyBinding Key="Backspace" Command="{Binding ClearClick}" />
+			</Button.InputBindings>-->
+		</Button>
 
 		<Button x:Name="SlashBt" Content="/" 
 					Grid.Row="2" Grid.Column="1" FontSize="14"
@@ -111,6 +118,7 @@
 					Command="{Binding AsteriskClick}" Click="AsteriskBt_Click"  />
 		<Button x:Name="MinusBt" Content="-" 
 					Grid.Row="2" Grid.Column="3"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding MinusClick}" Click="MinusBt_Click" />
 
 		<Button x:Name="SevenBt" Content="7" 
@@ -128,6 +136,7 @@
 
 		<Button x:Name="FourBt" Content="4" 
 					Grid.Row="4" Grid.Column="0"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding FourBtClick}" Click="FourBt_Click"  />
 		<Button x:Name="FiveBt" Content="5" 
 					Grid.Row="4" Grid.Column="1"
@@ -135,6 +144,7 @@
 					Command="{Binding FiveClick}"  Click="FiveBt_Click"  />
 		<Button x:Name="SixBt" Content="6" 
 					Grid.Row="4" Grid.Column="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding SixClick}" Click="SixBt_Click"  />
 
 		<Button x:Name="OneBt" Content="1" 
@@ -157,8 +167,8 @@
 					/>
 		<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="6" Grid.Column="1"
-						Template="{StaticResource Calcbutton}"
-				Command="{Binding ZeroClick}" Click="ZeroBt_Click"  />
+					Template="{StaticResource Calcbutton}"
+					Command="{Binding ZeroClick}" Click="ZeroBt_Click"  />
 		<Button x:Name="PeriodBt" Content="." 
 					Grid.Row="6" Grid.Column="2"
 					Template="{StaticResource Calcbutton}"
