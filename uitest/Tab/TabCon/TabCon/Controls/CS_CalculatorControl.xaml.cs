@@ -102,8 +102,8 @@ namespace TabCon.Controls {
 							if (ProssesStr.EndsWith("＋") || ProssesStr.EndsWith("－") || ProssesStr.EndsWith("×") || ProssesStr.EndsWith("÷")
 							) {
 								Operatier = ProssesStr.Substring(DelCount -1);
+								LastOperatier = Operatier;
 								NowOperation = Operatier;
-								CalcOperation.Content = Operatier;
 								if(1< ProssesStr.Length) {
 									for (int i = ProssesStr.Length - 1; 0 < i; i--) {
 										string testStr = ProssesStr.Substring(0, i);
@@ -111,6 +111,7 @@ namespace TabCon.Controls {
 										) {
 											Operatier = testStr.Substring(i - 1);
 											BeforeOperation = Operatier;
+											CalcOperation.Content = Operatier;
 											break;
 										}
 									}
@@ -121,29 +122,33 @@ namespace TabCon.Controls {
 							}
 						}
 					}
-
-					Operatier = LastOperatier;
-					if (Operatier.Equals("")) {
-						Operatier = NowOperation;
-					}
-					if (Operatier.Equals("")) {
-						Operatier = BeforeOperation;
-					}
-					if (!Operatier.Equals("")) {
-						if (Operatier.Equals("＋")) {
-							ProcessVal -= LastInput;
-						} else if (Operatier.Equals("－")) {
-							ProcessVal += LastInput;
-						} else if (Operatier.Equals("×")) {
-							if (ProcessVal != 0) {
+					if (1 < BeforeVals.Count) {
+					//確定値の残り2つまでは逆算
+						Operatier = LastOperatier;
+						if (!Operatier.Equals("")) {
+							if (Operatier.Equals("＋")) {
+								ProcessVal -= LastInput;
+							} else if (Operatier.Equals("－")) {
+								ProcessVal += LastInput;
+							} else if (Operatier.Equals("×")) {
+								//	if (ProcessVal != 0) {
 								ProcessVal /= LastInput;
+								//		}
+							} else if (Operatier.Equals("÷")) {
+								ProcessVal *= LastInput;
 							}
-						} else if (Operatier.Equals("÷")) {
-							ProcessVal *= LastInput;
+							CalcResult.Content = ProcessVal;
 						}
-						CalcResult.Content = ProcessVal;
+					}else if(0 < BeforeVals.Count) {
+						//最後の確定値になった時に演算情報リセット
+						Operatier = "";
+						BeforeOperation = Operatier;
+						NowOperation = Operatier;
+						CalcOperation.Content = Operatier;
+					} else if (0 == BeforeVals.Count) {
+						//確定値がなくなれば初期化
+						Initialize();
 					}
-
 				}
 			}
 
