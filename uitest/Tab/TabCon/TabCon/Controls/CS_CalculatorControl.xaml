@@ -119,7 +119,7 @@
 		</StackPanel>
 		<Button x:Name="ClearBt" Content="C"
 					Grid.Row="2" Grid.Column="0" 
-					Command="{Binding ClearClick}" Click="ClearBt_Click" KeyDown="ClearBt_KeyDown" />
+					Command="{Binding ClearClick}" Click="ClearBt_Click" />
 
 		<Button x:Name="SlashBt" Content="/" 
 					Grid.Row="2" Grid.Column="1" FontSize="14"
@@ -163,7 +163,7 @@
 
 		<Button x:Name="ClearAllBt" Content="CE" 
 					Grid.Row="6" Grid.Column="0"
-					Click="ClearAllBt_Click" KeyDown="ClearAllBt_KeyDown"
+					Click="ClearAllBt_Click"
 					/>
 		<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="6" Grid.Column="1"

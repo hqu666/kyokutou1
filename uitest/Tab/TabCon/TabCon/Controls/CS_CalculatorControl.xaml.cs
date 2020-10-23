@@ -80,24 +80,88 @@ namespace TabCon.Controls {
 		}
 		private void ClearFunc()
 		{
+			string ProssesStr = CalcMemo.Content.ToString();
 			if (0 < InputStr.Length) {
 				InputStr = InputStr.Substring(0, InputStr.Length - 1);
 				CalcProcess.Text = InputStr;
+			}else{
+				if (0 < BeforeVals.Count) {
+					//最後の確定入力を逆算
+					double LastInput = BeforeVals[BeforeVals.Count - 1];
+					string LastOperatier = NowOperation;
+					string Operatier = NowOperation;
+					///最後の確定入力を消去
+					BeforeVals.RemoveAt(BeforeVals.Count - 1);
+					if (0 < BeforeVals.Count) {
+						InputStr = BeforeVals[BeforeVals.Count - 1].ToString();
+						CalcProcess.Text = InputStr;
+
+						for (int DelCount = ProssesStr.Length - 1; 0 < DelCount; DelCount--) {
+							ProssesStr = ProssesStr.Substring(0, DelCount);
+							CalcMemo.Content = ProssesStr;
+							if (ProssesStr.EndsWith("＋") || ProssesStr.EndsWith("－") || ProssesStr.EndsWith("×") || ProssesStr.EndsWith("÷")
+							) {
+								Operatier = ProssesStr.Substring(DelCount -1);
+								NowOperation = Operatier;
+								CalcOperation.Content = Operatier;
+								if(1< ProssesStr.Length) {
+									for (int i = ProssesStr.Length - 1; 0 < i; i--) {
+										string testStr = ProssesStr.Substring(0, i);
+										if (testStr.EndsWith("＋") || testStr.EndsWith("－") || testStr.EndsWith("×") || testStr.EndsWith("÷")
+										) {
+											Operatier = testStr.Substring(i - 1);
+											BeforeOperation = Operatier;
+											break;
+										}
+									}
+								}else{
+									BeforeOperation = "";
+								}
+								break;
+							}
+						}
+					}
+
+					Operatier = LastOperatier;
+					if (Operatier.Equals("")) {
+						Operatier = NowOperation;
+					}
+					if (Operatier.Equals("")) {
+						Operatier = BeforeOperation;
+					}
+					if (!Operatier.Equals("")) {
+						if (Operatier.Equals("＋")) {
+							ProcessVal -= LastInput;
+						} else if (Operatier.Equals("－")) {
+							ProcessVal += LastInput;
+						} else if (Operatier.Equals("×")) {
+							if (ProcessVal != 0) {
+								ProcessVal /= LastInput;
+							}
+						} else if (Operatier.Equals("÷")) {
+							ProcessVal *= LastInput;
+						}
+						CalcResult.Content = ProcessVal;
+					}
+
+				}
 			}
+
 		}
 
 		private void EnterFunc()
 		{
 		//	if(CalcOperation.Content.Equals("")) {
 			if(InputStr.Equals("")) {               //1 < BeforeVals.Count  || 
-													//演算した経過が有れば終了
+				//演算した経過が有れば終了
 				MyCallBack();
 				rootView.CalcWindowCloss();
 			}else if(IsContinuation()) {
-				//無ければ入力の有無を確認して継続
-				ProcessVal = BeforeVals[BeforeVals.Count - 1];
-				SetResult("");
-	//			}
+				//			//無ければ入力の有無を確認して継続
+				ProcessedFunc("");
+	//			ProcessVal = BeforeVals[BeforeVals.Count - 1];
+	//			SetResult("");
+	////			}
 			} else {
 				ProcessedFunc(BeforeOperation);
 			}
@@ -149,9 +213,10 @@ namespace TabCon.Controls {
 			if (!InputStr.Equals("")) {
 				//演算値が有れば配列格納
 				BeforeVals.Add(Double.Parse(InputStr));
-				if (BeforeOperation.Equals("")) {
+				if (BeforeOperation.Equals("") || IsBegin) {
 					//演算子が無ければそのまま格納
 					ProcessVal = BeforeVals[BeforeVals.Count - 1];
+					IsBegin = false;
 				} else{
 					//演算子が有れば演算
 					if (BeforeOperation.Equals("＋")) {
@@ -181,7 +246,14 @@ namespace TabCon.Controls {
 		/// </summary>
 		private void DivideFunc()
 		{
-			if (ProcessVal != 0) {
+			//if (IsBegin) {
+			//	if (!InputStr.Equals("")) {
+			//		//演算値が有れば配列格納
+			//		BeforeVals.Add(Double.Parse(InputStr));
+			//		ProcessVal = BeforeVals[BeforeVals.Count - 1];
+			//	}
+			//} else 
+			if (!IsBegin &&ProcessVal == 0) {
 				MessageBox.Show("割られる値が0になっています。0は除算できません");
 			} else if(InputStr.Equals("")) {
 				MessageBox.Show("割る値が0になっています。0は除算できません");
