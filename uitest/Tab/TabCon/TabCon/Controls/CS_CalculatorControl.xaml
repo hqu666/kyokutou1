@@ -18,69 +18,48 @@
 			<Setter Property="VerticalAlignment" Value="Stretch" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 		</Style>
+		<ControlTemplate x:Key="Calcbutton"
+                         TargetType="Button">
 
-		<ControlTemplate  x:Key="ButtonTemplate" TargetType="Button">
-				<!--角の丸みを取りたいためGridを使用-->
-				<Grid x:Name="MyButton" Background="{TemplateBinding Background}">
-					<!--ボタンの枠線-->
-					<Border x:Name="MyBorder" BorderBrush="#1570A6" BorderThickness="1"/>
-					<!--ボタン内のコンテンツ（テキストなど）-->
-					<ContentPresenter x:Name="Presenter"
-                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                         Margin="10" />
-					<!--各イベントで表示を変えたいためVisualStateManagerを使用する-->
-					<VisualStateManager.VisualStateGroups>
-						<VisualStateGroup Name="CommonStates">
-							<!--通常時（これが無いとマウスが外れても表示が戻らない）-->
-							<VisualState Name="Normal" />
-							<!--マウスオーバー時-->
-							<VisualState Name="MouseOver">
-								<Storyboard>
-									<ColorAnimation Storyboard.TargetName="MyButton"
-                                       Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="#1570A6" />
-									<ColorAnimation Storyboard.TargetName="Presenter"
-                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="white" />
-								<!--To="white"-->
-							</Storyboard>
-							</VisualState>
-							<!--ボタン押下時-->
-							<VisualState Name="Pressed">
-								<Storyboard>
-									<ColorAnimation Storyboard.TargetName="MyButton"
-                                       Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="DarkGray" />
-								<!--To="#2580B6"-->
-								<ColorAnimation Storyboard.TargetName="Presenter"
-                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                       Duration="00:00:00.1"
-                                       To="white" />
-									<ThicknessAnimation Storyboard.TargetName="MyButton"
-                                            Storyboard.TargetProperty="Margin"
-                                            Duration="00:00:00.1"
-                                            To="0,0,0,0" />
-								</Storyboard>
-							</VisualState>
-							<!--ボタン無効化時-->
-							<VisualState Name="Disabled">
-								<Storyboard>
-									<ColorAnimation Storyboard.TargetName="MyBorder"
-                                       Storyboard.TargetProperty="BorderBrush.(SolidColorBrush.Color)"
-                                       To="Gray"/>
-									<ColorAnimation Storyboard.TargetName="Presenter"
-                                       Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
-                                       To="Gray"/>
-								</Storyboard>
-							</VisualState>
-						</VisualStateGroup>
-					</VisualStateManager.VisualStateGroups>
-				</Grid>
-			</ControlTemplate>
+			<Border Name="border"
+                    BorderThickness="1"
+                    BorderBrush="DarkGray"
+                    CornerRadius="5"
+                    TextBlock.Foreground="Black">
+				<ContentPresenter VerticalAlignment="Center"
+                                  HorizontalAlignment="Center" />
+			</Border>
+
+			<ControlTemplate.Triggers>
+
+				<!--マウスオーバー時-->
+				<Trigger Property="IsMouseOver"
+                         Value="True">
+					<Setter TargetName="border"
+                            Property="Background"
+                            Value="Green" />
+				</Trigger>
+
+				<!--クリック時-->
+				<Trigger Property="IsPressed"
+                         Value="True">
+					<Setter TargetName="border"
+                            Property="Background"
+                            Value="Red" />
+				</Trigger>
+
+				<!--キーボード フォーカス状態-->
+				<!--<Trigger Property="IsKeyboardFocused"
+                         Value="true">
+                    <Setter TargetName="border"
+                            Property="Background"
+                            Value="Yellow" />
+                </Trigger>-->
+
+			</ControlTemplate.Triggers>
+
+		</ControlTemplate>
+
 	</UserControl.Resources>
 	<!--<UserControl.InputBindings>
 		<KeyBinding Command="{Binding ElementName=ClearBt ,TargetNullValue=Click}"
@@ -119,13 +98,16 @@
 		</StackPanel>
 		<Button x:Name="ClearBt" Content="C"
 					Grid.Row="2" Grid.Column="0" 
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding ClearClick}" Click="ClearBt_Click" />
 
 		<Button x:Name="SlashBt" Content="/" 
 					Grid.Row="2" Grid.Column="1" FontSize="14"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding SlashClick}" Click="SlashBt_Click"  />
 		<Button x:Name="AsteriskBt" Content="*" 
 					Grid.Row="2" Grid.Column="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding AsteriskClick}" Click="AsteriskBt_Click"  />
 		<Button x:Name="MinusBt" Content="-" 
 					Grid.Row="2" Grid.Column="3"
@@ -133,12 +115,15 @@
 
 		<Button x:Name="SevenBt" Content="7" 
 					Grid.Row="3" Grid.Column="0"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding SevenClick}" Click="SevenBt_Click"  />
 		<Button x:Name="EightBt" Content="8" 
 					Grid.Row="3" Grid.Column="1"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding EightClick}" Click="EightBt_Click"  />
 		<Button x:Name="NineBt" Content="9" 
 					Grid.Row="3" Grid.Column="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding NineClick}" Click="NineBt_Click"  />
 
 		<Button x:Name="FourBt" Content="4" 
@@ -146,6 +131,7 @@
 					Command="{Binding FourBtClick}" Click="FourBt_Click"  />
 		<Button x:Name="FiveBt" Content="5" 
 					Grid.Row="4" Grid.Column="1"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding FiveClick}"  Click="FiveBt_Click"  />
 		<Button x:Name="SixBt" Content="6" 
 					Grid.Row="4" Grid.Column="2"
@@ -153,30 +139,38 @@
 
 		<Button x:Name="OneBt" Content="1" 
 					Grid.Row="5" Grid.Column="0"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding OneBtClick}" Click="OneBt_Click"  />
 		<Button x:Name="TwoBt" Content="2" 
 					Grid.Row="5" Grid.Column="1"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding TwoClick}" Click="TwoBt_Click"  />
 		<Button x:Name="ThreeBt" Content="3" 
 					Grid.Row="5" Grid.Column="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding ThreeClick}" Click="ThreeBt_Click"  />
 
 		<Button x:Name="ClearAllBt" Content="CE" 
 					Grid.Row="6" Grid.Column="0"
+					Template="{StaticResource Calcbutton}"
 					Click="ClearAllBt_Click"
 					/>
 		<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="6" Grid.Column="1"
-					Command="{Binding ZeroClick}" Click="ZeroBt_Click"  />
+						Template="{StaticResource Calcbutton}"
+				Command="{Binding ZeroClick}" Click="ZeroBt_Click"  />
 		<Button x:Name="PeriodBt" Content="." 
 					Grid.Row="6" Grid.Column="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding PeriodClick}" Click="PeriodBt_Click"  />
 		
 		<Button x:Name="PlusBt" Content="+" 
 					Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding PlusClick}" Click="PlusBt_Click"  />
 		<Button x:Name="EnterBt" Content="Enter"  FontSize="12"
 					Grid.Row="5" Grid.Column="3" Grid.RowSpan="2"
+					Template="{StaticResource Calcbutton}"
 					Command="{Binding PlusClick}" Click="EnterBt_Click"  />
 
 	</Grid>

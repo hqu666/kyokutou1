@@ -36,7 +36,22 @@ namespace TabCon.Controls {
 		//リソースの読込みが終わったら
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
-			Initialize();
+			string TAG = "this_loaded";
+			string dbMsg = "[CalculatorTextBox]";
+			try {
+				dbMsg += ",元の書込み=" + CalcText;
+				//初期値を渡された場合
+				int i = 0;
+				if (int.TryParse(CalcText, out i)){
+					CalcTB.Text = CalcText;
+				}else{
+					dbMsg += ">>数値以外を指定" ;
+				}
+				MyLog(TAG, dbMsg);
+				Initialize();
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		/// <summary>
@@ -52,8 +67,16 @@ namespace TabCon.Controls {
 				dbMsg += ",FieldWidth=" + FieldWidth;
 				CalcTB.Width = (int)FieldWidth+20;
 				dbMsg += ",ViewTitle=" + ViewTitle;
-				CalcText = CalcTB.Text;
-				dbMsg += ",元の書込み=" + CalcText;
+				int i = 0;
+				if (int.TryParse(CalcTB.Text, out i)) {
+					CalcText = CalcTB.Text;
+				} else {
+					dbMsg += ">>数値以外を指定";
+				}
+				double rHeight = CalcTB.ActualHeight;
+				dbMsg += ",高さ=" + rHeight;
+				//高さが拾えないのでフォントサイズ+40％でボタン幅を確保
+				CalcBT.Width = FieldFontSize*1.4;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -116,14 +139,12 @@ namespace TabCon.Controls {
 		//////////////////////////////////////////////////電卓//
 		public static void MyLog(string TAG, string dbMsg)
 		{
-			CS_Util Util = new CS_Util();
-			Util.MyLog(TAG, dbMsg);
+			Console.WriteLine(TAG + " : " + dbMsg);
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			CS_Util Util = new CS_Util();
-			Util.MyErrorLog(TAG, dbMsg, err);
+			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
 
 		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
@@ -131,9 +152,17 @@ namespace TabCon.Controls {
 																		MessageBoxImage icon
 																		)
 		{
-			CS_Util Util = new CS_Util();
-			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
+			MessageBoxResult result = 0;
+			if (titolStr == null) {
+				result = MessageBox.Show(msgStr);
+			} else if (icon == MessageBoxImage.None) {
+				result = MessageBox.Show(msgStr, titolStr, buttns);
+			} else {
+				result = MessageBox.Show(msgStr, titolStr, buttns, icon);
+			}
+			return result;
 		}
+
 
 	}
 }

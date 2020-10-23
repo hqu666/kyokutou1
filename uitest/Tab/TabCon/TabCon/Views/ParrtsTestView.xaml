@@ -49,12 +49,13 @@
 						/>
 
 		</StackPanel>
-			<!--<Controls:CalculatorTextBox x:Name="CalcTextSammple"
-													Grid.Row="1" Grid.Column="1"
-													FieldFontSize="18"
-													FieldWidth="120"
-													ViewTitle="電卓を表示するフィールドから"
-														/>-->
+		<Controls:CalculatorTextBox x:Name="CalcTextSammple"
+												Grid.Row="1" Grid.Column="1"
+												CalcText="01234657989"
+												FieldFontSize="24"
+												FieldWidth="200"
+												ViewTitle="電卓を表示するフィールドから"
+													/>
 
 		<Label Content=">参照>"
 					Grid.Row="1" Grid.Column="2"
@@ -67,11 +68,11 @@
 		<StackPanel Orientation="Horizontal"
 							Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
 							Margin="0,5,5,5">
-				<CS_Calculator:CalculatorTextBox x:Name="cTbox"
+				<!--<CS_Calculator:CalculatorTextBox x:Name="cTbox"
 													FieldFontSize="24"
 													FieldWidth="200"
 													ViewTitle="電卓を表示するフィールドから"
-																	/>
+																	/>-->
 
 
 		</StackPanel>

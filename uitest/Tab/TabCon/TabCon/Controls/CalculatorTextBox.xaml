@@ -24,7 +24,7 @@
 		<TextBox x:Name="CalcTB"
 			Text="{Binding CalcText ,Mode=TwoWay}"
 			MinWidth="120"
-			MinHeight="18"
+			MinHeight="14"
 			Grid.Row="0" Grid.Column="0"
 			/>
 		<!--FontSize="{Binding FieldFontSize}"-->

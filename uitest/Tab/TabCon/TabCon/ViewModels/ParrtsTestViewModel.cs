@@ -25,6 +25,9 @@ namespace TabCon.ViewModels {
 		public void Initialize()
 		{
 			CalcResult = "電卓の計算結果をここに表示します";
+			//	MyView.CalcTextSammple.CalcText = "1234567890"; だと
+			//System.NullReferenceException: 'オブジェクト参照がオブジェクト インスタンスに設定されていません。'
+			//abCon.ViewModels.ParrtsTestViewModel.MyView.get が null を返しました。
 		}
 
 		//電卓/////////////////////////////////////////////////////////////////////////
