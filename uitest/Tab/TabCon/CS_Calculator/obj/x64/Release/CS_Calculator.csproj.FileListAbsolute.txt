@@ -1,0 +1,13 @@
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\x64\Release\CS_Calculator.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\x64\Release\CS_Calculator.pdb
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator.csprojAssemblyReference.cache
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\Calculator.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CalculatorTextBox.g.cs
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator_MarkupCompile.cache
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator_MarkupCompile.lref
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\Calculator.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CalculatorTextBox.baml
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator.g.resources
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator.csproj.CoreCompileInputs.cache
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\x64\Release\CS_Calculator.pdb

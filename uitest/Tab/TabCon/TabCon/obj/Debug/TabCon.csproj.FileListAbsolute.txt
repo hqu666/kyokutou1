@@ -177,3 +177,5 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csproj.Co
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.exe
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Debug\TabCon.pdb
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\CS_Calculator.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Debug\CS_Calculator.pdb
