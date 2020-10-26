@@ -1,5 +1,4 @@
-﻿using Livet.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,7 +22,7 @@ namespace TabCon.Controls {
 		/// <summary>
 		/// 入力確定値の配列
 		/// </summary>
-		public IList<double> BeforeVals;
+		public IList<BeforeVal> BeforeVals;
 		/// <summary>
 		/// 小数点以下の処理が必要
 		/// </summary>
@@ -50,20 +49,17 @@ namespace TabCon.Controls {
 		{
 			InitializeComponent();
 			Initialize();
-			CalcProcess.Text = "ProcessStartComment2";
+	//		CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
-		//	this.KeyPreview = True	Formのみ？
-			//var window = Window.GetWindow(this);
-			//window.KeyDown += HandleKeyPress;
 		}
 
 		public void Initialize()
 		{
+			InputStr = "";              //最終入力値を残す為、初期化から外す?
+			BeforeVals = new List<BeforeVal>();
 			ProcessVal = 0.0;
-			InputStr = "";
 			isDecimal = false;
 			BeforeOperation = "";
-			BeforeVals = new List<double>();
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
 			CalcMemo.Content = "";
@@ -72,101 +68,95 @@ namespace TabCon.Controls {
 			IsBegin = true;
 		}
 
-		public ViewModelCommand ClearClick {
-			get { return new Livet.Commands.ViewModelCommand(ClearFunc); }
-		}
+		//public ViewModelCommand ClearClick {
+		//	get { return new Livet.Commands.ViewModelCommand(ClearFunc); }
+		//}
 		private void ClearFunc()
 		{
-			string ProssesStr = CalcMemo.Content.ToString();
-			if (0 < InputStr.Length) {
-				InputStr = InputStr.Substring(0, InputStr.Length - 1);
-				CalcProcess.Text = InputStr;
-			}else{
-				if (0 < BeforeVals.Count) {
-					//最後の確定入力を逆算
-					double LastInput = BeforeVals[BeforeVals.Count - 1];
-					string LastOperatier = NowOperation;
-					string Operatier = NowOperation;
-					///最後の確定入力を消去
-					BeforeVals.RemoveAt(BeforeVals.Count - 1);
-					if (0 < BeforeVals.Count) {
-						InputStr = BeforeVals[BeforeVals.Count - 1].ToString();
-						CalcProcess.Text = InputStr;
-
-						for (int DelCount = ProssesStr.Length - 1; 0 < DelCount; DelCount--) {
-							ProssesStr = ProssesStr.Substring(0, DelCount);
-							CalcMemo.Content = ProssesStr;
-							if (ProssesStr.EndsWith("＋") || ProssesStr.EndsWith("－") || ProssesStr.EndsWith("×") || ProssesStr.EndsWith("÷")
-							) {
-								Operatier = ProssesStr.Substring(DelCount -1);
-								LastOperatier = Operatier;
-								NowOperation = Operatier;
-								if(1< ProssesStr.Length) {
-									for (int i = ProssesStr.Length - 1; 0 < i; i--) {
-										string testStr = ProssesStr.Substring(0, i);
-										if (testStr.EndsWith("＋") || testStr.EndsWith("－") || testStr.EndsWith("×") || testStr.EndsWith("÷")
-										) {
-											Operatier = testStr.Substring(i - 1);
-											BeforeOperation = Operatier;
-											CalcOperation.Content = Operatier;
-											break;
-										}
-									}
-								}else{
-									BeforeOperation = "";
-								}
-								break;
-							}
-						}
-					}
+			string TAG = "ClearFunc";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				string ProssesStr = CalcMemo.Content.ToString();
+				InputStr = CalcProcess.Text;
+				dbMsg += ",入力状況=" + InputStr;
+				if (0 < InputStr.Length) {
+				//入力エリアに文字が有る間は一文字づつ消去
+					InputStr = InputStr.Substring(0, InputStr.Length - 1);
+					CalcProcess.Text = InputStr;
+				} else {
+					dbMsg += ",残り=" + BeforeVals.Count +"件";
 					if (1 < BeforeVals.Count) {
-					//確定値の残り2つまでは逆算
-						Operatier = LastOperatier;
-						if (!Operatier.Equals("")) {
-							if (Operatier.Equals("＋")) {
-								ProcessVal -= LastInput;
-							} else if (Operatier.Equals("－")) {
-								ProcessVal += LastInput;
-							} else if (Operatier.Equals("×")) {
+						//最終確定入力を読出し
+						BeforeVal LastInput = BeforeVals[BeforeVals.Count - 1];
+						//演算子と
+						string LastOperatier = LastInput.Operater; 
+						CalcOperation.Content = LastOperatier;
+						//値を転記
+						double LastValue = LastInput.Value;
+						dbMsg += "＝" + LastOperatier + " : " + LastValue;
+						InputStr = LastValue.ToString();
+						CalcProcess.Text = InputStr;
+						//計算過程から最終確定値と演算子を消去
+						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length- LastOperatier.Length));
+						//計算結果修正
+						if (!LastOperatier.Equals("")) {
+							if (LastOperatier.Equals("＋")) {
+								ProcessVal -= LastValue;
+							} else if (LastOperatier.Equals("－")) {
+								ProcessVal += LastValue;
+							} else if (LastOperatier.Equals("×")) {
 								//	if (ProcessVal != 0) {
-								ProcessVal /= LastInput;
+								ProcessVal /= LastValue;
 								//		}
-							} else if (Operatier.Equals("÷")) {
-								ProcessVal *= LastInput;
+							} else if (LastOperatier.Equals("÷")) {
+								ProcessVal *= LastValue;
 							}
 							CalcResult.Content = ProcessVal;
 						}
-					}else if(0 < BeforeVals.Count) {
-						//最後の確定値になった時に演算情報リセット
-						Operatier = "";
-						BeforeOperation = Operatier;
-						NowOperation = Operatier;
-						CalcOperation.Content = Operatier;
-					} else if (0 == BeforeVals.Count) {
-						//確定値がなくなれば初期化
+						///最後の確定入力を消去
+						BeforeVals.RemoveAt(BeforeVals.Count - 1);
+					} else {
+						//最終入力の
+						BeforeVal LastInput = BeforeVals[0];
+						//演算子を転記
+						string LastOperatier = LastInput.Operater; 
+						//値を読み出し
+						double LastValue = LastInput.Value;
+						dbMsg += "＝" + LastOperatier + " : " + LastValue;
+						string LastInputStr = LastValue.ToString();
 						Initialize();
+						//格納値をクリアした後で最終入力をフィールドに書き戻す
+						CalcOperation.Content = LastOperatier;
+						CalcProcess.Text = LastInputStr;
 					}
 				}
+				dbMsg += ">残り>" + BeforeVals.Count + "件";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
-
 		}
 
 		private void EnterFunc()
 		{
-		//	if(CalcOperation.Content.Equals("")) {
-			if(InputStr.Equals("")) {               //1 < BeforeVals.Count  || 
-				//演算した経過が有れば終了
-				MyCallBack();
-				rootView.CalcWindowCloss();
-			}else if(IsContinuation()) {
-				//			//無ければ入力の有無を確認して継続
-				ProcessedFunc("");
-	//			ProcessVal = BeforeVals[BeforeVals.Count - 1];
-	//			SetResult("");
-	////			}
-			} else {
-				ProcessedFunc(BeforeOperation);
-			}
+			string TAG = "EnterFunc";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				if (InputStr.Equals("")) {               //1 < BeforeVals.Count  || 
+					dbMsg += "処理する入力が無い";
+					MyCallBack();
+					rootView.CalcWindowCloss();
+				} else if (IsContinuation()) {
+					//			//無ければ入力の有無を確認して継続
+					ProcessedFunc("");
+				} else {
+					dbMsg += "," + InputStr + "を" + BeforeOperation;
+					ProcessedFunc(BeforeOperation);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			} 
 		}
 	
 		/// <summary>
@@ -176,15 +166,27 @@ namespace TabCon.Controls {
 		/// <returns></returns>
 		public bool IsContinuation()
 		{
+			string TAG = "IsContinuation";
+			string dbMsg = "[CS_CalculatorControl]";
 			bool retBool = false;
-			if (!InputStr.Equals("")) {
-				//演算値が有れば配列格納
-				BeforeVals.Add(Double.Parse(InputStr));
-				if (IsBegin) {
-					IsBegin = false;
-				}else{
-					retBool = true;
+			try {
+				if (!InputStr.Equals("")) {
+					//BeforeVal NowInput = new BeforeVal();
+					//NowInput.Operater = CalcOperation.Content.ToString();
+					//NowInput.Value = Double.Parse(InputStr);
+					////演算値が有れば配列格納
+					//BeforeVals.Add(NowInput);
+					if (IsBegin) {
+						dbMsg += "入力開始";
+						IsBegin = false;
+					} else {
+						dbMsg += "入力継続中";
+						retBool = true;
+					}
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
 			return retBool;
 		}
@@ -195,16 +197,26 @@ namespace TabCon.Controls {
 		/// <param name="OperationStr"></param>
 		public void SetResult(string OperationStr)
 		{
-			CalcResult.Content = ProcessVal.ToString();
-			if(!InputStr.Equals("")) {
-				if (CalcMemo.Content.Equals("")) {
-					CalcMemo.Content += "=" + InputStr;
-				} else {
-					CalcMemo.Content += OperationStr + InputStr;
+			string TAG = "SetResult";
+			string dbMsg = "[CS_CalculatorControl]";
+			dbMsg += ",OperationStr=" + OperationStr;
+			try {
+				CalcResult.Content = ProcessVal.ToString();
+				if (!InputStr.Equals("")) {
+					if (CalcMemo.Content.Equals("")) {
+						dbMsg += "入力開始";
+						CalcMemo.Content += "=" + InputStr;
+					} else {
+						dbMsg += "入力継続中";
+						CalcMemo.Content += OperationStr + InputStr;
+					}
 				}
+				InputStr = "";
+				CalcProcess.Text = InputStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
-			InputStr = "";
-			CalcProcess.Text = InputStr;
 		}
 
 		/// <summary>
@@ -212,34 +224,49 @@ namespace TabCon.Controls {
 		/// </summary>
 		private void ProcessedFunc(string NextOperation)
 		{
-			if (!InputStr.Equals("")) {
-				//演算値が有れば配列格納
-				BeforeVals.Add(Double.Parse(InputStr));
-				if (BeforeOperation.Equals("") || IsBegin) {
-					//演算子が無ければそのまま格納
-					ProcessVal = BeforeVals[BeforeVals.Count - 1];
-					IsBegin = false;
-				} else{
-					//演算子が有れば演算
-					if (BeforeOperation.Equals("＋")) {
-						ProcessVal += BeforeVals[BeforeVals.Count - 1];
-					} else if (BeforeOperation.Equals("－")) {
-						ProcessVal -= BeforeVals[BeforeVals.Count - 1];
-					} else if (BeforeOperation.Equals("×")) {
-						ProcessVal *= BeforeVals[BeforeVals.Count - 1];
-					} else if (BeforeOperation.Equals("÷")) {
-						if(ProcessVal !=0) {
-							ProcessVal /= BeforeVals[BeforeVals.Count - 1];
+			string TAG = "ProcessedFunc";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				if (!InputStr.Equals("")) {
+					//演算値が有れば配列格納
+					BeforeVal NowInput = new BeforeVal();
+					NowInput.Operater = CalcOperation.Content.ToString();
+					NowInput.Value = Double.Parse(InputStr);
+					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+					BeforeVals.Add(NowInput);
+					//			BeforeVal BeforeInput = BeforeVals[BeforeVals.Count - 1];
+					dbMsg += ",演算結果=" + ProcessVal;
+					if (BeforeOperation.Equals("") || IsBegin) {
+						//演算子が無ければそのまま格納
+						ProcessVal = BeforeVals[BeforeVals.Count - 1].Value;
+						IsBegin = false;
+					} else {
+						//演算子が有れば演算
+						if (BeforeOperation.Equals("＋")) {
+							ProcessVal += BeforeVals[BeforeVals.Count - 1].Value;
+						} else if (BeforeOperation.Equals("－")) {
+							ProcessVal -= BeforeVals[BeforeVals.Count - 1].Value;
+						} else if (BeforeOperation.Equals("×")) {
+							ProcessVal *= BeforeVals[BeforeVals.Count - 1].Value;
+						} else if (BeforeOperation.Equals("÷")) {
+							if (ProcessVal != 0) {
+								ProcessVal /= BeforeVals[BeforeVals.Count - 1].Value;
+							}
 						}
 					}
+					dbMsg += "＞＞" + ProcessVal;
+					SetResult(BeforeOperation);
+					CalcOperation.Content = NextOperation;
+				} else {
+					dbMsg += ",入力無し";
+					//演算値が無ければ入力する値の演算区分だけを記入
+					CalcOperation.Content = NextOperation;
 				}
-				SetResult(BeforeOperation);
-				CalcOperation.Content = NextOperation;
-			} else {
-				//演算値が無ければ入力する値の演算区分だけを記入
-				CalcOperation.Content = NextOperation;
+				BeforeOperation = NextOperation;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
-			BeforeOperation = NextOperation;
 		}
 
 
@@ -382,7 +409,9 @@ namespace TabCon.Controls {
 			CalcProcess.Text = InputStr;
 		}
 
-	
+		/// <summary>
+		/// 指定された入力枠に値を記入する
+		/// </summary>
 		public void MyCallBack()
 		{
 			if (!CalcResult.Content.Equals("")) {
@@ -390,6 +419,11 @@ namespace TabCon.Controls {
 			}
 		}
 
+		/// <summary>
+		/// クローズボックスなどで強制的にUnloadされた場合
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UserControl_Unloaded(object sender, RoutedEventArgs e)
 		{
 			MyCallBack();
@@ -402,66 +436,74 @@ namespace TabCon.Controls {
 		/// <param name="e"></param>
 		private void UserControl_KeyDown(object sender, KeyEventArgs e)
 		{
-			Key key = e.Key;
-			switch (key) {
-				case Key.NumPad1:
-				case Key.D1:
-					OneBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad2:
-				case Key.D2:
-					TwoBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad3:
-				case Key.D3:
-					ThreeBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad4:
-				case Key.D4:
-					FourBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad5:
-				case Key.D5:
-					FiveBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad6:
-				case Key.D6:
-					SixBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad7:
-				case Key.D7:
-					SevenBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad8:
-				case Key.D8:
-					EightBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad9:
-				case Key.D9:
-					NineBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.NumPad0:
-				case Key.D0:
-					ZeroBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.Decimal:
-					PeriodBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.Add:
-					PlusBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.Subtract:
-					MinusBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.Multiply:
-					AsteriskBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.Divide:
-					SlashBt_Click(new object(), new RoutedEventArgs());
-					break;
-				case Key.Enter:
-					EnterBt_Click(new object(), new RoutedEventArgs());
-					break;
+			string TAG = "UserControl_KeyDown";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				Key key = e.Key;
+				dbMsg += "key=" + key.ToString();
+				switch (key) {
+					case Key.NumPad1:
+					case Key.D1:
+						OneBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad2:
+					case Key.D2:
+						TwoBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad3:
+					case Key.D3:
+						ThreeBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad4:
+					case Key.D4:
+						FourBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad5:
+					case Key.D5:
+						FiveBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad6:
+					case Key.D6:
+						SixBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad7:
+					case Key.D7:
+						SevenBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad8:
+					case Key.D8:
+						EightBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad9:
+					case Key.D9:
+						NineBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.NumPad0:
+					case Key.D0:
+						ZeroBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Decimal:
+						PeriodBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Add:
+						PlusBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Subtract:
+						MinusBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Multiply:
+						AsteriskBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Divide:
+						SlashBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Enter:
+						EnterBt_Click(new object(), new RoutedEventArgs());
+						break;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
 			CalcProcess.Focus();
 		}
@@ -473,11 +515,64 @@ namespace TabCon.Controls {
 		/// <param name="e"></param>
 		private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.Back) {
-				ClearBt_Click(new object(), new RoutedEventArgs());
-			}else if (e.Key == Key.Delete) {
-				ClearAllBt_Click(new object(), new RoutedEventArgs());
+			string TAG = "UserControl_PreviewKeyDown";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				Key key = e.Key;
+				dbMsg += "key=" + key.ToString();
+				switch (key) {
+					case Key.Back:
+						ClearBt_Click(new object(), new RoutedEventArgs());
+						break;
+					case Key.Delete:
+						ClearAllBt_Click(new object(), new RoutedEventArgs());
+						break;
+				}
+				//if (e.Key == Key.Back) {
+				//	ClearBt_Click(new object(), new RoutedEventArgs());
+				//}else if (e.Key == Key.Delete) {
+				//	ClearAllBt_Click(new object(), new RoutedEventArgs());
+				//}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
+			CalcProcess.Focus();
+		}
+
+		//////////////////////////////////////////////////電卓//
+		public static void MyLog(string TAG, string dbMsg)
+		{
+			Console.WriteLine(TAG + " : " + dbMsg);
+		}
+
+		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
+		{
+			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
+		}
+
+		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
+																		MessageBoxButton buttns,
+																		MessageBoxImage icon
+																		)
+		{
+			MessageBoxResult result = 0;
+			if (titolStr == null) {
+				result = MessageBox.Show(msgStr);
+			} else if (icon == MessageBoxImage.None) {
+				result = MessageBox.Show(msgStr, titolStr, buttns);
+			} else {
+				result = MessageBox.Show(msgStr, titolStr, buttns, icon);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// 確定した演算子と数値
+		/// </summary>
+		public class BeforeVal{
+			public string Operater { get; set; }
+			public double Value { get; set; }
 		}
 
 	}
