@@ -52,6 +52,7 @@ namespace TabCon.Controls {
 			Initialize();
 			CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
+		//	this.KeyPreview = True	Formのみ？
 			//var window = Window.GetWindow(this);
 			//window.KeyDown += HandleKeyPress;
 		}
@@ -394,6 +395,11 @@ namespace TabCon.Controls {
 			MyCallBack();
 		}
 
+		/// <summary>
+		/// 通常のキーダウンイベント
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UserControl_KeyDown(object sender, KeyEventArgs e)
 		{
 			Key key = e.Key;
@@ -453,44 +459,26 @@ namespace TabCon.Controls {
 				case Key.Divide:
 					SlashBt_Click(new object(), new RoutedEventArgs());
 					break;
-				case Key.Back:
-					ClearBt_Click(new object(), new RoutedEventArgs());
-					//	ClearFunc();
-					break;
-				case Key.Delete:
-					ClearAllBt_Click(new object(), new RoutedEventArgs());
-					//			Initialize();
-					break;
 				case Key.Enter:
-		//			EnterBt.PerformClick();は参照できない
 					EnterBt_Click(new object(), new RoutedEventArgs());
 					break;
 			}
 			CalcProcess.Focus();
 		}
 
-		private void ClearBt_KeyDown(object sender, KeyEventArgs e)
+		/// <summary>
+		/// BackSpace,Delete,Fキーはここ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Back) {
+				ClearBt_Click(new object(), new RoutedEventArgs());
+			}else if (e.Key == Key.Delete) {
 				ClearAllBt_Click(new object(), new RoutedEventArgs());
 			}
 		}
-
-		private void ClearAllBt_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.Key == Key.Delete) {
-				ClearAllBt_Click(new object(), new RoutedEventArgs());
-			}
-		}
-		//private void CalcProcess_TextChanged(object sender, TextChangedEventArgs e)
-		//{
-		//	InputStr = CalcProcess.Text;
-		//}
-		//private void CalcProcess_SelectionChanged(object sender, RoutedEventArgs e)
-		//{
-		//	InputStr = CalcProcess.Text;
-		//}
-
 
 	}
 }
