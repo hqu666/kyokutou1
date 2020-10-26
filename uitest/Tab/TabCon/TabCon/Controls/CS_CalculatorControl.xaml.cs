@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Livet;
+using Livet.Commands;
 
 namespace TabCon.Controls {
 	/// <summary>
 	/// CS_CalculatorControl.xaml の相互作用ロジック
 	/// </summary>
 	public partial class CS_CalculatorControl : UserControl {
+		public CS_CalculatorViewModel VM;
 
 		public CalculatorTextBox rootView;
 		/// <summary>
@@ -49,12 +52,19 @@ namespace TabCon.Controls {
 		public CS_CalculatorControl()
 		{
 			InitializeComponent();
-			Initialize();
 	//		CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
-	//		CalcMemo.AutoSize = true;
-	//		CalcMemo.MultiLine = true;          //	XMALに無し
-
+			VM = new CS_CalculatorViewModel();
+			this.DataContext = VM;
+			this.Loaded += this_loaded;
+		}
+		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
+		private void this_loaded(object sender, RoutedEventArgs e)
+		{
+			Initialize();
+			VM.CResult = "C(BackSpace)ボタンは1クリックで1文字づつ消去します";
+			VM.CInput = "CA(Delete)で全消去";
+			VM.MyView = this;
 		}
 
 		public void Initialize()
@@ -146,8 +156,11 @@ namespace TabCon.Controls {
 			string TAG = "EnterFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-				if (InputStr.Equals("")) {               //1 < BeforeVals.Count  || 
+				if (InputStr.Equals("")) { 
 					dbMsg += "処理する入力が無い";
+					VM.CResult = ProcessVal.ToString();
+					dbMsg += "、CResult=" + VM.CResult;
+					MyLog(TAG, dbMsg);
 					MyCallBack();
 					rootView.CalcWindowCloss();
 				} else if (IsContinuation()) {
@@ -273,8 +286,7 @@ namespace TabCon.Controls {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
+		
 		/// <summary>
 		/// 除算
 		/// </summary>

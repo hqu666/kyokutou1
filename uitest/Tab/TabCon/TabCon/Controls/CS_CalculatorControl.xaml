@@ -6,8 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TabCon.Controls"
              mc:Ignorable="d" 
-			 Height="Auto" FontSize="16"
-             d:DesignHeight="350" d:DesignWidth="300" 
+			 FontSize="12"
+			 Height="Auto"
+			d:DesignWidth="300" 
 			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
 			 Unloaded="UserControl_Unloaded" 
 			PreviewKeyDown="UserControl_PreviewKeyDown"
@@ -18,6 +19,7 @@
 	<UserControl.Resources>
 		<Style TargetType="Button">
 			<Setter Property="FontSize" Value="24" />
+			<Setter Property="MinHeight" Value="48" />
 			<Setter Property="Foreground" Value="Black" />
 			<Setter Property="Margin" Value="2" />
 			<Setter Property="VerticalAlignment" Value="Stretch" />
@@ -65,24 +67,24 @@
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="*" MinHeight="52"/>
+			<RowDefinition Height="*" MinHeight="52"/>
+			<RowDefinition Height="*" MinHeight="52"/>
+			<RowDefinition Height="*" MinHeight="52"/>
+			<RowDefinition MinHeight="52"/>
 		</Grid.RowDefinitions>
 		<StackPanel Orientation="Horizontal"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
-			<Label x:Name="CalcResult" Content="結果" FontSize="18"/>
+			<Label x:Name="CalcResult" Content="{Binding CResult ,Mode=TwoWay}" FontSize="18"/>
 			<!--Content="C(BackSpace)ボタンは1クリックで1文字、"-->
 			<Label  x:Name="CalcMemo"
-						Content="ぺんぎんとくじらとラクダが&#10;ピクニックに行きました"/>
+						Content=""/>
 		</StackPanel>
 		<StackPanel Orientation="Horizontal"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
 			<Label x:Name="CalcOperation" Content=""
 							Width="Auto" />
-			<TextBox x:Name="CalcProcess" Text="CA(Delete)で全消去"
+			<TextBox x:Name="CalcProcess" Text="{Binding CInput ,Mode=TwoWay}"
 							FontSize="18" MinWidth="280" IsReadOnly="True" 
 							/>
 			<!--Content="{Binding process ,Mode=TwoWay}"-->
@@ -174,14 +176,16 @@
 		<!--Command="{Binding PeriodClick}"-->
 
 		<Button x:Name="PlusBt" Content="+" 
-					Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"
 					Template="{StaticResource Calcbutton}"
+					Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"
+					Height="106"
 					Click="PlusBt_Click"  />
 		<!--Command="{Binding PlusClick}"-->
 		<Button x:Name="EnterBt" Content="Enter"  FontSize="12"
 					Grid.Row="5" Grid.Column="3" Grid.RowSpan="2"
 					Template="{StaticResource Calcbutton}"
-					Click="EnterBt_Click"  />
+					Height="106"
+				Click="EnterBt_Click"  />
 		<!--Command="{Binding PlusClick}"-->
 
 	</Grid>

@@ -22,9 +22,21 @@ namespace TabCon.Controls {
 		/// 電卓を表示しているウィンドウ
 		/// </summary>
 		public Window CalcWindow;
+		/// <summary>
+		/// フィールドに表示される値
+		/// </summary>
 		public string CalcText { get; set; }
-		public int FieldFontSize { get; set; }
-		public int FieldWidth { get; set; }
+		/// <summary>
+		/// フィールドのフォントサイズ
+		/// </summary>
+		public string FieldFontSize { get; set; }
+		/// <summary>
+		/// フィールドの幅
+		/// </summary>
+		public string FieldWidth { get; set; }
+		/// <summary>
+		/// ダイアログタイトル
+		/// </summary>
 		public string ViewTitle { get; set; }
 
 		public CalculatorTextBox()
@@ -63,9 +75,9 @@ namespace TabCon.Controls {
 			string dbMsg = "[CalculatorTextBox]";
 			try {
 				dbMsg += ",FieldFontSize=" + FieldFontSize;
-				CalcTB.FontSize = (int)FieldFontSize;
+				CalcTB.FontSize = (int.Parse(FieldFontSize));
 				dbMsg += ",FieldWidth=" + FieldWidth;
-				CalcTB.Width = (int)FieldWidth+20;
+				CalcTB.Width = (int.Parse(FieldWidth)) +20;
 				dbMsg += ",ViewTitle=" + ViewTitle;
 				int i = 0;
 				if (int.TryParse(CalcTB.Text, out i)) {
@@ -76,7 +88,7 @@ namespace TabCon.Controls {
 				double rHeight = CalcTB.ActualHeight;
 				dbMsg += ",高さ=" + rHeight;
 				//高さが拾えないのでフォントサイズ+40％でボタン幅を確保
-				CalcBT.Width = FieldFontSize*1.4;
+				CalcBT.Width = int.Parse(FieldFontSize)*1.4;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -113,7 +125,7 @@ namespace TabCon.Controls {
 				CalcWindow.Width = 300;
 				CalcWindow.Height = 350;
 				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-				CalcWindow.FontSize = FieldFontSize;
+				CalcWindow.FontSize = int.Parse(FieldFontSize);
 				dbMsg += ",FontSize" + CalcWindow.FontSize;
 				dbMsg += ",ViewTitol=" + ViewTitle;
 

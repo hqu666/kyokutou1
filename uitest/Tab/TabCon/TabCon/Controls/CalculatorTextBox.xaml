@@ -23,6 +23,8 @@
 		</Grid.RowDefinitions>
 		<TextBox x:Name="CalcTB"
 			Text="{Binding CalcText ,Mode=TwoWay}"
+			FontSize="{Binding FieldFontSize}"
+			Width="{Binding FieldWidth}"
 			MinWidth="120"
 			MinHeight="14"
 			Grid.Row="0" Grid.Column="0"

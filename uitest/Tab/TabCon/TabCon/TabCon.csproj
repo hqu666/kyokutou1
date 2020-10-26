@@ -124,6 +124,7 @@
     <Compile Include="Controls\CS_CalculatorControl.xaml.cs">
       <DependentUpon>CS_CalculatorControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CS_CalculatorViewModel.cs" />
     <Compile Include="Controls\X_1_Control.xaml.cs">
       <DependentUpon>X_1_Control.xaml</DependentUpon>
     </Compile>

@@ -15,8 +15,23 @@ namespace TabCon.ViewModels {
 		public Views.ParrtsTestView MyView { get; set; }
 		public ViewModels.MainViewModel RootViewModel { get; set; }
 
+		/// <summary>
+		/// 結果表示フィールド値
+		/// </summary>
 		public string CalcResult { get; set; }
-
+		/// <summary>
+		/// ダイアログタイトル
+		/// </summary>
+		public string CalcTextDLogTitol { get; set; }
+		/// <summary>
+		/// 幅
+		/// </summary>
+		public string CalcTexWidth { get; set; }
+		/// <summary>
+		/// フォントサイズ
+		/// </summary>
+		public string CalcTextFontSize { get; set; }
+		
 		public ParrtsTestViewModel()
 		{
 			Initialize();
@@ -24,7 +39,12 @@ namespace TabCon.ViewModels {
 
 		public void Initialize()
 		{
+			CalcTextDLogTitol = "電卓を表示するフィールドから";
+			CalcTexWidth = "120";
+			CalcTextFontSize = "18";
 			CalcResult = "電卓の計算結果をここに表示します";
+			RaisePropertyChanged();
+
 			//	MyView.CalcTextSammple.CalcText = "1234567890"; だと
 			//System.NullReferenceException: 'オブジェクト参照がオブジェクト インスタンスに設定されていません。'
 			//abCon.ViewModels.ParrtsTestViewModel.MyView.get が null を返しました。
@@ -56,7 +76,7 @@ namespace TabCon.ViewModels {
 				window.ShowDialog();
 				window.Closed += new EventHandler(window_Closed);
 				//			CalcResult = "電卓で計算しました";
-
+				//CalcResult = MyView.CalcTextSammple.CalcTB.Text;
 				RaisePropertyChanged("CalcResult");
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -69,6 +89,9 @@ namespace TabCon.ViewModels {
 			string TAG = "window_Closed";
 			string dbMsg = "[MySQLBase]";
 			try {
+				CalcResult = MyView.CalcTextSammple.CalcTB.Text;
+				dbMsg = ",CalcResult=" + CalcResult;
+				RaisePropertyChanged("CalcResult");
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
