@@ -35,6 +35,7 @@ namespace TabCon.Controls {
 		/// 入力した演算子
 		/// </summary>
 		public string NowOperation = "";
+		public string LineBreakStr = "\n";                  //XAML中は&#10;
 
 		/// <summary>
 		/// 最初の入力か
@@ -51,6 +52,9 @@ namespace TabCon.Controls {
 			Initialize();
 	//		CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
+	//		CalcMemo.AutoSize = true;
+	//		CalcMemo.MultiLine = true;          //	XMALに無し
+
 		}
 
 		public void Initialize()
@@ -97,7 +101,7 @@ namespace TabCon.Controls {
 						InputStr = LastValue.ToString();
 						CalcProcess.Text = InputStr;
 						//計算過程から最終確定値と演算子を消去
-						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length- LastOperatier.Length));
+						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length- LastOperatier.Length - LineBreakStr.Length));
 						//計算結果修正
 						if (!LastOperatier.Equals("")) {
 							if (LastOperatier.Equals("＋")) {
@@ -202,13 +206,15 @@ namespace TabCon.Controls {
 			dbMsg += ",OperationStr=" + OperationStr;
 			try {
 				CalcResult.Content = ProcessVal.ToString();
+				string ProssesStr = CalcMemo.Content.ToString();
+
 				if (!InputStr.Equals("")) {
 					if (CalcMemo.Content.Equals("")) {
 						dbMsg += "入力開始";
 						CalcMemo.Content += "=" + InputStr;
 					} else {
 						dbMsg += "入力継続中";
-						CalcMemo.Content += OperationStr + InputStr;
+						CalcMemo.Content += LineBreakStr+OperationStr + InputStr;
 					}
 				}
 				InputStr = "";
@@ -234,7 +240,6 @@ namespace TabCon.Controls {
 					NowInput.Value = Double.Parse(InputStr);
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
-					//			BeforeVal BeforeInput = BeforeVals[BeforeVals.Count - 1];
 					dbMsg += ",演算結果=" + ProcessVal;
 					if (BeforeOperation.Equals("") || IsBegin) {
 						//演算子が無ければそのまま格納
@@ -528,11 +533,6 @@ namespace TabCon.Controls {
 						ClearAllBt_Click(new object(), new RoutedEventArgs());
 						break;
 				}
-				//if (e.Key == Key.Back) {
-				//	ClearBt_Click(new object(), new RoutedEventArgs());
-				//}else if (e.Key == Key.Delete) {
-				//	ClearAllBt_Click(new object(), new RoutedEventArgs());
-				//}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
