@@ -12,6 +12,10 @@ namespace TabCon.Controls {
 	/// </summary>
 	public partial class CS_CalculatorControl : UserControl {
 		public CS_CalculatorViewModel VM;
+		/// <summary>
+		/// 呼出しボタン
+		/// </summary>
+		public CalculatorButton rootBT;
 
 		public CalculatorTextBox rootView;
 		/// <summary>
@@ -61,10 +65,12 @@ namespace TabCon.Controls {
 		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
+			string InputStrStock = InputStr;
 			Initialize();
 			VM.CResult = "C(BackSpace)ボタンは1クリックで1文字づつ消去します";
 			VM.CInput = "CA(Delete)で全消去";
 			VM.MyView = this;
+			CalcProcess.Text = InputStrStock;
 		}
 
 		public void Initialize()
@@ -112,6 +118,7 @@ namespace TabCon.Controls {
 						CalcProcess.Text = InputStr;
 						//計算過程から最終確定値と演算子を消去
 						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length- LastOperatier.Length - LineBreakStr.Length));
+						CalcMemoScroll.ScrollToBottom();
 						//計算結果修正
 						if (!LastOperatier.Equals("")) {
 							if (LastOperatier.Equals("＋")) {
@@ -127,6 +134,7 @@ namespace TabCon.Controls {
 							}
 							CalcResult.Content = ProcessVal;
 						}
+						BeforeOperation = LastOperatier;
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
 					} else {
@@ -162,7 +170,6 @@ namespace TabCon.Controls {
 					dbMsg += "、CResult=" + VM.CResult;
 					MyLog(TAG, dbMsg);
 					MyCallBack();
-					rootView.CalcWindowCloss();
 				} else if (IsContinuation()) {
 					//			//無ければ入力の有無を確認して継続
 					ProcessedFunc("");
@@ -228,6 +235,7 @@ namespace TabCon.Controls {
 					} else {
 						dbMsg += "入力継続中";
 						CalcMemo.Content += LineBreakStr+OperationStr + InputStr;
+						CalcMemoScroll.ScrollToBottom();
 					}
 				}
 				InputStr = "";
@@ -432,7 +440,13 @@ namespace TabCon.Controls {
 		public void MyCallBack()
 		{
 			if (!CalcResult.Content.Equals("")) {
-				rootView.CalcTB.Text = (string)CalcResult.Content;
+				if (rootView != null) {
+					rootView.CalcTB.Text = (string)CalcResult.Content;
+					rootView.CalcWindowCloss();
+				} else if(rootBT != null) {
+					rootBT.TargetTextBox.Text = (string)CalcResult.Content;
+					rootBT.CalcWindowCloss();
+				}
 			}
 		}
 
@@ -555,7 +569,9 @@ namespace TabCon.Controls {
 		//////////////////////////////////////////////////電卓//
 		public static void MyLog(string TAG, string dbMsg)
 		{
-			Console.WriteLine(TAG + " : " + dbMsg);
+#if DEBUG
+				Console.WriteLine(TAG + " : " + dbMsg);
+#endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)

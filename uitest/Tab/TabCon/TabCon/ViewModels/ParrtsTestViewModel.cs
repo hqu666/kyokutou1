@@ -42,61 +42,61 @@ namespace TabCon.ViewModels {
 			CalcTextDLogTitol = "電卓を表示するフィールドから";
 			CalcTexWidth = "120";
 			CalcTextFontSize = "18";
-			CalcResult = "電卓の計算結果をここに表示します";
+			CalcResult = "0123456789";
+	//		MyView.CalcCallBt.TargetTextBox = MyView.Bt2Tbox;
+	//		MyView.CalcCallBt.ViewTitle = CalcTextDLogTitol;
 			RaisePropertyChanged();
-
 			//	MyView.CalcTextSammple.CalcText = "1234567890"; だと
 			//System.NullReferenceException: 'オブジェクト参照がオブジェクト インスタンスに設定されていません。'
 			//abCon.ViewModels.ParrtsTestViewModel.MyView.get が null を返しました。
 		}
 
 		//電卓/////////////////////////////////////////////////////////////////////////
-		public ViewModelCommand ShowCalc {
-			get { return new Livet.Commands.ViewModelCommand(CalcShow); }
-		}
-		/// <summary>
-		/// Googleカレンダーに反映
-		/// </summary>
-		public void CalcShow()
-		{
-			string TAG = "CalcShow";
-			string dbMsg = "[MySQLBase]";
-			try {
-				Controls.CS_CalculatorControl calculatorControl = new Controls.CS_CalculatorControl();
+		//public ViewModelCommand ShowCalc {
+		//	get { return new Livet.Commands.ViewModelCommand(CalcShow); }
+		//}
+		///// <summary>
+		///// 電卓表示
+		///// </summary>
+		//public void CalcShow()
+		//{
+		//	string TAG = "CalcShow";
+		//	string dbMsg = "[ParrtsTestViewModel]";
+		//	try {
+		//		Controls.CS_CalculatorControl calculatorControl = new Controls.CS_CalculatorControl();
 
-				Window window = new Window {
-					Title = "電卓で計算",
-					Content = calculatorControl,
-					ResizeMode = ResizeMode.NoResize
-				};
-				window.Width = 300;
-				window.Height = 350;
-				window.Topmost = true;
-				//		window.RaiseEvent
-				window.ShowDialog();
-				window.Closed += new EventHandler(window_Closed);
-				//			CalcResult = "電卓で計算しました";
-				//CalcResult = MyView.CalcTextSammple.CalcTB.Text;
-				RaisePropertyChanged("CalcResult");
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//		Window window = new Window {
+		//			Title = "電卓で計算",
+		//			Content = calculatorControl,
+		//			ResizeMode = ResizeMode.NoResize
+		//		};
+		//		window.Width = 300;
+		//		window.Height = 350;
+		//		window.Topmost = true;
+		//		//		window.RaiseEvent
+		//		window.ShowDialog();
+		//		window.Closed += new EventHandler(window_Closed);
+		//		//			CalcResult = "電卓で計算しました";
+		//		//CalcResult = MyView.CalcTextSammple.CalcTB.Text;
+		//		RaisePropertyChanged("CalcResult");
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
-		private void window_Closed(object sender, EventArgs e)
-		{
-			string TAG = "window_Closed";
-			string dbMsg = "[MySQLBase]";
-			try {
-				CalcResult = MyView.CalcTextSammple.CalcTB.Text;
-				dbMsg = ",CalcResult=" + CalcResult;
-				RaisePropertyChanged("CalcResult");
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//private void window_Closed(object sender, EventArgs e)
+		//{
+		//	string TAG = "window_Closed";
+		//	string dbMsg = "[ParrtsTestViewModel]";
+		//	try {
+		//		dbMsg = ",CalcResult=" + CalcResult;
+		//		RaisePropertyChanged("CalcResult");
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		//////////////////////////////////////////////////電卓//
 		public static void MyLog(string TAG, string dbMsg)

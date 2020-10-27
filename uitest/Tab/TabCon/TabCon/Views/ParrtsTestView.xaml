@@ -34,52 +34,43 @@
 			<Label  Content="フォントサイズ" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
-			<TextBox 	x:Name="CalcTextFontSize" Text="{Binding CalcTextFontSize,Mode=TwoWay}"
+			<TextBox 	x:Name="CalcTextFontSize" 
+						Text="{Binding CalcTextFontSize,Mode=TwoWay}"
 						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextFontSize_TextChanged"  
 						/>
 			<Label  Content="幅" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
-			<TextBox 	x:Name="CalcTexWidth" Text="{Binding CalcTexWidth,Mode=TwoWay}"
+			<TextBox 	x:Name="CalcTexWidth" x:Uid="CalcTexWidth"
+						Text="{Binding CalcTexWidth,Mode=TwoWay}"
 						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTexWidth_TextChanged"  
 						/>
 			<Label  Content="ダイアログタイトル" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
-			<TextBox 	x:Name="CalcTextDLogTitol" Text="{Binding CalcTextDLogTitol,Mode=TwoWay}"
-						Margin="5,5,5,5" VerticalAlignment="Center" 
+			<TextBox 	x:Name="CalcTextDLogTitol" 
+						Text="{Binding CalcTextDLogTitol,Mode=TwoWay}"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextDLogTitol_TextChanged" 
 						/>
 
 		</StackPanel>
-		<Controls:CalculatorTextBox x:Name="CalcTextSammple"
-												Grid.Row="1" Grid.Column="1"
-												CalcText="01234657989"
-												FieldFontSize="24"
-												FieldWidth="200"
-												ViewTitle="電卓を表示するフィールドから"
-													/>
-		<!--
-												FieldFontSize="{Binding ElementName=CalcTextDLogTitol}"
-		"{Binding ElementName=CalcTextDLogTitol}"-->
-		<Label Content=">参照>"
-					Grid.Row="1" Grid.Column="2"
-			/>
-		<Label x:Name="CalcResult" Content="{Binding CalcResult ,Mode=TwoWay}"
-							Grid.Row="1" Grid.Column="3"
-			/>
-
-
 		<StackPanel Orientation="Horizontal"
-							Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
 							Margin="0,5,5,5">
-				<!--<CS_Calculator:CalculatorTextBox x:Name="cTbox"
-													FieldFontSize="24"
-													FieldWidth="200"
-													ViewTitle="電卓を表示するフィールドから"
-																	/>-->
+			<TextBox x:Name="Bt2Tbox"
+							Text="{Binding CalcResult ,Mode=TwoWay}"/>
+			<Controls:CalculatorButton  x:Name="CalcCallBt" 
+			/>
+			<!--
+						TargetTextBox="{Binding ElementName=Bt2Tbox}"
+						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"
 
-
+			FieldFontSize="18"
+							FieldWidth="300"
+							ViewTitle="計算値をフィールドへ"-->
 		</StackPanel>
 
 	</Grid>
+
+
 </Page>

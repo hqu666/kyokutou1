@@ -118,6 +118,10 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="Controls\CalculatorButton.xaml.cs">
+      <DependentUpon>CalculatorButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CalculatorButtonViewModel.cs" />
     <Compile Include="Controls\CalculatorTextBox.xaml.cs">
       <DependentUpon>CalculatorTextBox.xaml</DependentUpon>
     </Compile>
@@ -273,6 +277,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\CalculatorButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CalculatorTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

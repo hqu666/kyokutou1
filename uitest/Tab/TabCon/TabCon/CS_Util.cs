@@ -15,6 +15,10 @@ namespace TabCon {
 		/// <param name="dbMsg"></param>
 		public void MyLog(String TAG, String dbMsg)
 		{
+#if DEBUG
+				Constant.debugNow = false;
+#endif
+
 			if (Constant.debugNow) {
 				Console.WriteLine(TAG + " : " + dbMsg);
 				//System.Diagnostics.Trace.WriteLine(TAG + " : " + dbMsg);

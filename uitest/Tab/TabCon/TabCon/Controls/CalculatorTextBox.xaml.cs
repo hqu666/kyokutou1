@@ -123,7 +123,7 @@ namespace TabCon.Controls {
 				CalcWindow.Topmost = true;
 				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
 				CalcWindow.Width = 300;
-				CalcWindow.Height = 350;
+				CalcWindow.Height = 400;
 				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
 				CalcWindow.FontSize = int.Parse(FieldFontSize);
 				dbMsg += ",FontSize" + CalcWindow.FontSize;
@@ -151,7 +151,9 @@ namespace TabCon.Controls {
 		//////////////////////////////////////////////////電卓//
 		public static void MyLog(string TAG, string dbMsg)
 		{
-			Console.WriteLine(TAG + " : " + dbMsg);
+#if DEBUG
+				Console.WriteLine(TAG + " : " + dbMsg);
+#endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)

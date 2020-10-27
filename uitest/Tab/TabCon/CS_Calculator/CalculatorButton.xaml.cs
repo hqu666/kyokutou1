@@ -15,89 +15,85 @@ using System.Windows.Shapes;
 
 namespace CS_Calculator {
 	/// <summary>
-	/// CalculatorTextBox.xaml の相互作用ロジック
+	/// CalculatorButton.xaml の相互作用ロジック
 	/// </summary>
-	public partial class CalculatorTextBox : UserControl {
+	public partial class CalculatorButton : UserControl {
+		/// <summary>
+		/// 結果の書き出し先
+		/// </summary>
+		public TextBox TargetTextBox { get; set; }
+		/// <summary>
+		/// 電卓クラス
+		/// </summary>
+		public CS_CalculatorControl calculatorControl;
 		/// <summary>
 		/// 電卓を表示しているウィンドウ
 		/// </summary>
 		public Window CalcWindow;
+		/// <summary>
+		/// フィールドに表示される値
+		/// </summary>
 		public string CalcText { get; set; }
-		public int FieldFontSize { get; set; }
-		public int FieldWidth { get; set; }
+		/// <summary>
+		/// フィールドのフォントサイズ
+		/// </summary>
+		public string FieldFontSize { get; set; }
+		/// <summary>
+		/// フィールドの幅
+		/// </summary>
+		public string FieldWidth { get; set; }
+		/// <summary>
+		/// ダイアログタイトル
+		/// </summary>
 		public string ViewTitle { get; set; }
-
-		public CalculatorTextBox()
+		public CalculatorButton()
 		{
 			InitializeComponent();
-			ViewTitle = "";
 			this.Loaded += this_loaded;
 		}
 		//リソースの読込みが終わったら
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
-			Initialize();
-		}
-
-		/// <summary>
-		/// パラメータを取得して、このコントローラのリソースを調整
-		/// </summary>
-		public void Initialize()
-		{
-			string TAG = "Initialize";
-			string dbMsg = "[CalculatorTextBox]";
+			string TAG = "this_loaded";
+			string dbMsg = "[CalculatorButton]";
 			try {
-				dbMsg += ",FieldFontSize=" + FieldFontSize;
-				CalcTB.FontSize = (int)FieldFontSize;
-				dbMsg += ",FieldWidth=" + FieldWidth;
-				CalcTB.Width = (int)FieldWidth + 20;
-				dbMsg += ",ViewTitle=" + ViewTitle;
-				CalcText = CalcTB.Text;
-				dbMsg += ",元の書込み=" + CalcText;
-				MyLog(TAG, dbMsg);
+				calculatorControl = new CS_CalculatorControl();
+				calculatorControl.rootBT = this;
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 
-		/// <summary>
-		/// 電卓アイコンボタン押下
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
 		private void CalcBT_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "CalcBT_Click";
-			string dbMsg = "[CalculatorTextBox]";
+			string dbMsg = "[CalculatorButtun]";
 			try {
-				Calculator calculatorControl = new Calculator();
-				calculatorControl.rootView = this;
-				CalcText = CalcTB.Text;
+				CalcText = TargetTextBox.Text;
 				dbMsg += ",元の書込み=" + CalcText;
 				calculatorControl.InputStr += (string)CalcText;
 				calculatorControl.CalcProcess.Text = calculatorControl.InputStr;
-
+				//Windowを生成して
 				CalcWindow = new Window {
-					Title = CalcTB.Name,
+					Title = TargetTextBox.Name,
 					Content = calculatorControl,
 					ResizeMode = ResizeMode.NoResize
 				};
-				Point pt = CalcTB.PointToScreen(new Point(0.0d, 0.0d));
+				//書き込み先フィールドの左やや下に表示する
+				Point pt = TargetTextBox.PointToScreen(new Point(0.0d, 0.0d));
 				CalcWindow.Left = pt.X + 20;
-				CalcWindow.Top = pt.Y + 20;
+				CalcWindow.Top = pt.Y + 30;
 				CalcWindow.Topmost = true;
 				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
 				CalcWindow.Width = 300;
-				CalcWindow.Height = 350;
+				CalcWindow.Height = 400;
 				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-				CalcWindow.FontSize = FieldFontSize;
-				dbMsg += ",FontSize" + CalcWindow.FontSize;
 				dbMsg += ",ViewTitol=" + ViewTitle;
 
 				if (!ViewTitle.Equals("")) {
 					CalcWindow.Title = ViewTitle;
 				}
-				CalcWindow.ShowDialog();
+				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -105,18 +101,32 @@ namespace CS_Calculator {
 			}
 		}
 
-
+		/// <summary>
+		/// ダイアログを終了させたい処から呼んで、外部からダイアログを閉じる
+		/// </summary>
 		public void CalcWindowCloss()
 		{
-			if (CalcWindow.IsLoaded) {
-				CalcWindow.Close();
+			string TAG = "CalcWindowCloss";
+			string dbMsg = "[CalculatorButtun]";
+			try {
+				if (CalcWindow.IsLoaded) {
+					string resurlStr = calculatorControl.ProcessVal.ToString();
+					dbMsg += ",resurlStr=" + resurlStr;
+					TargetTextBox.Text = resurlStr;
+					MyLog(TAG, dbMsg);
+					CalcWindow.Close();
+				}
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
+
 		}
 
-		//////////////////////////////////////////////////電卓//
 		public static void MyLog(string TAG, string dbMsg)
 		{
-			Console.WriteLine(TAG + " : " + dbMsg);
+#if DEBUG
+				Console.WriteLine(TAG + " : " + dbMsg);
+#endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)

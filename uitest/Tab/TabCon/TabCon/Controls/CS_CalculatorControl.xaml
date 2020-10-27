@@ -13,9 +13,7 @@
 			 Unloaded="UserControl_Unloaded" 
 			PreviewKeyDown="UserControl_PreviewKeyDown"
 			 KeyDown="UserControl_KeyDown">
-	<!--
-				 xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
-	-->
+
 	<UserControl.Resources>
 		<Style TargetType="Button">
 			<Setter Property="FontSize" Value="24" />
@@ -74,12 +72,22 @@
 			<RowDefinition MinHeight="52"/>
 		</Grid.RowDefinitions>
 		<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Stretch"  VerticalAlignment="Top"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
-			<Label x:Name="CalcResult" Content="{Binding CResult ,Mode=TwoWay}" FontSize="18"/>
-			<!--Content="C(BackSpace)ボタンは1クリックで1文字、"-->
-			<Label  x:Name="CalcMemo"
-						Content=""/>
+			<Label x:Name="CalcResult" 
+					VerticalAlignment="Top" HorizontalAlignment="Left"
+					Content="{Binding CResult ,Mode=TwoWay}" FontSize="18"/>
+			<!--Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"-->
+
+			<ScrollViewer x:Name="CalcMemoScroll"
+						HorizontalScrollBarVisibility="Auto" Height="50" HorizontalAlignment="Stretch" >
+				<!--Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"-->
+
+				<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
+			</ScrollViewer>
+
 		</StackPanel>
+
 		<StackPanel Orientation="Horizontal"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
 			<Label x:Name="CalcOperation" Content=""
