@@ -11,7 +11,6 @@
 			Grid.Row="0" Grid.Column="1"
 			Height="Auto"
 			MinWidth="20"
-			Command="{Binding CalcShow}"
 			Click="CalcBT_Click"	>
 			<Button.Background>
 				<ImageBrush ImageSource="CalcIcon.png" Stretch="UniformToFill"/>

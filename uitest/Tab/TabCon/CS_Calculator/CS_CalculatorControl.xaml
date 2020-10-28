@@ -74,27 +74,23 @@
 							HorizontalAlignment="Stretch"  VerticalAlignment="Top"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
 			<Label x:Name="CalcResult" 
-					VerticalAlignment="Top" HorizontalAlignment="Left"
-					Content="{Binding CResult ,Mode=TwoWay}" FontSize="18"/>
-			<!--Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"-->
-
+					VerticalAlignment="Top" HorizontalAlignment="Stretch"
+					FontSize="18"/>
+			<!--Content="{Binding CResult ,Mode=TwoWay}"-->
 			<ScrollViewer x:Name="CalcMemoScroll"
-						HorizontalScrollBarVisibility="Auto" Height="50" HorizontalAlignment="Stretch" >
-				<!--Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"-->
-
+								HorizontalScrollBarVisibility="Auto" Height="60" HorizontalAlignment="Right" >
 				<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
 			</ScrollViewer>
-
 		</StackPanel>
 
-		<StackPanel Orientation="Horizontal"
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
-			<Label x:Name="CalcOperation" Content=""
-							Width="Auto" />
-			<TextBox x:Name="CalcProcess" Text="{Binding CInput ,Mode=TwoWay}"
-							FontSize="18" MinWidth="280" IsReadOnly="True" 
+			<Label x:Name="CalcOperation" Content="" Margin="5,0,-5,0"/>
+			<TextBox x:Name="CalcProcess"
+							HorizontalAlignment="Stretch"
+							FontSize="18" MinWidth="270" IsReadOnly="True" 
 							/>
-			<!--Content="{Binding process ,Mode=TwoWay}"-->
+			<!--	 Text="{Binding CInput ,Mode=TwoWay}"	Content="{Binding process ,Mode=TwoWay}"-->
 		</StackPanel>
 		<Button x:Name="ClearBt" Content="C&#xa;BackSpace"  FontSize="12"
 					Grid.Row="2" Grid.Column="0"
@@ -102,7 +98,6 @@
 					Click="ClearBt_Click">
 		</Button>
 		<!--Command="{Binding ClearClick}"-->
-
 		<Button x:Name="SlashBt" Content="/" 
 					Grid.Row="2" Grid.Column="1" FontSize="14"
 					Template="{StaticResource Calcbutton}"
@@ -196,5 +191,6 @@
 		<!--Command="{Binding PlusClick}"-->
 
 	</Grid>
+
 
 </UserControl>

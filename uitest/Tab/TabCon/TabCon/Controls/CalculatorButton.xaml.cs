@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TabCon.Controls {
+
 	/// <summary>
 	/// クリックするとダイヤログで電卓を表示するボタン
 	/// </summary>
@@ -114,4 +115,5 @@ namespace TabCon.Controls {
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
 	}
+
 }

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace TabCon.Controls {
+
 	/// <summary>
 	/// 電卓
 	/// :ダイヤログなど別コントロールに組み込んで使用
@@ -574,4 +575,5 @@ namespace TabCon.Controls {
 		}
 
 	}
+
 }

@@ -14,14 +14,22 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CS_Calculator {
+
 	/// <summary>
-	/// CalculatorButton.xaml の相互作用ロジック
+	/// クリックするとダイヤログで電卓を表示するボタン
 	/// </summary>
 	public partial class CalculatorButton : UserControl {
+
 		/// <summary>
 		/// 結果の書き出し先
 		/// </summary>
-		public TextBox TargetTextBox { get; set; }
+		public TextBox TargetTextBox {
+			get { return (TextBox)GetValue(TargetTextBoxtProperty); }
+			set { SetValue(TargetTextBoxtProperty, value); }
+		}
+		public static readonly DependencyProperty TargetTextBoxtProperty =
+			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CalculatorButton), new PropertyMetadata(default(TextBox)));
+
 		/// <summary>
 		/// 電卓クラス
 		/// </summary>
@@ -31,34 +39,28 @@ namespace CS_Calculator {
 		/// </summary>
 		public Window CalcWindow;
 		/// <summary>
-		/// フィールドに表示される値
-		/// </summary>
-		public string CalcText { get; set; }
-		/// <summary>
-		/// フィールドのフォントサイズ
-		/// </summary>
-		public string FieldFontSize { get; set; }
-		/// <summary>
-		/// フィールドの幅
-		/// </summary>
-		public string FieldWidth { get; set; }
-		/// <summary>
 		/// ダイアログタイトル
 		/// </summary>
-		public string ViewTitle { get; set; }
+		public string ViewTitle {
+			get { return (string)GetValue(ViewTitleProperty); }
+			set { SetValue(ViewTitleProperty, value); }
+		}
+		public static readonly DependencyProperty ViewTitleProperty =
+			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
+
 		public CalculatorButton()
 		{
 			InitializeComponent();
-			this.Loaded += this_loaded;
+			this.Loaded += This_loaded;
 		}
 		//リソースの読込みが終わったら
-		private void this_loaded(object sender, RoutedEventArgs e)
+		private void This_loaded(object sender, RoutedEventArgs e)
 		{
 			string TAG = "this_loaded";
-			string dbMsg = "[CalculatorButton]";
+			string dbMsg = "[CalculatorButtun]";
 			try {
 				calculatorControl = new CS_CalculatorControl();
-				calculatorControl.rootBT = this;
+				calculatorControl.TargetTextBox = this.TargetTextBox;
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -69,11 +71,7 @@ namespace CS_Calculator {
 			string TAG = "CalcBT_Click";
 			string dbMsg = "[CalculatorButtun]";
 			try {
-				CalcText = TargetTextBox.Text;
-				dbMsg += ",元の書込み=" + CalcText;
-				calculatorControl.InputStr += (string)CalcText;
-				calculatorControl.CalcProcess.Text = calculatorControl.InputStr;
-				//Windowを生成して
+				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 				CalcWindow = new Window {
 					Title = TargetTextBox.Name,
 					Content = calculatorControl,
@@ -93,7 +91,10 @@ namespace CS_Calculator {
 				if (!ViewTitle.Equals("")) {
 					CalcWindow.Title = ViewTitle;
 				}
+				calculatorControl.CalcWindow = CalcWindow;
+
 				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
+				dbMsg += ",dialogResult=" + dialogResult;
 
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -101,31 +102,10 @@ namespace CS_Calculator {
 			}
 		}
 
-		/// <summary>
-		/// ダイアログを終了させたい処から呼んで、外部からダイアログを閉じる
-		/// </summary>
-		public void CalcWindowCloss()
-		{
-			string TAG = "CalcWindowCloss";
-			string dbMsg = "[CalculatorButtun]";
-			try {
-				if (CalcWindow.IsLoaded) {
-					string resurlStr = calculatorControl.ProcessVal.ToString();
-					dbMsg += ",resurlStr=" + resurlStr;
-					TargetTextBox.Text = resurlStr;
-					MyLog(TAG, dbMsg);
-					CalcWindow.Close();
-				}
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-
-		}
-
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-				Console.WriteLine(TAG + " : " + dbMsg);
+			Console.WriteLine(TAG + " : " + dbMsg);
 #endif
 		}
 
@@ -133,22 +113,7 @@ namespace CS_Calculator {
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
-
-		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
-																		MessageBoxButton buttns,
-																		MessageBoxImage icon
-																		)
-		{
-			MessageBoxResult result = 0;
-			if (titolStr == null) {
-				result = MessageBox.Show(msgStr);
-			} else if (icon == MessageBoxImage.None) {
-				result = MessageBox.Show(msgStr, titolStr, buttns);
-			} else {
-				result = MessageBox.Show(msgStr, titolStr, buttns, icon);
-			}
-			return result;
-		}
-
 	}
+
+
 }

@@ -1,15 +1,5 @@
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\CS_Calculator.pdb
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.Behaviors.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.Collections.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.Converters.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.Core.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.EventListeners.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.Messaging.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Livet.Mvvm.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Microsoft.Xaml.Behaviors.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\Microsoft.Xaml.Behaviors.pdb
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CalculatorButton.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_CalculatorControl.g.cs
@@ -19,6 +9,5 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\Calcula
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_CalculatorControl.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.g.resources
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.csproj.CoreCompileInputs.cache
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.pdb
