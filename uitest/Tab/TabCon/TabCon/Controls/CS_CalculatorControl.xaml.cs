@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Livet;
-using Livet.Commands;
 
 namespace TabCon.Controls {
 	/// <summary>
-	/// CS_CalculatorControl.xaml の相互作用ロジック
+	/// 電卓
+	/// :ダイヤログなど別コントロールに組み込んで使用
 	/// </summary>
 	public partial class CS_CalculatorControl : UserControl {
-		public CS_CalculatorViewModel VM;
 		/// <summary>
-		/// 呼出しボタン
+		/// 結果の書き出し先
 		/// </summary>
-		public CalculatorButton rootBT;
+		public TextBox TargetTextBox {
+			get { return (TextBox)GetValue(TargetTextBoxtProperty); }
+			set { SetValue(TargetTextBoxtProperty, value); }
+		}
+		public static readonly DependencyProperty TargetTextBoxtProperty =
+			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBox)));
+	
+		/// <summary>
+		/// 電卓を表示しているウィンドウ
+		/// </summary>
+		public Window CalcWindow;
 
-		public CalculatorTextBox rootView;
 		/// <summary>
 		/// 計算結果
 		/// </summary>
@@ -49,30 +56,29 @@ namespace TabCon.Controls {
 		/// </summary>
 		private bool IsBegin = true;
 		/// <summary>
-		/// 表示直後のコメント
+		/// 起動処理
 		/// </summary>
-//		private static string ProcessStartComment2 = "CA(Delete)で全消去";
-
 		public CS_CalculatorControl()
 		{
 			InitializeComponent();
-	//		CalcProcess.Text = "ProcessStartComment2";
 			CalcProcess.IsReadOnly = true;
-			VM = new CS_CalculatorViewModel();
-			this.DataContext = VM;
-			this.Loaded += this_loaded;
+			this.Loaded += ThisLoaded;
 		}
-		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
-		private void this_loaded(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// 読込み完了後、エレメント参照やプロセスの始動を行う
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
-			string InputStrStock = InputStr;
 			Initialize();
-			VM.CResult = "C(BackSpace)ボタンは1クリックで1文字づつ消去します";
-			VM.CInput = "CA(Delete)で全消去";
-			VM.MyView = this;
-			CalcProcess.Text = InputStrStock;
+			InputStr = TargetTextBox.Text;
+			CalcProcess.Text = InputStr;
 		}
 
+		/// <summary>
+		/// CEと合わせ、初期化処理
+		/// </summary>
 		public void Initialize()
 		{
 			InputStr = "";              //最終入力値を残す為、初期化から外す?
@@ -88,9 +94,9 @@ namespace TabCon.Controls {
 			IsBegin = true;
 		}
 
-		//public ViewModelCommand ClearClick {
-		//	get { return new Livet.Commands.ViewModelCommand(ClearFunc); }
-		//}
+		/// <summary>
+		/// C:クリア：一文字づつ消去
+		/// </summary>
 		private void ClearFunc()
 		{
 			string TAG = "ClearFunc";
@@ -166,12 +172,10 @@ namespace TabCon.Controls {
 			try {
 				if (InputStr.Equals("")) { 
 					dbMsg += "処理する入力が無い";
-					VM.CResult = ProcessVal.ToString();
-					dbMsg += "、CResult=" + VM.CResult;
 					MyLog(TAG, dbMsg);
 					MyCallBack();
-				} else if (IsContinuation()) {
-					//			//無ければ入力の有無を確認して継続
+				} else if (IsBegin) {
+					IsBegin = false;
 					ProcessedFunc("");
 				} else {
 					dbMsg += "," + InputStr + "を" + BeforeOperation;
@@ -195,11 +199,6 @@ namespace TabCon.Controls {
 			bool retBool = false;
 			try {
 				if (!InputStr.Equals("")) {
-					//BeforeVal NowInput = new BeforeVal();
-					//NowInput.Operater = CalcOperation.Content.ToString();
-					//NowInput.Value = Double.Parse(InputStr);
-					////演算値が有れば配列格納
-					//BeforeVals.Add(NowInput);
 					if (IsBegin) {
 						dbMsg += "入力開始";
 						IsBegin = false;
@@ -284,7 +283,7 @@ namespace TabCon.Controls {
 					SetResult(BeforeOperation);
 					CalcOperation.Content = NextOperation;
 				} else {
-					dbMsg += ",入力無し";
+					dbMsg += ",入力無し：演算子から入力された";
 					//演算値が無ければ入力する値の演算区分だけを記入
 					CalcOperation.Content = NextOperation;
 				}
@@ -294,29 +293,32 @@ namespace TabCon.Controls {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		
+
+		/// <summary>
+		/// 指定された入力枠に値を記入する
+		/// Nullなら空白文字を返す
+		/// </summary>
+		public void MyCallBack()
+		{
+			string rText = (string)CalcResult.Content;
+			TargetTextBox.Text = (string)CalcResult.Content;
+			CalcWindow.Close();
+		}
+
 		/// <summary>
 		/// 除算
 		/// </summary>
 		private void DivideFunc()
 		{
-			//if (IsBegin) {
-			//	if (!InputStr.Equals("")) {
-			//		//演算値が有れば配列格納
-			//		BeforeVals.Add(Double.Parse(InputStr));
-			//		ProcessVal = BeforeVals[BeforeVals.Count - 1];
-			//	}
-			//} else 
-			if (!IsBegin &&ProcessVal == 0) {
+			if (!IsBegin && ProcessVal == 0) {
 				MessageBox.Show("割られる値が0になっています。0は除算できません");
-			} else if(InputStr.Equals("")) {
+			} else if(!IsBegin && InputStr.Equals("")) {
 				MessageBox.Show("割る値が0になっています。0は除算できません");
 			} else{
 				string NextOperation = "÷";
 				ProcessedFunc(NextOperation);
 			}
 		}
-
 		/// <summary>
 		/// 積算
 		/// </summary>
@@ -435,22 +437,6 @@ namespace TabCon.Controls {
 		}
 
 		/// <summary>
-		/// 指定された入力枠に値を記入する
-		/// </summary>
-		public void MyCallBack()
-		{
-			if (!CalcResult.Content.Equals("")) {
-				if (rootView != null) {
-					rootView.CalcTB.Text = (string)CalcResult.Content;
-					rootView.CalcWindowCloss();
-				} else if(rootBT != null) {
-					rootBT.TargetTextBox.Text = (string)CalcResult.Content;
-					rootBT.CalcWindowCloss();
-				}
-			}
-		}
-
-		/// <summary>
 		/// クローズボックスなどで強制的にUnloadされた場合
 		/// </summary>
 		/// <param name="sender"></param>
@@ -566,7 +552,7 @@ namespace TabCon.Controls {
 			CalcProcess.Focus();
 		}
 
-		//////////////////////////////////////////////////電卓//
+		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
@@ -578,23 +564,7 @@ namespace TabCon.Controls {
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
-
-		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
-																		MessageBoxButton buttns,
-																		MessageBoxImage icon
-																		)
-		{
-			MessageBoxResult result = 0;
-			if (titolStr == null) {
-				result = MessageBox.Show(msgStr);
-			} else if (icon == MessageBoxImage.None) {
-				result = MessageBox.Show(msgStr, titolStr, buttns);
-			} else {
-				result = MessageBox.Show(msgStr, titolStr, buttns, icon);
-			}
-			return result;
-		}
-
+		////////////////////////////////////////////////////
 		/// <summary>
 		/// 確定した演算子と数値
 		/// </summary>

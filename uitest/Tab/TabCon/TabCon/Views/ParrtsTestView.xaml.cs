@@ -28,12 +28,18 @@ namespace TabCon.Views {
 			this.DataContext = VM;
 			this.Loaded += this_loaded;
 		}
-		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
+			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 			VM.MyView = this;
 		}
 
+		/// <summary>
+		/// このView上の表示調整
+		/// サンプルなのでコードビハインドで対処
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CalcTextFontSize_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			TextBox TB = sender as TextBox;

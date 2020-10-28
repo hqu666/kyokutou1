@@ -29,6 +29,7 @@ namespace TabCon.Controls {
 		}
 		public static readonly DependencyProperty TargetTextBoxtProperty =
 			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CalculatorButton), new PropertyMetadata(default(TextBox)));
+	
 		/// <summary>
 		/// 電卓クラス
 		/// </summary>
@@ -37,18 +38,6 @@ namespace TabCon.Controls {
 		/// 電卓を表示しているウィンドウ
 		/// </summary>
 		public Window CalcWindow;
-		/// <summary>
-		/// フィールドに表示される値
-		/// </summary>
-		public string CalcText { get; set; }
-		/// <summary>
-		/// フィールドのフォントサイズ
-		/// </summary>
-		public string FieldFontSize { get; set; }
-		/// <summary>
-		/// フィールドの幅
-		/// </summary>
-		public string FieldWidth { get; set; }
 		/// <summary>
 		/// ダイアログタイトル
 		/// </summary>
@@ -59,14 +48,9 @@ namespace TabCon.Controls {
 		public static readonly DependencyProperty ViewTitleProperty =
 			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
 
-
 		public CalculatorButton()
 		{
 			InitializeComponent();
-
-			//ViewとViewModelの紐付け
-			//VM = new CalculatorButtonViewModel();
-			//this.DataContext = VM;
 			this.Loaded += This_loaded;
 		}
 		//リソースの読込みが終わったら
@@ -75,12 +59,8 @@ namespace TabCon.Controls {
 			string TAG = "this_loaded";
 			string dbMsg = "[CalculatorButtun]";
 			try {
-				//VM.MyView = this;
-				//dbMsg += ",TargetTextBoxName=" + TargetTextBoxName;
-				//VM.TargetTextBox = TargetTextBox;
-
 				calculatorControl = new CS_CalculatorControl();
-				calculatorControl.rootBT = this;
+				calculatorControl.TargetTextBox = this.TargetTextBox;
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -91,11 +71,7 @@ namespace TabCon.Controls {
 			string TAG = "CalcBT_Click";
 			string dbMsg = "[CalculatorButtun]";
 			try {
-				CalcText = TargetTextBox.Text;
-				dbMsg += ",元の書込み=" + CalcText;
-				calculatorControl.InputStr += (string)CalcText;
-				calculatorControl.CalcProcess.Text = calculatorControl.InputStr;
-				//Windowを生成して
+				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 				CalcWindow = new Window {
 					Title = TargetTextBox.Name,
 					Content = calculatorControl,
@@ -115,29 +91,12 @@ namespace TabCon.Controls {
 				if (!ViewTitle.Equals("")) {
 					CalcWindow.Title = ViewTitle;
 				}
+				calculatorControl.CalcWindow = CalcWindow;
+
 				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
+				dbMsg += ",dialogResult=" + dialogResult;
 
 				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		/// <summary>
-		/// ダイアログを終了させたい処から呼んで、外部からダイアログを閉じる
-		/// </summary>
-		public void CalcWindowCloss()
-		{
-			string TAG = "CalcWindowCloss";
-			string dbMsg = "[CalculatorButtun]";
-			try {
-				if (CalcWindow.IsLoaded) {
-					string resurlStr = calculatorControl.ProcessVal.ToString();
-					dbMsg += ",resurlStr=" + resurlStr;
-					TargetTextBox.Text = resurlStr;
-					MyLog(TAG, dbMsg);
-					CalcWindow.Close();
-				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -154,22 +113,5 @@ namespace TabCon.Controls {
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
-
-		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
-																		MessageBoxButton buttns,
-																		MessageBoxImage icon
-																		)
-		{
-			MessageBoxResult result = 0;
-			if (titolStr == null) {
-				result = MessageBox.Show(msgStr);
-			} else if (icon == MessageBoxImage.None) {
-				result = MessageBox.Show(msgStr, titolStr, buttns);
-			} else {
-				result = MessageBox.Show(msgStr, titolStr, buttns, icon);
-			}
-			return result;
-		}
-
 	}
 }

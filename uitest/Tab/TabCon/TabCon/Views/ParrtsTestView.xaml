@@ -59,6 +59,8 @@
 							Margin="0,5,5,5">
 			<!--電卓で計算した結果-->
 			<TextBox x:Name="Bt2Tbox"
+							Width="{Binding ElementName=CalcTexWidth}"
+							FontSize="{Binding ElementName=CalcTextFontSize}"
 							Text="{Binding CalcResult ,Mode=TwoWay}"/>
 			<!--電卓を表示するボタン
 				TargetTextBoxに計算結果を書き写すフィールドを指定

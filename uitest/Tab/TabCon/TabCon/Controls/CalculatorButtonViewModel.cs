@@ -9,6 +9,10 @@ using Livet;
 using Livet.Commands;
 
 namespace TabCon.Controls {
+
+/// <summary>
+/// 未使用
+/// </summary>
 	public class CalculatorButtonViewModel : ViewModel {
 		public CalculatorButton MyView { get; set; }
 		public Object RootViewModel { get; set; }
@@ -60,7 +64,7 @@ namespace TabCon.Controls {
 		public void Initialize()
 		{
 			calculatorControl = new CS_CalculatorControl();
-			calculatorControl.rootBT = MyView;
+	//		calculatorControl.rootBT = MyView;
 		}
 
 		public ViewModelCommand CalcShow {

@@ -6,10 +6,6 @@
              xmlns:local="clr-namespace:TabCon.Controls"
              mc:Ignorable="d" 
 			 Width="Auto" Height="Auto">
-	<UserControl.DataContext>
-		<local:CalculatorButtonViewModel/>
-	</UserControl.DataContext>
-
 	<Grid>
 		<Button x:Name="CalcBT"
 			Grid.Row="0" Grid.Column="1"

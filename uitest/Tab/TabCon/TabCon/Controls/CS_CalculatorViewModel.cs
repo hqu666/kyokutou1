@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TabCon.Controls
 {
+/// <summary>
+/// 未使用
+/// </summary>
 	public class CS_CalculatorViewModel : ViewModel {
 		public CS_CalculatorControl MyView { get; set; }
 		/// <summary>

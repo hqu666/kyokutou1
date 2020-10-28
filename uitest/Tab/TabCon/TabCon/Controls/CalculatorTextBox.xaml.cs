@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace TabCon.Controls {
 	/// <summary>
-	/// CalculatorTextBox.xaml の相互作用ロジック
+	///未使用
 	/// </summary>
 	public partial class CalculatorTextBox : UserControl {
 		/// <summary>
@@ -43,10 +43,10 @@ namespace TabCon.Controls {
 		{
 			InitializeComponent();
 			ViewTitle = "";
-			this.Loaded += this_loaded;
+			this.Loaded += ThisLoaded;
 		}
 		//リソースの読込みが終わったら
-		private void this_loaded(object sender, RoutedEventArgs e)
+		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
 			string TAG = "this_loaded";
 			string dbMsg = "[CalculatorTextBox]";
@@ -74,6 +74,7 @@ namespace TabCon.Controls {
 			string TAG = "Initialize";
 			string dbMsg = "[CalculatorTextBox]";
 			try {
+
 				dbMsg += ",FieldFontSize=" + FieldFontSize;
 				CalcTB.FontSize = (int.Parse(FieldFontSize));
 				dbMsg += ",FieldWidth=" + FieldWidth;
@@ -106,7 +107,6 @@ namespace TabCon.Controls {
 			string dbMsg = "[CalculatorTextBox]";
 			try {
 				Controls.CS_CalculatorControl calculatorControl = new Controls.CS_CalculatorControl();
-				calculatorControl.rootView = this;
 				CalcText = CalcTB.Text;
 				dbMsg += ",元の書込み=" + CalcText;
 				calculatorControl.InputStr += (string)CalcText;
