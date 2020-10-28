@@ -13,30 +13,34 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApp1.Views{ 
+namespace WpfApp1.Views {
 	/// <summary>
 	/// ParrtsTestView.xaml の相互作用ロジック
 	/// </summary>
-public partial class ParrtsTestView : Window {
+	public partial class ParrtsTestView : Window {
+
 		public ViewModels.ParrtsTestViewModel VM;
 
-		public  ParrtsTestView()
+		public ParrtsTestView()
 		{
 			InitializeComponent();
 			//ViewとViewModelの紐付け
 			VM = new ViewModels.ParrtsTestViewModel();
 			this.DataContext = VM;
-			this.Loaded += this_loaded;
+			this.Loaded += ThisLoaded;
 		}
-		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
-		private void this_loaded(object sender, RoutedEventArgs e)
+		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
-			VM.MyView = this;
-			VM.TargetTextBox = Bt2Tbox;
-			//これを外したい
-			CalcCallBt.TargetTextBox = Bt2Tbox;
+			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
+			//VM.MyView = this;
 		}
 
+		/// <summary>
+		/// このView上の表示調整
+		/// サンプルなのでコードビハインドで対処
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CalcTextFontSize_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			TextBox TB = sender as TextBox;

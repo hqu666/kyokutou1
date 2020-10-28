@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
 		xmlns:CS_Calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"  
-      d:DesignHeight="450" d:DesignWidth="800"
       Title="ParrtsTestView">
 
 	<Grid Margin="0,0,0,0" >
@@ -55,14 +54,20 @@
 		<StackPanel Orientation="Horizontal"
 							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
 							Margin="0,5,5,5">
+			<!--電卓で計算した結果-->
 			<TextBox x:Name="Bt2Tbox"
+							Width="{Binding ElementName=CalcTexWidth}"
+							FontSize="{Binding ElementName=CalcTextFontSize}"
 							Text="{Binding CalcResult ,Mode=TwoWay}"/>
-			<CS_Calculator:CalculatorButton  x:Name="CalcCallBt" 
-							FieldFontSize="18"
-							FieldWidth="300"
-							ViewTitle="計算値をフィールドへ"
-			/>
-
+			<!--電卓を表示するボタン
+				TargetTextBoxに計算結果を書き写すフィールドを指定
+				ViewTitleはダイヤログタイトルで指定しなければフィールド名を表示-->
+			<CS_Calculator:CalculatorButton   x:Name="CalcCallBt" 
+						TargetTextBox="{Binding ElementName=Bt2Tbox}"
+						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"/>
 		</StackPanel>
 
-	</Grid></Window>
+	</Grid>
+
+
+</Window>
