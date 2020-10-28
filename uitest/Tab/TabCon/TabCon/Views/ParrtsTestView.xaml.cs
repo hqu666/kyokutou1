@@ -32,15 +32,6 @@ namespace TabCon.Views {
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			VM.MyView = this;
-			////CalcCallBtボタンで電卓ダイアログを表示して、Bt2Tboxテキストボックスに値を戻す
-			////Bt2Tbox.Text = "01234657989";
-			////Bt2Tbox.FontSize = int.Parse(CalcTextFontSize.Text);
-			////Bt2Tbox.MinWidth = int.Parse(CalcTexWidth.Text);
-			////CalcCallBt.MinWidth = int.Parse(CalcTextFontSize.Text) * 1.4;
-			////Controlを指定できるのはここだけ?
-			CalcCallBt.TargetTextBox = Bt2Tbox;
-			CalcCallBt.ViewTitle = CalcTextDLogTitol.Text.ToString();
-
 		}
 
 		private void CalcTextFontSize_TextChanged(object sender, TextChangedEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Livet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,17 +16,19 @@ using System.Windows.Shapes;
 
 namespace TabCon.Controls {
 	/// <summary>
-	/// CalculatorButtun.xaml の相互作用ロジック
+	/// クリックするとダイヤログで電卓を表示するボタン
 	/// </summary>
 	public partial class CalculatorButton : UserControl {
-
-		public CalculatorButtonViewModel VM;
-
 
 		/// <summary>
 		/// 結果の書き出し先
 		/// </summary>
-		public TextBox TargetTextBox { get; set; }
+		public TextBox TargetTextBox {
+			get { return (TextBox)GetValue(TargetTextBoxtProperty); }
+			set { SetValue(TargetTextBoxtProperty, value); }
+		}
+		public static readonly DependencyProperty TargetTextBoxtProperty =
+			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CalculatorButton), new PropertyMetadata(default(TextBox)));
 		/// <summary>
 		/// 電卓クラス
 		/// </summary>
@@ -49,23 +52,32 @@ namespace TabCon.Controls {
 		/// <summary>
 		/// ダイアログタイトル
 		/// </summary>
-		public string ViewTitle { get; set; }
+		public string ViewTitle {
+			get { return (string)GetValue(ViewTitleProperty); }
+			set { SetValue(ViewTitleProperty, value); }
+		}
+		public static readonly DependencyProperty ViewTitleProperty =
+			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
+
+
 		public CalculatorButton()
 		{
 			InitializeComponent();
+
 			//ViewとViewModelの紐付け
-			VM = new CalculatorButtonViewModel();
-			this.DataContext = VM;
-			this.Loaded += this_loaded;
+			//VM = new CalculatorButtonViewModel();
+			//this.DataContext = VM;
+			this.Loaded += This_loaded;
 		}
 		//リソースの読込みが終わったら
-		private void this_loaded(object sender, RoutedEventArgs e)
+		private void This_loaded(object sender, RoutedEventArgs e)
 		{
 			string TAG = "this_loaded";
 			string dbMsg = "[CalculatorButtun]";
 			try {
-				VM.MyView = this;
-				VM.TargetTextBox = TargetTextBox;
+				//VM.MyView = this;
+				//dbMsg += ",TargetTextBoxName=" + TargetTextBoxName;
+				//VM.TargetTextBox = TargetTextBox;
 
 				calculatorControl = new CS_CalculatorControl();
 				calculatorControl.rootBT = this;
@@ -98,8 +110,6 @@ namespace TabCon.Controls {
 				CalcWindow.Width = 300;
 				CalcWindow.Height = 400;
 				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-				//CalcWindow.FontSize = int.Parse(FieldFontSize);
-				//dbMsg += ",FontSize" + CalcWindow.FontSize;
 				dbMsg += ",ViewTitol=" + ViewTitle;
 
 				if (!ViewTitle.Equals("")) {

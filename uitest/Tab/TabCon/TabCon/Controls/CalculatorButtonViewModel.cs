@@ -17,6 +17,14 @@ namespace TabCon.Controls {
 		/// 結果の書き出し先
 		/// </summary>
 		public TextBox TargetTextBox { get; set; }
+		//public TextBox TargetTextBox {
+		//	get { return (TextBox)GetValue(TargetTextBoxtProperty); }
+		//	set { SetValue(TargetTextBoxtProperty, value); }
+		//}
+
+		//public static readonly DependencyProperty TargetTextBoxtProperty =
+		//	DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CalculatorButton), new PropertyMetadata(default(TextBox)));
+
 		/// <summary>
 		/// 電卓クラス
 		/// </summary>

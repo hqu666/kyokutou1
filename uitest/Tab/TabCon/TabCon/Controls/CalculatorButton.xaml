@@ -6,16 +6,20 @@
              xmlns:local="clr-namespace:TabCon.Controls"
              mc:Ignorable="d" 
 			 Width="Auto" Height="Auto">
-    <Grid>
+	<UserControl.DataContext>
+		<local:CalculatorButtonViewModel/>
+	</UserControl.DataContext>
+
+	<Grid>
 		<Button x:Name="CalcBT"
 			Grid.Row="0" Grid.Column="1"
 			Height="Auto"
 			MinWidth="20"
-			Command="{Binding CalcShow}"
+			Click="CalcBT_Click"
 			>
-			<!--Click="CalcBT_Click
+			<!--
+		Command="{Binding CalcShow}"
 			TargetTextBox="{Binding TargetTextBox}"
-			
 			"-->
 			<Button.Background>
 				<ImageBrush ImageSource="CalcIcon.png" Stretch="UniformToFill"/>
