@@ -74,15 +74,17 @@
 		<StackPanel Orientation="Horizontal"
 							HorizontalAlignment="Stretch"  VerticalAlignment="Top"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
-			<Label x:Name="CalcResult" 
+		</StackPanel>
+		<Label x:Name="CalcResult" 
+					Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
 					VerticalAlignment="Top" HorizontalAlignment="Stretch"
 					FontSize="18"/>
-			<!--Content="{Binding CResult ,Mode=TwoWay}"-->
-			<ScrollViewer x:Name="CalcMemoScroll"
-								HorizontalScrollBarVisibility="Auto" Height="60" HorizontalAlignment="Right" >
-				<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
-			</ScrollViewer>
-		</StackPanel>
+		<!--Content="{Binding CResult ,Mode=TwoWay}"-->
+		<ScrollViewer x:Name="CalcMemoScroll"
+					Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3"
+								 Height="60" HorizontalAlignment="Right" >
+			<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
+		</ScrollViewer>
 
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">

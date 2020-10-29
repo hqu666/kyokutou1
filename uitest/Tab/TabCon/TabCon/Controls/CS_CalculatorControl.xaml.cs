@@ -126,24 +126,28 @@ namespace TabCon.Controls {
 						//計算過程から最終確定値と演算子を消去
 						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length- LastOperatier.Length - LineBreakStr.Length));
 						CalcMemoScroll.ScrollToBottom();
-						//計算結果修正
-						if (!LastOperatier.Equals("")) {
-							if (LastOperatier.Equals("＋")) {
-								ProcessVal -= LastValue;
-							} else if (LastOperatier.Equals("－")) {
-								ProcessVal += LastValue;
-							} else if (LastOperatier.Equals("×")) {
-								//	if (ProcessVal != 0) {
-								ProcessVal /= LastValue;
-								//		}
-							} else if (LastOperatier.Equals("÷")) {
-								ProcessVal *= LastValue;
-							}
-							CalcResult.Content = ProcessVal;
-						}
-						BeforeOperation = LastOperatier;
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
+						ProcessVal = ReCalk();
+
+						////計算結果修正
+						//if (!LastOperatier.Equals("")) {
+						//	if (LastOperatier.Equals("＋")) {
+						//		ProcessVal -= LastValue;
+						//	} else if (LastOperatier.Equals("－")) {
+						//		ProcessVal += LastValue;
+						//	} else if (LastOperatier.Equals("×")) {
+						//		//	if (ProcessVal != 0) {
+						//		ProcessVal /= LastValue;
+						//		//		}
+						//	} else if (LastOperatier.Equals("÷")) {
+						//		ProcessVal *= LastValue;
+						//	}
+						CalcResult.Content = ProcessVal;
+						//}
+						BeforeOperation = LastOperatier;
+						/////最後の確定入力を消去
+						//BeforeVals.RemoveAt(BeforeVals.Count - 1);
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -261,26 +265,16 @@ namespace TabCon.Controls {
 					NowInput.Value = Double.Parse(InputStr);
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
-					dbMsg += ",演算結果=" + ProcessVal;
+					dbMsg += ",演算前=" + ProcessVal;
 					if (BeforeOperation.Equals("") || IsBegin) {
 						//演算子が無ければそのまま格納
 						ProcessVal = BeforeVals[BeforeVals.Count - 1].Value;
 						IsBegin = false;
 					} else {
 						//演算子が有れば演算
-						if (BeforeOperation.Equals("＋")) {
-							ProcessVal += BeforeVals[BeforeVals.Count - 1].Value;
-						} else if (BeforeOperation.Equals("－")) {
-							ProcessVal -= BeforeVals[BeforeVals.Count - 1].Value;
-						} else if (BeforeOperation.Equals("×")) {
-							ProcessVal *= BeforeVals[BeforeVals.Count - 1].Value;
-						} else if (BeforeOperation.Equals("÷")) {
-							if (ProcessVal != 0) {
-								ProcessVal /= BeforeVals[BeforeVals.Count - 1].Value;
-							}
-						}
+						ProcessVal = ReCalk();
 					}
-					dbMsg += "＞＞" + ProcessVal;
+					dbMsg += "＞結果＞" + ProcessVal;
 					SetResult(BeforeOperation);
 					CalcOperation.Content = NextOperation;
 				} else {
@@ -296,8 +290,62 @@ namespace TabCon.Controls {
 		}
 
 		/// <summary>
+		/// 再計算
+		///  : Deleteなど追加する演算が無ければ演算子は"",値は0を指定して下さい
+		/// </summary>
+		/// <param name="AddOperater">演算子</param>
+		/// <param name="AddVal">値</param>
+		/// <returns></returns>
+		private double ReCalk()
+		{
+			string TAG = "ReCalk";
+			string dbMsg = "[CS_CalculatorControl]";
+			double ResultNow = 0.0;
+			try {
+				foreach(var BeforeVal in BeforeVals) {
+					string bOperater = BeforeVal.Operater;
+					double bValue = BeforeVal.Value;
+					dbMsg += "\r\n" + bOperater + " " + bValue;
+					if (bOperater.Equals("")) {
+						dbMsg += "＜＜開始" ;
+						ResultNow = bValue;
+					} else if (bOperater.Equals("＋")) {
+						ResultNow += bValue;
+					} else if (bOperater.Equals("－")) {
+						ResultNow -= bValue;
+					} else if (bOperater.Equals("×")) {
+						ResultNow *= bValue;
+					} else if (bOperater.Equals("÷")) {
+						if (ResultNow != 0) {
+							ResultNow /= bValue;
+						}
+					}
+				}
+				//if (! AddOperater.Equals("")) {
+				//	dbMsg += "\r\n追加；" + AddOperater + " " + AddVal;
+				//	if (AddOperater.Equals("＋")) {
+				//		ResultNow += AddVal;
+				//	} else if (AddOperater.Equals("－")) {
+				//		ResultNow -= AddVal;
+				//	} else if (AddOperater.Equals("×")) {
+				//		ResultNow *= AddVal;
+				//	} else if (AddOperater.Equals("÷")) {
+				//		if (ResultNow != 0) {
+				//			ResultNow /= AddVal;
+				//		}
+				//	}
+				//}
+				dbMsg += "=" + ResultNow;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return ResultNow;
+		}
+
+		/// <summary>
 		/// 指定された入力枠に値を記入する
-		/// Nullなら空白文字を返す
+		/// Nullなら空白文字を記入する
 		/// </summary>
 		public void MyCallBack()
 		{
