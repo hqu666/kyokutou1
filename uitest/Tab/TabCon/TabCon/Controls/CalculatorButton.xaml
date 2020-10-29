@@ -2,9 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TabCon.Controls"
-             mc:Ignorable="d" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 mc:Ignorable="d" 
 			 Width="Auto" Height="Auto">
 	<Grid>
 		<Button x:Name="CalcBT"
@@ -13,10 +12,6 @@
 			MinWidth="20"
 			Click="CalcBT_Click"
 			>
-			<!--
-		Command="{Binding CalcShow}"
-			TargetTextBox="{Binding TargetTextBox}"
-			"-->
 			<Button.Background>
 				<ImageBrush ImageSource="CalcIcon.png" Stretch="UniformToFill"/>
 			</Button.Background>
