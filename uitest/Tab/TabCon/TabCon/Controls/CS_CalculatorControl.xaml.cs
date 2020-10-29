@@ -51,6 +51,12 @@ namespace TabCon.Controls {
 		/// </summary>
 		public string NowOperation = "";
 		public string LineBreakStr = "\n";                  //XAML中は&#10;
+		private static string AddStr = "＋";
+		private static string SubtractStr = "－";
+		private static string DivideStr = "÷";
+		private static string MultiplyStr = "×";
+
+		public Key OperatKey;
 
 		/// <summary>
 		/// 最初の入力か
@@ -72,9 +78,38 @@ namespace TabCon.Controls {
 		/// <param name="e"></param>
 		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
-			Initialize();
-			InputStr = TargetTextBox.Text;
-			CalcProcess.Text = InputStr;
+			string TAG = "UserControl_KeyDown";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				Initialize();
+				InputStr = TargetTextBox.Text;
+				CalcProcess.Text = InputStr;
+				dbMsg += ",OperatKey=" + OperatKey.ToString();
+				if (Key.Add <= OperatKey ) {
+					string NextOperation = "";
+					switch (OperatKey) {
+						case Key.Add:
+						case Key.OemPlus:
+							NextOperation = AddStr;
+							break;
+						case Key.Subtract:
+						case Key.OemMinus:
+							NextOperation = SubtractStr;
+							break;
+						case Key.Divide:
+							NextOperation = DivideStr;
+							break;
+						case Key.Multiply:
+							NextOperation = MultiplyStr;
+							break;
+					}
+					dbMsg += ",=" + NextOperation;
+					ProcessedFunc(NextOperation);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		/// <summary>
@@ -129,25 +164,8 @@ namespace TabCon.Controls {
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
 						ProcessVal = ReCalk();
-
-						////計算結果修正
-						//if (!LastOperatier.Equals("")) {
-						//	if (LastOperatier.Equals("＋")) {
-						//		ProcessVal -= LastValue;
-						//	} else if (LastOperatier.Equals("－")) {
-						//		ProcessVal += LastValue;
-						//	} else if (LastOperatier.Equals("×")) {
-						//		//	if (ProcessVal != 0) {
-						//		ProcessVal /= LastValue;
-						//		//		}
-						//	} else if (LastOperatier.Equals("÷")) {
-						//		ProcessVal *= LastValue;
-						//	}
 						CalcResult.Content = ProcessVal;
-						//}
 						BeforeOperation = LastOperatier;
-						/////最後の確定入力を消去
-						//BeforeVals.RemoveAt(BeforeVals.Count - 1);
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -175,6 +193,7 @@ namespace TabCon.Controls {
 			string TAG = "EnterFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
+				InputStr=CalcProcess.Text;
 				if (InputStr.Equals("")) { 
 					dbMsg += "処理する入力が無い";
 					MyLog(TAG, dbMsg);
@@ -309,32 +328,18 @@ namespace TabCon.Controls {
 					if (bOperater.Equals("")) {
 						dbMsg += "＜＜開始" ;
 						ResultNow = bValue;
-					} else if (bOperater.Equals("＋")) {
+					} else if (bOperater.Equals(AddStr)) {
 						ResultNow += bValue;
-					} else if (bOperater.Equals("－")) {
+					} else if (bOperater.Equals(SubtractStr)) {
 						ResultNow -= bValue;
-					} else if (bOperater.Equals("×")) {
+					} else if (bOperater.Equals(MultiplyStr)) {
 						ResultNow *= bValue;
-					} else if (bOperater.Equals("÷")) {
+					} else if (bOperater.Equals(DivideStr)) {
 						if (ResultNow != 0) {
 							ResultNow /= bValue;
 						}
 					}
 				}
-				//if (! AddOperater.Equals("")) {
-				//	dbMsg += "\r\n追加；" + AddOperater + " " + AddVal;
-				//	if (AddOperater.Equals("＋")) {
-				//		ResultNow += AddVal;
-				//	} else if (AddOperater.Equals("－")) {
-				//		ResultNow -= AddVal;
-				//	} else if (AddOperater.Equals("×")) {
-				//		ResultNow *= AddVal;
-				//	} else if (AddOperater.Equals("÷")) {
-				//		if (ResultNow != 0) {
-				//			ResultNow /= AddVal;
-				//		}
-				//	}
-				//}
 				dbMsg += "=" + ResultNow;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -364,7 +369,7 @@ namespace TabCon.Controls {
 			} else if(!IsBegin && InputStr.Equals("")) {
 				MessageBox.Show("割る値が0になっています。0は除算できません");
 			} else{
-				string NextOperation = "÷";
+				string NextOperation = DivideStr;
 				ProcessedFunc(NextOperation);
 			}
 		}
@@ -373,7 +378,7 @@ namespace TabCon.Controls {
 		/// </summary>
 		private void MultiplyFunc()
 		{
-			string NextOperation = "×";
+			string NextOperation = MultiplyStr;
 			ProcessedFunc(NextOperation);
 		}
 		/// <summary>
@@ -381,7 +386,7 @@ namespace TabCon.Controls {
 		/// </summary>
 		private void MinusFunc()
 		{
-			string NextOperation = "－";
+			string NextOperation = SubtractStr;
 			ProcessedFunc(NextOperation);
 		}
 		/// <summary>
@@ -389,7 +394,7 @@ namespace TabCon.Controls {
 		/// </summary>
 		private void PlusFunc()
 		{
-			string NextOperation = "＋";
+			string NextOperation = AddStr;
 			ProcessedFunc(NextOperation);
 		}
 		/// <summary>

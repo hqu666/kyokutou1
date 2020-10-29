@@ -74,9 +74,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CS_Calculator">
-      <HintPath>..\CS_Calculator\obj\x64\Release\CS_Calculator.dll</HintPath>
-    </Reference>
     <Reference Include="InfragisticsWPF4.Controls.Editors.XamCalendar.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="InfragisticsWPF4.Controls.Menus.XamMenu.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
@@ -372,10 +369,10 @@
       <Version>3.0.40218</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Calendar.v3">
-      <Version>1.49.0.2087</Version>
+      <Version>1.49.0.2119</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.49.0.2111</Version>
+      <Version>1.49.0.2117</Version>
     </PackageReference>
     <PackageReference Include="LivetCask">
       <Version>3.2.3.1</Version>

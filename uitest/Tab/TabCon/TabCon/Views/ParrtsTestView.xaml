@@ -1,5 +1,4 @@
-﻿<Page xmlns:CS_Calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"  
-	xmlns:Controls="clr-namespace:TabCon.Controls"  
+﻿<Page xmlns:Controls="clr-namespace:TabCon.Controls"  
 	x:Class="TabCon.Views.ParrtsTestView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,7 +8,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ParrtsTestView">
-
+	<!--xmlns:CS_Calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"-->
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />

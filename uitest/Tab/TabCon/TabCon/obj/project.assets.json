@@ -223,7 +223,7 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.49.0.2087": {
+      "Google.Apis.Calendar.v3/1.49.0.2119": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -251,7 +251,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.49.0.2111": {
+      "Google.Apis.Drive.v3/1.49.0.2117": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -831,7 +831,7 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.49.0.2087": {
+      "Google.Apis.Calendar.v3/1.49.0.2119": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -859,7 +859,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.49.0.2111": {
+      "Google.Apis.Drive.v3/1.49.0.2117": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -1439,7 +1439,7 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.49.0.2087": {
+      "Google.Apis.Calendar.v3/1.49.0.2119": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -1467,7 +1467,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.49.0.2111": {
+      "Google.Apis.Drive.v3/1.49.0.2117": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -2047,7 +2047,7 @@
           "lib/net45/Google.Apis.Auth.dll": {}
         }
       },
-      "Google.Apis.Calendar.v3/1.49.0.2087": {
+      "Google.Apis.Calendar.v3/1.49.0.2119": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -2075,7 +2075,7 @@
           "lib/net45/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Drive.v3/1.49.0.2111": {
+      "Google.Apis.Drive.v3/1.49.0.2117": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.49.0",
@@ -2774,15 +2774,15 @@
         "lib/netstandard2.0/Google.Apis.Auth.xml"
       ]
     },
-    "Google.Apis.Calendar.v3/1.49.0.2087": {
-      "sha512": "waxheGWwaJXx71d4uLKxqetTlDL7sABRiT7TVwnHjXJNJJ0ioWToAcmv/ZCACPT811KW1sqsSsqYB4ghOQWZsg==",
+    "Google.Apis.Calendar.v3/1.49.0.2119": {
+      "sha512": "KfvxBi/kFgZgjLs5BS3hKllS+THLsfGKoh0rjxE+yBh8efeErOunrH7+tURp1f8KqJvBDJwhjDGPl1KhDDDWVQ==",
       "type": "package",
-      "path": "google.apis.calendar.v3/1.49.0.2087",
+      "path": "google.apis.calendar.v3/1.49.0.2119",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.calendar.v3.1.49.0.2087.nupkg.sha512",
+        "google.apis.calendar.v3.1.49.0.2119.nupkg.sha512",
         "google.apis.calendar.v3.nuspec",
         "lib/net40/Google.Apis.Calendar.v3.dll",
         "lib/net40/Google.Apis.Calendar.v3.pdb",
@@ -2823,15 +2823,15 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "Google.Apis.Drive.v3/1.49.0.2111": {
-      "sha512": "fQmk3oFJusICIyJsQISA5GY3+mzPm4Ua17RMApBp/mTvzWGFvWPurmHAGizcxccEh7eE0v32x7ClSDu3KzskxQ==",
+    "Google.Apis.Drive.v3/1.49.0.2117": {
+      "sha512": "A+joHjGQJPfkB1/Ble2tXrhZE6Rt/dXv+ZlX+YgHr7sid8HMaXK8LrRYrXDfDKfFUXq6TeSPTfdVo+y5x0V9cw==",
       "type": "package",
-      "path": "google.apis.drive.v3/1.49.0.2111",
+      "path": "google.apis.drive.v3/1.49.0.2117",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.drive.v3.1.49.0.2111.nupkg.sha512",
+        "google.apis.drive.v3.1.49.0.2117.nupkg.sha512",
         "google.apis.drive.v3.nuspec",
         "lib/net40/Google.Apis.Drive.v3.dll",
         "lib/net40/Google.Apis.Drive.v3.pdb",
@@ -3308,8 +3308,8 @@
     ".NETFramework,Version=v4.7.1": [
       "Expression.Blend.Sdk.WPF >= 1.0.1",
       "Expression.Interaction >= 3.0.40218",
-      "Google.Apis.Calendar.v3 >= 1.49.0.2087",
-      "Google.Apis.Drive.v3 >= 1.49.0.2111",
+      "Google.Apis.Calendar.v3 >= 1.49.0.2119",
+      "Google.Apis.Drive.v3 >= 1.49.0.2117",
       "LivetCask >= 3.2.3.1",
       "LivetExtensions >= 3.2.3.1",
       "Microsoft.Xaml.Behaviors.Wpf >= 1.1.19",
@@ -3360,11 +3360,11 @@
           },
           "Google.Apis.Calendar.v3": {
             "target": "Package",
-            "version": "[1.49.0.2087, )"
+            "version": "[1.49.0.2119, )"
           },
           "Google.Apis.Drive.v3": {
             "target": "Package",
-            "version": "[1.49.0.2111, )"
+            "version": "[1.49.0.2117, )"
           },
           "LivetCask": {
             "target": "Package",
