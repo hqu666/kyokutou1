@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -515,61 +520,61 @@ namespace TabCon.Controls {
 				switch (key) {
 					case Key.NumPad1:
 					case Key.D1:
-						OneBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(OneBt);
 						break;
 					case Key.NumPad2:
 					case Key.D2:
-						TwoBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(TwoBt);
 						break;
 					case Key.NumPad3:
 					case Key.D3:
-						ThreeBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ThreeBt);
 						break;
 					case Key.NumPad4:
 					case Key.D4:
-						FourBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(FourBt);
 						break;
 					case Key.NumPad5:
 					case Key.D5:
-						FiveBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(FiveBt);
 						break;
 					case Key.NumPad6:
 					case Key.D6:
-						SixBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(SixBt);
 						break;
 					case Key.NumPad7:
 					case Key.D7:
-						SevenBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(SevenBt);
 						break;
 					case Key.NumPad8:
 					case Key.D8:
-						EightBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(EightBt);
 						break;
 					case Key.NumPad9:
 					case Key.D9:
-						NineBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(NineBt);
 						break;
 					case Key.NumPad0:
 					case Key.D0:
-						ZeroBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ZeroBt);
 						break;
 					case Key.Decimal:
-						PeriodBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(PeriodBt);
 						break;
 					case Key.Add:
-						PlusBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(PlusBt);
 						break;
 					case Key.Subtract:
-						MinusBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(MinusBt);
 						break;
 					case Key.Multiply:
-						AsteriskBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(AsteriskBt);
 						break;
 					case Key.Divide:
-						SlashBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(SlashBt);
 						break;
 					case Key.Enter:
-						EnterBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(EnterBt);
 						break;
 				}
 				MyLog(TAG, dbMsg);
@@ -593,10 +598,10 @@ namespace TabCon.Controls {
 				dbMsg += "key=" + key.ToString();
 				switch (key) {
 					case Key.Back:
-						ClearBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ClearBt);
 						break;
 					case Key.Delete:
-						ClearAllBt_Click(new object(), new RoutedEventArgs());
+						 Key2ButtonClickerAsync(ClearAllBt);
 						break;
 				}
 				MyLog(TAG, dbMsg);
@@ -606,6 +611,33 @@ namespace TabCon.Controls {
 			CalcProcess.Focus();
 		}
 
+		public Button TargetBt;
+		/// <summary>
+		/// キーボード押下に相当するボタンのクリック
+		/// </summary>
+		/// <param name="targetBt"></param>
+		private async Task Key2ButtonClickerAsync(Button targetBt)
+		{
+			string TAG = "Key2ButtonClicker";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				dbMsg += ",targetBt=" + targetBt.Name;
+				TargetBt = targetBt;
+				typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[] { true });
+				targetBt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+				await Task.Delay(100);
+				typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[] { false });
+
+				////以下でも動作はするがクリック表示にならない
+				//var provider = new ButtonAutomationPeer(targetBt) as IInvokeProvider;
+				//provider.Invoke();
+				//もしくは	ClearBt_Click(new object(), new RoutedEventArgs());
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			CalcProcess.Focus();
+		}
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{

@@ -49,7 +49,10 @@
                          Value="True">
 					<Setter TargetName="border"
                             Property="Background"
-                            Value="#FFD7E7FB" />
+                            Value="#FF154F99" />
+					<Setter TargetName="border"
+                            Property="TextBlock.Foreground"
+                            Value="White" />
 				</Trigger>
 			</ControlTemplate.Triggers>
 		</ControlTemplate>
@@ -172,7 +175,7 @@
 		<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="6" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"
-					Click="ZeroBt_Click"  />
+					Click="ZeroBt_Click" />
 		<!--Command="{Binding ZeroClick}"-->
 		<Button x:Name="PeriodBt" Content="." 
 					Grid.Row="6" Grid.Column="2"
