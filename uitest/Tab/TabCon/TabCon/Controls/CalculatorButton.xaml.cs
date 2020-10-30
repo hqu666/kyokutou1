@@ -98,6 +98,17 @@ namespace TabCon.Controls {
 						CalcBT_Click(new object(), new RoutedEventArgs());
 						break;
 					default:
+						if (Key.D0 <= key && key <= Key.D9) {
+							dbMsg += "=最上列";
+						} else if (Key.NumPad0 <= key && key <= Key.NumPad9) {
+							dbMsg += "=Numパッド";
+						} else if (Key.Decimal == key) {
+							dbMsg += "=小数点";
+						}else{
+							String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
+							String titolStr = "電卓表示フィールド";
+							MessageShowWPF(msgStr,titolStr);
+						}
 						break;
 				}
 				MyLog(TAG, dbMsg);
@@ -105,7 +116,6 @@ namespace TabCon.Controls {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// 電卓をダイアログで表示
@@ -117,6 +127,18 @@ namespace TabCon.Controls {
 			string TAG = "CalcBT_Click";
 			string dbMsg = "[CalculatorButtun]";
 			try {
+				var result = 0;
+				if (int.TryParse(TargetTextBox.Text, out result)) {
+					dbMsg += ",入力の変換結果=" + result;
+				}else{
+					String msgStr = "数値以外が入力されています\r\n";
+					msgStr += TargetTextBox.Text;
+					msgStr += "\r\n修正をお願いします";
+					String titolStr = "電卓表示フィールド";
+					MessageShowWPF(msgStr, titolStr ,MessageBoxButton.OK, MessageBoxImage.Error);
+					return;
+				}
+
 				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 				CalcWindow = new Window {
 					Title = TargetTextBox.Name,
@@ -160,6 +182,36 @@ namespace TabCon.Controls {
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
+
+
+		public MessageBoxResult MessageShowWPF(String msgStr,
+																				String titolStr = null,
+																				MessageBoxButton buttns = MessageBoxButton.OK,
+																				MessageBoxImage icon = MessageBoxImage.None
+																				)
+		{
+			String TAG = "MessageShowWPF";
+			String dbMsg = "開始";
+			MessageBoxResult result = 0;
+			try {
+				dbMsg = "titolStr=" + titolStr;
+				dbMsg += "mggStr=" + msgStr;
+				//メッセージボックスを表示する		https://docs.microsoft.com/ja-jp/dotnet/api/system.windows.messagebox?view=netcore-3.1
+				if (titolStr == null) {
+					result = MessageBox.Show(msgStr);
+				} else if (icon == MessageBoxImage.None) {
+					result = MessageBox.Show(msgStr, titolStr, buttns);
+				} else {
+					result = MessageBox.Show(msgStr, titolStr, buttns, icon);
+				}
+				dbMsg += ",result=" + result;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyLog(TAG, dbMsg + "で" + er.ToString());
+			}
+			return result;
+		}
+
 
 	}
 

@@ -576,7 +576,7 @@ namespace TabCon.Controls {
 		}
 
 		/// <summary>
-		/// BackSpace,Delete,Fキーはここ
+		/// システム キーのダウンイベント
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
