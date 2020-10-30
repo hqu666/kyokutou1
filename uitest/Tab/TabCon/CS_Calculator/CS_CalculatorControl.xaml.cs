@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +15,7 @@ namespace CS_Calculator {
 	/// :ダイヤログなど別コントロールに組み込んで使用
 	/// </summary>
 	public partial class CS_CalculatorControl : UserControl {
+
 		/// <summary>
 		/// 結果の書き出し先
 		/// </summary>
@@ -37,7 +42,7 @@ namespace CS_Calculator {
 		/// <summary>
 		/// 入力確定値の配列
 		/// </summary>
-		public IList<BeforeVal> BeforeVals;
+		public ObservableCollection<BeforeVal> BeforeVals;
 		/// <summary>
 		/// 小数点以下の処理が必要
 		/// </summary>
@@ -51,6 +56,12 @@ namespace CS_Calculator {
 		/// </summary>
 		public string NowOperation = "";
 		public string LineBreakStr = "\n";                  //XAML中は&#10;
+		private static string AddStr = "＋";
+		private static string SubtractStr = "－";
+		private static string DivideStr = "÷";
+		private static string MultiplyStr = "×";
+
+		public Key OperatKey;
 
 		/// <summary>
 		/// 最初の入力か
@@ -72,9 +83,38 @@ namespace CS_Calculator {
 		/// <param name="e"></param>
 		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
-			Initialize();
-			InputStr = TargetTextBox.Text;
-			CalcProcess.Text = InputStr;
+			string TAG = "UserControl_KeyDown";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				Initialize();
+				InputStr = TargetTextBox.Text;
+				CalcProcess.Text = InputStr;
+				dbMsg += ",OperatKey=" + OperatKey.ToString();
+				if (Key.Add <= OperatKey) {
+					string NextOperation = "";
+					switch (OperatKey) {
+						case Key.Add:
+						case Key.OemPlus:
+							NextOperation = AddStr;
+							break;
+						case Key.Subtract:
+						case Key.OemMinus:
+							NextOperation = SubtractStr;
+							break;
+						case Key.Divide:
+							NextOperation = DivideStr;
+							break;
+						case Key.Multiply:
+							NextOperation = MultiplyStr;
+							break;
+					}
+					dbMsg += ",=" + NextOperation;
+					ProcessedFunc(NextOperation);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		/// <summary>
@@ -82,14 +122,15 @@ namespace CS_Calculator {
 		/// </summary>
 		public void Initialize()
 		{
-			InputStr = "";              //最終入力値を残す為、初期化から外す?
-			BeforeVals = new List<BeforeVal>();
+			InputStr = "";
+			BeforeVals = new ObservableCollection<BeforeVal>();
 			ProcessVal = 0.0;
 			isDecimal = false;
 			BeforeOperation = "";
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
-			CalcMemo.Content = "";
+			//		CalcMemo.DataContext = BeforeVals;		//DataGridの場合
+			CalcMemo.Content = "";                                  //ラベルの場合
 			CalcProcess.Text = "";
 			CalcProcess.Focus();
 			IsBegin = true;
@@ -123,27 +164,16 @@ namespace CS_Calculator {
 						dbMsg += "＝" + LastOperatier + " : " + LastValue;
 						InputStr = LastValue.ToString();
 						CalcProcess.Text = InputStr;
+						///最後の確定入力を消去
+						BeforeVals.RemoveAt(BeforeVals.Count - 1);
+						ProcessVal = ReCalk();
+						CalcResult.Content = ProcessVal;
+						BeforeOperation = LastOperatier;
+						//計算過程を更新
+						//		CalcMemo.DataContext = BeforeVals;
 						//計算過程から最終確定値と演算子を消去
 						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
 						CalcMemoScroll.ScrollToBottom();
-						//計算結果修正
-						if (!LastOperatier.Equals("")) {
-							if (LastOperatier.Equals("＋")) {
-								ProcessVal -= LastValue;
-							} else if (LastOperatier.Equals("－")) {
-								ProcessVal += LastValue;
-							} else if (LastOperatier.Equals("×")) {
-								//	if (ProcessVal != 0) {
-								ProcessVal /= LastValue;
-								//		}
-							} else if (LastOperatier.Equals("÷")) {
-								ProcessVal *= LastValue;
-							}
-							CalcResult.Content = ProcessVal;
-						}
-						BeforeOperation = LastOperatier;
-						///最後の確定入力を消去
-						BeforeVals.RemoveAt(BeforeVals.Count - 1);
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -171,6 +201,7 @@ namespace CS_Calculator {
 			string TAG = "EnterFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
+				InputStr = CalcProcess.Text;
 				if (InputStr.Equals("")) {
 					dbMsg += "処理する入力が無い";
 					MyLog(TAG, dbMsg);
@@ -216,37 +247,6 @@ namespace CS_Calculator {
 		}
 
 		/// <summary>
-		/// 演算結果を表示し、次の入力を待つ
-		/// </summary>
-		/// <param name="OperationStr"></param>
-		public void SetResult(string OperationStr)
-		{
-			string TAG = "SetResult";
-			string dbMsg = "[CS_CalculatorControl]";
-			dbMsg += ",OperationStr=" + OperationStr;
-			try {
-				CalcResult.Content = ProcessVal.ToString();
-				string ProssesStr = CalcMemo.Content.ToString();
-
-				if (!InputStr.Equals("")) {
-					if (CalcMemo.Content.Equals("")) {
-						dbMsg += "入力開始";
-						CalcMemo.Content += "=" + InputStr;
-					} else {
-						dbMsg += "入力継続中";
-						CalcMemo.Content += LineBreakStr + OperationStr + InputStr;
-						CalcMemoScroll.ScrollToBottom();
-					}
-				}
-				InputStr = "";
-				CalcProcess.Text = InputStr;
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		/// <summary>
 		/// 演算子キーが押された時点で前の演算を処理して、値の入力を待つ
 		/// </summary>
 		private void ProcessedFunc(string NextOperation)
@@ -261,27 +261,33 @@ namespace CS_Calculator {
 					NowInput.Value = Double.Parse(InputStr);
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
-					dbMsg += ",演算結果=" + ProcessVal;
+					dbMsg += ",演算前=" + ProcessVal;
 					if (BeforeOperation.Equals("") || IsBegin) {
 						//演算子が無ければそのまま格納
 						ProcessVal = BeforeVals[BeforeVals.Count - 1].Value;
 						IsBegin = false;
 					} else {
 						//演算子が有れば演算
-						if (BeforeOperation.Equals("＋")) {
-							ProcessVal += BeforeVals[BeforeVals.Count - 1].Value;
-						} else if (BeforeOperation.Equals("－")) {
-							ProcessVal -= BeforeVals[BeforeVals.Count - 1].Value;
-						} else if (BeforeOperation.Equals("×")) {
-							ProcessVal *= BeforeVals[BeforeVals.Count - 1].Value;
-						} else if (BeforeOperation.Equals("÷")) {
-							if (ProcessVal != 0) {
-								ProcessVal /= BeforeVals[BeforeVals.Count - 1].Value;
-							}
-						}
+						ProcessVal = ReCalk();
 					}
-					dbMsg += "＞＞" + ProcessVal;
-					SetResult(BeforeOperation);
+					dbMsg += "＞結果＞" + ProcessVal;
+					//計算結果と経過を更新	:SetResult
+					CalcResult.Content = ProcessVal.ToString();
+					//			CalcMemo.DataContext = BeforeVals;				//DataGridの場合
+					//Labelの場合
+					if (1 == BeforeVals.Count) {
+						dbMsg += "入力開始";
+						CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
+					} else if (1 < BeforeVals.Count) {
+						dbMsg += "入力継続中";
+						CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+						CalcMemoScroll.ScrollToBottom();
+					}
+
+					OnPropertyChanged("BeforeVals");
+					InputStr = "";
+					CalcProcess.Text = InputStr;
+
 					CalcOperation.Content = NextOperation;
 				} else {
 					dbMsg += ",入力無し：演算子から入力された";
@@ -296,8 +302,48 @@ namespace CS_Calculator {
 		}
 
 		/// <summary>
+		/// 再計算
+		///  : Deleteなど追加する演算が無ければ演算子は"",値は0を指定して下さい
+		/// </summary>
+		/// <param name="AddOperater">演算子</param>
+		/// <param name="AddVal">値</param>
+		/// <returns></returns>
+		private double ReCalk()
+		{
+			string TAG = "ReCalk";
+			string dbMsg = "[CS_CalculatorControl]";
+			double ResultNow = 0.0;
+			try {
+				foreach (var BeforeVal in BeforeVals) {
+					string bOperater = BeforeVal.Operater;
+					double bValue = BeforeVal.Value;
+					dbMsg += "\r\n" + bOperater + " " + bValue;
+					if (bOperater.Equals("")) {
+						dbMsg += "＜＜開始";
+						ResultNow = bValue;
+					} else if (bOperater.Equals(AddStr)) {
+						ResultNow += bValue;
+					} else if (bOperater.Equals(SubtractStr)) {
+						ResultNow -= bValue;
+					} else if (bOperater.Equals(MultiplyStr)) {
+						ResultNow *= bValue;
+					} else if (bOperater.Equals(DivideStr)) {
+						if (ResultNow != 0) {
+							ResultNow /= bValue;
+						}
+					}
+				}
+				dbMsg += "=" + ResultNow;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return ResultNow;
+		}
+
+		/// <summary>
 		/// 指定された入力枠に値を記入する
-		/// Nullなら空白文字を返す
+		/// Nullなら空白文字を記入する
 		/// </summary>
 		public void MyCallBack()
 		{
@@ -316,7 +362,7 @@ namespace CS_Calculator {
 			} else if (!IsBegin && InputStr.Equals("")) {
 				MessageBox.Show("割る値が0になっています。0は除算できません");
 			} else {
-				string NextOperation = "÷";
+				string NextOperation = DivideStr;
 				ProcessedFunc(NextOperation);
 			}
 		}
@@ -325,7 +371,7 @@ namespace CS_Calculator {
 		/// </summary>
 		private void MultiplyFunc()
 		{
-			string NextOperation = "×";
+			string NextOperation = MultiplyStr;
 			ProcessedFunc(NextOperation);
 		}
 		/// <summary>
@@ -333,7 +379,7 @@ namespace CS_Calculator {
 		/// </summary>
 		private void MinusFunc()
 		{
-			string NextOperation = "－";
+			string NextOperation = SubtractStr;
 			ProcessedFunc(NextOperation);
 		}
 		/// <summary>
@@ -341,7 +387,7 @@ namespace CS_Calculator {
 		/// </summary>
 		private void PlusFunc()
 		{
-			string NextOperation = "＋";
+			string NextOperation = AddStr;
 			ProcessedFunc(NextOperation);
 		}
 		/// <summary>
@@ -462,61 +508,61 @@ namespace CS_Calculator {
 				switch (key) {
 					case Key.NumPad1:
 					case Key.D1:
-						OneBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(OneBt);
 						break;
 					case Key.NumPad2:
 					case Key.D2:
-						TwoBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(TwoBt);
 						break;
 					case Key.NumPad3:
 					case Key.D3:
-						ThreeBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ThreeBt);
 						break;
 					case Key.NumPad4:
 					case Key.D4:
-						FourBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(FourBt);
 						break;
 					case Key.NumPad5:
 					case Key.D5:
-						FiveBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(FiveBt);
 						break;
 					case Key.NumPad6:
 					case Key.D6:
-						SixBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(SixBt);
 						break;
 					case Key.NumPad7:
 					case Key.D7:
-						SevenBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(SevenBt);
 						break;
 					case Key.NumPad8:
 					case Key.D8:
-						EightBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(EightBt);
 						break;
 					case Key.NumPad9:
 					case Key.D9:
-						NineBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(NineBt);
 						break;
 					case Key.NumPad0:
 					case Key.D0:
-						ZeroBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ZeroBt);
 						break;
 					case Key.Decimal:
-						PeriodBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(PeriodBt);
 						break;
 					case Key.Add:
-						PlusBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(PlusBt);
 						break;
 					case Key.Subtract:
-						MinusBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(MinusBt);
 						break;
 					case Key.Multiply:
-						AsteriskBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(AsteriskBt);
 						break;
 					case Key.Divide:
-						SlashBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(SlashBt);
 						break;
 					case Key.Enter:
-						EnterBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(EnterBt);
 						break;
 				}
 				MyLog(TAG, dbMsg);
@@ -540,10 +586,10 @@ namespace CS_Calculator {
 				dbMsg += "key=" + key.ToString();
 				switch (key) {
 					case Key.Back:
-						ClearBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ClearBt);
 						break;
 					case Key.Delete:
-						ClearAllBt_Click(new object(), new RoutedEventArgs());
+						Key2ButtonClickerAsync(ClearAllBt);
 						break;
 				}
 				MyLog(TAG, dbMsg);
@@ -551,6 +597,40 @@ namespace CS_Calculator {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 			CalcProcess.Focus();
+		}
+
+		public Button TargetBt;
+		/// <summary>
+		/// キーボード押下に相当するボタンのクリック
+		/// </summary>
+		/// <param name="targetBt"></param>
+		private async Task Key2ButtonClickerAsync(Button targetBt)
+		{
+			string TAG = "Key2ButtonClicker";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				dbMsg += ",targetBt=" + targetBt.Name;
+				TargetBt = targetBt;
+				typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[] { true });
+				targetBt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+				await Task.Delay(100);
+				typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[] { false });
+
+				////以下でも動作はするがクリック表示にならない
+				//var provider = new ButtonAutomationPeer(targetBt) as IInvokeProvider;
+				//provider.Invoke();
+				//もしくは	ClearBt_Click(new object(), new RoutedEventArgs());
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			CalcProcess.Focus();
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void OnPropertyChanged(string propertyName)
+		{
+			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		////////////////////////////////////////////////////

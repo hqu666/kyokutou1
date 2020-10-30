@@ -48,7 +48,10 @@
                          Value="True">
 					<Setter TargetName="border"
                             Property="Background"
-                            Value="#FFD7E7FB" />
+                            Value="#FF154F99" />
+					<Setter TargetName="border"
+                            Property="TextBlock.Foreground"
+                            Value="White" />
 				</Trigger>
 			</ControlTemplate.Triggers>
 		</ControlTemplate>
@@ -70,18 +73,28 @@
 			<RowDefinition Height="*" MinHeight="52"/>
 			<RowDefinition MinHeight="52"/>
 		</Grid.RowDefinitions>
+
 		<StackPanel Orientation="Horizontal"
 							HorizontalAlignment="Stretch"  VerticalAlignment="Top"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
-			<Label x:Name="CalcResult" 
+		</StackPanel>
+		<Label x:Name="CalcResult" 
+					Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
 					VerticalAlignment="Top" HorizontalAlignment="Stretch"
 					FontSize="18"/>
-			<!--Content="{Binding CResult ,Mode=TwoWay}"-->
-			<ScrollViewer x:Name="CalcMemoScroll"
-								HorizontalScrollBarVisibility="Auto" Height="60" HorizontalAlignment="Right" >
-				<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
-			</ScrollViewer>
-		</StackPanel>
+		<!--Content="{Binding CResult ,Mode=TwoWay}"-->
+		<!--<DataGrid Name="CalcMemo" 
+						Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3"
+						Height="60" HorizontalAlignment="Right" >
+		</DataGrid>-->
+		<!--
+								DataContext="{Binding BeforeVals ,Mode=TwoWay}"
+AutoGenerateColumns="False"-->
+		<ScrollViewer x:Name="CalcMemoScroll"
+					Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3"
+								 Height="60" HorizontalAlignment="Right" >
+			<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
+		</ScrollViewer>
 
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
@@ -169,7 +182,7 @@
 		<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="6" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"
-					Click="ZeroBt_Click"  />
+					Click="ZeroBt_Click" />
 		<!--Command="{Binding ZeroClick}"-->
 		<Button x:Name="PeriodBt" Content="." 
 					Grid.Row="6" Grid.Column="2"
@@ -191,6 +204,5 @@
 		<!--Command="{Binding PlusClick}"-->
 
 	</Grid>
-
 
 </UserControl>

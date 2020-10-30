@@ -15,13 +15,14 @@ using System.Windows.Shapes;
 
 namespace CS_Calculator {
 
+
 	/// <summary>
 	/// クリックするとダイヤログで電卓を表示するボタン
 	/// </summary>
 	public partial class CalculatorButton : UserControl {
 
 		/// <summary>
-		/// 結果の書き出し先
+		/// 結果の書き出し先フィールド
 		/// </summary>
 		public TextBox TargetTextBox {
 			get { return (TextBox)GetValue(TargetTextBoxtProperty); }
@@ -48,6 +49,11 @@ namespace CS_Calculator {
 		public static readonly DependencyProperty ViewTitleProperty =
 			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
 
+		public Key OperatKey;
+
+		/// <summary>
+		/// このクラスの起点
+		/// </summary>
 		public CalculatorButton()
 		{
 			InitializeComponent();
@@ -61,11 +67,51 @@ namespace CS_Calculator {
 			try {
 				calculatorControl = new CS_CalculatorControl();
 				calculatorControl.TargetTextBox = this.TargetTextBox;
+
+				TargetTextBox.KeyDown += new KeyEventHandler(TFKeyDown);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 
+		/// <summary>
+		/// 結果の書き出し先フィールド四則演算子が入力されたら
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TFKeyDown(object sender, KeyEventArgs e)
+		{
+			string TAG = "TFKeyDown";
+			string dbMsg = "[CalculatorButtun]";
+			try {
+				TextBox TF = sender as TextBox;
+				Key key = e.Key;
+				dbMsg += "key=" + key.ToString();
+				switch (key) {
+					case Key.Add:
+					case Key.OemPlus:
+					case Key.Subtract:
+					case Key.OemMinus:
+					case Key.Divide:
+					case Key.Multiply:
+						OperatKey = key;
+						CalcBT_Click(new object(), new RoutedEventArgs());
+						break;
+					default:
+						break;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		/// <summary>
+		/// 電卓をダイアログで表示
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CalcBT_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "CalcBT_Click";
@@ -92,7 +138,7 @@ namespace CS_Calculator {
 					CalcWindow.Title = ViewTitle;
 				}
 				calculatorControl.CalcWindow = CalcWindow;
-
+				calculatorControl.OperatKey = this.OperatKey;
 				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 				dbMsg += ",dialogResult=" + dialogResult;
 
@@ -101,6 +147,7 @@ namespace CS_Calculator {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		public static void MyLog(string TAG, string dbMsg)
 		{
@@ -113,7 +160,7 @@ namespace CS_Calculator {
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
-	}
 
+	}
 
 }

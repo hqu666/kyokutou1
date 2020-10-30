@@ -74,6 +74,7 @@
 			<RowDefinition Height="*" MinHeight="52"/>
 			<RowDefinition MinHeight="52"/>
 		</Grid.RowDefinitions>
+
 		<StackPanel Orientation="Horizontal"
 							HorizontalAlignment="Stretch"  VerticalAlignment="Top"
 							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
@@ -83,6 +84,13 @@
 					VerticalAlignment="Top" HorizontalAlignment="Stretch"
 					FontSize="18"/>
 		<!--Content="{Binding CResult ,Mode=TwoWay}"-->
+		<!--<DataGrid Name="CalcMemo" 
+						Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3"
+						Height="60" HorizontalAlignment="Right" >
+		</DataGrid>-->
+		<!--
+								DataContext="{Binding BeforeVals ,Mode=TwoWay}"
+AutoGenerateColumns="False"-->
 		<ScrollViewer x:Name="CalcMemoScroll"
 					Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3"
 								 Height="60" HorizontalAlignment="Right" >

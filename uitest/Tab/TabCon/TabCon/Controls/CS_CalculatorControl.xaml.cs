@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ namespace TabCon.Controls {
 	/// :ダイヤログなど別コントロールに組み込んで使用
 	/// </summary>
 	public partial class CS_CalculatorControl : UserControl {
+	
 		/// <summary>
 		/// 結果の書き出し先
 		/// </summary>
@@ -42,7 +45,7 @@ namespace TabCon.Controls {
 		/// <summary>
 		/// 入力確定値の配列
 		/// </summary>
-		public IList<BeforeVal> BeforeVals;
+		public ObservableCollection<BeforeVal> BeforeVals;
 		/// <summary>
 		/// 小数点以下の処理が必要
 		/// </summary>
@@ -122,14 +125,15 @@ namespace TabCon.Controls {
 		/// </summary>
 		public void Initialize()
 		{
-			InputStr = "";              //最終入力値を残す為、初期化から外す?
-			BeforeVals = new List<BeforeVal>();
+			InputStr = ""; 
+			BeforeVals = new ObservableCollection<BeforeVal>();
 			ProcessVal = 0.0;
 			isDecimal = false;
 			BeforeOperation = "";
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
-			CalcMemo.Content = "";
+			//		CalcMemo.DataContext = BeforeVals;		//DataGridの場合
+			CalcMemo.Content = "";									//ラベルの場合
 			CalcProcess.Text = "";
 			CalcProcess.Focus();
 			IsBegin = true;
@@ -163,14 +167,16 @@ namespace TabCon.Controls {
 						dbMsg += "＝" + LastOperatier + " : " + LastValue;
 						InputStr = LastValue.ToString();
 						CalcProcess.Text = InputStr;
-						//計算過程から最終確定値と演算子を消去
-						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length- LastOperatier.Length - LineBreakStr.Length));
-						CalcMemoScroll.ScrollToBottom();
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
 						ProcessVal = ReCalk();
 						CalcResult.Content = ProcessVal;
 						BeforeOperation = LastOperatier;
+						//計算過程を更新
+						//		CalcMemo.DataContext = BeforeVals;
+						//計算過程から最終確定値と演算子を消去
+						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
+						CalcMemoScroll.ScrollToBottom();
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -244,37 +250,6 @@ namespace TabCon.Controls {
 		}
 
 		/// <summary>
-		/// 演算結果を表示し、次の入力を待つ
-		/// </summary>
-		/// <param name="OperationStr"></param>
-		public void SetResult(string OperationStr)
-		{
-			string TAG = "SetResult";
-			string dbMsg = "[CS_CalculatorControl]";
-			dbMsg += ",OperationStr=" + OperationStr;
-			try {
-				CalcResult.Content = ProcessVal.ToString();
-				string ProssesStr = CalcMemo.Content.ToString();
-
-				if (!InputStr.Equals("")) {
-					if (CalcMemo.Content.Equals("")) {
-						dbMsg += "入力開始";
-						CalcMemo.Content += "=" + InputStr;
-					} else {
-						dbMsg += "入力継続中";
-						CalcMemo.Content += LineBreakStr+OperationStr + InputStr;
-						CalcMemoScroll.ScrollToBottom();
-					}
-				}
-				InputStr = "";
-				CalcProcess.Text = InputStr;
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		/// <summary>
 		/// 演算子キーが押された時点で前の演算を処理して、値の入力を待つ
 		/// </summary>
 		private void ProcessedFunc(string NextOperation)
@@ -299,7 +274,23 @@ namespace TabCon.Controls {
 						ProcessVal = ReCalk();
 					}
 					dbMsg += "＞結果＞" + ProcessVal;
-					SetResult(BeforeOperation);
+					//計算結果と経過を更新	:SetResult
+					CalcResult.Content = ProcessVal.ToString();
+					//			CalcMemo.DataContext = BeforeVals;				//DataGridの場合
+					//Labelの場合
+					if (1== BeforeVals.Count) {
+							dbMsg += "入力開始";
+							CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
+					} else if(1 < BeforeVals.Count) {
+						dbMsg += "入力継続中";
+						CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+						CalcMemoScroll.ScrollToBottom();
+					}
+
+					OnPropertyChanged("BeforeVals");
+					InputStr = "";
+					CalcProcess.Text = InputStr;
+
 					CalcOperation.Content = NextOperation;
 				} else {
 					dbMsg += ",入力無し：演算子から入力された";
@@ -638,6 +629,13 @@ namespace TabCon.Controls {
 			}
 			CalcProcess.Focus();
 		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void OnPropertyChanged(string propertyName)
+		{
+			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{

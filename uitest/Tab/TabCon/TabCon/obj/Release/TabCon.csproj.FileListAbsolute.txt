@@ -2,7 +2,6 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\TabCon.csprojA
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\TabCon.exe.config
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Views\NaviWindow.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\CalculatorButton.g.cs
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\CalculatorTextBox.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\CS_CalculatorControl.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\X_1_Control.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Style\App.g.cs
@@ -130,7 +129,6 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\System.Securit
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\System.Security.SecureString.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\System.Threading.Overlapped.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\System.Xml.XPath.XDocument.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Controls.Editors.XamCalendar.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Controls.Menus.XamMenu.v12.2.dll
@@ -140,7 +138,6 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWP
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.DragDrop.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Editors.v12.2.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.v12.2.dll
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\CS_Calculator.pdb
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Controls.Editors.XamCalendar.v12.2.xml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2.xml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\InfragisticsWPF4.Controls.Menus.XamMenu.v12.2.xml
@@ -159,7 +156,6 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\ja\Infragistic
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\ja\InfragisticsWPF4.Editors.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\bin\Release\ja\InfragisticsWPF4.v12.2.resources.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\CalculatorButton.baml
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\CalculatorTextBox.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\CS_CalculatorControl.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Controls\X_1_Control.baml
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\TabCon\obj\Release\Style\App.baml
