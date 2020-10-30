@@ -132,11 +132,13 @@ namespace TabCon.Controls {
 			BeforeOperation = "";
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
-			//		CalcMemo.DataContext = BeforeVals;		//DataGridの場合
-			CalcMemo.Content = "";									//ラベルの場合
 			CalcProcess.Text = "";
-			CalcProcess.Focus();
 			IsBegin = true;
+			//DataGridの場合
+			CalcMemo.ItemsSource = BeforeVals;
+			CalcMemo.Items.Refresh();
+			//	CalcMemo.Content = "";									//ラベルの場合
+			CalcProcess.Focus();
 		}
 
 		/// <summary>
@@ -147,7 +149,7 @@ namespace TabCon.Controls {
 			string TAG = "ClearFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-				string ProssesStr = CalcMemo.Content.ToString();
+		//		string ProssesStr = CalcMemo.Content.ToString();
 				InputStr = CalcProcess.Text;
 				dbMsg += ",入力状況=" + InputStr;
 				if (0 < InputStr.Length) {
@@ -173,10 +175,11 @@ namespace TabCon.Controls {
 						CalcResult.Content = ProcessVal;
 						BeforeOperation = LastOperatier;
 						//計算過程を更新
-						//		CalcMemo.DataContext = BeforeVals;
-						//計算過程から最終確定値と演算子を消去
-						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
-						CalcMemoScroll.ScrollToBottom();
+						CalcMemo.ItemsSource = BeforeVals;
+						CalcMemo.Items.Refresh();
+						////計算過程から最終確定値と演算子を消去
+						////CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
+						////CalcMemoScroll.ScrollToBottom();
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -276,16 +279,19 @@ namespace TabCon.Controls {
 					dbMsg += "＞結果＞" + ProcessVal;
 					//計算結果と経過を更新	:SetResult
 					CalcResult.Content = ProcessVal.ToString();
-					//			CalcMemo.DataContext = BeforeVals;				//DataGridの場合
-					//Labelの場合
-					if (1== BeforeVals.Count) {
-							dbMsg += "入力開始";
-							CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
-					} else if(1 < BeforeVals.Count) {
-						dbMsg += "入力継続中";
-						CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-						CalcMemoScroll.ScrollToBottom();
-					}
+					//DataGridの場合
+					CalcMemo.DataContext = BeforeVals;	
+					CalcMemo.Items.Refresh();
+			//		CalcMemo.ScrollIntoView(BeforeVals.Count-1);
+					////Labelの場合
+					//if (1== BeforeVals.Count) {
+					//		dbMsg += "入力開始";
+					//		CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
+					//} else if(1 < BeforeVals.Count) {
+					//	dbMsg += "入力継続中";
+					//	CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+					//	CalcMemoScroll.ScrollToBottom();
+					//}
 
 					OnPropertyChanged("BeforeVals");
 					InputStr = "";
@@ -303,6 +309,7 @@ namespace TabCon.Controls {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 
 		/// <summary>
 		/// 再計算
@@ -343,6 +350,12 @@ namespace TabCon.Controls {
 			}
 			return ResultNow;
 		}
+
+		public void ProgressRefresh()
+		{
+		}
+
+
 
 		/// <summary>
 		/// 指定された入力枠に値を記入する
