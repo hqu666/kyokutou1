@@ -151,8 +151,14 @@ namespace TabCon.Controls {
 				CalcWindow.Top = pt.Y + 30;
 				CalcWindow.Topmost = true;
 				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-				CalcWindow.Width = 300;
-				CalcWindow.Height = 400;
+				CalcWindow.Width = 360;
+				CalcWindow.Height = 460;
+				//Thickness wPadding = new Thickness();
+				//wPadding.Left = 5;
+				//wPadding.Top = 5;
+				//wPadding.Right = 5;
+				//wPadding.Bottom = 5;
+				//CalcWindow.Padding = wPadding;
 				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
 				dbMsg += ",ViewTitol=" + ViewTitle;
 
