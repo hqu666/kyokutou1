@@ -4,6 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
+		FontSize="14" 
+		WindowStartupLocation="CenterScreen"
+		Topmost="true" Height="500" Width="800"
 		xmlns:CS_Calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"  
       Title="ParrtsTestView">
 
