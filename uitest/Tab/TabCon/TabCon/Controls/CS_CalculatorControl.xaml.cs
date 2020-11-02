@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -33,6 +34,10 @@ namespace TabCon.Controls {
 		/// 電卓を表示しているウィンドウ
 		/// </summary>
 		public Window CalcWindow;
+
+		public string SelectOperater { get; set; }
+		public string SelectValue { get; set; }
+
 
 		/// <summary>
 		/// 計算結果
@@ -70,6 +75,11 @@ namespace TabCon.Controls {
 		/// 最初の入力か
 		/// </summary>
 		private bool IsBegin = true;
+		/// <summary>
+		/// 編集値の変更か
+		/// </summary>
+		private bool IsPrgresEdit = false;
+
 		/// <summary>
 		/// 起動処理
 		/// </summary>
@@ -135,9 +145,9 @@ namespace TabCon.Controls {
 			CalcProcess.Text = "";
 			IsBegin = true;
 			//DataGridの場合
-			CalcMemo.ItemsSource = BeforeVals;
-			CalcMemo.Items.Refresh();
-			//	CalcMemo.Content = "";									//ラベルの場合
+			CalcProgress.ItemsSource = BeforeVals;
+			CalcProgress.Items.Refresh();
+			//	CalcProgress.Content = "";									//ラベルの場合
 			CalcProcess.Focus();
 		}
 
@@ -149,7 +159,7 @@ namespace TabCon.Controls {
 			string TAG = "ClearFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-		//		string ProssesStr = CalcMemo.Content.ToString();
+		//		string ProssesStr = CalcProgress.Content.ToString();
 				InputStr = CalcProcess.Text;
 				dbMsg += ",入力状況=" + InputStr;
 				if (0 < InputStr.Length) {
@@ -168,6 +178,15 @@ namespace TabCon.Controls {
 						double LastValue = LastInput.Value;
 						dbMsg += "＝" + LastOperatier + " : " + LastValue;
 						InputStr = LastValue.ToString();
+						if (InputStr.Contains("E")) {
+							int bp = 16;
+							string[] rStr = InputStr.Split('E');
+							InputStr = rStr[0].Replace(".", "") + "0";
+							dbMsg += ",sVer=" + InputStr;
+							int pStr = int.Parse(rStr[1].Substring(1, rStr[1].Length - 1)) - bp;
+							dbMsg += ",残り=" + pStr;
+							InputStr +=	Math.Pow(10, pStr).ToString().Replace("1", "");
+						}
 						CalcProcess.Text = InputStr;
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
@@ -175,11 +194,11 @@ namespace TabCon.Controls {
 						CalcResult.Content = ProcessVal;
 						BeforeOperation = LastOperatier;
 						//計算過程を更新
-						CalcMemo.ItemsSource = BeforeVals;
-						CalcMemo.Items.Refresh();
+						CalcProgress.ItemsSource = BeforeVals;
+						CalcProgress.Items.Refresh();
 						////計算過程から最終確定値と演算子を消去
-						////CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
-						////CalcMemoScroll.ScrollToBottom();
+						////CalcProgress.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
+						////CalcProgressScroll.ScrollToBottom();
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -280,19 +299,9 @@ namespace TabCon.Controls {
 					//計算結果と経過を更新	:SetResult
 					CalcResult.Content = ProcessVal.ToString();
 					//DataGridの場合
-					CalcMemo.DataContext = BeforeVals;	
-					CalcMemo.Items.Refresh();
-			//		CalcMemo.ScrollIntoView(BeforeVals.Count-1);
-					////Labelの場合
-					//if (1== BeforeVals.Count) {
-					//		dbMsg += "入力開始";
-					//		CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
-					//} else if(1 < BeforeVals.Count) {
-					//	dbMsg += "入力継続中";
-					//	CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-					//	CalcMemoScroll.ScrollToBottom();
-					//}
-
+					CalcProgress.DataContext = BeforeVals;	
+					CalcProgress.Items.Refresh();
+					ProgressRefresh();
 					OnPropertyChanged("BeforeVals");
 					InputStr = "";
 					CalcProcess.Text = InputStr;
@@ -351,10 +360,163 @@ namespace TabCon.Controls {
 			return ResultNow;
 		}
 
+		/// <summary>
+		/// 計算経過の更新
+		/// </summary>
 		public void ProgressRefresh()
 		{
+			string TAG = "ProgressRefresh";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				//DataGridの場合
+				CalcProgress.ItemsSource = BeforeVals;
+				CalcProgress.Items.Refresh();
+				int lastRow = CalcProgress.Items.Count - 1;				//書込み結果で取得＞だめならソースで＞ (BeforeVals.Count - 1);
+				dbMsg += "、最終=" + lastRow;
+				if(-1< lastRow) {
+					CalcProgress.ScrollIntoView(CalcProgress.Items.GetItemAt(lastRow));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
+		private void ProgressEdit(int selectedIndex,string operater ,double value)
+		{
+			string TAG = "ProgressEdit";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				dbMsg += "[" + selectedIndex + "]";
+				BeforeVal vals = BeforeVals[selectedIndex];
+				dbMsg += vals.Operater + "=" + vals.Value;
+				vals.Operater = operater;
+				vals.Value = value;
+				dbMsg +=">>"+ vals.Operater + "=" + vals.Value;
+				BeforeVals[selectedIndex]= vals;
+				dbMsg += ">>" + BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
+				ReCalk();
+		//		ProgressRefresh();
+				MyLog(TAG, dbMsg);
+				dbMsg += ";既存値変更終了";
+				IsPrgresEdit = false;
+
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// DataGridをクリック：直接編集開始
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CalcProgress_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+		{
+			string TAG = "CalcProgress_SelectedCellsChanged";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				dbMsg += "＞＞既存値変更開始";
+				IsPrgresEdit = true;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		/// <summary>
+		/// 経過の選択行が変わった
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CalcProgress_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "CalcProgress_SelectionChanged";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				//BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				//dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 経過編集後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CalcProgress_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+		{
+			string TAG = "CalcProgress_CellEditEnding";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+		//			DG.CommitEdit();
+				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				string eName = (string)e.Column.Header;
+				//		string eValue = e.EditingElement.TextInput;
+				dbMsg += ",eName" + eName;
+				MyLog(TAG, dbMsg);
+	//			ProgressEdit(selectedIndex, selectedItem.Operater, selectedItem.Value);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void CalcProgress_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+		{
+			string TAG = "CalcProgress_RowEditEnding";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				MyLog(TAG, dbMsg);
+	//			ProgressEdit(selectedIndex, selectedItem.Operater, selectedItem.Value);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 変更終了：Enter押下
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CalcProgress_LostFocus(object sender, RoutedEventArgs e)
+		{
+			string TAG = "CalcMemo_SelectedCellsChanged";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				//dbMsg += ";既存値変更終了";
+				//IsPrgresEdit = false;
+				MyLog(TAG, dbMsg);
+				//ProgressEdit(selectedIndex, selectedItem.Operater, selectedItem.Value);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 
 		/// <summary>
@@ -521,77 +683,81 @@ namespace TabCon.Controls {
 			try {
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
-				switch (key) {
-					case Key.NumPad1:
-					case Key.D1:
-						Key2ButtonClickerAsync(OneBt);
-						break;
-					case Key.NumPad2:
-					case Key.D2:
-						Key2ButtonClickerAsync(TwoBt);
-						break;
-					case Key.NumPad3:
-					case Key.D3:
-						Key2ButtonClickerAsync(ThreeBt);
-						break;
-					case Key.NumPad4:
-					case Key.D4:
-						Key2ButtonClickerAsync(FourBt);
-						break;
-					case Key.NumPad5:
-					case Key.D5:
-						Key2ButtonClickerAsync(FiveBt);
-						break;
-					case Key.NumPad6:
-					case Key.D6:
-						Key2ButtonClickerAsync(SixBt);
-						break;
-					case Key.NumPad7:
-					case Key.D7:
-						Key2ButtonClickerAsync(SevenBt);
-						break;
-					case Key.NumPad8:
-					case Key.D8:
-						Key2ButtonClickerAsync(EightBt);
-						break;
-					case Key.NumPad9:
-					case Key.D9:
-						Key2ButtonClickerAsync(NineBt);
-						break;
-					case Key.NumPad0:
-					case Key.D0:
-						Key2ButtonClickerAsync(ZeroBt);
-						break;
-					case Key.Decimal:
-						Key2ButtonClickerAsync(PeriodBt);
-						break;
-					case Key.Add:
-						Key2ButtonClickerAsync(PlusBt);
-						break;
-					case Key.Subtract:
-						Key2ButtonClickerAsync(MinusBt);
-						break;
-					case Key.Multiply:
-						Key2ButtonClickerAsync(AsteriskBt);
-						break;
-					case Key.Divide:
-						Key2ButtonClickerAsync(SlashBt);
-						break;
-					case Key.Enter:
-						Key2ButtonClickerAsync(EnterBt);
-						break;
+				if (IsPrgresEdit) {
+					dbMsg += ";既存値変更" ;
+				} else{
+					switch (key) {
+						case Key.NumPad1:
+						case Key.D1:
+							Key2ButtonClickerAsync(OneBt);
+							break;
+						case Key.NumPad2:
+						case Key.D2:
+							Key2ButtonClickerAsync(TwoBt);
+							break;
+						case Key.NumPad3:
+						case Key.D3:
+							Key2ButtonClickerAsync(ThreeBt);
+							break;
+						case Key.NumPad4:
+						case Key.D4:
+							Key2ButtonClickerAsync(FourBt);
+							break;
+						case Key.NumPad5:
+						case Key.D5:
+							Key2ButtonClickerAsync(FiveBt);
+							break;
+						case Key.NumPad6:
+						case Key.D6:
+							Key2ButtonClickerAsync(SixBt);
+							break;
+						case Key.NumPad7:
+						case Key.D7:
+							Key2ButtonClickerAsync(SevenBt);
+							break;
+						case Key.NumPad8:
+						case Key.D8:
+							Key2ButtonClickerAsync(EightBt);
+							break;
+						case Key.NumPad9:
+						case Key.D9:
+							Key2ButtonClickerAsync(NineBt);
+							break;
+						case Key.NumPad0:
+						case Key.D0:
+							Key2ButtonClickerAsync(ZeroBt);
+							break;
+						case Key.Decimal:
+							Key2ButtonClickerAsync(PeriodBt);
+							break;
+						case Key.Add:
+							Key2ButtonClickerAsync(PlusBt);
+							break;
+						case Key.Subtract:
+							Key2ButtonClickerAsync(MinusBt);
+							break;
+						case Key.Multiply:
+							Key2ButtonClickerAsync(AsteriskBt);
+							break;
+						case Key.Divide:
+							Key2ButtonClickerAsync(SlashBt);
+							break;
+						case Key.Enter:
+							Key2ButtonClickerAsync(EnterBt);
+							break;
+					}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			CalcProcess.Focus();
+	//		CalcProcess.Focus();
 		}
 
 		/// <summary>
 		/// システム キーのダウンイベント
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">クリックされたキー</param>
 		/// <param name="e"></param>
 		private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
@@ -600,19 +766,24 @@ namespace TabCon.Controls {
 			try {
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
-				switch (key) {
-					case Key.Back:
-						Key2ButtonClickerAsync(ClearBt);
-						break;
-					case Key.Delete:
-						 Key2ButtonClickerAsync(ClearAllBt);
-						break;
+				
+				if (IsPrgresEdit) {
+					dbMsg += ";既存値変更";
+				} else {
+					switch (key) {
+						case Key.Back:
+							Key2ButtonClickerAsync(ClearBt);
+							break;
+						case Key.Delete:
+							Key2ButtonClickerAsync(ClearAllBt);
+							break;
+					}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			CalcProcess.Focus();
+	//		CalcProcess.Focus();
 		}
 
 		public Button TargetBt;
@@ -640,7 +811,7 @@ namespace TabCon.Controls {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			CalcProcess.Focus();
+//			CalcProcess.Focus();
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -666,6 +837,11 @@ namespace TabCon.Controls {
 		/// 確定した演算子と数値
 		/// </summary>
 		public class BeforeVal{
+			public string Operater { get; set; }
+			public double Value { get; set; }
+		}
+
+		public class ProgressVal {
 			public string Operater { get; set; }
 			public double Value { get; set; }
 		}

@@ -60,10 +60,10 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition MinWidth="70" Width="Auto" />
+			<ColumnDefinition MinWidth="65" Width="*" />
+			<ColumnDefinition MinWidth="65" Width="*" />
+			<ColumnDefinition MinWidth="65" Width="*" />
+			<ColumnDefinition MinWidth="65"  Width="Auto" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
@@ -86,27 +86,25 @@
 						FontSize="18"/>
 			<!--
 						Content="{Binding CResult ,Mode=TwoWay}"-->
-			<DataGrid x:Name="CalcMemo" 
+		<DataGrid x:Name="CalcProgress" 
 							Grid.Row="0" Grid.Column="3"
 							HeadersVisibility="None"
-							 IsReadOnly="True"
 							AutoGenerateColumns="True"
 							ColumnWidth="SizeToCells"
 							 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 							HorizontalAlignment="Right" 
 							HorizontalContentAlignment="Stretch"
 							MaxHeight="60"
-							CanUserAddRows ="False"
+							CanUserAddRows ="False" 
+							CanUserReorderColumns="True"
+							SelectedCellsChanged="CalcProgress_SelectedCellsChanged" 
+							CellEditEnding="CalcProgress_CellEditEnding" 
 							>
-			<!--<DataGrid.CellStyle>
-				<Style TargetType="{x:Type DataGridCell}">
-					<Style.Triggers>
-						<Trigger Property="IsSelected" Value="False">
-							<Setter Property="IsEditing" Value="False" />
-						</Trigger>
-					</Style.Triggers>
-				</Style>
-			</DataGrid.CellStyle>-->
+			<!--IsReadOnly="True"
+								SelectionChanged="CalcProgress_SelectionChanged"
+									RowEditEnding="CalcProgress_RowEditEnding"
+							LostFocus="CalcProgress_LostFocus" 
+			-->
 		</DataGrid>
 
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
