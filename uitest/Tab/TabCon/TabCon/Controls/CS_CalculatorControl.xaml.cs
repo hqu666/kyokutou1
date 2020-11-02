@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace TabCon.Controls {
@@ -134,10 +135,7 @@ namespace TabCon.Controls {
 			CalcOperation.Content = "";
 			CalcProcess.Text = "";
 			IsBegin = true;
-			//DataGridの場合
-			CalcMemo.ItemsSource = BeforeVals;
-			CalcMemo.Items.Refresh();
-			//	CalcMemo.Content = "";									//ラベルの場合
+			ProgressRefresh();
 			CalcProcess.Focus();
 		}
 
@@ -149,7 +147,6 @@ namespace TabCon.Controls {
 			string TAG = "ClearFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-		//		string ProssesStr = CalcMemo.Content.ToString();
 				InputStr = CalcProcess.Text;
 				dbMsg += ",入力状況=" + InputStr;
 				if (0 < InputStr.Length) {
@@ -168,18 +165,22 @@ namespace TabCon.Controls {
 						double LastValue = LastInput.Value;
 						dbMsg += "＝" + LastOperatier + " : " + LastValue;
 						InputStr = LastValue.ToString();
+						if (InputStr.Contains("E")) {
+							int bp = 16;
+							string[] rStr = InputStr.Split('E');
+							InputStr = rStr[0].Replace(".", "") + "0";
+							dbMsg += ",sVer=" + InputStr;
+							int pStr = int.Parse(rStr[1].Substring(1, rStr[1].Length - 1)) - bp;
+							dbMsg += ",残り=" + pStr;
+							InputStr +=	Math.Pow(10, pStr).ToString().Replace("1", "");
+						}
 						CalcProcess.Text = InputStr;
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
 						ProcessVal = ReCalk();
 						CalcResult.Content = ProcessVal;
 						BeforeOperation = LastOperatier;
-						//計算過程を更新
-						CalcMemo.ItemsSource = BeforeVals;
-						CalcMemo.Items.Refresh();
-						////計算過程から最終確定値と演算子を消去
-						////CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
-						////CalcMemoScroll.ScrollToBottom();
+						ProgressRefresh();
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -277,23 +278,10 @@ namespace TabCon.Controls {
 						ProcessVal = ReCalk();
 					}
 					dbMsg += "＞結果＞" + ProcessVal;
-					//計算結果と経過を更新	:SetResult
+					//計算結果と経過を更新
 					CalcResult.Content = ProcessVal.ToString();
-					//DataGridの場合
-					CalcMemo.DataContext = BeforeVals;	
-					CalcMemo.Items.Refresh();
-			//		CalcMemo.ScrollIntoView(BeforeVals.Count-1);
-					////Labelの場合
-					//if (1== BeforeVals.Count) {
-					//		dbMsg += "入力開始";
-					//		CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
-					//} else if(1 < BeforeVals.Count) {
-					//	dbMsg += "入力継続中";
-					//	CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-					//	CalcMemoScroll.ScrollToBottom();
-					//}
-
-					OnPropertyChanged("BeforeVals");
+					ProgressRefresh();
+	//				OnPropertyChanged("BeforeVals");
 					InputStr = "";
 					CalcProcess.Text = InputStr;
 
@@ -309,7 +297,6 @@ namespace TabCon.Controls {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// 再計算
@@ -351,11 +338,36 @@ namespace TabCon.Controls {
 			return ResultNow;
 		}
 
+		/// <summary>
+		/// 計算経過の更新
+		/// </summary>
 		public void ProgressRefresh()
 		{
+			string TAG = "ProgressRefresh";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				//DataGridの場合
+				CalcProgress.ItemsSource = BeforeVals;
+				CalcProgress.Items.Refresh();
+				int lastRow = CalcProgress.Items.Count - 1;				//書込み結果で取得＞だめならソースで＞ (BeforeVals.Count - 1);
+				dbMsg += "、最終=" + lastRow;
+				if(-1< lastRow) {
+					CalcProgress.ScrollIntoView(CalcProgress.Items.GetItemAt(lastRow));
+				}
+				////Labelの場合
+				//if (1== BeforeVals.Count) {
+				//		dbMsg += "入力開始";
+				//		CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
+				//} else if(1 < BeforeVals.Count) {
+				//	dbMsg += "入力継続中";
+				//	CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+				//	CalcMemoScroll.ScrollToBottom();
+				//}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
-
-
 
 		/// <summary>
 		/// 指定された入力枠に値を記入する
