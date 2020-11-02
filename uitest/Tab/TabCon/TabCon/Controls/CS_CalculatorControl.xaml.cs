@@ -135,7 +135,7 @@ namespace TabCon.Controls {
 			CalcOperation.Content = "";
 			CalcProcess.Text = "";
 			IsBegin = true;
-			ProgressRefresh();
+	//		ProgressRefresh();
 			CalcProcess.Focus();
 		}
 

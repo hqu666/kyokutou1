@@ -104,7 +104,9 @@ namespace TabCon.Controls {
 							dbMsg += "=Numパッド";
 						} else if (Key.Decimal == key) {
 							dbMsg += "=小数点";
-						}else{
+						} else if (Key.Return == key) {
+							dbMsg += "=Return";
+						} else {
 							String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
 							String titolStr = "電卓表示フィールド";
 							MessageShowWPF(msgStr,titolStr);
