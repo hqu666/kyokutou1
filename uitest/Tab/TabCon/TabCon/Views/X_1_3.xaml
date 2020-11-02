@@ -1,0 +1,55 @@
+﻿<Page xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"  x:Class="TabCon.Views.X_1_3"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TabCon.Views"
+	  xmlns:ig="http://schemas.infragistics.com/xaml"
+	  xmlns:controls="clr-namespace:TabCon.Controls"
+	  mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="1000"
+      Title="月別表示">
+
+	<!--<Page.Resources>
+		<ResourceDictionary Source="/Style/App.xaml"/>
+		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
+	</Page.Resources>-->
+
+	<Grid Margin="0,0,0,0" >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<controls:X_1_Control x:Name="ControlPanel"
+										Grid.Row="0" Grid.Column="0"/>
+		<ig:XamMonthView x:Name="MyCalendar"
+									Grid.Row="1" Grid.Column="0"
+									ShowCalendarCloseButton="False" 
+									ShowCalendarOverlayButton="False"
+									CalendarDisplayMode="Overlay" WorkingDaysSource="AllResourcesInGroups"
+									DataManager="{Binding dataManager}" 
+									/>
+		<!--
+									DataManager="{Binding ElementName=dataManager}" の場合
+		<ig:XamScheduleDataManager x:Name="dataManager" 
+             DataConnector="{Binding dataConnector}">
+			<ig:XamScheduleDataManager.CalendarGroups>
+				<ig:CalendarGroup InitialCalendarIds="own1[cal1]"/>
+			</ig:XamScheduleDataManager.CalendarGroups>
+		</ig:XamScheduleDataManager>-->
+		<!--
+		 DataConnector="{Binding ElementName=dataConnector}"の場合
+		<ig:ListScheduleDataConnector x:Name="dataConnector" 
+													  ResourceItemsSource="{Binding resources}"
+													  ResourceCalendarItemsSource="{Binding calendars}"
+													  AppointmentItemsSource="{Binding appointments}"
+													  />-->
+		<!--TaskItemsSource="{Binding tasks}"
+													  JournalItemsSource="{Binding journals}"-->
+
+	</Grid>
+</Page>

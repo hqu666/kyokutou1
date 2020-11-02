@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace TabCon.Controls {
+namespace CS_Calculator {
 
 	/// <summary>
 	/// 電卓
 	/// :ダイヤログなど別コントロールに組み込んで使用
 	/// </summary>
 	public partial class CS_CalculatorControl : UserControl {
-	
+
 		/// <summary>
 		/// 結果の書き出し先
 		/// </summary>
@@ -28,7 +25,7 @@ namespace TabCon.Controls {
 		}
 		public static readonly DependencyProperty TargetTextBoxtProperty =
 			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBox)));
-	
+
 		/// <summary>
 		/// 電卓を表示しているウィンドウ
 		/// </summary>
@@ -53,7 +50,7 @@ namespace TabCon.Controls {
 		/// <summary>
 		/// 直前の演算
 		/// </summary>
-		public string BeforeOperation ="";
+		public string BeforeOperation = "";
 		/// <summary>
 		/// 入力した演算子
 		/// </summary>
@@ -93,7 +90,7 @@ namespace TabCon.Controls {
 				InputStr = TargetTextBox.Text;
 				CalcProcess.Text = InputStr;
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
-				if (Key.Add <= OperatKey ) {
+				if (Key.Add <= OperatKey) {
 					string NextOperation = "";
 					switch (OperatKey) {
 						case Key.Add:
@@ -125,20 +122,18 @@ namespace TabCon.Controls {
 		/// </summary>
 		public void Initialize()
 		{
-			InputStr = ""; 
+			InputStr = "";
 			BeforeVals = new ObservableCollection<BeforeVal>();
 			ProcessVal = 0.0;
 			isDecimal = false;
 			BeforeOperation = "";
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
+			//		CalcMemo.DataContext = BeforeVals;		//DataGridの場合
+			CalcMemo.Content = "";                                  //ラベルの場合
 			CalcProcess.Text = "";
-			IsBegin = true;
-			//DataGridの場合
-			CalcMemo.ItemsSource = BeforeVals;
-			CalcMemo.Items.Refresh();
-			//	CalcMemo.Content = "";									//ラベルの場合
 			CalcProcess.Focus();
+			IsBegin = true;
 		}
 
 		/// <summary>
@@ -149,20 +144,20 @@ namespace TabCon.Controls {
 			string TAG = "ClearFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-		//		string ProssesStr = CalcMemo.Content.ToString();
+				string ProssesStr = CalcMemo.Content.ToString();
 				InputStr = CalcProcess.Text;
 				dbMsg += ",入力状況=" + InputStr;
 				if (0 < InputStr.Length) {
-				//入力エリアに文字が有る間は一文字づつ消去
+					//入力エリアに文字が有る間は一文字づつ消去
 					InputStr = InputStr.Substring(0, InputStr.Length - 1);
 					CalcProcess.Text = InputStr;
 				} else {
-					dbMsg += ",残り=" + BeforeVals.Count +"件";
+					dbMsg += ",残り=" + BeforeVals.Count + "件";
 					if (1 < BeforeVals.Count) {
 						//最終確定入力を読出し
 						BeforeVal LastInput = BeforeVals[BeforeVals.Count - 1];
 						//演算子と
-						string LastOperatier = LastInput.Operater; 
+						string LastOperatier = LastInput.Operater;
 						CalcOperation.Content = LastOperatier;
 						//値を転記
 						double LastValue = LastInput.Value;
@@ -175,16 +170,15 @@ namespace TabCon.Controls {
 						CalcResult.Content = ProcessVal;
 						BeforeOperation = LastOperatier;
 						//計算過程を更新
-						CalcMemo.ItemsSource = BeforeVals;
-						CalcMemo.Items.Refresh();
-						////計算過程から最終確定値と演算子を消去
-						////CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
-						////CalcMemoScroll.ScrollToBottom();
+						//		CalcMemo.DataContext = BeforeVals;
+						//計算過程から最終確定値と演算子を消去
+						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
+						CalcMemoScroll.ScrollToBottom();
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
 						//演算子を転記
-						string LastOperatier = LastInput.Operater; 
+						string LastOperatier = LastInput.Operater;
 						//値を読み出し
 						double LastValue = LastInput.Value;
 						dbMsg += "＝" + LastOperatier + " : " + LastValue;
@@ -207,8 +201,8 @@ namespace TabCon.Controls {
 			string TAG = "EnterFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-				InputStr=CalcProcess.Text;
-				if (InputStr.Equals("")) { 
+				InputStr = CalcProcess.Text;
+				if (InputStr.Equals("")) {
 					dbMsg += "処理する入力が無い";
 					MyLog(TAG, dbMsg);
 					MyCallBack();
@@ -222,9 +216,9 @@ namespace TabCon.Controls {
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
-			} 
+			}
 		}
-	
+
 		/// <summary>
 		/// 最初の入力ではない
 		/// 各演算開始前に最初の入力値か否かを返す
@@ -279,19 +273,16 @@ namespace TabCon.Controls {
 					dbMsg += "＞結果＞" + ProcessVal;
 					//計算結果と経過を更新	:SetResult
 					CalcResult.Content = ProcessVal.ToString();
-					//DataGridの場合
-					CalcMemo.DataContext = BeforeVals;	
-					CalcMemo.Items.Refresh();
-			//		CalcMemo.ScrollIntoView(BeforeVals.Count-1);
-					////Labelの場合
-					//if (1== BeforeVals.Count) {
-					//		dbMsg += "入力開始";
-					//		CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
-					//} else if(1 < BeforeVals.Count) {
-					//	dbMsg += "入力継続中";
-					//	CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-					//	CalcMemoScroll.ScrollToBottom();
-					//}
+					//			CalcMemo.DataContext = BeforeVals;				//DataGridの場合
+					//Labelの場合
+					if (1 == BeforeVals.Count) {
+						dbMsg += "入力開始";
+						CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
+					} else if (1 < BeforeVals.Count) {
+						dbMsg += "入力継続中";
+						CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+						CalcMemoScroll.ScrollToBottom();
+					}
 
 					OnPropertyChanged("BeforeVals");
 					InputStr = "";
@@ -310,7 +301,6 @@ namespace TabCon.Controls {
 			}
 		}
 
-
 		/// <summary>
 		/// 再計算
 		///  : Deleteなど追加する演算が無ければ演算子は"",値は0を指定して下さい
@@ -324,12 +314,12 @@ namespace TabCon.Controls {
 			string dbMsg = "[CS_CalculatorControl]";
 			double ResultNow = 0.0;
 			try {
-				foreach(var BeforeVal in BeforeVals) {
+				foreach (var BeforeVal in BeforeVals) {
 					string bOperater = BeforeVal.Operater;
 					double bValue = BeforeVal.Value;
 					dbMsg += "\r\n" + bOperater + " " + bValue;
 					if (bOperater.Equals("")) {
-						dbMsg += "＜＜開始" ;
+						dbMsg += "＜＜開始";
 						ResultNow = bValue;
 					} else if (bOperater.Equals(AddStr)) {
 						ResultNow += bValue;
@@ -351,12 +341,6 @@ namespace TabCon.Controls {
 			return ResultNow;
 		}
 
-		public void ProgressRefresh()
-		{
-		}
-
-
-
 		/// <summary>
 		/// 指定された入力枠に値を記入する
 		/// Nullなら空白文字を記入する
@@ -375,9 +359,9 @@ namespace TabCon.Controls {
 		{
 			if (!IsBegin && ProcessVal == 0) {
 				MessageBox.Show("割られる値が0になっています。0は除算できません");
-			} else if(!IsBegin && InputStr.Equals("")) {
+			} else if (!IsBegin && InputStr.Equals("")) {
 				MessageBox.Show("割る値が0になっています。0は除算できません");
-			} else{
+			} else {
 				string NextOperation = DivideStr;
 				ProcessedFunc(NextOperation);
 			}
@@ -589,7 +573,7 @@ namespace TabCon.Controls {
 		}
 
 		/// <summary>
-		/// システム キーのダウンイベント
+		/// BackSpace,Delete,Fキーはここ
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -605,7 +589,7 @@ namespace TabCon.Controls {
 						Key2ButtonClickerAsync(ClearBt);
 						break;
 					case Key.Delete:
-						 Key2ButtonClickerAsync(ClearAllBt);
+						Key2ButtonClickerAsync(ClearAllBt);
 						break;
 				}
 				MyLog(TAG, dbMsg);
@@ -653,7 +637,7 @@ namespace TabCon.Controls {
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-				Console.WriteLine(TAG + " : " + dbMsg);
+			Console.WriteLine(TAG + " : " + dbMsg);
 #endif
 		}
 
@@ -665,7 +649,7 @@ namespace TabCon.Controls {
 		/// <summary>
 		/// 確定した演算子と数値
 		/// </summary>
-		public class BeforeVal{
+		public class BeforeVal {
 			public string Operater { get; set; }
 			public double Value { get; set; }
 		}

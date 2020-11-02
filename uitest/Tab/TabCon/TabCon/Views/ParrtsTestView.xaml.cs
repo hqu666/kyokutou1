@@ -43,14 +43,14 @@ namespace TabCon.Views {
 		private void CalcTextFontSize_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			TextBox TB = sender as TextBox;
-			Bt2Tbox.FontSize = int.Parse(TB.Text);
-			CalcCallBt.MinWidth = int.Parse(CalcTextFontSize.Text) * 1.4;
+			Bt2Tbox.FontSize = double.Parse(TB.Text);
+			CalcCallBt.MinWidth = double.Parse(CalcTextFontSize.Text) * 1.4;
 		}
 
 		private void CalcTexWidth_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			TextBox TB = sender as TextBox;
-			Bt2Tbox.Width = int.Parse(TB.Text);
+			Bt2Tbox.Width = double.Parse(TB.Text);
 		}
 
 		private void CalcTextDLogTitol_TextChanged(object sender, TextChangedEventArgs e)

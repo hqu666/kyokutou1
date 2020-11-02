@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1FBCC3B5-2044-4E53-B96B-A277F30B668F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TabCon</RootNamespace>
+    <AssemblyName>TabCon</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TabCon.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="InfragisticsWPF4.Controls.Editors.XamCalendar.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Controls.Menus.XamDataTree.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Controls.Menus.XamMenu.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Controls.Schedules.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.DataManager.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.DataPresenter.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.DragDrop.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.Editors.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="InfragisticsWPF4.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Behaviors\CloseButtonBehavior.cs" />
+    <Compile Include="Behaviors\PasswordBindBehavior.cs" />
+    <Compile Include="Constant.cs" />
+    <Compile Include="Controls\CalculatorButton.xaml.cs">
+      <DependentUpon>CalculatorButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CS_CalculatorControl.xaml.cs">
+      <DependentUpon>CS_CalculatorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\X_1_Control.xaml.cs">
+      <DependentUpon>X_1_Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CS_Util.cs" />
+    <Compile Include="Infrastructures\ViewModelBase .cs" />
+    <Compile Include="Models\MyMenu.cs" />
+    <Compile Include="Models\m_admin_users.cs" />
+    <Compile Include="Models\m_banks.cs" />
+    <Compile Include="Models\m_bank_accounts.cs" />
+    <Compile Include="Models\m_budget_departments.cs" />
+    <Compile Include="Models\m_budget_own_companies.cs" />
+    <Compile Include="Models\m_budget_staffs.cs" />
+    <Compile Include="Models\m_budget_suppliers.cs" />
+    <Compile Include="Models\m_catalogs.cs" />
+    <Compile Include="Models\m_catalog_products.cs" />
+    <Compile Include="Models\m_catalog_product_price_matrixes.cs" />
+    <Compile Include="Models\m_category_names.cs" />
+    <Compile Include="Models\m_client_names.cs" />
+    <Compile Include="Models\m_contracts.cs" />
+    <Compile Include="Models\m_contract_licenses.cs" />
+    <Compile Include="Models\m_deadlines.cs" />
+    <Compile Include="Models\m_departments.cs" />
+    <Compile Include="Models\m_ft_balance_accounts_payables.cs" />
+    <Compile Include="Models\m_ft_balance_accounts_receivables.cs" />
+    <Compile Include="Models\m_ft_balance_billings.cs" />
+    <Compile Include="Models\m_ft_balance_payments.cs" />
+    <Compile Include="Models\m_google_account.cs" />
+    <Compile Include="Models\m_headline_names.cs" />
+    <Compile Include="Models\m_import_item_settings.cs" />
+    <Compile Include="Models\m_lengths.cs" />
+    <Compile Include="Models\m_licenses.cs" />
+    <Compile Include="Models\m_license_users.cs" />
+    <Compile Include="Models\m_login_users.cs" />
+    <Compile Include="Models\m_login_user_connections.cs" />
+    <Compile Include="Models\m_mail_settings.cs" />
+    <Compile Include="Models\m_numbering_settings.cs" />
+    <Compile Include="Models\m_numbers.cs" />
+    <Compile Include="Models\m_option_settings.cs" />
+    <Compile Include="Models\m_own_companies.cs" />
+    <Compile Include="Models\m_own_company_file_management.cs" />
+    <Compile Include="Models\m_own_company_staffs.cs" />
+    <Compile Include="Models\m_plans.cs" />
+    <Compile Include="Models\m_postal_codes.cs" />
+    <Compile Include="Models\m_prefectures.cs" />
+    <Compile Include="Models\m_products.cs" />
+    <Compile Include="Models\m_product_price_matrixes.cs" />
+    <Compile Include="Models\m_properties.cs" />
+    <Compile Include="Models\m_service_settings.cs" />
+    <Compile Include="Models\m_sidebar_categories.cs" />
+    <Compile Include="Models\m_slip_item_patterns.cs" />
+    <Compile Include="Models\m_slip_settings.cs" />
+    <Compile Include="Models\m_suppliers.cs" />
+    <Compile Include="Models\m_supplier_product_price_rates.cs" />
+    <Compile Include="Models\m_supplier_staffs.cs" />
+    <Compile Include="Models\m_supplier_variety_rates.cs" />
+    <Compile Include="Models\m_system_names.cs" />
+    <Compile Include="Models\m_system_settings.cs" />
+    <Compile Include="Models\m_taxs.cs" />
+    <Compile Include="Models\m_varieties.cs" />
+    <Compile Include="Models\m_versions.cs" />
+    <Compile Include="Models\s_loging_users.cs" />
+    <Compile Include="Models\s_transactions.cs" />
+    <Compile Include="Models\t_accounts_payable_summaries.cs" />
+    <Compile Include="Models\t_accounts_receivable_summaries.cs" />
+    <Compile Include="Models\t_billing_summaries.cs" />
+    <Compile Include="Models\t_confirmation_processes.cs" />
+    <Compile Include="Models\t_customer_condition_bases.cs" />
+    <Compile Include="Models\t_customer_condition_details.cs" />
+    <Compile Include="Models\t_deposits.cs" />
+    <Compile Include="Models\t_deposit_allocations.cs" />
+    <Compile Include="Models\t_events.cs" />
+    <Compile Include="Models\t_payment_lumps.cs" />
+    <Compile Include="Models\t_payment_summaries.cs" />
+    <Compile Include="Models\t_project_bases.cs" />
+    <Compile Include="Models\t_project_slip_advance_details.cs" />
+    <Compile Include="Models\t_project_slip_advance_headers.cs" />
+    <Compile Include="Models\t_project_slip_cost_details.cs" />
+    <Compile Include="Models\t_project_slip_cost_headers.cs" />
+    <Compile Include="Models\t_project_slip_estimate_details.cs" />
+    <Compile Include="Models\t_project_slip_estimate_headers.cs" />
+    <Compile Include="Models\t_project_slip_invoice_details.cs" />
+    <Compile Include="Models\t_project_slip_invoice_headers.cs" />
+    <Compile Include="Models\t_project_slip_letters.cs" />
+    <Compile Include="Models\t_project_slip_order_details.cs" />
+    <Compile Include="Models\t_project_slip_order_headers.cs" />
+    <Compile Include="Models\t_project_slip_sale_details.cs" />
+    <Compile Include="Models\t_project_slip_sale_headers.cs" />
+    <Compile Include="Models\t_project_slip_template_details.cs" />
+    <Compile Include="Models\t_project_slip_template_headers.cs" />
+    <Compile Include="Models\t_project_slip_temporary_details.cs" />
+    <Compile Include="Models\t_project_slip_temporary_headers.cs" />
+    <Compile Include="Models\t_purchase_bases.cs" />
+    <Compile Include="Models\t_purchase_slip_letters.cs" />
+    <Compile Include="Models\t_purchase_slip_order_details.cs" />
+    <Compile Include="Models\t_purchase_slip_order_headers.cs" />
+    <Compile Include="Models\t_purchase_slip_purchase_details.cs" />
+    <Compile Include="Models\t_purchase_slip_purchase_headers.cs" />
+    <Compile Include="Models\t_purchase_slip_template_details.cs" />
+    <Compile Include="Models\t_purchase_slip_template_headers.cs" />
+    <Compile Include="Models\t_search_conditions.cs" />
+    <Compile Include="Style\App.xaml.cs" />
+    <Compile Include="Style\StyleDic.xaml.cs" />
+    <Compile Include="ViewModels\ChildPageViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ChildViewModel.cs" />
+    <Compile Include="ViewModels\MyIBindingList.cs" />
+    <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
+    <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
+    <Compile Include="ViewModels\SQLTablesViewModel.cs" />
+    <Compile Include="ViewModels\Widget .cs" />
+    <Compile Include="ViewModels\X_1_3ViewModel.cs" />
+    <Compile Include="Views\ChildPageView.xaml.cs">
+      <DependentUpon>ChildPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChildView.xaml.cs">
+      <DependentUpon>ChildView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Child_Page.xaml.cs">
+      <DependentUpon>Child_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Child_Window.xaml.cs">
+      <DependentUpon>Child_Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MySQLBase.xaml.cs">
+      <DependentUpon>MySQLBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NaviWindow.xaml.cs">
+      <DependentUpon>NaviWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ParrtsTestView.xaml.cs">
+      <DependentUpon>ParrtsTestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\X_1_3.xaml.cs">
+      <DependentUpon>X_1_3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTabControl.xaml.cs">
+      <DependentUpon>ViewTabControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowTabContentUC.xaml.cs">
+      <DependentUpon>WindowTabContentUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Controls\CalculatorButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CS_CalculatorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\X_1_Control.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Style\StyleDic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ChildPageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChildView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Child_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Child_Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MySQLBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NaviWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ParrtsTestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\X_1_3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowTabContentUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Views\ServiceReference.ClientConfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Expression.Blend.Sdk.WPF">
+      <Version>1.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Expression.Interaction">
+      <Version>3.0.40218</Version>
+    </PackageReference>
+    <PackageReference Include="Google.Apis.Calendar.v3">
+      <Version>1.49.0.2119</Version>
+    </PackageReference>
+    <PackageReference Include="Google.Apis.Drive.v3">
+      <Version>1.49.0.2117</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetExtensions">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.19</Version>
+    </PackageReference>
+    <PackageReference Include="MicrosoftExpressionInteractions">
+      <Version>3.0.40218</Version>
+    </PackageReference>
+    <PackageReference Include="MySql.Data">
+      <Version>8.0.22</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6 %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CalcIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\CalcIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
