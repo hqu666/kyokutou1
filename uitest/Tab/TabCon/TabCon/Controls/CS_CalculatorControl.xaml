@@ -89,6 +89,7 @@
 			<DataGrid x:Name="CalcMemo" 
 							Grid.Row="0" Grid.Column="3"
 							HeadersVisibility="None"
+							 IsReadOnly="True"
 							AutoGenerateColumns="True"
 							ColumnWidth="SizeToCells"
 							 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -97,25 +98,16 @@
 							MaxHeight="60"
 							CanUserAddRows ="False"
 							>
-				<!--<DataGrid.Columns>
-					<DataGridTextColumn Width="20" Header="Operater" />
-				<DataGridTextColumn Width="SizeToCells" Header="Value"/>
-				</DataGrid.Columns>-->
-			</DataGrid>
-			<!--
-
-		DataGridTextColumn
-			  Width="SizeToHeader" / "*" / "2*" /"SizeToCells"
-			  Binding="{Binding}"
-			  Header="SizeToHeader" />
-
-									DataContext="{Binding BeforeVals ,Mode=TwoWay}"
-	AutoGenerateColumns="False"-->
-			<!--<ScrollViewer x:Name="CalcMemoScroll"
-						Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3"
-									 Height="60" HorizontalAlignment="Right" >
-				<Label  x:Name="CalcMemo"	Content="" HorizontalAlignment="Stretch" />
-			</ScrollViewer>-->
+			<!--<DataGrid.CellStyle>
+				<Style TargetType="{x:Type DataGridCell}">
+					<Style.Triggers>
+						<Trigger Property="IsSelected" Value="False">
+							<Setter Property="IsEditing" Value="False" />
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</DataGrid.CellStyle>-->
+		</DataGrid>
 
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
