@@ -88,34 +88,5 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Expression.Blend.Sdk.WPF">
-      <Version>1.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Expression.Interaction">
-      <Version>3.0.40218</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Apis.Calendar.v3">
-      <Version>1.49.0.2119</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.49.0.2117</Version>
-    </PackageReference>
-    <PackageReference Include="LivetCask">
-      <Version>3.2.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="LivetExtensions">
-      <Version>3.2.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
-      <Version>1.1.19</Version>
-    </PackageReference>
-    <PackageReference Include="MicrosoftExpressionInteractions">
-      <Version>3.0.40218</Version>
-    </PackageReference>
-    <PackageReference Include="MySql.Data">
-      <Version>8.0.22</Version>
-    </PackageReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

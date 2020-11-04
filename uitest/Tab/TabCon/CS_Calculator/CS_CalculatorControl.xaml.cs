@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CS_Calculator {
-
 	/// <summary>
 	/// 電卓
 	/// :ダイヤログなど別コントロールに組み込んで使用
@@ -30,6 +29,10 @@ namespace CS_Calculator {
 		/// 電卓を表示しているウィンドウ
 		/// </summary>
 		public Window CalcWindow;
+
+		public string SelectOperater { get; set; }
+		public string SelectValue { get; set; }
+
 
 		/// <summary>
 		/// 計算結果
@@ -56,10 +59,10 @@ namespace CS_Calculator {
 		/// </summary>
 		public string NowOperation = "";
 		public string LineBreakStr = "\n";                  //XAML中は&#10;
-		private static string AddStr = "＋";
-		private static string SubtractStr = "－";
-		private static string DivideStr = "÷";
-		private static string MultiplyStr = "×";
+		private static string AddStr = "+";
+		private static string SubtractStr = "-";
+		private static string DivideStr = "/";
+		private static string MultiplyStr = "*";
 
 		public Key OperatKey;
 
@@ -67,6 +70,11 @@ namespace CS_Calculator {
 		/// 最初の入力か
 		/// </summary>
 		private bool IsBegin = true;
+		/// <summary>
+		/// 編集値の変更か
+		/// </summary>
+		private bool IsPrgresEdit = false;
+
 		/// <summary>
 		/// 起動処理
 		/// </summary>
@@ -129,11 +137,13 @@ namespace CS_Calculator {
 			BeforeOperation = "";
 			CalcResult.Content = "";
 			CalcOperation.Content = "";
-			//		CalcMemo.DataContext = BeforeVals;		//DataGridの場合
-			CalcMemo.Content = "";                                  //ラベルの場合
 			CalcProcess.Text = "";
-			CalcProcess.Focus();
 			IsBegin = true;
+			//DataGridの場合
+			CalcProgress.ItemsSource = BeforeVals;
+			CalcProgress.Items.Refresh();
+			//	CalcProgress.Content = "";									//ラベルの場合
+			CalcProcess.Focus();
 		}
 
 		/// <summary>
@@ -144,7 +154,7 @@ namespace CS_Calculator {
 			string TAG = "ClearFunc";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-				string ProssesStr = CalcMemo.Content.ToString();
+				//		string ProssesStr = CalcProgress.Content.ToString();
 				InputStr = CalcProcess.Text;
 				dbMsg += ",入力状況=" + InputStr;
 				if (0 < InputStr.Length) {
@@ -163,6 +173,15 @@ namespace CS_Calculator {
 						double LastValue = LastInput.Value;
 						dbMsg += "＝" + LastOperatier + " : " + LastValue;
 						InputStr = LastValue.ToString();
+						if (InputStr.Contains("E")) {
+							int bp = 16;
+							string[] rStr = InputStr.Split('E');
+							InputStr = rStr[0].Replace(".", "") + "0";
+							dbMsg += ",sVer=" + InputStr;
+							int pStr = int.Parse(rStr[1].Substring(1, rStr[1].Length - 1)) - bp;
+							dbMsg += ",残り=" + pStr;
+							InputStr += Math.Pow(10, pStr).ToString().Replace("1", "");
+						}
 						CalcProcess.Text = InputStr;
 						///最後の確定入力を消去
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
@@ -170,10 +189,11 @@ namespace CS_Calculator {
 						CalcResult.Content = ProcessVal;
 						BeforeOperation = LastOperatier;
 						//計算過程を更新
-						//		CalcMemo.DataContext = BeforeVals;
-						//計算過程から最終確定値と演算子を消去
-						CalcMemo.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
-						CalcMemoScroll.ScrollToBottom();
+						CalcProgress.ItemsSource = BeforeVals;
+						CalcProgress.Items.Refresh();
+						////計算過程から最終確定値と演算子を消去
+						////CalcProgress.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
+						////CalcProgressScroll.ScrollToBottom();
 					} else {
 						//最終入力の
 						BeforeVal LastInput = BeforeVals[0];
@@ -273,17 +293,10 @@ namespace CS_Calculator {
 					dbMsg += "＞結果＞" + ProcessVal;
 					//計算結果と経過を更新	:SetResult
 					CalcResult.Content = ProcessVal.ToString();
-					//			CalcMemo.DataContext = BeforeVals;				//DataGridの場合
-					//Labelの場合
-					if (1 == BeforeVals.Count) {
-						dbMsg += "入力開始";
-						CalcMemo.Content = "=" + BeforeVals[BeforeVals.Count - 1].Value;
-					} else if (1 < BeforeVals.Count) {
-						dbMsg += "入力継続中";
-						CalcMemo.Content += LineBreakStr + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-						CalcMemoScroll.ScrollToBottom();
-					}
-
+					//DataGridの場合
+					CalcProgress.DataContext = BeforeVals;
+					CalcProgress.Items.Refresh();
+					ProgressRefresh();
 					OnPropertyChanged("BeforeVals");
 					InputStr = "";
 					CalcProcess.Text = InputStr;
@@ -339,6 +352,140 @@ namespace CS_Calculator {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 			return ResultNow;
+		}
+
+		/// <summary>
+		/// 計算経過の更新
+		/// </summary>
+		public void ProgressRefresh()
+		{
+			string TAG = "ProgressRefresh";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				//DataGridの場合
+				CalcProgress.ItemsSource = BeforeVals;
+				CalcProgress.Items.Refresh();
+				int lastRow = CalcProgress.Items.Count - 1;             //書込み結果で取得＞だめならソースで＞ (BeforeVals.Count - 1);
+				dbMsg += "、最終=" + lastRow;
+				if (-1 < lastRow) {
+					CalcProgress.ScrollIntoView(CalcProgress.Items.GetItemAt(lastRow));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 経過編集
+		/// </summary>
+		/// <param name="selectedIndex">変更データのインデックス</param>
+		/// <param name="feladame">変更先</param>
+		/// <param name="value">内容</param>
+		private void ProgressEdit(int selectedIndex, string fieldName, string eValue)
+		{
+			string TAG = "ProgressEdit";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				dbMsg += "元[" + selectedIndex + "]";
+				dbMsg += BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
+				dbMsg += ">変更＞" + fieldName + " : " + eValue;
+				if (fieldName.Equals("Operater")) {
+					BeforeVals[selectedIndex].Operater = eValue;
+				} else if (fieldName.Equals("Value")) {
+					BeforeVals[selectedIndex].Value = double.Parse(eValue);
+				}
+				dbMsg += ">>" + BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
+				ProcessVal = ReCalk();
+				CalcResult.Content = ProcessVal.ToString();
+				IsPrgresEdit = false;
+				CalcProcess.Focus();
+				dbMsg += ";既存値変更" + IsPrgresEdit;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// DataGridをクリック：直接編集開始
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CalcProgress_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+		{
+			string TAG = "CalcProgress_SelectedCellsChanged";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				IsPrgresEdit = true;
+				dbMsg += "＞＞既存値変更開始" + IsPrgresEdit;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 経過編集後
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CalcProgress_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+		{
+			string TAG = "CalcProgress_CellEditEnding";
+			string dbMsg = "[CS_CalculatorControl]";
+			try {
+				string titolStr = "確定値編集";
+				DataGrid DG = sender as DataGrid;
+				int selectedIndex = DG.SelectedIndex;
+				dbMsg += "[" + selectedIndex + "]";
+				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				string fieldName = (string)e.Column.Header;
+				dbMsg += ",fieldName" + fieldName;
+				TextBox textEdit = (TextBox)e.EditingElement;
+				string eValue = textEdit.Text;
+				dbMsg += " : " + eValue;
+				if (fieldName.Equals("Operater")) {
+					if (eValue.Equals(AddStr) ||
+						eValue.Equals(SubtractStr) ||
+						eValue.Equals(DivideStr) ||
+						eValue.Equals(MultiplyStr)) {
+						dbMsg += ",問題無し";
+					} else {
+						String msgStr = "演算子(+-*/)以外が入力されています\r\n";
+						msgStr += eValue;
+						msgStr += "\r\n修正をお願いします";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+						IsPrgresEdit = false;
+						CalcProcess.Focus();
+						return;
+					}
+				} else if (fieldName.Equals("Value")) {
+					double number;
+					if (double.TryParse(eValue, out number)) {
+						dbMsg += ",入力の変換結果=" + number;
+						dbMsg += ",問題無し";
+					} else {
+						String msgStr = "数値以外が入力されています\r\n";
+						msgStr += eValue;
+						msgStr += "\r\n修正をお願いします";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+						IsPrgresEdit = false;
+						CalcProcess.Focus();
+						return;
+					}
+				}
+				MyLog(TAG, dbMsg);
+				ProgressEdit(selectedIndex, fieldName, eValue);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		/// <summary>
@@ -505,77 +652,81 @@ namespace CS_Calculator {
 			try {
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
-				switch (key) {
-					case Key.NumPad1:
-					case Key.D1:
-						Key2ButtonClickerAsync(OneBt);
-						break;
-					case Key.NumPad2:
-					case Key.D2:
-						Key2ButtonClickerAsync(TwoBt);
-						break;
-					case Key.NumPad3:
-					case Key.D3:
-						Key2ButtonClickerAsync(ThreeBt);
-						break;
-					case Key.NumPad4:
-					case Key.D4:
-						Key2ButtonClickerAsync(FourBt);
-						break;
-					case Key.NumPad5:
-					case Key.D5:
-						Key2ButtonClickerAsync(FiveBt);
-						break;
-					case Key.NumPad6:
-					case Key.D6:
-						Key2ButtonClickerAsync(SixBt);
-						break;
-					case Key.NumPad7:
-					case Key.D7:
-						Key2ButtonClickerAsync(SevenBt);
-						break;
-					case Key.NumPad8:
-					case Key.D8:
-						Key2ButtonClickerAsync(EightBt);
-						break;
-					case Key.NumPad9:
-					case Key.D9:
-						Key2ButtonClickerAsync(NineBt);
-						break;
-					case Key.NumPad0:
-					case Key.D0:
-						Key2ButtonClickerAsync(ZeroBt);
-						break;
-					case Key.Decimal:
-						Key2ButtonClickerAsync(PeriodBt);
-						break;
-					case Key.Add:
-						Key2ButtonClickerAsync(PlusBt);
-						break;
-					case Key.Subtract:
-						Key2ButtonClickerAsync(MinusBt);
-						break;
-					case Key.Multiply:
-						Key2ButtonClickerAsync(AsteriskBt);
-						break;
-					case Key.Divide:
-						Key2ButtonClickerAsync(SlashBt);
-						break;
-					case Key.Enter:
-						Key2ButtonClickerAsync(EnterBt);
-						break;
+				if (IsPrgresEdit) {
+					dbMsg += ";既存値変更";
+				} else {
+					switch (key) {
+						case Key.NumPad1:
+						case Key.D1:
+							Key2ButtonClickerAsync(OneBt);
+							break;
+						case Key.NumPad2:
+						case Key.D2:
+							Key2ButtonClickerAsync(TwoBt);
+							break;
+						case Key.NumPad3:
+						case Key.D3:
+							Key2ButtonClickerAsync(ThreeBt);
+							break;
+						case Key.NumPad4:
+						case Key.D4:
+							Key2ButtonClickerAsync(FourBt);
+							break;
+						case Key.NumPad5:
+						case Key.D5:
+							Key2ButtonClickerAsync(FiveBt);
+							break;
+						case Key.NumPad6:
+						case Key.D6:
+							Key2ButtonClickerAsync(SixBt);
+							break;
+						case Key.NumPad7:
+						case Key.D7:
+							Key2ButtonClickerAsync(SevenBt);
+							break;
+						case Key.NumPad8:
+						case Key.D8:
+							Key2ButtonClickerAsync(EightBt);
+							break;
+						case Key.NumPad9:
+						case Key.D9:
+							Key2ButtonClickerAsync(NineBt);
+							break;
+						case Key.NumPad0:
+						case Key.D0:
+							Key2ButtonClickerAsync(ZeroBt);
+							break;
+						case Key.Decimal:
+							Key2ButtonClickerAsync(PeriodBt);
+							break;
+						case Key.Add:
+							Key2ButtonClickerAsync(PlusBt);
+							break;
+						case Key.Subtract:
+							Key2ButtonClickerAsync(MinusBt);
+							break;
+						case Key.Multiply:
+							Key2ButtonClickerAsync(AsteriskBt);
+							break;
+						case Key.Divide:
+							Key2ButtonClickerAsync(SlashBt);
+							break;
+						case Key.Enter:
+							Key2ButtonClickerAsync(EnterBt);
+							break;
+					}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			CalcProcess.Focus();
+			//		CalcProcess.Focus();
 		}
 
 		/// <summary>
-		/// BackSpace,Delete,Fキーはここ
+		/// システム キーのダウンイベント
 		/// </summary>
-		/// <param name="sender"></param>
+		/// <param name="sender">クリックされたキー</param>
 		/// <param name="e"></param>
 		private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
@@ -584,19 +735,24 @@ namespace CS_Calculator {
 			try {
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
-				switch (key) {
-					case Key.Back:
-						Key2ButtonClickerAsync(ClearBt);
-						break;
-					case Key.Delete:
-						Key2ButtonClickerAsync(ClearAllBt);
-						break;
+
+				if (IsPrgresEdit) {
+					dbMsg += ";既存値変更";
+				} else {
+					switch (key) {
+						case Key.Back:
+							Key2ButtonClickerAsync(ClearBt);
+							break;
+						case Key.Delete:
+							Key2ButtonClickerAsync(ClearAllBt);
+							break;
+					}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			CalcProcess.Focus();
+			//		CalcProcess.Focus();
 		}
 
 		public Button TargetBt;
@@ -624,7 +780,7 @@ namespace CS_Calculator {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			CalcProcess.Focus();
+			//			CalcProcess.Focus();
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -644,6 +800,34 @@ namespace CS_Calculator {
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
+		}
+
+		public MessageBoxResult MessageShowWPF(String msgStr,
+																				String titolStr = null,
+																				MessageBoxButton buttns = MessageBoxButton.OK,
+																				MessageBoxImage icon = MessageBoxImage.None
+																				)
+		{
+			String TAG = "MessageShowWPF";
+			String dbMsg = "開始";
+			MessageBoxResult result = 0;
+			try {
+				dbMsg = "titolStr=" + titolStr;
+				dbMsg += "mggStr=" + msgStr;
+				//メッセージボックスを表示する		https://docs.microsoft.com/ja-jp/dotnet/api/system.windows.messagebox?view=netcore-3.1
+				if (titolStr == null) {
+					result = MessageBox.Show(msgStr);
+				} else if (icon == MessageBoxImage.None) {
+					result = MessageBox.Show(msgStr, titolStr, buttns);
+				} else {
+					result = MessageBox.Show(msgStr, titolStr, buttns, icon);
+				}
+				dbMsg += ",result=" + result;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyLog(TAG, dbMsg + "で" + er.ToString());
+			}
+			return result;
 		}
 		////////////////////////////////////////////////////
 		/// <summary>

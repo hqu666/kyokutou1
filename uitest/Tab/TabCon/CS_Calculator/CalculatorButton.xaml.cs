@@ -1,5 +1,4 @@
-﻿using Livet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CS_Calculator {
+
 
 	/// <summary>
 	/// クリックするとダイヤログで電卓を表示するボタン
@@ -104,6 +104,8 @@ namespace CS_Calculator {
 							dbMsg += "=Numパッド";
 						} else if (Key.Decimal == key) {
 							dbMsg += "=小数点";
+						} else if (Key.Return == key) {
+							dbMsg += "=Return";
 						} else {
 							String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
 							String titolStr = "電卓表示フィールド";
@@ -130,6 +132,7 @@ namespace CS_Calculator {
 				double number;
 				if (double.TryParse(TargetTextBox.Text, out number)) {
 					dbMsg += ",入力の変換結果=" + number;
+				} else if (TargetTextBox.Text.Equals("")) {
 				} else {
 					String msgStr = "数値以外が入力されています\r\n";
 					msgStr += TargetTextBox.Text;
@@ -138,7 +141,6 @@ namespace CS_Calculator {
 					MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 					return;
 				}
-
 				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 				CalcWindow = new Window {
 					Title = TargetTextBox.Name,

@@ -843,11 +843,6 @@ namespace TabCon.Controls {
 			public double Value { get; set; }
 		}
 
-		//public class ProgressVal {
-		//	public string Operater { get; set; }
-		//	public double Value { get; set; }
-		//}
-
 	}
 
 }
