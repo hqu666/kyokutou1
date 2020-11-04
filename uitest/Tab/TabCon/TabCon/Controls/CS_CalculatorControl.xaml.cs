@@ -18,7 +18,7 @@ namespace TabCon.Controls {
 	/// 電卓
 	/// :ダイヤログなど別コントロールに組み込んで使用
 	/// </summary>
-	public partial class CS_CalculatorControl : UserControl {
+	public partial class CS_CalculatorControl : UserControl  {
 	
 		/// <summary>
 		/// 結果の書き出し先
@@ -64,10 +64,10 @@ namespace TabCon.Controls {
 		/// </summary>
 		public string NowOperation = "";
 		public string LineBreakStr = "\n";                  //XAML中は&#10;
-		private static string AddStr = "＋";
-		private static string SubtractStr = "－";
-		private static string DivideStr = "÷";
-		private static string MultiplyStr = "×";
+		private static string AddStr = "+";
+		private static string SubtractStr = "-";
+		private static string DivideStr = "/";
+		private static string MultiplyStr = "*";
 
 		public Key OperatKey;
 
@@ -319,7 +319,6 @@ namespace TabCon.Controls {
 			}
 		}
 
-
 		/// <summary>
 		/// 再計算
 		///  : Deleteなど追加する演算が無ければ演算子は"",値は0を指定して下さい
@@ -382,25 +381,32 @@ namespace TabCon.Controls {
 			}
 		}
 
-		private void ProgressEdit(int selectedIndex,string operater ,double value)
+		/// <summary>
+		/// 経過編集
+		/// </summary>
+		/// <param name="selectedIndex">変更データのインデックス</param>
+		/// <param name="feladame">変更先</param>
+		/// <param name="value">内容</param>
+		private void ProgressEdit(int selectedIndex,string fieldName, string eValue)
 		{
 			string TAG = "ProgressEdit";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-				dbMsg += "[" + selectedIndex + "]";
-				BeforeVal vals = BeforeVals[selectedIndex];
-				dbMsg += vals.Operater + "=" + vals.Value;
-				vals.Operater = operater;
-				vals.Value = value;
-				dbMsg +=">>"+ vals.Operater + "=" + vals.Value;
-				BeforeVals[selectedIndex]= vals;
+				dbMsg += "元[" + selectedIndex + "]";
+				dbMsg += BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
+				dbMsg += ">変更＞" + fieldName + " : " + eValue;
+				if (fieldName.Equals("Operater")) {
+					BeforeVals[selectedIndex].Operater = eValue;
+				}else if (fieldName.Equals("Value")) {
+					BeforeVals[selectedIndex].Value = double.Parse(eValue);
+				}
 				dbMsg += ">>" + BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
-				ReCalk();
-		//		ProgressRefresh();
-				MyLog(TAG, dbMsg);
-				dbMsg += ";既存値変更終了";
+				ProcessVal = ReCalk();
+				CalcResult.Content = ProcessVal.ToString();
 				IsPrgresEdit = false;
-
+				CalcProcess.Focus();
+				dbMsg += ";既存値変更" + IsPrgresEdit;
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -421,30 +427,8 @@ namespace TabCon.Controls {
 				dbMsg += "[" + selectedIndex + "]";
 				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
 				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
-				dbMsg += "＞＞既存値変更開始";
 				IsPrgresEdit = true;
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-
-		/// <summary>
-		/// 経過の選択行が変わった
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void CalcProgress_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			string TAG = "CalcProgress_SelectionChanged";
-			string dbMsg = "[CS_CalculatorControl]";
-			try {
-				DataGrid DG = sender as DataGrid;
-				int selectedIndex = DG.SelectedIndex;
-				dbMsg += "[" + selectedIndex + "]";
-				//BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
-				//dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				dbMsg += "＞＞既存値変更開始" + IsPrgresEdit;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -461,63 +445,53 @@ namespace TabCon.Controls {
 			string TAG = "CalcProgress_CellEditEnding";
 			string dbMsg = "[CS_CalculatorControl]";
 			try {
-				DataGrid DG = sender as DataGrid;
-				int selectedIndex = DG.SelectedIndex;
-				dbMsg += "[" + selectedIndex + "]";
-		//			DG.CommitEdit();
-				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
-				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
-				string eName = (string)e.Column.Header;
-				//		string eValue = e.EditingElement.TextInput;
-				dbMsg += ",eName" + eName;
-				MyLog(TAG, dbMsg);
-	//			ProgressEdit(selectedIndex, selectedItem.Operater, selectedItem.Value);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		private void CalcProgress_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-		{
-			string TAG = "CalcProgress_RowEditEnding";
-			string dbMsg = "[CS_CalculatorControl]";
-			try {
+				string titolStr = "確定値編集";
 				DataGrid DG = sender as DataGrid;
 				int selectedIndex = DG.SelectedIndex;
 				dbMsg += "[" + selectedIndex + "]";
 				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
 				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+				string fieldName = (string)e.Column.Header;
+				dbMsg += ",fieldName" + fieldName;
+				TextBox textEdit = (TextBox)e.EditingElement;
+				string eValue = textEdit.Text;
+				dbMsg += " : " + eValue;
+				if (fieldName.Equals("Operater")) {
+					if(eValue.Equals(AddStr) ||
+						eValue.Equals(SubtractStr) ||
+						eValue.Equals(DivideStr) ||
+						eValue.Equals(MultiplyStr)) {
+						dbMsg += ",問題無し";
+					} else {
+						String msgStr = "演算子(+-*/)以外が入力されています\r\n";
+						msgStr += eValue;
+						msgStr += "\r\n修正をお願いします";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+						IsPrgresEdit = false;
+						CalcProcess.Focus();
+						return;
+					}
+				} else if (fieldName.Equals("Value")) {
+					double number;
+					if (double.TryParse(eValue, out number)) {
+						dbMsg += ",入力の変換結果=" + number;
+						dbMsg += ",問題無し";
+					} else {
+						String msgStr = "数値以外が入力されています\r\n";
+						msgStr += eValue;
+						msgStr += "\r\n修正をお願いします";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+						IsPrgresEdit = false;
+						CalcProcess.Focus();
+						return;
+					}
+				}
 				MyLog(TAG, dbMsg);
-	//			ProgressEdit(selectedIndex, selectedItem.Operater, selectedItem.Value);
+				ProgressEdit(selectedIndex, fieldName, eValue);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-		/// <summary>
-		/// 変更終了：Enter押下
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void CalcProgress_LostFocus(object sender, RoutedEventArgs e)
-		{
-			string TAG = "CalcMemo_SelectedCellsChanged";
-			string dbMsg = "[CS_CalculatorControl]";
-			try {
-				DataGrid DG = sender as DataGrid;
-				int selectedIndex = DG.SelectedIndex;
-				dbMsg += "[" + selectedIndex + "]";
-				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
-				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
-				//dbMsg += ";既存値変更終了";
-				//IsPrgresEdit = false;
-				MyLog(TAG, dbMsg);
-				//ProgressEdit(selectedIndex, selectedItem.Operater, selectedItem.Value);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
 
 		/// <summary>
 		/// 指定された入力枠に値を記入する
@@ -832,6 +806,34 @@ namespace TabCon.Controls {
 		{
 			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 		}
+
+		public MessageBoxResult MessageShowWPF(String msgStr,
+																				String titolStr = null,
+																				MessageBoxButton buttns = MessageBoxButton.OK,
+																				MessageBoxImage icon = MessageBoxImage.None
+																				)
+		{
+			String TAG = "MessageShowWPF";
+			String dbMsg = "開始";
+			MessageBoxResult result = 0;
+			try {
+				dbMsg = "titolStr=" + titolStr;
+				dbMsg += "mggStr=" + msgStr;
+				//メッセージボックスを表示する		https://docs.microsoft.com/ja-jp/dotnet/api/system.windows.messagebox?view=netcore-3.1
+				if (titolStr == null) {
+					result = MessageBox.Show(msgStr);
+				} else if (icon == MessageBoxImage.None) {
+					result = MessageBox.Show(msgStr, titolStr, buttns);
+				} else {
+					result = MessageBox.Show(msgStr, titolStr, buttns, icon);
+				}
+				dbMsg += ",result=" + result;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyLog(TAG, dbMsg + "で" + er.ToString());
+			}
+			return result;
+		}
 		////////////////////////////////////////////////////
 		/// <summary>
 		/// 確定した演算子と数値
@@ -841,10 +843,10 @@ namespace TabCon.Controls {
 			public double Value { get; set; }
 		}
 
-		public class ProgressVal {
-			public string Operater { get; set; }
-			public double Value { get; set; }
-		}
+		//public class ProgressVal {
+		//	public string Operater { get; set; }
+		//	public double Value { get; set; }
+		//}
 
 	}
 

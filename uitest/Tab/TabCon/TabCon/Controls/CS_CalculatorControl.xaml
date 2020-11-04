@@ -109,7 +109,7 @@
 
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
 							Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
-			<Label x:Name="CalcOperation" Content="" Margin="5,0,-5,0"/>
+			<Label x:Name="CalcOperation" Content="" Margin="5,0,5,0"/>
 			<TextBox x:Name="CalcProcess"
 							HorizontalAlignment="Stretch"
 							FontSize="18" MinWidth="270" IsReadOnly="True" 
