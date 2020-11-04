@@ -132,6 +132,7 @@ namespace TabCon.Controls {
 				double number;
 				if (double.TryParse(TargetTextBox.Text, out number)) {
 					dbMsg += ",入力の変換結果=" + number;
+				}else if(TargetTextBox.Text.Equals("")){ 
 				} else {
 					String msgStr = "数値以外が入力されています\r\n";
 					msgStr += TargetTextBox.Text;
