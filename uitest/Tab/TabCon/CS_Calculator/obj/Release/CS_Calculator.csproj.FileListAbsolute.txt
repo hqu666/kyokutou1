@@ -1,6 +1,5 @@
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Release\CS_Calculator.pdb
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CalculatorButton.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_CalculatorControl.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Release\CS_Calculator_MarkupCompile.cache

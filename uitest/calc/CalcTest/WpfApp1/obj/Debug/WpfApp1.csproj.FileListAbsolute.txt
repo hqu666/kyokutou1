@@ -38,8 +38,6 @@ C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\bin\Debug\Livet.Messag
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\bin\Debug\Livet.Mvvm.dll
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\bin\Debug\Microsoft.Xaml.Behaviors.dll
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\bin\Debug\Microsoft.Xaml.Behaviors.pdb
-C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\bin\Debug\CS_Calculator.pdb
-C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\WpfApp1.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\Views\ParrtsTestView.baml
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\Views\ParrtsTestView.g.cs
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\App.g.cs
