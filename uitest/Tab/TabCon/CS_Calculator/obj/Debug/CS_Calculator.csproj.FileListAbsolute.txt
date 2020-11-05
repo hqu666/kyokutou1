@@ -10,4 +10,3 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calcul
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csproj.CoreCompileInputs.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.pdb
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csprojAssemblyReference.cache
