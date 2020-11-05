@@ -2,12 +2,12 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
+		mc:Ignorable="d" 
 		FontSize="14" 
 		WindowStartupLocation="CenterScreen"
 		Topmost="true" Height="500" Width="800"
-		xmlns:CS_Calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"  
       Title="ParrtsTestView">
 
 	<Grid Margin="0,0,0,0" >
@@ -65,7 +65,7 @@
 			<!--電卓を表示するボタン
 				TargetTextBoxに計算結果を書き写すフィールドを指定
 				ViewTitleはダイヤログタイトルで指定しなければフィールド名を表示-->
-			<CS_Calculator:CalculatorButton 
+			<cs_calculator:CalculatorButton 
 						x:Name="CalcCallBt" 
 						TargetTextBox="{Binding ElementName=Bt2Tbox}"
 						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"/>
