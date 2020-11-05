@@ -49,3 +49,4 @@ C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\WpfApp1.cspr
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\WpfApp1.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\WpfApp1.exe
 C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\WpfApp1.pdb
+C:\work\2020\kyokuto\samples\uitest\calc\CalcTest\WpfApp1\obj\Debug\WpfApp1.csprojAssemblyReference.cache

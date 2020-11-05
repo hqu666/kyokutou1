@@ -80,6 +80,8 @@ namespace CS_Calculator {
 		/// </summary>
 		public CS_CalculatorControl()
 		{
+			string TAG = "CS_CalculatorControl";
+			string dbMsg = "";
 			InitializeComponent();
 			CalcProcess.IsReadOnly = true;
 			this.Loaded += ThisLoaded;
@@ -92,7 +94,7 @@ namespace CS_Calculator {
 		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
 			string TAG = "UserControl_KeyDown";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				Initialize();
 				InputStr = TargetTextBox.Text;
@@ -152,7 +154,7 @@ namespace CS_Calculator {
 		private void ClearFunc()
 		{
 			string TAG = "ClearFunc";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				//		string ProssesStr = CalcProgress.Content.ToString();
 				InputStr = CalcProcess.Text;
@@ -219,7 +221,7 @@ namespace CS_Calculator {
 		private void EnterFunc()
 		{
 			string TAG = "EnterFunc";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				InputStr = CalcProcess.Text;
 				if (InputStr.Equals("")) {
@@ -247,7 +249,7 @@ namespace CS_Calculator {
 		public bool IsContinuation()
 		{
 			string TAG = "IsContinuation";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			bool retBool = false;
 			try {
 				if (!InputStr.Equals("")) {
@@ -272,7 +274,7 @@ namespace CS_Calculator {
 		private void ProcessedFunc(string NextOperation)
 		{
 			string TAG = "ProcessedFunc";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				if (!InputStr.Equals("")) {
 					//演算値が有れば配列格納
@@ -324,7 +326,7 @@ namespace CS_Calculator {
 		private double ReCalk()
 		{
 			string TAG = "ReCalk";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			double ResultNow = 0.0;
 			try {
 				foreach (var BeforeVal in BeforeVals) {
@@ -360,7 +362,7 @@ namespace CS_Calculator {
 		public void ProgressRefresh()
 		{
 			string TAG = "ProgressRefresh";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				//DataGridの場合
 				CalcProgress.ItemsSource = BeforeVals;
@@ -385,7 +387,7 @@ namespace CS_Calculator {
 		private void ProgressEdit(int selectedIndex, string fieldName, string eValue)
 		{
 			string TAG = "ProgressEdit";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				dbMsg += "元[" + selectedIndex + "]";
 				dbMsg += BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
@@ -415,7 +417,7 @@ namespace CS_Calculator {
 		private void CalcProgress_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
 		{
 			string TAG = "CalcProgress_SelectedCellsChanged";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				DataGrid DG = sender as DataGrid;
 				int selectedIndex = DG.SelectedIndex;
@@ -438,7 +440,7 @@ namespace CS_Calculator {
 		private void CalcProgress_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
 		{
 			string TAG = "CalcProgress_CellEditEnding";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				string titolStr = "確定値編集";
 				DataGrid DG = sender as DataGrid;
@@ -648,7 +650,7 @@ namespace CS_Calculator {
 		private void UserControl_KeyDown(object sender, KeyEventArgs e)
 		{
 			string TAG = "UserControl_KeyDown";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
@@ -731,7 +733,7 @@ namespace CS_Calculator {
 		private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			string TAG = "UserControl_PreviewKeyDown";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
@@ -763,7 +765,7 @@ namespace CS_Calculator {
 		private async Task Key2ButtonClickerAsync(Button targetBt)
 		{
 			string TAG = "Key2ButtonClicker";
-			string dbMsg = "[CS_CalculatorControl]";
+			string dbMsg = "";
 			try {
 				dbMsg += ",targetBt=" + targetBt.Name;
 				TargetBt = targetBt;
@@ -793,13 +795,13 @@ namespace CS_Calculator {
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-			Console.WriteLine(TAG + " : " + dbMsg);
+			Console.WriteLine(TAG + "[CS_Calculator:CS_CalculatorControl]" + dbMsg);
 #endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
+			Console.WriteLine(TAG + "[CS_Calculator:CS_CalculatorControl] : " + dbMsg + "でエラー発生;" + err);
 		}
 
 		public MessageBoxResult MessageShowWPF(String msgStr,

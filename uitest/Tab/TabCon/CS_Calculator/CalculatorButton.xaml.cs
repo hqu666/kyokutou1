@@ -63,7 +63,7 @@ namespace CS_Calculator {
 		private void This_loaded(object sender, RoutedEventArgs e)
 		{
 			string TAG = "this_loaded";
-			string dbMsg = "[CalculatorButtun]";
+			string dbMsg = "";
 			try {
 				calculatorControl = new CS_CalculatorControl();
 				calculatorControl.TargetTextBox = this.TargetTextBox;
@@ -82,7 +82,7 @@ namespace CS_Calculator {
 		private void TFKeyDown(object sender, KeyEventArgs e)
 		{
 			string TAG = "TFKeyDown";
-			string dbMsg = "[CalculatorButtun]";
+			string dbMsg = "";
 			try {
 				TextBox TF = sender as TextBox;
 				Key key = e.Key;
@@ -127,7 +127,7 @@ namespace CS_Calculator {
 		private void CalcBT_Click(object sender, RoutedEventArgs e)
 		{
 			string TAG = "CalcBT_Click";
-			string dbMsg = "[CalculatorButtun]";
+			string dbMsg = "";
 			try {
 				double number;
 				if (double.TryParse(TargetTextBox.Text, out number)) {
@@ -176,13 +176,13 @@ namespace CS_Calculator {
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-			Console.WriteLine(TAG + " : " + dbMsg);
+			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg);
 #endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
+			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg + "でエラー発生;" + err);
 		}
 
 

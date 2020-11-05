@@ -418,5 +418,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CS_Calculator\CS_Calculator.csproj">
+      <Project>{98e13a8b-ae82-46dd-850a-00fd81293c26}</Project>
+      <Name>CS_Calculator</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

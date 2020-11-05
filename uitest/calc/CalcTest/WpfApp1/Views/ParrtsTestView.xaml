@@ -65,9 +65,12 @@
 			<!--電卓を表示するボタン
 				TargetTextBoxに計算結果を書き写すフィールドを指定
 				ViewTitleはダイヤログタイトルで指定しなければフィールド名を表示-->
-			<CS_Calculator:CalculatorButton   x:Name="CalcCallBt" 
+			<CS_Calculator:CalculatorButton 
+						x:Name="CalcCallBt" 
 						TargetTextBox="{Binding ElementName=Bt2Tbox}"
 						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"/>
+
+
 		</StackPanel>
 
 	</Grid>

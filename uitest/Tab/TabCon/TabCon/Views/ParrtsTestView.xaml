@@ -5,10 +5,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TabCon.Views"
-      mc:Ignorable="d" 
+	  xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
+	  mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ParrtsTestView">
-	<!--xmlns:CS_Calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"-->
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -64,12 +64,11 @@
 			<!--電卓を表示するボタン
 				TargetTextBoxに計算結果を書き写すフィールドを指定
 				ViewTitleはダイヤログタイトルで指定しなければフィールド名を表示-->
-			<Controls:CalculatorButton  x:Name="CalcCallBt" 
+			<cs_calculator:CalculatorButton  x:Name="CalcCallBt" 
 						TargetTextBox="{Binding ElementName=Bt2Tbox}"
 						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"
-													/>
-			<!--
-							ViewTitle="計算値をフィールドへ"-->
+				/>
+
 		</StackPanel>
 
 	</Grid>
