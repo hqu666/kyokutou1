@@ -37,7 +37,8 @@
 									ShowCalendarCloseButton="False" 
 									ShowCalendarOverlayButton="False"
 									CalendarDisplayMode="Merged"
-									DataManager="{Binding dataManager}" 
+									WorkingDaysSource="AllResourcesInGroups" 
+									DataManager="{Binding dataManager}"
 									/>
 		<!--
 		ActivityBase

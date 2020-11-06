@@ -30,11 +30,16 @@ namespace TabCon.ViewModels {
 		/// 表示対象年月
 		/// </summary>
 		public string CurrentDate { get; set; }
-
+		/// <summary>
+		/// XamMonthViewへBindingするカレンダの全内容
+		/// </summary>
 		public XamScheduleDataManager dataManager { get; set; }
 		public　ListScheduleDataConnector dataConnector { get; set; }
 		public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
 		public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
+		/// <summary>
+		/// 予定配列
+		/// </summary>
 		public ObservableCollection<Appointment> appointments { get; set; }               //AppointmentItemsSource
 																						  //public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
 																						  //public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
@@ -57,29 +62,33 @@ namespace TabCon.ViewModels {
 				{ "3", "通常イベント" },
 			};
 			ToDaySet();
-			CalenderWrite();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public void CalenderWrite() {
 			string TAG = "CalenderWrite";
 			string dbMsg = "[MySQLBase]";
 			try {
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
-				DateTime cEnd = cStart.AddMonths(1);
+				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
 
 				//リソースとカレンダー
 				resources = new ObservableCollection<Resource>();
 
+				//1タブ分のデータ//////////////////////////////////////////////////////////////////////
+				//仮名で作成する
 				Resource resAmanda = new Resource() { Id = "own1", Name = "Amanda" };
 				resources.Add(resAmanda);
 				calendars = new ObservableCollection<ResourceCalendar>();
-
 				ResourceCalendar calAmanda = new ResourceCalendar() {
 					Id = "cal1",
 					OwningResourceId = "own1"
 				};
 
 				calendars.Add(calAmanda);
+				//XAMLプロパティのCalendarDisplayMode="Merged"でタブを表示させない
 
 				appointments = WriteEvent();
 				dataConnector =new ListScheduleDataConnector();
@@ -89,15 +98,18 @@ namespace TabCon.ViewModels {
 
 				 //カレンダー グループを作成し、初期カレンダーを設定
 				 dataManager = new XamScheduleDataManager();
+
+				//表示範囲を一月分に限定する
+				ScheduleSettings cSettings = new ScheduleSettings();
+				cSettings.MinDate = cStart;
+				cSettings.MaxDate = cEnd;
+				dataManager.Settings = cSettings;
+
 				dataManager.DataConnector = dataConnector;
 				CalendarGroupCollection calGroups = dataManager.CalendarGroups;
 				CalendarGroup calGroup = new CalendarGroup();
 				calGroup.InitialCalendarIds = "own1[cal1]";
 				calGroups.Add(calGroup);
-
-				//dataManager.Settings.MinDate = cStart;
-				//dataManager.Settings.MaxDate = cEnd;
-
 				/**
 				 * 
 				ActivityBase の　 Start 	End
@@ -107,7 +119,7 @@ XamDayView dayView = new XamDayView();
 dayView.DataManager = dataManager;
 this.PageRoot.Children.Add(dayView);
 */
-				RaisePropertyChanged();
+				RaisePropertyChanged("dataManager");
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -199,7 +211,7 @@ this.PageRoot.Children.Add(dayView);
 				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
 				RaisePropertyChanged("CurrentDate");
-
+				CalenderWrite();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -222,6 +234,7 @@ this.PageRoot.Children.Add(dayView);
 				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
 				RaisePropertyChanged("CurrentDate");
+				CalenderWrite();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -245,7 +258,7 @@ this.PageRoot.Children.Add(dayView);
 				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
 				RaisePropertyChanged("CurrentDate");
-
+				CalenderWrite();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
