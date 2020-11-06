@@ -69,16 +69,16 @@ namespace TabCon.ViewModels {
 
 				Resource resAmanda = new Resource() { Id = "own1", Name = "Amanda" };
 				resources.Add(resAmanda);
-
 				calendars = new ObservableCollection<ResourceCalendar>();
+
+
 				ResourceCalendar calAmanda = new ResourceCalendar() {
 					Id = "cal1",
 					OwningResourceId = "own1"
 				};
+
 				calendars.Add(calAmanda);
 				appointments = WriteEvent();
-
-
 				dataConnector =new ListScheduleDataConnector();
 				dataConnector.ResourceItemsSource = resources;
 				dataConnector.ResourceCalendarItemsSource = calendars;
@@ -143,7 +143,6 @@ this.PageRoot.Children.Add(dayView);
 			}
 			return appointments;
 		}
-
 
 		/// <summary>
 		/// イベント選択

@@ -14,9 +14,13 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -24,11 +28,11 @@
 		</Grid.RowDefinitions>
 
 		<Label  Content="電卓を表示" 
-						Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
-							Margin="5,5,5,5" VerticalAlignment="Center"  
+						Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+							Margin="5,24" VerticalAlignment="Center" Height="26"  
 							/>
 		<StackPanel Orientation="Horizontal"
-							Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
+							Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
 							Margin="0,5,5,5">
 			<Label  Content="フォントサイズ" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
@@ -54,7 +58,7 @@
 
 		</StackPanel>
 		<StackPanel Orientation="Horizontal"
-							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
 							Margin="0,5,5,5">
 			<!--電卓で計算した結果-->
 			<TextBox x:Name="Bt2Tbox"
@@ -70,6 +74,68 @@
 				/>
 
 		</StackPanel>
+
+		<!--文字色判定-->
+		<Label  Content="文字色の白黒判定" 
+						Grid.Row="3" Grid.Column="0"
+							Margin="5,5,5,5" VerticalAlignment="Center" Height="26"  
+							/>
+		<StackPanel Orientation="Horizontal"
+			HorizontalAlignment="Right"
+			Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" >
+			<Label  Content="閾値" 
+					HorizontalAlignment="Right"
+							Margin="0,5,0,5" VerticalAlignment="Center" Height="26" Width="34"  
+							/>
+			<TextBox 	x:Name="ColorSampleLimit" 
+						Grid.Row="3" Grid.Column="2"
+						Text="128" 
+						Margin="0,0,5,9" VerticalAlignment="Bottom" TextChanged="ColorSampleLimit_TextChanged" Height="18" 
+						/>
+			<Label  Content="判定値" 
+					HorizontalAlignment="Right"
+							Margin="0,5,0,5" VerticalAlignment="Center" Height="26" Width="34"  
+							/>
+			<Label  x:Name="ColorSampleJudg" 
+							Margin="0,5,0,5" VerticalAlignment="Center" 
+							/>
+		</StackPanel>
+		<Label  Content="TextBox" 
+					HorizontalAlignment="Right"
+					Grid.Row="3" Grid.Column="3"
+					Margin="0,5,0,5" VerticalAlignment="Center" Height="26" Width="50"  
+							/>
+		<TextBox 	x:Name="ColorSampleTB" 
+						Grid.Row="3" Grid.Column="4"
+						Text="#999999" 
+						Margin="5,0,5,9" VerticalAlignment="Bottom" Height="18" 
+						/>
+		<Label  Content="背景" 
+					HorizontalAlignment="Right"
+					Grid.Row="4" Grid.Column="1"
+					Margin="0,5,0,5" VerticalAlignment="Center" Height="26" Width="34"  
+							/>
+		<TextBox 	x:Name="ColorSampleBackground" 
+						Grid.Row="4" Grid.Column="2"
+						Text="#999999" 
+						Margin="0,0,5,9" VerticalAlignment="Bottom" TextChanged="ColorSampleBackground_TextChanged" 
+						/>
+		<!--<ComboBox 	x:Name="ColorSampleBackground" 
+						Grid.Row="4" Grid.Column="2" Margin="5,0,10,0">
+		</ComboBox>-->
+
+		<Label  Content="Label" 
+					HorizontalAlignment="Right"
+					Grid.Row="4" Grid.Column="3"
+					Margin="0,5,5,5" VerticalAlignment="Center" Height="26" Width="38"  
+							/>
+		<Label  x:Name="ColorSampleLavel" 
+						Content="#FFFFFF" 
+						Grid.Row="4" Grid.Column="4"
+						Margin="5,5,5,5" VerticalAlignment="Center" 
+						Background="#FF000000" Foreground="White" Height="26"  
+							/>
+
 
 	</Grid>
 

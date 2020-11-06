@@ -1,5 +1,5 @@
 ﻿<Page  x:Class="TabCon.Views.X_1_3"
-xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" 
+		xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" 
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +7,8 @@ xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
       xmlns:local="clr-namespace:TabCon.Views"
 	  xmlns:ig="http://schemas.infragistics.com/xaml"
 	  xmlns:controls="clr-namespace:TabCon.Controls"
-	  mc:Ignorable="d" 
+	   xmlns:ig1="http://infragistics.com/Editors"
+	   mc:Ignorable="d" 
       d:DesignHeight="750" d:DesignWidth="1000"
       Title="月別表示">
 
@@ -27,14 +28,20 @@ xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
+		<!--<ig1:XamMonthCalendar x:Name="MyCalendar"
+									Grid.Row="1" Grid.Column="0"
+									AutoAdjustCalendarDimensions="False"
+								 Margin="0,0,0,10" />-->
 		<ig:XamMonthView x:Name="MyCalendar"
 									Grid.Row="1" Grid.Column="0"
 									ShowCalendarCloseButton="False" 
 									ShowCalendarOverlayButton="False"
-									CalendarDisplayMode="Overlay" WorkingDaysSource="AllResourcesInGroups"
+									CalendarDisplayMode="Separate"
 									DataManager="{Binding dataManager}" 
 									/>
 		<!--
+		ActivityBase
+
 									DataManager="{Binding ElementName=dataManager}" の場合
 		<ig:XamScheduleDataManager x:Name="dataManager" 
              DataConnector="{Binding dataConnector}">
