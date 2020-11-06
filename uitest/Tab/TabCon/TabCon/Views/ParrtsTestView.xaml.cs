@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infragistics.Controls.Editors;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,9 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TabCon.Controls;
 
 namespace TabCon.Views {
 	/// <summary>
@@ -72,6 +71,7 @@ namespace TabCon.Views {
 			TextBox tb = sender as TextBox;
 			// System.NullReferenceException'対策
 			if (ColorSampleBackground != null) {
+		//		Color color = ColorSampleBackground.Color;
 				string colorcode = ColorSampleBackground.Text;
 				if (6 < colorcode.Length) {
 					double number;
@@ -130,20 +130,29 @@ namespace TabCon.Views {
 				}
 			}
 		}
-
+		private void XamColorPicker_SelectedColorChanged(object sender, Infragistics.Controls.Editors.SelectedColorChangedEventArgs e)
+		{
+			XamColorPicker XCP = sender as XamColorPicker;
+			// System.NullReferenceException'対策
+			if (xamColorPicker != null) {
+				Color? selectedColor = XCP.SelectedColor;
+				string colorcode = selectedColor.ToString();
+				ColorSampleBackground.Text = colorcode;
+			}
+		}
 		/// <summary>
 		/// 背景に応じて文字色の白黒を切り替える
 		/// </summary>
 		private void ForegroundBW(string colorcode, int limit)
 		{
 			if(ColorSampleLavel != null && ColorSampleTB !=null) {
-				int r = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
-				int g = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
-				int b = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+				int r = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
+				int g = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+				int b = int.Parse(colorcode.Substring(7, 2), NumberStyles.HexNumber);
 				Color col = Color.FromArgb(255, (byte)r, (byte)g, (byte)b);
 				if (colorcode.Length == 6) {
 				} else {
-					int a = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+					int a = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
 					col = Color.FromArgb((byte)r, (byte)g, (byte)b, (byte)a);
 				}
 				ColorSampleLavel.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
@@ -167,13 +176,13 @@ namespace TabCon.Views {
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg);
+			Console.WriteLine(TAG + "[ParrtsTestView]" + dbMsg);
 #endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg + "でエラー発生;" + err);
+			Console.WriteLine(TAG + "[ParrtsTestView]" + dbMsg + "でエラー発生;" + err);
 		}
 
 

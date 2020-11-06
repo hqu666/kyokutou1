@@ -1,5 +1,6 @@
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\CS_Calculator.pdb
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CalculatorButton.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_CalculatorControl.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator_MarkupCompile.cache
@@ -10,4 +11,3 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calcul
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csproj.CoreCompileInputs.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.pdb
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csprojAssemblyReference.cache
