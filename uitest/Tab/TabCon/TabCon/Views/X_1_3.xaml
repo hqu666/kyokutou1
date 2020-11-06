@@ -36,7 +36,7 @@
 									Grid.Row="1" Grid.Column="0"
 									ShowCalendarCloseButton="False" 
 									ShowCalendarOverlayButton="False"
-									CalendarDisplayMode="Separate"
+									CalendarDisplayMode="Merged"
 									DataManager="{Binding dataManager}" 
 									/>
 		<!--

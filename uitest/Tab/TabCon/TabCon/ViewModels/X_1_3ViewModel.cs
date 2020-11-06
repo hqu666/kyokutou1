@@ -64,6 +64,9 @@ namespace TabCon.ViewModels {
 			string TAG = "CalenderWrite";
 			string dbMsg = "[MySQLBase]";
 			try {
+				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
+				DateTime cEnd = cStart.AddMonths(1);
+
 				//リソースとカレンダー
 				resources = new ObservableCollection<Resource>();
 
@@ -71,18 +74,19 @@ namespace TabCon.ViewModels {
 				resources.Add(resAmanda);
 				calendars = new ObservableCollection<ResourceCalendar>();
 
-
 				ResourceCalendar calAmanda = new ResourceCalendar() {
 					Id = "cal1",
 					OwningResourceId = "own1"
 				};
 
 				calendars.Add(calAmanda);
+
 				appointments = WriteEvent();
 				dataConnector =new ListScheduleDataConnector();
 				dataConnector.ResourceItemsSource = resources;
 				dataConnector.ResourceCalendarItemsSource = calendars;
 				dataConnector.AppointmentItemsSource = appointments;
+
 				 //カレンダー グループを作成し、初期カレンダーを設定
 				 dataManager = new XamScheduleDataManager();
 				dataManager.DataConnector = dataConnector;
@@ -90,7 +94,13 @@ namespace TabCon.ViewModels {
 				CalendarGroup calGroup = new CalendarGroup();
 				calGroup.InitialCalendarIds = "own1[cal1]";
 				calGroups.Add(calGroup);
+
+				//dataManager.Settings.MinDate = cStart;
+				//dataManager.Settings.MaxDate = cEnd;
+
 				/**
+				 * 
+				ActivityBase の　 Start 	End
 				 * 
 //最後にコントロールを生成する場合は
 XamDayView dayView = new XamDayView();
