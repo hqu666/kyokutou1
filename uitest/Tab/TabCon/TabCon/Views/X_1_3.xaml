@@ -28,23 +28,30 @@
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
-		<!--<ig1:XamMonthCalendar x:Name="MyCalendar"
+		<!--<Grid Name="PageRoot"
+				Grid.Row="1" Grid.Column="0"
+				DataContext="{Binding cView}"
+				>
+		</Grid>-->
+
+		<!--　	一日	<ig:XamDayView x:Name="MyCalendar"
 									Grid.Row="1" Grid.Column="0"
-									AutoAdjustCalendarDimensions="False"
-								 Margin="0,0,0,10" />-->
-		<ig:XamMonthView x:Name="MyCalendar"
-									Grid.Row="1" Grid.Column="0"
-									ShowCalendarCloseButton="False" 
-									ShowCalendarOverlayButton="False"
-									CalendarDisplayMode="Merged"
-									WorkingDaysSource="AllResourcesInGroups" 
+									DataManager="{Binding dataManager}"
+									/> 
+		一日横向き		<ig:XamScheduleView Grid.Row="1" Grid.Column="0"
 									DataManager="{Binding dataManager}"
 									/>
-		<!--
-		ActivityBase
-
-									DataManager="{Binding ElementName=dataManager}" の場合
-		<ig:XamScheduleDataManager x:Name="dataManager" 
+									
+									なら問題無し
+		-->
+		<ig:XamMonthView Grid.Row="1" Grid.Column="0"
+									DataManager="{Binding dataManager}"
+									/>
+		<!--<ig:XamMonthView x:Name="MyCalendar"
+									Grid.Row="1" Grid.Column="0"
+									DataManager="{Binding dataManager}"
+									/>-->
+		<!--<ig:XamScheduleDataManager x:Name="dataManager" 
              DataConnector="{Binding dataConnector}">
 			<ig:XamScheduleDataManager.CalendarGroups>
 				<ig:CalendarGroup InitialCalendarIds="own1[cal1]"/>

@@ -34,18 +34,24 @@ namespace TabCon.ViewModels {
 		/// XamMonthViewへBindingするカレンダの全内容
 		/// </summary>
 		public XamScheduleDataManager dataManager { get; set; }
-		public　ListScheduleDataConnector dataConnector { get; set; }
-		public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
-		public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
+		//public　ListScheduleDataConnector dataConnector { get; set; }
+		//public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
+		//public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
+		public XamMonthView cView { get; set; }
+
 		/// <summary>
 		/// 予定配列
 		/// </summary>
 		public ObservableCollection<Appointment> appointments { get; set; }               //AppointmentItemsSource
 																						  //public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
 																						  //public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
+		/// <summary>
+		/// カレンダ作成の仮ID
+		/// </summary>
+		public string AppointmentOwningResourceId = "own1";
+		public string AppointmentOwningCalendarId = "cal1";
 
-
-
+		public MySQL_Util MySQLUtil;
 
 		public X_1_3ViewModel()
 		{
@@ -65,7 +71,7 @@ namespace TabCon.ViewModels {
 		}
 
 		/// <summary>
-		/// 
+		/// カレンダ作成
 		/// </summary>
 		public void CalenderWrite() {
 			string TAG = "CalenderWrite";
@@ -73,92 +79,155 @@ namespace TabCon.ViewModels {
 			try {
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
+				dbMsg += cStart + "～" + cEnd;
 
 				//リソースとカレンダー
-				resources = new ObservableCollection<Resource>();
+				ObservableCollection<Resource> resources = new ObservableCollection<Resource>();
 
-				//1タブ分のデータ//////////////////////////////////////////////////////////////////////
+				//1タブ分のデータ//5.リソースとカレンダーをコードビハインドに作成します。///////////////////
 				//仮名で作成する
-				Resource resAmanda = new Resource() { Id = "own1", Name = "Amanda" };
+				Resource resAmanda = new Resource() { Id = AppointmentOwningResourceId, Name = "Amanda" };
 				resources.Add(resAmanda);
-				calendars = new ObservableCollection<ResourceCalendar>();
+				ObservableCollection<ResourceCalendar> calendars = new ObservableCollection<ResourceCalendar>();
 				ResourceCalendar calAmanda = new ResourceCalendar() {
-					Id = "cal1",
-					OwningResourceId = "own1"
+					Id = AppointmentOwningCalendarId,
+					OwningResourceId = AppointmentOwningResourceId
 				};
 
 				calendars.Add(calAmanda);
 				//XAMLプロパティのCalendarDisplayMode="Merged"でタブを表示させない
-
-				appointments = WriteEvent();
-				dataConnector =new ListScheduleDataConnector();
+				//6.その中に 予定のリストを作成//5///////////////////
+				appointments = WriteEvent(calAmanda, resAmanda);
+				dbMsg += ",appointments=" + appointments.Count + "件";
+				//7.コードビハインドを使用して ListScheduleDataConnector を追加//6///////////////////
+				ListScheduleDataConnector　dataConnector = new ListScheduleDataConnector();
 				dataConnector.ResourceItemsSource = resources;
 				dataConnector.ResourceCalendarItemsSource = calendars;
 				dataConnector.AppointmentItemsSource = appointments;
+				//dataConnector.TaskItemsSource = tasks;
+				//dataConnector.JournalItemsSource = journals;
 
-				 //カレンダー グループを作成し、初期カレンダーを設定
-				 dataManager = new XamScheduleDataManager();
-
-				//表示範囲を一月分に限定する
+				//9.カレンダー グループを作成し、初期カレンダーを設定////7//8はXAML
+				dataManager = new XamScheduleDataManager();
+				dataManager.DataConnector = dataConnector;
+				//追加//////////
+				dataManager.CurrentUserId = AppointmentOwningResourceId;
+				//表示範囲を一月分に限定する//////////
 				ScheduleSettings cSettings = new ScheduleSettings();
 				cSettings.MinDate = cStart;
 				cSettings.MaxDate = cEnd;
 				dataManager.Settings = cSettings;
-
-				dataManager.DataConnector = dataConnector;
+				///////////////////////////////////////追加//
 				CalendarGroupCollection calGroups = dataManager.CalendarGroups;
 				CalendarGroup calGroup = new CalendarGroup();
-				calGroup.InitialCalendarIds = "own1[cal1]";
+				calGroup.InitialCalendarIds = AppointmentOwningResourceId + "[" + AppointmentOwningCalendarId + "]";                     ///"own1[cal1]";
 				calGroups.Add(calGroup);
-				/**
-				 * 
-				ActivityBase の　 Start 	End
-				 * 
-//最後にコントロールを生成する場合は
-XamDayView dayView = new XamDayView();
-dayView.DataManager = dataManager;
-this.PageRoot.Children.Add(dayView);
-*/
-				RaisePropertyChanged("dataManager");
+				dbMsg += ",CurrentUserId=" + dataManager.CurrentUserId;
+
+				////10.コードビハインドでGirid（PageRoot）にコントロールを生成する場合//////9//
+				//XamMonthView cView = new XamMonthView();
+				//cView.DataManager = dataManager;
+				////MyView.PageRoot.Children.Add(cView);
+
+				RaisePropertyChanged(); //	"dataManager"
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 
-		public ObservableCollection<Appointment> WriteEvent()
+		/// <summary>
+		/// 予定作成
+		/// </summary>
+		/// <returns></returns>
+		public ObservableCollection<Appointment> WriteEvent(ResourceCalendar RCalendar, Resource resource)
 		{
 			string TAG = "WriteEvent";
 			string dbMsg = "[MySQLBase]";
 			try {
+				//予定取得///////////////////////////////////////////
+	//			int AppointmentCount = 1;
+				DateTime dt = DateTime.Now;
+				// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
+				DateTime StartDT = DateTime.Today.AddHours(dt.Hour).ToUniversalTime();
+				DateTime EndDT = StartDT.AddHours(1).AddMinutes(30);
 
-				//予定作成///////////////////////////////////////////
+				//MySQLUtil = new MySQL_Util();
+				//if (MySQLUtil.MySqlConnection()){
+				//	ObservableCollection<object> rTable = MySQLUtil.ReadTable( "t_events");
+				//	ObservableCollection<Models.t_events> tEvents = new ObservableCollection<Models.t_events>();
+
+				//	MySQLUtil.DisConnect();
+				//}
+
+
+				// Infragistics.Controls.Schedules のメタデータ
 				appointments = new ObservableCollection<Appointment>();
-				Appointment app1 = new Appointment() {
-					Id = "t1",
-					OwningResourceId = "own1",
-					OwningCalendarId = "cal1",
-					Subject = "Appointment 1",
-					Description = "My first appointment",
-					// タイムゾーンはこのスニペットで設定しないため、
-					// 日付をグリニッジ標準時へ変換します
-					Start = DateTime.Today.AddHours(9).AddMinutes(12).ToUniversalTime(),
-					End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
-				};
-				appointments.Add(app1);
-				Appointment app2 = new Appointment() {
-					Id = "t2",
-					OwningResourceId = "own1",
-					OwningCalendarId = "cal1",
-					Subject = "Appointment 2",
-					Description = "My second appointment",
-					// タイムゾーンはこのスニペットで設定しないため、
-					// 日付をグリニッジ標準時へ変換します
-					Start = DateTime.Today.AddHours(10).AddMinutes(12).ToUniversalTime(),
-					End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
-				};
-				appointments.Add(app2);
+				for (int AppointmentCount = 1; AppointmentCount < 4; AppointmentCount++) {
+					dbMsg += "[" + AppointmentCount + "]" + StartDT + "～" + EndDT;
+					Appointment app1 = new Appointment() {
+						Id = "t" + AppointmentCount,
+						OwningResourceId = AppointmentOwningResourceId,
+						OwningCalendarId = AppointmentOwningCalendarId,
+						Subject = "Test" + AppointmentCount,
+						Description = "My first appointment",
+						Start = StartDT,
+						End = EndDT
+						// タイムゾーンはこのスニペットで設定しないため、
+						// 日付をグリニッジ標準時へ変換します
+						//Start = DateTime.Today.AddHours(9).AddMinutes(12).ToUniversalTime(),
+						//End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
+					};
+					appointments.Add(app1);
+					StartDT = StartDT.AddHours(1);
+					EndDT = StartDT.AddHours(1).AddMinutes(30);
 
+				}
+;
+				/*
+,
+					IsVisible = true,
+					OwningCalendar = RCalendar,
+					OwningResource = resource,
+					OriginalOccurrenceStart = StartDT,
+					OriginalOccurrenceEnd = EndDT,
+					LastModifiedTime = dt
+					
+					
+					-		AppointmentItemsSource	Count = 2	System.Collections.IEnumerable {System.Collections.ObjectModel.ObservableCollection<Infragistics.Controls.Schedules.Appointment>}
+				-		[0]	Id="t1", Range={2020/11/09 0:12:00}-{2020/11/09 2:42:00}, OwningResourceId="own1", OwningCalendarId="cal1", Description="My first appointment", DataItem=null	Infragistics.Controls.Schedules.Appointment
+						
+						Categories	null	string
+
+						EndTimeZoneId	null	string
+						Error	null	Infragistics.DataErrorInfo
+						HasListeners	false	bool
+
+						IsLocked	null	bool?
+						IsOccurrence	false	bool
+						IsOccurrenceDeleted	false	bool
+						IsRecurrenceRoot	false	bool
+						IsTimeZoneNeutral	false	bool
+						IsVariance	false	bool
+						IsVisibleResolved	true	bool
+						Location	null	string
+
+						MaxOccurrenceDateTime	null	System.DateTime?
+
+				+		Metadata	{Infragistics.Controls.Schedules.DictionaryMetadataPropertyValueStore}	Infragistics.Controls.Schedules.MetadataPropertyValueStore {Infragistics.Controls.Schedules.DictionaryMetadataPropertyValueStore}
+
+						Recurrence	null	Infragistics.Controls.Schedules.RecurrenceBase
+						RecurrenceVersion	0	int
+						Reminder	null	Infragistics.Controls.Schedules.Reminder
+						ReminderEnabled	false	bool
+				+		ReminderInterval	{00:00:00}	System.TimeSpan
+						RootActivity	null	Infragistics.Controls.Schedules.ActivityBase
+						RootActivityId	null	string
+
+						StartTimeZoneId	null	string
+						VariantProperties	0	long
+
+				 */
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
