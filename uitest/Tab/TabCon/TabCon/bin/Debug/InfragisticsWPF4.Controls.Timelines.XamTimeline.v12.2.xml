@@ -1,0 +1,1978 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+    <assembly>
+        <name>InfragisticsWPF4.Controls.Timelines.XamTimeline.v12.2</name>
+    </assembly>
+    <members>
+        <member name="T:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer">
+            <summary>日時軸のオートメーション ピア。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.#ctor(Infragistics.Controls.Timelines.DateTimeAxis)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="axis">軸。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.SetValue(System.String)">
+            <summary>コントロールの値を設定します。</summary>
+            <param name="value">設定する値。プロバイダーは、値を適切なデータ型に変換します。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.GetAutomationControlTypeCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられる <see cref="T:System.Windows.UIElement" /> のコントロール タイプを返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetAutomationControlType" /> によって呼び出されます。</summary>
+            <returns>列挙体の値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.GetClassNameCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.UIElement" /> の名前を返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetClassName" /> によって呼び出されます。</summary>
+            <returns>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられたオーナー型の名前を返します。特記事項を参照してください。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.GetNameCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.FrameworkElement" /> のテキスト ラベルを返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetName" /> によって呼び出されます。</summary>
+            <returns>このオートメーション ピアに関連付けられる要素のテキスト ラベル。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.GetPattern(System.Windows.Automation.Peers.PatternInterface)">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.UIElement" /> のコントロール パターンを返します。</summary>
+            <param name="patternInterface">列挙値の １ つです。</param>
+            <returns>特記事項を参照してください。</returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.Axis">
+            <summary>軸を取得または設定します。</summary>
+            <value>軸。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.IsReadOnly">
+            <summary>コントロールの値が読み取り専用かどうかを示す値を取得します。</summary>
+            <value></value>
+            <returns>値が読み取り専用の場合、true。変更可能な場合、false。 </returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.DateTimeAxisAutomationPeer.Value">
+            <summary>コントロールの値を取得します。</summary>
+            <value></value>
+            <returns>コントロールの値。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer">
+            <summary>数値時間軸のオートメーション ピア。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.#ctor(Infragistics.Controls.Timelines.NumericTimeAxis)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="axis">軸。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.SetValue(System.Double)">
+            <summary>コントロールの値を設定します。</summary>
+            <param name="value">設定する値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.GetAutomationControlTypeCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられる <see cref="T:System.Windows.UIElement" /> のコントロール タイプを返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetAutomationControlType" /> によって呼び出されます。</summary>
+            <returns>列挙体の値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.GetClassNameCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.UIElement" /> の名前を返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetClassName" /> によって呼び出されます。</summary>
+            <returns>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられたオーナー型の名前を返します。特記事項を参照してください。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.GetNameCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.FrameworkElement" /> のテキスト ラベルを返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetName" /> によって呼び出されます。</summary>
+            <returns>このオートメーション ピアに関連付けられる要素のテキスト ラベル。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.GetPattern(System.Windows.Automation.Peers.PatternInterface)">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.UIElement" /> のコントロール パターンを返します。</summary>
+            <param name="patternInterface">列挙値の １ つです。</param>
+            <returns>特記事項を参照してください。</returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.Axis">
+            <summary>軸を取得または設定します。</summary>
+            <value>軸。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.IsReadOnly">
+            <summary>コントロールの値が読み取り専用かどうかを示す値を取得します。</summary>
+            <value></value>
+            <returns>値が読み取り専用の場合、true。変更可能な場合、false。 </returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.LargeChange">
+            <summary>Page Down キーなどで大きな変更が実行されたときに <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.Value" />  プロパティに追加/削除する値を取得します。</summary>
+            <value></value>
+            <returns>コントロールがサポートする変更の値。または、コントロールが <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.LargeChange" /> をサポートしない場合は null。 </returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.Minimum">
+            <summary>コントロールがサポートする最小の範囲値を取得します。</summary>
+            <value></value>
+            <returns>コントロールがサポートする最小値。またはコントロールが <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.Minimum" /> をサポートしない場合は、null。 </returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.Maximum">
+            <summary>コントロールでサポートされる最大の範囲値を取得します。</summary>
+            <value></value>
+            <returns>コントロールがサポートする最大値。またはコントロールが <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.Maximum" /> をサポートしない場合は、null。 </returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.SmallChange">
+            <summary>矢印キーなどで小さな変更を行ったときに  <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.Value" /> プロパティに追加/削除する値を取得します。</summary>
+            <value></value>
+            <returns>コントロールがサポートする小さな変更。またはコントロールが <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.SmallChange" /> をサポートしない場合は、null。 </returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.NumericTimeAxisAutomationPeer.Value">
+            <summary>コントロールの値を取得します。</summary>
+            <value></value>
+            <returns>コントロールの値。コントロールが <see cref="P:System.Windows.Automation.Provider.IRangeValueProvider.Value" /> をサポートしない場合は、null。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer">
+            <summary>タイムラインのオートメーション ピア。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer.#ctor(Infragistics.Controls.Timelines.XamTimeline)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="timeline">タイムライン。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer.GetAutomationControlTypeCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられる <see cref="T:System.Windows.UIElement" /> のコントロール タイプを返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetAutomationControlType" /> によって呼び出されます。</summary>
+            <returns>列挙体の値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer.GetClassNameCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.UIElement" /> の名前を返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetClassName" /> によって呼び出されます。</summary>
+            <returns>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられたオーナー型の名前を返します。特記事項を参照してください。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer.GetNameCore">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.FrameworkElement" /> のテキスト ラベルを返します。このメソッドは、<see cref="M:System.Windows.Automation.Peers.AutomationPeer.GetName" /> によって呼び出されます。</summary>
+            <returns>このオートメーション ピアに関連付けられる要素のテキスト ラベル。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer.GetPattern(System.Windows.Automation.Peers.PatternInterface)">
+            <summary>この <see cref="T:System.Windows.Automation.Peers.FrameworkElementAutomationPeer" /> に関連付けられた <see cref="T:System.Windows.UIElement" /> のコントロール パターンを返します。</summary>
+            <param name="patternInterface">列挙値の １ つです。</param>
+            <returns>特記事項を参照してください。</returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AutomationPeers.XamTimelineAutomationPeer.Timeline">
+            <summary>タイムラインを取得または設定します。</summary>
+            <value>タイムライン。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.AxisLabel">
+            <summary>軸にデータを表示するラベル。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AxisLabel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.FormattedTextProperty">
+            <summary>FormattedContent 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.StringFormatProperty">
+            <summary>StringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>StringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">StringFormat を変更しおた AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnStringFormatPropertyChanged(System.String)">
+            <summary>StringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="newValue">新しい値。</param>        
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.YearsUnitStringFormatProperty">
+            <summary>YearsUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnYearsUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>YearsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">YearsUnitStringFormat を変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnYearsUnitStringFormatPropertyChanged">
+            <summary>YearsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.MonthsUnitStringFormatProperty">
+            <summary>MonthsUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnMonthsUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>MonthsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">MonthsUnitStringFormat を変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnMonthsUnitStringFormatPropertyChanged">
+            <summary>MonthsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.WeeksUnitStringFormatProperty">
+            <summary>WeeksUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnWeeksUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>WeeksUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">WeeksUnitStringFormat を変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnWeeksUnitStringFormatPropertyChanged">
+            <summary>WeeksUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.DaysUnitStringFormatProperty">
+            <summary>DaysUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnDaysUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>DaysUnitStringFormatProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="d">DaysUnitStringFormat を変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnDaysUnitStringFormatPropertyChanged">
+            <summary>DaysUnitStringFormatProperty プロパティはハンドラーを変更しました。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.HoursUnitStringFormatProperty">
+            <summary>HoursUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnHoursUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>HoursUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">HoursUnitStringFormat を変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnHoursUnitStringFormatPropertyChanged">
+            <summary>HoursUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.MinutesUnitStringFormatProperty">
+            <summary>MinutesUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnMinutesUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>MinutesUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">MinutesUnitStringFormat を変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnMinutesUnitStringFormatPropertyChanged">
+            <summary>MinutesUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.SecondsUnitStringFormatProperty">
+            <summary>SecondsUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnSecondsUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>SecondsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">SecondsUnitStringFormat 変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnSecondsUnitStringFormatPropertyChanged">
+            <summary>SecondsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.AxisLabel.MillisecondsUnitStringFormatProperty">
+            <summary>MillisecondsUnitStringFormat 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnMillisecondsUnitStringFormatPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>MillisecondsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">MillisecondsUnitStringFormat 変更した AxisLabel です。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.OnMillisecondsUnitStringFormatPropertyChanged">
+            <summary>MillisecondsUnitStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.UpdateFormattedText">
+            <summary>フォーマットされたテキストを更新します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisLabel.UpdateFormattedText(System.Windows.DependencyProperty,System.Object)">
+            <summary>フォーマットされたテキストを更新します。</summary>
+            <param name="property">プロパティ。</param>
+            <param name="source">ソース。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.FormattedText">
+            <summary>書式化されたコンテンツ プロパティを取得します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.StringFormat">
+            <summary>テキスト文字列の書式を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.YearsUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.MonthsUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.WeeksUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.DaysUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.HoursUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.MinutesUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.SecondsUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.AxisLabel.MillisecondsUnitStringFormat">
+            <summary>Unit は時間の時に使用する書式文字列を取得または設定します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DateTimeAxis">
+            <summary>日付値を表示する軸。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.TimelineAxis">
+            <summary>Axis は RangeAxis から継承され、スクロール、拡大と縮小、軸の自動範囲設定の機能が追加されています。また、グリッド線、ストライプ、つまみも含まれています。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.RangeAxis">
+            <summary>RangeAxis は、軸線のデータ範囲計算と視覚的表現に使用されるプロパティとメソッドの基本セットを提供します。RangeAxis には目盛とラベルも含まれています。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.RangeAxis" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.ShowMajorTickMarksProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.ShowMajorTickMarks" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnShowMajorTickMarksChanged(System.Boolean,System.Boolean)">
+            <summary>ShowMajorTickMarksProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.MajorTickMarkStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.MajorTickMarkStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnMajorTickMarkStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>MajorTickMarkStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.ShowMinorTickMarksProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.ShowMinorTickMarks" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnShowMinorTickMarksChanged(System.Boolean,System.Boolean)">
+            <summary>ShowMinorTickMarksProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.MinorTickMarkStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.MinorTickMarkStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnMinorTickMarkStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>MinorTickMarkStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.AxisPaneStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.AxisPaneStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnAxisPaneStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>AxisPaneStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.ShowLabelsProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.ShowLabels" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnShowLabelsChanged(System.Boolean,System.Boolean)">
+            <summary>ShowLabelsProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.LabelStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.LabelStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnLabelStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>LabelStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.RangeAxis.PaneStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.RangeAxis.PaneStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnPaneStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>PaneStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnApplyTemplate">
+            <summary>派生したクラスでオーバーライドされると、アプリケーション コードまたは内部プロセス（再構築レイアウト パスなど）が <see cref="M:System.Windows.Controls.Control.ApplyTemplate" /> を呼び出す時に常に起動されます。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.SetDataTypeInfo(Infragistics.Controls.Timelines.AxisLabel)">
+            <summary>データ型情報を設定します。</summary>
+            <param name="axisLabel">軸ラベル。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.GetPixelValue(System.Double)">
+            <summary>ピクセル位置に対応する値を取得します。</summary>
+            <param name="pixelPosition">ピクセルの位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.GetWindowBasedPixelValue(System.Double)">
+            <summary>ピクセル位置に対応するウィンドウ ベースの値を取得します。</summary>
+            <param name="pixelPosition">ピクセルの位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.GetPosition(System.Double)">
+            <summary>値に対応するピクセル位置を取得します。</summary>
+            <param name="valuePosition">値の位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.GetWindowBasedPosition(System.Double)">
+            <summary>値に対応するウィンドウ ベースのピクセル位置を取得します。</summary>
+            <param name="valuePosition">値の位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>PropertyChanged 変更ハンドラー。</summary>
+            <param name="d">d。</param>
+            <param name="e">イベントのデータを含む <see cref="T:System.Windows.DependencyPropertyChangedEventArgs" /> インスタンス。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RangeAxis.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary><see cref="E:PropertyChanged" /> イベントを発生します。</summary>
+            <param name="e">イベントのデータを含む <see cref="T:System.Windows.DependencyPropertyChangedEventArgs" /> インスタンス。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.ShowMajorTickMarks">
+            <summary>主目盛が表示されるかどうかを示す値を取得または設定します。</summary>
+            <value>主目盛が表示される場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.MajorTickMarkStyle">
+            <summary>主目盛のスタイルを取得または設定します。</summary>
+            <value>主目盛のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.ShowMinorTickMarks">
+            <summary>副目盛が表示されるかどうかを示す値を取得または設定します。</summary>
+            <value>副目盛が表示される場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.AxisPaneStyle">
+            <summary>軸ペイン スタイルを取得または設定します。</summary>
+            <value>軸ペインのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.ShowLabels">
+            <summary>ラベルを表示するかどうかを示す値を取得または設定します。</summary>
+            <value>ラベルが表示される場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.LabelStyle">
+            <summary>スタイルを取得または設定します。</summary>
+            <value>ラベル スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.PaneStyle">
+            <summary>ペイン スタイルを取得または設定します。</summary>
+            <value>ペインのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.RangeAxis.ActualUnit">
+            <summary>実際の単位を取得または設定します</summary>
+            <value>実際の単位。</value>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.MaximumAxisIntervals">
+            <summary>200 ピクセルでの最大間隔です。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.TimelineAxis" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.AutoRangeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.AutoRange" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnAutoRangeChanged(System.Boolean,System.Boolean)">
+            <summary>AutoRangeProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.ScrollScaleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.ScrollScale" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnScrollScaleChanged(System.Double,System.Double)">
+            <summary>ScrollScaleProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.ScrollPositionProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.ScrollPosition" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnScrollPositionChanged(System.Double,System.Double)">
+            <summary>ScrollPositionProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.UnitProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.Unit" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnUnitChanged(System.Double,System.Double)">
+            <summary>UnitProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.ShowMajorGridLinesProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.ShowMajorGridLines" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnShowMajorGridLinesChanged(System.Boolean,System.Boolean)">
+            <summary>ShowMajorGridLinesProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.MajorGridLineStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.MajorGridLineStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnMajorGridLineStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>MajorGridLineStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.ShowMinorGridLinesProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.ShowMinorGridLines" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnShowMinorGridLinesChanged(System.Boolean,System.Boolean)">
+            <summary>ShowMinorGridLinesProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.MinorGridLineStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.MinorGridLineStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnMinorGridLineStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>MinorGridLineStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.ShowThumbProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.ShowThumb" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.ThumbStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.ThumbStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnThumbStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>ThumbStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.StripesProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.Stripes" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineAxis.InnerVisibilityProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineAxis.InnerVisibility" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnInnerVisibilityChanged(System.Windows.Visibility,System.Windows.Visibility)">
+            <summary>InnerVisibilityProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.GetPixelValue(System.Double)">
+            <summary>ピクセル位置に対応する値を取得します。</summary>
+            <param name="pixelPosition">ピクセルの位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.GetWindowBasedPixelValue(System.Double)">
+            <summary>ピクセル位置に対応するウィンドウ ベースの値を取得します。</summary>
+            <param name="pixelPosition">ピクセルの位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.GetPosition(System.Double)">
+            <summary>値に対応するピクセル位置を取得します。</summary>
+            <param name="valuePosition">値の位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.GetWindowBasedPosition(System.Double)">
+            <summary>値に対応するウィンドウ ベースのピクセル位置を取得します。</summary>
+            <param name="valuePosition">値の位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.Calculate">
+            <summary>データ ポイント、軸タイプおよびタイムライン タイプに基づいた現在の軸の間隔、最小および最大を計算します。各軸タイプにひとつしか許可していない場合、最小および最大はすべてのシリーズに基づく必要があります。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.CalculateRounding(Infragistics.Controls.Timelines.DataRange)">
+            <summary>丸めを計算します。</summary>
+            <param name="range">範囲。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.SetRoundValues(Infragistics.Controls.Timelines.DataRange)">
+            <summary>丸め値を設定します。</summary>
+            <param name="range">範囲。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.CalculateActualUnit(System.Double,System.Double)">
+            <summary>実際の単位を計算します。</summary>
+            <param name="min">最小値。</param>
+            <param name="max">最大値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.SetMinMax">
+            <summary>最小値と最大値を設定します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.DetermineAutoInterval(System.Double,System.Double)">
+            <summary>自動で間隔を決定します。</summary>
+            <param name="minimum">最小値。</param>
+            <param name="maximum">最大値。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnApplyTemplate">
+            <summary>派生したクラスでオーバーライドされると、アプリケーション コードまたは内部プロセス（再構築レイアウト パスなど）が <see cref="M:System.Windows.Controls.Control.ApplyTemplate" /> を呼び出す時に常に起動されます。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineAxis.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>この軸でプロパティが変更された時に呼び出されるメソッド。</summary>
+            <param name="e">コンテキストの DependencyPropertyChangedEventArgs。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.AutoRange">
+            <summary>Minimum、Maximum、Unit プロパティが自動的に計算されるかどうかを示す値を取得または設定します。手動範囲を作成するには、AutoRange プロパティを False に設定して、Minimum、Maximum、Unit が設定する必要があります。</summary>
+            <remarks>デフォルトでは、チャートは軸の最小および最大範囲の値を決定します。ユーザーの要件をより適切に満たすようにスケールにカスタマイズできます。AutoRange のデフォルト値は True です。</remarks>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ScrollScale">
+            <summary>スクロールできる領域のスケール (0 から 1 の間の値で表現します)を取得または設定します。</summary>
+            <value>スクロールできる領域のスケール。</value>        
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ScrollPosition">
+            <summary>スクロールバー領域内の現在の表示の位置 (0 から 1 の間の値で表す) を取得または設定します。</summary>
+            <value>スクロールできる領域内の現在の表示の位置。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.Unit">
+            <summary>隣接する 2 つの軸ラベル、グリッドライン、およびメモリの間の距離を取得または設定をします。ユニット値は、軸スケールを使用します。ユニットが 0 の場合、ユニットは自動的に計算されます。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ShowMajorGridLines">
+            <summary>主グリッド線が表示されるかどうかを示す値を取得または設定します。</summary>
+            <value>主目盛が表示される場合は <c>true</c>。そうでない場合は <c>false</c>。</value>        
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.MajorGridLineStyle">
+            <summary>主グリッド線のスタイルを取得または設定します。</summary>
+            <value>主グリッド線スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ShowMinorGridLines">
+            <summary>副グリッド線が表示されるかどうかを示す値を取得または設定します。</summary>
+            <value>副グリッド線が表示される場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.MinorGridLineStyle">
+            <summary>副グリッドラインのスタイルを取得または設定します。</summary>
+            <value>副グリッド線スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ShowThumb">
+            <summary>つまみを表示するかどうかを示す値を取得または設定します。</summary>
+            <value>つまみを表示する場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ThumbStyle">
+            <summary>つまみのスタイルを取得または設定します。</summary>
+            <value>つまみのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.Stripes">
+            <summary>この軸のストライプを取得または設定します。</summary>
+            <value>ストライプ。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineAxis.ActualUnit">
+            <summary>実際の単位を取得します。</summary>
+            <value>実際の単位。</value>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DateTimeAxis" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeAxis.SelectedTimeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeAxis.SelectedTime" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.OnSelectedTimeChanged(Infragistics.Controls.Timelines.DateTimeChangedEventArgs)">
+            <summary><see cref="E:SelectedTimeChanged" /> イベントを発生します。</summary>
+            <param name="e">イベントのデータを含む <see cref="T:Infragistics.Controls.Timelines.DateTimeChangedEventArgs" /> インスタンス。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeAxis.MaximumProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeAxis.Maximum" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeAxis.MinimumProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeAxis.Minimum" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeAxis.UnitTypeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeAxis.UnitType" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.SetDataTypeInfo(Infragistics.Controls.Timelines.AxisLabel)">
+            <summary>データ型情報を設定します。</summary>
+            <param name="axisLabel">軸ラベル。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.SetMinMax">
+            <summary>最小値と最大値を設定します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.DetermineAutoInterval(System.Double,System.Double)">
+            <summary>自動で間隔を決定します。</summary>
+            <param name="minimum">最小値。</param>
+            <param name="maximum">最大値。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.CalculateRounding(Infragistics.Controls.Timelines.DataRange)">
+            <summary>丸めを計算します。</summary>
+            <param name="range">範囲。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.CalculateActualUnit(System.Double,System.Double)">
+            <summary>実際の単位を計算します。</summary>
+            <param name="min">最小値。</param>
+            <param name="max">最大値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeAxis.OnCreateAutomationPeer">
+            <summary>派生クラス内で実装される場合、Silverlight オートメーション インフラストラクチャーのためのクラス固有の <see cref="T:System.Windows.Automation.Peers.AutomationPeer" /> 実装を返します。</summary>
+            <returns>返すクラス固有 <see cref="T:System.Windows.Automation.Peers.AutomationPeer" /> サブクラス。</returns>
+        </member>
+        <member name="E:Infragistics.Controls.Timelines.DateTimeAxis.SelectedTimeChanged">
+            <summary>選択された時間を変更するときに発生します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.SelectedTime">
+            <summary>選択した時刻を取得または設定します。</summary>
+            <value>選択された時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.Maximum">
+            <summary>軸値域の最大限度を取得または設定します。手動範囲を作成するには、<see cref="P:Infragistics.AxisBase.AutoRange" /> プロパティを False に設定し、<see cref="P:Infragistics.Controls.Timelines.DateTimeAxis.Minimum" /> および Maximum が設定される必要があります。</summary><seealso cref="F:Infragistics.Controls.Timelines.DateTimeAxis.MaximumProperty" /></member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.Minimum">
+            <summary>軸値域の最小限度を取得または設定します。手動範囲を作成するには、<see cref="P:Infragistics.AxisBase.AutoRange" /> プロパティを False に設定し、Minimum および <see cref="P:Infragistics.Controls.Timelines.DateTimeAxis.Maximum" /> が設定される必要があります。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.UnitType">
+            <summary>単位のタイプを取得または設定します。</summary>
+            <value>単位のタイプです。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.ActualUnitType">
+            <summary>単位の実際のタイプを取得します。</summary>
+            <value>単位の実際のタイプです。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.ActualMinimum">
+            <summary>実際の最小値を取得します。</summary>
+            <value>実際の最小値。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.ActualMaximum">
+            <summary>実際の最大値を取得します。</summary>
+            <value>実際の最大値。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.VisibleMinimum">
+            <summary>表示可能な最小値を取得します。</summary>
+            <value>表示可能な最小値。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeAxis.VisibleMaximum">
+            <summary>表示可能な最大値を取得します。</summary>
+            <value>表示可能な最大値。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DateTimeChangedEventArgs">
+            <summary>DatetimeChanged イベントにデータを提供します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeChangedEventArgs.#ctor(System.DateTime)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DateTimeChangedEventArgs" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="newTime">新しい時刻です。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeChangedEventArgs.NewTime">
+            <summary>新しい新しい時刻を取得または設定します。</summary>
+            <value>新しい時刻です。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DateTimeUnitType">
+            <summary>日時ユニット タイプを指定します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Auto">
+            <summary>自動的に決まります。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Years">
+            <summary>単位タイプは年です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Months">
+            <summary>単位タイプは月です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Weeks">
+            <summary>単位タイプは週です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Days">
+            <summary>単位タイプは日です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Hours">
+            <summary>単位タイプは時間です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Minutes">
+            <summary>単位タイプは分です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Seconds">
+            <summary>単位タイプは秒です。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeUnitType.Milliseconds">
+            <summary>単位タイプはミリ秒です。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.AxisEventsPanel">
+            <summary>軸イベントを含むパネルを表します (点とスパン)。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisEventsPanel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AxisEventsPanel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisEventsPanel.MeasureOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの「計測」パスの動作を提供します。クラスは、計測パスの動作を定義するためにこのメソッドをオーバーライドできます。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisEventsPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの配置パスの動作を提供します。特別な配置パスの動作を定義するために、クラスはこのメソッドをオーバーライドできます。</summary>
+            <param name="finalSize">このオブジェクトがオブジェクト自体とその子を配列するために使用する親の中の最終領域。</param>
+            <returns>要素は外資された後の現在のサイズ。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.AxisPane">
+            <summary>タイムライン軸ペイン。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisPane.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AxisPane" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisPane.OnApplyTemplate">
+            <summary>派生したクラスでオーバーライドされると、アプリケーション コードまたは内部プロセス（再構築レイアウト パスなど）が <see cref="M:System.Windows.Controls.Control.ApplyTemplate" /> を呼び出す時に常に起動されます。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.LabelsPanel">
+            <summary>ラベルを含むパネルを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.LabelsPanel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.LabelsPanel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.LabelsPanel.MeasureOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの「計測」パスの動作を提供します。クラスは、計測パスの動作を定義するためにこのメソッドをオーバーライドできます。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.LabelsPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの配置パスの動作を提供します。特別な配置パスの動作を定義するために、クラスはこのメソッドをオーバーライドできます。</summary>
+            <param name="finalSize">このオブジェクトがオブジェクト自体とその子を配列するために使用する親の中の最終領域。</param>
+            <returns>要素は外資された後の現在のサイズ。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.TickMarksPanel">
+            <summary>目盛を含むパネルを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TickMarksPanel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.TickMarksPanel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TickMarksPanel.MeasureOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの「計測」パスの動作を提供します。クラスは、計測パスの動作を定義するためにこのメソッドをオーバーライドできます。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TickMarksPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの配置パスの動作を提供します。特別な配置パスの動作を定義するために、クラスはこのメソッドをオーバーライドできます。</summary>
+            <param name="finalSize">このオブジェクトがオブジェクト自体とその子を配列するために使用する親の中の最終領域。</param>
+            <returns>要素は外資された後の現在のサイズ。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.NumericTimeAxis">
+            <summary>数値を表示する軸。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeAxis.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.NumericTimeAxis" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.NumericTimeAxis.SelectedTimeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.NumericTimeAxis.SelectedTime" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeAxis.OnSelectedTimeChanged(Infragistics.Controls.Timelines.NumericTimeChangedEventArgs)">
+            <summary><see cref="E:SelectedTimeChanged" /> イベントを発生します。</summary>
+            <param name="e">イベントのデータを含む <see cref="T:Infragistics.Controls.Timelines.NumericTimeChangedEventArgs" /> インスタンス。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.NumericTimeAxis.MaximumProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.NumericTimeAxis.Maximum" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.NumericTimeAxis.MinimumProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.NumericTimeAxis.Minimum" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeAxis.SetMinMax">
+            <summary>最小値と最大値を設定します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeAxis.DetermineAutoInterval(System.Double,System.Double)">
+            <summary>自動で間隔を決定します。</summary>
+            <param name="minimum">最小値。</param>
+            <param name="maximum">最大値。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeAxis.CalculateActualUnit(System.Double,System.Double)">
+            <summary>実際の単位を計算します。</summary>
+            <param name="min">最小値。</param>
+            <param name="max">最大値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeAxis.OnCreateAutomationPeer">
+            <summary>派生クラス内で実装される場合、Silverlight オートメーション インフラストラクチャーのためのクラス固有の <see cref="T:System.Windows.Automation.Peers.AutomationPeer" /> 実装を返します。</summary>
+            <returns>返すクラス固有 <see cref="T:System.Windows.Automation.Peers.AutomationPeer" /> サブクラス。</returns>
+        </member>
+        <member name="E:Infragistics.Controls.Timelines.NumericTimeAxis.SelectedTimeChanged">
+            <summary>選択された時間を変更するときに発生します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.SelectedTime">
+            <summary>選択した時刻を取得または設定します。</summary>
+            <value>選択された時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.Maximum">
+            <summary>軸値域の最大限度を取得または設定します。手動範囲を作成するには、<see cref="P:Infragistics.AxisBase.AutoRange" /> プロパティを False に設定し、<see cref="P:Infragistics.Controls.Timelines.NumericTimeAxis.Minimum" /> および Maximum が設定される必要があります。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.Minimum">
+            <summary>軸値域の最小限度を取得または設定します。手動範囲を作成するには、<see cref="P:Infragistics.AxisBase.AutoRange" /> プロパティを False に設定し、Minimum および <see cref="P:Infragistics.Controls.Timelines.NumericTimeAxis.Maximum" /> が設定される必要があります。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.ActualMinimum">
+            <summary>実際の最小値を取得します。</summary>
+            <value>実際の最小値。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.ActualMaximum">
+            <summary>実際の最大値を取得します。</summary>
+            <value>実際の最大値。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.VisibleMinimum">
+            <summary>表示可能な最小値を取得します。</summary>
+            <value>表示可能な最小値。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeAxis.VisibleMaximum">
+            <summary>表示可能な最大値を取得します。</summary>
+            <value>表示可能な最大値。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.NumericTimeChangedEventArgs">
+            <summary>DatetimeChanged イベントにデータを提供します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeChangedEventArgs.#ctor(System.Double)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.NumericTimeChangedEventArgs" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="newTime">新しい時刻です。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeChangedEventArgs.NewTime">
+            <summary>新しい新しい時刻を取得または設定します。</summary>
+            <value>新しい時刻です。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.PreviewAxis">
+            <summary>Timeline の Zoombar の実際の軸をプレビューするために使用する軸を表します。PreviewAxis のプロパティを変更することで、PreviewAxis の異なる視覚的な外観を指定できます。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.PreviewAxis" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.GetPixelValue(System.Double)">
+            <summary>ピクセル位置に対応する値を取得します。</summary>
+            <param name="pixelPosition">ピクセルの位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.GetWindowBasedPixelValue(System.Double)">
+            <summary>ピクセル位置に対応するウィンドウ ベースの値を取得します。</summary>
+            <param name="pixelPosition">ピクセルの位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.GetPosition(System.Double)">
+            <summary>値に対応するピクセル位置を取得します。</summary>
+            <param name="valuePosition">値の位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.GetWindowBasedPosition(System.Double)">
+            <summary>値に対応するウィンドウ ベースのピクセル位置を取得します。</summary>
+            <param name="valuePosition">値の位置。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.MeasureOverride(System.Windows.Size)">
+            <summary>デフォルト高さと幅を提供するためにオーバーライドされるメソッドです。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.PreviewAxis.SetDataTypeInfo(Infragistics.Controls.Timelines.AxisLabel)">
+            <summary>データ型情報を設定します。</summary>
+            <param name="axisLabel">軸ラベル。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.PreviewAxis.ActualUnit">
+            <summary>実際の単位を取得または設定します</summary>
+            <value>実際の単位。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DateTimeEntry">
+            <summary>DateTime/TimeSpan の値が使えるイベント エントリーを表します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventEntry">
+            <summary>イベント エントリを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventEntry.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventEntry" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.TitleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.Title" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.DetailsProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.Details" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.ToolTipProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.ToolTip" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.TitleStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.TitleStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventEntry.OnTitleStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>TitleStyleProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.DetailsStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.DetailsStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventEntry.OnDetailsStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>DetailsStyleProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.PointStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.PointStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventEntry.OnPointStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>PointStyleProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventEntry.SpanStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventEntry.SpanStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventEntry.OnSpanStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>SpanStyleProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventEntry.EntryChanged">
+            <summary>変更されたエントリー。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.Title">
+            <summary>タイトルを取得または設定します。</summary>
+            <value>タイトル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.Details">
+            <summary>詳細を取得または設定します。</summary>
+            <value>詳細。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.ToolTip">
+            <summary>ツールチップを取得または設定します</summary>
+            <value>ツールチップ。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.TitleStyle">
+            <summary>タイトル スタイルを取得または設定します。</summary>
+            <value>タイトル スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.DetailsStyle">
+            <summary>詳細スタイルを取得または設定します。</summary>
+            <value>詳細スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.PointStyle">
+            <summary>ポイント スタイルを取得または設定します。</summary>
+            <value>ポイント スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.SpanStyle">
+            <summary>スパン スタイルを取得または設定します。</summary>
+            <value>スパンのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.Series">
+            <summary>この EventEntry が属するシリーズを取得します。</summary>
+            <value>シリーズ。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventEntry.Control">
+            <summary>この要素が UI に表示されるコントロールを取得または設定します。</summary>
+            <value>軸イベント。</value>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeEntry.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DateTimeEntry" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeEntry.TimeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeEntry.Time" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeEntry.OnTimeChanged(System.DateTime,System.DateTime)">
+            <summary>TimeProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeEntry.DurationProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeEntry.Duration" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeEntry.OnDurationChanged(System.TimeSpan,System.TimeSpan)">
+            <summary>DurationProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeEntry.Time">
+            <summary>時刻を取得または設定します。</summary>
+            <value>時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeEntry.Duration">
+            <summary>期間を取得または設定します。</summary>
+            <value>期間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeEntry.EndTime">
+            <summary>終了時間を取得します。</summary>
+            <value>終了時間です。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.NumericTimeEntry">
+            <summary>数値が使えるイベント エントリーを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeEntry.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.NumericTimeEntry" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.NumericTimeEntry.TimeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.NumericTimeEntry.Time" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeEntry.OnTimeChanged(System.Double,System.Double)">
+            <summary>TimeProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.NumericTimeEntry.DurationProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.NumericTimeEntry.Duration" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeEntry.OnDurationChanged(System.Double,System.Double)">
+            <summary>DurationProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeEntry.Time">
+            <summary>時刻を取得または設定します。</summary>
+            <value>時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeEntry.Duration">
+            <summary>期間を取得または設定します。</summary>
+            <value>期間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeEntry.EndTime">
+            <summary>終了時間を取得します。</summary>
+            <value>終了時間です。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DataRange">
+            <summary>値の範囲を表します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DataRange._hasData">
+            <summary>範囲が空かどうかを決定するフラグ。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DataRange._maximum">
+            <summary>範囲内の最大値。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DataRange._minimum">
+            <summary>範囲内の最小値。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.#ctor(System.Double,System.Double)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DataRange" /> 構造のインスタンスを初期化します。</summary>
+            <param name="minimum">最小値。</param>
+            <param name="maximum">最大値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.op_Equality(Infragistics.Controls.Timelines.DataRange,Infragistics.Controls.Timelines.DataRange)">
+            <summary>2 つの範囲を比較し、等しいかどうかを示す値を返します。</summary>
+            <param name="leftRange">左側の範囲。</param>
+            <param name="rightRange">右側の範囲。</param>
+            <returns>範囲が等しいかどうかを示す値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.op_Inequality(Infragistics.Controls.Timelines.DataRange,Infragistics.Controls.Timelines.DataRange)">
+            <summary>2 つの範囲を比較し、等しくないかどうかを示す値を返します。</summary>
+            <param name="leftRange">左側の範囲。</param>
+            <param name="rightRange">右側の範囲。</param>
+            <returns>範囲が等しくないかどうかを示す値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.Add(Infragistics.Controls.Timelines.DataRange)">
+            <summary>現在の範囲に範囲を追加します。</summary>
+            <param name="range">現在の範囲に追加する範囲。</param>
+            <returns>インスタンス範囲と範囲パラメーターを含む新しい範囲。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.Equals(Infragistics.Controls.Timelines.DataRange)">
+            <summary>範囲を別の範囲と比較します。</summary>
+            <param name="range">異なる範囲。</param>
+            <returns>範囲が等しいかどうかを示す値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.Equals(System.Object)">
+            <summary>範囲をオブジェクトと比較します。</summary>
+            <param name="obj">別のオブジェクト。</param>
+            <returns>他のオブジェクトが範囲であるかどうかと、範囲である場合に、その範囲がインスタンス範囲と等しいかどうかを示す値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.Contains(System.Double)">
+            <summary>値が範囲内にあるかどうかを示す値を返します。</summary>
+            <param name="value">値。</param>
+            <returns>値が範囲内にあるかどうか。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.Contains(Infragistics.Controls.Timelines.DataRange)">
+            <summary>範囲がこの範囲内にあるかどうかを示す値を返します。</summary>
+            <param name="range">範囲。</param>
+            <returns>範囲がこの範囲内にあるかどうか。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.IntersectsWith(Infragistics.Controls.Timelines.DataRange)">
+            <summary>2 つの範囲が重なるかどうかを示す値を返します。</summary>
+            <param name="range">この範囲と比較する範囲。</param>
+            <returns>範囲が重なるかどうかを示す値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DataRange.GetHashCode">
+            <summary>ハッシュ コード値を計算します。</summary>
+            <returns>ハッシュ コード値。</returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DataRange.HasData">
+            <summary>範囲が空かどうかを示す値を取得します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DataRange.Maximum">
+            <summary>範囲内の最大値を取得します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DataRange.Minimum">
+            <summary>範囲内の最小値を取得します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DataRange.IsEmpty">
+            <summary>このインスタンスがドラッグ中であるかどうかを示す値を取得します。</summary>
+            <value>このインスタンスが空である場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DateTimeSeries">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DateTimeEntry" /> のコレクションを含むシリーズを表します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.TimelineSeries">
+            <summary>シリーズは、<see cref="T:Infragistics.Controls.Timelines.EventEntry" /> のコンテナーとして使用されます。外観がエントリーごとに指定されていない場合、データ バインド機能およびすべてのエントリーのデフォルトの外観を持ちます。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeries.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.TimelineSeries" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.TitleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.Title" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.FillProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.Fill" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.HollowFillProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.HollowFill" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.StrokeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.Stroke" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.PositionProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.Position" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeries.OnPositionChanged(Infragistics.Controls.Timelines.Position,Infragistics.Controls.Timelines.Position)">
+            <summary>PositionProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.EventTitleStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.EventTitleStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.EventDetailsStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.EventDetailsStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.EventPointStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.EventPointStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.EventSpanStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.EventSpanStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.LegendItemStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.LegendItemStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.DataMappingProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.DataMapping" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeries.OnDataMappingChanged(System.String,System.String)">
+            <summary>DataMappingProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.DataSourceProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.DataSource" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeries.OnDataSourceChanged(System.Object,System.Object)">
+            <summary>DataSourceProperty プロパティ変更のハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineSeries.InnerVisiblityProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.TimelineSeries.InnerVisiblity" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeries.OnInnerVisiblityChanged(System.Windows.Visibility,System.Windows.Visibility)">
+            <summary>InnerVisiblityProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeries.Series_CollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>Series コントロールの CollectionChanged イベントを処理します。</summary>
+            <param name="sender">イベントのソース。</param>
+            <param name="e">イベントのデータを含む <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs" /> インスタンス。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.Title">
+            <summary>タイトルを取得または設定します。</summary>
+            <value>タイトル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.Fill">
+            <summary>塗りつぶしを取得または設定します。</summary>
+            <value>塗りつぶし。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.HollowFill">
+            <summary>白抜きの塗りつぶしを取得または設定します。</summary>
+            <value>白抜きの塗りつぶし。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.Stroke">
+            <summary>ストロークを取得または設定します。</summary>
+            <value>ストローク。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.Position">
+            <summary>位置を取得または設定します。</summary>
+            <value>位置。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.EventTitleStyle">
+            <summary>イベント タイトルのスタイルを取得または設定します。</summary>
+            <value>イベント タイトルのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.EventDetailsStyle">
+            <summary>イベント詳細スタイルを取得または設定します。</summary>
+            <value>イベント詳細スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.EventPointStyle">
+            <summary>イベント ポイントのスタイルを取得または設定します。</summary>
+            <value>イベント ポイントのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.EventSpanStyle">
+            <summary>イベント スパンのスタイルを取得または設定します。</summary>
+            <value>イベント スパンのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.LegendItemStyle">
+            <summary>凡例項目に使用するスタイルを取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.DataMapping">
+            <summary>データ バインディングを定義するために使用される表現文字列を取得または設定します。</summary>
+            <remarks>バインディングを指定するには、; 文字を使用して列と値の名前を分割する必要があります（たとえば、“Title = myTitleColumn; Time = myTimeColumn”)。= 文字はプロパティ値の名前を列の名前から分離するために使用されます（たとえば、“Time= myTime”)</remarks>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeries.DataSource">
+            <summary>このシリーズにデータをバインドするために使用されるデータ ソースを取得または設定します。</summary>
+            <remarks>項目はそれぞれのレコードに作成され、項目のプロパティは指定されたデータ ソースからの値で埋められます。シリーズは作成したデータ ポイントで埋められます。<see cref="P:Infragistics.Controls.Timelines.TimelineSeries.DataMapping" />プロパティを指定する必要があります。</remarks><seealso cref="P:Infragistics.Controls.Timelines.TimelineSeries.DataMapping" /></member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeSeries.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DateTimeSeries" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.DateTimeSeries.EntriesProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.DateTimeSeries.Entries" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DateTimeSeries.OnEntriesChanged(System.Collections.ObjectModel.ObservableCollection{Infragistics.Controls.Timelines.DateTimeEntry},System.Collections.ObjectModel.ObservableCollection{Infragistics.Controls.Timelines.DateTimeEntry})">
+            <summary>EntriesChangedProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeSeries.Entries">
+            <summary>イベント エントリーを取得または設定します。</summary>
+            <value>イベント エントリー。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeSeries.MinTime">
+            <summary>最小時刻を取得します。</summary>
+            <value>最小時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.DateTimeSeries.MaxTime">
+            <summary>最大時間を取得します。</summary>
+            <value>最大時刻。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.NumericTimeSeries">
+            <summary><see cref="T:Infragistics.Controls.Timelines.NumericTimeEntry" /> のコレクションを含むシリーズを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.NumericTimeSeries.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.NumericTimeSeries" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.NumericTimeSeries.EntriesProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.NumericTimeSeries.Entries" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeSeries.Entries">
+            <summary>イベント エントリーを取得または設定します。</summary>
+            <value>イベント エントリー。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeSeries.MinTime">
+            <summary>最小時刻を取得します。</summary>
+            <value>最小時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.NumericTimeSeries.MaxTime">
+            <summary>最大時間を取得します。</summary>
+            <value>最大時刻。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.Position">
+            <summary>位置を指定します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.Position.TopOrLeft">
+            <summary>上または左。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.Position.BottomOrRight">
+            <summary>下か右。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.TimelineSeriesCollection">
+            <summary>タイムライン シリーズのコレクション クラス。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineSeriesCollection.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.TimelineSeriesCollection" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineSeriesCollection.Range">
+            <summary>データ シリーズの範囲を取得します。</summary>
+            <value>範囲。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.AxisThumb">
+            <summary>軸つまみコントロールを表す。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisThumb.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.AxisThumb" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisThumb.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary><see cref="E:System.Windows.UIElement.MouseLeftButtonDown" /> イベントを発生する前に呼び出します。</summary>
+            <param name="e">イベントについてのデータ。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.AxisThumb.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary><see cref="E:System.Windows.UIElement.MouseLeftButtonUp" /> イベントを発生する前に呼び出します。</summary>
+            <param name="e">イベントについてのデータ。</param>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventControl">
+            <summary>すべての Event 要素の基本クラス。外観、ラベル フォーマット、EventEntry プロパティに関する情報を提供します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventControl.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventControl" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.TimeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.Time" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventControl.OnTimeChanged(System.Object,System.Object)">
+            <summary>TimeProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.DurationProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.Duration" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventControl.OnDurationChanged(System.Object,System.Object)">
+            <summary>DurationProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.TitleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.Title" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.DetailsProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.Details" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.FillProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.Fill" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.StrokeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.Stroke" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.HollowFillProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.HollowFill" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.FormattedTextProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.FormattedText" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.PointStringFormatProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.PointStringFormat" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventControl.OnPointStringFormatPropertyChanged">
+            <summary>PointStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventControl.SpanStringFormatProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventControl.SpanStringFormat" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventControl.OnSpanStringFormatPropertyChanged">
+            <summary>SpanStringFormatProperty プロパティ変更ハンドラー。</summary>    
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.Time">
+            <summary>時刻を取得または設定します。</summary>
+            <value>時間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.Duration">
+            <summary>期間を取得または設定します。</summary>
+            <value>期間。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.Title">
+            <summary>タイトルを取得または設定します。</summary>
+            <value>タイトル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.Details">
+            <summary>詳細を取得または設定します。</summary>
+            <value>詳細。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.Fill">
+            <summary>塗りつぶしを取得または設定します。</summary>
+            <value>塗りつぶし。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.Stroke">
+            <summary>ストロークを取得または設定します。</summary>
+            <value>ストローク。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.HollowFill">
+            <summary>白抜きの塗りつぶしを取得または設定します。</summary>
+            <value>白抜きの塗りつぶし。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.FormattedText">
+            <summary>フォーマットされたテキストを取得または設定します。</summary>
+            <value>フォーマットされたテキスト。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.PointStringFormat">
+            <summary>ポイント文字列のフォーマットを取得または設定します。</summary>
+            <value>ポイント文字列フォーマット。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.SpanStringFormat">
+            <summary>スパン文字列フォーマットを取得または設定します。</summary>
+            <value>スパン文字列フォーマット。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventControl.EventEntry">
+            <summary>このコントロールに関連付けられたイベント エントリーを取得または設定します。</summary>
+            <value>イベント エントリー。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventDetails">
+            <summary>イベントの詳細を表すコントロール</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventDetails.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventDetails" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventPoint">
+            <summary>イベントの Axis に表示される点を表す Control。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventPoint.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventPoint" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventPoint.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary><see cref="E:System.Windows.UIElement.MouseLeftButtonDown" /> イベントを発生する前に呼び出します。</summary>
+            <param name="e">イベントについてのデータ。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventPoint.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>マウスの左ボタンがこのコントロール上で放された時に呼び出されるメソッド。</summary>
+            <param name="e">コンテキスト内の MouseEventArgs。</param>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventSpan">
+            <summary>イベントの Axis に表示されるスパンを表す Control。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventSpan.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventSpan" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventSpan.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary><see cref="E:System.Windows.UIElement.MouseLeftButtonDown" /> イベントを発生する前に呼び出します。</summary>
+            <param name="e">イベントについてのデータ。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventSpan.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>マウスの左ボタンがこのコントロール上で放された時に呼び出されるメソッド。</summary>
+            <param name="e">コンテキスト内の MouseEventArgs。</param>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventTitle">
+            <summary>イベントのタイトルを表すコントロール</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitle.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventTitle" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventTitle.LineStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventTitle.LineStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitle.OnLineStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>NewStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventTitle.LineStyle">
+            <summary>線スタイルを取得または設定します。</summary>
+            <value>線スタイル。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventTitlesPanel">
+            <summary>イベント タイトルを含むパネルを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitlesPanel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventTitlesPanel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventTitlesPanel.PositionProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventTitlesPanel.Position" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitlesPanel.SwitchElements(System.Collections.Generic.List{Infragistics.Controls.Timelines.EventTitle})">
+            <summary>要素を切り替えます。</summary>
+            <param name="newTitles">新しいタイトル。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitlesPanel.MeasureOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの「計測」パスの動作を提供します。クラスは、計測パスの動作を定義するためにこのメソッドをオーバーライドできます。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitlesPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの配置パスの動作を提供します。特別な配置パスの動作を定義するために、クラスはこのメソッドをオーバーライドできます。</summary>
+            <param name="finalSize">このオブジェクトがオブジェクト自体とその子を配列するために使用する親の中の最終領域。</param>
+            <returns>要素は外資された後の現在のサイズ。</returns>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventTitlesPanel.Position">
+            <summary>位置を取得または設定します。</summary>
+            <value>位置。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.GridLinesPanel">
+            <summary>グリッド線を含むパネルを表します。</summary>    
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.GridLinesPanel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.GridLinesPanel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.GridLinesPanel.MeasureOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの「計測」パスの動作を提供します。クラスは、計測パスの動作を定義するためにこのメソッドをオーバーライドできます。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.GridLinesPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの配置パスの動作を提供します。特別な配置パスの動作を定義するために、クラスはこのメソッドをオーバーライドできます。</summary>
+            <param name="finalSize">このオブジェクトがオブジェクト自体とその子を配列するために使用する親の中の最終領域。</param>
+            <returns>要素は外資された後の現在のサイズ。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.LegendItem">
+            <summary>Legend で使用された項目を表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.LegendItem.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.LegendItem" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.LegendItem.FillProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.LegendItem.Fill" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.LegendItem.StrokeProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.LegendItem.Stroke" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.LegendItem.Fill">
+            <summary>塗りつぶしを取得または設定します。</summary>
+            <value>塗りつぶし。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.LegendItem.Stroke">
+            <summary>ストロークを取得または設定します。</summary>
+            <value>ストローク。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.Mark">
+            <summary>Mark は軸グリッド線と目盛りの外観、アニメーション、単位プロパティを保持します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.Mark.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.Mark" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.Mark.UnitProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.Mark.Unit" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.Mark.Unit">
+            <summary>2 つの隣接するグリッド線または目盛り間の距離を取得または設定します。値が 0 の場合、軸ユニット値が使用されます。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.MessageControl">
+            <summary>表現。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.MessageControl.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.MessageControl" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.Scene">
+            <summary>Axis、GridAreaPanel、および EventTitlesPanels を含む Control を表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.Scene.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.Scene" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.Scene.SceneGridStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.Scene.SceneGridStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.Scene.OnApplyTemplate">
+            <summary>派生したクラスでオーバーライドされると、アプリケーション コードまたは内部プロセス（再構築レイアウト パスなど）が <see cref="M:System.Windows.Controls.Control.ApplyTemplate" /> を呼び出す時に常に起動されます。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.Scene.SceneGridStyle">
+            <summary>シーン グリッドのスタイルを取得または設定します。</summary>
+            <value>シーン グリッドのスタイル。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.Stripe">
+            <summary>ストライプは、軸ストライプの外観、アニメーション、およびユニット プロパティを保持します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.Stripe.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.Stripe" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.Stripe.UnitProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.Stripe.Unit" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.Stripe.Unit">
+            <summary>2 つの隣接するグリッド線または目盛り間の距離を取得または設定します。値が 0 の場合、軸ユニット値が使用されます。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.StripeGroup">
+            <summary>軸ストライプのセットを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.StripeGroup.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.StripeGroup" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.StripeGroup.UnitOffsetProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.StripeGroup.UnitOffset" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.StripeGroup.OnPropertyChanged(System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>このストライプ グループでプロパティが変更された時に呼び出されるメソッド。</summary>
+            <param name="e">コンテキストの DependencyPropertyChangedEventArgs。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.StripeGroup.UnitOffset">
+            <summary>ユニット オフセットを取得または設定します。</summary>
+            <remarks>UnitOffset を使用すると、指定したオフセットだけストライプを移動できます。</remarks>
+            <value>ユニット オフセット。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.StripesPanel">
+            <summary>ストライプを含むパネルを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.StripesPanel.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.StripesPanel" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.StripesPanel.MeasureOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの「計測」パスの動作を提供します。クラスは、計測パスの動作を定義するためにこのメソッドをオーバーライドできます。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.StripesPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>Silverlight レイアウトの配置パスの動作を提供します。特別な配置パスの動作を定義するために、クラスはこのメソッドをオーバーライドできます。</summary>
+            <param name="finalSize">このオブジェクトがオブジェクト自体とその子を配列するために使用する親の中の最終領域。</param>
+            <returns>要素は外資された後の現在のサイズ。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.TimelineLegend">
+            <summary>項目のリストを表示しタイトルを持つコントロールを表します。</summary>    
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineLegend.LegendItemsAreaName">
+            <summary>凡例領域名。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineLegend.#ctor">
+            <summary>Legend クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineLegend.TitleProperty">
+            <summary>Title 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineLegend.OnTitlePropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>TitleProperty プロパティ変更ハンドラー。</summary>
+            <param name="d">その Title を変更した凡例。</param>
+            <param name="e">イベント引数。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineLegend.TitleStyleProperty">
+            <summary>TitleStyle 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.TimelineLegend.LegendItemStyleProperty">
+            <summary>LegendItemStyle 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.TimelineLegend.OnApplyTemplate">
+            <summary>テンプレートが適用される時にテンプレートの一部を読み込みします。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineLegend.Title">
+            <summary>Legend のタイトル コンテンツを取得または設定します。</summary>        
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineLegend.TitleStyle">
+            <summary>Legend の Title プロパティに適用されるスタイルを取得または設定します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.TimelineLegend.LegendItemStyle">
+            <summary>凡例項目に使用するスタイルを取得または設定します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.Title">
+            <summary>タイトルを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.Title.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.Title" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.EventTitleLayoutSettings">
+            <summary>EventTitles のレイアウト アルゴリズムで使用する設定を定義します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitleLayoutSettings.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.EventTitleLayoutSettings" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventTitleLayoutSettings.HorizontalOffsetProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventTitleLayoutSettings.HorizontalOffset" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitleLayoutSettings.OnHorizontalOffsetChanged(System.Double,System.Double)">
+            <summary>HorizontalOffsetProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventTitleLayoutSettings.VerticalOffsetProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventTitleLayoutSettings.VerticalOffset" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitleLayoutSettings.OnVerticalOffsetChanged(System.Double,System.Double)">
+            <summary>VerticalOffsetProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.EventTitleLayoutSettings.EnabledProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.EventTitleLayoutSettings.Enabled" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.EventTitleLayoutSettings.OnEnabledChanged(System.Boolean,System.Boolean)">
+            <summary>EnabledProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventTitleLayoutSettings.HorizontalOffset">
+            <summary>行ベースのレイアウト アルゴリズムにおいて、2 つの隣接する要素間の水平方向のオフセットを取得または設定します。</summary>
+            <value>水平方向のオフセット。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventTitleLayoutSettings.VerticalOffset">
+            <summary>行ベースのレイアウト アルゴリズムにおいて、2 つの隣接する行の間の垂直方向のオフセットを取得または設定します。</summary>
+            <value>垂直方向のオフセット。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.EventTitleLayoutSettings.Enabled">
+            <summary>Timeline がレイアウト アルゴリズムを適用する必要があるかどうかを示す値を取得または設定します。</summary>
+            <value>Timeline にレイアウト アルゴリズムを適用する必要がある場合は <c>true</c>。そうでない場合は <c>false</c>。</value>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.RowBasedLayoutAlgorithm">
+            <summary>SeriesPane 上で EventTitles をレイアウトする論理をカプセル化するクラス。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.RowBasedLayoutAlgorithm.#ctor(Infragistics.Controls.Timelines.EventTitlesPanel)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.RowBasedLayoutAlgorithm" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="titlesPanel">タイトル パネル。</param>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.Properties.Resources">
+            <summary>ローカライズされた文字列の検索など、厳密に型指定されたリソース クラス。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.Properties.Resources.ResourceManager">
+            <summary>このクラスによって使用されるキャッシュされた ResourceManager インスタンスを返します。</summary>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.Properties.Resources.Culture">
+            <summary>この厳密に型指定されたリソース クラスを使用してすべてのリソースの検索の現在のスレッドの CurrentUICulture プロパティをオーバーライドします。</summary>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.DraggingTool">
+            <summary>軸つまみのドラッグに使用されるツールを表します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DraggingTool.#ctor(Infragistics.Controls.Timelines.XamTimeline)">
+            <summary><see cref="T:Infragistics.Controls.Timelines.DraggingTool" /> クラスの新しいインスタンスを初期化します。</summary>
+            <param name="timeline">タイムライン。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DraggingTool.CanStart(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>このツールが開始できるかどうかを決定します。</summary>
+            <param name="e">イベントのデータを含む <see cref="T:System.Windows.Input.MouseButtonEventArgs" /> インスタンス。</param>
+            <returns>このツールを開始できる場合は <c>true</c>。そうでない場合は <c>false</c>。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DraggingTool.MouseMove">
+            <summary>このツールが開始されてマウスが移動されると呼び出されます。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.DraggingTool.MouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>このツールが開始され左マウス ボタンがアップされると呼び出されます。</summary>
+            <param name="e">イベントのデータを含む <see cref="T:System.Windows.Input.MouseButtonEventArgs" /> インスタンス。</param>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.SpanStringFormatConverter">
+            <summary>現在のカルチャーに応じて 2 つの値をフォーマットする文字列コンバーター。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.SpanStringFormatConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>UI で表示するために対象に渡す前にソース データを変更します。</summary>
+            <param name="value">対象に渡されたソース データ。</param>
+            <param name="targetType">対象の依存プロパティに期待されたデータの <see cref="T:System.Type" />。</param>
+            <param name="parameter">コンバーターの論理で使用されるオプションのパラメーター。</param>
+            <param name="culture">変換のカルチャー。</param>
+            <returns>対象の依存プロパティに渡す値。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.SpanStringFormatConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>ソース オブジェクトに渡す前に対象のデータを変更します。このメソッドは <see cref="F:System.Windows.Data.BindingMode.TwoWay" /> バインディングのみに呼び出します。</summary>
+            <param name="value">ソースに渡す対象のデータ。</param>
+            <param name="targetType">ソース オブジェクトの期待されたデータの <see cref="T:System.Type" />。</param>
+            <param name="parameter">コンバーターの論理で使用されるオプションのパラメーター。</param>
+            <param name="culture">変換のカルチャー。</param>
+            <returns>ソース オブジェクトに渡す値。</returns>
+        </member>
+        <member name="T:Infragistics.Controls.Timelines.XamTimeline">
+            <summary>Timeline コントロール クラス</summary>        
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.#ctor">
+            <summary><see cref="T:Infragistics.Controls.Timelines.XamTimeline" /> クラスの新しいインスタンスを初期化します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.AxisProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.Title" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.PreviewAxisProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.PreviewAxis" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnPreviewAxisChanged(Infragistics.Controls.Timelines.PreviewAxis,Infragistics.Controls.Timelines.PreviewAxis)">
+            <summary>PreviewAxisProperty プロパティはハンドラーを変更しました。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.SeriesProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.Series" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnSeriesChanged(Infragistics.Controls.Timelines.TimelineSeriesCollection,Infragistics.Controls.Timelines.TimelineSeriesCollection)">
+            <summary>SeriesProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.TitleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.Title" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.TitleStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.TitleStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.LegendStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.LegendStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnLegendStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>LegendStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.LegendTitleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.LegendTitle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.ZoombarStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.ZoombarStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnZoombarStyleChanged(System.Windows.Style,System.Windows.Style)">
+            <summary>ZoombarStyleProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.SceneStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.SceneStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.MessageControlStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.MessageControlStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventTitleTopStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventTitleTopStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventTitleBottomStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventTitleBottomStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventSpanTopStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventSpanTopStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventSpanBottomStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventSpanBottomStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventDetailsBottomStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventDetailsBottomStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventDetailsTopStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventDetailsTopStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventPointStyleProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventPointStyle" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="F:Infragistics.Controls.Timelines.XamTimeline.EventTitleLayoutSettingsProperty">
+            <summary><see cref="P:Infragistics.Controls.Timelines.XamTimeline.EventTitleLayoutSettings" /> 依存プロパティを識別します。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnEventTitleLayoutSettingsChanged(Infragistics.Controls.Timelines.EventTitleLayoutSettings,Infragistics.Controls.Timelines.EventTitleLayoutSettings)">
+            <summary>EventTitleLayoutSettingsProperty プロパティ変更ハンドラー。</summary>
+            <param name="oldValue">古い値。</param>
+            <param name="newValue">新しい値。</param>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnApplyTemplate">
+            <summary>派生したクラスでオーバーライドされると、アプリケーション コードまたは内部プロセス（再構築レイアウト パスなど）が <see cref="M:System.Windows.Controls.Control.ApplyTemplate" /> を呼び出す時に常に起動されます。</summary>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.MeasureOverride(System.Windows.Size)">
+            <summary>デフォルト高さと幅を提供するためにオーバーライドされるメソッドです。</summary>
+            <param name="availableSize">このオブジェクトが子オブジェクトに設定できる利用可能なサイズ。値として Infinity の指定をすることによって、使用可能なコンテンツにサイズを合わせることを示します。</param>
+            <returns>子オブジェクトの割り当てサイズの計算に基づいて、レイアウト時にこのオブジェクトが決定した必要サイズ。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.OnCreateAutomationPeer">
+            <summary>派生クラス内で実装される場合、Silverlight オートメーション インフラストラクチャーのためのクラス固有の <see cref="T:System.Windows.Automation.Peers.AutomationPeer" /> 実装を返します。</summary>
+            <returns>返すクラス固有 <see cref="T:System.Windows.Automation.Peers.AutomationPeer" /> サブクラス。</returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.GetEntries(System.Double)">
+            <summary>エントリを取得します。</summary>
+            <param name="time">時間。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.GetEntries(System.DateTime)">
+            <summary>エントリを取得します。</summary>
+            <param name="time">時間。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.GetClosestEntry(System.Double)">
+            <summary>一番近いエントリーを取得します。</summary>
+            <param name="time">時間。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.GetClosestEntry(System.DateTime)">
+            <summary>一番近いエントリーを取得します。</summary>
+            <param name="time">時間。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.RegisterResources(System.String,System.Reflection.Assembly)">
+            <summary>コントロールがリソースをプルする追加の Resx を追加します。</summary>
+            <param name="name">使用されるリソースを含む組み込み resx ファイルの名前。</param>
+            <param name="assembly">resx ファイルが埋め込まれるアセンブリ。</param>
+            <remarks>ファイルの拡張子を含まないでください。ただし、アセンブリのデフォルト名前空間でプレフィックスしてください。</remarks>
+        </member>
+        <member name="M:Infragistics.Controls.Timelines.XamTimeline.UnregisterResources(System.String)">
+            <summary>以前登録した resx ファイルを削除します。</summary>
+            <param name="name">登録に使用された埋め込み resx ファイルの名前。</param>
+            <remarks>注：これは、すでにビューに存在し、文字列を表示しているコントロールには影響ありません。作成された新規コントロールにのみ影響を与えます。</remarks>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.Axis">
+            <summary>軸を取得または設定します。</summary>
+            <value>軸。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.PreviewAxis">
+            <summary>プレビュー軸を取得または設定します。</summary>
+            <value>プレビュー軸。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.Series">
+            <summary>シリーズを取得または設定します。</summary>
+            <value>シリーズ。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.Title">
+            <summary>タイトルを取得または設定します。</summary>
+            <value>タイトル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.TitleStyle">
+            <summary>タイトル スタイルを取得または設定します。</summary>
+            <value>タイトル スタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.LegendStyle">
+            <summary>凡例のスタイルを取得または設定します。</summary>
+            <value>凡例のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.LegendTitle">
+            <summary>凡例のタイトルを取得または設定します。</summary>
+            <value>凡例のタイトル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.ZoombarStyle">
+            <summary>ズームバー スタイルを取得または設定します。</summary>
+            <value>ズームバー スタイルです。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.SceneStyle">
+            <summary>シーン スタイルを取得または設定します。</summary>
+            <value>シーンのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.MessageControlStyle">
+            <summary>メッセージ コントロールのスタイルを取得または設定します。</summary>
+            <value>メッセージ コントロールのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventTitleTopStyle">
+            <summary>イベント タイトル上のスタイルを取得または設定します。</summary>
+            <value>イベント タイトル上のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventTitleBottomStyle">
+            <summary>イベント タイトル下のスタイルを取得または設定します。</summary>
+            <value>イベント タイトル下のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventSpanTopStyle">
+            <summary>イベント スパン上のスタイルを取得または設定します。</summary>
+            <value>イベント スパン上のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventSpanBottomStyle">
+            <summary>イベント スパン下のスタイルを取得または設定します。</summary>
+            <value>イベント スパン下のスタイル</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventDetailsBottomStyle">
+            <summary>イベント詳細下のスタイルを取得または設定します。</summary>
+            <value>イベント詳細下のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventDetailsTopStyle">
+            <summary>イベント詳細上のスタイルを取得または設定します。</summary>
+            <value>イベント詳細上のスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventPointStyle">
+            <summary>イベント ポイントのスタイルを取得または設定します。</summary>
+            <value>イベント ポイントのスタイル。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.EventTitleLayoutSettings">
+            <summary>イベント タイトルのレイアウト設定を取得または設定します。</summary>
+            <value>イベント タイトルのレイアウト設定。</value>
+        </member>
+        <member name="P:Infragistics.Controls.Timelines.XamTimeline.Zoombar">
+            <summary>この Timeline のズームバーを取得します。</summary>
+            <remarks>このプロパティは、この Timeline が初期化された後で使用してください。</remarks>
+            <value>ズームバー。</value>
+        </member>
+    </members>
+</doc>

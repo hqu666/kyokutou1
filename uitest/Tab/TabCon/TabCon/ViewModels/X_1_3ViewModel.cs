@@ -22,7 +22,7 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public Dictionary<string, string> EventComboSource { get; set; }
 		public IList<string> EventComboSelectedItem { get; set; }
-		public string EventComboSelectedIndex { get; set; }
+		public Int32 EventComboSelectedIndex { get; set; }
 
 		//表示対象年月
 		public DateTime SelectedDateTime;
@@ -67,6 +67,8 @@ namespace TabCon.ViewModels {
 				{ "2", "工程イベント" },
 				{ "3", "通常イベント" },
 			};
+			EventComboSelectedIndex = 0;
+			RaisePropertyChanged(); //	"dataManager"
 			ToDaySet();
 		}
 
@@ -98,13 +100,13 @@ namespace TabCon.ViewModels {
 				//XAMLプロパティのCalendarDisplayMode="Merged"でタブを表示させない
 				//6.その中に 予定のリストを作成//5///////////////////
 				appointments = WriteEvent(calAmanda, resAmanda);
+				//XamMonthView　は　VisibleDates?
 				dbMsg += ",appointments=" + appointments.Count + "件";
 				//7.コードビハインドを使用して ListScheduleDataConnector を追加//6///////////////////
 				ListScheduleDataConnector　dataConnector = new ListScheduleDataConnector();
 				dataConnector.ResourceItemsSource = resources;
 				dataConnector.ResourceCalendarItemsSource = calendars;
 				dataConnector.AppointmentItemsSource = appointments;
-				//dataConnector.TaskItemsSource = tasks;
 				//dataConnector.JournalItemsSource = journals;
 
 				//9.カレンダー グループを作成し、初期カレンダーを設定////7//8はXAML
@@ -123,7 +125,6 @@ namespace TabCon.ViewModels {
 				calGroup.InitialCalendarIds = AppointmentOwningResourceId + "[" + AppointmentOwningCalendarId + "]";                     ///"own1[cal1]";
 				calGroups.Add(calGroup);
 				dbMsg += ",CurrentUserId=" + dataManager.CurrentUserId;
-
 				////10.コードビハインドでGirid（PageRoot）にコントロールを生成する場合//////9//
 				//XamMonthView cView = new XamMonthView();
 				//cView.DataManager = dataManager;
@@ -171,22 +172,21 @@ namespace TabCon.ViewModels {
 						OwningCalendarId = AppointmentOwningCalendarId,
 						Subject = "Test" + AppointmentCount,
 						Description = "My first appointment",
+						IsVisible = true,
+
 						Start = StartDT,
 						End = EndDT
 						// タイムゾーンはこのスニペットで設定しないため、
 						// 日付をグリニッジ標準時へ変換します
 						//Start = DateTime.Today.AddHours(9).AddMinutes(12).ToUniversalTime(),
 						//End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
+
 					};
 					appointments.Add(app1);
 					StartDT = StartDT.AddHours(1);
 					EndDT = StartDT.AddHours(1).AddMinutes(30);
-
 				}
-;
 				/*
-,
-					IsVisible = true,
 					OwningCalendar = RCalendar,
 					OwningResource = resource,
 					OriginalOccurrenceStart = StartDT,
@@ -255,7 +255,7 @@ namespace TabCon.ViewModels {
 				RaisePropertyChanged();
 				if (value != null) {
 					string msgStr = EventComboSource[ value ].ToString()+  "が選択されました";
-					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
 					//		ReadTable(value);
 				}
