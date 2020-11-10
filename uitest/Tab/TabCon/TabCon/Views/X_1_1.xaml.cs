@@ -21,6 +21,7 @@ namespace TabCon.Views {
 		{
 			VM.MyView = this;
 			//	VM.Control = ControlPanel;
+	//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
 		}
 
 	}

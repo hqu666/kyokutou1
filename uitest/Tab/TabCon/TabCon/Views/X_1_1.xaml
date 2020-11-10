@@ -12,7 +12,7 @@
       d:DesignHeight="750" d:DesignWidth="1000"
       Title="日別表示">
 
-	<Grid Margin="0,0,0,0" >
+	<Grid >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
@@ -25,13 +25,16 @@
 										Grid.Row="0" Grid.Column="0"/>
 		<!--　	一日	ig:XamOutlookCalendarView
 		一日横向き		ig:XamScheduleView
-									なら問題無し		-->
+									なら問題無し		
+																		Height="{Binding vHeight}" 
+
+									-->
 		<!--週表示 WeekDisplayMode="Week"-->
 		<ig:XamDayView x:Name="MyCalendar"
-							Grid.Row="1" Grid.Column="0"
-									PrimaryTimeZoneLabel="UTC-09" 
+									Grid.Row="1" Grid.Column="0"
+									MinHeight="500"
 									DataManager="{Binding dataManager}" 
-									WeekDisplayMode="{Binding weekDisplayMode}" SecondaryTimeZoneId="Tokyo Standard Time" 
+									WeekDisplayMode="{Binding weekDisplayMode}" Margin="0,0,0,20"
 									/>
 	</Grid>
 </Page>

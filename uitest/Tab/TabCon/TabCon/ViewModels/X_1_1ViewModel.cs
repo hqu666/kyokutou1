@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace TabCon.ViewModels {
 
@@ -43,7 +44,16 @@ namespace TabCon.ViewModels {
 		//public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
 		//public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
 		public XamMonthView cView { get; set; }
+		/// <summary>
+		/// Viewの高さ
+		/// </summary>
+		public double vHeight { get; set; }
+		/// <summary>
+		/// Viewを格納するGridの高さ
+		/// </summary>
+		public double rHeight { get; set; }
 
+		
 		/// <summary>
 		/// 予定配列
 		/// </summary>
@@ -84,8 +94,28 @@ namespace TabCon.ViewModels {
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+		}
+
+		public void ReSizeView()
+		{
+			string TAG = "ReSizeView";
+			string dbMsg = "[X_1_1ViewModel]";
+			try {
+				RaisePropertyChanged(); //	"dataManager"
+				dbMsg = "グリッド" + MyView.RenderSize.Height + "、View" + vHeight;
+				//if(200< rHeight) {
+				//	vHeight = rHeight - 10;
+				//}else{
+				vHeight = MyView.RenderSize.Height;
+				//}
+				RaisePropertyChanged(); //	"dataManager"
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 
 		}
+
 
 		/// <summary>
 		/// カレンダ作成
@@ -95,6 +125,7 @@ namespace TabCon.ViewModels {
 			string TAG = "CalenderWrite";
 			string dbMsg = "[X_1_1ViewModel]";
 			try {
+			ReSizeView();
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
 				dbMsg += cStart + "～" + cEnd;
@@ -115,11 +146,12 @@ namespace TabCon.ViewModels {
 				calendars.Add(calAmanda);
 				//XAMLプロパティのCalendarDisplayMode="Merged"でタブを表示させない
 				//6.その中に 予定のリストを作成//5///////////////////
-				appointments = WriteEvent(calAmanda, resAmanda);
+				ListScheduleDataConnector dataConnector = new ListScheduleDataConnector();
+				appointments = WriteEvent(dataConnector);
 				//XamMonthView　は　VisibleDates?
 				dbMsg += ",appointments=" + appointments.Count + "件";
 				//7.コードビハインドを使用して ListScheduleDataConnector を追加//6///////////////////
-				ListScheduleDataConnector dataConnector = new ListScheduleDataConnector();
+	//			ListScheduleDataConnector dataConnector = new ListScheduleDataConnector();
 				dataConnector.ResourceItemsSource = resources;
 				dataConnector.ResourceCalendarItemsSource = calendars;
 				dataConnector.AppointmentItemsSource = appointments;
@@ -134,6 +166,7 @@ namespace TabCon.ViewModels {
 				ScheduleSettings cSettings = new ScheduleSettings();
 				cSettings.MinDate = cStart;
 				cSettings.MaxDate = cEnd;
+	//			cSettings.SetCurrentValue = SelectedDateTime;
 				dataManager.Settings = cSettings;
 				///////////////////////////////////////追加//
 				CalendarGroupCollection calGroups = dataManager.CalendarGroups;
@@ -157,18 +190,15 @@ namespace TabCon.ViewModels {
 		/// 予定作成
 		/// </summary>
 		/// <returns></returns>
-		public ObservableCollection<Appointment> WriteEvent(ResourceCalendar RCalendar, Resource resource)
+		public ObservableCollection<Appointment> WriteEvent(ListScheduleDataConnector dataConnector)
 		{
 			string TAG = "WriteEvent";
 			string dbMsg = "[X_1_1ViewModel]";
 			try {
+				dbMsg += "" + SelectedDateTime;
 				//予定取得///////////////////////////////////////////
-				int AppointmentCount = 1;
-				DateTime dt = DateTime.Now;
-				// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
-				DateTime StartDT = DateTime.Today.AddHours(dt.Hour).ToUniversalTime();
-				DateTime EndDT = StartDT.AddHours(1).AddMinutes(30);
-
+				appointments = new ObservableCollection<Appointment>();
+				ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
 				//MySQLUtil = new MySQL_Util();
 				//if (MySQLUtil.MySqlConnection()){
 				//	ObservableCollection<object> rTable = MySQLUtil.ReadTable( "t_events");
@@ -176,64 +206,84 @@ namespace TabCon.ViewModels {
 
 				//	MySQLUtil.DisConnect();
 				//}
-
-
-				// Infragistics.Controls.Schedules のメタデータ
-				appointments = new ObservableCollection<Appointment>();
-				for ( AppointmentCount = 1; AppointmentCount < 4; AppointmentCount++) {
-					dbMsg += "[" + AppointmentCount + "]" + StartDT + "～" + EndDT;
-					Appointment app1 = new Appointment() {
-						Id = "t" + AppointmentCount,
-						OwningResourceId = ApOwResourceId,
-						OwningCalendarId = ApOwCalendarId,
-						Subject = AppointmentCount + "つ目のタイトル",
-						Description = AppointmentCount + "つ目の詳細",
-						Location = "場所は第" + AppointmentCount + "会議室",
-						Categories = AppointmentCount + "つ目のカテゴリ",
-						StartTimeZoneId = "Tokyo Standard Time",
-						EndTimeZoneId = "Tokyo Standard Time",
-						Start = StartDT,
-						End = EndDT
-					};
-					appointments.Add(app1);
-					StartDT = StartDT.AddHours(1);
-					EndDT = StartDT.AddHours(1).AddMinutes(30);
+				//実データが無ければテストデータ作成
+				if (appointments.Count < 1) {
+					int AppointmentCount = 1;
+					DateTime dt = DateTime.Now;
+					// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
+					DateTime StartDT = DateTime.Today.AddHours(SelectedDateTime.Hour).ToUniversalTime();
+					DateTime EndDT = StartDT.AddHours(1).AddMinutes(30);
+					// Infragistics.Controls.Schedules のメタデータ
+					for (AppointmentCount = 1; AppointmentCount < 10; AppointmentCount++) {
+						dbMsg += "[" + AppointmentCount + "]" + StartDT + "～" + EndDT;
+						string categoryName = "TestCategory" + AppointmentCount;
+						//背景色
+						ColorConverter cc = new ColorConverter();
+						int rCode = AppointmentCount * 20;
+						if (255 < rCode) {
+							rCode = rCode % 255;
+						}
+						string rStr = rCode.ToString("X");
+						if (rStr.Length < 2) {
+							rStr = 0 + rStr;
+						}
+						int gCode = rCode* AppointmentCount;
+						if (255 < gCode) {
+							gCode = gCode % 255;
+						}
+						string gStr = gCode.ToString("X");
+						if (gStr.Length < 2) {
+							gStr = 0 + gStr;
+						}
+						int bCode = gCode * AppointmentCount;
+						if (255 < bCode) {
+							bCode = bCode % 255;
+						}
+						string bStr = bCode.ToString("X");
+						if (bStr.Length < 2) {
+							bStr = 0 + bStr;
+						}
+						Color color = (Color)cc.ConvertFrom("#FF" + rStr + gStr + bStr);
+						dbMsg += ",color=" + color;
+						ActivityCategory activityCategory = new ActivityCategory() {
+							CategoryName = categoryName,
+							Description = "表示データが無い場合のテストデータ",
+							Color = color
+						};
+						activityCategoryCollection.Add(activityCategory);
+						Appointment app1 = new Appointment() {
+							Id = "t" + AppointmentCount,
+							OwningResourceId = ApOwResourceId,
+							OwningCalendarId = ApOwCalendarId,
+							Subject = AppointmentCount + "つ目のタイトル",
+							Description = AppointmentCount + "つ目の詳細",
+							Location = "場所は第" + AppointmentCount + "会議室",
+							Categories = categoryName,
+							StartTimeZoneId = "Tokyo Standard Time",
+							EndTimeZoneId = "Tokyo Standard Time",
+							Start = StartDT,
+							End = EndDT,
+							LastModifiedTime = DateTime.Now
+						};
+						appointments.Add(app1);
+						//次の日時設定
+						if (8 == AppointmentCount) {
+							StartDT = SelectedDateTime.AddMonths(-1);
+							EndDT = StartDT.AddMonths(2);
+						} else if (6 == AppointmentCount) {
+							StartDT = SelectedDateTime.AddDays(-4);
+							EndDT = StartDT.AddDays(8);
+						} else if (4 == AppointmentCount) {
+							StartDT = SelectedDateTime.AddDays(-1);
+							EndDT = StartDT.AddDays(2);
+						} else {
+							StartDT = StartDT.AddHours(1);
+							EndDT = StartDT.AddHours(1).AddMinutes(30);
+						}
+					}
 				}
 				//	IsTimeZoneNeutral=false,		//trueでStart/Endが標準時（-9時間）になる
-				/*
-					OwningCalendar = RCalendar,
-					OwningResource = resource,
-					OriginalOccurrenceStart = StartDT,
-					OriginalOccurrenceEnd = EndDT,
-					LastModifiedTime = dt
-
-					-		AppointmentItemsSource	Count = 2	System.Collections.IEnumerable {System.Collections.ObjectModel.ObservableCollection<Infragistics.Controls.Schedules.Appointment>}
-				-		[0]	Id="t1", Range={2020/11/09 0:12:00}-{2020/11/09 2:42:00}, 
-								OwningResourceId="own1", OwningCalendarId="cal1", 
-								Description="My first appointment", DataItem=null	Infragistics.Controls.Schedules.Appointment
-						
-						Error	null	Infragistics.DataErrorInfo
-						HasListeners	false	bool
-						IsLocked	null	bool?
-						IsOccurrence	false	bool
-						IsOccurrenceDeleted	false	bool
-						IsRecurrenceRoot	false	bool
-						IsVariance	false	bool
-						IsVisibleResolved	true	bool
-						MaxOccurrenceDateTime	null	System.DateTime?
-
-				+		Metadata	{Infragistics.Controls.Schedules.DictionaryMetadataPropertyValueStore}	Infragistics.Controls.Schedules.MetadataPropertyValueStore {Infragistics.Controls.Schedules.DictionaryMetadataPropertyValueStore}
-
-						Recurrence	null	Infragistics.Controls.Schedules.RecurrenceBase
-						RecurrenceVersion	0	int
-						Reminder	null	Infragistics.Controls.Schedules.Reminder
-						ReminderEnabled	false	bool
-				+		ReminderInterval	{00:00:00}	System.TimeSpan
-						RootActivity	null	Infragistics.Controls.Schedules.ActivityBase
-						RootActivityId	null	string
-						VariantProperties	0	long
-
-				 */
+				dataConnector.ActivityCategoryItemsSource = activityCategoryCollection;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -281,9 +331,13 @@ namespace TabCon.ViewModels {
 			string TAG = "DateBack";
 			string dbMsg = "[X_1_1ViewModel]";
 			try {
-				SelectedDateTime = SelectedDateTime.AddMonths(-1);
+				if (weekDisplayMode.Equals("Week")) {
+					SelectedDateTime = SelectedDateTime.AddDays(-7);
+				}else{
+					SelectedDateTime = SelectedDateTime.AddDays(-1);
+				}
 				dbMsg += SelectedDateTime + "に戻す";
-				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
+				CurrentDate = String.Format("{0:yyyy年MM月dd日}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
 				RaisePropertyChanged("CurrentDate");
 				CalenderWrite();
@@ -306,7 +360,7 @@ namespace TabCon.ViewModels {
 			try {
 				SelectedDateTime = DateTime.Now;
 				dbMsg += "今日は" + SelectedDateTime;
-				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
+				CurrentDate = String.Format("{0:yyyy年MM月dd日}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
 				RaisePropertyChanged("CurrentDate");
 				CalenderWrite();
@@ -328,9 +382,13 @@ namespace TabCon.ViewModels {
 			string TAG = "DateSend";
 			string dbMsg = "[X_1_1ViewModel]";
 			try {
-				SelectedDateTime = SelectedDateTime.AddMonths(1);
+				if (weekDisplayMode.Equals("Week")) {
+					SelectedDateTime = SelectedDateTime.AddDays(7);
+				} else {
+					SelectedDateTime = SelectedDateTime.AddDays(1);
+				}
 				dbMsg += SelectedDateTime + "に進める";
-				CurrentDate = String.Format("{0:yyyy年MM月}", SelectedDateTime);
+				CurrentDate = String.Format("{0:yyyy年MM月dd日}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
 				RaisePropertyChanged("CurrentDate");
 				CalenderWrite();
