@@ -163,7 +163,7 @@ namespace TabCon.ViewModels {
 			string dbMsg = "[X_1_1ViewModel]";
 			try {
 				//予定取得///////////////////////////////////////////
-				//			int AppointmentCount = 1;
+				int AppointmentCount = 1;
 				DateTime dt = DateTime.Now;
 				// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
 				DateTime StartDT = DateTime.Today.AddHours(dt.Hour).ToUniversalTime();
@@ -180,54 +180,46 @@ namespace TabCon.ViewModels {
 
 				// Infragistics.Controls.Schedules のメタデータ
 				appointments = new ObservableCollection<Appointment>();
-				for (int AppointmentCount = 1; AppointmentCount < 4; AppointmentCount++) {
+				for ( AppointmentCount = 1; AppointmentCount < 4; AppointmentCount++) {
 					dbMsg += "[" + AppointmentCount + "]" + StartDT + "～" + EndDT;
 					Appointment app1 = new Appointment() {
 						Id = "t" + AppointmentCount,
 						OwningResourceId = ApOwResourceId,
 						OwningCalendarId = ApOwCalendarId,
-						Subject = "Test" + AppointmentCount,
-						Description = "My first appointment",
-						IsVisible = true,
-
+						Subject = AppointmentCount + "つ目のタイトル",
+						Description = AppointmentCount + "つ目の詳細",
+						Location = "場所は第" + AppointmentCount + "会議室",
+						Categories = AppointmentCount + "つ目のカテゴリ",
+						StartTimeZoneId = "Tokyo Standard Time",
+						EndTimeZoneId = "Tokyo Standard Time",
 						Start = StartDT,
 						End = EndDT
-						// タイムゾーンはこのスニペットで設定しないため、
-						// 日付をグリニッジ標準時へ変換します
-						//Start = DateTime.Today.AddHours(9).AddMinutes(12).ToUniversalTime(),
-						//End = DateTime.Today.AddHours(11).AddMinutes(42).ToUniversalTime()
-
 					};
 					appointments.Add(app1);
 					StartDT = StartDT.AddHours(1);
 					EndDT = StartDT.AddHours(1).AddMinutes(30);
 				}
+				//	IsTimeZoneNeutral=false,		//trueでStart/Endが標準時（-9時間）になる
 				/*
 					OwningCalendar = RCalendar,
 					OwningResource = resource,
 					OriginalOccurrenceStart = StartDT,
 					OriginalOccurrenceEnd = EndDT,
 					LastModifiedTime = dt
-					
-					
-					-		AppointmentItemsSource	Count = 2	System.Collections.IEnumerable {System.Collections.ObjectModel.ObservableCollection<Infragistics.Controls.Schedules.Appointment>}
-				-		[0]	Id="t1", Range={2020/11/09 0:12:00}-{2020/11/09 2:42:00}, OwningResourceId="own1", OwningCalendarId="cal1", Description="My first appointment", DataItem=null	Infragistics.Controls.Schedules.Appointment
-						
-						Categories	null	string
 
-						EndTimeZoneId	null	string
+					-		AppointmentItemsSource	Count = 2	System.Collections.IEnumerable {System.Collections.ObjectModel.ObservableCollection<Infragistics.Controls.Schedules.Appointment>}
+				-		[0]	Id="t1", Range={2020/11/09 0:12:00}-{2020/11/09 2:42:00}, 
+								OwningResourceId="own1", OwningCalendarId="cal1", 
+								Description="My first appointment", DataItem=null	Infragistics.Controls.Schedules.Appointment
+						
 						Error	null	Infragistics.DataErrorInfo
 						HasListeners	false	bool
-
 						IsLocked	null	bool?
 						IsOccurrence	false	bool
 						IsOccurrenceDeleted	false	bool
 						IsRecurrenceRoot	false	bool
-						IsTimeZoneNeutral	false	bool
 						IsVariance	false	bool
 						IsVisibleResolved	true	bool
-						Location	null	string
-
 						MaxOccurrenceDateTime	null	System.DateTime?
 
 				+		Metadata	{Infragistics.Controls.Schedules.DictionaryMetadataPropertyValueStore}	Infragistics.Controls.Schedules.MetadataPropertyValueStore {Infragistics.Controls.Schedules.DictionaryMetadataPropertyValueStore}
@@ -239,8 +231,6 @@ namespace TabCon.ViewModels {
 				+		ReminderInterval	{00:00:00}	System.TimeSpan
 						RootActivity	null	Infragistics.Controls.Schedules.ActivityBase
 						RootActivityId	null	string
-
-						StartTimeZoneId	null	string
 						VariantProperties	0	long
 
 				 */

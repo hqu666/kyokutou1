@@ -163,7 +163,7 @@ namespace TabCon.ViewModels {
 				MyView.Info_lv.Content = dbMsg;
 				Views.X_1_1 rContent = new Views.X_1_1();
 				rContent.VM.RootViewModel = this;
-				rContent.VM.weekDisplayMode = "none";
+				rContent.VM.weekDisplayMode = "None";
 				Add2Tab(rContent);
 			} else if (selectedValue == "X-1-2") {
 				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダに週別スケジュールを書き込みます\r\n";

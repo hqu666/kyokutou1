@@ -12,11 +12,6 @@
       d:DesignHeight="750" d:DesignWidth="1000"
       Title="日別表示">
 
-	<!--<Page.Resources>
-		<ResourceDictionary Source="/Style/App.xaml"/>
-		<ResourceDictionary Source="/Style/StyleDic.xaml"/>
-	</Page.Resources>-->
-
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
@@ -34,8 +29,9 @@
 		<!--週表示 WeekDisplayMode="Week"-->
 		<ig:XamDayView x:Name="MyCalendar"
 							Grid.Row="1" Grid.Column="0"
+									PrimaryTimeZoneLabel="UTC-09" 
 									DataManager="{Binding dataManager}" 
-									WeekDisplayMode="{Binding weekDisplayMode}" 
+									WeekDisplayMode="{Binding weekDisplayMode}" SecondaryTimeZoneId="Tokyo Standard Time" 
 									/>
 	</Grid>
 </Page>
