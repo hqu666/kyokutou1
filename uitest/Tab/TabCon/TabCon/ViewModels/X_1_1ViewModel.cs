@@ -88,6 +88,7 @@ namespace TabCon.ViewModels {
 					{ "3", "通常イベント" },
 				};
 				EventComboSelectedIndex = 0;
+				vHeight = 860;				//FHDの高さでView外スクロールが出なくなる高さ
 				RaisePropertyChanged(); //	"dataManager"
 				ToDaySet();
 				MyLog(TAG, dbMsg);
@@ -101,14 +102,15 @@ namespace TabCon.ViewModels {
 			string TAG = "ReSizeView";
 			string dbMsg = "[X_1_1ViewModel]";
 			try {
-				RaisePropertyChanged(); //	"dataManager"
-				dbMsg = "グリッド" + MyView.RenderSize.Height + "、View" + vHeight;
-				//if(200< rHeight) {
-				//	vHeight = rHeight - 10;
-				//}else{
-				vHeight = MyView.RenderSize.Height;
-				//}
-				RaisePropertyChanged(); //	"dataManager"
+				if(MyView != null) {
+					dbMsg += "グリッド" + MyView.RenderSize.Height;
+					//if(200< rHeight) {
+					//	vHeight = rHeight - 10;
+					//}else{
+					vHeight = MyView.RenderSize.Height;
+					dbMsg += "、View" + vHeight;
+					RaisePropertyChanged(); //	"dataManager"
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

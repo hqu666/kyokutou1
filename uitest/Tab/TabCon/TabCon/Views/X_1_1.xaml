@@ -26,15 +26,15 @@
 		<!--　	一日	ig:XamOutlookCalendarView
 		一日横向き		ig:XamScheduleView
 									なら問題無し		
-																		Height="{Binding vHeight}" 
-
+Height="714" 
 									-->
 		<!--週表示 WeekDisplayMode="Week"-->
 		<ig:XamDayView x:Name="MyCalendar"
 									Grid.Row="1" Grid.Column="0"
-									MinHeight="500"
+									MaxHeight="{Binding vHeight}" 
+									 VerticalAlignment="Top"
 									DataManager="{Binding dataManager}" 
-									WeekDisplayMode="{Binding weekDisplayMode}" Margin="0,0,0,20"
+									WeekDisplayMode="{Binding weekDisplayMode}"
 									/>
 	</Grid>
 </Page>
