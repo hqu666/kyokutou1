@@ -168,7 +168,7 @@ namespace TabCon.ViewModels {
 				ScheduleSettings cSettings = new ScheduleSettings();
 				cSettings.MinDate = cStart;
 				cSettings.MaxDate = cEnd;
-	//			cSettings.SetCurrentValue = SelectedDateTime;
+	//			cSettings.AppointmentSettings.IsAddViaClickToAddEnabled = true;
 				dataManager.Settings = cSettings;
 				///////////////////////////////////////追加//
 				CalendarGroupCollection calGroups = dataManager.CalendarGroups;

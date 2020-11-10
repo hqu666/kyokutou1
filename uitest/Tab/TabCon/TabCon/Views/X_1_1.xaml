@@ -34,7 +34,7 @@ Height="714"
 									MaxHeight="{Binding vHeight}" 
 									 VerticalAlignment="Top"
 									DataManager="{Binding dataManager}" 
-									WeekDisplayMode="{Binding weekDisplayMode}"
+									WeekDisplayMode="{Binding weekDisplayMode}" CalendarDisplayMode="Overlay" 
 									/>
 	</Grid>
 </Page>
