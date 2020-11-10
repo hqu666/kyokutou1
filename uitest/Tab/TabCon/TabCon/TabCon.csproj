@@ -234,6 +234,7 @@
     <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
     <Compile Include="ViewModels\Widget .cs" />
+    <Compile Include="ViewModels\X_1_1ViewModel.cs" />
     <Compile Include="ViewModels\X_1_3ViewModel.cs" />
     <Compile Include="Views\ChildPageView.xaml.cs">
       <DependentUpon>ChildPageView.xaml</DependentUpon>
@@ -258,6 +259,9 @@
     </Compile>
     <Compile Include="Views\ParrtsTestView.xaml.cs">
       <DependentUpon>ParrtsTestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\X_1_1.xaml.cs">
+      <DependentUpon>X_1_1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\X_1_3.xaml.cs">
       <DependentUpon>X_1_3.xaml</DependentUpon>
@@ -313,6 +317,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ParrtsTestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\X_1_1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

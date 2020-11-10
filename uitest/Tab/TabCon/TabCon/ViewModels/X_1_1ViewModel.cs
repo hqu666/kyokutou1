@@ -8,10 +8,18 @@ using System.ComponentModel;
 using System.Windows;
 
 namespace TabCon.ViewModels {
-	public class X_1_3ViewModel : ViewModel {
-		public string titolStr = "【スケジュール】月別表示";
 
-		public Views.X_1_3 MyView { get; set; }
+/// <summary>
+/// 日別・週別スケジュール
+/// </summary>
+	public class X_1_1ViewModel : ViewModel {
+		public string titolStr = "【スケジュール】日別表示";
+		/// <summary>
+		/// 週別/日別区分
+		/// </summary>
+		public string weekDisplayMode { get; set; }
+		
+		public Views.X_1_1 MyView { get; set; }
 		public ViewModels.MainViewModel RootViewModel { get; set; }
 		public Controls.X_1_Control Control { get; set; }
 		/// <summary>
@@ -42,39 +50,50 @@ namespace TabCon.ViewModels {
 		public ObservableCollection<Appointment> appointments { get; set; }               //AppointmentItemsSource
 																						  //public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
 																						  //public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
-		/// <summary>
-		/// カレンダ作成の仮ID
-		/// </summary>
-		public string AppointmentOwningResourceId = "own1";
-		public string AppointmentOwningCalendarId = "cal1";
+																						  /// <summary>
+																						  /// カレンダ作成の仮ID
+																						  /// </summary>
+		public string ApOwResourceId = "own1";
+		public string ApOwCalendarId = "cal1";
 
 		public MySQL_Util MySQLUtil;
 
-		public X_1_3ViewModel()
+		public X_1_1ViewModel()
 		{
 			Initialize();
 		}
 
 		public void Initialize()
 		{
-			EventComboSource = new Dictionary<string, string>()
-			{
-				{ "0", "すべて" },
-				{ "1", "案件イベント" },
-				{ "2", "工程イベント" },
-				{ "3", "通常イベント" },
-			};
-			EventComboSelectedIndex = 0;
-			RaisePropertyChanged(); //	"dataManager"
-			ToDaySet();
+			string TAG = "Initialize";
+			string dbMsg = "[X_1_1ViewModel]";
+			try {
+				dbMsg += ",weekDisplayMode=" + weekDisplayMode;
+				dbMsg += ",ApOwResourceId=" + ApOwResourceId + ",ApOwCalendarId=" + ApOwCalendarId;
+				EventComboSource = new Dictionary<string, string>()
+				{
+					{ "0", "すべて" },
+					{ "1", "案件イベント" },
+					{ "2", "工程イベント" },
+					{ "3", "通常イベント" },
+				};
+				EventComboSelectedIndex = 0;
+				RaisePropertyChanged(); //	"dataManager"
+				ToDaySet();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
 		}
 
 		/// <summary>
 		/// カレンダ作成
 		/// </summary>
-		public void CalenderWrite() {
+		public void CalenderWrite()
+		{
 			string TAG = "CalenderWrite";
-			string dbMsg = "[MySQLBase]";
+			string dbMsg = "[X_1_1ViewModel]";
 			try {
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
@@ -85,12 +104,12 @@ namespace TabCon.ViewModels {
 
 				//1タブ分のデータ//5.リソースとカレンダーをコードビハインドに作成します。///////////////////
 				//仮名で作成する
-				Resource resAmanda = new Resource() { Id = AppointmentOwningResourceId, Name = "Amanda" };
+				Resource resAmanda = new Resource() { Id = ApOwResourceId, Name = "Amanda" };
 				resources.Add(resAmanda);
 				ObservableCollection<ResourceCalendar> calendars = new ObservableCollection<ResourceCalendar>();
 				ResourceCalendar calAmanda = new ResourceCalendar() {
-					Id = AppointmentOwningCalendarId,
-					OwningResourceId = AppointmentOwningResourceId
+					Id = ApOwCalendarId,
+					OwningResourceId = ApOwResourceId
 				};
 
 				calendars.Add(calAmanda);
@@ -100,7 +119,7 @@ namespace TabCon.ViewModels {
 				//XamMonthView　は　VisibleDates?
 				dbMsg += ",appointments=" + appointments.Count + "件";
 				//7.コードビハインドを使用して ListScheduleDataConnector を追加//6///////////////////
-				ListScheduleDataConnector　dataConnector = new ListScheduleDataConnector();
+				ListScheduleDataConnector dataConnector = new ListScheduleDataConnector();
 				dataConnector.ResourceItemsSource = resources;
 				dataConnector.ResourceCalendarItemsSource = calendars;
 				dataConnector.AppointmentItemsSource = appointments;
@@ -110,7 +129,7 @@ namespace TabCon.ViewModels {
 				dataManager = new XamScheduleDataManager();
 				dataManager.DataConnector = dataConnector;
 				//追加//////////
-				dataManager.CurrentUserId = AppointmentOwningResourceId;
+				dataManager.CurrentUserId = ApOwResourceId;
 				//表示範囲を一月分に限定する//////////
 				ScheduleSettings cSettings = new ScheduleSettings();
 				cSettings.MinDate = cStart;
@@ -119,7 +138,7 @@ namespace TabCon.ViewModels {
 				///////////////////////////////////////追加//
 				CalendarGroupCollection calGroups = dataManager.CalendarGroups;
 				CalendarGroup calGroup = new CalendarGroup();
-				calGroup.InitialCalendarIds = AppointmentOwningResourceId + "[" + AppointmentOwningCalendarId + "]";                     ///"own1[cal1]";
+				calGroup.InitialCalendarIds = ApOwResourceId + "[" + ApOwCalendarId + "]";                     ///"own1[cal1]";
 				calGroups.Add(calGroup);
 				dbMsg += ",CurrentUserId=" + dataManager.CurrentUserId;
 				////10.コードビハインドでGirid（PageRoot）にコントロールを生成する場合//////9//
@@ -141,10 +160,10 @@ namespace TabCon.ViewModels {
 		public ObservableCollection<Appointment> WriteEvent(ResourceCalendar RCalendar, Resource resource)
 		{
 			string TAG = "WriteEvent";
-			string dbMsg = "[MySQLBase]";
+			string dbMsg = "[X_1_1ViewModel]";
 			try {
 				//予定取得///////////////////////////////////////////
-	//			int AppointmentCount = 1;
+				//			int AppointmentCount = 1;
 				DateTime dt = DateTime.Now;
 				// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
 				DateTime StartDT = DateTime.Today.AddHours(dt.Hour).ToUniversalTime();
@@ -165,8 +184,8 @@ namespace TabCon.ViewModels {
 					dbMsg += "[" + AppointmentCount + "]" + StartDT + "～" + EndDT;
 					Appointment app1 = new Appointment() {
 						Id = "t" + AppointmentCount,
-						OwningResourceId = AppointmentOwningResourceId,
-						OwningCalendarId = AppointmentOwningCalendarId,
+						OwningResourceId = ApOwResourceId,
+						OwningCalendarId = ApOwCalendarId,
 						Subject = "Test" + AppointmentCount,
 						Description = "My first appointment",
 						IsVisible = true,
@@ -251,8 +270,8 @@ namespace TabCon.ViewModels {
 				_EventComboSelectedValue = value;
 				RaisePropertyChanged();
 				if (value != null) {
-					string msgStr = EventComboSource[ value ].ToString()+  "が選択されました";
-		//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					string msgStr = EventComboSource[value].ToString() + "が選択されました";
+					//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
 					//		ReadTable(value);
 				}
@@ -270,7 +289,7 @@ namespace TabCon.ViewModels {
 		public void DateBack()
 		{
 			string TAG = "DateBack";
-			string dbMsg = "[MySQLBase]";
+			string dbMsg = "[X_1_1ViewModel]";
 			try {
 				SelectedDateTime = SelectedDateTime.AddMonths(-1);
 				dbMsg += SelectedDateTime + "に戻す";
@@ -293,7 +312,7 @@ namespace TabCon.ViewModels {
 		public void ToDaySet()
 		{
 			string TAG = "ToDaySet";
-			string dbMsg = "[MySQLBase]";
+			string dbMsg = "[X_1_1ViewModel]";
 			try {
 				SelectedDateTime = DateTime.Now;
 				dbMsg += "今日は" + SelectedDateTime;
@@ -317,7 +336,7 @@ namespace TabCon.ViewModels {
 		public void DateSend()
 		{
 			string TAG = "DateSend";
-			string dbMsg = "[MySQLBase]";
+			string dbMsg = "[X_1_1ViewModel]";
 			try {
 				SelectedDateTime = SelectedDateTime.AddMonths(1);
 				dbMsg += SelectedDateTime + "に進める";
@@ -341,7 +360,7 @@ namespace TabCon.ViewModels {
 		public void EventRegistration()
 		{
 			string TAG = "EventRegistration";
-			string dbMsg = "[MySQLBase]";
+			string dbMsg = "[X_1_1ViewModel]";
 			try {
 
 				MyLog(TAG, dbMsg);

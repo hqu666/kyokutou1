@@ -24,9 +24,10 @@ namespace TabCon.ViewModels {
 		public System.Collections.IEnumerable TabItems { get; set; }
 
 		public string InfoLavel { get; set; }
-	//	public TreeView MenuTree { get; set; }
+		public string ReTitle="";
+		//	public TreeView MenuTree { get; set; }
 		/// <summary>TreeViewItemが選択されているかを取得・設定します。</summary>
-	//	public ReactivePropertySlim<bool> IsSelected { get; set; }
+		//	public ReactivePropertySlim<bool> IsSelected { get; set; }
 		//public bool NeedHideOwner { get; set; }
 
 		//		int AddCount;
@@ -157,8 +158,23 @@ namespace TabCon.ViewModels {
 				//読込んだページを操作
 				rContent.VM.RootViewModel = this;
 				Add2Tab(rContent);
+			} else if (selectedValue == "X-1-1") {
+				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダに日別スケジュールを書き込みます\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.X_1_1 rContent = new Views.X_1_1();
+				rContent.VM.RootViewModel = this;
+				rContent.VM.weekDisplayMode = "none";
+				Add2Tab(rContent);
+			} else if (selectedValue == "X-1-2") {
+				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダに週別スケジュールを書き込みます\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.X_1_1 rContent = new Views.X_1_1();
+				rContent.VM.RootViewModel = this;
+				rContent.VM.weekDisplayMode = "Week";
+				ReTitle = "週別表示";
+				Add2Tab(rContent);
 			} else if (selectedValue == "X-1-3") {
-				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダにスケジュールを書き込みます\r\n";
+				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダに月別スケジュールを書き込みます\r\n";
 				MyView.Info_lv.Content = dbMsg;
 				Views.X_1_3 rContent = new Views.X_1_3();
 				//読込んだページを操作
@@ -204,7 +220,12 @@ namespace TabCon.ViewModels {
 			//MyView.Info_lv.Content += "サイズは" + MyView.ViewTab.MainTab.Width + "×" + MyView.ViewTab.MainTab.Height + "]です";
 
 			TabItem tab = new TabItem();
+			//タブの表示名はコントロールのTitleから取得・別名の指定が有れば書き換え
 			tab.Header = rContent.Title;                        ///"Tab" + (MyView.ViewTab.MainTab.Items.Count + 1);
+			if(!ReTitle.Equals("")) {
+				tab.Header = ReTitle;
+				ReTitle = "";
+			}
 			////フレームを生成して設置したタブコントロールのContentにする場合
 			////var frame = new Frame();
 			//②Viewの読込ができるTabContentを生成する
