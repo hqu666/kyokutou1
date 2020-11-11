@@ -1,0 +1,40 @@
+﻿<Page x:Class="TabCon.Views.X_1_4"
+		xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" 
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TabCon.Views"
+	  xmlns:ig="http://schemas.infragistics.com/xaml"
+	  xmlns:controls="clr-namespace:TabCon.Controls"
+	   xmlns:ig1="http://infragistics.com/Editors"
+	   mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="1000"
+      Title="スケジュールリスト">
+
+	<Grid >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<controls:X_1_Control x:Name="ControlPanel"
+										Grid.Row="0" Grid.Column="0"/>
+		<!--　	一日	ig:XamOutlookCalendarView
+		一日横向き		ig:XamScheduleView
+									なら問題無し		
+Height="714" 
+									-->
+		<!--週表示 WeekDisplayMode="Week"-->
+		<ig:XamDayView x:Name="MyCalendar"
+									Grid.Row="1" Grid.Column="0"
+									MaxHeight="{Binding vHeight}" 
+									 VerticalAlignment="Top"
+									DataManager="{Binding dataManager}" 
+									WeekDisplayMode="{Binding weekDisplayMode}" CalendarDisplayMode="Overlay" 
+									/>
+	</Grid>
+</Page>

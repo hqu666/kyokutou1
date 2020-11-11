@@ -180,6 +180,14 @@ namespace TabCon.ViewModels {
 				//読込んだページを操作
 				rContent.VM.RootViewModel = this;
 				Add2Tab(rContent);
+			} else if (selectedValue == "X-1-4") {
+				dbMsg = "MySQLデータベースのスケジュールテーブルからスケジュールをリストアップします\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.X_1_4 rContent = new Views.X_1_4();
+				rContent.VM.RootViewModel = this;
+				//rContent.VM.weekDisplayMode = "Week";
+				//ReTitle = "週別表示";
+				Add2Tab(rContent);
 			} else if (selectedValue == "MySQL") {
 				dbMsg = "MySQLデータベースに接続し、コンボボックスで選択したテーブルを操作します\r\n";
 				MyView.Info_lv.Content = dbMsg;
