@@ -60,61 +60,11 @@
 									</DataGrid.Columns>
 								</DataGrid>
 							</DataTemplate>
-							<!--<DataTemplate>
-								<ListBox ItemsSource="{Binding summarys}"/>
-							</DataTemplate>-->
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
 			</DataGrid>
-				<!--
-							<DataGridTextColumn  Header="要約"  Binding="{Binding summarys}" />
 
-				
-				<DataGrid ItemsSource="{Binding events}" 
-							AutoGenerateColumns="False" 
-							IsReadOnly="True"
-							>
-				<DataGrid.Columns>
-					<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
-					<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
-					<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />
-					<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_end}"/>
-					<DataGridCheckBoxColumn Header="終日" Binding="{Binding event_is_daylong}"/>
-					<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}">
-						<DataGridTextColumn.ElementStyle>
-							<Style TargetType="{x:Type TextBlock}">
-								<Setter Property="Background" Value="{Binding event_bg_color}"/>
-								<Setter Property="Foreground" Value="{Binding event_font_color}"/>
-							</Style>
-						</DataGridTextColumn.ElementStyle>
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="場所" Binding="{Binding event_place}"/>
-					<DataGridTextColumn Header="メモ" Binding="{Binding event_memo}"/>
-					<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
-					<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
-					<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>
-
-					--><!--
-					<DataGridTextColumn Header="背景色" Binding="{Binding event_bg_color}"/>
-					<DataGridTextColumn Header="文字色" Binding="{Binding event_font_color}"/>
--->
-
-					<!--<DataGridComboBoxColumn Header="仕入先"  SelectedValueBinding="{Binding _Vender}" DisplayMemberPath="_Label" SelectedValuePath="_Value">
-						<DataGridComboBoxColumn.ItemsSource>
-							<x:Array Type="{x:Type local:VenderToComboBox}">
-								<local:VenderToComboBox _Label="取引先1" _Value="取引先A"/>
-								<local:VenderToComboBox _Label="取引先2" _Value="取引先B"/>
-								<local:VenderToComboBox _Label="取引先3" _Value="取引先C"/>
-								<local:VenderToComboBox _Label="取引先4" _Value="取引先D"/>
-							</x:Array>
-						</DataGridComboBoxColumn.ItemsSource>
-					</DataGridComboBoxColumn>
-					--><!--
-				</DataGrid.Columns>
-			</DataGrid>-->
-	
-	
-	</Grid>
+		</Grid>
 	</Grid>
 </Page>

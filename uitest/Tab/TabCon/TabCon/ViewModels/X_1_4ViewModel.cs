@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Infragistics.Controls.Schedules;
@@ -119,14 +120,17 @@ namespace TabCon.ViewModels
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
 				dbMsg += cStart + "～" + cEnd;
 				Events=WriteEvent();
-				DateTime tDate = cStart;
+				ObservableCollection<t_events> orderedByStart =
+					new ObservableCollection<t_events>(Events.OrderBy(n => n.event_date_start));
+				DateTime tDate = orderedByStart.First().event_date_start;
 				EDays = new  ObservableCollection<ADay>();
 				List<string>summarys = new List<string>();
 				ObservableCollection<t_events> dEvents = new ObservableCollection<t_events>();
 				ADay aDay = new ADay(tDate, summarys, dEvents);
-				foreach (t_events ev in Events) {
+				foreach (t_events ev in orderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
-						 aDay = new ADay(tDate, summarys, dEvents);
+						dbMsg +=":開始"+ tDate + ">>" + ev.event_date_start + ":" + EDays + "件";
+						aDay = new ADay(tDate, summarys, dEvents);
 						EDays.Add(aDay);
 						summarys = new List<string>();
 						dEvents = new ObservableCollection<t_events>();
@@ -172,16 +176,17 @@ namespace TabCon.ViewModels
 				//}
 				//実データが少なければテストデータ作成
 				if (Events.Count < 10) {
-					int EventCount = 1;
+					int EventCount = Events.Count+1;
+					int endCount = EventCount + 10;
 					DateTime dt = DateTime.Now;
 					// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
 					DateTime StartDT = DateTime.Today.AddHours(SelectedDateTime.Hour).ToUniversalTime();
 					DateTime EndDT = StartDT.AddHours(1).AddMinutes(30);
 					// Infragistics.Controls.Schedules のメタデータ
-					for (EventCount = 1; EventCount < 10; EventCount++) {
+					for (EventCount = Events.Count + 1; EventCount < endCount; EventCount++) {
 						dbMsg += "\r\n[" + EventCount + "]" + StartDT + "～" + EndDT;
 						Models.t_events OneEvent = new Models.t_events();
-						OneEvent.id = 90000 + EventCount;
+						OneEvent.id = 99990 + EventCount;
 						OneEvent.event_title = "Test" + EventCount;         //タイトル
 						OneEvent.event_date_start =StartDT.Date;            //開始日
 						OneEvent.event_time_start = StartDT.Hour;           //開始時刻
@@ -190,6 +195,8 @@ namespace TabCon.ViewModels
 						OneEvent.event_is_daylong =false;                           //終日
 						if (OneEvent.event_date_start < OneEvent.event_date_end) {
 							OneEvent.event_is_daylong = true;
+							OneEvent.event_time_start = 0;           //開始時刻
+							OneEvent.event_time_end = 23;               //終了時刻
 						}
 						OneEvent.event_place = "第" + EventCount + "会議室";                           //場所
 						OneEvent.event_memo = "場所は第" + EventCount + "会議室";                           //メモ
