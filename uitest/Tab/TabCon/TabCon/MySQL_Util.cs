@@ -135,8 +135,8 @@ namespace TabCon {
 						MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 						dbMsg += "接続の解除";
 
-						TableCombo.Clear();
-						tablDataContext = null;
+						//TableCombo.Clear();
+						//tablDataContext = null;
 						connectionString = "";
 					} catch (MySqlException me) {
 						MyErrorLog(TAG, dbMsg, me);

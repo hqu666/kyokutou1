@@ -121,7 +121,11 @@ namespace TabCon.ViewModels
 				dbMsg += cStart + "～" + cEnd;
 				Events=WriteEvent();
 				ObservableCollection<t_events> orderedByStart =
-					new ObservableCollection<t_events>(Events.OrderBy(n => n.event_date_start));
+					new ObservableCollection<t_events>(
+							 Events.OrderBy(rec => rec.event_date_start)
+										.ThenBy(rec => rec.event_time_start)
+										.ThenBy(rec => rec.event_date_end)
+							);
 				DateTime tDate = orderedByStart.First().event_date_start;
 				EDays = new  ObservableCollection<ADay>();
 				List<string>summarys = new List<string>();
@@ -162,13 +166,15 @@ namespace TabCon.ViewModels
 				//予定取得///////////////////////////////////////////
 				Events = new ObservableCollection<Models.t_events>();
 				ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
-				//MySQLUtil = new MySQL_Util();
-				//if (MySQLUtil.MySqlConnection()){
-				//	ObservableCollection<object> rTable = MySQLUtil.ReadTable( "t_events");
-				//	ObservableCollection<Models.t_events> tEvents = new ObservableCollection<Models.t_events>();
+				MySQLUtil = new MySQL_Util();
+				if (MySQLUtil.MySqlConnection()) {
+					ObservableCollection<object> rTable = MySQLUtil.ReadTable("t_events");
+					if(rTable != null) {
+						dbMsg += "rTable" + rTable.Count + "件";
+					}
 
-				//	MySQLUtil.DisConnect();
-				//}
+					MySQLUtil.DisConnect();
+				}
 				//実データが少なければテストデータ作成
 				if (Events.Count < 10) {
 					int EventCount = Events.Count+1;
