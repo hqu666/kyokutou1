@@ -54,7 +54,7 @@ namespace TabCon.ViewModels
 		/// <summary>
 		/// 予定配列
 		/// </summary>
-		public ObservableCollection<Appointment> appointments { get; set; }               //AppointmentItemsSource
+		public ObservableCollection<Models.t_events> events { get; set; }               //AppointmentItemsSource
 																						  //public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
 																						  //public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
 																						  /// <summary>
@@ -124,59 +124,10 @@ namespace TabCon.ViewModels
 			string TAG = "CalenderWrite";
 			string dbMsg = "";
 			try {
-				ReSizeView();
+			//	ReSizeView();
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
 				dbMsg += cStart + "～" + cEnd;
-
-				//リソースとカレンダー
-				ObservableCollection<Resource> resources = new ObservableCollection<Resource>();
-
-				//1タブ分のデータ//5.リソースとカレンダーをコードビハインドに作成します。///////////////////
-				//仮名で作成する
-				Resource resAmanda = new Resource() { Id = ApOwResourceId, Name = "Amanda" };
-				resources.Add(resAmanda);
-				ObservableCollection<ResourceCalendar> calendars = new ObservableCollection<ResourceCalendar>();
-				ResourceCalendar calAmanda = new ResourceCalendar() {
-					Id = ApOwCalendarId,
-					OwningResourceId = ApOwResourceId
-				};
-
-				calendars.Add(calAmanda);
-				//XAMLプロパティのCalendarDisplayMode="Merged"でタブを表示させない
-				//6.その中に 予定のリストを作成//5///////////////////
-				ListScheduleDataConnector dataConnector = new ListScheduleDataConnector();
-				appointments = WriteEvent(dataConnector);
-				//XamMonthView　は　VisibleDates?
-				dbMsg += ",appointments=" + appointments.Count + "件";
-				//7.コードビハインドを使用して ListScheduleDataConnector を追加//6///////////////////
-				//			ListScheduleDataConnector dataConnector = new ListScheduleDataConnector();
-				dataConnector.ResourceItemsSource = resources;
-				dataConnector.ResourceCalendarItemsSource = calendars;
-				dataConnector.AppointmentItemsSource = appointments;
-				//dataConnector.JournalItemsSource = journals;
-
-				//9.カレンダー グループを作成し、初期カレンダーを設定////7//8はXAML
-				dataManager = new XamScheduleDataManager();
-				dataManager.DataConnector = dataConnector;
-				//追加//////////
-				dataManager.CurrentUserId = ApOwResourceId;
-				//表示範囲を一月分に限定する//////////
-				ScheduleSettings cSettings = new ScheduleSettings();
-				cSettings.MinDate = cStart;
-				cSettings.MaxDate = cEnd;
-				//			cSettings.AppointmentSettings.IsAddViaClickToAddEnabled = true;
-				dataManager.Settings = cSettings;
-				///////////////////////////////////////追加//
-				CalendarGroupCollection calGroups = dataManager.CalendarGroups;
-				CalendarGroup calGroup = new CalendarGroup();
-				calGroup.InitialCalendarIds = ApOwResourceId + "[" + ApOwCalendarId + "]";                     ///"own1[cal1]";
-				calGroups.Add(calGroup);
-				dbMsg += ",CurrentUserId=" + dataManager.CurrentUserId;
-				////10.コードビハインドでGirid（PageRoot）にコントロールを生成する場合//////9//
-				//XamMonthView cView = new XamMonthView();
-				//cView.DataManager = dataManager;
-				////MyView.PageRoot.Children.Add(cView);
 
 				RaisePropertyChanged(); //	"dataManager"
 				MyLog(TAG, dbMsg);
@@ -189,14 +140,14 @@ namespace TabCon.ViewModels
 		/// 予定作成
 		/// </summary>
 		/// <returns></returns>
-		public ObservableCollection<Appointment> WriteEvent(ListScheduleDataConnector dataConnector)
+		public ObservableCollection<Models.t_events> WriteEvent(ListScheduleDataConnector dataConnector)
 		{
 			string TAG = "WriteEvent";
 			string dbMsg = "";
 			try {
 				dbMsg += "" + SelectedDateTime;
 				//予定取得///////////////////////////////////////////
-				appointments = new ObservableCollection<Appointment>();
+				events = new ObservableCollection<Models.t_events>();
 				ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
 				//MySQLUtil = new MySQL_Util();
 				//if (MySQLUtil.MySqlConnection()){
@@ -205,20 +156,42 @@ namespace TabCon.ViewModels
 
 				//	MySQLUtil.DisConnect();
 				//}
-				//実データが無ければテストデータ作成
-				if (appointments.Count < 1) {
-					int AppointmentCount = 1;
+				//実データが少なければテストデータ作成
+				if (events.Count < 10) {
+					int EventCount = 1;
 					DateTime dt = DateTime.Now;
 					// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
 					DateTime StartDT = DateTime.Today.AddHours(SelectedDateTime.Hour).ToUniversalTime();
 					DateTime EndDT = StartDT.AddHours(1).AddMinutes(30);
 					// Infragistics.Controls.Schedules のメタデータ
-					for (AppointmentCount = 1; AppointmentCount < 10; AppointmentCount++) {
-						dbMsg += "[" + AppointmentCount + "]" + StartDT + "～" + EndDT;
-						string categoryName = "TestCategory" + AppointmentCount;
+					for (EventCount = 1; EventCount < 10; EventCount++) {
+						dbMsg += "[" + EventCount + "]" + StartDT + "～" + EndDT;
+						Models.t_events OneEvent = new Models.t_events();
+						OneEvent.event_title = "Test" + EventCount;         //タイトル
+						OneEvent.event_date_start =StartDT.Date;            //開始日
+						OneEvent.event_time_start = StartDT.Hour;           //開始時刻
+						OneEvent.event_date_end = EndDT.Date;               //終了日
+						OneEvent.event_time_end = EndDT.Hour;               //終了時刻
+						OneEvent.event_is_daylong =false;                           //終日
+						if (OneEvent.event_date_start < OneEvent.event_date_end) {
+							OneEvent.event_is_daylong = true;
+						}
+						OneEvent.event_place = "第" + EventCount + "会議室";                           //場所
+						OneEvent.event_memo = "場所は第" + EventCount + "会議室";                           //メモ
+						OneEvent.google_id = "";                           //GoogleイベントID:未登録は空白文字
+						OneEvent.event_status = 1;                           //ステータス
+						OneEvent.event_type = 1;                           //イベント種別
+
+						/*
+					<!--
+					<DataGridTextColumn Header="" Binding="{Binding }"/>
+					<DataGridTextColumn Header="" Binding="{Binding event_font_color}"/>
+						 */
+
+
 						//背景色
 						ColorConverter cc = new ColorConverter();
-						int rCode = AppointmentCount * 20;
+						int rCode = EventCount * 20;
 						if (255 < rCode) {
 							rCode = rCode % 255;
 						}
@@ -226,7 +199,7 @@ namespace TabCon.ViewModels
 						if (rStr.Length < 2) {
 							rStr = 0 + rStr;
 						}
-						int gCode = rCode * AppointmentCount;
+						int gCode = rCode * EventCount;
 						if (255 < gCode) {
 							gCode = gCode % 255;
 						}
@@ -234,7 +207,7 @@ namespace TabCon.ViewModels
 						if (gStr.Length < 2) {
 							gStr = 0 + gStr;
 						}
-						int bCode = gCode * AppointmentCount;
+						int bCode = gCode * EventCount;
 						if (255 < bCode) {
 							bCode = bCode % 255;
 						}
@@ -244,35 +217,23 @@ namespace TabCon.ViewModels
 						}
 						Color color = (Color)cc.ConvertFrom("#FF" + rStr + gStr + bStr);
 						dbMsg += ",color=" + color;
-						ActivityCategory activityCategory = new ActivityCategory() {
-							CategoryName = categoryName,
-							Description = "表示データが無い場合のテストデータ",
-							Color = color
-						};
-						activityCategoryCollection.Add(activityCategory);
-						Appointment app1 = new Appointment() {
-							Id = "t" + AppointmentCount,
-							OwningResourceId = ApOwResourceId,
-							OwningCalendarId = ApOwCalendarId,
-							Subject = AppointmentCount + "つ目のタイトル",
-							Description = AppointmentCount + "つ目の詳細",
-							Location = "場所は第" + AppointmentCount + "会議室",
-							Categories = categoryName,
-							StartTimeZoneId = "Tokyo Standard Time",
-							EndTimeZoneId = "Tokyo Standard Time",
-							Start = StartDT,
-							End = EndDT,
-							LastModifiedTime = DateTime.Now
-						};
-						appointments.Add(app1);
+						OneEvent.event_bg_color = color.ToString();                           //背景色
+						CS_Util Util = new CS_Util();
+						if (Util.IsForegroundWhite(OneEvent.event_bg_color)) {  
+							OneEvent.event_font_color = Brushes.White.ToString();  
+						}else{
+							OneEvent.event_font_color = Brushes.Black.ToString();
+						}
+						//1レコード追加
+						events.Add(OneEvent);
 						//次の日時設定
-						if (8 == AppointmentCount) {
+						if (8 == EventCount) {
 							StartDT = SelectedDateTime.AddMonths(-1);
 							EndDT = StartDT.AddMonths(2);
-						} else if (6 == AppointmentCount) {
+						} else if (6 == EventCount) {
 							StartDT = SelectedDateTime.AddDays(-4);
 							EndDT = StartDT.AddDays(8);
-						} else if (4 == AppointmentCount) {
+						} else if (4 == EventCount) {
 							StartDT = SelectedDateTime.AddDays(-1);
 							EndDT = StartDT.AddDays(2);
 						} else {
@@ -281,13 +242,11 @@ namespace TabCon.ViewModels
 						}
 					}
 				}
-				//	IsTimeZoneNeutral=false,		//trueでStart/Endが標準時（-9時間）になる
-				dataConnector.ActivityCategoryItemsSource = activityCategoryCollection;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			return appointments;
+			return events;
 		}
 
 		/// <summary>

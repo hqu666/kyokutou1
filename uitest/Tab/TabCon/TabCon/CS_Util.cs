@@ -1,12 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace TabCon {
 	class CS_Util {
+
+		/// <summary>
+		/// カラーコードの文字列をSystem.Windows.MediaのColorに変換する
+		/// </summary>
+		/// 
+		public Color ColorStr2Color(string colorcode)
+		{
+			string TAG = "IsForegroundWhite";
+			string dbMsg = "[CS_Util]";
+			Color col= Color.FromArgb(255, (byte)0, (byte)0, (byte)0);
+			try {
+				int redInt = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
+				int greenInt = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
+				int blueInt = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+				col = Color.FromArgb(255, (byte)redInt, (byte)greenInt, (byte)blueInt);
+				if (colorcode.Length == 6) {
+					dbMsg += ",r=" + redInt + ",g=" + greenInt + ",b=" + blueInt;
+				} else {
+					dbMsg += ">ARGB>";
+					int alphaInt = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
+					dbMsg += ",alpha=" + alphaInt;
+					redInt = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
+					greenInt = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+					blueInt = int.Parse(colorcode.Substring(7, 2), NumberStyles.HexNumber);
+					dbMsg += ",r=" + redInt + ",g=" + greenInt + ",b=" + blueInt;
+					col = Color.FromArgb((byte)alphaInt,(byte)redInt, (byte)greenInt, (byte)blueInt);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return col;
+		}
+
+		/// <summary>
+		/// 背景色に応じて文字色が白で良ければTrueを返す
+		/// </summary>
+		/// <param name="colorcode"></param>
+		/// <param name="limit"></param>
+		/// <returns></returns>
+		public bool IsForegroundWhite(string colorcode, int limit = 128)
+		{
+			string TAG = "IsForegroundWhite";
+			string dbMsg = "[CS_Util]";
+			bool retBool = false;
+			try {
+				int redInt = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
+				int greenInt = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
+				int blueInt = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+		//		Color col = Color.FromArgb(255, (byte)redInt, (byte)greenInt, (byte)blueInt);
+				if (colorcode.Length == 6) {
+					dbMsg += ",r=" + redInt + ",g=" + greenInt + ",b=" + blueInt;
+				} else {
+					dbMsg += ">ARGB>" ;
+					int alphaInt = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
+					dbMsg += ",alpha=" + alphaInt;
+					redInt = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
+					greenInt = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
+					blueInt = int.Parse(colorcode.Substring(7, 2), NumberStyles.HexNumber);
+					dbMsg += ",r=" + redInt + ",g=" + greenInt + ",b=" + blueInt;
+		//			col = Color.FromArgb((byte)redInt, (byte)greenInt, (byte)blueInt, (byte)alphaInt);
+				}
+
+				int Judgment = ((redInt * 299) + (greenInt * 587) + (blueInt * 114)) / 1000;
+				dbMsg += ",Judg=" + Judgment;
+				dbMsg += " : " + limit;
+				if (Judgment < limit) {
+					retBool = true;
+				}
+				dbMsg += ">>" + retBool;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+		//反映例
+		//ColorSampleLavel.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
+		//ColorSampleLavel.Foreground = Brushes.White;
+		//			ColorSampleLavel.Content = "白文字";
+		//ColorSampleTB.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
+		//ColorSampleTB.Foreground = Brushes.White;
+		//ColorSampleTB.Text = "白文字";
+
 		/// <summary>
 		/// デバッグログ
 		/// 出荷時は　debugNow　をfalseに

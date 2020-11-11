@@ -23,18 +23,40 @@
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
-		<!--　	一日	ig:XamOutlookCalendarView
-		一日横向き		ig:XamScheduleView
-									なら問題無し		
-Height="714" 
-									-->
-		<!--週表示 WeekDisplayMode="Week"-->
-		<ig:XamDayView x:Name="MyCalendar"
-									Grid.Row="1" Grid.Column="0"
-									MaxHeight="{Binding vHeight}" 
-									 VerticalAlignment="Top"
-									DataManager="{Binding dataManager}" 
-									WeekDisplayMode="{Binding weekDisplayMode}" CalendarDisplayMode="Overlay" 
-									/>
+		<Grid x:Name="MyCalendar"
+				Grid.Row="1" Grid.Column="0">
+			<DataGrid ItemsSource="{Binding events}" AutoGenerateColumns="False">
+				<DataGrid.Columns>
+					<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}"/>
+					<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start}"/>
+					<DataGridTextColumn  Header="開始時刻" Binding="{Binding event_time_start}"/>
+					<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end}"/>
+					<DataGridTextColumn  Header="終了時刻" Binding="{Binding event_time_end}"/>
+					<DataGridCheckBoxColumn Header="終日" Binding="{Binding event_is_daylong}"/>
+					<DataGridTextColumn Header="場所" Binding="{Binding event_place}"/>
+					<DataGridTextColumn Header="メモ" Binding="{Binding event_memo}"/>
+					<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
+					<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
+					<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>
+
+					<!--
+					<DataGridTextColumn Header="背景色" Binding="{Binding event_bg_color}"/>
+					<DataGridTextColumn Header="文字色" Binding="{Binding event_font_color}"/>
+-->
+
+					<!--<DataGridComboBoxColumn Header="仕入先"  SelectedValueBinding="{Binding _Vender}" DisplayMemberPath="_Label" SelectedValuePath="_Value">
+						<DataGridComboBoxColumn.ItemsSource>
+							<x:Array Type="{x:Type local:VenderToComboBox}">
+								<local:VenderToComboBox _Label="取引先1" _Value="取引先A"/>
+								<local:VenderToComboBox _Label="取引先2" _Value="取引先B"/>
+								<local:VenderToComboBox _Label="取引先3" _Value="取引先C"/>
+								<local:VenderToComboBox _Label="取引先4" _Value="取引先D"/>
+							</x:Array>
+						</DataGridComboBoxColumn.ItemsSource>
+					</DataGridComboBoxColumn>
+					-->
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
 	</Grid>
 </Page>
