@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Infragistics.Controls.Schedules;
 using Livet;
 using Livet.Commands;
+using TabCon.Models;
 
 namespace TabCon.ViewModels
 {
@@ -33,13 +34,6 @@ namespace TabCon.ViewModels
 		/// 表示対象年月
 		/// </summary>
 		public string CurrentDate { get; set; }
-		/// <summary>
-		/// XamMonthViewへBindingするカレンダの全内容
-		/// </summary>
-		public XamScheduleDataManager dataManager { get; set; }
-		//public　ListScheduleDataConnector dataConnector { get; set; }
-		//public ObservableCollection<Resource> resources { get; set; }               //System.Collections.IEnumerable    ListScheduleDataConnector.ResourceItemsSource
-		//public ObservableCollection<ResourceCalendar> calendars { get; set; }               //ResourceCalendarItemsSource
 		public XamMonthView cView { get; set; }
 		/// <summary>
 		/// Viewの高さ
@@ -50,18 +44,15 @@ namespace TabCon.ViewModels
 		/// </summary>
 		public double rHeight { get; set; }
 
+		/// <summary>
+		/// イベントが有る日の配列
+		/// </summary>
+		public ObservableCollection<ADay> EDays { get; set; }
 
 		/// <summary>
 		/// 予定配列
 		/// </summary>
-		public ObservableCollection<Models.t_events> events { get; set; }               //AppointmentItemsSource
-																						  //public ObservableCollection<Task> tasks { get; set; }               //TaskItemsSource
-																						  //public ObservableCollection<Resource> journals { get; set; }               //JournalItemsSource
-																						  /// <summary>
-																						  /// カレンダ作成の仮ID
-																						  /// </summary>
-		public string ApOwResourceId = "own1";
-		public string ApOwCalendarId = "cal1";
+		public ObservableCollection<t_events> Events { get; set; }  
 
 		public MySQL_Util MySQLUtil;
 
@@ -76,7 +67,6 @@ namespace TabCon.ViewModels
 			string dbMsg = "";
 			try {
 				dbMsg += ",weekDisplayMode=" + weekDisplayMode;
-				dbMsg += ",ApOwResourceId=" + ApOwResourceId + ",ApOwCalendarId=" + ApOwCalendarId;
 				EventComboSource = new Dictionary<string, string>()
 				{
 					{ "0", "すべて" },
@@ -128,7 +118,31 @@ namespace TabCon.ViewModels
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
 				dbMsg += cStart + "～" + cEnd;
-				events=WriteEvent();
+				Events=WriteEvent();
+				DateTime tDate = cStart;
+				EDays = new  ObservableCollection<ADay>();
+				List<string>summarys = new List<string>();
+				ObservableCollection<t_events> dEvents = new ObservableCollection<t_events>();
+				ADay aDay = new ADay(tDate, summarys, dEvents);
+				foreach (t_events ev in Events) {
+					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
+						 aDay = new ADay(tDate, summarys, dEvents);
+						EDays.Add(aDay);
+						summarys = new List<string>();
+						dEvents = new ObservableCollection<t_events>();
+					}
+					tDate = ev.event_date_start;
+					dEvents.Add(ev);
+					string summary ="";
+					if(!ev.event_is_daylong) {
+						summary = ev.event_time_start + "～" + ev.event_time_end;
+					}
+					summary += " : " + ev.event_title + " : " + ev.event_place + " : " + ev.event_memo;
+					summarys.Add(summary);
+				}
+				 aDay = new ADay(tDate, summarys, dEvents);
+				EDays.Add(aDay);
+
 				RaisePropertyChanged(); //	"dataManager"
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -147,7 +161,7 @@ namespace TabCon.ViewModels
 			try {
 				dbMsg += "" + SelectedDateTime;
 				//予定取得///////////////////////////////////////////
-				events = new ObservableCollection<Models.t_events>();
+				Events = new ObservableCollection<Models.t_events>();
 				ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
 				//MySQLUtil = new MySQL_Util();
 				//if (MySQLUtil.MySqlConnection()){
@@ -157,7 +171,7 @@ namespace TabCon.ViewModels
 				//	MySQLUtil.DisConnect();
 				//}
 				//実データが少なければテストデータ作成
-				if (events.Count < 10) {
+				if (Events.Count < 10) {
 					int EventCount = 1;
 					DateTime dt = DateTime.Now;
 					// タイムゾーンはこのスニペットで設定しないため、日付をグリニッジ標準時へ変換します
@@ -167,6 +181,7 @@ namespace TabCon.ViewModels
 					for (EventCount = 1; EventCount < 10; EventCount++) {
 						dbMsg += "\r\n[" + EventCount + "]" + StartDT + "～" + EndDT;
 						Models.t_events OneEvent = new Models.t_events();
+						OneEvent.id = 90000 + EventCount;
 						OneEvent.event_title = "Test" + EventCount;         //タイトル
 						OneEvent.event_date_start =StartDT.Date;            //開始日
 						OneEvent.event_time_start = StartDT.Hour;           //開始時刻
@@ -219,7 +234,7 @@ namespace TabCon.ViewModels
 							OneEvent.event_font_color = Brushes.Black.ToString();
 						}
 						//1レコード追加
-						events.Add(OneEvent);
+						Events.Add(OneEvent);
 						//次の日時設定
 						if (8 == EventCount) {
 							StartDT = SelectedDateTime.AddMonths(-1);
@@ -240,7 +255,7 @@ namespace TabCon.ViewModels
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			return events;
+			return Events;
 		}
 
 		/// <summary>
@@ -392,6 +407,30 @@ namespace TabCon.ViewModels
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
+		
+		/// <summary>
+		/// 一日分の箱
+		/// </summary>
+		public class ADay {
+			/// <summary>
+			/// 対象日
+			/// </summary>
+			public DateTime date { get; }
+			/// <summary>
+			/// 表示する要約
+			/// </summary>
+			public List<string> summarys { get; }
 
+			public ObservableCollection<t_events> events { get; set; }
+			/// <summary>
+			/// 一日分の箱
+			/// </summary>
+			public ADay(DateTime _date, List<string> _summarys , ObservableCollection<t_events> _events)
+			{
+				this.date = _date;
+				this.summarys = _summarys;
+				this.events = _events;
+			}
+		}
 	}
 }
