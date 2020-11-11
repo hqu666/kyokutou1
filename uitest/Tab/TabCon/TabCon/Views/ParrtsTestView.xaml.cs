@@ -150,23 +150,6 @@ namespace TabCon.Views {
 				Color retCol = Util.ColorStr2Color(colorcode);
 				ColorSampleLavel.Background = new SolidColorBrush(retCol);
 				ColorSampleTB.Background = new SolidColorBrush(retCol);
-				//	int r = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
-				//	int g = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
-				//	int b = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
-				//	Color col = Color.FromArgb(255, (byte)r, (byte)g, (byte)b);
-				//	if (colorcode.Length == 6) {
-				//	} else {
-				//		r = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
-				//		g = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
-				//		b = int.Parse(colorcode.Substring(7, 2), NumberStyles.HexNumber);
-				//		int a = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
-				//		col = Color.FromArgb((byte)r, (byte)g, (byte)b, (byte)a);
-				//	}
-				//	ColorSampleLavel.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-				//	ColorSampleTB.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-
-				//int Judgment = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-				//ColorSampleJudg.Content = Judgment.ToString();
 				if (Util.IsForegroundWhite(colorcode,  limit)) {         //Judgment < limit
 					ColorSampleTB.Foreground = Brushes.White;
 					ColorSampleTB.Text = "白文字";

@@ -128,7 +128,7 @@ namespace TabCon.ViewModels
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
 				dbMsg += cStart + "～" + cEnd;
-
+				events=WriteEvent();
 				RaisePropertyChanged(); //	"dataManager"
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -140,7 +140,7 @@ namespace TabCon.ViewModels
 		/// 予定作成
 		/// </summary>
 		/// <returns></returns>
-		public ObservableCollection<Models.t_events> WriteEvent(ListScheduleDataConnector dataConnector)
+		public ObservableCollection<Models.t_events> WriteEvent()
 		{
 			string TAG = "WriteEvent";
 			string dbMsg = "";
@@ -165,7 +165,7 @@ namespace TabCon.ViewModels
 					DateTime EndDT = StartDT.AddHours(1).AddMinutes(30);
 					// Infragistics.Controls.Schedules のメタデータ
 					for (EventCount = 1; EventCount < 10; EventCount++) {
-						dbMsg += "[" + EventCount + "]" + StartDT + "～" + EndDT;
+						dbMsg += "\r\n[" + EventCount + "]" + StartDT + "～" + EndDT;
 						Models.t_events OneEvent = new Models.t_events();
 						OneEvent.event_title = "Test" + EventCount;         //タイトル
 						OneEvent.event_date_start =StartDT.Date;            //開始日
@@ -181,14 +181,6 @@ namespace TabCon.ViewModels
 						OneEvent.google_id = "";                           //GoogleイベントID:未登録は空白文字
 						OneEvent.event_status = 1;                           //ステータス
 						OneEvent.event_type = 1;                           //イベント種別
-
-						/*
-					<!--
-					<DataGridTextColumn Header="" Binding="{Binding }"/>
-					<DataGridTextColumn Header="" Binding="{Binding event_font_color}"/>
-						 */
-
-
 						//背景色
 						ColorConverter cc = new ColorConverter();
 						int rCode = EventCount * 20;
@@ -219,9 +211,11 @@ namespace TabCon.ViewModels
 						dbMsg += ",color=" + color;
 						OneEvent.event_bg_color = color.ToString();                           //背景色
 						CS_Util Util = new CS_Util();
-						if (Util.IsForegroundWhite(OneEvent.event_bg_color)) {  
+						if (Util.IsForegroundWhite(OneEvent.event_bg_color)) {
+							dbMsg += "に白文字";
 							OneEvent.event_font_color = Brushes.White.ToString();  
 						}else{
+							dbMsg += "に黒文字";
 							OneEvent.event_font_color = Brushes.Black.ToString();
 						}
 						//1レコード追加

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,7 +9,6 @@ namespace TabCon {
 		/// <summary>
 		/// カラーコードの文字列をSystem.Windows.MediaのColorに変換する
 		/// </summary>
-		/// 
 		public Color ColorStr2Color(string colorcode)
 		{
 			string TAG = "IsForegroundWhite";
@@ -58,7 +53,6 @@ namespace TabCon {
 				int redInt = int.Parse(colorcode.Substring(1, 2), NumberStyles.HexNumber);
 				int greenInt = int.Parse(colorcode.Substring(3, 2), NumberStyles.HexNumber);
 				int blueInt = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
-		//		Color col = Color.FromArgb(255, (byte)redInt, (byte)greenInt, (byte)blueInt);
 				if (colorcode.Length == 6) {
 					dbMsg += ",r=" + redInt + ",g=" + greenInt + ",b=" + blueInt;
 				} else {
@@ -69,9 +63,7 @@ namespace TabCon {
 					greenInt = int.Parse(colorcode.Substring(5, 2), NumberStyles.HexNumber);
 					blueInt = int.Parse(colorcode.Substring(7, 2), NumberStyles.HexNumber);
 					dbMsg += ",r=" + redInt + ",g=" + greenInt + ",b=" + blueInt;
-		//			col = Color.FromArgb((byte)redInt, (byte)greenInt, (byte)blueInt, (byte)alphaInt);
 				}
-
 				int Judgment = ((redInt * 299) + (greenInt * 587) + (blueInt * 114)) / 1000;
 				dbMsg += ",Judg=" + Judgment;
 				dbMsg += " : " + limit;
@@ -85,13 +77,6 @@ namespace TabCon {
 			}
 			return retBool;
 		}
-		//反映例
-		//ColorSampleLavel.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-		//ColorSampleLavel.Foreground = Brushes.White;
-		//			ColorSampleLavel.Content = "白文字";
-		//ColorSampleTB.Background = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-		//ColorSampleTB.Foreground = Brushes.White;
-		//ColorSampleTB.Text = "白文字";
 
 		/// <summary>
 		/// デバッグログ
@@ -101,21 +86,18 @@ namespace TabCon {
 		/// <param name="dbMsg"></param>
 		public void MyLog(String TAG, String dbMsg)
 		{
+			Constant.debugNow = false;
 #if DEBUG
-				Constant.debugNow = false;
+			Constant.debugNow = true;
 #endif
-
 			if (Constant.debugNow) {
 				Console.WriteLine(TAG + " : " + dbMsg);
-				//System.Diagnostics.Trace.WriteLine(TAG + " : " + dbMsg);
-				//System.Diagnostics.Debug.WriteLine(TAG + " : " + dbMsg);
 			}
 		}
 
 		public void MyErrorLog(String TAG, String dbMsg, Exception err)
 		{
 			if (Constant.errorCheckNow) {
-				//					Xamarin.Forms.Internals.Log.Warning(TAG, dbMsg);
 				Console.WriteLine(TAG + " : " + dbMsg + "でエラー発生;" + err);
 			}
 		}
