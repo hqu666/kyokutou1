@@ -347,7 +347,23 @@ namespace TabCon.Models
 				RaisePropertyChanged();
 			}
 		}
-
+		//¶¬ˆÈ~‚Ì’Ç‹L//////////////////////////////////////////////////////////////
+		private string _summary;
+		public string summary {
+			get => _summary;
+			set {
+				if (_summary == value)
+					return;
+				_summary = value;
+				//_summary = "I“ú";
+				//if (!_event_is_daylong) {
+				//	_summary = _event_time_start + "`" + _event_time_end;
+				//}
+				//_summary += ": " + _event_title + " : " + _event_place + " : " + _event_memo;
+				RaisePropertyChanged();
+			}
+		}
+		/////////////////////////////////////////////////////////////¶¬ˆÈ~‚Ì’Ç‹L///
 	}
 
 

@@ -36,10 +36,19 @@
 							<DataTemplate>
 								<DataGrid ItemsSource="{Binding events}"
 												AutoGenerateColumns="False" 
-												IsReadOnly="True"
+												IsReadOnly="True" HeadersVisibility="None"
 											>
 									<DataGrid.Columns>
-										<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
+										<DataGridTextColumn Binding="{Binding summary}">
+											<DataGridTextColumn.ElementStyle>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Background" Value="{Binding event_bg_color}"/>
+													<Setter Property="Foreground" Value="{Binding event_font_color}"/>
+												</Style>
+											</DataGridTextColumn.ElementStyle>
+										</DataGridTextColumn>
+
+										<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
 										<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_end}"/>
@@ -56,7 +65,8 @@
 										<DataGridTextColumn Header="メモ" Binding="{Binding event_memo}"/>
 										<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
 										<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
-										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>
+										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>-->
+
 									</DataGrid.Columns>
 								</DataGrid>
 							</DataTemplate>

@@ -137,12 +137,7 @@ namespace TabCon.ViewModels
 					}
 					tDate = ev.event_date_start;
 					dEvents.Add(ev);
-					string summary ="";
-					if(!ev.event_is_daylong) {
-						summary = ev.event_time_start + "～" + ev.event_time_end;
-					}
-					summary += " : " + ev.event_title + " : " + ev.event_place + " : " + ev.event_memo;
-					summarys.Add(summary);
+					summarys.Add(ev.summary);
 				}
 				 aDay = new ADay(tDate, summarys, dEvents);
 				EDays.Add(aDay);
@@ -199,10 +194,17 @@ namespace TabCon.ViewModels
 							OneEvent.event_time_end = 23;               //終了時刻
 						}
 						OneEvent.event_place = "第" + EventCount + "会議室";                           //場所
-						OneEvent.event_memo = "場所は第" + EventCount + "会議室";                           //メモ
+						OneEvent.event_memo =  EventCount + "つ目のメモ";                           //メモ
 						OneEvent.google_id = "";                           //GoogleイベントID:未登録は空白文字
 						OneEvent.event_status = 1;                           //ステータス
 						OneEvent.event_type = 1;                           //イベント種別
+
+						string summary = "終日";
+						if (!OneEvent.event_is_daylong) {
+							summary = OneEvent.event_time_start + "～" + OneEvent.event_time_end;
+						}
+						summary += ": " + OneEvent.event_title + " : " + OneEvent.event_place + " : " + OneEvent.event_memo;
+						OneEvent.summary = summary;
 						//背景色
 						ColorConverter cc = new ColorConverter();
 						int rCode = EventCount * 20;
