@@ -29,6 +29,7 @@
 							AutoGenerateColumns="False" 
 							IsReadOnly="True"
 							>
+
 				<DataGrid.Columns>
 					<DataGridTextColumn  Header="開始日" Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
 					<DataGridTemplateColumn Header="要約">
@@ -38,6 +39,17 @@
 												AutoGenerateColumns="False" 
 												IsReadOnly="True" HeadersVisibility="None"
 											>
+									<!--MouseDoubleClick="{Binding RowDoubleClick}"-->
+									<DataGrid.InputBindings>
+										<MouseBinding MouseAction="LeftDoubleClick"
+																  Command="{Binding DoubleClickCommand }"
+																  CommandParameter="{Binding events/}"/>
+									</DataGrid.InputBindings>
+									<!--<DataGrid.ItemContainerStyle>
+										<Style TargetType="DataGridRow">
+											<EventSetter Event="MouseDoubleClick" Handler="{Binding RowDoubleClick}"/>
+										</Style>
+									</DataGrid.ItemContainerStyle>-->
 									<DataGrid.Columns>
 										<DataGridTextColumn Binding="{Binding summary}">
 											<DataGridTextColumn.ElementStyle>
@@ -47,7 +59,6 @@
 												</Style>
 											</DataGridTextColumn.ElementStyle>
 										</DataGridTextColumn>
-
 										<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
 										<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />

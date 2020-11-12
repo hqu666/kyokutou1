@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using Infragistics.Controls.Schedules;
 using Livet;
@@ -62,6 +63,7 @@ namespace TabCon.ViewModels
 		public X_1_4ViewModel()
 		{
 			Initialize();
+			//			DoubleClickCommand = CreateCommand(param => MyDoubleClickCommand(param));WPF用 ViewModelの基底クラス
 		}
 
 		public void Initialize()
@@ -360,14 +362,34 @@ namespace TabCon.ViewModels
 			return Events;
 		}
 
+		//レコードクリック/////////////////////////////////////////////////////////////////////////
+		public ICommand DoubleClickCommand { get; private set; }
+		/// <summary>
+		/// レコードクリック
+		/// </summary>
+		public void MyDoubleClickCommand(object param)
+		{
+			string TAG = "DoubleClickRow";
+			string dbMsg = "";
+			try {
+				if (param == null) {
+					return;
+				}
+				var clc = (t_events)param;
+				MessageBox.Show("Double click on " + clc.event_title);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
+		}
+		/////////////////////////////////////////////////////////////////////////レコードクリック//
+
 		/// <summary>
 		/// イベント選択
 		/// </summary>
 		#region EventComboSelectedValueChanged
 		private string _EventComboSelectedValue;
-
-		public event ListChangedEventHandler ListChanged;
-
 		public string EventComboSelectedValue {
 			get {
 				return _EventComboSelectedValue;
