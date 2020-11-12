@@ -8,8 +8,8 @@
         Title="イベント登録"  FontSize="12" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
 	    WindowStartupLocation="CenterScreen"  Topmost="True"
-		Width="620" Height="650"
-		Closing="Window_Closing" >
+		Width="620" Height="650" >
+		<!--Closing="Window_Closing"-->
 
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -111,8 +111,8 @@
 
 		<Label Content="背景色"  Grid.Row="1" Grid.Column="2"
 					HorizontalAlignment="Right" Margin="0,5,5,5" />
-		<ComboBox Name="color_cb" SelectionChanged="Color_cb_SelectionChanged" Grid.Row="1" Grid.Column="3"  Height="24" />
-
+		<ComboBox Name="color_cb"  Grid.Row="1" Grid.Column="3"  Height="24" />
+		<!--SelectionChanged="Color_cb_SelectionChanged"-->
 		<!--<StackPanel Grid.Row="2" Grid.Column="3"   Orientation="Horizontal" Width="400"
 								 Margin="0,0,5,0" HorizontalAlignment="Right" >
 			<Label Name="time_zone_lb" Content="GMT+09:00) 日本標準時" 
@@ -127,8 +127,8 @@
 		<StackPanel  Grid.Row="3"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
 			<DatePicker    HorizontalAlignment="Left"  Width="190"
 								SelectedDateFormat="Long" VerticalAlignment="Center"
-								Name="start_date_dp"
-								SelectedDateChanged="Start_date_dp_SelectedDateChanged" >
+								Name="start_date_dp" >
+								<!--SelectedDateChanged="Start_date_dp_SelectedDateChanged"-->
 				<DatePicker.CalendarStyle>
 					<Style TargetType="Calendar">
 						<Setter Property="LayoutTransform">
@@ -141,17 +141,19 @@
 			</DatePicker>
 			<!--<local:TimePic x:Name="start_time_tp"   VerticalAlignment="Center"  
 								TimeSelectionChanged="Start_time_tp_SelectedTimeChanged"   />-->
-			<CheckBox Name="daylong_cb" Content="終日" Click="Daylong_cb_Click"
+			<CheckBox Name="daylong_cb" Content="終日" 
 								 HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
 								/>
+			<!--Click="Daylong_cb_Click"-->
 		</StackPanel>
 
 		<Label Content="終了日時"  Grid.Row="4" Grid.Column="0"  HorizontalAlignment="Right"  />
 		<StackPanel  Grid.Row="4"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
 
 			<DatePicker SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
-								Name="end_date_dp"  
-									SelectedDateChanged="End_date_dp_SelectedDateChanged" />
+								Name="end_date_dp"   />
+									<!--SelectedDateChanged="End_date_dp_SelectedDateChanged"-->
+
 			<!--<local:TimePic  x:Name="end_time_tp"  VerticalAlignment="Top"  
 										TimeSelectionChanged="End_time_tp_SelectedTimeChanged"   />-->
 			<!--<ComboBox Name="kurikaesi_cb" SelectedIndex="1" Margin="10,0,0,0" >
@@ -279,9 +281,10 @@
 								Name="attachments_sp" 
 				/>
 		<Grid x:Name="attachments_g" 
-					 Drop="Attachments_sp_Drop"  AllowDrop="true" 
+					 AllowDrop="true" 
 					Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
 					Background="#55D3D3D3">
+			<!--Drop="Attachments_sp_Drop"-->
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*" />
 				<RowDefinition Height="Auto" />
@@ -302,9 +305,10 @@
 				   HorizontalAlignment="Left" 
 				  Height="110"  Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
 				  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
-				  SelectionChanged="Attachments_SelectionChanged" SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
+				   SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
 				  AutoGenerateColumns="False" Background="#55F0F0F0"
 				  >
+				<!--SelectionChanged="Attachments_SelectionChanged"-->
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header=" " >
 						<DataGridTemplateColumn.CellTemplate>
@@ -319,14 +323,16 @@
 					<DataGridTemplateColumn Header="解除" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate >
-								<Button  Click="Release_Click" Style="{StaticResource bt-dell}"  Tag="{Binding}" IsEnabled="{Binding Actionable}"/>
+								<Button  Style="{StaticResource bt-dell}"  Tag="{Binding}" IsEnabled="{Binding Actionable}"/>
+								<!--Click="Release_Click"-->
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Header="削除" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate >
-								<Button  Click="RemoveAt_Click" Style="{StaticResource bt-dell}"  Tag="{Binding}" IsEnabled="{Binding Actionable}"/>
+								<Button Style="{StaticResource bt-dell}"  Tag="{Binding}" IsEnabled="{Binding Actionable}"/>
+								<!--Click="RemoveAt_Click"-->
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
@@ -369,13 +375,16 @@
 		<!--<Rectangle  Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Fill="#FFEFF9F9"   />-->
 		<Button   Grid.Row="17" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
-							Name="cancel_bt" Content="キャンセル" Click="Cancel_bt_Click" />
+							Name="cancel_bt" Content="キャンセル"  />
+		<!--Click="Cancel_bt_Click"-->
 		<Button  Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="2"
 						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
-							  Name="del_bt" Content="削除" Click="Del_bt_Click"/>
+							  Name="del_bt" Content="削除"/>
+		<!--Click="Del_bt_Click"-->
 		<Button   Grid.Row="17" Grid.Column="4"
 					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
-					Name="save_bt" Content="登録"  Click="Save_bt_Click"  />
+					Name="save_bt" Content="登録"  />
+		<!--Click="Save_bt_Click"-->
 		<!--</StackPanel>-->
 		<TextBox  Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" Foreground="White" 
 								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,10,0"

@@ -212,12 +212,17 @@ namespace CS_Calculator {
 					}
 				}
 				dbMsg += ">残り>" + BeforeVals.Count + "件";
+				if (BeforeVals.Count < 1) {
+					IsBegin = true;
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
+		/// <summary>
+		/// Enter:確定処理
+		/// </summary>
 		private void EnterFunc()
 		{
 			string TAG = "EnterFunc";
@@ -284,7 +289,8 @@ namespace CS_Calculator {
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
 					dbMsg += ",演算前=" + ProcessVal;
-					if (BeforeOperation.Equals("") || IsBegin) {
+					if (BeforeOperation.Equals("") || BeforeVals.Count<1) {
+						//BeforeOperation.Equals("") || IsBegin
 						//演算子が無ければそのまま格納
 						ProcessVal = BeforeVals[BeforeVals.Count - 1].Value;
 						IsBegin = false;
@@ -401,7 +407,6 @@ namespace CS_Calculator {
 				ProcessVal = ReCalk();
 				CalcResult.Content = ProcessVal.ToString();
 				IsPrgresEdit = false;
-				CalcProcess.Focus();
 				dbMsg += ";既存値変更" + IsPrgresEdit;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -459,13 +464,15 @@ namespace CS_Calculator {
 						eValue.Equals(DivideStr) ||
 						eValue.Equals(MultiplyStr)) {
 						dbMsg += ",問題無し";
+						ProgressEdit(selectedIndex, fieldName, eValue);
 					} else {
 						String msgStr = "演算子(+-*/)以外が入力されています\r\n";
 						msgStr += eValue;
 						msgStr += "\r\n修正をお願いします";
 						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 						IsPrgresEdit = false;
-						CalcProcess.Focus();
+						textEdit.Text = BeforeVals[selectedIndex].Operater.ToString();
+				//		CalcProcess.Focus();
 						return;
 					}
 				} else if (fieldName.Equals("Value")) {
@@ -473,18 +480,20 @@ namespace CS_Calculator {
 					if (double.TryParse(eValue, out number)) {
 						dbMsg += ",入力の変換結果=" + number;
 						dbMsg += ",問題無し";
+						ProgressEdit(selectedIndex, fieldName, eValue);
 					} else {
 						String msgStr = "数値以外が入力されています\r\n";
 						msgStr += eValue;
 						msgStr += "\r\n修正をお願いします";
 						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 						IsPrgresEdit = false;
-						CalcProcess.Focus();
+						textEdit.Text=BeforeVals[selectedIndex].Value.ToString();
+				//		CalcProcess.Focus();
 						return;
 					}
 				}
 				MyLog(TAG, dbMsg);
-				ProgressEdit(selectedIndex, fieldName, eValue);
+			//	ProgressEdit(selectedIndex, fieldName, eValue);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -506,13 +515,32 @@ namespace CS_Calculator {
 		/// </summary>
 		private void DivideFunc()
 		{
-			if (!IsBegin && ProcessVal == 0) {
-				MessageBox.Show("割られる値が0になっています。0は除算できません");
-			} else if (!IsBegin && InputStr.Equals("")) {
-				MessageBox.Show("割る値が0になっています。0は除算できません");
-			} else {
-				string NextOperation = DivideStr;
-				ProcessedFunc(NextOperation);
+			string TAG = "DivideFunc";
+			string dbMsg = "";
+			try {
+				string InputStr = CalcProcess.Text;
+				dbMsg += ",現在=" + InputStr;
+				double ProcessVal = ReCalk();
+				dbMsg += ",ここまでの演算結果=" + ProcessVal;
+				if (BeforeVals.Count < 1 ) {
+					dbMsg += ",最初の値が無い";
+					if (InputStr.Equals("")) {
+						MessageBox.Show("0は除算できません。割られる値から入力して下さい。");
+					}else{
+						dbMsg += ">>最初の値を登録";
+						string NextOperation = DivideStr;
+						ProcessedFunc(NextOperation);
+					}
+				} else if (ProcessVal == 0) {
+					MessageBox.Show("ここまでの演算結果が0になっています。0は除算できません");
+				} else {
+					dbMsg += ">>通常登録";
+					string NextOperation = DivideStr;
+					ProcessedFunc(NextOperation);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
 		/// <summary>
