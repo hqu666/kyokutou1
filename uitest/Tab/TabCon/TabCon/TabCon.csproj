@@ -123,11 +123,21 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="Controls\WaitingCircle.xaml.cs">
+      <DependentUpon>WaitingCircle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WaitingDLog.xaml.cs">
+      <DependentUpon>WaitingDLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\X_1_Control.xaml.cs">
       <DependentUpon>X_1_Control.xaml</DependentUpon>
     </Compile>
     <Compile Include="CS_Util.cs" />
+    <Compile Include="GoogleAuthUtil.cs" />
+    <Compile Include="GoogleCalendarUtil.cs" />
+    <Compile Include="GoogleDriveUtil.cs" />
     <Compile Include="Infrastructures\ViewModelBase .cs" />
+    <Compile Include="LocalFileUtil.cs" />
     <Compile Include="Models\MyMenu.cs" />
     <Compile Include="Models\m_admin_users.cs" />
     <Compile Include="Models\m_banks.cs" />
@@ -237,6 +247,7 @@
     <Compile Include="ViewModels\X_1_1ViewModel.cs" />
     <Compile Include="ViewModels\X_1_3ViewModel.cs" />
     <Compile Include="ViewModels\X_1_4ViewModel.cs" />
+    <Compile Include="ViewModels\X_2ViewModel.cs" />
     <Compile Include="Views\ChildPageView.xaml.cs">
       <DependentUpon>ChildPageView.xaml</DependentUpon>
     </Compile>
@@ -270,6 +281,9 @@
     <Compile Include="Views\X_1_4.xaml.cs">
       <DependentUpon>X_1_4.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\X_2.xaml.cs">
+      <DependentUpon>X_2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewTabControl.xaml.cs">
       <DependentUpon>ViewTabControl.xaml</DependentUpon>
     </Compile>
@@ -280,6 +294,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\WaitingCircle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WaitingDLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\X_1_Control.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -333,6 +355,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\X_1_4.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\X_2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

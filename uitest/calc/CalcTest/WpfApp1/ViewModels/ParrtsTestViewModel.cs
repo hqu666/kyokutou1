@@ -1,9 +1,4 @@
-﻿using System;
-using System.Windows;
-using Livet;
-using Livet.Commands;
-using CS_Calculator;
-using System.Windows.Controls;
+﻿using Livet;
 
 namespace WpfApp1.ViewModels {
 	public class ParrtsTestViewModel : ViewModel {
