@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using Infragistics.Controls.Schedules;
 using Livet;
 using Livet.Commands;
+using MySql.Data.MySqlClient;
 using TabCon.Models;
 
 namespace TabCon.ViewModels
@@ -163,16 +165,100 @@ namespace TabCon.ViewModels
 			string dbMsg = "";
 			try {
 				dbMsg += "" + SelectedDateTime;
+				CS_Util Util = new CS_Util();
 				//予定取得///////////////////////////////////////////
-				Events = new ObservableCollection<Models.t_events>();
-				ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
+				Events = new ObservableCollection<t_events>();
+	//			ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
 				MySQLUtil = new MySQL_Util();
 				if (MySQLUtil.MySqlConnection()) {
-					ObservableCollection<object> rTable = MySQLUtil.ReadTable("t_events");
-					if(rTable != null) {
-						dbMsg += "rTable" + rTable.Count + "件";
-					}
+					//ObservableCollection<object> rTable = MySQLUtil.ReadTable("t_events");
+					//if(rTable != null) {
+					//	dbMsg += "rTable" + rTable.Count + "件";
+					//}
 
+					using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+						mySqlConnection.Open();
+						using (MySqlCommand command = mySqlConnection.CreateCommand()) {
+							command.CommandText = $"SELECT * FROM {"t_events"}";
+							using (MySqlDataReader reader = command.ExecuteReader()) {
+								//int RecordCount = reader.;
+								//dbMsg += "," + RecordCount + "レコード";
+								int FieldCount = reader.FieldCount;
+								dbMsg += "," + FieldCount + "項目";
+
+								//一行づつデータを読み取りモデルに書込む
+								while (reader.Read()) {
+									t_events OneEvent = new t_events();
+									for (int i = 0; i < FieldCount; i++) {
+										string rName = reader.GetName(i);
+										string rType = reader.GetFieldType(i).Name;
+										dbMsg += "\r\n(" + i + ")" + rName + ",rType=" + rType;
+										var rVar = reader.GetValue(i);
+										dbMsg += ",rVar=" + rVar;
+										if (rVar == null || rVar.Equals("") || reader.IsDBNull(i)) {
+											dbMsg += ">>スキップ" ;
+										} else if (rName.Equals("id")) {
+											OneEvent.id = (int)rVar;
+										}else if(rName.Equals("event_title")) {
+											OneEvent.event_title = (string)rVar;         //タイトル
+										} else if (rName.Equals("event_date_start")) {
+											OneEvent.event_date_start = (DateTime)rVar;              //開始日
+										} else if (rName.Equals("event_date_start")) {
+											OneEvent.event_time_start = (int)rVar;           //開始時刻
+										} else if (rName.Equals("event_date_end")) {
+											OneEvent.event_date_end = (DateTime)rVar;                  //終了日
+										} else if (rName.Equals("event_time_end")) {
+											OneEvent.event_time_end = (int)rVar;             //終了時刻
+										} else if (rName.Equals("event_is_daylong")) {
+											OneEvent.event_is_daylong = (bool)rVar;                       //終日
+										} else if (rName.Equals("event_place")) {
+											OneEvent.event_place = (string)rVar;                           //場所
+										} else if (rName.Equals("event_memo")) {
+											OneEvent.event_memo = (string)rVar;                              //メモ
+										} else if (rName.Equals("google_id")) {
+											OneEvent.google_id = (string)rVar;                        //GoogleイベントID:未登録は空白文字
+										} else if (rName.Equals("event_status")) {
+											OneEvent.event_status = (int)rVar;                       //ステータス
+										} else if (rName.Equals("event_type")) {
+											OneEvent.event_type = (SByte)rVar;                           //イベント種別
+										} else if (rName.Equals("event_bg_color")) {
+											OneEvent.event_bg_color = (string)rVar;                       //背景色
+										}
+										dbMsg += ">>読取";
+										//	}
+									}
+									//string rCol = OneEvent.event_bg_color;
+									//if (rCol == null || rCol.Equals("")) {
+										if (Util.IsForegroundWhite(OneEvent.event_bg_color)) {
+											dbMsg += "に白文字";
+											OneEvent.event_font_color = Brushes.White.ToString();
+										} else {
+											dbMsg += "に黒文字";
+											OneEvent.event_font_color = Brushes.Black.ToString();
+										}
+									//} else {
+									//	dbMsg += "背景未指定";
+									//}
+									if (OneEvent.event_date_start < OneEvent.event_date_end) {
+										OneEvent.event_is_daylong = true;
+										OneEvent.event_time_start = 0;           //開始時刻
+										OneEvent.event_time_end = 23;               //終了時刻
+									}
+									string summary = "";
+									if (!OneEvent.event_is_daylong) {
+										summary = OneEvent.event_time_start + "～" + OneEvent.event_time_end;
+									}else{
+										summary += "～" + String.Format("{0:yyyy/MM/dd}", OneEvent.event_date_end);
+									}
+									summary += ": " + OneEvent.event_title + " : " + OneEvent.event_place + " : " + OneEvent.event_memo;
+									OneEvent.summary = summary;
+									Events.Add(OneEvent);
+								}
+							}
+						}
+					}
+					int rCount = Events.Count;
+					dbMsg += ",Events=" + rCount + "件";
 					MySQLUtil.DisConnect();
 				}
 				//実データが少なければテストデータ作成
@@ -205,9 +291,11 @@ namespace TabCon.ViewModels
 						OneEvent.event_status = 1;                           //ステータス
 						OneEvent.event_type = 1;                           //イベント種別
 
-						string summary = "終日";
+						string summary = "";
 						if (!OneEvent.event_is_daylong) {
 							summary = OneEvent.event_time_start + "～" + OneEvent.event_time_end;
+						} else {
+							summary += "～" + String.Format("{0:yyyy/MM/dd}", OneEvent.event_date_end);
 						}
 						summary += ": " + OneEvent.event_title + " : " + OneEvent.event_place + " : " + OneEvent.event_memo;
 						OneEvent.summary = summary;
@@ -240,7 +328,6 @@ namespace TabCon.ViewModels
 						Color color = (Color)cc.ConvertFrom("#FF" + rStr + gStr + bStr);
 						dbMsg += ",color=" + color;
 						OneEvent.event_bg_color = color.ToString();                           //背景色
-						CS_Util Util = new CS_Util();
 						if (Util.IsForegroundWhite(OneEvent.event_bg_color)) {
 							dbMsg += "に白文字";
 							OneEvent.event_font_color = Brushes.White.ToString();  
