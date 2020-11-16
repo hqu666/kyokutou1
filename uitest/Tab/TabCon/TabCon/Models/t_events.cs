@@ -283,8 +283,8 @@ namespace TabCon.Models {
 		///<summary>
 		///作成日時
 		///</summary>
-		private DateTime _created_at;
-		public DateTime created_at
+		private DateTime? _created_at;
+		public DateTime? created_at
 		{
 			get => _created_at;
 			set
@@ -330,9 +330,10 @@ namespace TabCon.Models {
 
 		///<summary>
 		///削除日時
+		///基本的にNullなのでnull 許容参照型に型指定する
 		///</summary>
-		private DateTime _deleted_at;
-		public DateTime deleted_at
+		private DateTime ? _deleted_at;
+		public DateTime ? deleted_at
 		{
 			get => _deleted_at;
 			set

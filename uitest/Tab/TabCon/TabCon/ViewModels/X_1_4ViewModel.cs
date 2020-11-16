@@ -145,7 +145,6 @@ namespace TabCon.ViewModels
 
 		}
 
-
 		/// <summary>
 		/// カレンダ作成
 		/// </summary>
@@ -397,7 +396,6 @@ namespace TabCon.ViewModels
 			return Events;
 		}
 
-
 		//レコードクリック/////////////////////////////////////////////////////////////////////////
 		#region EditCommand
 		private ViewModelCommand _EditCommand;
@@ -426,7 +424,7 @@ namespace TabCon.ViewModels
 		}
 
 		/// <summary>
-		/// 選択されたアイテムが有る
+		/// 選択されたアイテムが有るか？
 		/// 無ければここで処理終了
 		/// </summary>
 		/// <returns></returns>
@@ -434,15 +432,21 @@ namespace TabCon.ViewModels
 		{
 			string TAG = "EditCommand";
 			string dbMsg = "";
+			bool retBool = true;
 			try {
 				if (this.TatagetDay != null) {
 					dbMsg += "、選択日＝" + TatagetDay.date;
 				}
+				if(this.TargetEvent == null) {
+					dbMsg += ">>処理対象取得できず";
+		//			retBool = false;
+				}
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			return true;
+			return retBool;
 	//		return this.TargetEvent != null;
 		}
 
@@ -461,14 +465,6 @@ namespace TabCon.ViewModels
 
 		}
 		#endregion //public ICommand DoubleClickCommand { get; private set; }
-		///// <summary>
-		///// レコードクリック
-		///// </summary>
-		//public void MyDoubleClickCommand(object param)
-		//{
-
-
-		//}
 		/////////////////////////////////////////////////////////////////////////レコードクリック//
 
 		/// <summary>
@@ -652,25 +648,23 @@ namespace TabCon.ViewModels
 				this.events = _events;
 				this.rootClass = _rootClass;
 			}
-			public t_events selectedIndex { set; get; }
-				
-			#region TargetEvent変更通知プロパティ
-			public t_events _TargetEvent;
-			/// <summary>
-			/// 操作対象の予定
-			/// </summary>
-			public t_events TargetEvent {
-				get { return _TargetEvent; }
-				set {
-					if (_TargetEvent == value)
-						return;
-						_TargetEvent = new t_events();
-						_TargetEvent = value;
-						rootClass.TargetEvent = value;
-		//			rootClass.RaisePropertyChanged("TargetEvent");
-				}
-			}
-			#endregion
+			//public t_events selectedIndex { set; get; }
+
+			//public t_events _TargetEvent;
+			///// <summary>
+			///// 操作対象の予定
+			///// </summary>
+			//public t_events TargetEvent {
+			//	get { return _TargetEvent; }
+			//	set {
+			//		if (_TargetEvent == value)
+			//			return;
+			//		_TargetEvent = new t_events();
+			//		_TargetEvent = value;
+			//		rootClass.TargetEvent = value;
+			//		//			rootClass.RaisePropertyChanged("TargetEvent");
+			//	}
+			//}
 
 
 		}

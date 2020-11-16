@@ -24,9 +24,9 @@
 		</l:InteractionMessageTrigger>
 
 		<!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
-		<!--<i:EventTrigger EventName="Closed">
+		<behaviors:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction/>
-		</i:EventTrigger>-->
+		</behaviors:EventTrigger>
 	</behaviors:Interaction.Triggers>
 
 

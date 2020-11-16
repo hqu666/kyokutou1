@@ -4,17 +4,17 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-	 xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-	 xmlns:v="clr-namespace:TabCon.Views"
-        xmlns:vm="clr-namespace:TabCon.ViewModels"
-		xmlns:local="clr-namespace:TabCon.Views"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+      xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+      xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:v="clr-namespace:TabCon.Views"
+      xmlns:vm="clr-namespace:TabCon.ViewModels"
+      xmlns:local="clr-namespace:TabCon.Views"
 	  xmlns:ig="http://schemas.infragistics.com/xaml"
 	  xmlns:controls="clr-namespace:TabCon.Controls"
-	   xmlns:ig1="http://infragistics.com/Editors"
-	   mc:Ignorable="d" 
+      xmlns:ig1="http://infragistics.com/Editors"
+      mc:Ignorable="d" 
       d:DesignHeight="750" d:DesignWidth="1000"
       Title="スケジュールリスト">
 
@@ -23,9 +23,9 @@
 	</Page.DataContext>-->
 
 	<behaviors:Interaction.Triggers>
-		<!--<i:EventTrigger EventName="Closed">
+		<behaviors:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction/>
-		</i:EventTrigger>-->
+		</behaviors:EventTrigger>
 		<l:InteractionMessageTrigger MessageKey="EditCommand" Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction 
                 WindowType="{x:Type v:X_2}" Mode="Modal" />
@@ -51,10 +51,10 @@
 							AutoGenerateColumns="False" 
 							IsReadOnly="True" SelectionMode="Single"
 							>
-				<DataGrid.InputBindings>
+				<!--<DataGrid.InputBindings>
 					<MouseBinding MouseAction="LeftDoubleClick" 
 																Command="{Binding EditCommand}" />
-				</DataGrid.InputBindings>
+				</DataGrid.InputBindings>-->
 
 				<DataGrid.Columns>
 					<DataGridTextColumn  Header="開始日" Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
@@ -66,46 +66,50 @@
 												IsReadOnly="True" 
 												HeadersVisibility="None" SelectionMode="Single"
 											>
-									<!--二階層目では　<DataGrid.InputBindings>が使えない-->
-
-									<!--
-														SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
+									<!--二階層目では　<DataGrid.InputBindings>が使えない?
 												SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
-																			
-									
-									<DataGrid.InputBindings>
-										<MouseBinding MouseAction="LeftDoubleClick"
-																  Command="{Binding DoubleClickCommand }"
-																  CommandParameter="{Binding events/}"/>
+														SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
+														
+																  CommandParameter="{Binding events/}"
+												-->
+									<!--<DataGrid.InputBindings>
+										<MouseBinding  MouseAction="LeftDoubleClick"
+																  Command="{Binding EditCommand }"/>
 									</DataGrid.InputBindings>-->
 									<!--<DataGrid.ItemContainerStyle>
 										<Style TargetType="DataGridRow">
-											<EventSetter Event="MouseDoubleClick" Handler="{Binding RowDoubleClick}"/>
+											<EventSetter Event="MouseDoubleClick" Handler="{Binding EditCommand}"/>
 										</Style>
 									</DataGrid.ItemContainerStyle>-->
 
 									<DataGrid.Columns>
-										<!--<DataGridTemplateColumn Header="summary">
+
+										<DataGridTemplateColumn Header="summary">
 											<DataGridTemplateColumn.CellTemplate>
 												<DataTemplate>
-													<Button Content="{Binding summary}" 
+													<Button 
+																Content="{Binding summary}" 
+																Name="eventBt"
+																Command="{Binding Path=EditCommand}"
 																Background="{Binding event_bg_color}"
 																Foreground="{Binding event_font_color}"
-																Command="{Binding EditCommand}"
 																HorizontalAlignment="Left"  VerticalAlignment="Center" 
 																/>
 												</DataTemplate>
 											</DataGridTemplateColumn.CellTemplate>
-										</DataGridTemplateColumn>-->
+										</DataGridTemplateColumn>
+										<!--
+																CommandParameter="{Binding TargetEvent,Mode=TwoWay}" 
+										-->
 
-										<DataGridTextColumn Binding="{Binding summary}" >
+										<!--<DataGridTextColumn Binding="{Binding summary}" >
 											<DataGridTextColumn.ElementStyle>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Background" Value="{Binding event_bg_color}"/>
 													<Setter Property="Foreground" Value="{Binding event_font_color}"/>
 												</Style>
 											</DataGridTextColumn.ElementStyle>
-										</DataGridTextColumn>
+										</DataGridTextColumn>-->
 
 										<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>

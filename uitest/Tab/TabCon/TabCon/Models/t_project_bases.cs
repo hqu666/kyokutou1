@@ -719,8 +719,8 @@ namespace TabCon.Models
 		///<summary>
 		///ì¬“ú
 		///</summary>
-		private DateTime _created_at;
-		public DateTime created_at
+		private DateTime? _created_at;
+		public DateTime? created_at
 		{
 			get => _created_at;
 			set
@@ -751,8 +751,8 @@ namespace TabCon.Models
 		///<summary>
 		///XV“ú
 		///</summary>
-		private DateTime _updated_at;
-		public DateTime updated_at
+		private DateTime? _updated_at;
+		public DateTime? updated_at
 		{
 			get => _updated_at;
 			set
@@ -767,8 +767,8 @@ namespace TabCon.Models
 		///<summary>
 		///íœ“ú
 		///</summary>
-		private DateTime _deleted_at;
-		public DateTime deleted_at
+		private DateTime? _deleted_at;
+		public DateTime? deleted_at
 		{
 			get => _deleted_at;
 			set
