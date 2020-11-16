@@ -10,6 +10,10 @@ using System.Windows.Media;
 using Infragistics.Controls.Schedules;
 using Livet;
 using Livet.Commands;
+using Livet.Messaging;
+using Livet.Messaging.IO;
+using Livet.EventListeners;
+using Livet.Messaging.Windows;
 using MySql.Data.MySqlClient;
 using TabCon.Models;
 
@@ -17,6 +21,7 @@ namespace TabCon.ViewModels
 {
 	public class X_1_4ViewModel : ViewModel {
 		public string titolStr = "【スケジュール】リスト表示";
+		public MySQL_Util MySQLUtil;
 		/// <summary>
 		/// 週別/日別区分
 		/// </summary>
@@ -52,13 +57,43 @@ namespace TabCon.ViewModels
 		/// イベントが有る日の配列
 		/// </summary>
 		public ObservableCollection<ADay> EDays { get; set; }
+		/// <summary>
+		/// 選択された日
+		/// </summary>
+		public ADay TatagetDay{ get; set; }
 
+		#region Events変更通知プロパティ
+		private ObservableCollection<t_events> _Events;
 		/// <summary>
 		/// 予定配列
 		/// </summary>
-		public ObservableCollection<t_events> Events { get; set; }  
+		public ObservableCollection<t_events> Events {
+			get { return _Events; }
+			set {
+				if (_Events == value)
+					return;
+				_Events = value;
+				RaisePropertyChanged("Events");
+			}
+		}
+		#endregion
 
-		public MySQL_Util MySQLUtil;
+		#region TargetEvent変更通知プロパティ
+		private t_events _TargetEvent;
+		/// <summary>
+		/// 操作対象の予定
+		/// </summary>
+		public t_events TargetEvent {
+			get { return _TargetEvent; }
+			set {
+				if (_TargetEvent == value)
+					return;
+				//	_TargetEvent = new t_events();
+				_TargetEvent = value;
+				RaisePropertyChanged("TargetEvent");
+			}
+		}
+		#endregion
 
 		public X_1_4ViewModel()
 		{
@@ -134,11 +169,11 @@ namespace TabCon.ViewModels
 				EDays = new  ObservableCollection<ADay>();
 				List<string>summarys = new List<string>();
 				ObservableCollection<t_events> dEvents = new ObservableCollection<t_events>();
-				ADay aDay = new ADay(tDate, summarys, dEvents);
+				ADay aDay = new ADay(tDate, summarys, dEvents ,this);
 				foreach (t_events ev in orderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
 						dbMsg +=":開始"+ tDate + ">>" + ev.event_date_start + ":" + EDays + "件";
-						aDay = new ADay(tDate, summarys, dEvents);
+						aDay = new ADay(tDate, summarys, dEvents,this);
 						EDays.Add(aDay);
 						summarys = new List<string>();
 						dEvents = new ObservableCollection<t_events>();
@@ -147,7 +182,7 @@ namespace TabCon.ViewModels
 					dEvents.Add(ev);
 					summarys.Add(ev.summary);
 				}
-				 aDay = new ADay(tDate, summarys, dEvents);
+				 aDay = new ADay(tDate, summarys, dEvents,this);
 				EDays.Add(aDay);
 
 				RaisePropertyChanged(); //	"dataManager"
@@ -205,7 +240,7 @@ namespace TabCon.ViewModels
 											OneEvent.event_title = (string)rVar;         //タイトル
 										} else if (rName.Equals("event_date_start")) {
 											OneEvent.event_date_start = (DateTime)rVar;              //開始日
-										} else if (rName.Equals("event_date_start")) {
+										} else if (rName.Equals("event_time_start")) {
 											OneEvent.event_time_start = (int)rVar;           //開始時刻
 										} else if (rName.Equals("event_date_end")) {
 											OneEvent.event_date_end = (DateTime)rVar;                  //終了日
@@ -362,27 +397,78 @@ namespace TabCon.ViewModels
 			return Events;
 		}
 
+
 		//レコードクリック/////////////////////////////////////////////////////////////////////////
-		public ICommand DoubleClickCommand { get; private set; }
+		#region EditCommand
+		private ViewModelCommand _EditCommand;
+
+		public ViewModelCommand EditCommand {
+			get {
+				string TAG = "EditCommand";
+				string dbMsg = "";
+				try {
+					if (_EditCommand == null) {
+						dbMsg += ">>起動時";
+						_EditCommand = new ViewModelCommand(Edit, CanEdit);
+					}else{
+						if(this.TargetEvent != null) {
+							dbMsg += this.TargetEvent.ToString();
+						}else{
+							dbMsg += ">>選択行無し";
+						}
+					}
+					MyLog(TAG, dbMsg);
+				} catch (Exception er) {
+					MyErrorLog(TAG, dbMsg, er);
+				}
+				return _EditCommand;
+			}
+		}
+
 		/// <summary>
-		/// レコードクリック
+		/// 選択されたアイテムが有る
+		/// 無ければここで処理終了
 		/// </summary>
-		public void MyDoubleClickCommand(object param)
+		/// <returns></returns>
+		public bool CanEdit()
 		{
-			string TAG = "DoubleClickRow";
+			string TAG = "EditCommand";
 			string dbMsg = "";
 			try {
-				if (param == null) {
-					return;
+				if (this.TatagetDay != null) {
+					dbMsg += "、選択日＝" + TatagetDay.date;
 				}
-				var clc = (t_events)param;
-				MessageBox.Show("Double click on " + clc.event_title);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return true;
+	//		return this.TargetEvent != null;
+		}
+
+		public void Edit()
+		{
+			string TAG = "Edit";
+			string dbMsg = "";
+			try {
+				using (var vm = new X_2ViewModel(this.TargetEvent)) {
+					Messenger.Raise(new TransitionMessage(vm, "EditCommand"));
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 
 		}
+		#endregion //public ICommand DoubleClickCommand { get; private set; }
+		///// <summary>
+		///// レコードクリック
+		///// </summary>
+		//public void MyDoubleClickCommand(object param)
+		//{
+
+
+		//}
 		/////////////////////////////////////////////////////////////////////////レコードクリック//
 
 		/// <summary>
@@ -422,11 +508,11 @@ namespace TabCon.ViewModels
 			string TAG = "DateBack";
 			string dbMsg = "";
 			try {
-				if (weekDisplayMode.Equals("Week")) {
-					SelectedDateTime = SelectedDateTime.AddDays(-7);
-				} else {
-					SelectedDateTime = SelectedDateTime.AddDays(-1);
-				}
+				//if (weekDisplayMode.Equals("Week")) {
+				//	SelectedDateTime = SelectedDateTime.AddDays(-7);
+				//} else {
+				//	SelectedDateTime = SelectedDateTime.AddDays(-1);
+				//}
 				dbMsg += SelectedDateTime + "に戻す";
 				CurrentDate = String.Format("{0:yyyy年MM月dd日}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
@@ -473,11 +559,11 @@ namespace TabCon.ViewModels
 			string TAG = "DateSend";
 			string dbMsg = "";
 			try {
-				if (weekDisplayMode.Equals("Week")) {
-					SelectedDateTime = SelectedDateTime.AddDays(7);
-				} else {
-					SelectedDateTime = SelectedDateTime.AddDays(1);
-				}
+				//if (weekDisplayMode.Equals("Week")) {
+				//	SelectedDateTime = SelectedDateTime.AddDays(7);
+				//} else {
+				//	SelectedDateTime = SelectedDateTime.AddDays(1);
+				//}
 				dbMsg += SelectedDateTime + "に進める";
 				CurrentDate = String.Format("{0:yyyy年MM月dd日}", SelectedDateTime);
 				dbMsg += ">>" + CurrentDate;
@@ -508,6 +594,15 @@ namespace TabCon.ViewModels
 			}
 		}
 
+
+
+		//Livet Messenger用///////////////////////
+		new public void Dispose()
+		{
+			// 基本クラスのDispose()でCompositeDisposableに登録されたイベントを解放する。
+			base.Dispose();
+			Dispose(true);
+		}
 		//////////////////////////////////////////////////登録//
 		public static void MyLog(string TAG, string dbMsg)
 		{
@@ -536,6 +631,7 @@ namespace TabCon.ViewModels
 		/// 一日分の箱
 		/// </summary>
 		public class ADay {
+			X_1_4ViewModel rootClass;
 			/// <summary>
 			/// 対象日
 			/// </summary>
@@ -549,12 +645,34 @@ namespace TabCon.ViewModels
 			/// <summary>
 			/// 一日分の箱
 			/// </summary>
-			public ADay(DateTime _date, List<string> _summarys , ObservableCollection<t_events> _events)
+			public ADay(DateTime _date, List<string> _summarys , ObservableCollection<t_events> _events , X_1_4ViewModel _rootClass)
 			{
 				this.date = _date;
 				this.summarys = _summarys;
 				this.events = _events;
+				this.rootClass = _rootClass;
 			}
+			public t_events selectedIndex { set; get; }
+				
+			#region TargetEvent変更通知プロパティ
+			public t_events _TargetEvent;
+			/// <summary>
+			/// 操作対象の予定
+			/// </summary>
+			public t_events TargetEvent {
+				get { return _TargetEvent; }
+				set {
+					if (_TargetEvent == value)
+						return;
+						_TargetEvent = new t_events();
+						_TargetEvent = value;
+						rootClass.TargetEvent = value;
+		//			rootClass.RaisePropertyChanged("TargetEvent");
+				}
+			}
+			#endregion
+
+
 		}
 	}
 }

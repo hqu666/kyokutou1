@@ -3,13 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GoogleOSD"
-        mc:Ignorable="d"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	 xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+		xmlns:vm="clr-namespace:TabCon.ViewModels"
+		mc:Ignorable="d"
         Title="イベント登録"  FontSize="12" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
 	    WindowStartupLocation="CenterScreen"  Topmost="True"
 		Width="620" Height="650" >
-		<!--Closing="Window_Closing"-->
+
+	<Window.DataContext>
+		<vm:X_2ViewModel/>
+	</Window.DataContext>
+
+	<behaviors:Interaction.Triggers>
+		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
+			<l:WindowInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
+		</l:InteractionMessageTrigger>
+
+		<!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
+		<!--<i:EventTrigger EventName="Closed">
+			<l:DataContextDisposeAction/>
+		</i:EventTrigger>-->
+	</behaviors:Interaction.Triggers>
+
 
 	<Window.Resources>
 		<Style TargetType="StackPanel">
@@ -64,7 +83,6 @@
 		</Style>
 
 	</Window.Resources>
-
 
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
 		<Grid.ColumnDefinitions>
@@ -375,7 +393,9 @@
 		<!--<Rectangle  Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="4" Fill="#FFEFF9F9"   />-->
 		<Button   Grid.Row="17" Grid.Column="0"
 							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
-							Name="cancel_bt" Content="キャンセル"  />
+							Name="cancel_bt" Content="キャンセル"  
+							 Command="{Binding CancelCommand}"
+							/>
 		<!--Click="Cancel_bt_Click"-->
 		<Button  Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="2"
 						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
@@ -383,7 +403,9 @@
 		<!--Click="Del_bt_Click"-->
 		<Button   Grid.Row="17" Grid.Column="4"
 					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
-					Name="save_bt" Content="登録"  />
+					Name="save_bt" Content="登録"  
+					Command="{Binding UpdateCommand}"
+					/>
 		<!--Click="Save_bt_Click"-->
 		<!--</StackPanel>-->
 		<TextBox  Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" Foreground="White" 

@@ -1,16 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
 using Livet;
 
-namespace TabCon.Models
-{
+namespace TabCon.Models {
 	/// <summary>
 	/// イベント
 	/// </summary>
-	public partial class t_events : NotificationObject
-	{
+	public partial class t_events : NotificationObject, ICloneable {
 
 		///<summary>
 		///ID
@@ -363,9 +359,33 @@ namespace TabCon.Models
 				RaisePropertyChanged();
 			}
 		}
+
+		object ICloneable.Clone()
+		{
+			return new t_events() {
+				id = this.id,
+				event_type = this.event_type,
+				event_title = this.event_title,
+				event_date_start = this.event_date_start,
+				event_time_start = this.event_time_start,
+				event_date_end = this.event_date_end,
+				event_time_end = this.event_time_end,
+				event_is_daylong = this.event_is_daylong,
+				event_place = this.event_place,
+				event_memo = this.event_memo,
+				google_id = this.google_id,
+				event_status = this.event_status,
+				event_bg_color = this.event_bg_color,
+				event_font_color = this.event_font_color,
+				created_user = this.created_user,
+				created_at = this.created_at,
+				updated_user = this.updated_user,
+				updated_at = this.updated_at,
+				deleted_at = this.deleted_at
+			};
+		}
 		/////////////////////////////////////////////////////////////生成以降の追記///
 	}
-
 
 	public class t_eventsCollection : ObservableCollection<t_events> {
 		public t_eventsCollection(){

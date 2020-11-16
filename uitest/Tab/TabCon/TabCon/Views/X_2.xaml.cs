@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TabCon.Views {
 	/// <summary>
@@ -30,7 +19,10 @@ namespace TabCon.Views {
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			VM.MyView = this;
+			//	VM.Control = ControlPanel;
+			//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
 		}
+
 
 	}
 }

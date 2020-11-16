@@ -132,7 +132,7 @@ namespace TabCon {
 						Connection.Close();
 						string msgStr = "MySQLの接続を解除しました";
 						dbMsg += ",msgStr=" + msgStr;
-						MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				//		MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 						dbMsg += "接続の解除";
 
 						//TableCombo.Clear();

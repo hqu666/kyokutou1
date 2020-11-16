@@ -22,6 +22,7 @@ using MySql.Data.MySqlClient;
 
 using TabCon.Models;
 using Task = System.Threading.Tasks.Task;
+using Livet.Messaging.Windows;
 
 namespace TabCon.ViewModels {
 	public class X_2ViewModel : ViewModel {
@@ -34,7 +35,6 @@ namespace TabCon.ViewModels {
 		//public GoogleDriveBrouser driveView;
 		//public WebWindow webWindow;
 
-		public t_events tEvents;
 		public t_project_bases tProject;
 		//public IList<GAttachFile> sendFiles = new List<GAttachFile>();
 		///// <summary>
@@ -72,12 +72,40 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// 予定配列
 		/// </summary>
-		public ObservableCollection<t_events> Events { get; set; }
+		//	public ObservableCollection<t_events> Events { get; set; }
+		#region tEvents変更通知プロパティ
+		public t_events _tEvents;
+		/// <summary>
+		/// 操作対象の予定
+		/// </summary>
+		public t_events tEvents {
+			get { return _tEvents; }
+			set {
+				if (_tEvents == value)
+					return;
+				_tEvents = value;
+				RaisePropertyChanged("tEvents");
+			}
+		}
+		#endregion
 
 		public MySQL_Util MySQLUtil;
 
+		/// <summary>
+		/// ViewからのDataContext設定用
+		/// </summary>
 		public X_2ViewModel()
 		{
+			Initialize();
+		}
+
+		/// <summary>
+		/// リスト画面からの編集予備出し
+		/// </summary>
+		/// <param name="_TargetEvent"></param>
+		public X_2ViewModel(t_events _TargetEvent)
+		{
+			tEvents = _TargetEvent;
 			Initialize();
 		}
 
@@ -97,8 +125,6 @@ namespace TabCon.ViewModels {
 				RaisePropertyChanged();
 				MyView.FontSize = Constant.MyFontSize;
 				this.taregetEvent = taregetEvent;
-				//this.tEvents = tEvents;
-				//this.tProject = tProject;
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
 
 				EventWrite(taregetEvent, tEvents);
@@ -114,7 +140,7 @@ namespace TabCon.ViewModels {
 		#region EventComboSelectedValueChanged
 		private string _EventComboSelectedValue;
 
-		public event ListChangedEventHandler ListChanged;
+	//	public event ListChangedEventHandler ListChanged;
 
 		public string EventComboSelectedValue {
 			get {
@@ -1696,6 +1722,55 @@ namespace TabCon.ViewModels {
 		}
 
 		//////////////////////////////////////////////////登録//
+
+		#region CancelCommand
+		private ViewModelCommand _CancelCommand;
+
+		public ViewModelCommand CancelCommand {
+			get {
+				if (_CancelCommand == null) {
+					_CancelCommand = new ViewModelCommand(Cancel);
+				}
+				return _CancelCommand;
+			}
+		}
+
+		public void Cancel()
+		{
+			Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+		}
+		#endregion
+
+		#region UpdateCommand
+		private ViewModelCommand _UpdateCommand;
+
+		public ViewModelCommand UpdateCommand {
+			get {
+				if (_UpdateCommand == null) {
+					_UpdateCommand = new ViewModelCommand(Update);
+				}
+				return _UpdateCommand;
+			}
+		}
+
+		public void Update()
+		{
+			//_Origin.Address = _Person.Address;
+			//_Origin.Name = _Person.Name;
+			Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+		}
+		#endregion
+
+
+
+		//Livet Messenger用///////////////////////
+		new public void Dispose()
+		{
+			// 基本クラスのDispose()でCompositeDisposableに登録されたイベントを解放する。
+			base.Dispose();
+			Dispose(true);
+		}
+		///////////////////////Livet Messenger用//
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();

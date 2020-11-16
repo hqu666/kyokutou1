@@ -406,12 +406,39 @@
       <Version>3.0.40218</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Calendar.v3">
-      <Version>1.49.0.2119</Version>
+      <Version>1.49.0.2137</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.49.0.2117</Version>
+      <Version>1.49.0.2138</Version>
     </PackageReference>
     <PackageReference Include="LivetCask">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.Behaviors">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.Collections">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.Converters">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.Core">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.EventListeners">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.Messaging">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.Mvvm">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask.StatefulModel">
+      <Version>3.2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="LivetCask2">
       <Version>3.2.3.1</Version>
     </PackageReference>
     <PackageReference Include="LivetExtensions">
