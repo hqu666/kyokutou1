@@ -345,6 +345,9 @@ namespace TabCon.Models {
 			}
 		}
 		//生成以降の追記//////////////////////////////////////////////////////////////
+		/// <summary>
+		/// 表示用の文字列
+		/// </summary>
 		private string _summary;
 		public string summary {
 			get => _summary;
@@ -360,6 +363,22 @@ namespace TabCon.Models {
 				RaisePropertyChanged();
 			}
 		}
+
+		/// <summary>
+		/// 選択された
+		/// </summary>
+		private bool _isSetect;
+		public bool isSetect {
+			get => _isSetect;
+			set {
+				if (_isSetect == value)
+					return;
+				_isSetect = value;
+				RaisePropertyChanged();
+			}
+		}
+
+
 
 		object ICloneable.Clone()
 		{

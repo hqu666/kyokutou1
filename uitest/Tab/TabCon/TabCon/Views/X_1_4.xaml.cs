@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TabCon.Views {
@@ -22,6 +23,34 @@ namespace TabCon.Views {
 			VM.MyView = this;
 			//	VM.Control = ControlPanel;
 			//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
+		}
+
+		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string TAG = "DataGrid_SelectionChanged";
+			string dbMsg = "";
+			try {
+				DataGrid DG = sender as DataGrid;
+				VM.TargetEvent = (Models.t_events)DG.SelectedItem;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
+		}
+
+		public static void MyLog(string TAG, string dbMsg)
+		{
+			CS_Util Util = new CS_Util();
+			dbMsg = "[X_1_4]" + dbMsg;
+			Util.MyLog(TAG, dbMsg);
+		}
+
+		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
+		{
+			CS_Util Util = new CS_Util();
+			dbMsg = "[X_1_4]" + dbMsg;
+			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 
 	}

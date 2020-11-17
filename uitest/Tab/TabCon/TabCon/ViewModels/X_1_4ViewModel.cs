@@ -51,7 +51,7 @@ namespace TabCon.ViewModels
 		/// <summary>
 		/// Viewを格納するGridの高さ
 		/// </summary>
-		public double rHeight { get; set; }
+		public double DateColWidth { get; set; }
 
 		/// <summary>
 		/// イベントが有る日の配列
@@ -61,6 +61,22 @@ namespace TabCon.ViewModels
 		/// 選択された日
 		/// </summary>
 		public ADay TatagetDay{ get; set; }
+		public int selectedDateIndex { set; get; }
+
+		public int selectedIndex { set; get; }
+		//public t_events _TargetEvent;
+		///// <summary>
+		///// 操作対象の予定
+		///// </summary>
+		//public t_events TargetEvent {
+		//	get { return _TargetEvent; }
+		//	set {
+		//		if (_TargetEvent == value)
+		//			return;
+		//	//	_TargetEvent = new t_events();
+		//		_TargetEvent = value;
+		//	}
+		//}
 
 		#region Events変更通知プロパティ
 		private ObservableCollection<t_events> _Events;
@@ -97,6 +113,7 @@ namespace TabCon.ViewModels
 
 		public X_1_4ViewModel()
 		{
+			DateColWidth = 200.0;
 			Initialize();
 			//			DoubleClickCommand = CreateCommand(param => MyDoubleClickCommand(param));WPF用 ViewModelの基底クラス
 		}
@@ -183,7 +200,7 @@ namespace TabCon.ViewModels
 				}
 				 aDay = new ADay(tDate, summarys, dEvents,this);
 				EDays.Add(aDay);
-
+				dbMsg += ",DateColWidth=" + DateColWidth;
 				RaisePropertyChanged(); //	"dataManager"
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -288,6 +305,7 @@ namespace TabCon.ViewModels
 									}
 									summary += ": " + OneEvent.event_title + " : " + OneEvent.event_place + " : " + OneEvent.event_memo;
 									OneEvent.summary = summary;
+					//				OneEvent.isSetect = false;
 									Events.Add(OneEvent);
 								}
 							}
@@ -335,6 +353,7 @@ namespace TabCon.ViewModels
 						}
 						summary += ": " + OneEvent.event_title + " : " + OneEvent.event_place + " : " + OneEvent.event_memo;
 						OneEvent.summary = summary;
+			//			OneEvent.isSetect = false;
 						//背景色
 						ColorConverter cc = new ColorConverter();
 						int rCode = EventCount * 20;
@@ -434,12 +453,14 @@ namespace TabCon.ViewModels
 			string dbMsg = "";
 			bool retBool = true;
 			try {
+				dbMsg += "[" + selectedDateIndex + "]";
 				if (this.TatagetDay != null) {
 					dbMsg += "、選択日＝" + TatagetDay.date;
 				}
-				if(this.TargetEvent == null) {
+				dbMsg += "[selectedIndex＝" + selectedIndex + "]";
+				if (this.TargetEvent == null) {
 					dbMsg += ">>処理対象取得できず";
-		//			retBool = false;
+					retBool = false;
 				}
 
 				MyLog(TAG, dbMsg);
@@ -447,7 +468,6 @@ namespace TabCon.ViewModels
 				MyErrorLog(TAG, dbMsg, er);
 			}
 			return retBool;
-	//		return this.TargetEvent != null;
 		}
 
 		public void Edit()
@@ -638,6 +658,22 @@ namespace TabCon.ViewModels
 			public List<string> summarys { get; }
 
 			public ObservableCollection<t_events> events { get; set; }
+
+			private int _selectedIndex { set; get; }
+			/// <summary>
+			/// DataGrid上の選択インデックス
+			/// </summary>
+			public int selectedIndex {
+				get { return _selectedIndex; }
+				set {
+					if (_selectedIndex == value)
+						return;
+					_selectedIndex = value;
+					rootClass.selectedIndex = value;
+					//			RaisePropertyChanged("selectedIndex");
+				}
+			}
+
 			/// <summary>
 			/// 一日分の箱
 			/// </summary>
@@ -648,7 +684,6 @@ namespace TabCon.ViewModels
 				this.events = _events;
 				this.rootClass = _rootClass;
 			}
-			//public t_events selectedIndex { set; get; }
 
 			//public t_events _TargetEvent;
 			///// <summary>

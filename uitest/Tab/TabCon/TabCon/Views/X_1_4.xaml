@@ -48,43 +48,54 @@
 				Grid.Row="1" Grid.Column="0">
 			<DataGrid ItemsSource="{Binding EDays}" 
 							SelectedItem="{Binding TatagetDay,Mode=TwoWay}" 
+							SelectedIndex="{Binding selectedDateIndex,Mode=TwoWay}" 
 							AutoGenerateColumns="False" 
-							IsReadOnly="True" SelectionMode="Single"
+							IsReadOnly="True" 
+							SelectionMode="Single"
+							RowDetailsVisibilityMode="Visible" 
 							>
-				<!--<DataGrid.InputBindings>
+				<!--SelectedIndexはここなら取得できる-->
+				<DataGrid.InputBindings>
 					<MouseBinding MouseAction="LeftDoubleClick" 
-																Command="{Binding EditCommand}" />
-				</DataGrid.InputBindings>-->
+											Command="{Binding EditCommand}"
+											/>
+				</DataGrid.InputBindings>
 
 				<DataGrid.Columns>
-					<DataGridTextColumn  Header="開始日" Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
-					<DataGridTemplateColumn Header="要約">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<DataGrid ItemsSource="{Binding events}"
+					<DataGridTextColumn  Header="開始日" 
+													Width="{Binding Path=DateColWidth,Mode=TwoWay}" 
+													Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
+					<!--<DataGridTemplateColumn Header="要約"/>-->
+					<!--<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<DataGrid ItemsSource="{Binding events}"
+												SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
 												AutoGenerateColumns="False" 
 												IsReadOnly="True" 
 												HeadersVisibility="None" SelectionMode="Single"
 											>
-									<!--二階層目では　<DataGrid.InputBindings>が使えない?
-												SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
+								--><!--二階層目では　<DataGrid.InputBindings>が使えない?
 														SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
 														
 																  CommandParameter="{Binding events/}"
 												-->
-									<!--<DataGrid.InputBindings>
+								<!--<DataGrid.InputBindings>
 										<MouseBinding  MouseAction="LeftDoubleClick"
 																  Command="{Binding EditCommand }"/>
 									</DataGrid.InputBindings>-->
-									<!--<DataGrid.ItemContainerStyle>
+								<!--<DataGrid.ItemContainerStyle>
 										<Style TargetType="DataGridRow">
 											<EventSetter Event="MouseDoubleClick" Handler="{Binding EditCommand}"/>
 										</Style>
 									</DataGrid.ItemContainerStyle>-->
 
-									<DataGrid.Columns>
+									<!--
 
-										<DataGridTemplateColumn Header="summary">
+								<DataGrid.Columns>
+									--><!--<DataGridCheckBoxColumn  Binding="{Binding isSetect }">
+										</DataGridCheckBoxColumn>-->
+
+									<!--<DataGridTemplateColumn Header="summary">
 											<DataGridTemplateColumn.CellTemplate>
 												<DataTemplate>
 													<Button 
@@ -97,27 +108,27 @@
 																/>
 												</DataTemplate>
 											</DataGridTemplateColumn.CellTemplate>
-										</DataGridTemplateColumn>
-										<!--
+										</DataGridTemplateColumn>-->
+									<!--
 																CommandParameter="{Binding TargetEvent,Mode=TwoWay}" 
-										-->
+										--><!--
 
-										<!--<DataGridTextColumn Binding="{Binding summary}" >
-											<DataGridTextColumn.ElementStyle>
-												<Style TargetType="{x:Type TextBlock}">
-													<Setter Property="Background" Value="{Binding event_bg_color}"/>
-													<Setter Property="Foreground" Value="{Binding event_font_color}"/>
-												</Style>
-											</DataGridTextColumn.ElementStyle>
-										</DataGridTextColumn>-->
+									<DataGridTextColumn Binding="{Binding summary }" >
+										<DataGridTextColumn.ElementStyle>
+											<Style TargetType="{x:Type TextBlock}">
+												<Setter Property="Background" Value="{Binding event_bg_color}"/>
+												<Setter Property="Foreground" Value="{Binding event_font_color}"/>
+											</Style>
+										</DataGridTextColumn.ElementStyle>
+									</DataGridTextColumn>
 
-										<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
+									--><!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
 										<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_end}"/>
 										<DataGridCheckBoxColumn Header="終日" Binding="{Binding event_is_daylong}"/>-->
-					
-					<!--<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}" Width="200">
+
+									<!--<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}" Width="200">
 											<DataGridTextColumn.ElementStyle>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Background" Value="{Binding event_bg_color}"/>
@@ -127,17 +138,63 @@
 										</DataGridTextColumn>
 										<DataGridTextColumn Header="場所" Binding="{Binding event_place}"  Width="120"/>
 										<DataGridTextColumn Header="メモ" Binding="{Binding event_memo}"/>-->
-						
-						<!--<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
-										<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
-										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>-->
 
-									</DataGrid.Columns>
-								</DataGrid>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
+									<!--<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
+										<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
+										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>--><!--
+
+								</DataGrid.Columns>
+							</DataGrid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>-->
 				</DataGrid.Columns>
+
+				<DataGrid.RowDetailsTemplate>
+
+					<DataTemplate>
+						<DataGrid HeadersVisibility="None" 
+										AutoGenerateColumns="False" 
+										IsReadOnly="True"
+										ItemsSource="{Binding events}" 
+										SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
+										SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" SelectionChanged="DataGrid_SelectionChanged" 
+										>
+							<DataGrid.Columns>
+								<DataGridTextColumn  Header="開始日" 
+																Width="{Binding Path=DateColWidth}" 
+																/>
+								<!--
+								,Mode=TwoWay
+																Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" 
+								
+								<DataGridTemplateColumn Header="summary">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<Button 
+														Content="{Binding summary}" 
+														Name="eventBt"
+														Command="{Binding Path=EditCommand}"
+														Background="{Binding event_bg_color}"
+														Foreground="{Binding event_font_color}"
+														HorizontalAlignment="Left"  VerticalAlignment="Center" 
+														/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>-->
+								<DataGridTextColumn Binding="{Binding summary }" >
+									<DataGridTextColumn.ElementStyle>
+										<Style TargetType="{x:Type TextBlock}">
+											<Setter Property="Background" Value="{Binding event_bg_color}"/>
+											<Setter Property="Foreground" Value="{Binding event_font_color}"/>
+										</Style>
+									</DataGridTextColumn.ElementStyle>
+								</DataGridTextColumn>
+
+							</DataGrid.Columns>
+						</DataGrid>
+					</DataTemplate>
+				</DataGrid.RowDetailsTemplate>
+
 			</DataGrid>
 
 		</Grid>
