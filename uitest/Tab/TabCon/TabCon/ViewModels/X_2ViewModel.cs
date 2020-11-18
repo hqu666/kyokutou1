@@ -59,8 +59,14 @@ namespace TabCon.ViewModels {
 		/// イベント種別
 		/// </summary>
 		public Dictionary<string, string> EventComboSource { get; set; }
-		public IList<string> EventComboSelectedItem { get; set; }
-		public Int32 EventComboSelectedIndex { get; set; }
+		public int EventComboSelectedIndex { get; set; }
+		/// <summary>
+		/// 背景色
+		/// </summary>
+		public Dictionary<string, string> ColorComboSource { get; set; }
+		public int ColorComboSelectedIndex { get; set; }
+		public string SelectedColorCord { get; set; }
+
 
 		//表示対象年月
 		public DateTime SelectedDateTime;
@@ -92,7 +98,7 @@ namespace TabCon.ViewModels {
 		///<summary>
 		///イベント種別 :※固定値：イベント種別
 		///</summary>
-		public int? eventType { get; set; }
+		public int eventType { get; set; }
 		///<summary>
 		///イベント開始日 :未登録案件はnull
 		///</summary>
@@ -161,15 +167,6 @@ namespace TabCon.ViewModels {
 		public X_2ViewModel(t_events _TargetEvent)
 		{
 			tEvents = _TargetEvent;
-			eventType = tEvents.event_type;
-			eventIsDaylong = tEvents.event_is_daylong;
-			eventTitle = tEvents.event_title + "";
-			eventPlace = tEvents.event_place + "";
-			eventMemo = tEvents.event_memo + "";
-			eventStatus = tEvents.event_status;
-			googleId = tEvents.google_id + "";
-			eventBgColor = tEvents.event_bg_color + "";
-			eventFontColor = tEvents.event_font_color + "";
 			Initialize();
 		}
 
@@ -178,30 +175,68 @@ namespace TabCon.ViewModels {
 			string TAG = "Initialize";
 			string dbMsg = "";
 			try {
-				dbMsg += ",weekDisplayMode=" + weekDisplayMode;
 				EventComboSource = new Dictionary<string, string>()
 				{
 					{ "1", "案件イベント" },
 					{ "2", "工程イベント" },
 					{ "3", "通常イベント" },
 				};
-				EventComboSelectedIndex = 0;
+				eventType = tEvents.event_type;
+				dbMsg += ",イベント種類=" + eventType;
 				TSList = new List<int>() ;
 				for (int i=0 ; i<24; i++){
 					TSList.Add(i);
 				}
+				EventComboSelectedIndex = eventType - 1;
+				dbMsg += "[" + EventComboSelectedIndex + "]";
+				RaisePropertyChanged();
 				eventDateStart = tEvents.event_date_start;
 				eventTimeStart = tEvents.event_time_start;
 				eventDateEnd = tEvents.event_date_end;
 				eventTimeEnd = tEvents.event_time_end;
-				dbMsg += "  , " + eventDateStart + ":" + eventTimeStart + "時～" + eventDateEnd + "：" + eventTimeEnd + "時";
+				dbMsg += "  , " + eventDateStart + ":" + eventTimeStart + "時～" + eventDateEnd + "：" + eventDateStart + "時";
+				eventIsDaylong = tEvents.event_is_daylong;
+				dbMsg += ",終日=" + eventIsDaylong;
 
+				eventTitle = tEvents.event_title + "";
+				eventPlace = tEvents.event_place + "";
+				eventMemo = tEvents.event_memo + "";
+				dbMsg += "," + eventTitle+ "," + eventPlace + "," + eventMemo;
+
+				eventStatus = tEvents.event_status;
+				googleId = tEvents.google_id + "";
+				ColorComboSource = new Dictionary<string, string>()
+				{
+					{ "1", "#FFFFFF" },
+					{ "2", "#7986CB" },
+					{ "3", "#01B679	" },
+					{ "4", "#8E24AA" },
+					{ "5", "#E67C73" },
+					{ "6", "#F6C028	" },
+					{ "7", "#F4511E" },
+					{ "8", "#039BE5" },
+					{ "9", "#3F51B5	" },
+					{ "10", "#616161" },
+					{ "11", "#0B8043" },
+					{ "12", "#D50000" },
+					{ "13", "選択..." },
+				};
+				eventBgColor = tEvents.event_bg_color + "";
+				dbMsg += ",背景色=" + eventBgColor;
+				if(eventBgColor.StartsWith("#")) {
+					ColorComboSelectedIndex = ColorComboSource.Count - 1;
+					SelectedColorCord = eventBgColor;
+				} else {
+					ColorComboSelectedIndex = int.Parse(eventBgColor) - 1;
+					SelectedColorCord = ColorComboSource[eventBgColor];
+				}
+				dbMsg += "[" + ColorComboSelectedIndex + "]" + SelectedColorCord;
+				eventFontColor = tEvents.event_font_color + "";
 				RaisePropertyChanged();
-			//	MyView.FontSize = Constant.MyFontSize;
-				//tEvents = taregetEvent;
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
+				RaisePropertyChanged();
 
-		//		EventWrite(taregetEvent, tEvents);
+				//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -232,6 +267,27 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
+
+		#region 背景色選択
+		private ViewModelCommand _ColorComboCommand;
+		public ViewModelCommand ColorComboCommand {
+			get {
+				if (_ColorComboCommand == null) {
+					_ColorComboCommand = new ViewModelCommand(ColorComboChenge);
+				}
+				return _ColorComboCommand;
+			}
+		}
+
+		public void ColorComboChenge()
+		{
+			if(ColorComboSelectedIndex< ColorComboSource.Count - 1) {
+				eventBgColor = (ColorComboSelectedIndex + 1).ToString();
+				SelectedColorCord = ColorComboSource[eventBgColor];
+			}
+		}
+		#endregion
+
 
 		/// <summary>
 		/// 開始直後、対象イベントの設定内容を読取りViewを初期構成
@@ -658,23 +714,23 @@ namespace TabCon.ViewModels {
 					lb.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 					lb.DataContext = color;
 					//規定色をリストアイテムに格納
-					MyView.color_cb.Items.Add(lb);
-					if (color.id.Equals(colorID)) {
-						//指定されたインデックスと一致したらコンボボックス上のインデックスを記録し
-						serectIndex = nowCount;
-						//タイトル入力枠に着色
-						MyView.titol_tv.Background = new SolidColorBrush(color.rgb);
-						MyView.color_cb.Background = new SolidColorBrush(color.rgb);
-					}
-					nowCount++;
+					//MyView.color_cb.Items.Add(lb);
+					//if (color.id.Equals(colorID)) {
+					//	//指定されたインデックスと一致したらコンボボックス上のインデックスを記録し
+					//	serectIndex = nowCount;
+					//	//タイトル入力枠に着色
+					//	MyView.titol_tv.Background = new SolidColorBrush(color.rgb);
+					//	MyView.color_cb.Background = new SolidColorBrush(color.rgb);
+					//}
+					//nowCount++;
 				}
 				Label lbe = new Label();
 				lbe.Content = "その他...";
 				//規定色をリストアイテムに格納
-				MyView.color_cb.Items.Add(lbe);
+				//MyView.color_cb.Items.Add(lbe);
 
-				dbMsg += ",serectIndex=" + serectIndex;
-				MyView.color_cb.SelectedIndex = serectIndex;
+				//dbMsg += ",serectIndex=" + serectIndex;
+				//MyView.color_cb.SelectedIndex = serectIndex;
 
 				if (serectIndex == 0) {      //規定色でなく
 					if (colorID.Contains('#')) {      //カラーコード指定なら：https://www.ipentec.com/document/csharp-htmlcolor-to-color

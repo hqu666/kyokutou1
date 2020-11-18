@@ -327,7 +327,7 @@ namespace TabCon.ViewModels
 					for (EventCount = Events.Count + 1; EventCount < endCount; EventCount++) {
 						dbMsg += "\r\n[" + EventCount + "]" + StartDT + "～" + EndDT;
 						Models.t_events OneEvent = new Models.t_events();
-						OneEvent.id = 99990 + EventCount;
+						OneEvent.id = -1;
 						OneEvent.event_title = "Test" + EventCount;         //タイトル
 						OneEvent.event_date_start =StartDT.Date;            //開始日
 						OneEvent.event_time_start = StartDT.Hour;           //開始時刻
@@ -343,7 +343,7 @@ namespace TabCon.ViewModels
 						OneEvent.event_memo =  EventCount + "つ目のメモ";                           //メモ
 						OneEvent.google_id = "";                           //GoogleイベントID:未登録は空白文字
 						OneEvent.event_status = 1;                           //ステータス
-						OneEvent.event_type = 1;                           //イベント種別
+						OneEvent.event_type = 3;                           //イベント種別:通常イベント
 
 						string summary = "";
 						if (!OneEvent.event_is_daylong) {

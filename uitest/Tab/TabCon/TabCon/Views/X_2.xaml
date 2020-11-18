@@ -8,6 +8,7 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
+		xmlns:ig="http://schemas.infragistics.com/xaml"
 		mc:Ignorable="d"
         Title="イベント登録"  FontSize="12" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
@@ -120,16 +121,57 @@
 					HorizontalAlignment="Right" Margin="0,5,5,5" />
 		<ComboBox  Grid.Row="1" Grid.Column="1"  
 							Height="24" Width="Auto" HorizontalAlignment="Left"
-							SelectedIndex="0">
-			<ListBoxItem Content="案件イベント"/>
-			<ListBoxItem Content="工程イベント"/>
-			<ListBoxItem Content="通常イベント"/>
-		</ComboBox>
-
+							ItemsSource="{Binding Path=EventComboSource}" 
+							SelectedIndex="{Binding Path=EventComboSelectedIndex,Mode=TwoWay}" 
+							SelectedValuePath="Key" 
+							DisplayMemberPath="Value"
+							/>
 		<Label Content="背景色"  Grid.Row="1" Grid.Column="2"
 					HorizontalAlignment="Right" Margin="0,5,5,5" />
-		<ComboBox Name="color_cb"  Grid.Row="1" Grid.Column="3"  Height="24" />
-		<!--SelectionChanged="Color_cb_SelectionChanged"-->
+		<StackPanel Grid.Row="1" Grid.Column="3" 
+							Orientation="Horizontal"
+								 Margin="0,0,5,0">
+			<ComboBox Name="color_cb"  Height="24"  MinWidth="100"
+								ItemsSource="{Binding Path=ColorComboSource}" 
+								SelectedIndex="{Binding Path=ColorComboSelectedIndex,Mode=TwoWay}" 
+								SelectedValuePath="Key" 
+								DisplayMemberPath="Value"
+								/>
+			<!--
+											SelectionChanged="{Binding Path=ColorComboCommand}"			
+			SelectionChanged="Color_cb_SelectionChanged"-->
+			<ig:XamColorPicker 	x:Name="xamColorPicker" 
+					Grid.Row="1" Grid.Column="3"  Margin="0,10,0,10" MinWidth="40" 
+					SelectedColor="{Binding Path=SelectedColorCord,Mode=TwoWay}" 
+					>
+					<!--
+						ShowAdvancedEditorButton="True"
+							ShowDerivedColorPalettes="True" 
+				SelectedColorChanged="XamColorPicker_SelectedColorChanged"
+							-->
+					<!-- カスタム パレット;10しか追加できない -->
+				<!--<ig:XamColorPicker.ColorPalettes>
+					<ig:ColorPalette>
+						<ig:ColorPalette.Colors>
+							<ig:ColorPatchCollection>
+								<ig:ColorPatch Color="#FFFFFF"/>
+								<ig:ColorPatch Color="#7986CB"/>
+								<ig:ColorPatch Color="#01B679	"/>
+								<ig:ColorPatch Color="#8E24AA"/>
+								<ig:ColorPatch Color="#E67C73"/>
+								<ig:ColorPatch Color="#F6C028	"/>
+								<ig:ColorPatch Color="#F4511E"/>
+								<ig:ColorPatch Color="#039BE5"/>
+								<ig:ColorPatch Color="#3F51B5"/>
+								<ig:ColorPatch Color="#616161"/>
+								<ig:ColorPatch Color="#0B8043"/>
+								<ig:ColorPatch Color="#D50000"/>
+							</ig:ColorPatchCollection>
+						</ig:ColorPalette.Colors>
+					</ig:ColorPalette>
+				</ig:XamColorPicker.ColorPalettes>-->
+			</ig:XamColorPicker>
+		</StackPanel>
 		<!--<StackPanel Grid.Row="2" Grid.Column="3"   Orientation="Horizontal" Width="400"
 								 Margin="0,0,5,0" HorizontalAlignment="Right" >
 			<Label Name="time_zone_lb" Content="GMT+09:00) 日本標準時" 
@@ -382,10 +424,12 @@
 				>-->
 		<!--<Rectangle  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="3" Height="33"  
 								Fill="#FFE1E2E2" Stroke="Black" StrokeThickness="1" StrokeDashArray="5" Width="463" />
-		</StackPanel>-->
+		</StackPanel>     -->
 		<Label  Grid.Row="15" Grid.Column="0"   Content="メモ" HorizontalAlignment="Right" VerticalAlignment="Top"  />
 		<TextBox  Grid.Row="15" Grid.Column="1"  Grid.ColumnSpan="3" Height="80" Width="482"
-						Name="memo_tb"  Text="ABCdef"   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0"   />
+						Name="memo_tb"  
+						Text="{Binding Path=eventMemo,Mode=TwoWay}"
+						VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0"/>
 
 		<Button   Grid.Row="16" Grid.Column="0" 
 				HorizontalAlignment="Left"  VerticalAlignment="Center" 
