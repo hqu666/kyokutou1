@@ -141,7 +141,8 @@ namespace TabCon.ViewModels {
 		///文字色 :ARGB値（９桁：カラーピッカーによっては透明度が付与される）
 		///</summary>
 		public string eventFontColor { get; set; }
-		public Dictionary<string, int> TSList { get; set; }
+		public List<int> TSList { get; set; }
+		//public Dictionary<string, int> TSList { get; set; }
 
 		public MySQL_Util MySQLUtil;
 
@@ -185,14 +186,15 @@ namespace TabCon.ViewModels {
 					{ "3", "通常イベント" },
 				};
 				EventComboSelectedIndex = 0;
-				TSList = new Dictionary<string, int>() ;
+				TSList = new List<int>() ;
 				for (int i=0 ; i<24; i++){
-					TSList.Add( i.ToString(), i);
+					TSList.Add(i);
 				}
 				eventDateStart = tEvents.event_date_start;
 				eventTimeStart = tEvents.event_time_start;
 				eventDateEnd = tEvents.event_date_end;
 				eventTimeEnd = tEvents.event_time_end;
+				dbMsg += "  , " + eventDateStart + ":" + eventTimeStart + "時～" + eventDateEnd + "：" + eventTimeEnd + "時";
 
 				RaisePropertyChanged();
 			//	MyView.FontSize = Constant.MyFontSize;
