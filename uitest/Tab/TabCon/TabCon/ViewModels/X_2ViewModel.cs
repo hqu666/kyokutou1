@@ -88,6 +88,60 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
+		//viewへのBinding用
+		///<summary>
+		///イベント種別 :※固定値：イベント種別
+		///</summary>
+		public int? eventType { get; set; }
+		///<summary>
+		///イベント開始日 :未登録案件はnull
+		///</summary>
+		public DateTime? eventDateStart { get; set; }
+		///<summary>
+		///イベント開始時刻 :※固定値：イベント時刻
+		///</summary>
+		public int eventTimeStart { get; set; }
+		///<summary>
+		///イベント終了日
+		///</summary>
+		public DateTime? eventDateEnd { get; set; }
+		///<summary>
+		///イベント終了時刻 :※固定値：イベント時刻
+		///</summary>
+		public int? eventTimeEnd { get; set; }
+		///<summary>
+		///終日
+		///</summary>
+		public bool? eventIsDaylong { get; set; }
+		///<summary>
+		///タイトル
+		///</summary>
+		public string eventTitle { get; set; }
+		///<summary>
+		///場所
+		///</summary>
+		public string eventPlace { get; set; }
+		///<summary>
+		///メモ
+		///</summary>
+		public string eventMemo { get; set; }
+		///<summary>
+		///ステータス :※固定値：イベントステータス
+		///</summary>
+		public int? eventStatus { get; set; }
+		///<summary>
+		///GoogleイベントID
+		///</summary>
+		public string googleId { get; set; }
+		///<summary>
+		///背景色 :※固定値：カラーもしくはARGB値（９桁）
+		///</summary>
+		public string eventBgColor { get; set; }
+		///<summary>
+		///文字色 :ARGB値（９桁：カラーピッカーによっては透明度が付与される）
+		///</summary>
+		public string eventFontColor { get; set; }
+		public Dictionary<string, int> TSList { get; set; }
 
 		public MySQL_Util MySQLUtil;
 
@@ -96,7 +150,7 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public X_2ViewModel()
 		{
-			Initialize();
+			//Initialize();
 		}
 
 		/// <summary>
@@ -106,6 +160,15 @@ namespace TabCon.ViewModels {
 		public X_2ViewModel(t_events _TargetEvent)
 		{
 			tEvents = _TargetEvent;
+			eventType = tEvents.event_type;
+			eventIsDaylong = tEvents.event_is_daylong;
+			eventTitle = tEvents.event_title + "";
+			eventPlace = tEvents.event_place + "";
+			eventMemo = tEvents.event_memo + "";
+			eventStatus = tEvents.event_status;
+			googleId = tEvents.google_id + "";
+			eventBgColor = tEvents.event_bg_color + "";
+			eventFontColor = tEvents.event_font_color + "";
 			Initialize();
 		}
 
@@ -122,12 +185,21 @@ namespace TabCon.ViewModels {
 					{ "3", "通常イベント" },
 				};
 				EventComboSelectedIndex = 0;
+				TSList = new Dictionary<string, int>() ;
+				for (int i=0 ; i<24; i++){
+					TSList.Add( i.ToString(), i);
+				}
+				eventDateStart = tEvents.event_date_start;
+				eventTimeStart = tEvents.event_time_start;
+				eventDateEnd = tEvents.event_date_end;
+				eventTimeEnd = tEvents.event_time_end;
+
 				RaisePropertyChanged();
-				MyView.FontSize = Constant.MyFontSize;
-				this.taregetEvent = taregetEvent;
+			//	MyView.FontSize = Constant.MyFontSize;
+				//tEvents = taregetEvent;
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
 
-				EventWrite(taregetEvent, tEvents);
+		//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -139,9 +211,6 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		#region EventComboSelectedValueChanged
 		private string _EventComboSelectedValue;
-
-	//	public event ListChangedEventHandler ListChanged;
-
 		public string EventComboSelectedValue {
 			get {
 				return _EventComboSelectedValue;
@@ -171,11 +240,11 @@ namespace TabCon.ViewModels {
 			string TAG = "EventWrite";
 			string dbMsg = "[GEventEdit]";
 			try {
-				dbMsg += "HtmlLink=" + taregetEvent.HtmlLink;
-				MyView.htmlLink_lb.Text = taregetEvent.HtmlLink;
-				dbMsg += "taregetEvent=" + taregetEvent.Summary;
-				MyView.titol_tv.Text = taregetEvent.Summary;
-				SetDate(taregetEvent);
+				//dbMsg += "HtmlLink=" + taregetEvent.HtmlLink;
+				//MyView.htmlLink_lb.Text = taregetEvent.HtmlLink;
+				dbMsg += "taregetEvent=" + tEvents.event_title;
+			//	MyView.titol_tv.Text = tEvents.event_title;
+				SetDate();
 				SetDaylong(taregetEvent);
 				if (taregetEvent.Location != null) {
 					MyView.location_tb.Text = taregetEvent.Location;
@@ -195,24 +264,31 @@ namespace TabCon.ViewModels {
 		/// 開始・終了の日時設定
 		/// </summary>
 		/// <param name="taregetEvent"></param>
-		private void SetDate(Google.Apis.Calendar.v3.Data.Event eventItem)
+		private void SetDate()
 		{
 			string TAG = "SetDate";
 			string dbMsg = "[GEventEdit]";
+			//Google.Apis.Calendar.v3.Data.Event eventItem
 			try {
 				dbMsg += "," + tEvents.event_date_start + " " + tEvents.event_time_start;
 				TimeSpan nonTS = new TimeSpan(0, 0, 0);
 				dbMsg += ",TimeSpan未設定=" + nonTS;
 				DateTime now = DateTime.Now;
-				DateTime originalSDT = GCalendarUtil.EventDateTime2DT(eventItem.OriginalStartTime);
-				dbMsg += ",OriginalStartTime=" + originalSDT;
-				if (now == originalSDT) {
-					dbMsg += ">>現在時刻";
-				}
-				DateTime startDT = GCalendarUtil.EventDateTime2DT(eventItem.Start);
+				//DateTime originalSDT = GCalendarUtil.EventDateTime2DT(eventItem.OriginalStartTime);
+				//dbMsg += ",OriginalStartTime=" + originalSDT;
+				//if (now == originalSDT) {
+				//	dbMsg += ">>現在時刻";
+				//}
+				DateTime startDT = tEvents.event_date_start;	//GCalendarUtil.EventDateTime2DT(eventItem.Start);
 				TimeSpan startDTT = startDT.TimeOfDay;
-				DateTime endDT = GCalendarUtil.EventDateTime2DT(eventItem.End);
+				if (0 < tEvents.event_time_start) {
+					startDTT = new TimeSpan(tEvents.event_time_start, 0, 0);
+				}
+				DateTime endDT = tEvents.event_date_end;  //GCalendarUtil.EventDateTime2DT(eventItem.End);
 				TimeSpan endDTT = endDT.TimeOfDay;
+				if (0 < tEvents.event_time_end) {
+					startDTT = new TimeSpan(tEvents.event_time_end, 0, 0);
+				}
 				dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
 				MyView.start_date_dp.SelectedDate = tEvents.event_date_start;
 				int selectedHours = (int)tEvents.event_time_start;

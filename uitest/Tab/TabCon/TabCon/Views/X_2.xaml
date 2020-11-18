@@ -6,23 +6,22 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-	 xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+		xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		mc:Ignorable="d"
         Title="イベント登録"  FontSize="12" 
-		ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+		ScrollViewer.VerticalScrollBarVisibility="Auto" 
 	    WindowStartupLocation="CenterScreen"  Topmost="True"
 		Width="620" Height="650" >
 
-	<Window.DataContext>
+	<!--<Window.DataContext>
 		<vm:X_2ViewModel/>
-	</Window.DataContext>
-
+	</Window.DataContext>-->
 	<behaviors:Interaction.Triggers>
 		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
 			<l:WindowInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False" />
 		</l:InteractionMessageTrigger>
-
 		<!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
 		<behaviors:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction/>
@@ -143,10 +142,13 @@
 		<Label Content="開始日時" Grid.Row="3"  Grid.Column="0"  
 					HorizontalAlignment="Right" />
 		<StackPanel  Grid.Row="3"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
-			<DatePicker    HorizontalAlignment="Left"  Width="190"
+			<DatePicker  Name="start_date_dp" 
+								SelectedDate="{Binding Path=eventDateStart,Mode=TwoWay}" 
+								HorizontalAlignment="Left"  Width="190"
 								SelectedDateFormat="Long" VerticalAlignment="Center"
-								Name="start_date_dp" >
+								>
 								<!--SelectedDateChanged="Start_date_dp_SelectedDateChanged"-->
+				<!--サイズ変更実験-->
 				<DatePicker.CalendarStyle>
 					<Style TargetType="Calendar">
 						<Setter Property="LayoutTransform">
@@ -157,9 +159,12 @@
 					</Style>
 				</DatePicker.CalendarStyle>
 			</DatePicker>
+			<ComboBox ItemsSource="{Binding Path=TSList}"  
+								SelectedItem="{Binding Path=eventTimeStart,Mode=TwoWay}" />
 			<!--<local:TimePic x:Name="start_time_tp"   VerticalAlignment="Center"  
 								TimeSelectionChanged="Start_time_tp_SelectedTimeChanged"   />-->
 			<CheckBox Name="daylong_cb" Content="終日" 
+								IsChecked="{Binding Path=eventTimeEnd,Mode=TwoWay}"
 								 HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
 								/>
 			<!--Click="Daylong_cb_Click"-->
@@ -169,8 +174,12 @@
 		<StackPanel  Grid.Row="4"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
 
 			<DatePicker SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
-								Name="end_date_dp"   />
+								Name="end_date_dp"
+								SelectedDate="{Binding Path=eventDateEnd,Mode=TwoWay}" 
+								/>
 									<!--SelectedDateChanged="End_date_dp_SelectedDateChanged"-->
+			<ComboBox ItemsSource="{Binding Path=TSList}"  
+								SelectedItem="{Binding Path=eventTimeEnd,Mode=TwoWay}" />
 
 			<!--<local:TimePic  x:Name="end_time_tp"  VerticalAlignment="Top"  
 										TimeSelectionChanged="End_time_tp_SelectedTimeChanged"   />-->
@@ -188,7 +197,9 @@
 
 		<Label Name="Color_lb" Grid.Row="6" Grid.Column="0"   Content="タイトル" HorizontalAlignment="Right" 
 						 />
-		<TextBox Name="titol_tv" Text="タイトル" Grid.Row="6"  Grid.Column="1" Grid.ColumnSpan="3" 
+		<TextBox Name="titol_tv" 
+						Text="{Binding Path=eventTitle,Mode=TwoWay}"
+						Grid.Row="6"  Grid.Column="1" Grid.ColumnSpan="3" 
 								 />
 		<!--<StackPanel Grid.Row="3" Grid.Column="2"  Orientation="Horizontal"  Margin="10,0,0,0">
 			<ComboBox  Text="出欠確認:参加" Margin="0,0,10,0" Width="85" >
@@ -198,9 +209,10 @@
 			</ComboBox>
 			<Button Content="メモ/ゲストを追加" />
 		</StackPanel>-->
-		<Label Content="場所" Grid.Row="8" Grid.Column="0" 
+		<Label Grid.Row="8" Grid.Column="0" Content="場所"
 						HorizontalAlignment="Right" />
-		<TextBox Text="場所" Grid.Row="8"  Grid.Column="1"   Grid.ColumnSpan="3"
+		<TextBox Grid.Row="8"  Grid.Column="1"   Grid.ColumnSpan="3"
+						Text="{Binding Path=eventPlace,Mode=TwoWay}"
 						Name="location_tb" />
 		<!--<StackPanel Grid.Row="4" Grid.Column="2"  Grid.RowSpan="5" VerticalAlignment="Top"  Margin="10,5,0,5" >
 			<Button  Content="ゲストを追加" 
