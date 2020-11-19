@@ -943,7 +943,7 @@ namespace TabCon.ViewModels {
 			try {
 				if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
 					Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
-					progressWindow.Show();
+			//		progressWindow.Show();
 
 					Constant.GDriveFiles = new List<Google.Apis.Drive.v3.Data.File>();
 					Constant.GDriveFiles = GDriveUtil.GDAllFolderListUp();
@@ -1009,7 +1009,7 @@ namespace TabCon.ViewModels {
 						dbMsg += "[" + gFileId + "]";
 					}
 					AttachmentsFromDrive(fileItem);
-					progressWindow.Close();
+		//			progressWindow.Close();
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -1989,15 +1989,16 @@ namespace TabCon.ViewModels {
 		///////////////////////Livet Messenger用//
 		public static void MyLog(string TAG, string dbMsg)
 		{
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Module.Name+ "]" + dbMsg;
+			//dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			CS_Util Util = new CS_Util();
-			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			CS_Util Util = new CS_Util();
 			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
+			CS_Util Util = new CS_Util();
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 

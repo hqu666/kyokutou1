@@ -167,22 +167,31 @@ namespace TabCon.ViewModels
 		/// </summary>
 		public void CalenderWrite()
 		{
-			string TAG = "CalenderWrite";
+			string TAG = MethodBase.GetCurrentMethod().Name;
+		//	string TAG = "CalenderWrite";
 			string dbMsg = "";
 			try {
-				//	ReSizeView();
-				Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
-				progressWindow.Show();
 
+				//	ReSizeView();
+				Window progressWindow = new Window();
+				progressWindow.Width = 500;
+				progressWindow.Height = 140;
+				progressWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;	
+				progressWindow.Topmost = true;
+				progressWindow.Title = "しばらくお待ちください";
+				Controls.WaitingDLog waitingDLog = new Controls.WaitingDLog();
+				progressWindow.Content = waitingDLog;			//ユーザーコントロールをWindowに読み込む
+			//	progressWindow.ShowDialog();//	にすると処理が止まる
+											progressWindow.Show();  //にするとWaitingCircleが回らない
 
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
-				string msgStr = cStart + "～" + cEnd;
+				string msgStr = cStart + "～" + cEnd + "の予定を読み出しています";;
 				dbMsg += msgStr;
-				msgStr += "の予定を読み出しています" ;
-				progressWindow.SetMes(msgStr);
+				waitingDLog.SetMes(msgStr);
 				Events =WriteEvent();
 				msgStr = Events.Count + "件の予定が有りました";
+				waitingDLog.SetMes(msgStr);
 				ObservableCollection<t_events> orderedByStart =
 					new ObservableCollection<t_events>(
 							 Events.OrderBy(rec => rec.event_date_start)
@@ -197,6 +206,7 @@ namespace TabCon.ViewModels
 				foreach (t_events ev in orderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
 						msgStr = ":開始" + tDate + ">>" + ev.event_date_start + ":" + EDays.Count + "件";
+						waitingDLog.SetMes(msgStr);
 						dbMsg += msgStr;
 						aDay = new ADay(tDate, summarys, dEvents,this);
 						EDays.Add(aDay);
@@ -211,9 +221,8 @@ namespace TabCon.ViewModels
 				EDays.Add(aDay);
 				dbMsg += ",DateColWidth=" + DateColWidth;
 				RaisePropertyChanged(); //	"dataManager"
-	
-				progressWindow.Close();
-
+			progressWindow.Close();
+			//	waitingDLog.QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -226,7 +235,7 @@ namespace TabCon.ViewModels
 		/// <returns></returns>
 		public ObservableCollection<Models.t_events> WriteEvent()
 		{
-			string TAG = "WriteEvent";
+			string TAG = MethodBase.GetCurrentMethod().Name;
 			string dbMsg = "";
 			try {
 				dbMsg += "" + SelectedDateTime;
@@ -632,15 +641,16 @@ namespace TabCon.ViewModels
 		//////////////////////////////////////////////////登録//
 		public static void MyLog(string TAG, string dbMsg)
 		{
+			dbMsg = "[X_1_4ViewModel]" + dbMsg;
+			//TabCon.exe = MethodBase.GetCurrentMethod().Module.Name
 			CS_Util Util = new CS_Util();
-			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
+			dbMsg = "[X_1_4ViewModel]" + dbMsg;
 			CS_Util Util = new CS_Util();
-			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 

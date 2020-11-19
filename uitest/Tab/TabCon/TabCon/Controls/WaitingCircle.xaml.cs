@@ -9,7 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
+using System.Windows.Media.Animation;   //DoubleAnimationUsingKeyFramesなど
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -85,7 +85,8 @@ namespace TabCon.Controls {
 				kf.RepeatBehavior = RepeatBehavior.Forever;
 
 				//一点当たりの表示時間 default : 80
-				int OneDrow = 150;
+				int OneDrow = 80;
+				dbMsg += ",deg=" + deg;
 
 				for (int i = 0; i < cnt; ++i) {
 					kf.KeyFrames.Add(new DiscreteDoubleKeyFrame() {
@@ -125,16 +126,17 @@ namespace TabCon.Controls {
 		public void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
+			dbMsg = "[WaitingCircle]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
+			dbMsg = "[WaitingCircle]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 
 	}
 }
+/// https://araramistudio.jimdo.com/2016/11/24/wpf%E3%81%A7waitingcircle%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B/
