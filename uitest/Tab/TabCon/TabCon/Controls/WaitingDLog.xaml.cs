@@ -4,13 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Reflection;
 
 namespace TabCon.Controls {
 	/// <summary>
@@ -20,7 +14,7 @@ namespace TabCon.Controls {
 		public WaitingDLog()
 		{
 			string TAG = "WaitingDLog";
-			string dbMsg = "[WaitingDLog]";
+			string dbMsg = "";
 			try {
 				InitializeComponent();
 				MyLog(TAG, dbMsg);
@@ -32,7 +26,7 @@ namespace TabCon.Controls {
 		public void SetMes(string Msg)
 		{
 			string TAG = "SetMes";
-			string dbMsg = "[WaitingDLog]";
+			string dbMsg = "";
 			try {
 				Progress_msg_tb.Content = Msg;
 				MyLog(TAG, dbMsg);
@@ -46,12 +40,14 @@ namespace TabCon.Controls {
 		public void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			CS_Util Util = new CS_Util();
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 	}

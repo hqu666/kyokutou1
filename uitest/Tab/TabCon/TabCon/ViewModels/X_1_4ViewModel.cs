@@ -170,11 +170,19 @@ namespace TabCon.ViewModels
 			string TAG = "CalenderWrite";
 			string dbMsg = "";
 			try {
-			//	ReSizeView();
+				//	ReSizeView();
+				Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
+				progressWindow.Show();
+
+
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
-				dbMsg += cStart + "～" + cEnd;
-				Events=WriteEvent();
+				string msgStr = cStart + "～" + cEnd;
+				dbMsg += msgStr;
+				msgStr += "の予定を読み出しています" ;
+				progressWindow.SetMes(msgStr);
+				Events =WriteEvent();
+				msgStr = Events.Count + "件の予定が有りました";
 				ObservableCollection<t_events> orderedByStart =
 					new ObservableCollection<t_events>(
 							 Events.OrderBy(rec => rec.event_date_start)
@@ -188,7 +196,8 @@ namespace TabCon.ViewModels
 				ADay aDay = new ADay(tDate, summarys, dEvents ,this);
 				foreach (t_events ev in orderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
-						dbMsg +=":開始"+ tDate + ">>" + ev.event_date_start + ":" + EDays + "件";
+						msgStr = ":開始" + tDate + ">>" + ev.event_date_start + ":" + EDays.Count + "件";
+						dbMsg += msgStr;
 						aDay = new ADay(tDate, summarys, dEvents,this);
 						EDays.Add(aDay);
 						summarys = new List<string>();
@@ -202,6 +211,9 @@ namespace TabCon.ViewModels
 				EDays.Add(aDay);
 				dbMsg += ",DateColWidth=" + DateColWidth;
 				RaisePropertyChanged(); //	"dataManager"
+	
+				progressWindow.Close();
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

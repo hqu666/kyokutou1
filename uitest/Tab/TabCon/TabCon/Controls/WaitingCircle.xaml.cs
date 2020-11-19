@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reflection;
 
 namespace TabCon.Controls {
 	/// <summary>
@@ -37,7 +38,7 @@ namespace TabCon.Controls {
 		public WaitingCircle()
 		{
 			string TAG = "WaitingCircle";
-			string dbMsg = "[WaitingCircle]";
+			string dbMsg = "";
 			try {
 				InitializeComponent();
 				dbMsg += "MainCanvas[" + MainCanvas.Width + " × " + MainCanvas.Height + "]";
@@ -104,7 +105,7 @@ namespace TabCon.Controls {
 		public void OnCircleColorPropertyChanged(DependencyPropertyChangedEventArgs e)
 		{
 			string TAG = "OnCircleColorPropertyChanged";
-			string dbMsg = "[WaitingCircle]";
+			string dbMsg = "";
 			try {
 				if (null == MainCanvas) return;
 				if (null == MainCanvas.Children) return;
@@ -124,12 +125,14 @@ namespace TabCon.Controls {
 		public void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			CS_Util Util = new CS_Util();
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 
