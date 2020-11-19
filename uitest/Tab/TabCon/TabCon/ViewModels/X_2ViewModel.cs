@@ -23,6 +23,7 @@ using MySql.Data.MySqlClient;
 using TabCon.Models;
 using Task = System.Threading.Tasks.Task;
 using Livet.Messaging.Windows;
+using System.Reflection;
 
 namespace TabCon.ViewModels {
 	public class X_2ViewModel : ViewModel {
@@ -60,12 +61,90 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public Dictionary<string, string> EventComboSource { get; set; }
 		public int EventComboSelectedIndex { get; set; }
+	
 		/// <summary>
 		/// 背景色
 		/// </summary>
 		public Dictionary<string, string> ColorComboSource { get; set; }
-		public int ColorComboSelectedIndex { get; set; }
-		public string SelectedColorCord { get; set; }
+		public string souceEndValue = "選択...";
+		#region ColorCombo選択変更
+		private int _ColorComboSelectedIndex;
+		public int ColorComboSelectedIndex {
+			get {
+				return _ColorComboSelectedIndex;
+			}
+			set {
+				string TAG = "ColorComboSelectedIndex.set";
+				string dbMsg = "";
+				try {
+					if (value == _ColorComboSelectedIndex)
+						return;
+					_ColorComboSelectedIndex = value;
+
+					dbMsg += ",元の色 " + SelectedColorCord;
+					dbMsg += "＞＞[ " + value + "]";
+					//ColorCombo内で設定している色なら
+					if (ColorComboSelectedIndex < ColorComboSource.Count - 1) {
+						//対象イベントの背景色とXamColorPickerのSelectedColorに反映
+						eventBgColor = (ColorComboSelectedIndex + 1).ToString();
+						SelectedColorCord = ColorComboSource[eventBgColor];
+						RaisePropertyChanged("SelectedColorCord");
+					}
+					dbMsg += ">>変更色 " + SelectedColorCord;
+					RaisePropertyChanged();
+					MyLog(TAG, dbMsg);
+				} catch (Exception er) {
+					MyErrorLog(TAG, dbMsg, er);
+				}
+			}
+		}
+		#endregion
+
+		#region XamColorPicker選択変更
+		private string _SelectedColorCord;
+		public string SelectedColorCord {
+			get {
+				return _SelectedColorCord;
+			}
+			set {
+				string TAG = "SelectedColorCord.set";
+				string dbMsg = "";
+				try {
+					if (value == _SelectedColorCord)
+						return;
+					_SelectedColorCord = value;
+					eventBgColor = value;
+
+					dbMsg += ",元のColorCombo選択[" + ColorComboSelectedIndex + "]";
+					dbMsg += "＞＞選択色 " + value;
+					int SourceEndIndex = ColorComboSource.Count - 1;
+					//ColorCombo内で設定している色なら
+					if (ColorComboSource.ContainsValue(value)) {
+						//ColorCombono選択に反映
+						int combIndex = 0;
+						foreach (KeyValuePair<string, string> item in ColorComboSource) {
+							if(item.Value== value) {
+								break;
+							}
+							combIndex++;
+							//読み出しが最後のアイテムに達したら
+							if (item.Value.Equals(souceEndValue)) {
+								combIndex = SourceEndIndex;
+							}
+						}
+						ColorComboSelectedIndex = combIndex;
+					}else{
+						ColorComboSelectedIndex = SourceEndIndex;
+					}
+					dbMsg += ">>[" + ColorComboSelectedIndex +"/"+ SourceEndIndex + "]";
+					RaisePropertyChanged();
+					MyLog(TAG, dbMsg);
+				} catch (Exception er) {
+					MyErrorLog(TAG, dbMsg, er);
+				}
+			}
+		}
+		#endregion
 
 
 		//表示対象年月
@@ -219,7 +298,7 @@ namespace TabCon.ViewModels {
 					{ "10", "#616161" },
 					{ "11", "#0B8043" },
 					{ "12", "#D50000" },
-					{ "13", "選択..." },
+					{ "13", souceEndValue },
 				};
 				eventBgColor = tEvents.event_bg_color + "";
 				dbMsg += ",背景色=" + eventBgColor;
@@ -260,7 +339,7 @@ namespace TabCon.ViewModels {
 				RaisePropertyChanged();
 				if (value != null) {
 					string msgStr = EventComboSource[value].ToString() + "が選択されました";
-					//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
 					//		ReadTable(value);
 				}
@@ -268,25 +347,28 @@ namespace TabCon.ViewModels {
 		}
 		#endregion
 
-		#region 背景色選択
-		private ViewModelCommand _ColorComboCommand;
-		public ViewModelCommand ColorComboCommand {
-			get {
-				if (_ColorComboCommand == null) {
-					_ColorComboCommand = new ViewModelCommand(ColorComboChenge);
-				}
-				return _ColorComboCommand;
-			}
-		}
-
-		public void ColorComboChenge()
-		{
-			if(ColorComboSelectedIndex< ColorComboSource.Count - 1) {
-				eventBgColor = (ColorComboSelectedIndex + 1).ToString();
-				SelectedColorCord = ColorComboSource[eventBgColor];
-			}
-		}
-		#endregion
+		//#region ColorComboCommand  
+		//private ViewModelCommand _ColorComboCommand;
+		//public ViewModelCommand ColorComboCommand {
+		//	get {
+		//		if (_ColorComboCommand == null) {
+		//			_ColorComboCommand = new ViewModelCommand(ColorComboChenge);
+		//		}
+		//		return _ColorComboCommand;
+		//	}
+		//}
+	
+		///// <summary>
+		///// 背景色選択変更
+		///// </summary>
+		//public void ColorComboChenge()
+		//{
+		//	if(ColorComboSelectedIndex< ColorComboSource.Count - 1) {
+		//		eventBgColor = (ColorComboSelectedIndex + 1).ToString();
+		//		SelectedColorCord = ColorComboSource[eventBgColor];
+		//	}
+		//}
+		//#endregion
 
 
 		/// <summary>
@@ -1908,14 +1990,14 @@ namespace TabCon.ViewModels {
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[X_2ViewModel]" + dbMsg;
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[X_2ViewModel]" + dbMsg;
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 

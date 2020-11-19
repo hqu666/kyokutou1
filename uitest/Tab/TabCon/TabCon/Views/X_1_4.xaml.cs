@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,24 +33,25 @@ namespace TabCon.Views {
 			try {
 				DataGrid DG = sender as DataGrid;
 				VM.TargetEvent = (Models.t_events)DG.SelectedItem;
+				dbMsg += "" + VM.TargetEvent.event_date_start + "～" + VM.TargetEvent.event_date_end ;
+				dbMsg += ":" + VM.TargetEvent.event_title;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-
 		}
 
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[X_1_4]" + dbMsg;
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[X_1_4]" + dbMsg;
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 

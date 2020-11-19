@@ -136,10 +136,11 @@
 								SelectedIndex="{Binding Path=ColorComboSelectedIndex,Mode=TwoWay}" 
 								SelectedValuePath="Key" 
 								DisplayMemberPath="Value"
-								/>
-			<!--
-											SelectionChanged="{Binding Path=ColorComboCommand}"			
-			SelectionChanged="Color_cb_SelectionChanged"-->
+								>
+				<!--<i:EventTrigger EventName="SelectionChanged">
+					<i:InvokeCommandAction Command="{Binding ColorComboCommand}" />
+				</i:EventTrigger>   でクラッシュした-->
+			</ComboBox>
 			<ig:XamColorPicker 	x:Name="xamColorPicker" 
 					Grid.Row="1" Grid.Column="3"  Margin="0,10,0,10" MinWidth="40" 
 					SelectedColor="{Binding Path=SelectedColorCord,Mode=TwoWay}" 
@@ -374,11 +375,11 @@
 			-->
 			<!--AutoGenerateColumns	;	Columnsで定義していないBindingを表示しない-->
 			<DataGrid x:Name="Attachments_dg"
-				   HorizontalAlignment="Left" 
 				  Height="110"  Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
-				  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
+				  HorizontalAlignment="Stretch"
 				   SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
 				  AutoGenerateColumns="False" Background="#55F0F0F0"
+				  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
 				  >
 				<!--SelectionChanged="Attachments_SelectionChanged"-->
 				<DataGrid.Columns>
@@ -414,7 +415,9 @@
 		</Grid>
 		<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" x:Name="attachments_tb"
 								Grid.Row="13" Grid.Column="1"  Grid.ColumnSpan="3" TextAlignment="Center" 
-								HorizontalAlignment="Center"  VerticalAlignment="Center" Height="56" Margin="99,61,100,5" Panel.ZIndex="-1"  />
+								HorizontalAlignment="Center"  
+								VerticalAlignment="Center" 
+								 Panel.ZIndex="-1"  />
 
 		<!--<StackPanel   Grid.Row="14"  Grid.Column="1"  Grid.ColumnSpan="3" Orientation="Horizontal"  
 								HorizontalAlignment="Stretch"  VerticalAlignment="Top"  Margin="0" 
@@ -426,10 +429,12 @@
 								Fill="#FFE1E2E2" Stroke="Black" StrokeThickness="1" StrokeDashArray="5" Width="463" />
 		</StackPanel>     -->
 		<Label  Grid.Row="15" Grid.Column="0"   Content="メモ" HorizontalAlignment="Right" VerticalAlignment="Top"  />
-		<TextBox  Grid.Row="15" Grid.Column="1"  Grid.ColumnSpan="3" Height="80" Width="482"
+		<TextBox  Grid.Row="15" Grid.Column="1"  Grid.ColumnSpan="3" 
+						Height="80" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto"
+						HorizontalAlignment="Stretch"
 						Name="memo_tb"  
 						Text="{Binding Path=eventMemo,Mode=TwoWay}"
-						VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0"/>
+						/>
 
 		<Button   Grid.Row="16" Grid.Column="0" 
 				HorizontalAlignment="Left"  VerticalAlignment="Center" 

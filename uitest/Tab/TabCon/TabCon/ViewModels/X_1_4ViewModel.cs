@@ -502,12 +502,10 @@ namespace TabCon.ViewModels
 
 				_EventComboSelectedValue = value;
 				RaisePropertyChanged();
-				if (value != null) {
-					string msgStr = EventComboSource[value].ToString() + "が選択されました";
-					//			MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
-					//		ReadTable(value);
-				}
+				//if (value != null) {
+				//	string msgStr = EventComboSource[value].ToString() + "が選択されました";
+				//	MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				//}
 			}
 		}
 		#endregion
@@ -623,14 +621,14 @@ namespace TabCon.ViewModels
 		public static void MyLog(string TAG, string dbMsg)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[X_1_4ViewModel]" + dbMsg;
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyLog(TAG, dbMsg);
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
 			CS_Util Util = new CS_Util();
-			dbMsg = "[X_1_4ViewModel]" + dbMsg;
+			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
 

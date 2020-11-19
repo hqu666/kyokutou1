@@ -63,9 +63,11 @@
 
 				<DataGrid.Columns>
 					<DataGridTextColumn  Header="開始日" 
-													Width="{Binding Path=DateColWidth,Mode=TwoWay}" 
+													Width="120" 
 													Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
-					<!--<DataGridTemplateColumn Header="要約"/>-->
+					<!--
+													Width="{Binding Path=DateColWidth,Mode=TwoWay}" 
+					<DataGridTemplateColumn Header="要約"/>-->
 					<!--<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<DataGrid ItemsSource="{Binding events}"
@@ -157,11 +159,12 @@
 										IsReadOnly="True"
 										ItemsSource="{Binding events}" 
 										SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
-										SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" SelectionChanged="DataGrid_SelectionChanged" 
+										SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
+										SelectionChanged="DataGrid_SelectionChanged" 
 										>
 							<DataGrid.Columns>
 								<DataGridTextColumn  Header="開始日" 
-																Width="{Binding Path=DateColWidth}" 
+																	Width="120" 
 																/>
 								<!--
 								,Mode=TwoWay
@@ -184,6 +187,7 @@
 								<DataGridTextColumn Binding="{Binding summary }" >
 									<DataGridTextColumn.ElementStyle>
 										<Style TargetType="{x:Type TextBlock}">
+											<Setter Property="Background" Value="{Binding event_bg_color}"/>
 											<Setter Property="Background" Value="{Binding event_bg_color}"/>
 											<Setter Property="Foreground" Value="{Binding event_font_color}"/>
 										</Style>
