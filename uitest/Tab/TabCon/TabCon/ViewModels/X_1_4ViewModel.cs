@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Infragistics.Controls.Schedules;
 using Livet;
 using Livet.Commands;
 using Livet.Messaging;
@@ -16,6 +15,8 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 using MySql.Data.MySqlClient;
 using TabCon.Models;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace TabCon.ViewModels
 {
@@ -43,7 +44,6 @@ namespace TabCon.ViewModels
 		/// 表示対象年月
 		/// </summary>
 		public string CurrentDate { get; set; }
-		public XamMonthView cView { get; set; }
 		/// <summary>
 		/// Viewの高さ
 		/// </summary>
@@ -78,21 +78,21 @@ namespace TabCon.ViewModels
 		//	}
 		//}
 
-		#region Events変更通知プロパティ
-		private ObservableCollection<t_events> _Events;
-		/// <summary>
-		/// 予定配列
-		/// </summary>
-		public ObservableCollection<t_events> Events {
-			get { return _Events; }
-			set {
-				if (_Events == value)
-					return;
-				_Events = value;
-				RaisePropertyChanged("Events");
-			}
-		}
-		#endregion
+	//	#region Events変更通知プロパティ
+	//	private ObservableCollection<t_events> _Events;
+	////	/// <summary>
+	////	/// 予定配列
+	////	/// </summary>
+	//////	public ObservableCollection<t_events> Events {
+	////		get { return _Events; }
+	////		set {
+	////			if (_Events == value)
+	////				return;
+	////			_Events = value;
+	////			RaisePropertyChanged("Events");
+	////		}
+	////	}
+	////	#endregion
 
 		#region TargetEvent変更通知プロパティ
 		private t_events _TargetEvent;
@@ -111,6 +111,14 @@ namespace TabCon.ViewModels
 		}
 		#endregion
 
+		/// <summary>
+		/// ローディングダイアログクラス
+		/// </summary>
+		public Controls.WaitingDLog waitingDLog ;
+
+		/// <summary>
+		/// スケジュールリスト：ここからスタート
+		/// </summary>
 		public X_1_4ViewModel()
 		{
 			DateColWidth = 200.0;
@@ -168,30 +176,52 @@ namespace TabCon.ViewModels
 		public void CalenderWrite()
 		{
 			string TAG = MethodBase.GetCurrentMethod().Name;
-		//	string TAG = "CalenderWrite";
 			string dbMsg = "";
 			try {
+				waitingDLog = new Controls.WaitingDLog();
+				waitingDLog.Show(); //.ShowDialog(); だとこのオブジェクトは別のスレッドに所有されているため、呼び出しスレッドはこのオブジェクトにアクセスできません。
+									//waitingDLog=wDLog.Result;  だと　呼び出しスレッドは、多数の UI コンポーネントが必要としているため、STA である必要があります。
+									//	waitingDLog.ShowDialog();  // Show() にするとWaitingCircleが回らない
+									//						///////////WindowにユーザーコントロールをWindowに読み込む方法//
+									// this.EDays = CalenderWriteBody(waitingDLog);
+				Task<ObservableCollection<ADay>> EDays = Task.Run(() => {
+					//waitingDLog.Dispatcher.Invoke((Action)(() => {
+					//	waitingDLog.ShowDialog();  // Show() にするとWaitingCircleが回らない
+					//}));　だと表示もされない
+					//waitingDLog.ShowDialog(); だとこのオブジェクトは別のスレッドに所有されているため、呼び出しスレッドはこのオブジェクトにアクセスできません。
+					return CalenderWriteBody(waitingDLog);
+				});
+				EDays.Wait();
 
-				//	ReSizeView();
-				Window progressWindow = new Window();
-				progressWindow.Width = 500;
-				progressWindow.Height = 140;
-				progressWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;	
-				progressWindow.Topmost = true;
-				progressWindow.Title = "しばらくお待ちください";
-				Controls.WaitingDLog waitingDLog = new Controls.WaitingDLog();
-				progressWindow.Content = waitingDLog;			//ユーザーコントロールをWindowに読み込む
-			//	progressWindow.ShowDialog();//	にすると処理が止まる
-											progressWindow.Show();  //にするとWaitingCircleが回らない
+				//waitingDLog.Close();
+				waitingDLog.QuitMe();
+				waitingDLog = null;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
+		/// <summary>
+		/// カレンダ作成本体
+		/// </summary>
+		private ObservableCollection<ADay> CalenderWriteBody(Controls.WaitingDLog waitingDLog)
+		{
+			//
+			string TAG = MethodBase.GetCurrentMethod().Name;
+			string dbMsg = "";
+			EDays = new ObservableCollection<ADay>();
+			try {
 				DateTime cStart = new DateTime(SelectedDateTime.Year, SelectedDateTime.Month, 1);
 				DateTime cEnd = cStart.AddMonths(1).AddSeconds(-1);
-				string msgStr = cStart + "～" + cEnd + "の予定を読み出しています";;
+				string msgStr = cStart + "～" + cEnd + "の予定を読み出しています"; ;
 				dbMsg += msgStr;
 				waitingDLog.SetMes(msgStr);
-				Events =WriteEvent();
+				//Application.Current.Dispatcher.Invoke(new System.Action(() => this.waitingDLog.SetMes(msgStr)));
+				ObservableCollection<t_events> Events = WriteEvent();
 				msgStr = Events.Count + "件の予定が有りました";
-				waitingDLog.SetMes(msgStr);
+
+				//	Application.Current.Dispatcher.Invoke(new System.Action(() => waitingDLog.SetMes(msgStr)));
 				ObservableCollection<t_events> orderedByStart =
 					new ObservableCollection<t_events>(
 							 Events.OrderBy(rec => rec.event_date_start)
@@ -199,16 +229,15 @@ namespace TabCon.ViewModels
 										.ThenBy(rec => rec.event_date_end)
 							);
 				DateTime tDate = orderedByStart.First().event_date_start;
-				EDays = new  ObservableCollection<ADay>();
-				List<string>summarys = new List<string>();
+				List<string> summarys = new List<string>();
 				ObservableCollection<t_events> dEvents = new ObservableCollection<t_events>();
-				ADay aDay = new ADay(tDate, summarys, dEvents ,this);
+				ADay aDay = new ADay(tDate, summarys, dEvents, this);
 				foreach (t_events ev in orderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
 						msgStr = ":開始" + tDate + ">>" + ev.event_date_start + ":" + EDays.Count + "件";
-						waitingDLog.SetMes(msgStr);
+						//				Application.Current.Dispatcher.Invoke(new System.Action(() => waitingDLog.SetMes(msgStr)));
 						dbMsg += msgStr;
-						aDay = new ADay(tDate, summarys, dEvents,this);
+						aDay = new ADay(tDate, summarys, dEvents, this);
 						EDays.Add(aDay);
 						summarys = new List<string>();
 						dEvents = new ObservableCollection<t_events>();
@@ -217,17 +246,17 @@ namespace TabCon.ViewModels
 					dEvents.Add(ev);
 					summarys.Add(ev.summary);
 				}
-				 aDay = new ADay(tDate, summarys, dEvents,this);
+				aDay = new ADay(tDate, summarys, dEvents, this);
 				EDays.Add(aDay);
 				dbMsg += ",DateColWidth=" + DateColWidth;
 				RaisePropertyChanged(); //	"dataManager"
-			progressWindow.Close();
-			//	waitingDLog.QuitMe();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return EDays;
 		}
+
 
 		/// <summary>
 		/// 予定作成
@@ -237,11 +266,11 @@ namespace TabCon.ViewModels
 		{
 			string TAG = MethodBase.GetCurrentMethod().Name;
 			string dbMsg = "";
+			ObservableCollection<t_events> Events = new ObservableCollection<t_events>();
 			try {
 				dbMsg += "" + SelectedDateTime;
 				CS_Util Util = new CS_Util();
 				//予定取得///////////////////////////////////////////
-				Events = new ObservableCollection<t_events>();
 	//			ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
 				MySQLUtil = new MySQL_Util();
 				if (MySQLUtil.MySqlConnection()) {

@@ -2,13 +2,14 @@
 using System.Windows.Controls;
 using System.Reflection;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace TabCon.Controls {
 	/// <summary>
 	/// WaitingDLog.xaml の相互作用ロジック
 	/// </summary>
-	public partial class WaitingDLog : UserControl {
-//		public Window MyWindow;
+	public partial class WaitingDLog : Window {
+		public Window MyWindow;
 	/// <summary>
 	/// 呼べばローディングダイアログを開く
 	/// </summary>
@@ -25,31 +26,43 @@ namespace TabCon.Controls {
 			}
 		}
 
-	////ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
-	//private void this_loaded(object sender, RoutedEventArgs e)
-	//{
-	//		string TAG = "this_loaded";
-	//		string dbMsg = "";
-	//		try {
-	//			//ShowDialog();にするとこのダイアログの操作まで処理がとまる
-	//			//	Show();にするとWaitingCircleが回らない
-	//			MyWindow = Window.GetWindow(this);
-	//			MyWindow.Closing += window_Closing;
-	//			MyLog(TAG, dbMsg);
-	//		} catch (Exception er) {
-	//			MyErrorLog(TAG, dbMsg, er);
-	//		}
-	//	}
-	//	void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
-	//	{
-	//		string TAG = "window_Closing";
-	//		string dbMsg = "";
-	//		try {
-	//			MyLog(TAG, dbMsg);
-	//		} catch (Exception er) {
-	//			MyErrorLog(TAG, dbMsg, er);
-	//		}
-	//	}
+		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
+		private void this_loaded(object sender, RoutedEventArgs e)
+		{
+			string TAG = "this_loaded";
+			string dbMsg = "";
+			try {
+				//UserContlorの場合、Windowを生成して自分を入れる/////////////
+				//MyWindow = Window.GetWindow(this);
+				//MyWindow.Width = 500;
+				//MyWindow.Height = 140;
+				//MyWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+				//MyWindow.Topmost = true;
+				//MyWindow.Title = "しばらくお待ちください";
+				/////////////UserContlorの場合、Windowを生成して自分を入れる//
+				//	Application.Current.Dispatcher.Invoke(new System.Action(() => ShowDialog()));
+				//ShowDialog(); だけだと　このオブジェクトは別のスレッドに所有されているため、呼び出しスレッドはこのオブジェクトにアクセスできません。
+				//	MyWindow.Show();
+				//ShowDialog();にするとこのダイアログの操作まで処理がとまる
+				//	Show();			//にするとWaitingCircleが回らない
+				MyWindow = this;
+				MyWindow.Closing += window_Closing;
+				dbMsg += "＞＞表示";
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+		{
+			string TAG = "window_Closing";
+			string dbMsg = "";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		public void SetMes(string Msg)
 		{
@@ -57,7 +70,13 @@ namespace TabCon.Controls {
 			string dbMsg = "";
 			try {
 				dbMsg += "Msg=" + Msg;
+				//System.InvalidOperationException: このオブジェクトは別のスレッドに所有されているため、呼び出しスレッドはこのオブジェクトにアクセスできません。
 				Progress_msg_tb.Content = Msg;
+
+				//this.Dispatcher.Invoke((Action)(() =>
+				//{
+				//	Progress_msg_tb.Content = Msg;
+				//}));
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -72,8 +91,8 @@ namespace TabCon.Controls {
 			string TAG = MethodBase.GetCurrentMethod().Name;
 			string dbMsg = "";
 			try {
-			//	Close();
-				//if(MyWindow !=null) {
+				Close();
+				//if (MyWindow != null) {
 				//	MyWindow.Close();
 				//}
 				MyLog(TAG, dbMsg);

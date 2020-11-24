@@ -11,6 +11,7 @@ using Livet.Messaging;
 
 using TabCon.Models;
 using System.ComponentModel;
+using Infragistics.Windows.Controls;
 
 namespace TabCon.ViewModels {
 	//.ViewModel
@@ -227,7 +228,7 @@ namespace TabCon.ViewModels {
 			//MyView.ViewTab.MainTab.Width = rContent.MaxWidth;
 			//MyView.Info_lv.Content += "サイズは" + MyView.ViewTab.MainTab.Width + "×" + MyView.ViewTab.MainTab.Height + "]です";
 
-			TabItem tab = new TabItem();
+			TabItemEx tab = new TabItemEx();
 			//タブの表示名はコントロールのTitleから取得・別名の指定が有れば書き換え
 			tab.Header = rContent.Title;                        ///"Tab" + (MyView.ViewTab.MainTab.Items.Count + 1);
 			if(!ReTitle.Equals("")) {
@@ -245,6 +246,7 @@ namespace TabCon.ViewModels {
 			//追加した物を選択状態にしてタブコントロールに追加
 			tab.IsSelected = true;
 			MyView.ViewTab.MainTab.Items.Add(tab);
+			
 		}
 
 		/// <summary>

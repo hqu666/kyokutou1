@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TabCon"
+			 xmlns:igWindows="http://infragistics.com/Windows"
+			  xmlns:controls="clr-namespace:TabCon.Controls"
+			  xmlns:res="clr-namespace:TabCon.Properties"
+			  xmlns:src="clr-namespace:TabCon.Behaviors"
 			 xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
 			 mc:Ignorable="d" 
 			 Width="Auto" Height="Auto"
@@ -44,8 +47,7 @@
 							HorizontalAlignment="Right" Margin="20,5,5,5" Width="100" Click="AddWindow_Click" />
 			</StackPanel>
 		</StackPanel>
-
-		<igWPF:XamTabControl  x:Name="MainTab" 
+		<igWindows:XamTabControl  x:Name="MainTab" 
 				ItemsSource="{Binding TabItems}" 
 				SelectedItem="{Binding TabSelected}" 
 				Width="Auto" Height="Auto" 
@@ -58,10 +60,11 @@
 				 MinimumTabExtent="100"
 				 InterTabSpacing="2" 
 				 InterRowSpacing="2"
-				 AllowTabClosing="False"  ShowTabHeaderCloseButton="True"
+				 ShowTabHeaderCloseButton="True"
 				 Margin="10,0,10,10"
-				 ScrollViewer.CanContentScroll="True"
-				 />
-    </Grid>
+				 ScrollViewer.CanContentScroll="True" 
+				 AllowTabClosing="True"
+				/>
+	</Grid>
 
 </UserControl>
