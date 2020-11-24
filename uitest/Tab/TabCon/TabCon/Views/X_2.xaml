@@ -82,6 +82,35 @@
 			<Setter Property="Panel.ZIndex" Value="90" />
 		</Style>
 
+		<Style TargetType="Button"
+           x:Key="CalendarButtons">
+			<Setter Property="Control.Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Button x:Name="PART_Button" Width="20"/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="DatePicker"
+           x:Key="DateTimeCalendar">
+			<Setter Property="Control.Template"   Value="{StaticResource CalendarButtons}"/>
+		</Style>
+
+		<!--
+		<DatePicker.Resources>
+			<Style TargetType="{x:Type Button}">
+				<Setter Property="Control.Template">
+					<Setter.Value>
+						<ControlTemplate>
+							<Button x:Name="PART_Button" Width="Auto"/>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</DatePicker.Resources>
+		-->
+
 	</Window.Resources>
 
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10">
@@ -145,12 +174,12 @@
 					Grid.Row="1" Grid.Column="3"  Margin="0,10,0,10" MinWidth="40" 
 					SelectedColor="{Binding Path=SelectedColorCord,Mode=TwoWay}" 
 					>
-					<!--
+				<!--
 						ShowAdvancedEditorButton="True"
 							ShowDerivedColorPalettes="True" 
 				SelectedColorChanged="XamColorPicker_SelectedColorChanged"
 							-->
-					<!-- カスタム パレット;10しか追加できない -->
+				<!-- カスタム パレット;10しか追加できない -->
 				<!--<ig:XamColorPicker.ColorPalettes>
 					<ig:ColorPalette>
 						<ig:ColorPalette.Colors>
@@ -185,15 +214,13 @@
 		<Label Content="開始日時" Grid.Row="3"  Grid.Column="0"  
 					HorizontalAlignment="Right" />
 		<StackPanel  Grid.Row="3"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
-			<DatePicker  Name="start_date_dp" 
-								SelectedDate="{Binding Path=eventDateStart,Mode=TwoWay}" 
-								HorizontalAlignment="Left"  Width="190"
-								SelectedDateFormat="Long" VerticalAlignment="Center"
+			<DatePicker  x:Name="start_date_dp" 
+								SelectedDateFormat="Long" 
+								SelectedDate="{Binding Path=eventDateStart, Mode=TwoWay}"
 								>
-								<!--SelectedDateChanged="Start_date_dp_SelectedDateChanged"-->
 				<!--サイズ変更実験-->
 				<DatePicker.CalendarStyle>
-					<Style TargetType="Calendar">
+					<Style TargetType="{x:Type Calendar}">
 						<Setter Property="LayoutTransform">
 							<Setter.Value>
 								<ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
@@ -201,13 +228,28 @@
 						</Setter>
 					</Style>
 				</DatePicker.CalendarStyle>
+				<DatePicker.Resources>
+					<Style TargetType="{x:Type Button}">
+						<Setter Property="Control.Template">
+							<Setter.Value>
+								<ControlTemplate>
+									<Button x:Name="PART_Button" 
+												Width="Auto"
+									/>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DatePicker.Resources>
 			</DatePicker>
-			<ComboBox ItemsSource="{Binding Path=TSList}"  
-								SelectedItem="{Binding Path=eventTimeStart,Mode=TwoWay}" />
+
+			<ComboBox ItemsSource="{Binding TSList}"  
+								SelectedItem="{Binding eventTimeStart, Mode=TwoWay}" />
 			<!--<local:TimePic x:Name="start_time_tp"   VerticalAlignment="Center"  
 								TimeSelectionChanged="Start_time_tp_SelectedTimeChanged"   />-->
-			<CheckBox Name="daylong_cb" Content="終日" 
-								IsChecked="{Binding Path=eventTimeEnd,Mode=TwoWay}"
+	
+			<CheckBox x:Name="daylong_cb" Content="終日" 
+								IsChecked="{Binding eventTimeEnd, Mode=TwoWay}"
 								 HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
 								/>
 			<!--Click="Daylong_cb_Click"-->
@@ -217,10 +259,26 @@
 		<StackPanel  Grid.Row="4"  Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" >
 
 			<DatePicker SelectedDateFormat="Long" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190"
-								Name="end_date_dp"
+							Name="end_date_dp"
 								SelectedDate="{Binding Path=eventDateEnd,Mode=TwoWay}" 
-								/>
-									<!--SelectedDateChanged="End_date_dp_SelectedDateChanged"-->
+								>
+				<DatePicker.Resources>
+					<Style TargetType="{x:Type Button}">
+						<Setter Property="Control.Template">
+							<Setter.Value>
+								<ControlTemplate>
+									<Button x:Name="PART_Button" 
+												Width="Auto"
+									/>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DatePicker.Resources>
+
+				</DatePicker>
+			<!--									Style="{StaticResource DateTimeCalendar}"
+ SelectedDateChanged="End_date_dp_SelectedDateChanged"-->
 			<ComboBox ItemsSource="{Binding Path=TSList}"  
 								SelectedItem="{Binding Path=eventTimeEnd,Mode=TwoWay}" />
 
