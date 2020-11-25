@@ -1,0 +1,199 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:igDP="http://infragistics.com/DataPresenter">
+	<ResourceDictionary.MergedDictionaries>
+		<!--<ResourceDictionary Source="/Resources/Custom.Controls.Scrollbars.xaml" />-->
+		<ResourceDictionary Source="CheckboxResource.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
+	<!-- XamDataGrid -->
+	<Style TargetType="{x:Type igDP:XamDataGrid}" x:Key="SearchGrid">
+		<Setter Property="AutoFit" Value="True" />
+		<Setter Property="GroupByAreaLocation" Value="None" />
+		<Setter Property="ScrollingMode" Value="Immediate" />
+		<!--<Setter Property="Theme" Value="Metro" />-->
+		<Setter Property="FieldSettings">
+			<Setter.Value>
+				<igDP:FieldSettings
+                    AllowEdit="False"
+                    CellClickAction="SelectRecord"
+                    />
+			</Setter.Value>
+		</Setter>
+		<Setter Property="FieldLayoutSettings">
+			<Setter.Value>
+				<igDP:FieldLayoutSettings
+                    AutoArrangeCells="Never"
+                    AllowAddNew="False"
+                    AllowDelete="False"
+                    HighlightAlternateRecords="True"
+                    SelectionTypeCell="None"
+                    SelectionTypeRecord="Single"
+                    AutoGenerateFields="False"
+                    />
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="{x:Type igDP:XamDataGrid}" x:Key="NoSortGrid" BasedOn="{StaticResource SearchGrid}">
+		<Setter Property="FieldSettings">
+			<Setter.Value>
+				<igDP:FieldSettings
+                    AllowEdit="False"
+                    CellClickAction="SelectRecord"
+                    LabelClickAction="Nothing"
+                    />
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!-- XamDataGrid -->
+	<Style TargetType="{x:Type igDP:XamDataGrid}" x:Key="EditGrid">
+		<Setter Property="AutoFit" Value="False" />
+		<Setter Property="GroupByAreaLocation" Value="None" />
+		<Setter Property="ScrollingMode" Value="Immediate" />
+		<Setter Property="FieldSettings">
+			<Setter.Value>
+				<igDP:FieldSettings
+                    AllowEdit="True"
+                    CellClickAction="EnterEditModeIfAllowed"
+                    />
+			</Setter.Value>
+		</Setter>
+		<Setter Property="FieldLayoutSettings">
+			<Setter.Value>
+				<igDP:FieldLayoutSettings
+                    AutoArrangeCells="Never"
+                    AllowAddNew="False"
+                    AllowDelete="False"
+                    HighlightAlternateRecords="True"
+                    SelectionTypeCell="None"
+                    SelectionTypeRecord="Single"
+                    AutoGenerateFields="False"
+                    />
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+	<Style TargetType="{x:Type igDP:RecordListControl}" x:Key="RecordListControlStyle">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type igDP:RecordListControl}">
+					<ScrollViewer PanningMode="Both" CanContentScroll="true" Focusable="false" >
+						<ItemsPresenter RenderTransform="{TemplateBinding ScrollableElementTransform}" />
+					</ScrollViewer>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="CheckBoxHeaderPrefixArea" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
+		<Setter Property="Visibility" Value="Visible" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type igDP:HeaderPrefixArea}">
+					<CheckBox
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        Style="{StaticResource LargerCheckbox}"
+                        IsChecked="{Binding Path=DataPresenter.DataContext.AllMembersAreChecked, Mode=TwoWay}">
+					</CheckBox>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Margin" Value="5" />
+	</Style>
+	<Style x:Key="CheckBoxHeaderPrefixAreaNoImage" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
+		<Setter Property="Visibility" Value="Visible" />
+		<Setter Property="Margin" Value="5" />
+	</Style>
+
+	<Style x:Key="RecordSelectorTargetHeader" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type igDP:HeaderPrefixArea}">
+					<Label Content="対象"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Margin" Value="5" />
+	</Style>
+
+	<Style x:Key="CheckBoxRecordSelector" TargetType="{x:Type igDP:RecordSelector}" BasedOn="{x:Null}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type igDP:RecordSelector}">
+					<CheckBox 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource LargerCheckbox}"
+                        IsChecked="{Binding Path=DataItem.IsChecked, Mode=TwoWay}">
+					</CheckBox>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Margin" Value="5" />
+	</Style>
+
+	<Style x:Key="RecordSelectorTargetHeaderNoMargin" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type igDP:HeaderPrefixArea}">
+					<Label Content="対象"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Margin" Value="0,5" />
+	</Style>
+	<Style x:Key="CheckBoxRecordSelectorNoMargin" TargetType="{x:Type igDP:RecordSelector}" BasedOn="{x:Null}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type igDP:RecordSelector}">
+					<CheckBox 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource LargerCheckbox}"
+                        IsChecked="{Binding Path=DataItem.IsChecked, Mode=TwoWay}">
+					</CheckBox>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Margin" Value="0,5" />
+	</Style>
+	<Style x:Key="xam" TargetType="{x:Type igDP:DataRecordCellArea}">
+		<Setter Property="BackgroundHover" Value="Transparent" />
+		<Setter Property="BackgroundSelected" Value="Transparent" />
+		<Setter Property="BackgroundActive" Value="{StaticResource SelectionHilightBrush}" />
+	</Style>
+
+	<!--XamDataGridStyleから移動-->
+	<Style x:Key="RecordColor" TargetType="{x:Type igDP:DataRecordCellArea}">
+		<Setter Property="BackgroundHover" Value="Transparent" />
+		<Setter Property="BackgroundSelected" Value="Transparent" />
+		<Setter Property="BackgroundActive" Value="{StaticResource SelectionHilightBrush}" />
+	</Style>
+	<Style x:Key="ClickableRecordColor" TargetType="{x:Type igDP:DataRecordCellArea}">
+		<Setter Property="BackgroundHover" Value="Transparent" />
+		<Setter Property="BackgroundSelected" Value="Transparent" />
+		<Setter Property="BackgroundActive" Value="{StaticResource DoubleClickableSelectionHilightBrush}" />
+	</Style>
+
+	<Style x:Key="SelectableClickableRecordColor" TargetType="{x:Type igDP:DataRecordCellArea}">
+		<Style.Triggers>
+			<!--<DataTrigger Binding="{Binding DataItem.IsClickableRow}" Value="True">-->
+			<DataTrigger Binding="{Binding DataPresenter.DataContext.IsClickableRow}" Value="True">
+				<Setter Property="BackgroundHover" Value="Transparent" />
+				<Setter Property="BackgroundSelected" Value="Transparent" />
+				<Setter Property="BackgroundActive" Value="{StaticResource DoubleClickableSelectionHilightBrush}" />
+			</DataTrigger>
+			<!--<DataTrigger Binding="{Binding DataItem.IsClickableRow}" Value="False">-->
+			<DataTrigger Binding="{Binding DataPresenter.DataContext.IsClickableRow}" Value="False">
+				<Setter Property="BackgroundHover" Value="Transparent" />
+				<Setter Property="BackgroundSelected" Value="Transparent" />
+				<Setter Property="BackgroundActive" Value="{StaticResource SelectionHilightBrush}" />
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+	<!---->
+</ResourceDictionary>

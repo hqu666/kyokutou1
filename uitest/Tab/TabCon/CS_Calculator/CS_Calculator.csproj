@@ -128,6 +128,9 @@
     <PackageReference Include="LivetExtensions">
       <Version>3.2.3.1</Version>
     </PackageReference>
+    <PackageReference Include="MahApps.Metro">
+      <Version>2.3.4</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
       <Version>1.1.19</Version>
     </PackageReference>

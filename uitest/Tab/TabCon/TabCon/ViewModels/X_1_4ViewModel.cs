@@ -61,38 +61,31 @@ namespace TabCon.ViewModels
 		/// 選択された日
 		/// </summary>
 		public ADay TatagetDay{ get; set; }
+		/// <summary>
+		/// 開始日順の対象イベント配列
+		/// </summary>
+		public ObservableCollection<t_events> OrderedByStart { get; set; }
 		public int selectedDateIndex { set; get; }
 
 		public int selectedIndex { set; get; }
-		//public t_events _TargetEvent;
-		///// <summary>
-		///// 操作対象の予定
-		///// </summary>
-		//public t_events TargetEvent {
-		//	get { return _TargetEvent; }
-		//	set {
-		//		if (_TargetEvent == value)
-		//			return;
-		//	//	_TargetEvent = new t_events();
-		//		_TargetEvent = value;
-		//	}
-		//}
 
-	//	#region Events変更通知プロパティ
-	//	private ObservableCollection<t_events> _Events;
-	////	/// <summary>
-	////	/// 予定配列
-	////	/// </summary>
-	//////	public ObservableCollection<t_events> Events {
-	////		get { return _Events; }
-	////		set {
-	////			if (_Events == value)
-	////				return;
-	////			_Events = value;
-	////			RaisePropertyChanged("Events");
-	////		}
-	////	}
-	////	#endregion
+
+
+		//	#region Events変更通知プロパティ
+		//	private ObservableCollection<t_events> _Events;
+		////	/// <summary>
+		////	/// 予定配列
+		////	/// </summary>
+		//////	public ObservableCollection<t_events> Events {
+		////		get { return _Events; }
+		////		set {
+		////			if (_Events == value)
+		////				return;
+		////			_Events = value;
+		////			RaisePropertyChanged("Events");
+		////		}
+		////	}
+		////	#endregion
 
 		#region TargetEvent変更通知プロパティ
 		private t_events _TargetEvent;
@@ -222,17 +215,17 @@ namespace TabCon.ViewModels
 				msgStr = Events.Count + "件の予定が有りました";
 
 				//	Application.Current.Dispatcher.Invoke(new System.Action(() => waitingDLog.SetMes(msgStr)));
-				ObservableCollection<t_events> orderedByStart =
+				OrderedByStart =
 					new ObservableCollection<t_events>(
 							 Events.OrderBy(rec => rec.event_date_start)
 										.ThenBy(rec => rec.event_time_start)
 										.ThenBy(rec => rec.event_date_end)
 							);
-				DateTime tDate = orderedByStart.First().event_date_start;
+				DateTime tDate = OrderedByStart.First().event_date_start;
 				List<string> summarys = new List<string>();
 				ObservableCollection<t_events> dEvents = new ObservableCollection<t_events>();
 				ADay aDay = new ADay(tDate, summarys, dEvents, this);
-				foreach (t_events ev in orderedByStart) {
+				foreach (t_events ev in OrderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
 						msgStr = ":開始" + tDate + ">>" + ev.event_date_start + ":" + EDays.Count + "件";
 						//				Application.Current.Dispatcher.Invoke(new System.Action(() => waitingDLog.SetMes(msgStr)));
@@ -720,6 +713,20 @@ namespace TabCon.ViewModels
 					_selectedIndex = value;
 					rootClass.selectedIndex = value;
 					//			RaisePropertyChanged("selectedIndex");
+				}
+			}
+
+			public bool _IsChecked;
+			/// <summary>
+			/// リスト先頭のチェック
+			/// </summary>
+			public bool IsChecked {
+				get { return _IsChecked; }
+				set {
+					if (_IsChecked == value)
+						return;
+
+					_IsChecked = value;
 				}
 			}
 

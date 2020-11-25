@@ -145,14 +145,17 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
-
-
+		
 		//表示対象年月
 		public DateTime SelectedDateTime;
 		/// <summary>
 		/// 表示対象年月
 		/// </summary>
 		public string CurrentDate { get; set; }
+		/// <summary>
+		/// 個々の開催期間；終了-開始
+		/// </summary>
+		public TimeSpan EventTimeSpan;
 
 		/// <summary>
 		/// 予定配列
@@ -178,26 +181,6 @@ namespace TabCon.ViewModels {
 		///イベント種別 :※固定値：イベント種別
 		///</summary>
 		public int eventType { get; set; }
-		///<summary>
-		///イベント開始日 :未登録案件はnull
-		///</summary>
-		public DateTime? eventDateStart { get; set; }
-		///<summary>
-		///イベント開始時刻 :※固定値：イベント時刻
-		///</summary>
-		public int eventTimeStart { get; set; }
-		///<summary>
-		///イベント終了日
-		///</summary>
-		public DateTime? eventDateEnd { get; set; }
-		///<summary>
-		///イベント終了時刻 :※固定値：イベント時刻
-		///</summary>
-		public int? eventTimeEnd { get; set; }
-		///<summary>
-		///終日
-		///</summary>
-		public bool? eventIsDaylong { get; set; }
 		///<summary>
 		///タイトル
 		///</summary>
@@ -269,13 +252,16 @@ namespace TabCon.ViewModels {
 				EventComboSelectedIndex = eventType - 1;
 				dbMsg += "[" + EventComboSelectedIndex + "]";
 				RaisePropertyChanged();
-				eventDateStart = tEvents.event_date_start;
-				eventTimeStart = tEvents.event_time_start;
-				eventDateEnd = tEvents.event_date_end;
-				eventTimeEnd = tEvents.event_time_end;
-				dbMsg += "  , " + eventDateStart + ":" + eventTimeStart + "時～" + eventDateEnd + "：" + eventDateStart + "時";
-				eventIsDaylong = tEvents.event_is_daylong;
-				dbMsg += ",終日=" + eventIsDaylong;
+				EventDateStart = tEvents.event_date_start;
+				EventTimeStart = tEvents.event_time_start;
+				EventDateEnd = tEvents.event_date_end;
+				EventTimeEnd = tEvents.event_time_end;
+				dbMsg += "  , " + EventDateStart + ":" + EventTimeStart + "時～" + EventDateEnd + "：" + EventDateStart + "時";
+				EventIsDaylong = tEvents.event_is_daylong;
+				dbMsg += ",終日=" + EventIsDaylong;
+				EventTimeSpan = (DateTime)EventDateEnd - (DateTime)EventDateStart;
+				dbMsg += ",開催期間=" + EventTimeSpan;
+				SetDate();
 
 				eventTitle = tEvents.event_title + "";
 				eventPlace = tEvents.event_place + "";
@@ -347,30 +333,6 @@ namespace TabCon.ViewModels {
 		}
 		#endregion
 
-		//#region ColorComboCommand  
-		//private ViewModelCommand _ColorComboCommand;
-		//public ViewModelCommand ColorComboCommand {
-		//	get {
-		//		if (_ColorComboCommand == null) {
-		//			_ColorComboCommand = new ViewModelCommand(ColorComboChenge);
-		//		}
-		//		return _ColorComboCommand;
-		//	}
-		//}
-	
-		///// <summary>
-		///// 背景色選択変更
-		///// </summary>
-		//public void ColorComboChenge()
-		//{
-		//	if(ColorComboSelectedIndex< ColorComboSource.Count - 1) {
-		//		eventBgColor = (ColorComboSelectedIndex + 1).ToString();
-		//		SelectedColorCord = ColorComboSource[eventBgColor];
-		//	}
-		//}
-		//#endregion
-
-
 		/// <summary>
 		/// 開始直後、対象イベントの設定内容を読取りViewを初期構成
 		/// </summary>
@@ -400,6 +362,117 @@ namespace TabCon.ViewModels {
 			}
 		}
 
+		#region 開始日変更		EventDateStart
+		private DateTime _eventDateStart;
+		///<summary>
+		///イベント開始日 :未登録案件はnull
+		///</summary>
+		public DateTime EventDateStart {
+			get {
+				return _eventDateStart;
+			}
+			set {
+				if (value == _eventDateStart)
+					return;
+				if (value != null) {
+					_eventDateStart = value;
+				}else{
+					_eventDateStart = DateTime.Now;
+				}
+				SetDate();
+			}
+		}
+		#endregion
+
+		#region 開始時刻変更		EventTimeStart
+		private int _eventTimeStart;
+		///<summary>
+		///イベント開始時刻 :※固定値：イベント時刻
+		///</summary>
+		public int EventTimeStart {
+			get {
+				return _eventTimeStart;
+			}
+			set {
+				if (value == _eventTimeStart)
+					return;
+
+				if (value != null) {
+					_eventTimeStart = value;
+				} else {
+					_eventTimeStart = DateTime.Now.Hour;
+				}
+				SetDate();
+			}
+		}
+		#endregion
+
+		#region 終了日変更		EventDateEnd
+		private DateTime _eventDateEnd;
+		///<summary>
+		///イベント終了日
+		///</summary>
+		public DateTime EventDateEnd {
+			get {
+				return _eventDateStart;
+			}
+			set {
+				if (value == _eventDateEnd)
+					return;
+				if (value != null) {
+					_eventDateEnd = value;
+				} else {
+					_eventDateEnd = DateTime.Now;
+				}
+				SetDate();
+			}
+		}
+		#endregion
+
+		#region 終了時刻変更		EventTimeEnd
+		private int _eventTimeEnd;
+		///<summary>
+		///イベント終了時刻 :※固定値：イベント時刻
+		///</summary>
+		public int EventTimeEnd {
+			get {
+				return _eventTimeEnd;
+			}
+			set {
+				if (value == _eventTimeEnd)
+					return;
+
+				if (value != null) {
+					_eventTimeEnd = (int)value;
+				} else {
+					_eventTimeEnd = EventDateStart.Hour + 1;
+				}
+				SetDate();
+			}
+		}
+		#endregion
+
+		#region 終日		EventIsDaylong
+		private bool _eventIsDaylong;
+		///<summary>
+		///終日予定ならtrue
+		///</summary>
+		public bool EventIsDaylong {
+			get {
+				return _eventIsDaylong;
+			}
+			set {
+				if (value == _eventIsDaylong)
+					return;
+
+				if (value != null) {
+					_eventIsDaylong = (bool)value;
+				}
+				SetDate();
+			}
+		}
+		#endregion
+
 		/// <summary>
 		/// 開始・終了の日時設定
 		/// </summary>
@@ -407,52 +480,78 @@ namespace TabCon.ViewModels {
 		private void SetDate()
 		{
 			string TAG = "SetDate";
-			string dbMsg = "[GEventEdit]";
-			//Google.Apis.Calendar.v3.Data.Event eventItem
+			string dbMsg = "";
 			try {
-				dbMsg += "," + tEvents.event_date_start + " " + tEvents.event_time_start;
-				TimeSpan nonTS = new TimeSpan(0, 0, 0);
-				dbMsg += ",TimeSpan未設定=" + nonTS;
-				DateTime now = DateTime.Now;
-				//DateTime originalSDT = GCalendarUtil.EventDateTime2DT(eventItem.OriginalStartTime);
-				//dbMsg += ",OriginalStartTime=" + originalSDT;
-				//if (now == originalSDT) {
-				//	dbMsg += ">>現在時刻";
-				//}
-				DateTime startDT = tEvents.event_date_start;	//GCalendarUtil.EventDateTime2DT(eventItem.Start);
-				TimeSpan startDTT = startDT.TimeOfDay;
-				if (0 < tEvents.event_time_start) {
-					startDTT = new TimeSpan(tEvents.event_time_start, 0, 0);
+				dbMsg += ",終日=" + EventIsDaylong;
+				dbMsg += "," + EventDateStart + " " + EventTimeStart;
+				dbMsg += "～" + EventDateEnd + " " + EventTimeEnd;
+				if (EventIsDaylong) {
+					EventDateStart = new DateTime(EventDateStart.Year, EventDateStart.Month, EventDateStart.Day, 0, 0, 0);
+					EventDateEnd = new DateTime(EventDateStart.Year, EventDateStart.Month, EventDateStart.Day, 23, 59, 59);
+				} else {
+					EventDateStart = new DateTime(EventDateStart.Year, EventDateStart.Month, EventDateStart.Day, EventTimeStart, 0, 0);
+					EventDateEnd = new DateTime(EventDateStart.Year, EventDateStart.Month, EventDateStart.Day, EventTimeEnd, 0, 0);
 				}
-				DateTime endDT = tEvents.event_date_end;  //GCalendarUtil.EventDateTime2DT(eventItem.End);
-				TimeSpan endDTT = endDT.TimeOfDay;
-				if (0 < tEvents.event_time_end) {
-					startDTT = new TimeSpan(tEvents.event_time_end, 0, 0);
+				dbMsg += ">>" + EventDateStart +" ～ " + EventDateEnd;
+				if(EventDateEnd< EventDateStart) {
+					dbMsg += ">>開始終了逆転";
+					DateTime TemporaryEnd = EventDateStart + EventTimeSpan;
+					//if (EventIsDaylong) {
+					//	TemporaryEnd = EventDateStart.AddDays(1);
+					//}
+					string msgStr = "開始と終了が逆転しています。";
+					msgStr = "\r\n" + EventDateStart + " ～ " + EventDateEnd;
+					msgStr = "\r\n終了を " + TemporaryEnd + " に仮修正しますので必要に応じて再修正して下さい。";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				}
-				dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
-				MyView.start_date_dp.SelectedDate = tEvents.event_date_start;
-				int selectedHours = (int)tEvents.event_time_start;
-				int selectedMinutes = 0;
-				int selectedSeconds = 0;
-				TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
-		//		MyView.start_time_tp.SetMyTimeSpan(selectedTime);
-				dbMsg += "～" + tEvents.event_date_end + " " + tEvents.event_time_end;
-				MyView.end_date_dp.SelectedDate = tEvents.event_date_end;
-				selectedHours = (int)tEvents.event_time_end;
-				selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
-		//		MyView.end_time_tp.SetMyTimeSpan(selectedTime);
-				if (tEvents.event_is_daylong == true) {
-					dbMsg += ">終日>";
-					//MyView.start_time_tp.Visibility = System.Windows.Visibility.Hidden;
-					//MyView.end_time_tp.Visibility = System.Windows.Visibility.Hidden;
-				}
-				if (startDTT == nonTS) {
-					//start_time_tp.Visibility = System.Windows.Visibility.Hidden;
-				}
-				//MyView.end_time_tp.SetMyTimeSpan(endDTT);
-				if (endDTT == nonTS) {
-					//MyView.end_time_tp.Visibility = System.Windows.Visibility.Hidden;
-				}
+
+				EventTimeSpan = (DateTime)EventDateEnd - (DateTime)EventDateStart;
+				dbMsg += ",開催期間=" + EventTimeSpan;
+
+
+		//		TimeSpan nonTS = new TimeSpan(0, 0, 0);
+		//		dbMsg += ",TimeSpan未設定=" + nonTS;
+		//		DateTime now = DateTime.Now;
+		//		//DateTime originalSDT = GCalendarUtil.EventDateTime2DT(eventItem.OriginalStartTime);
+		//		//dbMsg += ",OriginalStartTime=" + originalSDT;
+		//		//if (now == originalSDT) {
+		//		//	dbMsg += ">>現在時刻";
+		//		//}
+		//		DateTime startDT = tEvents.event_date_start;	//GCalendarUtil.EventDateTime2DT(eventItem.Start);
+		//		TimeSpan startDTT = startDT.TimeOfDay;
+		//		if (0 < tEvents.event_time_start) {
+		//			startDTT = new TimeSpan(tEvents.event_time_start, 0, 0);
+		//		}
+		//		DateTime endDT = tEvents.event_date_end;  //GCalendarUtil.EventDateTime2DT(eventItem.End);
+		//		TimeSpan endDTT = endDT.TimeOfDay;
+		//		if (0 < tEvents.event_time_end) {
+		//			startDTT = new TimeSpan(tEvents.event_time_end, 0, 0);
+		//		}
+		//		dbMsg += "," + startDT + "(" + startDTT + ")～" + endDT + "(" + endDTT + ")";
+		//		MyView.start_date_dp.SelectedDate = tEvents.event_date_start;
+		//		int selectedHours = (int)tEvents.event_time_start;
+		//		int selectedMinutes = 0;
+		//		int selectedSeconds = 0;
+		//		TimeSpan selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
+		////		MyView.start_time_tp.SetMyTimeSpan(selectedTime);
+		//		dbMsg += "～" + tEvents.event_date_end + " " + tEvents.event_time_end;
+		//		MyView.end_date_dp.SelectedDate = tEvents.event_date_end;
+		//		selectedHours = (int)tEvents.event_time_end;
+		//		selectedTime = new TimeSpan(selectedHours, selectedMinutes, selectedSeconds);
+		////		MyView.end_time_tp.SetMyTimeSpan(selectedTime);
+		//		if (tEvents.event_is_daylong == true) {
+		//			dbMsg += ">終日>";
+		//			//MyView.start_time_tp.Visibility = System.Windows.Visibility.Hidden;
+		//			//MyView.end_time_tp.Visibility = System.Windows.Visibility.Hidden;
+		//		}
+		//		if (startDTT == nonTS) {
+		//			//start_time_tp.Visibility = System.Windows.Visibility.Hidden;
+		//		}
+		//		//MyView.end_time_tp.SetMyTimeSpan(endDTT);
+		//		if (endDTT == nonTS) {
+		//			//MyView.end_time_tp.Visibility = System.Windows.Visibility.Hidden;
+		//		}
+				RaisePropertyChanged();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -764,6 +863,11 @@ namespace TabCon.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+
+
+
+
 
 		/// <summary>
 		/// カラー設定

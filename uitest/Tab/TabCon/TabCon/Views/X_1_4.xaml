@@ -7,7 +7,9 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-      xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+		xmlns:igDP="http://infragistics.com/DataPresenter"
+             xmlns:igEditors="http://infragistics.com/Editors"
+			 xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:v="clr-namespace:TabCon.Views"
       xmlns:vm="clr-namespace:TabCon.ViewModels"
       xmlns:local="clr-namespace:TabCon.Views"
@@ -40,12 +42,14 @@
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
 		<Grid x:Name="MyCalendar"
-				Grid.Row="1" Grid.Column="0">
+				Grid.Row="1" Grid.Column="0"
+				>
 			<DataGrid ItemsSource="{Binding EDays}" 
 							SelectedItem="{Binding TatagetDay,Mode=TwoWay}" 
 							SelectedIndex="{Binding selectedDateIndex,Mode=TwoWay}" 
@@ -65,55 +69,7 @@
 					<DataGridTextColumn  Header="開始日" 
 													Width="120" 
 													Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
-					<!--
-													Width="{Binding Path=DateColWidth,Mode=TwoWay}" 
-					<DataGridTemplateColumn Header="要約"/>-->
-					<!--<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<DataGrid ItemsSource="{Binding events}"
-												SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
-												AutoGenerateColumns="False" 
-												IsReadOnly="True" 
-												HeadersVisibility="None" SelectionMode="Single"
-											>
-								--><!--二階層目では　<DataGrid.InputBindings>が使えない?
-														SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
-														
-																  CommandParameter="{Binding events/}"
-												-->
-								<!--<DataGrid.InputBindings>
-										<MouseBinding  MouseAction="LeftDoubleClick"
-																  Command="{Binding EditCommand }"/>
-									</DataGrid.InputBindings>-->
-								<!--<DataGrid.ItemContainerStyle>
-										<Style TargetType="DataGridRow">
-											<EventSetter Event="MouseDoubleClick" Handler="{Binding EditCommand}"/>
-										</Style>
-									</DataGrid.ItemContainerStyle>-->
-
-									<!--
-
-								<DataGrid.Columns>
-									--><!--<DataGridCheckBoxColumn  Binding="{Binding isSetect }">
-										</DataGridCheckBoxColumn>-->
-
-									<!--<DataGridTemplateColumn Header="summary">
-											<DataGridTemplateColumn.CellTemplate>
-												<DataTemplate>
-													<Button 
-																Content="{Binding summary}" 
-																Name="eventBt"
-																Command="{Binding Path=EditCommand}"
-																Background="{Binding event_bg_color}"
-																Foreground="{Binding event_font_color}"
-																HorizontalAlignment="Left"  VerticalAlignment="Center" 
-																/>
-												</DataTemplate>
-											</DataGridTemplateColumn.CellTemplate>
-										</DataGridTemplateColumn>-->
-									<!--
-																CommandParameter="{Binding TargetEvent,Mode=TwoWay}" 
-										--><!--
+<!--
 
 									<DataGridTextColumn Binding="{Binding summary }" >
 										<DataGridTextColumn.ElementStyle>
@@ -124,7 +80,8 @@
 										</DataGridTextColumn.ElementStyle>
 									</DataGridTextColumn>
 
-									--><!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
+									-->
+									<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
 										<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_end}"/>
@@ -152,7 +109,6 @@
 				</DataGrid.Columns>
 
 				<DataGrid.RowDetailsTemplate>
-
 					<DataTemplate>
 						<DataGrid HeadersVisibility="None" 
 										AutoGenerateColumns="False" 
@@ -166,24 +122,6 @@
 								<DataGridTextColumn  Header="開始日" 
 																	Width="120" 
 																/>
-								<!--
-								,Mode=TwoWay
-																Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" 
-								
-								<DataGridTemplateColumn Header="summary">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<Button 
-														Content="{Binding summary}" 
-														Name="eventBt"
-														Command="{Binding Path=EditCommand}"
-														Background="{Binding event_bg_color}"
-														Foreground="{Binding event_font_color}"
-														HorizontalAlignment="Left"  VerticalAlignment="Center" 
-														/>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>-->
 								<DataGridTextColumn Binding="{Binding summary }" >
 									<DataGridTextColumn.ElementStyle>
 										<Style TargetType="{x:Type TextBlock}">
@@ -202,5 +140,90 @@
 			</DataGrid>
 
 		</Grid>
+
+		<igDP:XamDataGrid Name="CenterSlipEstimateGrid" 
+										Grid.Row="2" Grid.Column="0"
+								DataSource="{Binding OrderedByStart}" 
+								BorderThickness="1" 
+								BorderBrush="Gray" ScrollingMode="DeferredWithScrollTips" >
+			<!--
+											Style="{StaticResource  SearchGrid}" 
+			ActiveDataItem="{Binding Path=TatagetDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+
+			<igDP:XamDataGrid.Resources>
+				<!--<Style TargetType="{x:Type igDP:RecordListControl}" BasedOn="{StaticResource RecordListControlStyle}" />
+				<Style TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{StaticResource RecordSelectorTargetHeaderNoMargin}" />-->
+				<Style TargetType="{x:Type igDP:RecordSelector}" BasedOn="{StaticResource CheckBoxRecordSelectorNoMargin}" />
+				<Style TargetType="{x:Type igDP:DataRecordCellArea}" BasedOn="{StaticResource ClickableRecordColor}" />
+				<!--<Style TargetType="{x:Type igDP:XamDataGrid}" >
+					<Setter Property="GroupByAreaLocation" Value="BelowDataArea" />
+					<Setter Property="ScrollingMode" Value="Deferred" />
+				</Style>-->
+			</igDP:XamDataGrid.Resources>
+
+			<igDP:XamDataGrid.ViewSettings>
+				<igDP:GridViewSettings />
+			</igDP:XamDataGrid.ViewSettings>
+
+			<!--<igDP:XamDataGrid.FieldSettings>
+				--><!--列のリサイズを抑止	AllowSorting="false"	 AllowResize="False" 	--><!--
+				<igDP:FieldSettings  AllowEdit="False"/>
+			</igDP:XamDataGrid.FieldSettings>-->
+
+			<igDP:XamDataGrid.InputBindings>
+				<MouseBinding MouseAction="LeftDoubleClick" Command="{Binding PropertyDoubleClickCommand}"/>
+			</igDP:XamDataGrid.InputBindings>
+
+			<igDP:XamDataGrid.FieldLayoutSettings>
+				<!-- Fieldsに入れていないFieldが表示されないようにAutoGenerateFieldsをFalseにして列の自動生成を抑止する。 -->
+				<!--<igDP:FieldLayoutSettings   />-->
+				<igDP:FieldLayoutSettings HeaderPrefixAreaDisplayMode="FieldChooserButton"
+														AutoGenerateFields="False" 
+														AutoArrangeCells="Default"
+                                              />
+				<!--AllowAddNew="False"
+                    AllowDelete="False"
+                    HighlightAlternateRecords="True"
+                    SelectionTypeCell="None"
+                    SelectionTypeRecord="Single"-->
+			</igDP:XamDataGrid.FieldLayoutSettings>
+			<igDP:XamDataGrid.FieldLayouts>
+				<igDP:FieldLayout>
+					<igDP:FieldLayout.Fields>
+						<!--<igDP:CheckBoxField Name="target" Label="対象" Row="0" Column="0" AllowEdit="True" HorizontalContentAlignment="Center" LabelTextAlignment="Center" />-->
+						<!--<igDP:FieldGroup Label="event_date_start" AllowCollapsing="True">-->
+						<igDP:UnboundField BindingPath="event_date_start" Label="開始日" Width="80" />
+						<igDP:UnboundField BindingPath="summary" Label="要約"  Width="Auto" />
+						<!--<igDP:Field x:Name="event_date_start" Label="開始日" Width="120" />-->
+						<!--<igDP:Field.Settings>
+							<igDP:FieldSettings MergedCellMode="Always" >
+							</igDP:FieldSettings>-->
+							<!--<igDP:Field x:Name="summary" Label="要約"  />-->
+						<!--<igDP:Field.Settings>
+								<igDP:FieldSettings b="Always" >
+								</igDP:FieldSettings>-->
+					</igDP:FieldLayout.Fields>
+					<!--</igDP:FieldGroup>-->
+				</igDP:FieldLayout>
+			</igDP:XamDataGrid.FieldLayouts>
+
+			<!--<igDP:FieldLayout>
+					<igDP:FieldLayout.Fields>
+						<igDP:Field Name="summary" Label="summary" />
+					</igDP:FieldLayout.Fields>
+				</igDP:FieldLayout>-->
+
+
+			<!--Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
+			summary
+
+			-->
+
+		</igDP:XamDataGrid>
+
+
+
+
+
 	</Grid>
 </Page>

@@ -4,5 +4,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+
+				<ResourceDictionary Source="Assets\Global.xaml" />
+				<!--<ResourceDictionary Source="Assets\SBStyles.xaml" />
+				<ResourceDictionary Source="/Assets/LabelResource.xaml" />-->
+				<ResourceDictionary Source="/Resources/Custom.xaml">
+				</ResourceDictionary>
+				<!--<ResourceDictionary Source="/Resources/bitmapIcon.xaml" />-->
+				<ResourceDictionary Source="/Assets/XamDataGridStyle.xaml">
+				</ResourceDictionary>
+
+			</ResourceDictionary.MergedDictionaries>
+
+		</ResourceDictionary>
 	</Application.Resources>
 </Application>

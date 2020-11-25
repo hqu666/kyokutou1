@@ -1,5 +1,7 @@
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\CS_Calculator.pdb
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\ControlzEx.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\ControlzEx.pdb
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\Microsoft.Expression.Interactions.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\System.Windows.Interactivity.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\en\Microsoft.Expression.Interactions.resources.dll
@@ -66,8 +68,11 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\Livet.Ext
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\Microsoft.WindowsAPICodePack.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\ja\Livet.Extensions.resources.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\MahApps.Metro.dll
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\MahApps.Metro.pdb
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\Microsoft.Xaml.Behaviors.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\bin\Debug\Microsoft.Xaml.Behaviors.pdb
+C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csprojAssemblyReference.cache
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CalculatorButton.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_CalculatorControl.g.cs
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator_MarkupCompile.cache
@@ -79,4 +84,3 @@ C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calcul
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csproj.CopyComplete
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.dll
 C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.pdb
-C:\work\2020\kyokuto\samples\uitest\Tab\TabCon\CS_Calculator\obj\Debug\CS_Calculator.csprojAssemblyReference.cache

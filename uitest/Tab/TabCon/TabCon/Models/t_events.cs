@@ -378,7 +378,19 @@ namespace TabCon.Models {
 			}
 		}
 
+		public bool _IsChecked;
+		/// <summary>
+		/// リスト先頭のチェック
+		/// </summary>
+		public bool IsChecked {
+			get { return _IsChecked; }
+			set {
+				if (_IsChecked == value)
+					return;
 
+				_IsChecked = value;
+			}
+		}
 
 		object ICloneable.Clone()
 		{

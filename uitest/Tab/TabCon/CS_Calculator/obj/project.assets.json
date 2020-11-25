@@ -2,6 +2,22 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.7.1": {
+      "ControlzEx/4.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.19"
+        },
+        "frameworkAssemblies": [
+          "System.Web",
+          "System.Web.Extensions"
+        ],
+        "compile": {
+          "lib/net462/ControlzEx.dll": {}
+        },
+        "runtime": {
+          "lib/net462/ControlzEx.dll": {}
+        }
+      },
       "Expression.Blend.Sdk.WPF/1.0.1": {
         "type": "package",
         "compile": {
@@ -381,6 +397,22 @@
           "lib/net452/ja/Livet.Extensions.resources.dll": {
             "locale": "ja"
           }
+        }
+      },
+      "MahApps.Metro/2.3.4": {
+        "type": "package",
+        "dependencies": {
+          "ControlzEx": "4.4.0"
+        },
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration"
+        ],
+        "compile": {
+          "lib/net47/MahApps.Metro.dll": {}
+        },
+        "runtime": {
+          "lib/net47/MahApps.Metro.dll": {}
         }
       },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
@@ -412,6 +444,22 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win": {
+      "ControlzEx/4.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.19"
+        },
+        "frameworkAssemblies": [
+          "System.Web",
+          "System.Web.Extensions"
+        ],
+        "compile": {
+          "lib/net462/ControlzEx.dll": {}
+        },
+        "runtime": {
+          "lib/net462/ControlzEx.dll": {}
+        }
+      },
       "Expression.Blend.Sdk.WPF/1.0.1": {
         "type": "package",
         "compile": {
@@ -791,6 +839,22 @@
           "lib/net452/ja/Livet.Extensions.resources.dll": {
             "locale": "ja"
           }
+        }
+      },
+      "MahApps.Metro/2.3.4": {
+        "type": "package",
+        "dependencies": {
+          "ControlzEx": "4.4.0"
+        },
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration"
+        ],
+        "compile": {
+          "lib/net47/MahApps.Metro.dll": {}
+        },
+        "runtime": {
+          "lib/net47/MahApps.Metro.dll": {}
         }
       },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
@@ -822,6 +886,22 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win-x64": {
+      "ControlzEx/4.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.19"
+        },
+        "frameworkAssemblies": [
+          "System.Web",
+          "System.Web.Extensions"
+        ],
+        "compile": {
+          "lib/net462/ControlzEx.dll": {}
+        },
+        "runtime": {
+          "lib/net462/ControlzEx.dll": {}
+        }
+      },
       "Expression.Blend.Sdk.WPF/1.0.1": {
         "type": "package",
         "compile": {
@@ -1201,6 +1281,22 @@
           "lib/net452/ja/Livet.Extensions.resources.dll": {
             "locale": "ja"
           }
+        }
+      },
+      "MahApps.Metro/2.3.4": {
+        "type": "package",
+        "dependencies": {
+          "ControlzEx": "4.4.0"
+        },
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration"
+        ],
+        "compile": {
+          "lib/net47/MahApps.Metro.dll": {}
+        },
+        "runtime": {
+          "lib/net47/MahApps.Metro.dll": {}
         }
       },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
@@ -1232,6 +1328,22 @@
       }
     },
     ".NETFramework,Version=v4.7.1/win-x86": {
+      "ControlzEx/4.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.19"
+        },
+        "frameworkAssemblies": [
+          "System.Web",
+          "System.Web.Extensions"
+        ],
+        "compile": {
+          "lib/net462/ControlzEx.dll": {}
+        },
+        "runtime": {
+          "lib/net462/ControlzEx.dll": {}
+        }
+      },
       "Expression.Blend.Sdk.WPF/1.0.1": {
         "type": "package",
         "compile": {
@@ -1611,6 +1723,22 @@
           "lib/net452/ja/Livet.Extensions.resources.dll": {
             "locale": "ja"
           }
+        }
+      },
+      "MahApps.Metro/2.3.4": {
+        "type": "package",
+        "dependencies": {
+          "ControlzEx": "4.4.0"
+        },
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration"
+        ],
+        "compile": {
+          "lib/net47/MahApps.Metro.dll": {}
+        },
+        "runtime": {
+          "lib/net47/MahApps.Metro.dll": {}
         }
       },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
@@ -1643,6 +1771,30 @@
     }
   },
   "libraries": {
+    "ControlzEx/4.4.0": {
+      "sha512": "pZ5z4hYWwE4R13UMCVs6vII//nL7hz+Nwn4oJlnsZJRGqJNy6Z9KnJiTZfly6lKFu0pMc1aWBZpx+VqFTQKP1Q==",
+      "type": "package",
+      "path": "controlzex/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "controlzex.4.4.0.nupkg.sha512",
+        "controlzex.nuspec",
+        "lib/net45/ControlzEx.dll",
+        "lib/net45/ControlzEx.pdb",
+        "lib/net45/ControlzEx.xml",
+        "lib/net462/ControlzEx.dll",
+        "lib/net462/ControlzEx.pdb",
+        "lib/net462/ControlzEx.xml",
+        "lib/netcoreapp3.0/ControlzEx.dll",
+        "lib/netcoreapp3.0/ControlzEx.pdb",
+        "lib/netcoreapp3.0/ControlzEx.xml",
+        "lib/netcoreapp3.1/ControlzEx.dll",
+        "lib/netcoreapp3.1/ControlzEx.pdb",
+        "lib/netcoreapp3.1/ControlzEx.xml",
+        "logo-mini.png"
+      ]
+    },
     "Expression.Blend.Sdk.WPF/1.0.1": {
       "sha512": "eXvBXgPhxHSdlzwK1rItPdrvj8sBzOUvibbAHbR9obo5o5eMTue9/OCOrjguUsaDtR3uzE1IM/HmQqDC686mcA==",
       "type": "package",
@@ -2081,6 +2233,35 @@
         "livetextensions.nuspec"
       ]
     },
+    "MahApps.Metro/2.3.4": {
+      "sha512": "++yabGDjGmQui36vNmn4eIu7436N2NLDpH49/GFbKn4oMSNosZHoUTQLp51jCZvwDqE8u5VSZDCNfle4gfjXnA==",
+      "type": "package",
+      "path": "mahapps.metro/2.3.4",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/MahApps.Metro.dll",
+        "lib/net452/MahApps.Metro.pdb",
+        "lib/net452/MahApps.Metro.xml",
+        "lib/net46/MahApps.Metro.dll",
+        "lib/net46/MahApps.Metro.pdb",
+        "lib/net46/MahApps.Metro.xml",
+        "lib/net47/MahApps.Metro.dll",
+        "lib/net47/MahApps.Metro.pdb",
+        "lib/net47/MahApps.Metro.xml",
+        "lib/netcoreapp3.0/MahApps.Metro.dll",
+        "lib/netcoreapp3.0/MahApps.Metro.pdb",
+        "lib/netcoreapp3.0/MahApps.Metro.xml",
+        "lib/netcoreapp3.1/MahApps.Metro.dll",
+        "lib/netcoreapp3.1/MahApps.Metro.pdb",
+        "lib/netcoreapp3.1/MahApps.Metro.xml",
+        "mahapps.metro.2.3.4.nupkg.sha512",
+        "mahapps.metro.logo.png",
+        "mahapps.metro.nuspec",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
     "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
       "sha512": "5sPWkbqImc2t1aQwIfJcKsUo7tOg1Tr8+6xVzZJB56Nzt4u9NlpcLofgdX/aRYpPKdWDA3U23Akw1KQzU5e82g==",
       "type": "package",
@@ -2132,6 +2313,7 @@
       "LivetCask.StatefulModel >= 3.2.3.1",
       "LivetCask2 >= 3.2.3.1",
       "LivetExtensions >= 3.2.3.1",
+      "MahApps.Metro >= 2.3.4",
       "Microsoft.Xaml.Behaviors.Wpf >= 1.1.19",
       "MicrosoftExpressionInteractions >= 3.0.40218"
     ]
@@ -2220,6 +2402,10 @@
           "LivetExtensions": {
             "target": "Package",
             "version": "[3.2.3.1, )"
+          },
+          "MahApps.Metro": {
+            "target": "Package",
+            "version": "[2.3.4, )"
           },
           "Microsoft.Xaml.Behaviors.Wpf": {
             "target": "Package",
