@@ -95,6 +95,9 @@
     <PackageReference Include="Expression.Interaction">
       <Version>3.0.40218</Version>
     </PackageReference>
+    <PackageReference Include="Infragistics.DataPresenter.DataSources.OData">
+      <Version>16.1.1000</Version>
+    </PackageReference>
     <PackageReference Include="LivetCask">
       <Version>3.2.3.1</Version>
     </PackageReference>

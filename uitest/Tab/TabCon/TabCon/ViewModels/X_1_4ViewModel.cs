@@ -459,6 +459,30 @@ namespace TabCon.ViewModels
 		}
 
 		//レコードクリック/////////////////////////////////////////////////////////////////////////
+		#region PropertyDoubleClickCommand 一覧ダブルクリック処理
+		private ViewModelCommand _PropertyDoubleClickCommand;
+		public ViewModelCommand PropertyDoubleClickCommand {
+			get {
+				string TAG = "PropertyDoubleClickCommand";
+				string dbMsg = "";
+				try {
+					if (_PropertyDoubleClickCommand == null) {
+						dbMsg += ">>起動時";
+						_PropertyDoubleClickCommand = new ViewModelCommand(Edit, CanEdit);
+						//_PropertyDoubleClickCommand = new ViewModelCommand(() => {
+						//});
+					}
+					MyLog(TAG, dbMsg);
+				} catch (Exception er) {
+					MyErrorLog(TAG, dbMsg, er);
+				}
+				return _PropertyDoubleClickCommand;
+			}
+		}
+		#endregion
+
+
+
 		#region EditCommand
 		private ViewModelCommand _EditCommand;
 

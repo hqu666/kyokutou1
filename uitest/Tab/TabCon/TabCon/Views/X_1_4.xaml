@@ -47,8 +47,121 @@
 
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
+
+		<!--<igDP:XamDataPresenter Name="xamDataPresenter1" BindToSampleData="True">
+			<igDP:XamDataGrid.FieldSettings>
+				<igDP:FieldSettings MergedCellMode="Always" >
+				</igDP:FieldSettings>
+			</igDP:XamDataGrid.FieldSettings>
+		</igDP:XamDataPresenter>-->
+
+		<igDP:XamDataGrid Name="OrderedByStart" 
+									Grid.Row="1" Grid.Column="0"
+									DataSource="{Binding OrderedByStart}" 
+									ActiveDataItem="{Binding Path=TatagetDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									GroupByAreaLocation="AboveDataArea"
+									AutoFit="False"
+									>
+			<!--									
+									Style="{StaticResource  SearchGrid}" 
+
+			<Style TargetType="{x:Type igDP:XamDataGrid}" x:Key="SearchGrid">
+				<Setter Property="AutoFit" Value="True" />
+				<Setter Property="GroupByAreaLocation" Value="None" />
+				<Setter Property="ScrollingMode" Value="Immediate" />
+				<Setter Property="FieldSettings">
+					<Setter.Value>
+						<igDP:FieldSettings
+                    AllowEdit="False"
+                    CellClickAction="SelectRecord"
+                    />
+					</Setter.Value>
+				</Setter>
+				<Setter Property="FieldLayoutSettings">
+					<Setter.Value>
+						<igDP:FieldLayoutSettings
+                    AutoArrangeCells="Never"
+                    AllowAddNew="False"
+                    AllowDelete="False"
+                    HighlightAlternateRecords="True"
+                    SelectionTypeCell="None"
+                    SelectionTypeRecord="Single"
+                    AutoGenerateFields="False"
+                    />
+					</Setter.Value>
+				</Setter>
+			</Style>-->
+			<igDP:XamDataGrid.Resources>
+				<Style TargetType="{x:Type igDP:RecordListControl}" BasedOn="{StaticResource RecordListControlStyle}" />
+				<Style TargetType="{x:Type igDP:RecordSelector}" BasedOn="{StaticResource CheckBoxRecordSelector}" />
+				<Style TargetType="{x:Type igDP:DataRecordCellArea}" BasedOn="{StaticResource ClickableRecordColor}" />
+				<Style TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{StaticResource RecordSelectorTargetHeader}" />
+			</igDP:XamDataGrid.Resources>
+
+			<igDP:XamDataGrid.ViewSettings>
+				<igDP:GridViewSettings />
+			</igDP:XamDataGrid.ViewSettings>
+
+			<igDP:XamDataGrid.InputBindings>
+				<MouseBinding MouseAction="LeftDoubleClick" Command="{Binding PropertyDoubleClickCommand}"/>
+			</igDP:XamDataGrid.InputBindings>
+
+			<igDP:XamDataGrid.FieldLayoutSettings>
+				<igDP:FieldLayoutSettings HeaderPrefixAreaDisplayMode="FieldChooserButton"
+														AutoGenerateFields="False" 
+														AutoArrangeCells="Default"
+														SelectionTypeRecord="Default"
+                                             />
+				<!--AllowAddNew="False"
+                    AllowDelete="False"
+                    HighlightAlternateRecords="True"
+                    SelectionTypeCell="None"
+					-->
+			</igDP:XamDataGrid.FieldLayoutSettings>
+			<igDP:XamDataGrid.FieldLayouts>
+				<igDP:FieldLayout>
+					<igDP:FieldLayout.Fields >
+						<!--<igDP:CheckBoxField Name="target" Label="対象" Row="0" Column="0" AllowEdit="True" HorizontalContentAlignment="Center" LabelTextAlignment="Center" />-->
+						<!--<igDP:FieldGroup Label="event_date_start" AllowCollapsing="True">  -->
+						<igDP:Field Name="event_date_start" Label="開始日"
+											Row="0" Column="1"  Width="Auto"
+											>
+							<igDP:Field.Settings>
+								<igDP:FieldSettings GroupByMode="OutlookDate" />
+							</igDP:Field.Settings>
+							<!--<igDP:Field.Settings>
+							<igDP:FieldSettings MergedCellMode="Always" >
+							</igDP:FieldSettings>-->
+						</igDP:Field>
+						<igDP:Field Name="summary" Label="要約" 
+										Row="0" Column="2" Width="Auto"
+										TextBlock.Foreground="{Binding event_font_color}"
+										/>
+						<!--
+											TextElement.Foreground="{Binding event_font_color}"
+					
+						-->
+					</igDP:FieldLayout.Fields>
+					<!--</igDP:FieldGroup>-->
+				</igDP:FieldLayout>
+			</igDP:XamDataGrid.FieldLayouts>
+
+			<!--<igDP:FieldLayout>
+					<igDP:FieldLayout.Fields>
+						<igDP:Field Name="summary" Label="summary" />
+					</igDP:FieldLayout.Fields>
+				</igDP:FieldLayout>-->
+
+
+			<!--Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
+			summary
+
+			-->
+
+		</igDP:XamDataGrid>
+
 		<Grid x:Name="MyCalendar"
-				Grid.Row="1" Grid.Column="0"
+				Grid.Row="2" Grid.Column="0"
 				>
 			<DataGrid ItemsSource="{Binding EDays}" 
 							SelectedItem="{Binding TatagetDay,Mode=TwoWay}" 
@@ -69,7 +182,7 @@
 					<DataGridTextColumn  Header="開始日" 
 													Width="120" 
 													Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
-<!--
+					<!--
 
 									<DataGridTextColumn Binding="{Binding summary }" >
 										<DataGridTextColumn.ElementStyle>
@@ -81,13 +194,13 @@
 									</DataGridTextColumn>
 
 									-->
-									<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
+					<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
 										<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_end}"/>
 										<DataGridCheckBoxColumn Header="終日" Binding="{Binding event_is_daylong}"/>-->
 
-									<!--<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}" Width="200">
+					<!--<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}" Width="200">
 											<DataGridTextColumn.ElementStyle>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Background" Value="{Binding event_bg_color}"/>
@@ -98,9 +211,10 @@
 										<DataGridTextColumn Header="場所" Binding="{Binding event_place}"  Width="120"/>
 										<DataGridTextColumn Header="メモ" Binding="{Binding event_memo}"/>-->
 
-									<!--<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
+					<!--<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
 										<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
-										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>--><!--
+										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>-->
+					<!--
 
 								</DataGrid.Columns>
 							</DataGrid>
@@ -140,90 +254,6 @@
 			</DataGrid>
 
 		</Grid>
-
-		<igDP:XamDataGrid Name="CenterSlipEstimateGrid" 
-										Grid.Row="2" Grid.Column="0"
-								DataSource="{Binding OrderedByStart}" 
-								BorderThickness="1" 
-								BorderBrush="Gray" ScrollingMode="DeferredWithScrollTips" >
-			<!--
-											Style="{StaticResource  SearchGrid}" 
-			ActiveDataItem="{Binding Path=TatagetDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
-
-			<igDP:XamDataGrid.Resources>
-				<!--<Style TargetType="{x:Type igDP:RecordListControl}" BasedOn="{StaticResource RecordListControlStyle}" />
-				<Style TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{StaticResource RecordSelectorTargetHeaderNoMargin}" />-->
-				<Style TargetType="{x:Type igDP:RecordSelector}" BasedOn="{StaticResource CheckBoxRecordSelectorNoMargin}" />
-				<Style TargetType="{x:Type igDP:DataRecordCellArea}" BasedOn="{StaticResource ClickableRecordColor}" />
-				<!--<Style TargetType="{x:Type igDP:XamDataGrid}" >
-					<Setter Property="GroupByAreaLocation" Value="BelowDataArea" />
-					<Setter Property="ScrollingMode" Value="Deferred" />
-				</Style>-->
-			</igDP:XamDataGrid.Resources>
-
-			<igDP:XamDataGrid.ViewSettings>
-				<igDP:GridViewSettings />
-			</igDP:XamDataGrid.ViewSettings>
-
-			<!--<igDP:XamDataGrid.FieldSettings>
-				--><!--列のリサイズを抑止	AllowSorting="false"	 AllowResize="False" 	--><!--
-				<igDP:FieldSettings  AllowEdit="False"/>
-			</igDP:XamDataGrid.FieldSettings>-->
-
-			<igDP:XamDataGrid.InputBindings>
-				<MouseBinding MouseAction="LeftDoubleClick" Command="{Binding PropertyDoubleClickCommand}"/>
-			</igDP:XamDataGrid.InputBindings>
-
-			<igDP:XamDataGrid.FieldLayoutSettings>
-				<!-- Fieldsに入れていないFieldが表示されないようにAutoGenerateFieldsをFalseにして列の自動生成を抑止する。 -->
-				<!--<igDP:FieldLayoutSettings   />-->
-				<igDP:FieldLayoutSettings HeaderPrefixAreaDisplayMode="FieldChooserButton"
-														AutoGenerateFields="False" 
-														AutoArrangeCells="Default"
-                                              />
-				<!--AllowAddNew="False"
-                    AllowDelete="False"
-                    HighlightAlternateRecords="True"
-                    SelectionTypeCell="None"
-                    SelectionTypeRecord="Single"-->
-			</igDP:XamDataGrid.FieldLayoutSettings>
-			<igDP:XamDataGrid.FieldLayouts>
-				<igDP:FieldLayout>
-					<igDP:FieldLayout.Fields>
-						<!--<igDP:CheckBoxField Name="target" Label="対象" Row="0" Column="0" AllowEdit="True" HorizontalContentAlignment="Center" LabelTextAlignment="Center" />-->
-						<!--<igDP:FieldGroup Label="event_date_start" AllowCollapsing="True">-->
-						<igDP:UnboundField BindingPath="event_date_start" Label="開始日" Width="80" />
-						<igDP:UnboundField BindingPath="summary" Label="要約"  Width="Auto" />
-						<!--<igDP:Field x:Name="event_date_start" Label="開始日" Width="120" />-->
-						<!--<igDP:Field.Settings>
-							<igDP:FieldSettings MergedCellMode="Always" >
-							</igDP:FieldSettings>-->
-							<!--<igDP:Field x:Name="summary" Label="要約"  />-->
-						<!--<igDP:Field.Settings>
-								<igDP:FieldSettings b="Always" >
-								</igDP:FieldSettings>-->
-					</igDP:FieldLayout.Fields>
-					<!--</igDP:FieldGroup>-->
-				</igDP:FieldLayout>
-			</igDP:XamDataGrid.FieldLayouts>
-
-			<!--<igDP:FieldLayout>
-					<igDP:FieldLayout.Fields>
-						<igDP:Field Name="summary" Label="summary" />
-					</igDP:FieldLayout.Fields>
-				</igDP:FieldLayout>-->
-
-
-			<!--Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
-			summary
-
-			-->
-
-		</igDP:XamDataGrid>
-
-
-
-
 
 	</Grid>
 </Page>

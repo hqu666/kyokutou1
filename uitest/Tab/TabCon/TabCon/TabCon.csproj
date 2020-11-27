@@ -133,6 +133,9 @@
       <DependentUpon>X_1_Control.xaml</DependentUpon>
     </Compile>
     <Compile Include="CS_Util.cs" />
+    <Compile Include="Enums\Z03Color.cs" />
+    <Compile Include="Enums\E11SuppliersClosingDates.cs" />
+    <Compile Include="Enums\EnumDisplayNameAttribute.cs" />
     <Compile Include="GoogleAuthUtil.cs" />
     <Compile Include="GoogleCalendarUtil.cs" />
     <Compile Include="GoogleDriveUtil.cs" />
@@ -435,6 +438,9 @@
     <PackageReference Include="Google.Apis.Drive.v3">
       <Version>1.49.0.2138</Version>
     </PackageReference>
+    <PackageReference Include="Infragistics.DataPresenter.DataSources.OData">
+      <Version>16.1.1000</Version>
+    </PackageReference>
     <PackageReference Include="LivetCask">
       <Version>3.2.3.1</Version>
     </PackageReference>
@@ -481,9 +487,7 @@
       <Version>8.0.22</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>

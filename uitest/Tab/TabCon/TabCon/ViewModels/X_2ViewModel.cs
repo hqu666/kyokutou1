@@ -21,6 +21,7 @@ using Google.Apis.Drive.v3.Data;
 using MySql.Data.MySqlClient;
 
 using TabCon.Models;
+using TabCon.Enums;
 using Task = System.Threading.Tasks.Task;
 using Livet.Messaging.Windows;
 using System.Reflection;
@@ -87,7 +88,11 @@ namespace TabCon.ViewModels {
 					if (ColorComboSelectedIndex < ColorComboSource.Count - 1) {
 						//対象イベントの背景色とXamColorPickerのSelectedColorに反映
 						eventBgColor = (ColorComboSelectedIndex + 1).ToString();
-						SelectedColorCord = ColorComboSource[eventBgColor];
+					//	var ec = new EnumDisplayNameConverter(typeof(Z03Color));
+						Z03Color headername = (Z03Color)Enum.Parse(typeof(Z03Color), ColorComboSelectedIndex.ToString());
+						SelectedColorCord = headername.ToString().Replace("s", "#");
+					//	string dispName = ec.ConvertToString(headername);
+					//	SelectedColorCord = ColorComboSource[eventBgColor];
 						RaisePropertyChanged("SelectedColorCord");
 					}
 					dbMsg += ">>変更色 " + SelectedColorCord;
@@ -270,22 +275,31 @@ namespace TabCon.ViewModels {
 
 				eventStatus = tEvents.event_status;
 				googleId = tEvents.google_id + "";
-				ColorComboSource = new Dictionary<string, string>()
-				{
-					{ "1", "#FFFFFF" },
-					{ "2", "#7986CB" },
-					{ "3", "#01B679	" },
-					{ "4", "#8E24AA" },
-					{ "5", "#E67C73" },
-					{ "6", "#F6C028	" },
-					{ "7", "#F4511E" },
-					{ "8", "#039BE5" },
-					{ "9", "#3F51B5	" },
-					{ "10", "#616161" },
-					{ "11", "#0B8043" },
-					{ "12", "#D50000" },
-					{ "13", souceEndValue },
-				};
+				ColorComboSource = new Dictionary<string, string>();
+				//{
+				//	{ "1", Z03Color.i },
+				//	{ "2", "#7986CB" },
+				//	{ "3", "#01B679	" },
+				//	{ "4", "#8E24AA" },
+				//	{ "5", "#E67C73" },
+				//	{ "6", "#F6C028	" },
+				//	{ "7", "#F4511E" },
+				//	{ "8", "#039BE5" },
+				//	{ "9", "#3F51B5	" },
+				//	{ "10", "#616161" },
+				//	{ "11", "#0B8043" },
+				//	{ "12", "#D50000" },
+				//	{ "13", souceEndValue },
+				//};
+				for (int i = 0; i < 12; i++){
+					var ec = new EnumDisplayNameConverter(typeof(Z03Color));
+					Z03Color headername = (Z03Color)Enum.Parse(typeof(Z03Color), i.ToString());
+					string colorCord = headername.ToString().Replace("s","#");
+					string dispName = ec.ConvertToString(headername);
+					ColorComboSource.Add(i.ToString() ,dispName);
+				}
+				ColorComboSource.Add(ColorComboSource.Count.ToString(), souceEndValue);
+
 				eventBgColor = tEvents.event_bg_color + "";
 				dbMsg += ",背景色=" + eventBgColor;
 				if(eventBgColor.StartsWith("#")) {
