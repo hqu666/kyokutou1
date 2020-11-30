@@ -56,7 +56,9 @@
 									Grid.Row="1" Grid.Column="0"
 									DataSource="{Binding OrderedByStart}" 
 									ActiveDataItem="{Binding Path=TargetEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									GroupByAreaLocation="None"
 									>
+			<!--Expander.Expanded="this_loaded" GroupByAreaMode="DefaultFieldLayoutOnly"-->
 			<igDP:XamDataPresenter.Resources>
 				<Style TargetType="{x:Type igDP:RecordListControl}" BasedOn="{StaticResource RecordListControlStyle}" />
 				<Style TargetType="{x:Type igDP:RecordSelector}" BasedOn="{StaticResource CheckBoxRecordSelector}" />
@@ -67,6 +69,8 @@
 						<Setter.Value>
 							<igDP:FieldLayoutSettings
 								AutoGenerateFields="False"
+								HighlightAlternateRecords="True" 
+								RecordSelectorLocation="LeftOfCellArea"
 								/>
 						</Setter.Value>
 					</Setter>
@@ -76,6 +80,7 @@
 								Width="Auto"
 								AllowEdit="False"
 								CellClickAction="SelectRecord"
+								LabelClickAction="Nothing" 
 							/>
 						</Setter.Value>
 					</Setter>
@@ -98,43 +103,38 @@
 							IsGroupBy="True"
 							Direction="Ascending"
 							FieldName="event_date_start" 
-							/>
+						/>
 					</igDP:FieldLayout.SortedFields>
-					<igDP:FieldLayout.SummaryDefinitions>
+					<!--<igDP:FieldLayout.SummaryDefinitions>
 						<igDP:SummaryDefinition
 									Calculator="{x:Static igDP:SummaryCalculator.Count}"
 									SourceFieldName="summary" 
 									/>
-					</igDP:FieldLayout.SummaryDefinitions>
+					</igDP:FieldLayout.SummaryDefinitions>-->
 					<igDP:FieldLayout.Fields >
 						<!--<igDP:CheckBoxField Name="target" Label="対象" Row="0" Column="0" AllowEdit="True" HorizontalContentAlignment="Center" LabelTextAlignment="Center" />-->
 						<!--<igDP:FieldGroup Label="event_date_start" AllowCollapsing="True">-->
+						<!--<igDP:Field Name="●" Label="" 
+										Row="0" Column="1"
+										TextElement.Foreground="{Binding event_font_color}"
+										/>-->
 						<!--<igDP:Field Name="date" Label="開始日"
 											Row="0" Column="1" 
 											/>-->
 						<igDP:Field Name="event_date_start" Label="開始日"
 											Row="0" Column="1" 
-											/>
-					<!--<igDP:Field.Settings>
-									<igDP:FieldSettings MergedCellMode="Always" >
-								</igDP:FieldSettings>-->
-							<!--<igDP:Field.Settings>
+											>
+							<igDP:Field.Settings>
 								<igDP:FieldSettings GroupByMode="Date" />
-							</igDP:Field.Settings>--><!--
+								<!--<igDP:FieldSettings MergedCellMode="Always"/>-->
+							</igDP:Field.Settings>
 							</igDP:Field>
-							
-							-->
 
 						<igDP:Field Name="summary" Label="要約" 
 										Row="0" Column="2"
+										TextElement.Foreground="{Binding event_font_color}"
 										/>
-
-						<!--<igDP:Field Name="summary" Label="要約" 
-										Row="0" Column="2"
-										TextBlock.Foreground="{Binding event_font_color}"
-										/>-->
-						<!--
-											TextElement.Foreground="{Binding event_font_color}"						-->
+						<!--</igDP:FieldGroup>-->
 					</igDP:FieldLayout.Fields>
 				</igDP:FieldLayout>
 
