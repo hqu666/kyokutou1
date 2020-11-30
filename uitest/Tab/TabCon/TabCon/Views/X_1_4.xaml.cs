@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using Infragistics.Windows.DataPresenter;
+
 
 namespace TabCon.Views {
 	/// <summary>
@@ -22,6 +24,7 @@ namespace TabCon.Views {
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			VM.MyView = this;
+		//	this.MainXDG.FieldSettings.MergedCellMode = MergedCellMode.Always;
 			//	VM.Control = ControlPanel;
 			//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
 		}

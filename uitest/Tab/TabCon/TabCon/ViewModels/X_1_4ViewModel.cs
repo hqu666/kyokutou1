@@ -459,27 +459,27 @@ namespace TabCon.ViewModels
 		}
 
 		//レコードクリック/////////////////////////////////////////////////////////////////////////
-		#region PropertyDoubleClickCommand 一覧ダブルクリック処理
-		private ViewModelCommand _PropertyDoubleClickCommand;
-		public ViewModelCommand PropertyDoubleClickCommand {
-			get {
-				string TAG = "PropertyDoubleClickCommand";
-				string dbMsg = "";
-				try {
-					if (_PropertyDoubleClickCommand == null) {
-						dbMsg += ">>起動時";
-						_PropertyDoubleClickCommand = new ViewModelCommand(Edit, CanEdit);
-						//_PropertyDoubleClickCommand = new ViewModelCommand(() => {
-						//});
-					}
-					MyLog(TAG, dbMsg);
-				} catch (Exception er) {
-					MyErrorLog(TAG, dbMsg, er);
-				}
-				return _PropertyDoubleClickCommand;
-			}
-		}
-		#endregion
+		//#region PropertyDoubleClickCommand 一覧ダブルクリック処理
+		//private ViewModelCommand _PropertyDoubleClickCommand;
+		//public ViewModelCommand PropertyDoubleClickCommand {
+		//	get {
+		//		string TAG = "PropertyDoubleClickCommand";
+		//		string dbMsg = "";
+		//		try {
+		//			if (_PropertyDoubleClickCommand == null) {
+		//				dbMsg += ">>起動時";
+		//				_PropertyDoubleClickCommand = new ViewModelCommand(Edit, CanEdit);
+		//				//_PropertyDoubleClickCommand = new ViewModelCommand(() => {
+		//				//});
+		//			}
+		//			MyLog(TAG, dbMsg);
+		//		} catch (Exception er) {
+		//			MyErrorLog(TAG, dbMsg, er);
+		//		}
+		//		return _PropertyDoubleClickCommand;
+		//	}
+		//}
+		//#endregion
 
 
 
@@ -520,11 +520,11 @@ namespace TabCon.ViewModels
 			string dbMsg = "";
 			bool retBool = true;
 			try {
-				dbMsg += "[" + selectedDateIndex + "]";
-				if (this.TatagetDay != null) {
-					dbMsg += "、選択日＝" + TatagetDay.date;
+		//		dbMsg += "[" + selectedDateIndex + "]";
+				if (this.TargetEvent != null) {
+					dbMsg += "、選択日＝" + TargetEvent.event_date_start;
 				}
-				dbMsg += "[selectedIndex＝" + selectedIndex + "]";
+			//	dbMsg += "[selectedIndex＝" + selectedIndex + "]";
 				if (this.TargetEvent == null) {
 					dbMsg += ">>処理対象取得できず";
 					retBool = false;

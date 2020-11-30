@@ -433,10 +433,10 @@
       <Version>3.0.40218</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Calendar.v3">
-      <Version>1.49.0.2137</Version>
+      <Version>1.49.0.2142</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.49.0.2138</Version>
+      <Version>1.49.0.2145</Version>
     </PackageReference>
     <PackageReference Include="Infragistics.DataPresenter.DataSources.OData">
       <Version>16.1.1000</Version>

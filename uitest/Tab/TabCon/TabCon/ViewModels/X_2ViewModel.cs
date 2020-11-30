@@ -88,11 +88,10 @@ namespace TabCon.ViewModels {
 					if (ColorComboSelectedIndex < ColorComboSource.Count - 1) {
 						//対象イベントの背景色とXamColorPickerのSelectedColorに反映
 						eventBgColor = (ColorComboSelectedIndex + 1).ToString();
-					//	var ec = new EnumDisplayNameConverter(typeof(Z03Color));
+						//	Z03Colorの列挙子を取得
 						Z03Color headername = (Z03Color)Enum.Parse(typeof(Z03Color), ColorComboSelectedIndex.ToString());
+						//	カラーコードは列挙子に使えないので置換えていた文字を＃戻す
 						SelectedColorCord = headername.ToString().Replace("s", "#");
-					//	string dispName = ec.ConvertToString(headername);
-					//	SelectedColorCord = ColorComboSource[eventBgColor];
 						RaisePropertyChanged("SelectedColorCord");
 					}
 					dbMsg += ">>変更色 " + SelectedColorCord;
@@ -276,25 +275,13 @@ namespace TabCon.ViewModels {
 				eventStatus = tEvents.event_status;
 				googleId = tEvents.google_id + "";
 				ColorComboSource = new Dictionary<string, string>();
-				//{
-				//	{ "1", Z03Color.i },
-				//	{ "2", "#7986CB" },
-				//	{ "3", "#01B679	" },
-				//	{ "4", "#8E24AA" },
-				//	{ "5", "#E67C73" },
-				//	{ "6", "#F6C028	" },
-				//	{ "7", "#F4511E" },
-				//	{ "8", "#039BE5" },
-				//	{ "9", "#3F51B5	" },
-				//	{ "10", "#616161" },
-				//	{ "11", "#0B8043" },
-				//	{ "12", "#D50000" },
-				//	{ "13", souceEndValue },
-				//};
 				for (int i = 0; i < 12; i++){
+					// \Enums\Z03Color クラスのインスタンスを生成
 					var ec = new EnumDisplayNameConverter(typeof(Z03Color));
+					// i番目の列挙子を取得
 					Z03Color headername = (Z03Color)Enum.Parse(typeof(Z03Color), i.ToString());
 					string colorCord = headername.ToString().Replace("s","#");
+					// 列挙子に該当する表示名を引き当て
 					string dispName = ec.ConvertToString(headername);
 					ColorComboSource.Add(i.ToString() ,dispName);
 				}
