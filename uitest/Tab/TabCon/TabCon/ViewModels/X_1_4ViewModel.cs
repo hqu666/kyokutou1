@@ -69,24 +69,6 @@ namespace TabCon.ViewModels
 
 		public int selectedIndex { set; get; }
 
-
-
-		//	#region Events変更通知プロパティ
-		//	private ObservableCollection<t_events> _Events;
-		////	/// <summary>
-		////	/// 予定配列
-		////	/// </summary>
-		//////	public ObservableCollection<t_events> Events {
-		////		get { return _Events; }
-		////		set {
-		////			if (_Events == value)
-		////				return;
-		////			_Events = value;
-		////			RaisePropertyChanged("Events");
-		////		}
-		////	}
-		////	#endregion
-
 		#region TargetEvent変更通知プロパティ
 		private t_events _TargetEvent;
 		/// <summary>
@@ -97,9 +79,11 @@ namespace TabCon.ViewModels
 			set {
 				if (_TargetEvent == value)
 					return;
-				//	_TargetEvent = new t_events();
 				_TargetEvent = value;
 				RaisePropertyChanged("TargetEvent");
+				//if(_TargetEvent != null) {
+				//	Edit();
+				//}
 			}
 		}
 		#endregion
@@ -215,16 +199,20 @@ namespace TabCon.ViewModels
 				msgStr = Events.Count + "件の予定が有りました";
 
 				//	Application.Current.Dispatcher.Invoke(new System.Action(() => waitingDLog.SetMes(msgStr)));
+				//対象期間中の予定を開始日時が早いものから配列化
 				OrderedByStart =
 					new ObservableCollection<t_events>(
 							 Events.OrderBy(rec => rec.event_date_start)
 										.ThenBy(rec => rec.event_time_start)
 										.ThenBy(rec => rec.event_date_end)
 							);
+				//日毎にまとめる
 				DateTime tDate = OrderedByStart.First().event_date_start;
 				List<string> summarys = new List<string>();
 				ObservableCollection<t_events> dEvents = new ObservableCollection<t_events>();
 				ADay aDay = new ADay(tDate, summarys, dEvents, this);
+				int cIndex = 0;
+
 				foreach (t_events ev in OrderedByStart) {
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
 						msgStr = ":開始" + tDate + ">>" + ev.event_date_start + ":" + EDays.Count + "件";
@@ -234,8 +222,11 @@ namespace TabCon.ViewModels
 						EDays.Add(aDay);
 						summarys = new List<string>();
 						dEvents = new ObservableCollection<t_events>();
+						cIndex=0;
 					}
 					tDate = ev.event_date_start;
+					ev.childIndex = cIndex;
+					cIndex++;
 					dEvents.Add(ev);
 					summarys.Add(ev.summary);
 				}
@@ -249,7 +240,6 @@ namespace TabCon.ViewModels
 			}
 			return EDays;
 		}
-
 
 		/// <summary>
 		/// 予定作成
@@ -459,30 +449,6 @@ namespace TabCon.ViewModels
 		}
 
 		//レコードクリック/////////////////////////////////////////////////////////////////////////
-		//#region PropertyDoubleClickCommand 一覧ダブルクリック処理
-		//private ViewModelCommand _PropertyDoubleClickCommand;
-		//public ViewModelCommand PropertyDoubleClickCommand {
-		//	get {
-		//		string TAG = "PropertyDoubleClickCommand";
-		//		string dbMsg = "";
-		//		try {
-		//			if (_PropertyDoubleClickCommand == null) {
-		//				dbMsg += ">>起動時";
-		//				_PropertyDoubleClickCommand = new ViewModelCommand(Edit, CanEdit);
-		//				//_PropertyDoubleClickCommand = new ViewModelCommand(() => {
-		//				//});
-		//			}
-		//			MyLog(TAG, dbMsg);
-		//		} catch (Exception er) {
-		//			MyErrorLog(TAG, dbMsg, er);
-		//		}
-		//		return _PropertyDoubleClickCommand;
-		//	}
-		//}
-		//#endregion
-
-
-
 		#region EditCommand
 		private ViewModelCommand _EditCommand;
 

@@ -7,8 +7,8 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-             xmlns:igEditors="http://infragistics.com/Editors"
-			 xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:igEditors="http://infragistics.com/Editors"
+		xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
   	  xmlns:igDP="http://infragistics.com/DataPresenter"
 		xmlns:v="clr-namespace:TabCon.Views"
       xmlns:vm="clr-namespace:TabCon.ViewModels"
@@ -16,18 +16,90 @@
 	  xmlns:ig="http://schemas.infragistics.com/xaml"
 	  xmlns:controls="clr-namespace:TabCon.Controls"
       xmlns:ig1="http://infragistics.com/Editors"
+	  xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
 	  mc:Ignorable="d" 
       d:DesignHeight="750" d:DesignWidth="1000"
       Title="スケジュールリスト">
 
-	<!--
-			xmlns:igDP="http://infragistics.com/DataPresenter"
+	<Page.Resources>
+		<!--<Style x:Key="GroupItemStyle" TargetType="{x:Type GroupItem}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type GroupItem}">
+						<StackPanel Orientation="Horizontal" >
+							<Border BorderThickness="0">
+								<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="Auto"/>
+									</Grid.ColumnDefinitions>
 
-	
+									<Border BorderThickness="1"  Grid.Column="0">
+										<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+											<ContentPresenter Content="{Binding Path= event_date_start}" >
+											</ContentPresenter>
+										</Grid>
+									</Border>
+
+									<Border BorderThickness="0" Grid.Column="1">
+										<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+											<ItemsPresenter/>
+										</Grid>
+									</Border>
+								</Grid>
+							</Border>
+						</StackPanel>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<DataTemplate x:Key="SubDataGrid">
+			<DataGrid HeadersVisibility="None" 
+										AutoGenerateColumns="False" 
+										IsReadOnly="True"
+										ItemsSource="{Binding events}" 
+										SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
+										SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
+										>
+				<DataGrid.Columns>
+					<DataGridTextColumn  Header="開始日" />
+					<DataGridTextColumn Binding="{Binding summary }" >
+						<DataGridTextColumn.ElementStyle>
+							<Style TargetType="{x:Type TextBlock}">
+								<Setter Property="Background" Value="{Binding event_bg_color}"/>
+								<Setter Property="Foreground" Value="{Binding event_font_color}"/>
+							</Style>
+						</DataGridTextColumn.ElementStyle>
+					</DataGridTextColumn>
+
+				</DataGrid.Columns>
+			</DataGrid>
+		</DataTemplate>
+
+		<CollectionViewSource x:Key="eventCollection" IsLiveSortingRequested="True" IsLiveGroupingRequested="True" 
+											Source="{Binding OrderedByStart}">
+			--><!-- Sorting --><!--
+			<CollectionViewSource.SortDescriptions>
+				<componentModel:SortDescription PropertyName="event_date_start" />
+			</CollectionViewSource.SortDescriptions>
+
+			--><!-- Grouping --><!--
+			<CollectionViewSource.GroupDescriptions>
+				<PropertyGroupDescription PropertyName="event_date_start"/>
+			</CollectionViewSource.GroupDescriptions>
+		</CollectionViewSource>
+		<DataTemplate x:Key="GroupingHeader">
+			<Label Content="{Binding event_date_start}" />
+		</DataTemplate>-->
+
+	</Page.Resources>
+	<!--	ここでVMを指定する場合
 	<Page.DataContext>
 		<vm:X_1_4ViewModel/>
 	</Page.DataContext>-->
 
+	<!--遷移先のダイアログ-->
 	<behaviors:Interaction.Triggers>
 		<behaviors:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction/>
@@ -37,7 +109,6 @@
                 WindowType="{x:Type v:X_2}" Mode="Modal" />
 		</l:InteractionMessageTrigger>
 	</behaviors:Interaction.Triggers>
-
 
 	<Grid >
 		<Grid.ColumnDefinitions>
@@ -52,13 +123,170 @@
 		<controls:X_1_Control x:Name="ControlPanel"
 										Grid.Row="0" Grid.Column="0"/>
 
+		<DataGrid  x:Name="MyCalendar"
+						Grid.Row="1" Grid.Column="0"
+						ItemsSource="{Binding EDays}"
+						SelectionMode="Single"
+						 CanUserAddRows="False" 
+						 CanUserDeleteRows="False"
+						RowDetailsVisibilityMode="Visible" 
+						AutoGenerateColumns="False" IsReadOnly="True"
+						>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="開始日"  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Grid>
+								<TextBlock Text="{Binding Path=date, StringFormat={}{0:yyyy/MM/dd}}" 
+													VerticalAlignment="Top" Padding="3,3,3,3"/>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="要約"  >
+					<DataGridTemplateColumn.CellTemplate >
+						<DataTemplate>
+							<DataGrid HeadersVisibility="None" 
+														AutoGenerateColumns="False" 
+														IsReadOnly="True"
+														ItemsSource="{Binding events}" 
+														SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
+														SelectedIndex="{Binding selectedIndex,Mode=TwoWay}" 
+														MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" 
+														>
+								<DataGrid.Columns>
+									<DataGridTextColumn 
+													Binding="{Binding summary }"
+													MinWidth="200"
+													>
+										<DataGridTextColumn.ElementStyle>
+											<Style TargetType="{x:Type TextBlock}">
+												<Setter Property="Background" Value="{Binding event_bg_color}"/>
+												<Setter Property="Foreground" Value="{Binding event_font_color}"/>
+											</Style>
+										</DataGridTextColumn.ElementStyle>
+									</DataGridTextColumn>
+								</DataGrid.Columns>
+							</DataGrid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<!--<DataGrid 	 x:Name="MyCalendar"
+						Grid.Row="1" Grid.Column="0"
+						ItemsSource="{Binding OrderedByStart}"
+						SelectedItem="{Binding TargetEvent,Mode=TwoWay}" 
+					AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+
+			<DataGrid.InputBindings>
+				<MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditCommand}"/>
+			</DataGrid.InputBindings>
+
+			<DataGrid.GroupStyle>
+				 -->
+				 <!--First Group-->
+				 <!-- 
+				<GroupStyle ContainerStyle="{StaticResource GroupItemStyle}">
+					<GroupStyle.Panel>
+						<ItemsPanelTemplate>
+							<DataGridRowsPresenter/>
+						</ItemsPanelTemplate>
+					</GroupStyle.Panel>
+				</GroupStyle>
+
+				 -->
+				 <!--Second Group--> 
+				<!--<GroupStyle ContainerStyle="{StaticResource GroupItemStyle}">
+					<GroupStyle.Panel>
+						<ItemsPanelTemplate>
+							<DataGridRowsPresenter/>
+						</ItemsPanelTemplate>
+					</GroupStyle.Panel>
+				</GroupStyle>-->
+				 <!--Third Group--> 
+				<!--<GroupStyle ContainerStyle="{StaticResource GroupItemStyle}">
+					<GroupStyle.Panel>
+						<ItemsPanelTemplate>
+							<DataGridRowsPresenter/>
+						</ItemsPanelTemplate>
+					</GroupStyle.Panel>
+				</GroupStyle>-->
+				<!--
+			</DataGrid.GroupStyle>
+			<DataGrid.Columns>
+				--><!--<DataGridTemplateColumn Header="開始日" Width="80"/>-->
+				<!--<DataGridTemplateColumn Header="開始日"  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Grid>
+								<TextBlock Text="{Binding Path=event_date_start, StringFormat={}{0:yyyy/MM/dd}}" 
+													VerticalAlignment="Top" Padding="3,3,3,3"/>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>-->
+				<!--
+
+				<DataGridTemplateColumn Header="要約"  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate >
+							<Grid>
+								<TextBlock Grid.Row="0" 
+												Text="{Binding Path=summary}"
+												Background ="{Binding Path=event_bg_color}"
+												Foreground="{Binding Path=event_font_color}"
+												 VerticalAlignment="Center" Padding="3,3,3,3"
+											/>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>-->
+		<!--https://stackoverflow.com/questions/23988232/vertical-grouping-wpf-datagrid-or-listview
+		<ItemsControl ItemsSource="{Binding OrderedByStart}"
+								Grid.Row="1" Grid.Column="0">
+			<ItemsControl.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.ContainerStyle>
+						<Style TargetType="{x:Type GroupItem}">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="{x:Type GroupItem}">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="auto" />
+												<ColumnDefinition />
+											</Grid.ColumnDefinitions>
+											<Border BorderBrush="Black" BorderThickness=".5" Padding="4">
+												<TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+											</Border>
+											<ItemsPresenter Grid.Column="1" />
+										</Grid>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</GroupStyle.ContainerStyle>
+				</GroupStyle>
+			</ItemsControl.GroupStyle>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border BorderBrush="Black" BorderThickness=".5" Padding="4">
+						<TextBlock Text="{Binding summary}" />
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>-->
+		<!--Tree構造でグループ化
 		<igDP:XamDataPresenter Name="MainXDG" 
 									Grid.Row="1" Grid.Column="0"
 									DataSource="{Binding OrderedByStart}" 
 									ActiveDataItem="{Binding Path=TargetEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									GroupByAreaLocation="None"
 									>
-			<!--Expander.Expanded="this_loaded" GroupByAreaMode="DefaultFieldLayoutOnly"-->
 			<igDP:XamDataPresenter.Resources>
 				<Style TargetType="{x:Type igDP:RecordListControl}" BasedOn="{StaticResource RecordListControlStyle}" />
 				<Style TargetType="{x:Type igDP:RecordSelector}" BasedOn="{StaticResource CheckBoxRecordSelector}" />
@@ -85,13 +313,7 @@
 						</Setter.Value>
 					</Setter>
 				</Style>
-
 			</igDP:XamDataPresenter.Resources>
-
-			<!--<igDP:XamDataPresenter.ViewSettings>
-				<igDP:GridViewSettings />
-			</igDP:XamDataPresenter.ViewSettings>-->
-
 			<igDP:XamDataPresenter.InputBindings>
 				<MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditCommand}"/>
 			</igDP:XamDataPresenter.InputBindings>
@@ -105,28 +327,18 @@
 							FieldName="event_date_start" 
 						/>
 					</igDP:FieldLayout.SortedFields>
-					<!--<igDP:FieldLayout.SummaryDefinitions>
+					<igDP:FieldLayout.SummaryDefinitions>
 						<igDP:SummaryDefinition
 									Calculator="{x:Static igDP:SummaryCalculator.Count}"
 									SourceFieldName="summary" 
 									/>
-					</igDP:FieldLayout.SummaryDefinitions>-->
+					</igDP:FieldLayout.SummaryDefinitions>
 					<igDP:FieldLayout.Fields >
-						<!--<igDP:CheckBoxField Name="target" Label="対象" Row="0" Column="0" AllowEdit="True" HorizontalContentAlignment="Center" LabelTextAlignment="Center" />-->
-						<!--<igDP:FieldGroup Label="event_date_start" AllowCollapsing="True">-->
-						<!--<igDP:Field Name="●" Label="" 
-										Row="0" Column="1"
-										TextElement.Foreground="{Binding event_font_color}"
-										/>-->
-						<!--<igDP:Field Name="date" Label="開始日"
-											Row="0" Column="1" 
-											/>-->
 						<igDP:Field Name="event_date_start" Label="開始日"
 											Row="0" Column="1" 
 											>
 							<igDP:Field.Settings>
 								<igDP:FieldSettings GroupByMode="Date" />
-								<!--<igDP:FieldSettings MergedCellMode="Always"/>-->
 							</igDP:Field.Settings>
 							</igDP:Field>
 
@@ -134,17 +346,16 @@
 										Row="0" Column="2"
 										TextElement.Foreground="{Binding event_font_color}"
 										/>
-						<!--</igDP:FieldGroup>-->
 					</igDP:FieldLayout.Fields>
 				</igDP:FieldLayout>
-
 			</igDP:XamDataPresenter.FieldLayouts>
-		</igDP:XamDataPresenter>
-
+		</igDP:XamDataPresenter>-->
+		<!--DataGridの階層化
 		<Grid x:Name="MyCalendar"
 				Grid.Row="2" Grid.Column="0"
-				>
-			<DataGrid ItemsSource="{Binding EDays}" 
+				>-->
+		<!--<DataGrid Grid.Row="2" Grid.Column="0"
+							ItemsSource="{Binding EDays}" 
 							SelectedItem="{Binding TatagetDay,Mode=TwoWay}" 
 							SelectedIndex="{Binding selectedDateIndex,Mode=TwoWay}" 
 							AutoGenerateColumns="False" 
@@ -152,7 +363,7 @@
 							SelectionMode="Single"
 							RowDetailsVisibilityMode="Visible" 
 							>
-				<!--SelectedIndexはここなら取得できる-->
+				
 				<DataGrid.InputBindings>
 					<MouseBinding MouseAction="LeftDoubleClick" 
 											Command="{Binding EditCommand}"
@@ -161,27 +372,21 @@
 
 				<DataGrid.Columns>
 					<DataGridTextColumn  Header="開始日" 
-													Width="120" 
+													Width="120"
 													Binding="{Binding date, StringFormat={}{0:yyyy/MM/dd}}" />
-					<!--
 
-									<DataGridTextColumn Binding="{Binding summary }" >
-										<DataGridTextColumn.ElementStyle>
-											<Style TargetType="{x:Type TextBlock}">
-												<Setter Property="Background" Value="{Binding event_bg_color}"/>
-												<Setter Property="Foreground" Value="{Binding event_font_color}"/>
-											</Style>
-										</DataGridTextColumn.ElementStyle>
-									</DataGridTextColumn>
 
-									-->
-					<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
+				<DataGridTemplateColumn>
+
+				</DataGridTemplateColumn>
+				-->
+				<!--<DataGridTextColumn  Header="開始日" Binding="{Binding event_date_start, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_start}"/>
 										<DataGridTextColumn  Header="終了日" Binding="{Binding event_date_end, StringFormat={}{0:yyyy/MM/dd}}" />
 										<DataGridTextColumn  Header="時刻" Binding="{Binding event_time_end}"/>
-										<DataGridCheckBoxColumn Header="終日" Binding="{Binding event_is_daylong}"/>-->
+										<DataGridCheckBoxColumn Header="終日" Binding="{Binding event_is_daylong}"/>
 
-					<!--<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}" Width="200">
+					<DataGridTextColumn  Header="タイトル" Binding="{Binding event_title}" Width="200">
 											<DataGridTextColumn.ElementStyle>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Background" Value="{Binding event_bg_color}"/>
@@ -191,7 +396,6 @@
 										</DataGridTextColumn>
 										<DataGridTextColumn Header="場所" Binding="{Binding event_place}"  Width="120"/>
 										<DataGridTextColumn Header="メモ" Binding="{Binding event_memo}"/>-->
-
 					<!--<DataGridTextColumn Header="ステータス" Binding="{Binding event_status}"/>
 										<DataGridTextColumn Header="GoogleイベントID" Binding="{Binding google_id}"/>
 										<DataGridTextColumn  Header="イベント種別" Binding="{Binding event_type}"/>-->
@@ -201,6 +405,7 @@
 							</DataGrid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>-->
+					<!--
 				</DataGrid.Columns>
 
 				<DataGrid.RowDetailsTemplate>
@@ -221,7 +426,6 @@
 									<DataGridTextColumn.ElementStyle>
 										<Style TargetType="{x:Type TextBlock}">
 											<Setter Property="Background" Value="{Binding event_bg_color}"/>
-											<Setter Property="Background" Value="{Binding event_bg_color}"/>
 											<Setter Property="Foreground" Value="{Binding event_font_color}"/>
 										</Style>
 									</DataGridTextColumn.ElementStyle>
@@ -231,10 +435,41 @@
 						</DataGrid>
 					</DataTemplate>
 				</DataGrid.RowDetailsTemplate>
-
 			</DataGrid>
+		</Grid>-->
+		<!--<DataGrid Grid.Row="1" Grid.Column="0"
+						ItemsSource="{Binding Source={StaticResource ResourceKey=eventCollection}, Mode=OneWay}"
+						AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+			<DataGrid.GroupStyle>
+				<GroupStyle HeaderTemplate="{StaticResource ResourceKey=GroupingHeader}" />
+			</DataGrid.GroupStyle>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="開始日"  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Grid>
+								<TextBlock Text="{Binding Path=event_date_start, StringFormat={}{0:yyyy/MM/dd}}" 
+													VerticalAlignment="Top" Padding="3,3,3,3"/>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 
-		</Grid>
+				<DataGridTemplateColumn Header="要約"  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate >
+							<Grid>
+								<TextBlock Grid.Row="0" Text="{Binding Path=summary}"
+												Background ="{Binding Path=event_bg_color}"
+												Foreground="{Binding Path=event_font_color}"
+												 VerticalAlignment="Center" Padding="3,3,3,3"
+											/>
+							</Grid>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>--><!--
+				</DataGrid.Columns>
+		</DataGrid>-->
 
 	</Grid>
 </Page>

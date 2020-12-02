@@ -365,6 +365,20 @@ namespace TabCon.Models {
 		}
 
 		/// <summary>
+		/// “¯‚¶“ú‚Å‰½”Ô–Ú‚Ì—\’è‚©
+		/// </summary>
+		private int _childIndex;
+		public int childIndex {
+			get => _childIndex;
+			set {
+				if (_childIndex == value)
+					return;
+				_childIndex = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		/// <summary>
 		/// ‘I‘ð‚³‚ê‚½
 		/// </summary>
 		private bool _isSetect;
