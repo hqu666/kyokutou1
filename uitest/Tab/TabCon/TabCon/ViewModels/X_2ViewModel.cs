@@ -215,6 +215,10 @@ namespace TabCon.ViewModels {
 		public string eventFontColor { get; set; }
 		public List<int> TSList { get; set; }
 		//public Dictionary<string, int> TSList { get; set; }
+		/// <summary>
+		/// 添付ファイルリスト
+		/// </summary>
+		public List<attachments> AttachmentsList { get; set; }
 
 		public MySQL_Util MySQLUtil;
 
@@ -300,8 +304,8 @@ namespace TabCon.ViewModels {
 				eventFontColor = tEvents.event_font_color + "";
 				RaisePropertyChanged();
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
+				AttachmentsList = new List<attachments>();
 				RaisePropertyChanged();
-
 				//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -865,11 +869,6 @@ namespace TabCon.ViewModels {
 			}
 		}
 
-
-
-
-
-
 		/// <summary>
 		/// カラー設定
 		/// </summary>
@@ -1186,6 +1185,28 @@ namespace TabCon.ViewModels {
 			}
 		}
 
+		/// <summary>
+		/// PCから添付されたファイルの仮表示まで
+		/// </summary>
+		public void FilesFromLocal(string[] files)
+		{
+			string TAG = "FilesFromLocal";
+			string dbMsg = "[GEventEdit]";
+			try {
+				dbMsg += "," + files.Length + "件";
+				foreach(string file in files) {
+					dbMsg += "\r\n" + file;
+					attachments attachment = new attachments();
+					attachment.local_file_pass = file;
+					AttachmentsList.Add(attachment);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
+		}
+
 
 		/// <summary>
 		/// 添付ファイル配列の書き写し
@@ -1428,6 +1449,7 @@ namespace TabCon.ViewModels {
 			string TAG = "AddAttachmentst";
 			string dbMsg = "[GEventEdit]";
 			try {
+
 				//string title = attachment.Title;
 				//string fileId = attachment.FileId;
 				//string fileUrl = attachment.FileUrl;
