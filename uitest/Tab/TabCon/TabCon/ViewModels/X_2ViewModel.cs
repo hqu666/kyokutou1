@@ -5,9 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Infragistics.Controls.Schedules;
-using Livet;
-using Livet.Commands;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,18 +13,23 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Reflection;
 using System.Windows.Shapes;
 using Google.Apis.Drive.v3.Data;
+using Infragistics.Controls.Schedules;
+using Livet;
+using Livet.Commands;
+using Livet.Messaging.Windows;
+using Livet.EventListeners;
+
 using MySql.Data.MySqlClient;
 
 using TabCon.Models;
 using TabCon.Enums;
 using Task = System.Threading.Tasks.Task;
-using Livet.Messaging.Windows;
-using System.Reflection;
 
 namespace TabCon.ViewModels {
-	public class X_2ViewModel : ViewModel {
+	public class X_2ViewModel : ViewModel  {
 		public string titolStr = "【スケジュール登録】";
 		GoogleCalendarUtil GCalendarUtil = new GoogleCalendarUtil();
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
@@ -299,11 +301,6 @@ namespace TabCon.ViewModels {
 				eventFontColor = tEvents.event_font_color + "";
 				RaisePropertyChanged();
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
-
-
-
-				string[] files = { "test" };
-				FilesFromLocal(files);
 
 				RaisePropertyChanged();
 				//		EventWrite(taregetEvent, tEvents);
@@ -1301,8 +1298,7 @@ namespace TabCon.ViewModels {
 		}
 		#endregion
 
-
-		#region ExploreShow	　フォルダ選択
+		#region ExploreShow	　エクスプローラー表示
 		private ViewModelCommand _ExploreShow;
 
 		public ViewModelCommand ExploreShow {
@@ -1332,7 +1328,6 @@ namespace TabCon.ViewModels {
 		}
 		#endregion
 
-
 		/// <summary>
 		/// PCから添付されたファイルの仮表示まで
 		/// </summary>
@@ -1347,13 +1342,18 @@ namespace TabCon.ViewModels {
 				}
 				dbMsg += "：Attach=" + AttachmentsList.Count() ;
 				dbMsg += "に" + files.Length + "件を追加";
-				foreach(string file in files) {
+				string index = AttachmentsList.Count().ToString();
+				foreach (string file in files) {
 					dbMsg += "\r\n" + file;
 					attachments attachment = new attachments();
+					attachment.index = AttachmentsList.Count().ToString();
+					dbMsg += "\r\n(" + attachment.index;
+					dbMsg += ")" + file;
 					attachment.local_file_pass = file;
-					attachment.summary = @file;
+					attachment.summary = System.IO.Path.GetFileName(file);
 					attachment.IsEnabled = true;
 					AttachmentsList.Add(attachment);
+					index = AttachmentsList.Count().ToString();
 				}
 				dbMsg += ">> Attach=" + AttachmentsList.Count() + "件";
 				RaisePropertyChanged();         //"AttachmentsList"
@@ -1362,6 +1362,63 @@ namespace TabCon.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		public string DelFileIndex { get; set; }
+		#region AttachFileDell	　添付指定を削除
+		private ListenerCommand<string> _AttachFileDell;
+		public ListenerCommand<string> AttachFileDell {
+			get {
+				if (_AttachFileDell == null)
+					_AttachFileDell = new ListenerCommand<string>(DellAttachFile);
+				{
+					return _AttachFileDell;
+				}
+			}
+		}
+		//public ICommand AttachFileDell { get; set; }
+		//this.AttachFileDell = new DelegateCommand<int>(DellAttachFile);
+		//private Infrastructures.RelayCommand<int> _AttachFileDell;
+		//public ICommand AttachFileDell {
+		//	get {
+		//		if (_AttachFileDell == null)
+		//			_AttachFileDell = new Infrastructures.RelayCommand<int>(DellAttachFile);
+		//		return _AttachFileDell;
+		//	}
+		//}
+		//private ViewModelCommand _AttachFileDell;
+		//public ViewModelCommand AttachFileDell {
+		//	get {
+		//		if (_AttachFileDell == null) {
+		//			_AttachFileDell = new ViewModelCommand(DellAttachFile(o));
+		//		}
+		//		return _AttachFileDell;
+		//	}
+		//}
+
+		/// <summary>
+		/// 指定されたインデックスで添付指定を削除
+		/// </summary>
+		private void DellAttachFile(string index)
+		{
+			string TAG = "DellAttachFile";
+			string dbMsg = "";
+			try {
+				if ( index != "") {
+					dbMsg += ":index=" + index;
+					dbMsg += "/" + AttachmentsList.Count();
+					AttachmentsList.RemoveAt(int.Parse(index));
+					dbMsg += ">>" + AttachmentsList.Count();
+				} else {
+					dbMsg += ":引数無し";
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+
 
 		/// <summary>
 		/// 添付ファイル配列の書き写し

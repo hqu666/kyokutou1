@@ -252,12 +252,14 @@
     <Compile Include="Style\App.xaml.cs" />
     <Compile Include="Style\StyleDic.xaml.cs" />
     <Compile Include="ViewModels\ChildPageViewModel.cs" />
+    <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ChildViewModel.cs" />
     <Compile Include="ViewModels\MyIBindingList.cs" />
     <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
     <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelsBase .cs" />
     <Compile Include="ViewModels\Widget .cs" />
     <Compile Include="ViewModels\X_1_1ViewModel.cs" />
     <Compile Include="ViewModels\X_1_3ViewModel.cs" />

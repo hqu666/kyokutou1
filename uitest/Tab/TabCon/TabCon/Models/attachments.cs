@@ -8,6 +8,18 @@ namespace TabCon.Models {
 	/// </summary>
 	public partial class attachments : NotificationObject, ICloneable {
 
+		private string _index;
+		public string index {
+			get => _index;
+			set {
+				if (_index == value)
+					return;
+				_index = value;
+				RaisePropertyChanged();
+			}
+		}
+
+
 		private string _local_file_pass;
 		///<summary>
 		///PCやサーバ上のフルパス名
@@ -54,6 +66,7 @@ namespace TabCon.Models {
 		object ICloneable.Clone()
 		{
 			return new attachments() {
+				index = this.index,
 				local_file_pass = this.local_file_pass,
 				IsEnabled = this.IsEnabled,
 				summary = this.summary

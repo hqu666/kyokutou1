@@ -78,14 +78,15 @@
 		</Style>
 		<Style x:Key="bt-dell" TargetType="Button">
 			<Setter Property="HorizontalContentAlignment" Value="Center" />
-			<Setter Property="VerticalAlignment" Value="Center" />
-			<Setter Property="Margin" Value="0,0,10,0" />
+			<Setter Property="VerticalAlignment" Value="Top" />
+			<!--<Setter Property="Margin" Value="0,0,10,0" />-->
 			<Setter Property="Content" Value="×" />
-			<Setter Property="Background" Value="Transparent" />
-			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="Background" Value="Red" />
+			<Setter Property="BorderBrush" Value="#FFBB0F3E" />
 			<Setter Property="Panel.ZIndex" Value="90" />
 		</Style>
-
+		
 		<Style TargetType="Button"
            x:Key="CalendarButtons">
 			<Setter Property="Control.Template">
@@ -453,30 +454,66 @@
 			<Button Content="エクスプローラー"  
 						Command="{Binding ExploreShow}"
 						Grid.Row="13" Grid.Column="0" 
-							HorizontalAlignment="Left"  VerticalAlignment="Center" 
+							HorizontalAlignment="Left"  VerticalAlignment="Top" 
 							 />
 			<Grid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" >
+				<ScrollViewer MaxHeight="120">
+					<ItemsControl ItemsSource="{Binding AttachmentsList}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel  Background="#0C999292" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Name="border"
+											Margin="3"
+											BorderThickness="1"
+											BorderBrush="Navy"
+											Background="LightBlue"
+											CornerRadius="3">
+										<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition  Width="*"  />
+											<ColumnDefinition  Width="Auto"/>
+										</Grid.ColumnDefinitions>
+										<TextBlock  Text="{Binding Path=summary}" 
+											Padding="3"/>
+										<Button Grid.Column="1" 
+													Style="{StaticResource bt-dell}" 
+													Command="{Binding  AttachFileDell}"
+													CommandParameter="{Binding  Path=index}"
+											>
+										<!--
+										System.Windows.Data Error: 40 : BindingExpression path error: 
+										'AttachFileDell' property not found on 'object' ''attachments' (HashCode=27869743)'.
+										BindingExpression:Path=AttachFileDell; DataItem='attachments' (HashCode=27869743); 
+										target element is 'Button' (Name=''); target property is 'Command' (type 'ICommand')
 
-				<ItemsControl ItemsSource="{Binding AttachmentsList}">
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<WrapPanel  MinHeight="40" Background="#0C999292" />
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Button Content="{Binding summary ,Mode=OneWay}" Padding="3">
-<!--
+										-->
+
+											<!--<i:Interaction.Triggers>
+												<i:EventTrigger EventName="Click">
+													<i:InvokeCommandAction Command="{Binding AttachFileDell}" />
+													<i:InvokeCommandAction CommandParameter="{Binding  Path=index}" />
+												</i:EventTrigger>
+											</i:Interaction.Triggers>-->
+										</Button>
+									</Grid>
+								</Border>
+
+									<!--
 , UpdateSourceTrigger=PropertyChanged
 <i:Interaction.Triggers>
 												<i:EventTrigger EventName="Click">
 													<i:InvokeCommandAction Command="{Binding ClickCommand}" />
 												</i:EventTrigger>
-											</i:Interaction.Triggers>-->
-							</Button>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
+											</i:Interaction.Triggers>
+								</Button>-->
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
 
 			</Grid>
 
