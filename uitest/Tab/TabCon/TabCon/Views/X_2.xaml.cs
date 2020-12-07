@@ -24,9 +24,9 @@ namespace TabCon.Views {
 			VM = new ViewModels.X_2ViewModel();
 			this.DataContext = VM;
 			this.AllowDrop = true;
-			Attachments_wp.AllowDrop = true;
-			Attachments_wp.AddHandler(WrapPanel.DragOverEvent, new DragEventHandler(WPDragOver), true);
-			Attachments_wp.AddHandler(WrapPanel.DropEvent, new DragEventHandler(WPDrop), true);
+			//Attachments_wp.AllowDrop = true;
+			//Attachments_wp.AddHandler(WrapPanel.DragOverEvent, new DragEventHandler(WPDragOver), true);
+			//Attachments_wp.AddHandler(WrapPanel.DropEvent, new DragEventHandler(WPDrop), true);
 
 			this.Loaded += this_loaded;
 		}
@@ -316,6 +316,8 @@ namespace TabCon.Views {
 					dbMsg += ">>" + SelectFileName;
 					NowSelectedPath = Path.GetDirectoryName(SelectFileName);
 					dbMsg += ">>NowSelectedPath=" + NowSelectedPath;
+					string[] files = { SelectFileName };
+					VM.FilesFromLocal(files);
 				} else {
 					dbMsg += "キャンセルされました";
 				}

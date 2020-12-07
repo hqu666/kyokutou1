@@ -214,11 +214,19 @@ namespace TabCon.ViewModels {
 		///</summary>
 		public string eventFontColor { get; set; }
 		public List<int> TSList { get; set; }
-		//public Dictionary<string, int> TSList { get; set; }
+
+		private ObservableCollection<attachments> _AttachmentsList = new ObservableCollection<attachments>();
 		/// <summary>
 		/// 添付ファイルリスト
 		/// </summary>
-		public List<attachments> AttachmentsList { get; set; }
+		public ObservableCollection<attachments> AttachmentsList {
+			get {
+				return _AttachmentsList;
+			}
+			set {
+				_AttachmentsList = value;
+			}
+		}
 
 		public MySQL_Util MySQLUtil;
 
@@ -304,7 +312,6 @@ namespace TabCon.ViewModels {
 				eventFontColor = tEvents.event_font_color + "";
 				RaisePropertyChanged();
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
-				AttachmentsList = new List<attachments>();
 				RaisePropertyChanged();
 				//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
@@ -1191,22 +1198,30 @@ namespace TabCon.ViewModels {
 		public void FilesFromLocal(string[] files)
 		{
 			string TAG = "FilesFromLocal";
-			string dbMsg = "[GEventEdit]";
+			string dbMsg = "";
 			try {
-				dbMsg += "," + files.Length + "件";
+				if(AttachmentsList == null) {
+					AttachmentsList = new ObservableCollection<attachments>();
+			//		AttachmentsList = new Binding("AttachmentsList");
+				}
+				dbMsg += " Attach=" + AttachmentsList.Count() ;
+				dbMsg += "+" + files.Length + "件";
 				foreach(string file in files) {
 					dbMsg += "\r\n" + file;
 					attachments attachment = new attachments();
 					attachment.local_file_pass = file;
+					attachment.summary = file;
+					attachment.IsEnabled = true;
 					AttachmentsList.Add(attachment);
 				}
+				dbMsg += ">> Attach=" + AttachmentsList.Count() + "件";
+
+				RaisePropertyChanged("AttachmentsList");
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-
 		}
-
 
 		/// <summary>
 		/// 添付ファイル配列の書き写し

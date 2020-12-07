@@ -117,16 +117,22 @@
 		<!--DataTemplateとして定義-->
 		<DataTemplate x:Key="ButtonsDataTemplete">
 			<Button 
-                               Content="{Binding Path=ButtonContent}" 
-                               IsEnabled="{Binding Path=IsEnabled}"
-							   Style="{StaticResource bt-attachment}"
-                               FontFamily="Segoe UI Semibold"
-                                HorizontalAlignment="Left" />
+                    Content="{Binding Path=summary}" 
+                    IsEnabled="{Binding Path=IsEnabled}"
+					Style="{StaticResource bt-attachment}"
+                    FontFamily="Segoe UI Semibold"
+                    HorizontalAlignment="Left" />
 			<!---->
 		</DataTemplate>
 		<ItemsPanelTemplate x:Key="WrapPanelTemplate">
 			<WrapPanel 
-								MinHeight="40" Background="#0C999292" 
+					MinHeight="40" Background="#0C999292"
+					AllowDrop="true" 
+					Drop="WPDrop" 
+					DragEnter="Attachments_wp_DragEnter" 
+					DragLeave="Attachments_wp_DragLeave" 
+					DragOver="WPDragOver"
+					MouseLeftButtonDown="WPMouseLeftButtonUp"  
 				>
 			</WrapPanel>
 		</ItemsPanelTemplate>
@@ -448,34 +454,73 @@
 							HorizontalAlignment="Left"  VerticalAlignment="Center" 
 							 Content="エクスプローラー" Click="Exp_bt_Click" />
 
-			<Grid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" 
-				>
-				<WrapPanel x:Name="Attachments_wp"
-								MinHeight="40" Background="#0C999292"
-								AllowDrop="true" 
-								Drop="WPDrop" 
-								DragEnter="Attachments_wp_DragEnter" 
-								DragLeave="Attachments_wp_DragLeave" 
-								DragOver="WPDragOver"
-								MouseLeftButtonDown="WPMouseLeftButtonUp" 
-									>
+			<Grid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" >
+				<!--xmlns:exp="clr-namespace:System.Linq.Expressions;assembly=System.Core">
+				<Grid.Resources>
+					<DataTemplate DataType="{x:Type exp:ParameterExpression}">
+							<Button Content="{Binding summary}">
+							</Button>
+					</DataTemplate>
+				</Grid.Resources>
+				<WrapPanel MinHeight="40" Background="#0C999292">
+					<ItemsControl ItemsSource="{Binding AttachmentsList}" />
+				</WrapPanel>-->
 
-					<!--https://qiita.com/takanemu/items/d459677b8ddee91172f5
-					<WrapPanel.DataContext>
-						<vm:X_2ViewModel />
-					</WrapPanel.DataContext>
-					<i:Interaction.Behaviors>
-						<behaviors:DragStartBehavior AllowedEffects="Copy" DragDropData="{Binding}" />
-					</i:Interaction.Behaviors>-->
+				<!--AllowDrop="true" 
+					Drop="WPDrop" 
+					DragEnter="Attachments_wp_DragEnter" 
+					DragLeave="Attachments_wp_DragLeave" 
+					DragOver="WPDragOver"
+					MouseLeftButtonDown="WPMouseLeftButtonUp"
+					-->
+				<ItemsControl ItemsSource="{Binding AttachmentsList, Mode=OneWay}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Button Content="{Binding summary}" Padding="3">
+								<!--<i:Interaction.Triggers>
+												<i:EventTrigger EventName="Click">
+													<i:InvokeCommandAction Command="{Binding ClickCommand}" />
+												</i:EventTrigger>
+											</i:Interaction.Triggers>-->
+							</Button>
+							<!--<Border BorderBrush="Black" BorderThickness="1" Margin="5,5,5,5">
+								<local:ServerControl DataContext="{Binding }" />
+								--><!-- The actual UserControl --><!--
+							</Border>-->
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<!--<ItemsControl ItemsSource="{Binding AttachmentsList}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Button Content="{Binding summary}" Padding="3">
+											--><!--<i:Interaction.Triggers>
+												<i:EventTrigger EventName="Click">
+													<i:InvokeCommandAction Command="{Binding ClickCommand}" />
+												</i:EventTrigger>
+											</i:Interaction.Triggers>--><!--
+										</Button>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
 
-					<ItemsControl ItemsSource="{Binding buttonsViewModelColl}"
-								 ItemsPanel="{StaticResource WrapPanelTemplate}"
-									ItemTemplate="{StaticResource ButtonsDataTemplete}" 
-									/>
-				</WrapPanel>
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<Grid />
+							--><!--<WrapPanel MinHeight="40" Background="#0C999292" />--><!--
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+							</ItemsControl>-->
+
 			</Grid>
 
-			<!--<Grid x:Name="attachments_g" 
+			<!--
+			 x:Name="Attachments_wp"
+			<Grid x:Name="attachments_g" 
 					 AllowDrop="true" 
 					Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
 					Background="#55D3D3D3">
