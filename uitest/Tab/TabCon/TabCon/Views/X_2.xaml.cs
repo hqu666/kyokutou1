@@ -252,82 +252,11 @@ namespace TabCon.Views {
 			}
 		}
 
-		private void Exp_bt_Click(object sender, RoutedEventArgs e)
+		private void Del_bt_Click(object sender, RoutedEventArgs e)
 		{
-			string TAG = "Exp_bt_Click";
-			//	Process.Start("EXPLORER.EXE", @"c:\");
-			//最近表示した場所	をシェルなら
-		//	explorer.exe shell:::{ 22877A6D - 37A1 - 461A - 91B0 - DBDA5AAEBC99}
-			Process.Start("EXPLORER.EXE", @"{ 22877A6D - 37A1 - 461A - 91B0 - DBDA5AAEBC99}");
-			string dbMsg = "";
-			try {
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
+
 		}
 
-		private void Folder_bt_Click(object sender, RoutedEventArgs e)
-		{
-			string TAG = "Folder_bt_Click";
-			string dbMsg = "";
-			try {
-				//①
-				FolderBrowserDialog fbDialog = new FolderBrowserDialog();
-				// ダイアログの説明文を指定する
-				fbDialog.Description = "添付ファイルをフォルダ単位で指定";
-				// デフォルトのフォルダを指定する
-				dbMsg += ",NowSelectedPath="+ NowSelectedPath;
-				fbDialog.SelectedPath = @NowSelectedPath;
-				// 「新しいフォルダーの作成する」ボタンを表示しない
-				fbDialog.ShowNewFolderButton = false;
-				//フォルダを選択するダイアログを表示する
-				if (fbDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-					NowSelectedPath= fbDialog.SelectedPath;
-					dbMsg += ">>" + NowSelectedPath;
-					string[] files = System.IO.Directory.GetFiles(@NowSelectedPath, "*", System.IO.SearchOption.AllDirectories);
-					dbMsg += ">>" + files.Length + "件";
-					VM.FilesFromLocal(files);
-				} else {
-					dbMsg += "キャンセルされました";
-				}
-				// オブジェクトを破棄する
-				fbDialog.Dispose();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-		private void File_bt_Click(object sender, RoutedEventArgs e)
-		{
-			string TAG = "File_bt_Click";
-			string dbMsg = "";
-			try {
-				//①
-				OpenFileDialog ofDialog = new OpenFileDialog();
-				//② デフォルトのフォルダを指定する
-				dbMsg += ",NowSelectedPath=" + NowSelectedPath;
-				ofDialog.InitialDirectory = @NowSelectedPath;
-				//③ダイアログのタイトルを指定する
-				ofDialog.Title = "添付ファイル選択";
-				//ダイアログを表示する
-				if (ofDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-					string SelectFileName = ofDialog.FileName;
-					dbMsg += ">>" + SelectFileName;
-					NowSelectedPath = Path.GetDirectoryName(SelectFileName);
-					dbMsg += ">>NowSelectedPath=" + NowSelectedPath;
-					string[] files = { SelectFileName };
-					VM.FilesFromLocal(files);
-				} else {
-					dbMsg += "キャンセルされました";
-				}
-				// オブジェクトを破棄する
-				ofDialog.Dispose();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)

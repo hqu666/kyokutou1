@@ -428,15 +428,16 @@
 						Name="description_wb"/>-->
 			<Label  Grid.Row="12" Grid.Column="0" Content="添付ファイル" 
 							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
-			<Button x:Name="file_bt"
+			<Button Content="ファイル選択"
+							Command="{Binding FileDlogShow}"
 							Grid.Row="12" Grid.Column="1" 
-							HorizontalAlignment="Center"  VerticalAlignment="Center" 
-							 Content="ファイル" Click="File_bt_Click"/>
-			<Button x:Name="folder_bt"
+							HorizontalAlignment="Right"  VerticalAlignment="Center" 
+							 />
+			<Button Content="フォルダ選択"
+							Command="{Binding FolderDlogShow}"
 							Grid.Row="12" Grid.Column="2" 
-							HorizontalAlignment="Center"  VerticalAlignment="Center" 
-							 Content="フォルダ" Click="Folder_bt_Click"/>
-
+							HorizontalAlignment="Right"  VerticalAlignment="Center" 
+							/>
 			<StackPanel Orientation="Horizontal" 	HorizontalAlignment="Right" Grid.Row="12" Grid.Column="3" >
 				<Label  x:Name="attachments_count_lb" Content="0" 
 						VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
@@ -449,72 +450,33 @@
 								Panel.ZIndex="10" 
 								Name="attachments_sp" 
 				/>
-			<Button x:Name="exp_bt"
+			<Button Content="エクスプローラー"  
+						Command="{Binding ExploreShow}"
 						Grid.Row="13" Grid.Column="0" 
 							HorizontalAlignment="Left"  VerticalAlignment="Center" 
-							 Content="エクスプローラー" Click="Exp_bt_Click" />
-
+							 />
 			<Grid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" >
-				<!--xmlns:exp="clr-namespace:System.Linq.Expressions;assembly=System.Core">
-				<Grid.Resources>
-					<DataTemplate DataType="{x:Type exp:ParameterExpression}">
-							<Button Content="{Binding summary}">
-							</Button>
-					</DataTemplate>
-				</Grid.Resources>
-				<WrapPanel MinHeight="40" Background="#0C999292">
-					<ItemsControl ItemsSource="{Binding AttachmentsList}" />
-				</WrapPanel>-->
 
-				<!--AllowDrop="true" 
-					Drop="WPDrop" 
-					DragEnter="Attachments_wp_DragEnter" 
-					DragLeave="Attachments_wp_DragLeave" 
-					DragOver="WPDragOver"
-					MouseLeftButtonDown="WPMouseLeftButtonUp"
-					-->
-				<ItemsControl ItemsSource="{Binding AttachmentsList, Mode=OneWay}">
+				<ItemsControl ItemsSource="{Binding AttachmentsList}">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<WrapPanel />
+							<WrapPanel  MinHeight="40" Background="#0C999292" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Button Content="{Binding summary}" Padding="3">
-								<!--<i:Interaction.Triggers>
+							<Button Content="{Binding summary ,Mode=OneWay}" Padding="3">
+<!--
+, UpdateSourceTrigger=PropertyChanged
+<i:Interaction.Triggers>
 												<i:EventTrigger EventName="Click">
 													<i:InvokeCommandAction Command="{Binding ClickCommand}" />
 												</i:EventTrigger>
 											</i:Interaction.Triggers>-->
 							</Button>
-							<!--<Border BorderBrush="Black" BorderThickness="1" Margin="5,5,5,5">
-								<local:ServerControl DataContext="{Binding }" />
-								--><!-- The actual UserControl --><!--
-							</Border>-->
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
-				<!--<ItemsControl ItemsSource="{Binding AttachmentsList}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<Button Content="{Binding summary}" Padding="3">
-											--><!--<i:Interaction.Triggers>
-												<i:EventTrigger EventName="Click">
-													<i:InvokeCommandAction Command="{Binding ClickCommand}" />
-												</i:EventTrigger>
-											</i:Interaction.Triggers>--><!--
-										</Button>
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-
-								<ItemsControl.ItemsPanel>
-									<ItemsPanelTemplate>
-										<Grid />
-							--><!--<WrapPanel MinHeight="40" Background="#0C999292" />--><!--
-									</ItemsPanelTemplate>
-								</ItemsControl.ItemsPanel>
-							</ItemsControl>-->
 
 			</Grid>
 
@@ -620,10 +582,10 @@
 				HorizontalAlignment="Left"  VerticalAlignment="Center" 
 							 Content="イベントをコピー" />
 			<Button  Grid.Row="16" Grid.Column="1" 
-					HorizontalAlignment="Center"  VerticalAlignment="Center"
+							HorizontalAlignment="Right"  VerticalAlignment="Center" 
 							   Content="工程イベントを作成"/>
 			<Button   Grid.Row="16" Grid.Column="2" 
-					HorizontalAlignment="Center"  VerticalAlignment="Center"
+							HorizontalAlignment="Right"  VerticalAlignment="Center" 
 					 Content="発注書を作成" />
 			<Button  Grid.Row="16" Grid.Column="4" 
 						HorizontalAlignment="Right"  VerticalAlignment="Center" 
@@ -637,18 +599,14 @@
 							Name="cancel_bt" Content="キャンセル"  
 							 Command="{Binding CancelCommand}"
 							/>
-			<!--Click="Cancel_bt_Click"-->
 			<Button  Grid.Row="17" Grid.Column="1" Grid.ColumnSpan="2"
 						HorizontalAlignment="Center"  VerticalAlignment="Center" Width="80"
 							  Name="del_bt" Content="削除"/>
-			<!--Click="Del_bt_Click"-->
 			<Button   Grid.Row="17" Grid.Column="4"
 					HorizontalAlignment="Right"  VerticalAlignment="Center" Width="80"  
 					Name="save_bt" Content="登録"  
 					Command="{Binding UpdateCommand}"
 					/>
-			<!--Click="Save_bt_Click"-->
-			<!--</StackPanel>-->
 			<TextBox  Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" Foreground="White" 
 								Name="htmlLink_lb" Text="url"  HorizontalAlignment="Left"  Margin="0,0,10,0"
 								VerticalAlignment="Top" />

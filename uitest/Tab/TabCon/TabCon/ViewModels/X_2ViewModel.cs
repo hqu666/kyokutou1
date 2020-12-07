@@ -215,19 +215,6 @@ namespace TabCon.ViewModels {
 		public string eventFontColor { get; set; }
 		public List<int> TSList { get; set; }
 
-		private ObservableCollection<attachments> _AttachmentsList = new ObservableCollection<attachments>();
-		/// <summary>
-		/// 添付ファイルリスト
-		/// </summary>
-		public ObservableCollection<attachments> AttachmentsList {
-			get {
-				return _AttachmentsList;
-			}
-			set {
-				_AttachmentsList = value;
-			}
-		}
-
 		public MySQL_Util MySQLUtil;
 
 		/// <summary>
@@ -312,6 +299,12 @@ namespace TabCon.ViewModels {
 				eventFontColor = tEvents.event_font_color + "";
 				RaisePropertyChanged();
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
+
+
+
+				string[] files = { "test" };
+				FilesFromLocal(files);
+
 				RaisePropertyChanged();
 				//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
@@ -1192,6 +1185,154 @@ namespace TabCon.ViewModels {
 			}
 		}
 
+		public string NowSelectedPath = "C:";
+		private ObservableCollection<attachments> _AttachmentsList = new ObservableCollection<attachments>();
+		/// <summary>
+		/// 添付ファイルリスト
+		/// </summary>
+		public ObservableCollection<attachments> AttachmentsList {
+			get {
+				return _AttachmentsList;
+			}
+			set {
+				string TAG = "AttachmentsList(set)";
+				string dbMsg = "";
+				_AttachmentsList = value;
+				dbMsg += "" + _AttachmentsList.Count() + "件";
+				MyLog(TAG, dbMsg);
+				RaisePropertyChanged("AttachmentsList");
+			}
+		}
+
+		#region FileDlogShow	　単一ファイルの選択
+		private ViewModelCommand _FileDlogShow;
+
+		public ViewModelCommand FileDlogShow {
+			get {
+				if (_FileDlogShow == null) {
+					_FileDlogShow = new ViewModelCommand(ShowFileDlog);
+				}
+				return _FileDlogShow;
+			}
+		}
+		/// <summary>
+		/// 単一ファイルの選択ダイアログから選択されたファイルをアイコン化処理に渡す
+		/// </summary>
+		public void ShowFileDlog()
+		{
+			string TAG = "File_bt_Click";
+			string dbMsg = "";
+			try {
+				string SelectFileName = "";
+				//①
+				System.Windows.Forms.OpenFileDialog ofDialog = new System.Windows.Forms.OpenFileDialog();
+				//② デフォルトのフォルダを指定する
+				dbMsg += ",NowSelectedPath=" + NowSelectedPath;
+				ofDialog.InitialDirectory = @NowSelectedPath;
+				//③ダイアログのタイトルを指定する
+				ofDialog.Title = "添付ファイル選択";
+				//ダイアログを表示する
+				if (ofDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					SelectFileName = ofDialog.FileName;
+					dbMsg += ">>" + SelectFileName;
+					NowSelectedPath = System.IO.Path.GetDirectoryName(SelectFileName);
+					dbMsg += ">>NowSelectedPath=" + NowSelectedPath;
+				} else {
+					dbMsg += "キャンセルされました";
+				}
+				// オブジェクトを破棄する
+				ofDialog.Dispose();
+
+				if (!SelectFileName.Equals("")) {
+					string[] files = { SelectFileName };
+					FilesFromLocal(files);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+		#region FolderDlogShow	　フォルダ選択
+		private ViewModelCommand _FolderDlogShow;
+
+		public ViewModelCommand FolderDlogShow {
+			get {
+				if (_FolderDlogShow == null) {
+					_FolderDlogShow = new ViewModelCommand(ShowFolderDlog);
+				}
+				return _FolderDlogShow;
+			}
+		}
+		/// <summary>
+		/// フォルダ選択ダイアログから選択されたフォルダのファイルリストをファイルをアイコン化処理に渡す
+		/// </summary>
+		private void ShowFolderDlog()
+		{
+			string TAG = "Folder_bt_Click";
+			string dbMsg = "";
+			try {
+				//①
+				System.Windows.Forms.FolderBrowserDialog fbDialog = new System.Windows.Forms.FolderBrowserDialog();
+				// ダイアログの説明文を指定する
+				fbDialog.Description = "添付ファイルをフォルダ単位で指定";
+				// デフォルトのフォルダを指定する
+				dbMsg += ",NowSelectedPath=" + NowSelectedPath;
+				fbDialog.SelectedPath = @NowSelectedPath;
+				// 「新しいフォルダーの作成する」ボタンを表示しない
+				fbDialog.ShowNewFolderButton = false;
+				//フォルダを選択するダイアログを表示する
+				if (fbDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+					NowSelectedPath = fbDialog.SelectedPath;
+					dbMsg += ">>" + NowSelectedPath;
+					string[] files = System.IO.Directory.GetFiles(@NowSelectedPath, "*", System.IO.SearchOption.AllDirectories);
+					dbMsg += ">>" + files.Length + "件";
+					FilesFromLocal(files);
+				} else {
+					dbMsg += "キャンセルされました";
+				}
+				// オブジェクトを破棄する
+				fbDialog.Dispose();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+
+		#region ExploreShow	　フォルダ選択
+		private ViewModelCommand _ExploreShow;
+
+		public ViewModelCommand ExploreShow {
+			get {
+				if (_ExploreShow == null) {
+					_ExploreShow = new ViewModelCommand(ShowExplore);
+				}
+				return _ExploreShow;
+			}
+		}
+		/// <summary>
+		/// エクスプローラで作業対象フォルダを表示する
+		/// </summary>
+		private void ShowExplore()
+		{
+			string TAG = "ShowExplore";
+			//	Process.Start("EXPLORER.EXE", @"c:\");
+			//最近表示した場所	をシェルなら
+			//	explorer.exe shell:::{ 22877A6D - 37A1 - 461A - 91B0 - DBDA5AAEBC99}
+			System.Diagnostics.Process.Start("EXPLORER.EXE", @"{ 22877A6D - 37A1 - 461A - 91B0 - DBDA5AAEBC99}");
+			string dbMsg = "";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+
 		/// <summary>
 		/// PCから添付されたファイルの仮表示まで
 		/// </summary>
@@ -1201,22 +1342,21 @@ namespace TabCon.ViewModels {
 			string dbMsg = "";
 			try {
 				if(AttachmentsList == null) {
+					dbMsg = "AttachmentsList生成";
 					AttachmentsList = new ObservableCollection<attachments>();
-			//		AttachmentsList = new Binding("AttachmentsList");
 				}
-				dbMsg += " Attach=" + AttachmentsList.Count() ;
-				dbMsg += "+" + files.Length + "件";
+				dbMsg += "：Attach=" + AttachmentsList.Count() ;
+				dbMsg += "に" + files.Length + "件を追加";
 				foreach(string file in files) {
 					dbMsg += "\r\n" + file;
 					attachments attachment = new attachments();
 					attachment.local_file_pass = file;
-					attachment.summary = file;
+					attachment.summary = @file;
 					attachment.IsEnabled = true;
 					AttachmentsList.Add(attachment);
 				}
 				dbMsg += ">> Attach=" + AttachmentsList.Count() + "件";
-
-				RaisePropertyChanged("AttachmentsList");
+				RaisePropertyChanged();         //"AttachmentsList"
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
