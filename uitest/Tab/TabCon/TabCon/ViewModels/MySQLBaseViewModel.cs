@@ -62,7 +62,7 @@ namespace TabCon.ViewModels{
 		/// <summary>
 		/// 選択されたテーブル名
 		/// </summary>
-		public string selectedTableName;
+		public string selectedTableName { get; set; }
 		/// <summary>
 		/// 選択しているテーブルのモデル
 		/// </summary>

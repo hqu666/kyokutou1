@@ -153,6 +153,8 @@
     <Compile Include="Helpers\GoogleApi.cs" />
     <Compile Include="Infrastructures\ViewModelBase .cs" />
     <Compile Include="LocalFileUtil.cs" />
+    <Compile Include="Models\GAttachFile.cs" />
+    <Compile Include="Models\GOAuthModel.cs" />
     <Compile Include="Models\MyMenu.cs" />
     <Compile Include="Models\m_admin_users.cs" />
     <Compile Include="Models\m_banks.cs" />

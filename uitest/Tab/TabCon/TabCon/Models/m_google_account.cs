@@ -143,8 +143,8 @@ namespace TabCon.Models
 		///<summary>
 		///作成者
 		///</summary>
-		private int _created_user;
-		public int created_user
+		private int? _created_user;
+		public int? created_user
 		{
 			get => _created_user;
 			set
@@ -159,8 +159,8 @@ namespace TabCon.Models
 		///<summary>
 		///作成日時
 		///</summary>
-		private DateTime _created_at;
-		public DateTime created_at
+		private DateTime? _created_at;
+		public DateTime? created_at
 		{
 			get => _created_at;
 			set
@@ -175,8 +175,8 @@ namespace TabCon.Models
 		///<summary>
 		///更新者
 		///</summary>
-		private int _updated_user;
-		public int updated_user
+		private int? _updated_user;
+		public int? updated_user
 		{
 			get => _updated_user;
 			set
@@ -191,8 +191,8 @@ namespace TabCon.Models
 		///<summary>
 		///更新日時
 		///</summary>
-		private DateTime _updated_at;
-		public DateTime updated_at
+		private DateTime? _updated_at;
+		public DateTime? updated_at
 		{
 			get => _updated_at;
 			set
@@ -207,8 +207,8 @@ namespace TabCon.Models
 		///<summary>
 		///削除日時
 		///</summary>
-		private DateTime _deleted_at;
-		public DateTime deleted_at
+		private DateTime? _deleted_at;
+		public DateTime? deleted_at
 		{
 			get => _deleted_at;
 			set
@@ -219,6 +219,7 @@ namespace TabCon.Models
 				RaisePropertyChanged();
 			}
 		}
+		//生成以降の追記//////////////////////////////////////////////////////////////
 
 	}
 
