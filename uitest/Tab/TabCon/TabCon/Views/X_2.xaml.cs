@@ -274,11 +274,6 @@ namespace TabCon.Views {
 			}
 		}
 
-		private void Del_bt_Click(object sender, RoutedEventArgs e)
-		{
-
-		}
-
 
 		/// ///////////////////////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)

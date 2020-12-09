@@ -511,9 +511,11 @@
 													<l:LivetCallMethodAction 
 															MethodTarget="{Binding methodTarget}"
 															MethodName="DellAttachFile"
-															MethodParameter="{Binding Path=index}"
+															MethodParameter="{Binding}"
 																							/>
-													<!--MethodTarget="{Binding Source={StaticResource viewModel}}"-->
+													<!--MethodTarget="{Binding Source={StaticResource viewModel}}"
+															MethodParameter="{Binding Path=index}"
+													-->
 												</behaviors:EventTrigger>
 											</behaviors:Interaction.Triggers>
 										</Button>

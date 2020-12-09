@@ -1195,8 +1195,6 @@ namespace TabCon.ViewModels {
 				string TAG = "AttachmentsList(set)";
 				string dbMsg = "";
 				_AttachmentsList = value;
-				AttachmentsCount = _AttachmentsList.Count();
-				dbMsg += "" + AttachmentsCount + "件";
 				MyLog(TAG, dbMsg);
 				RaisePropertyChanged("AttachmentsList");
 			}
@@ -1362,8 +1360,10 @@ namespace TabCon.ViewModels {
 					AttachmentsList.Add(attachment);
 					index = AttachmentsList.Count().ToString();
 				}
-				dbMsg += ">> Attach=" + AttachmentsList.Count() + "件";
-				RaisePropertyChanged();         //"AttachmentsList"
+				RaisePropertyChanged("AttachmentsList");
+				AttachmentsCount = AttachmentsList.Count();
+				RaisePropertyChanged("AttachmentsCount");
+				dbMsg += ">> Attach=" + AttachmentsCount + "件";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1382,11 +1382,11 @@ namespace TabCon.ViewModels {
 		//	}
 		//}
 
-		private RelayCommand<int> _AttachFileDell;
+		private RelayCommand<attachments> _AttachFileDell;
 		public ICommand AttachFileDell {
 			get {
 				if (_AttachFileDell == null)
-					_AttachFileDell = new RelayCommand<int>(DellAttachFile);
+					_AttachFileDell = new RelayCommand<attachments>(DellAttachFile);
 				return _AttachFileDell;
 			}
 		}
@@ -1419,22 +1419,22 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// 指定されたインデックスで添付指定を削除
 		/// </summary>
-		public void DellAttachFile(int index)
+		public void DellAttachFile(attachments item)
 		{
 			string TAG = "DellAttachFile";
 			string dbMsg = "";
 			try {
-				if ( -1 < index ) {
-					dbMsg += "Attach:index=" + index;
+				if (item != null) {
+					dbMsg += "Attach(" + item.index + ")" + item.local_file_pass;
 					dbMsg += "/" + this.AttachmentsList.Count();
-					if(index <= this.AttachmentsList.Count()) {
-						this.AttachmentsList.RemoveAt(index);
-						dbMsg += ">>" + this.AttachmentsList.Count();
-					} else {
-						dbMsg += ":範囲外";
-					}
+					this.AttachmentsList.Remove(item);
+					RaisePropertyChanged("AttachmentsList");
+					AttachmentsCount = AttachmentsList.Count();
+					RaisePropertyChanged("AttachmentsCount");
+					dbMsg += ">> Attach=" + AttachmentsCount + "件";
+					RaisePropertyChanged();         //"AttachmentsList"
 				} else {
-					dbMsg += ":引数無し";
+					dbMsg += ":対象不明";
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -1442,8 +1442,6 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
-
-
 
 		/// <summary>
 		/// 添付ファイル配列の書き写し
