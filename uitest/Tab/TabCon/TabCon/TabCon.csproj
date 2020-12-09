@@ -150,6 +150,7 @@
     <Compile Include="GoogleAuthUtil.cs" />
     <Compile Include="GoogleCalendarUtil.cs" />
     <Compile Include="GoogleDriveUtil.cs" />
+    <Compile Include="Helpers\GoogleApi.cs" />
     <Compile Include="Infrastructures\ViewModelBase .cs" />
     <Compile Include="LocalFileUtil.cs" />
     <Compile Include="Models\MyMenu.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="ViewModels\X_1_1ViewModel.cs" />
     <Compile Include="ViewModels\X_1_3ViewModel.cs" />
     <Compile Include="ViewModels\X_1_4ViewModel.cs" />
+    <Compile Include="ViewModels\Z_1_4ViewModel.cs" />
     <Compile Include="ViewModels\X_2ViewModel.cs" />
     <Compile Include="Views\ChildPageView.xaml.cs">
       <DependentUpon>ChildPageView.xaml</DependentUpon>
@@ -301,6 +303,9 @@
     </Compile>
     <Compile Include="Views\X_2.xaml.cs">
       <DependentUpon>X_2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Z_1_4.xaml.cs">
+      <DependentUpon>Z_1_4.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewTabControl.xaml.cs">
       <DependentUpon>ViewTabControl.xaml</DependentUpon>
@@ -404,6 +409,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Z_1_4.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ViewTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -503,6 +512,9 @@
     </PackageReference>
     <PackageReference Include="MySql.Data">
       <Version>8.0.22</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

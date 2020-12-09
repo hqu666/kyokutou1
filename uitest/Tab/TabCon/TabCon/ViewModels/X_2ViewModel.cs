@@ -1204,7 +1204,6 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public int AttachmentsCount { get; set; }
 
-
 		#region FileDlogShow	　単一ファイルの選択
 		private ViewModelCommand _FileDlogShow;
 
@@ -1672,8 +1671,6 @@ namespace TabCon.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
 
 		/// <summary>
 		/// 添付ファイルのリストアイテム化	（ボタン化）

@@ -137,6 +137,9 @@
     <PackageReference Include="MicrosoftExpressionInteractions">
       <Version>3.0.40218</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

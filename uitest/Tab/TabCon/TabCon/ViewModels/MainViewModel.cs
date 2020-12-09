@@ -81,7 +81,7 @@ namespace TabCon.ViewModels {
 							Name = "システム管理",
 							Child = new List<MyMenu>()
 							{
-								new MyMenu() { Name = "Googleアカウント認証",Value="Z-1-5" },
+								new MyMenu() { Name = "Googleアカウント認証",Value="Z-1-4" },
 							}
 						},
 					}
@@ -188,6 +188,11 @@ namespace TabCon.ViewModels {
 				//rContent.VM.RootViewModel = this;
 				//rContent.VM.weekDisplayMode = "Week";
 				//ReTitle = "週別表示";
+				Add2Tab(rContent);
+			} else if (selectedValue == "Z-1-4") {
+				dbMsg = "Googleサービスを利用します\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.Z_1_4 rContent = new Views.Z_1_4();
 				Add2Tab(rContent);
 			} else if (selectedValue == "MySQL") {
 				dbMsg = "MySQLデータベースに接続し、コンボボックスで選択したテーブルを操作します\r\n";
