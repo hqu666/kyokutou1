@@ -8,8 +8,8 @@ namespace TabCon.Models {
 	/// </summary>
 	public partial class attachments : NotificationObject, ICloneable {
 
-		private string _index;
-		public string index {
+		private int _index;
+		public int index {
 			get => _index;
 			set {
 				if (_index == value)
@@ -19,18 +19,30 @@ namespace TabCon.Models {
 			}
 		}
 
-
 		private string _local_file_pass;
 		///<summary>
 		///PCやサーバ上のフルパス名
 		///</summary>
 		public string local_file_pass {
 			get => _local_file_pass;
-			set
-			{
+			set {
 				if (_local_file_pass == value)
 					return;
 				_local_file_pass = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		private TabCon.ViewModels.X_2ViewModel _methodTarget;
+		/// <summary>
+		/// ContextになるViewModel
+		/// </summary>
+		public TabCon.ViewModels.X_2ViewModel methodTarget {
+			get => _methodTarget;
+			set {
+				if (_methodTarget == value)
+					return;
+				_methodTarget = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -68,6 +80,7 @@ namespace TabCon.Models {
 			return new attachments() {
 				index = this.index,
 				local_file_pass = this.local_file_pass,
+				methodTarget = this.methodTarget,
 				IsEnabled = this.IsEnabled,
 				summary = this.summary
 			};

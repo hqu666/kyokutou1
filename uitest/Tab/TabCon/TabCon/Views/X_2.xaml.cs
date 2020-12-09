@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using Button = System.Windows.Controls.Button;
 using DataFormats = System.Windows.DataFormats;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
@@ -37,6 +38,27 @@ namespace TabCon.Views {
 			//	VM.Control = ControlPanel;
 			//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
 		}
+
+		///// <summary>
+		///// ここからVMを呼ぶとAttachmentsListが0件になっている
+		///// </summary>
+		///// <param name="sender"></param>
+		///// <param name="e"></param>
+		//private void CloseBT_Click(object sender, RoutedEventArgs e)
+		//{
+		//	string TAG = "CloseBT_Click";
+		//	string dbMsg = "";
+		//	try {
+		//		Button BT = sender as Button;
+		//		int index = int.Parse( BT.CommandParameter.ToString());
+		//		dbMsg += "index=" + index;
+		//		VM.DelFileIndex = index;
+		//		//		VM.DellAttachFile(index);
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		private void WPDragOver(object sender, DragEventArgs e)
 		{
@@ -282,6 +304,5 @@ namespace TabCon.Views {
 			CS_Util Util = new CS_Util();
 			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
 		}
-
 	}
 }

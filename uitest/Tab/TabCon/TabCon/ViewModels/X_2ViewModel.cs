@@ -1195,11 +1195,17 @@ namespace TabCon.ViewModels {
 				string TAG = "AttachmentsList(set)";
 				string dbMsg = "";
 				_AttachmentsList = value;
-				dbMsg += "" + _AttachmentsList.Count() + "件";
+				AttachmentsCount = _AttachmentsList.Count();
+				dbMsg += "" + AttachmentsCount + "件";
 				MyLog(TAG, dbMsg);
 				RaisePropertyChanged("AttachmentsList");
 			}
 		}
+		/// <summary>
+		/// 添付ファイル数
+		/// </summary>
+		public int AttachmentsCount { get; set; }
+
 
 		#region FileDlogShow	　単一ファイルの選択
 		private ViewModelCommand _FileDlogShow;
@@ -1346,11 +1352,12 @@ namespace TabCon.ViewModels {
 				foreach (string file in files) {
 					dbMsg += "\r\n" + file;
 					attachments attachment = new attachments();
-					attachment.index = AttachmentsList.Count().ToString();
+					attachment.index = AttachmentsList.Count();
 					dbMsg += "\r\n(" + attachment.index;
 					dbMsg += ")" + file;
 					attachment.local_file_pass = file;
 					attachment.summary = System.IO.Path.GetFileName(file);
+					attachment.methodTarget = this;
 					attachment.IsEnabled = true;
 					AttachmentsList.Add(attachment);
 					index = AttachmentsList.Count().ToString();
@@ -1363,28 +1370,27 @@ namespace TabCon.ViewModels {
 			}
 		}
 
-		public string DelFileIndex { get; set; }
 		#region AttachFileDell	　添付指定を削除
-		private ListenerCommand<string> _AttachFileDell;
-		public ListenerCommand<string> AttachFileDell {
-			get {
-				if (_AttachFileDell == null)
-					_AttachFileDell = new ListenerCommand<string>(DellAttachFile);
-				{
-					return _AttachFileDell;
-				}
-			}
-		}
-		//public ICommand AttachFileDell { get; set; }
-		//this.AttachFileDell = new DelegateCommand<int>(DellAttachFile);
-		//private Infrastructures.RelayCommand<int> _AttachFileDell;
-		//public ICommand AttachFileDell {
+		//private ListenerCommand<string> _AttachFileDell;
+		//public ListenerCommand<string> AttachFileDell {
 		//	get {
 		//		if (_AttachFileDell == null)
-		//			_AttachFileDell = new Infrastructures.RelayCommand<int>(DellAttachFile);
-		//		return _AttachFileDell;
+		//			_AttachFileDell = new ListenerCommand<string>(DellAttachFile);
+		//		{
+		//			return _AttachFileDell;
+		//		}
 		//	}
 		//}
+
+		private RelayCommand<int> _AttachFileDell;
+		public ICommand AttachFileDell {
+			get {
+				if (_AttachFileDell == null)
+					_AttachFileDell = new RelayCommand<int>(DellAttachFile);
+				return _AttachFileDell;
+			}
+		}
+
 		//private ViewModelCommand _AttachFileDell;
 		//public ViewModelCommand AttachFileDell {
 		//	get {
@@ -1395,19 +1401,38 @@ namespace TabCon.ViewModels {
 		//	}
 		//}
 
+		//private int _DelFileIndex;
+		///// <summary>
+		///// 削除するファイルをモデル配列のインデックスで指定する
+		///// </summary>
+		//public int DelFileIndex 
+		//{
+		//	get { return _DelFileIndex; }
+		//	set {
+		//		if (_DelFileIndex == value)
+		//			return;
+		//		_DelFileIndex = value;
+		//		DellAttachFile(value);
+		//		RaisePropertyChanged("DelFileIndex");
+		//	}
+		//}
 		/// <summary>
 		/// 指定されたインデックスで添付指定を削除
 		/// </summary>
-		private void DellAttachFile(string index)
+		public void DellAttachFile(int index)
 		{
 			string TAG = "DellAttachFile";
 			string dbMsg = "";
 			try {
-				if ( index != "") {
-					dbMsg += ":index=" + index;
-					dbMsg += "/" + AttachmentsList.Count();
-					AttachmentsList.RemoveAt(int.Parse(index));
-					dbMsg += ">>" + AttachmentsList.Count();
+				if ( -1 < index ) {
+					dbMsg += "Attach:index=" + index;
+					dbMsg += "/" + this.AttachmentsList.Count();
+					if(index <= this.AttachmentsList.Count()) {
+						this.AttachmentsList.RemoveAt(index);
+						dbMsg += ">>" + this.AttachmentsList.Count();
+					} else {
+						dbMsg += ":範囲外";
+					}
 				} else {
 					dbMsg += ":引数無し";
 				}

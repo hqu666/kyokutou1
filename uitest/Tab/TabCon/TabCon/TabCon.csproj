@@ -258,6 +258,7 @@
     <Compile Include="ViewModels\MyIBindingList.cs" />
     <Compile Include="ViewModels\MySQLBaseViewModel.cs" />
     <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
     <Compile Include="ViewModels\ViewModelsBase .cs" />
     <Compile Include="ViewModels\Widget .cs" />
@@ -504,7 +505,11 @@
       <Version>8.0.22</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\explore_icon.png" />
+    <Resource Include="Resources\file_icon.png" />
+    <Resource Include="Resources\folder_icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>

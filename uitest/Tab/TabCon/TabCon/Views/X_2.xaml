@@ -7,9 +7,9 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		xmlns:ig="http://schemas.infragistics.com/xaml"
 		xmlns:local="clr-namespace:TabCon"
+		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		mc:Ignorable="d"
         Title="イベント登録"  FontSize="12" 
 		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
@@ -35,6 +35,8 @@
 
 
 	<Window.Resources>
+		<vm:X_2ViewModel  x:Key="viewModel" />
+
 		<Style TargetType="StackPanel">
 			<Setter Property="VerticalAlignment" Value="Center"/>
 			<Setter Property="Margin" Value="0,5,0,5"/>
@@ -429,18 +431,39 @@
 						Name="description_wb"/>-->
 			<Label  Grid.Row="12" Grid.Column="0" Content="添付ファイル" 
 							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
-			<Button Content="ファイル選択"
-							Command="{Binding FileDlogShow}"
+			<Button Command="{Binding FileDlogShow}"
+						AutomationProperties.HelpText="ファイル選択" 
+							Width="Auto"  
 							Grid.Row="12" Grid.Column="1" 
-							HorizontalAlignment="Right"  VerticalAlignment="Center" 
-							 />
-			<Button Content="フォルダ選択"
-							Command="{Binding FolderDlogShow}"
-							Grid.Row="12" Grid.Column="2" 
-							HorizontalAlignment="Right"  VerticalAlignment="Center" 
-							/>
+							HorizontalAlignment="Left"  VerticalAlignment="Center" MinWidth="26" MinHeight="26" Margin="20,5" 
+							 >
+				<Button.Background>
+					<ImageBrush ImageSource="/TabCon;component/Resources/file_icon.png"/>
+				</Button.Background>
+			</Button>
+			<Button Command="{Binding FolderDlogShow}"
+							AutomationProperties.HelpText="フォルダ選択" 
+							Grid.Row="12" Grid.Column="1" 
+							 VerticalAlignment="Center" Panel.ZIndex="26" MinWidth="26" 
+							 HorizontalAlignment="Center" Margin="20,5" Height="26"
+							>
+				<Button.Background>
+					<ImageBrush ImageSource="/TabCon;component/Resources/folder_icon.png" Stretch="UniformToFill"/>
+				</Button.Background>
+			</Button>
+			<Button Command="{Binding ExploreShow}"
+							AutomationProperties.HelpText="エクスプローラーからDorp" 
+						Grid.Row="12" Grid.Column="1" 
+							HorizontalAlignment="Right"  VerticalAlignment="Top" MinWidth="26" Panel.ZIndex="26" Height="26" Margin="20,5" 
+							 >
+				<Button.Background>
+					<ImageBrush ImageSource="/TabCon;component/Resources/explore_icon.png" Stretch="UniformToFill"/>
+				</Button.Background>
+			</Button>
+
 			<StackPanel Orientation="Horizontal" 	HorizontalAlignment="Right" Grid.Row="12" Grid.Column="3" >
-				<Label  x:Name="attachments_count_lb" Content="0" 
+				<Label  x:Name="attachments_count_lb" 
+							Content="{Binding Path=AttachmentsCount}" 
 						VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
 				<Label  Grid.Row="12" Grid.Column="3" Content="件" 
 							HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="-5,0,5,0" Background="#FFFFFCFC"  />
@@ -451,19 +474,15 @@
 								Panel.ZIndex="10" 
 								Name="attachments_sp" 
 				/>
-			<Button Content="エクスプローラー"  
-						Command="{Binding ExploreShow}"
-						Grid.Row="13" Grid.Column="0" 
-							HorizontalAlignment="Left"  VerticalAlignment="Top" 
-							 />
 			<Grid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" >
 				<ScrollViewer MaxHeight="120">
 					<ItemsControl ItemsSource="{Binding AttachmentsList}">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<WrapPanel  Background="#0C999292" />
+								<WrapPanel  Background="#7F99928E" />
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
+						<!--ここからファイルボタン-->
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<Border Name="border"
@@ -475,43 +494,36 @@
 										<Grid>
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition  Width="*"  />
+											<ColumnDefinition  Width="*"  />
 											<ColumnDefinition  Width="Auto"/>
 										</Grid.ColumnDefinitions>
 										<TextBlock  Text="{Binding Path=summary}" 
 											Padding="3"/>
-										<Button Grid.Column="1" 
-													Style="{StaticResource bt-dell}" 
-													Command="{Binding  AttachFileDell}"
-													CommandParameter="{Binding  Path=index}"
-											>
-										<!--
-										System.Windows.Data Error: 40 : BindingExpression path error: 
-										'AttachFileDell' property not found on 'object' ''attachments' (HashCode=27869743)'.
-										BindingExpression:Path=AttachFileDell; DataItem='attachments' (HashCode=27869743); 
-										target element is 'Button' (Name=''); target property is 'Command' (type 'ICommand')
-
-										-->
-
-											<!--<i:Interaction.Triggers>
-												<i:EventTrigger EventName="Click">
-													<i:InvokeCommandAction Command="{Binding AttachFileDell}" />
-													<i:InvokeCommandAction CommandParameter="{Binding  Path=index}" />
-												</i:EventTrigger>
-											</i:Interaction.Triggers>-->
+										<!--<TextBlock  Grid.Column="1"  
+														Name="EventIndex"
+														Text="{Binding Path=index}"  />-->										
+										<Button Grid.Column="2" 
+														Name="CloseBT"
+														Style="{StaticResource bt-dell}" 
+														>
+											<behaviors:Interaction.Triggers>
+												<behaviors:EventTrigger EventName="Click">
+													<l:LivetCallMethodAction 
+															MethodTarget="{Binding methodTarget}"
+															MethodName="DellAttachFile"
+															MethodParameter="{Binding Path=index}"
+																							/>
+													<!--MethodTarget="{Binding Source={StaticResource viewModel}}"-->
+												</behaviors:EventTrigger>
+											</behaviors:Interaction.Triggers>
 										</Button>
 									</Grid>
 								</Border>
 
-									<!--
-, UpdateSourceTrigger=PropertyChanged
-<i:Interaction.Triggers>
-												<i:EventTrigger EventName="Click">
-													<i:InvokeCommandAction Command="{Binding ClickCommand}" />
-												</i:EventTrigger>
-											</i:Interaction.Triggers>
-								</Button>-->
+
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
+						<!--ここまでファイルボタン-->
 					</ItemsControl>
 				</ScrollViewer>
 

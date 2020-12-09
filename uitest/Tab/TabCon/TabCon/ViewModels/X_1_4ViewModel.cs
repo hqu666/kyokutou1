@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Data;
+using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
+
 using Livet;
 using Livet.Commands;
 using Livet.Messaging;
@@ -15,12 +21,10 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 using MySql.Data.MySqlClient;
 using TabCon.Models;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace TabCon.ViewModels
 {
-	public class X_1_4ViewModel : ViewModel {
+	public class X_1_4ViewModel : ViewModel  {
 		public string titolStr = "【スケジュール】リスト表示";
 		public MySQL_Util MySQLUtil;
 		/// <summary>
@@ -108,6 +112,8 @@ namespace TabCon.ViewModels
 			string TAG = "Initialize";
 			string dbMsg = "";
 			try {
+				// ICommandの場合
+				//	EditCommand = CreateCommand(t_events => MyDoubleClickCommand(t_events));
 				dbMsg += ",weekDisplayMode=" + weekDisplayMode;
 				EventComboSource = new Dictionary<string, string>()
 				{
@@ -450,8 +456,27 @@ namespace TabCon.ViewModels
 
 		//レコードクリック/////////////////////////////////////////////////////////////////////////
 		#region EditCommand
+		//public ICommand EditCommand { get; private set; }
+		//public void MyDoubleClickCommand(object param)
+		//{
+		//	string TAG = "MyDoubleClickCommand";
+		//	string dbMsg = "";
+		//	try {
+		//		if (param == null) {
+		//			dbMsg += ">>TargetEvent取得できず";
+		//			return;
+		//		}
+		//		TargetEvent = (t_events)param;
+		//		dbMsg += "Double click on " + TargetEvent.summary;
+		//		using (var vm = new X_2ViewModel(this.TargetEvent)) {
+		//			Messenger.Raise(new TransitionMessage(vm, "EditCommand"));
+		//		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 		private ViewModelCommand _EditCommand;
-
 		public ViewModelCommand EditCommand {
 			get {
 				string TAG = "EditCommand";
@@ -460,10 +485,10 @@ namespace TabCon.ViewModels
 					if (_EditCommand == null) {
 						dbMsg += ">>起動時";
 						_EditCommand = new ViewModelCommand(Edit, CanEdit);
-					}else{
-						if(this.TargetEvent != null) {
+					} else {
+						if (this.TargetEvent != null) {
 							dbMsg += this.TargetEvent.ToString();
-						}else{
+						} else {
 							dbMsg += ">>選択行無し";
 						}
 					}
@@ -482,7 +507,7 @@ namespace TabCon.ViewModels
 		/// <returns></returns>
 		public bool CanEdit()
 		{
-			string TAG = "EditCommand";
+			string TAG = "CanEdit";
 			string dbMsg = "";
 			bool retBool = true;
 			try {
@@ -746,8 +771,6 @@ namespace TabCon.ViewModels
 			//		//			rootClass.RaisePropertyChanged("TargetEvent");
 			//	}
 			//}
-
-
 		}
 	}
 }

@@ -18,58 +18,38 @@ namespace TabCon.Views {
         {
 			InitializeComponent();
 			//ViewとViewModelの紐付け
-			VM = new ViewModels.X_1_4ViewModel();
-			this.DataContext = VM;
+			//VM = new ViewModels.X_1_4ViewModel();
+			//this.DataContext = VM;
 			this.Loaded += this_loaded;
 		}
 		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
-			//ICollectionView cv = CollectionViewSource.GetDefaultView(dt);
-			//cv.GroupDescriptions.Add(newPropertyGroupDescription("City"));
-			//Hotels.ItemsSource = cv;
-
-			VM.MyView = this;
+		//	VM.MyView = this;
 		//	this.MainXDG.FieldSettings.MergedCellMode = MergedCellMode.Always;
 			//	VM.Control = ControlPanel;
 			//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
 		}
 
-		//private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//private void DataGrid_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		//{
-		//	string TAG = "DataGrid_SelectionChanged";
+		//	string TAG = "DataGrid_MouseLeftButtonUp";
 		//	string dbMsg = "";
 		//	try {
 		//		DataGrid DG = sender as DataGrid;
 		//		VM.TargetEvent = (Models.t_events)DG.SelectedItem;
-		//		dbMsg += "" + VM.TargetEvent.event_date_start + "～" + VM.TargetEvent.event_date_end ;
+		//		dbMsg += "" + VM.TargetEvent.event_date_start + "～" + VM.TargetEvent.event_date_end;
 		//		dbMsg += ":" + VM.TargetEvent.event_title;
+		//		if (VM.CanEdit()) {
+		//			VM.Edit();
+		//		}else{
+		//			dbMsg += "遷移条件満たせず";
+		//		}
 		//		MyLog(TAG, dbMsg);
 		//	} catch (Exception er) {
 		//		MyErrorLog(TAG, dbMsg, er);
 		//	}
 		//}
-
-		private void DataGrid_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			string TAG = "DataGrid_MouseLeftButtonUp";
-			string dbMsg = "";
-			try {
-				DataGrid DG = sender as DataGrid;
-				VM.TargetEvent = (Models.t_events)DG.SelectedItem;
-				dbMsg += "" + VM.TargetEvent.event_date_start + "～" + VM.TargetEvent.event_date_end;
-				dbMsg += ":" + VM.TargetEvent.event_title;
-				if (VM.CanEdit()) {
-					VM.Edit();
-				}else{
-					dbMsg += "遷移条件満たせず";
-				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-
-		}
 
 
 		public static void MyLog(string TAG, string dbMsg)
