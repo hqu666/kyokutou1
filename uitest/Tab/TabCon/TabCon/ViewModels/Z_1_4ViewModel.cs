@@ -46,11 +46,18 @@ namespace TabCon.ViewModels {
 		GoogleDriveUtil GDriveUtil = new GoogleDriveUtil();
 		MySQL_Util MySQLUtil;
 		/// <summary>
+		/// 操作対象テーブル:Googleアカウント認証テーブル
+		/// </summary>
+		public string TargetTableName = "m_google_account";
+		/// <summary>
 		/// GoogleAccountテーブルレコード
 		/// </summary>
 		public m_google_account OneAccount;
 		//ObservableCollection<m_google_account> GoogleAccount;
 
+		/// <summary>
+		/// 契約ID
+		/// </summary>
 		public int contractId = 1;
 
 		/// <summary>
@@ -87,18 +94,24 @@ namespace TabCon.ViewModels {
 			string TAG = "Initialize";
 			string dbMsg = "";
 			try {
+				OneAccount = new m_google_account();
 				CS_Util Util = new CS_Util();
-				//Googleアカウント認証テーブル///////////////////////////////////////////
-				//			ActivityCategoryCollection activityCategoryCollection = new ActivityCategoryCollection();
+				//Googleアカウント認証テーブルを読み込む///////////////////////////////////////////
 				MySQLUtil = new MySQL_Util();
 				if (MySQLUtil.MySqlConnection()) {
+					//接続文字列作成
 					Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}",
 																	Constant.Server, Constant.Database, Constant.Uid, Constant.Pwd);
-
 					using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 						mySqlConnection.Open();
 						using (MySqlCommand command = mySqlConnection.CreateCommand()) {
-							command.CommandText = $"SELECT * FROM {"m_google_account"} WHERE m_contract_id=?contractId";
+							command.Connection = mySqlConnection;
+							string TableSql = $"SELECT * FROM " + TargetTableName + " WHERE m_contract_id= " + contractId;
+							////			string InsertTableSql = $"INSERT INTO {Constant.Database}.person (id, name) VALUES (@id, @name)";
+							command.CommandText = TableSql;
+				//			command.Parameters.AddWithValue("@contractId", contractId);
+							//	command.CommandText = $"SELECT * FROM " + TargetTableName + " WHERE m_contract_id=?contractId";
+							dbMsg += ",CommandText=" + command.CommandText;
 							using (MySqlDataReader reader = command.ExecuteReader()) {
 								//int RecordCount = reader.;
 								//dbMsg += "," + RecordCount + "レコード";
@@ -106,7 +119,6 @@ namespace TabCon.ViewModels {
 								dbMsg += "," + FieldCount + "項目";
 								//一行づつデータを読み取りモデルに書込む
 								while (reader.Read()) {
-									m_google_account OneAccount = new m_google_account();
 									for (int i = 0; i < FieldCount; i++) {
 										string rName = reader.GetName(i);
 										string rType = reader.GetFieldType(i).Name;
@@ -152,6 +164,7 @@ namespace TabCon.ViewModels {
 
 		/// <summary>
 		/// OAuthのJSONファイルを読む
+		/// Modelに格納して
 		/// </summary>
 		private void JsonRead()
 		{
@@ -159,8 +172,8 @@ namespace TabCon.ViewModels {
 			string dbMsg = "[GoogleAuth]";
 			try {
 				// ダイアログのインスタンスを生成
-				var dialog = new System.Windows.Forms.OpenFileDialog();
-
+				OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+				dialog.Title = "Googleコンソールで取得したJSONファイルを選択して下さい";
 				// ファイルの種類を設定
 				dialog.Filter = "テキストファイル (*.json)|*.json|全てのファイル (*.*)|*.*";
 				// ダイアログを表示する
@@ -180,14 +193,32 @@ namespace TabCon.ViewModels {
 							sr.Close();
 							dbMsg += ",rStr=" + rStr;
 							GOAuthModel gOAuthModel = JsonConvert.DeserializeObject<GOAuthModel>(rStr);
+							//JSONからMODELへ転記////////////////////////////////////////////
+							dbMsg += ",client_id=" + gOAuthModel.client_id;
+							OneAccount.client_id = gOAuthModel.client_id;
+							dbMsg += ",client_secret=" + gOAuthModel.client_secret;
+							OneAccount.client_secret = gOAuthModel.client_secret;
+							dbMsg += ",project_id=" + gOAuthModel.project_id;
+							OneAccount.project_id = gOAuthModel.project_id;
+							dbMsg += ",auth_uri=" + gOAuthModel.auth_uri;
+							OneAccount.auth_uri = gOAuthModel.auth_uri;
+							dbMsg += ",token_uri=" + gOAuthModel.token_uri;
+							OneAccount.token_uri = gOAuthModel.token_uri;
+							dbMsg += ",auth_provider_x509_cert_url=" + gOAuthModel.auth_provider_x509_cert_url;
+							OneAccount.auth_provider_x509_cert_url = gOAuthModel.auth_provider_x509_cert_url;
+							///テーブルに書込む////////////////////JSONからMODELへ転記//
 							using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
 								mySqlConnection.Open();
 								// コマンドを作成
-								MySqlCommand cmd =
-								new MySqlCommand("insert into m_google_account " +
-		"															values (@id, @m_contract_id, @google_account, @client_id, @client_secret, @project_id, " +
+								string CommandStr = "insert into " + TargetTableName;
+								if(0< OneAccount.id) {
+									CommandStr = "update " + TargetTableName + " set updatedate = @date where id = @id";
+								}
+								CommandStr += " values(@id, @m_contract_id, @google_account, @client_id, @client_secret, @project_id, " +
 																				"@calender_id, @drive_id, @created_user, @created_at , " +
-																				" @updated_user, @updated_at , @deleted_at  )", mySqlConnection);
+																				" @updated_user, @updated_at , @deleted_at  )";
+
+								MySqlCommand cmd =new MySqlCommand(CommandStr, mySqlConnection);
 								// パラメータ設定
 								cmd.Parameters.Add(
 									new MySqlParameter("id", OneAccount.id));
@@ -196,15 +227,18 @@ namespace TabCon.ViewModels {
 								cmd.Parameters.Add(
 									new MySqlParameter("google_account", OneAccount.google_account));
 								dbMsg += ",client_id=" + gOAuthModel.client_id;
-								//			tablActiveRecord.SetCellValue("client_id", gOAuthModel.client_id) ;
-								//dbMsg += ",client_secret=" + gOAuthModel.client_secret;
-								//MySettings.clientSecret = gOAuthModel.client_secret;
-								//MySettings.projectId = gOAuthModel.project_id;
-								//MySettings.authUri = gOAuthModel.auth_uri;
-								//MySettings.tokenUri = gOAuthModel.token_uri;
-								//MySettings.auth_providerX509CertUrl = gOAuthModel.auth_provider_x509_cert_url;
-
-
+								cmd.Parameters.Add(
+									new MySqlParameter("client_id", gOAuthModel.client_id));
+								dbMsg += ",client_secret=" + gOAuthModel.client_secret;
+								cmd.Parameters.Add(
+									new MySqlParameter("client_secret", gOAuthModel.client_secret));
+								dbMsg += ",project_id=" + gOAuthModel.project_id;
+								cmd.Parameters.Add(
+									new MySqlParameter("project_id", gOAuthModel.project_id));
+								//**ログインユーザーに要書き換え*********************//
+								cmd.Parameters.Add(
+									new MySqlParameter("updated_user", OneAccount.m_contract_id));
+								//*********************ログインユーザーに要書き換え**//
 								cmd.Parameters.Add(
 									new MySqlParameter("updated_at", DateTime.Now));
 
@@ -214,14 +248,8 @@ namespace TabCon.ViewModels {
 								cmd.ExecuteNonQuery();
 								// クローズ
 								cmd.Connection.Close();
-
+								dbMsg += ">>書き込み終了";
 							}
-							//MySQLUtil.selectedTableName = "m_google_account";
-							//Infragistics.Windows.DataPresenter.DataRecord tablActiveRecord = MySQLUtil.tablActiveRecord;
-							//MyLog(TAG, dbMsg);
-							////(ユーザーフォルダー)\AppData\Local\CompanyName\ProgramName_xxxx\Version\user.config に保存
-							//MySettings.Save();
-							//ReadSetting();
 						}
 						//複数選ばれても一件目で強制的に処理開始
 						break;
@@ -232,7 +260,6 @@ namespace TabCon.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// UserCredentialを作成する

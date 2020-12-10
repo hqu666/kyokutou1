@@ -220,7 +220,45 @@ namespace TabCon.Models
 			}
 		}
 		//生成以降の追記//////////////////////////////////////////////////////////////
-
+		/// <summary>
+		/// JSONの記載
+		/// </summary>
+		private string _auth_uri;
+		public string auth_uri {
+			get => _auth_uri;
+			set {
+				if (_auth_uri == value)
+					return;
+				_auth_uri = value;
+				RaisePropertyChanged();
+			}
+		}
+		/// <summary>
+		/// JSONの記載
+		/// </summary>
+		private string _token_uri;
+		public string token_uri {
+			get => _token_uri;
+			set {
+				if (_token_uri == value)
+					return;
+				_token_uri = value;
+				RaisePropertyChanged();
+			}
+		}
+		/// <summary>
+		/// JSONの記載
+		/// </summary>
+		private string _auth_provider_x509_cert_url;
+		public string auth_provider_x509_cert_url {
+			get => _auth_provider_x509_cert_url;
+			set {
+				if (_auth_provider_x509_cert_url == value)
+					return;
+				_auth_provider_x509_cert_url = value;
+				RaisePropertyChanged();
+			}
+		}
 	}
 
 
