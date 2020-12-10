@@ -64,13 +64,19 @@ namespace TabCon.ViewModels {
 		/// 使用許諾を受けるAPIのリスト
 		/// </summary>
 		public static string[] AllScopes = { DriveService.Scope.DriveFile,
-																	DriveService.Scope.DriveAppdata,			//追加
+																	DriveService.Scope.DriveAppdata,
 																	DriveService.Scope.Drive,
 																	CalendarService.Scope.Calendar,
 																	CalendarService.Scope.CalendarEvents
 															};
-
-
+		/// <summary>
+		/// 接続ボタン表示
+		/// </summary>
+		public string ConnectVisibility { set; get; }
+		/// <summary>
+		/// 解除ボタン表示
+		/// </summary>
+		public string CancelVisibility { set; get; }
 
 		/// <summary>
 		/// このページで編集するEvent
@@ -106,11 +112,7 @@ namespace TabCon.ViewModels {
 						mySqlConnection.Open();
 						using (MySqlCommand command = mySqlConnection.CreateCommand()) {
 							command.Connection = mySqlConnection;
-							string TableSql = $"SELECT * FROM " + TargetTableName + " WHERE m_contract_id= " + contractId;
-							////			string InsertTableSql = $"INSERT INTO {Constant.Database}.person (id, name) VALUES (@id, @name)";
-							command.CommandText = TableSql;
-				//			command.Parameters.AddWithValue("@contractId", contractId);
-							//	command.CommandText = $"SELECT * FROM " + TargetTableName + " WHERE m_contract_id=?contractId";
+							command.CommandText = $"SELECT * FROM " + TargetTableName + " WHERE m_contract_id= " + contractId;
 							dbMsg += ",CommandText=" + command.CommandText;
 							using (MySqlDataReader reader = command.ExecuteReader()) {
 								//int RecordCount = reader.;
@@ -130,19 +132,19 @@ namespace TabCon.ViewModels {
 										} else if (rName.Equals("id")) {
 											OneAccount.id = (int)rVar;
 										} else if (rName.Equals("m_contract_id")) {
-											OneAccount.m_contract_id = (int)rVar;         //契約ID
+											OneAccount.m_contract_id = (int)rVar;				//契約ID
 										} else if (rName.Equals("google_account")) {
-											OneAccount.google_account = (string)rVar;         //Googleアカウント :@gmail.comのアカウント
+											OneAccount.google_account = (string)rVar;       //Googleアカウント :@gmail.comのアカウント
 										} else if (rName.Equals("client_id")) {
-											OneAccount.client_id = (string)rVar;         //GoogleクライアントID :GoogleAPIが使用するアカウント相当情報
+											OneAccount.client_id = (string)rVar;				//GoogleクライアントID :GoogleAPIが使用するアカウント相当情報
 										} else if (rName.Equals("client_secret")) {
 											OneAccount.client_secret = (string)rVar;         //Googleクライアントシークレット :上記のパスワード相当相当
 										} else if (rName.Equals("project_id")) {
-											OneAccount.project_id = (string)rVar;         //GoogleプロジェクトID :GoogleAPIの登録先名
+											OneAccount.project_id = (string)rVar;				//GoogleプロジェクトID :GoogleAPIの登録先名
 										} else if (rName.Equals("calender_id")) {
-											OneAccount.calender_id = (string)rVar;         //カレンダID
+											OneAccount.calender_id = (string)rVar;			//カレンダID
 										} else if (rName.Equals("drive_id")) {
-											OneAccount.drive_id = (string)rVar;         //ドライブID
+											OneAccount.drive_id = (string)rVar;				//ドライブID
 										}
 										dbMsg += ">>読取";
 									}
@@ -154,9 +156,10 @@ namespace TabCon.ViewModels {
 				}else{
 					dbMsg += ">>DB接続失敗" ;
 				}
-
-
 				MyLog(TAG, dbMsg);
+				ConnectVisibility = "Visible";
+				CancelVisibility = "Hidden"; 
+				RaisePropertyChanged();
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -194,45 +197,48 @@ namespace TabCon.ViewModels {
 							dbMsg += ",rStr=" + rStr;
 							GOAuthModel gOAuthModel = JsonConvert.DeserializeObject<GOAuthModel>(rStr);
 							//JSONからMODELへ転記////////////////////////////////////////////
-							dbMsg += ",client_id=" + gOAuthModel.client_id;
+							dbMsg += "\r\nclient_id= " + gOAuthModel.client_id;
 							OneAccount.client_id = gOAuthModel.client_id;
-							dbMsg += ",client_secret=" + gOAuthModel.client_secret;
+							dbMsg += " \r\nclient_secret= " + gOAuthModel.client_secret;
 							OneAccount.client_secret = gOAuthModel.client_secret;
-							dbMsg += ",project_id=" + gOAuthModel.project_id;
+							dbMsg += "\r\nproject_id= " + gOAuthModel.project_id;
 							OneAccount.project_id = gOAuthModel.project_id;
-							dbMsg += ",auth_uri=" + gOAuthModel.auth_uri;
+							dbMsg += "\r\nauth_uri= " + gOAuthModel.auth_uri;
 							OneAccount.auth_uri = gOAuthModel.auth_uri;
-							dbMsg += ",token_uri=" + gOAuthModel.token_uri;
+							dbMsg += "\r\ntoken_uri= " + gOAuthModel.token_uri;
 							OneAccount.token_uri = gOAuthModel.token_uri;
-							dbMsg += ",auth_provider_x509_cert_url=" + gOAuthModel.auth_provider_x509_cert_url;
+							dbMsg += "\r\nauth_provider_x509_cert_url= " + gOAuthModel.auth_provider_x509_cert_url + "\r\n";
 							OneAccount.auth_provider_x509_cert_url = gOAuthModel.auth_provider_x509_cert_url;
 							///テーブルに書込む////////////////////JSONからMODELへ転記//
 							using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
-								mySqlConnection.Open();
+						//		mySqlConnection.Open();
 								// コマンドを作成
 								string CommandStr = "insert into " + TargetTableName;
-								if(0< OneAccount.id) {
-									CommandStr = "update " + TargetTableName + " set updatedate = @date where id = @id";
-								}
 								CommandStr += " values(@id, @m_contract_id, @google_account, @client_id, @client_secret, @project_id, " +
 																				"@calender_id, @drive_id, @created_user, @created_at , " +
 																				" @updated_user, @updated_at , @deleted_at  )";
+								if (0< OneAccount.id) {
+									CommandStr = "update " + TargetTableName + " set " +
+																			"client_id = @client_id" +
+																			" , client_secret = @client_secret" +
+																			" , project_id = @project_id" +
+																			" , updated_user = @updated_user" +
+																			" , updated_at = @updated_at" +
+																			" where id = @id";
+								}
 
 								MySqlCommand cmd =new MySqlCommand(CommandStr, mySqlConnection);
 								// パラメータ設定
 								cmd.Parameters.Add(
 									new MySqlParameter("id", OneAccount.id));
-								cmd.Parameters.Add(
-									new MySqlParameter("m_contract_id", OneAccount.m_contract_id));
-								cmd.Parameters.Add(
-									new MySqlParameter("google_account", OneAccount.google_account));
-								dbMsg += ",client_id=" + gOAuthModel.client_id;
+								//cmd.Parameters.Add(
+								//	new MySqlParameter("m_contract_id", OneAccount.m_contract_id));
+								//cmd.Parameters.Add(
+								//	new MySqlParameter("google_account", OneAccount.google_account));
 								cmd.Parameters.Add(
 									new MySqlParameter("client_id", gOAuthModel.client_id));
-								dbMsg += ",client_secret=" + gOAuthModel.client_secret;
 								cmd.Parameters.Add(
 									new MySqlParameter("client_secret", gOAuthModel.client_secret));
-								dbMsg += ",project_id=" + gOAuthModel.project_id;
 								cmd.Parameters.Add(
 									new MySqlParameter("project_id", gOAuthModel.project_id));
 								//**ログインユーザーに要書き換え*********************//
@@ -241,14 +247,14 @@ namespace TabCon.ViewModels {
 								//*********************ログインユーザーに要書き換え**//
 								cmd.Parameters.Add(
 									new MySqlParameter("updated_at", DateTime.Now));
-
 								// オープン
 								cmd.Connection.Open();
 								// 実行
 								cmd.ExecuteNonQuery();
 								// クローズ
 								cmd.Connection.Close();
-								dbMsg += ">>書き込み終了";
+								dbMsg += " >>書き込み終了";
+								ConnectBody();
 							}
 						}
 						//複数選ばれても一件目で強制的に処理開始
@@ -303,6 +309,9 @@ namespace TabCon.ViewModels {
 			}
 		}
 
+		/// <summary>
+		/// 接続前の状況確認
+		/// </summary>
 		public void Connect()
 		{
 			string TAG = "Connect";
@@ -314,40 +323,67 @@ namespace TabCon.ViewModels {
 					JsonRead();
 				} else {
 					dbMsg += ",接続へ";
-
-					Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
-					progressWindow.Show();
-					progressWindow.SetMes("Googleサービス接続中...");
-					Task<UserCredential> userCredential = Task.Run(() => {
-						return MakeAllCredentialAsync();
-					});
-					userCredential.Wait();
-
-					progressWindow.Close();
-
-					Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
-					if (Constant.MyDriveCredential == null) {
-						//メッセージボックスを表示する
-						String titolStr = Constant.ApplicationName;
-						String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
-						MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-						dbMsg += ",result=" + result;
-					} else {
-						dbMsg += "\r\nAccessToken=" + Constant.MyDriveCredential.Token.AccessToken;
-						dbMsg += "\r\nRefreshToken=" + Constant.MyDriveCredential.Token.RefreshToken;
-						Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
-							HttpClientInitializer = Constant.MyDriveCredential,
-							ApplicationName = Constant.ApplicationName,
-						});
-						dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
-						Constant.MyCalendarCredential = Constant.MyDriveCredential;
-						Constant.MyCalendarService = new CalendarService(new BaseClientService.Initializer() {
-							HttpClientInitializer = Constant.MyCalendarCredential,
-							ApplicationName = Constant.ApplicationName,
-						});
-						dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
-					}
+					ConnectBody();
 				}
+				Constant.RootFolderID = GDriveUtil.MakeAriadneGoogleFolder();
+				if (Constant.RootFolderID.Equals("")) {
+					dbMsg += ">フォルダ作成>失敗";
+				} else {
+					dbMsg += "[" + Constant.RootFolderID + "]" + Constant.RootFolderName;
+				}
+				MyLog(TAG, dbMsg);
+				Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 接続開始
+		/// </summary>
+		public void ConnectBody()
+		{
+			string TAG = "ConnectBody";
+			string dbMsg = "";
+			try {
+				dbMsg += ",client_id=" + OneAccount.client_id;
+				Controls.WaitingDLog progressWindow = new Controls.WaitingDLog();
+				progressWindow.Show();
+				progressWindow.SetMes("Googleサービス接続中...");
+				Task<UserCredential> userCredential = Task.Run(() => {
+					return MakeAllCredentialAsync();
+				});
+				userCredential.Wait();
+
+				progressWindow.Close();
+
+				Constant.MyDriveCredential = userCredential.Result;                           //作成結果が格納され戻される
+				if (Constant.MyDriveCredential == null) {
+					//メッセージボックスを表示する
+					String titolStr = Constant.ApplicationName;
+					String msgStr = "認証されませんでした。\r\n更新ボタンをクリックして下さい";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+				} else {
+					dbMsg += "\r\nAccessToken=" + Constant.MyDriveCredential.Token.AccessToken;
+					dbMsg += "\r\nRefreshToken=" + Constant.MyDriveCredential.Token.RefreshToken;
+					Constant.MyDriveService = new DriveService(new BaseClientService.Initializer() {
+						HttpClientInitializer = Constant.MyDriveCredential,
+						ApplicationName = Constant.ApplicationName,
+					});
+					dbMsg += ",MyDriveService:ApiKey=" + Constant.MyDriveService.ApiKey;
+					Constant.MyCalendarCredential = Constant.MyDriveCredential;
+					Constant.MyCalendarService = new CalendarService(new BaseClientService.Initializer() {
+						HttpClientInitializer = Constant.MyCalendarCredential,
+						ApplicationName = Constant.ApplicationName,
+					});
+					dbMsg += ",MyCalendarService:ApiKey=" + Constant.MyCalendarService.ApiKey;
+				}
+
+				ConnectVisibility = "Hidden";
+				RaisePropertyChanged("ConnectVisibility");
+				CancelVisibility = "Visible";
+				RaisePropertyChanged("CancelVisibility");
 				Constant.RootFolderID = GDriveUtil.MakeAriadneGoogleFolder();
 				if (Constant.RootFolderID.Equals("")) {
 					dbMsg += ">フォルダ作成>失敗";
@@ -379,9 +415,17 @@ namespace TabCon.ViewModels {
 			string TAG = "Cancel";
 			string dbMsg = "";
 			try {
-
+				dbMsg += ";Token" + Constant.MyDriveCredential.Token.ToString();
+				Constant.MyDriveService = null;
+				Constant.MyCalendarService = null;
+				dbMsg += "\r\n>>" + Constant.MyDriveCredential.Token.ToString();
 				MyLog(TAG, dbMsg);
-				Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+				ConnectVisibility = "Visible";
+				RaisePropertyChanged("ConnectVisibility");
+				CancelVisibility = "Hidden";
+				RaisePropertyChanged("CancelVisibility");
+				RaisePropertyChanged();
+		//		Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}

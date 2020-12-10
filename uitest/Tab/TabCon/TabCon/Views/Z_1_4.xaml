@@ -7,12 +7,32 @@
 	  xmlns:vm="clr-namespace:TabCon.ViewModels"
 	  mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Z_1_4">
+      Title="Googleアカウント認証">
 	<!--ここでVMを指定する場合-->
 	<Page.DataContext>
 		<vm:Z_1_4ViewModel/>
 	</Page.DataContext>
 
+	<Page.Resources>
+		<ControlTemplate x:Key="buttonTemplate"  TargetType="Button">
+			<Border Name="border"
+                BorderThickness="2"
+                BorderBrush="DarkGray"
+				 Padding="5"
+                Background="{TemplateBinding Background}"
+                CornerRadius="2">
+				<ContentPresenter VerticalAlignment="Center"
+                              HorizontalAlignment="Center" />
+			</Border>
+		</ControlTemplate>
+
+		<Style TargetType="Button">
+			<Setter Property="MinWidth" Value="95"/>
+
+			<Setter Property="Margin" Value="5,5,5,5"/>
+			<Setter Property="Template"  Value="{StaticResource buttonTemplate}"/>
+		</Style>
+	</Page.Resources>
 
 
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10"
@@ -26,18 +46,19 @@
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
 			<RowDefinition Height="30"/>
-			<RowDefinition Height="60"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="*"/>
 		</Grid.RowDefinitions>
 		<Button   Grid.Row="1" Grid.Column="1"
-							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
-							Name="Connect_bt" Content="接続"  
-							 Command="{Binding ConnectCommand}" Margin="5"
-							/>
+						Command="{Binding ConnectCommand}"
+						Visibility="{Binding ConnectVisibility}"
+						Name="Connect_bt" Content="接続"
+						/>
 		<Button   Grid.Row="1" Grid.Column="3"
-							HorizontalAlignment="Left"  VerticalAlignment="Center" Width="80"
-							Name="cancel_bt" Content="解除"  
-							 Command="{Binding CancelCommand}" Margin="5"
-							/>
+						Command="{Binding CancelCommand}" 
+						Visibility="{Binding CancelVisibility}"
+						Name="cancel_bt" Content="解除" 
+						/>
+
 	</Grid>
 </Page>
