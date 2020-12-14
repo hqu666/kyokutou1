@@ -34,7 +34,6 @@
 		</Style>
 	</Page.Resources>
 
-
 	<Grid x:Name="MainContainer" HorizontalAlignment="Stretch" Margin="10,10,10,10"
 					>
 		<Grid.ColumnDefinitions>
@@ -42,10 +41,14 @@
 			<ColumnDefinition  Width="Auto"  />
 			<ColumnDefinition  Width="30"  />
 			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  Width="Auto"  />
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
 			<RowDefinition Height="30"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition x:Name="attach_row" Height="*"/>
 		</Grid.RowDefinitions>
@@ -59,6 +62,19 @@
 						Visibility="{Binding CancelVisibility}"
 						Name="cancel_bt" Content="解除" 
 						/>
-
+		<Label Content="{Binding PromptStr}" 
+						Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"
+						Visibility="{Binding SumbitVisibility}"
+						/>
+		<TextBox  Text="{Binding InputStr,Mode=TwoWay}" 
+						Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+						Margin="0,5,0,5"
+						Visibility="{Binding SumbitVisibility}"
+						/>
+		<Button   Grid.Row="3" Grid.Column="4"
+						Command="{Binding SumbitCommand}" 
+						Visibility="{Binding SumbitVisibility}"
+						Content="登録" 
+						/>
 	</Grid>
 </Page>

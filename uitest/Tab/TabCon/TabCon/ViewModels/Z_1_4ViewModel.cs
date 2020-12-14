@@ -78,6 +78,11 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public string CancelVisibility { set; get; }
 
+		public string PromptStr { set; get; }
+		public string InputStr { set; get; }
+		public string SumbitVisibility { set; get; }
+
+
 		/// <summary>
 		/// このページで編集するEvent
 		/// </summary>
@@ -152,6 +157,17 @@ namespace TabCon.ViewModels {
 							}
 						}
 					}
+					if(OneAccount.google_account == null) {
+						SumbitVisibility = "Visible";
+						PromptStr = "ご利用になるGoogleアカウントを入力して下さい";
+						RaisePropertyChanged("PromptStr");
+						InputStr = "";
+						RaisePropertyChanged("InputStr");
+					} else {
+						SumbitVisibility = "Hidden";
+					}
+					RaisePropertyChanged("SumbitVisibility");
+
 					MySQLUtil.DisConnect();
 				}else{
 					dbMsg += ">>DB接続失敗" ;
@@ -211,22 +227,13 @@ namespace TabCon.ViewModels {
 							OneAccount.auth_provider_x509_cert_url = gOAuthModel.auth_provider_x509_cert_url;
 							///テーブルに書込む////////////////////JSONからMODELへ転記//
 							using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
-						//		mySqlConnection.Open();
-								// コマンドを作成
-								string CommandStr = "insert into " + TargetTableName;
-								CommandStr += " values(@id, @m_contract_id, @google_account, @client_id, @client_secret, @project_id, " +
-																				"@calender_id, @drive_id, @created_user, @created_at , " +
-																				" @updated_user, @updated_at , @deleted_at  )";
-								if (0< OneAccount.id) {
-									CommandStr = "update " + TargetTableName + " set " +
+								string CommandStr = "update " + TargetTableName + " set " +
 																			"client_id = @client_id" +
 																			" , client_secret = @client_secret" +
 																			" , project_id = @project_id" +
 																			" , updated_user = @updated_user" +
 																			" , updated_at = @updated_at" +
 																			" where id = @id";
-								}
-
 								MySqlCommand cmd =new MySqlCommand(CommandStr, mySqlConnection);
 								// パラメータ設定
 								cmd.Parameters.Add(
@@ -249,7 +256,7 @@ namespace TabCon.ViewModels {
 									new MySqlParameter("updated_at", DateTime.Now));
 								// オープン
 								cmd.Connection.Open();
-								// 実行
+								// 実行  ※レコード作成直後、エラー発生?
 								cmd.ExecuteNonQuery();
 								// クローズ
 								cmd.Connection.Close();
@@ -426,6 +433,73 @@ namespace TabCon.ViewModels {
 				RaisePropertyChanged("CancelVisibility");
 				RaisePropertyChanged();
 		//		Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
+		}
+		#endregion
+	
+		#region 　　登録
+		private ViewModelCommand _SumbitCommand;
+
+		public ViewModelCommand SumbitCommand {
+			get {
+				if (_SumbitCommand == null) {
+					_SumbitCommand = new ViewModelCommand(Sumbit);
+				}
+				return _SumbitCommand;
+			}
+		}
+
+		public void Sumbit()
+		{
+			string TAG = "Sumbit";
+			string dbMsg = "";
+			try {
+				if (InputStr==null) {
+					InputStr = "";
+				}
+				dbMsg += ";InputStr=" + InputStr;
+				if(!InputStr.Equals("") ) {
+					if (MySQLUtil.MySqlConnection()) {
+						//接続文字列作成
+						Constant.ConnectionString = string.Format("Server={0};Database={1};Uid={2};Pwd={3}",
+																		Constant.Server, Constant.Database, Constant.Uid, Constant.Pwd);
+						using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+							mySqlConnection.Open();
+							using (MySqlCommand command = mySqlConnection.CreateCommand()) {
+								command.Connection = mySqlConnection;
+								command.CommandText = $"INSERT INTO " + TargetTableName +
+																			"( m_contract_id, google_account, created_user, created_at, updated_user, updated_at) " +
+																			"VALUES (@m_contract_id, @google_account, @created_user, @created_at, @updated_user, @updated_at)";
+								//IDの自動採番はCommandTextのidを抜いてParametersに仮値を入れる
+								command.Parameters.AddWithValue("@id", 1);
+								command.Parameters.AddWithValue("@m_contract_id", contractId);
+								command.Parameters.AddWithValue("@google_account", InputStr);
+								command.Parameters.AddWithValue("@created_user", 1);
+								command.Parameters.AddWithValue("@created_at", DateTime.Now);
+								command.Parameters.AddWithValue("@updated_user", 1);
+								command.Parameters.AddWithValue("@updated_at", DateTime.Now);
+								dbMsg += ",CommandText=" + command.CommandText;
+								var result = command.ExecuteNonQuery();
+								// データ登録できない場合
+								if (result == 1) {
+									dbMsg += ">>データ登録";
+									SumbitVisibility = "Hidden";
+									RaisePropertyChanged("SumbitVisibility");
+									RaisePropertyChanged();
+								} else {
+									dbMsg += ">>データを登録できませんでした。";
+								}
+								command.Connection.Close();
+							}
+							mySqlConnection.Close();
+
+						}
+					}
+				}
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
