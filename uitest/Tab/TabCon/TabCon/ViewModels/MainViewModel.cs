@@ -159,6 +159,11 @@ namespace TabCon.ViewModels {
 				//読込んだページを操作
 				rContent.VM.RootViewModel = this;
 				Add2Tab(rContent);
+			} else if (selectedValue == "W-1") {
+				dbMsg = "GoogleDriveを表示します\r\n";
+				MyView.Info_lv.Content = dbMsg;
+				Views.W_1 rContent = new Views.W_1();
+				Add2Tab(rContent);
 			} else if (selectedValue == "X-1-1") {
 				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダに日別スケジュールを書き込みます\r\n";
 				MyView.Info_lv.Content = dbMsg;

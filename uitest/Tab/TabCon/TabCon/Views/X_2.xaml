@@ -460,7 +460,11 @@
 					<ImageBrush ImageSource="/TabCon;component/Resources/explore_icon.png" Stretch="UniformToFill"/>
 				</Button.Background>
 			</Button>
-
+			<Button Command="{Binding GoogleDriveShow}"
+						Content="GoogleDrive" 
+						Grid.Row="12" Grid.Column="2" 
+							HorizontalAlignment="Right"  VerticalAlignment="Top" MinWidth="26"
+							 />
 			<StackPanel Orientation="Horizontal" 	HorizontalAlignment="Right" Grid.Row="12" Grid.Column="3" >
 				<Label  x:Name="attachments_count_lb" 
 							Content="{Binding Path=AttachmentsCount}" 

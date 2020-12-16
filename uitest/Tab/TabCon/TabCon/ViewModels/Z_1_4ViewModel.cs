@@ -301,8 +301,6 @@ namespace TabCon.ViewModels {
 			return userCedential;
 		}
 
-
-
 		//////////////////////////////////////////////////登録//
 		#region CancelCommand　　接続
 		private ViewModelCommand _ConnectCommand;

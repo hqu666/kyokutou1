@@ -27,6 +27,7 @@ using MySql.Data.MySqlClient;
 using TabCon.Models;
 using TabCon.Enums;
 using Task = System.Threading.Tasks.Task;
+using Livet.Messaging;
 
 namespace TabCon.ViewModels {
 	public class X_2ViewModel : ViewModel  {
@@ -1140,26 +1141,26 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// WebViewでGoogleドライブを開く
 		/// </summary>
-		private void ShowGoogleDrive()
-		{
-			string TAG = "ShowGoogleDrive";
-			string dbMsg = "[GEventEdit]";
-			try {
-				dbMsg += ". " + Constant.RootFolderURL;
-				string DriveURL = Constant.RootFolderURL;
-				dbMsg += "DriveURL=" + DriveURL;
-				//if (webWindow == null) {
-				//	dbMsg += "webでGoogleDriveを表示";
-				//	webWindow = new WebWindow();
-				//	webWindow.eventEdit = this;
-				//	webWindow.Show();
-				//	webWindow.SetMyURL(new Uri(@DriveURL));
-				//}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//private void ShowGoogleDrive()
+		//{
+		//	string TAG = "ShowGoogleDrive";
+		//	string dbMsg = "[GEventEdit]";
+		//	try {
+		//		dbMsg += ". " + Constant.RootFolderURL;
+		//		string DriveURL = Constant.RootFolderURL;
+		//		dbMsg += "DriveURL=" + DriveURL;
+		//		//if (webWindow == null) {
+		//		//	dbMsg += "webでGoogleDriveを表示";
+		//		//	webWindow = new WebWindow();
+		//		//	webWindow.eventEdit = this;
+		//		//	webWindow.Show();
+		//		//	webWindow.SetMyURL(new Uri(@DriveURL));
+		//		//}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		/// <summary>
 		/// XAMLのDriveBrouserを表示
@@ -1330,6 +1331,36 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
+
+		#region GoogleDrive
+		private ViewModelCommand _GoogleDriveShow;
+
+		public ViewModelCommand GoogleDriveShow {
+			get {
+				if (_GoogleDriveShow == null) {
+					_GoogleDriveShow = new ViewModelCommand(ShowGoogleDrive);
+				}
+				return _GoogleDriveShow;
+			}
+		}
+		/// <summary>
+		/// GoogleDriveを表示する
+		/// </summary>
+		private void ShowGoogleDrive()
+		{
+			string TAG = "ShowGoogleDrive";
+			string dbMsg = "";
+			try {
+				using (var vm = new W_1ViewModel()) {
+					Messenger.Raise(new TransitionMessage(vm, "GoogleDriveShow"));
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
 
 		/// <summary>
 		/// PCから添付されたファイルの仮表示まで

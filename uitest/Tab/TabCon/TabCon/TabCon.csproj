@@ -265,6 +265,7 @@
     <Compile Include="ViewModels\SQLTablesViewModel.cs" />
     <Compile Include="ViewModels\ViewModelsBase .cs" />
     <Compile Include="ViewModels\Widget .cs" />
+    <Compile Include="ViewModels\W_1ViewModel.cs" />
     <Compile Include="ViewModels\X_1_1ViewModel.cs" />
     <Compile Include="ViewModels\X_1_3ViewModel.cs" />
     <Compile Include="ViewModels\X_1_4ViewModel.cs" />
@@ -293,6 +294,9 @@
     </Compile>
     <Compile Include="Views\ParrtsTestView.xaml.cs">
       <DependentUpon>ParrtsTestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\W_1.xaml.cs">
+      <DependentUpon>W_1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\X_1_1.xaml.cs">
       <DependentUpon>X_1_1.xaml</DependentUpon>
@@ -395,6 +399,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\W_1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\X_1_1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -462,10 +470,10 @@
       <Version>3.0.40218</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Calendar.v3">
-      <Version>1.49.0.2142</Version>
+      <Version>1.49.0.2161</Version>
     </PackageReference>
     <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.49.0.2145</Version>
+      <Version>1.49.0.2166</Version>
     </PackageReference>
     <PackageReference Include="Infragistics.DataPresenter.DataSources.OData">
       <Version>16.1.1000</Version>
@@ -504,7 +512,16 @@
       <Version>3.2.3.1</Version>
     </PackageReference>
     <PackageReference Include="MahApps.Metro">
-      <Version>2.3.4</Version>
+      <Version>2.4.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Win32.UI.Controls">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls.WebView">
+      <Version>6.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.664.37</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
       <Version>1.1.19</Version>

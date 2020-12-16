@@ -6,7 +6,9 @@
 		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		xmlns:local="clr-namespace:TabCon"
-		xmlns:v="clr-namespace:TabCon.Views"
+		xmlns:ct1="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
+	      xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+	xmlns:v="clr-namespace:TabCon.Views"
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		xmlns:b="clr-namespace:TabCon.Behaviors"
 		xmlns:ig="http://schemas.infragistics.com/xaml"
@@ -52,12 +54,13 @@ WindowStartupLocation="CenterScreen"
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions >
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
 			<TreeView x:Name="Menu_tv"
-				Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+				Grid.Row="0" Grid.Column="0"
+				Grid.RowSpan="2"
 				Margin="10,0,5,0" Padding="5,5,5,5" MinHeight="710"   MinWidth="120"   Height="Auto" Width="Auto"
 				ItemsSource="{Binding _MyMenu}" >
 				<i:Interaction.Triggers>
@@ -77,8 +80,15 @@ WindowStartupLocation="CenterScreen"
 					</HierarchicalDataTemplate>
 				</TreeView.ItemTemplate>
 			</TreeView>
-
-			<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
+		<!--<ct1:WebView Name = "webView" 
+					Grid.Row="1" Grid.Column="0"
+										Source="https://www.yahoo.co.jp/"
+									  />-->
+		<!--<wv2:WebView2 Name = "webView"
+					Grid.Row="1" Grid.Column="0"
+					Source = "https://www.yahoo.co.jp/"
+					  />-->
+		<Label x:Name="Info_lv" Content="{Binding InfoLavel}"  
 							Grid.Row="0" Grid.Column="1" 
 							Height="Auto"  Width="Auto"
 							MinHeight="50" Margin="5,5,5,5"/>
