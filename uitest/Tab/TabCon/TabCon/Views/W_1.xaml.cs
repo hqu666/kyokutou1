@@ -22,12 +22,14 @@ namespace TabCon.Views {
 		{
 			InitializeComponent();
 			this.Loaded += this_loaded;
+
+			//Uri uri = new Uri(@"https://www.yahoo.co.jp/");
+			//this.webView.Navigate(uri);
+
 		}
 		//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
-			Uri uri = new Uri(@"https://www.yahoo.co.jp/");
-	//		this.webView.Navigate("https://www.yahoo.co.jp/");
 			//	VM.Control = ControlPanel;
 			//		MyCalendar.Height = this.Height- ControlPanel.Height-10;
 		}

@@ -65,5 +65,10 @@ namespace TabCon.Views {
 			dbMsg = "[" + MethodBase.GetCurrentMethod().Name + "]" + dbMsg;
 			Util.MyErrorLog(TAG, dbMsg, err);
 		}
+
+		private void ControlPanel_Loaded(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

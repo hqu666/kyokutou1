@@ -22,9 +22,9 @@
 
 	-->
 
-	<!--<Page.DataContext>
+	<Page.DataContext>
 		<vm:W_1ViewModel/>
-	</Page.DataContext>-->
+	</Page.DataContext>
 
 	<behaviors:Interaction.Triggers>
 		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
@@ -35,25 +35,12 @@
 			<l:DataContextDisposeAction/>
 		</behaviors:EventTrigger>
 	</behaviors:Interaction.Triggers>
-	
-	<DockPanel Background="Aqua">
-		<!--<DockPanel DockPanel.Dock="Top" >
-			<Button x:Name="ButtonGo" DockPanel.Dock="Right" Click="ButtonGo_Click" Content="Go"/>
-			<TextBox Name = "addressBar" Text= "{Binding WebUrl}"/>
-		</DockPanel>-->
-		<ct1:WebView Name = "webView" 
-								Source="https://www.microsoft.com"
-									  />
-		<!--
-										Source="https://www.yahoo.co.jp/"
-										Source = "{Binding TargetURI}"
 
-												VerticalAlignment="Stretch" 
-										HorizontalAlignment="Stretch" 
-										Width="365" Height="205"
-										 Margin="0,0,0,0"-->
-		<!--<wv2:WebView2 Name = "webView"
-					  Source = "https://www.microsoft.com"
-					  />-->
+	<DockPanel >
+		<wv2:WebView2 Name = "webView"
+					  Source = "https://drive.google.com/drive/u/0/my-drive"
+					  />
+	<!--https://developer.microsoft.com/en-us/microsoft-edge/webview2/　の　Evergreen Bootstrapperをインストール-->
+
 	</DockPanel>
 </Page>
