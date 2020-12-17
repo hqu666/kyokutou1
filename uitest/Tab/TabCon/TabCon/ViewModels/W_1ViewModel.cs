@@ -19,6 +19,8 @@ using System.Windows.Media.Imaging;
 using System.Reflection;
 using System.Windows.Shapes;
 
+using Microsoft.Web.WebView2.Core;
+
 using Google.Apis.Drive.v3.Data;
 using Infragistics.Controls.Schedules;
 using Livet;

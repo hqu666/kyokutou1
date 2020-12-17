@@ -295,6 +295,9 @@
     <Compile Include="Views\ParrtsTestView.xaml.cs">
       <DependentUpon>ParrtsTestView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TextInputDialog.xaml.cs">
+      <DependentUpon>TextInputDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\W_1.xaml.cs">
       <DependentUpon>W_1.xaml</DependentUpon>
     </Compile>
@@ -396,6 +399,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ParrtsTestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TextInputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,12 +19,30 @@
 	   		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
 		ScrollViewer.VerticalScrollBarVisibility="Auto" 
 		xmlns:ct="clr-namespace:Microsoft.Toolkit.Win32.UI.Controls.WPF;assembly=Microsoft.Toolkit.Win32.UI.Controls"   
-
 	-->
 
 	<Page.DataContext>
 		<vm:W_1ViewModel/>
 	</Page.DataContext>
+
+	<Page.CommandBindings>
+		<CommandBinding Command="ApplicationCommands.New" Executed="NewCmdExecuted"/>
+		<CommandBinding Command="ApplicationCommands.Close" Executed="CloseCmdExecuted"/>
+		<CommandBinding Command="NavigationCommands.BrowseBack" Executed="BackCmdExecuted" CanExecute="BackCmdCanExecute"/>
+		<CommandBinding Command="NavigationCommands.BrowseForward" Executed="ForwardCmdExecuted" CanExecute="ForwardCmdCanExecute"/>
+		<CommandBinding Command="NavigationCommands.Refresh" Executed="RefreshCmdExecuted" CanExecute="RefreshCmdCanExecute"/>
+		<CommandBinding Command="NavigationCommands.BrowseStop" Executed="BrowseStopCmdExecuted" CanExecute="BrowseStopCmdCanExecute"/>
+		<CommandBinding Command="NavigationCommands.GoToPage" Executed="GoToPageCmdExecuted" CanExecute="GoToPageCmdCanExecute"/>
+		<CommandBinding Command="NavigationCommands.IncreaseZoom" Executed="IncreaseZoomCmdExecuted" CanExecute="IncreaseZoomCmdCanExecute"/>
+		<CommandBinding Command="NavigationCommands.DecreaseZoom" Executed="DecreaseZoomCmdExecuted" CanExecute="DecreaseZoomCmdCanExecute"/>
+		<!--<CommandBinding Command="{x:Static local:MainWindow.InjectScriptCommand}" Executed="InjectScriptCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<CommandBinding Command="{x:Static local:MainWindow.GetCookiesCommand}" Executed="GetCookiesCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<CommandBinding Command="{x:Static local:MainWindow.DOMContentLoadedCommand}" Executed="DOMContentLoadedCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<CommandBinding Command="{x:Static local:MainWindow.NavigateWithWebResourceRequestCommand}" Executed="NavigateWithWebResourceRequestCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<CommandBinding Command="{x:Static local:MainWindow.AddOrUpdateCookieCommand}" Executed="AddOrUpdateCookieCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<CommandBinding Command="{x:Static local:MainWindow.DeleteCookiesCommand}" Executed="DeleteCookiesCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<CommandBinding Command="{x:Static local:MainWindow.DeleteAllCookiesCommand}" Executed="DeleteAllCookiesCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>-->
+	</Page.CommandBindings>
 
 	<behaviors:Interaction.Triggers>
 		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
@@ -37,10 +55,61 @@
 	</behaviors:Interaction.Triggers>
 
 	<DockPanel >
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="_File">
+				<MenuItem Header="_New Window" Command="ApplicationCommands.New"/>
+				<MenuItem Header="_Close" Command="ApplicationCommands.Close"/>
+				<!--<MenuItem Header="_Inject Script..." Command="{x:Static local:MainWindow.InjectScriptCommand}"/>-->
+			</MenuItem>
+			<MenuItem Header="_View">
+				<MenuItem Header="_Increase Zoom" Command="NavigationCommands.IncreaseZoom"/>
+				<MenuItem Header="_Decrease Zoom" Command="NavigationCommands.DecreaseZoom"/>
+			</MenuItem>
+			<MenuItem Header="S_cenario">
+				<!--<MenuItem Header="_DOM Content Loaded" Command="{x:Static local:MainWindow.DOMContentLoadedCommand}"/>
+				<MenuItem Header="_NavigateWithWebResourceRequest" Command="{x:Static local:MainWindow.NavigateWithWebResourceRequestCommand}"/>-->
+				<MenuItem Header="_Cookie Management">
+					<!--<MenuItem Header="Get Cookies" Command="{x:Static local:MainWindow.GetCookiesCommand}"/>
+					<MenuItem Header="Add Or Update Cookie" Command="{x:Static local:MainWindow.AddOrUpdateCookieCommand}"/>
+					<MenuItem Header="Delete Cookie" Command="{x:Static local:MainWindow.DeleteCookiesCommand}"/>
+					<MenuItem Header="Delete All Cookies" Command="{x:Static local:MainWindow.DeleteAllCookiesCommand}"/>-->
+				</MenuItem>
+				<MenuItem Header="Intercept _Response" IsCheckable="True" IsChecked="{Binding ElementName=MyWindow, Path=ShowNextWebResponse, Mode=TwoWay}"/>
+			</MenuItem>
+		</Menu>
+		<DockPanel x:Name="topPanel"
+			DockPanel.Dock="Top" 
+			HorizontalAlignment="Stretch" 
+			>
+			<Button x:Name="ButtonHome"
+							DockPanel.Dock="Left"
+							Content="Home" Click="ButtonHome_Click"
+							 />
+			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseBack">Back</Button>
+			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseForward">Forward</Button>
+			<Button DockPanel.Dock="Left" Command="NavigationCommands.Refresh">Refresh</Button>
+			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseStop">Stop</Button>
+			<Button DockPanel.Dock="Right" Command="NavigationCommands.GoToPage" CommandParameter="{Binding ElementName=addressBar,Path=Text}">Go</Button>
+
+			<Button x:Name="ButtonGo"
+							DockPanel.Dock="Right"
+							Click="ButtonGo_Click"
+							Content="Go"
+							 />
+			<TextBox Name="addressBar" 
+							Text="https://www.yahoo.co.jp/"
+							/>
+		</DockPanel>
 		<wv2:WebView2 Name = "webView"
-					  Source = "https://drive.google.com/drive/u/0/my-drive"
-					  />
-	<!--https://developer.microsoft.com/en-us/microsoft-edge/webview2/　の　Evergreen Bootstrapperをインストール-->
+								  Source = "https://drive.google.com/drive/u/0/my-drive" 
+								  Loaded="WebView_Loaded"
+									NavigationStarting="WebView_NavigationStarting"
+									NavigationCompleted="WebView_NavigationCompleted"
+								  />
+	<!--
+									              CreationProperties="{StaticResource EvergreenWebView2CreationProperties}"
+
+	https://developer.microsoft.com/en-us/microsoft-edge/webview2/　の　Evergreen Bootstrapperをインストール-->
 
 	</DockPanel>
 </Page>
