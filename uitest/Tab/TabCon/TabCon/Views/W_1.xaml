@@ -81,41 +81,48 @@
 			</MenuItem>
 		</Menu>
 		<DockPanel x:Name="topPanel"
-			DockPanel.Dock="Top" 
-			HorizontalAlignment="Stretch" 
+							Visibility="{Binding Path=TopPanelVisibility}" 
+							DockPanel.Dock="Top" 
+							HorizontalAlignment="Stretch" 
 			>
 			<Button x:Name="ButtonHome"
+							Command="{Binding HomeBTCommand}"
 							DockPanel.Dock="Left"
-							Content="Home" Click="ButtonHome_Click"
+							Content="Home" 
 							 />
+			<!--Click="ButtonHome_Click"-->
+
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseBack">Back</Button>
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseForward">Forward</Button>
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.Refresh">Refresh</Button>
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseStop">Stop</Button>
 			<Button DockPanel.Dock="Right" Command="NavigationCommands.GoToPage" 
 															CommandParameter="{Binding ElementName=addressBar,Path=Text}">Go</Button>
-
-			<!--<Button x:Name="ButtonGo"
-							DockPanel.Dock="Right"
-							Click="ButtonGo_Click"
-							Content="Go"
-							 />-->
 			<TextBox Name="addressBar" 
 							Text="https://www.yahoo.co.jp/"
 							/>
 		</DockPanel>
 		<wv2:WebView2 Name = "webView"
-								  Loaded="WebView_Loaded"
-									NavigationStarting="WebView_NavigationStarting"
-									NavigationCompleted="WebView_NavigationCompleted" 
-									SourceChanged="WebView_SourceChanged" 
-									ContentLoading="WebView_ContentLoading" SourceUpdated="WebView_SourceUpdated" WebMessageReceived="WebView_WebMessageReceived"
-								  />
+								Source="{Binding Path=TargetURI ,Mode=TwoWay }" 
+							 >
+			<!---->
+			<behaviors:Interaction.Triggers>
+				<behaviors:EventTrigger EventName="Loaded">
+					<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LoadedWebView"/>
+				</behaviors:EventTrigger>
+				<behaviors:EventTrigger EventName="SourceChanged">
+					<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="SourceChanged"/>
+				</behaviors:EventTrigger>
+				<behaviors:EventTrigger EventName="NavigationCompleted">
+					<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="NavigationCompleted"/>
+				</behaviors:EventTrigger>
+			</behaviors:Interaction.Triggers>
+		</wv2:WebView2>
 	<!--
-									  Source = "https://drive.google.com/drive/u/0/my-drive" 
-
-
-									              CreationProperties="{StaticResource EvergreenWebView2CreationProperties}"
+									NavigationStarting="WebView_NavigationStarting"
+									ContentLoading="WebView_ContentLoading" 
+									SourceUpdated="WebView_SourceUpdated" 
+									WebMessageReceived="WebView_WebMessageReceived"
 
 	https://developer.microsoft.com/en-us/microsoft-edge/webview2/　の　Evergreen Bootstrapperをインストール-->
 

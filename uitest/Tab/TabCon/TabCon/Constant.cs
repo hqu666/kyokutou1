@@ -36,7 +36,11 @@ namespace TabCon {
 		public static string RootFolderURL = "https://drive.google.com/drive/my-drive";         //だとマイドライブすべてを表示
 		public static string TopFolderName = "案件";                                        //	最上位フォルダ KSクラウド
 		public static string TopFolderID = "";
-		public static string WebStratUrl ="https://drive.google.com/drive/my-drive";		///Googleマイドライブ
+		//		public static string WebStratUrl ="https://drive.google.com/drive/my-drive";        ///Googleマイドライブ
+		/// <summary>
+		/// m_google_account.drive_id以下の遷移上限
+		/// </summary>
+		public static string WebStratUrl = @"https://drive.google.com/drive/u/0/folders/1LtomrOcTDrKy1omo81rBTbO20PF9GbLz";
 
 		public static string MakeFolderName = null;         //作成するファイルの格納フォルダ
 		public static String parentFolderId;
