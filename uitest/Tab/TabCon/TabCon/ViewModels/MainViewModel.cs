@@ -160,10 +160,16 @@ namespace TabCon.ViewModels {
 				rContent.VM.RootViewModel = this;
 				Add2Tab(rContent);
 			} else if (selectedValue == "W-1") {
-				dbMsg = "GoogleDriveを表示します\r\n";
-				MyView.Info_lv.Content = dbMsg;
-				Views.W_1 rContent = new Views.W_1();
-				Add2Tab(rContent);
+				if (Constant.MyDriveService == null) {
+					String msgStr = "システム設定のGoogleアカウント認証で認証を行ってください。";
+					String titolStr = "Googleアカウント";
+					MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Error);
+				}else{
+					dbMsg = "GoogleDriveを表示します\r\n";
+					MyView.Info_lv.Content = dbMsg;
+					Views.W_1 rContent = new Views.W_1();
+					Add2Tab(rContent);
+				}
 			} else if (selectedValue == "X-1-1") {
 				dbMsg = "MySQLデータベースのスケジュールテーブルからカレンダに日別スケジュールを書き込みます\r\n";
 				MyView.Info_lv.Content = dbMsg;
@@ -312,5 +318,15 @@ namespace TabCon.ViewModels {
 			var window = Application.Current.Windows.OfType<Window>().SingleOrDefault((w) =>w.IsActive);
 			window.Close();
 		}
+
+		public MessageBoxResult MessageShowWPF(String titolStr, String msgStr,
+																		MessageBoxButton buttns,
+																		MessageBoxImage icon
+																		)
+		{
+			CS_Util Util = new CS_Util();
+			return Util.MessageShowWPF(msgStr, titolStr, buttns, icon);
+		}
+
 	}
 }

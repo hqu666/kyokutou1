@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Google.Apis.Drive.v3.Data;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 
@@ -25,7 +26,12 @@ namespace TabCon.Views {
 	/// W_1.xaml の相互作用ロジック
 	/// </summary>
 	public partial class W_1 : Page {
-	//
+		/// <summary>
+		/// m_google_account.drive_id以下の遷移上限
+		/// </summary>
+		public string DriveId = @"https://drive.google.com/drive/u/0/folders/1LtomrOcTDrKy1omo81rBTbO20PF9GbLz";
+		public string RedirectUrl = "";
+		//
 		public static RoutedCommand InjectScriptCommand = new RoutedCommand();
 		public static RoutedCommand NavigateWithWebResourceRequestCommand = new RoutedCommand();
 		public static RoutedCommand DOMContentLoadedCommand = new RoutedCommand();
@@ -33,6 +39,9 @@ namespace TabCon.Views {
 		public static RoutedCommand AddOrUpdateCookieCommand = new RoutedCommand();
 		public static RoutedCommand DeleteCookiesCommand = new RoutedCommand();
 		public static RoutedCommand DeleteAllCookiesCommand = new RoutedCommand();
+		/// <summary>
+		/// 現在遷移中
+		/// </summary>
 		bool _isNavigating = false;
 
 		string urlStr = "";
@@ -41,11 +50,12 @@ namespace TabCon.Views {
 		public W_1()
 		{
 			InitializeComponent();
+			RedirectUrl = "";
 			this.Loaded += this_loaded;
 			webView.NavigationStarting += EnsureHttps;
 			InitializeAsync();
-			//Uri uri = new Uri(@"https://www.yahoo.co.jp/");
-			//this.webView.Navigate(uri);
+			Uri uri = new Uri(DriveId);
+			this.webView.Source = uri;
 		}
 
 		/// <summary>
@@ -61,7 +71,7 @@ namespace TabCon.Views {
 				//ホストからメッセージを印刷するためのハンドラーを登録する web コンテンツに、スクリプトを挿入
 				await webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.chrome.webview.postMessage(window.document.URL);");
 				//ホストに URL をポストする web コンテンツにスクリプトを挿入
-				await webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.chrome.webview.addEventListener(\'message\', event => alert(event.data));");
+//				await webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.chrome.webview.addEventListener(\'message\', event => alert(event.data));");
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -100,6 +110,9 @@ namespace TabCon.Views {
 			}
 		}
 
+		/// <summary>
+		/// アドレスバーパネルの表示制御
+		/// </summary>
 		private void VisibleTop()
 		{
 			string TAG = "VisibleTop";
@@ -124,16 +137,55 @@ namespace TabCon.Views {
 			}
 		}
 
-		private void WebView_Loaded(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// GoogleDriveの指定フォルダ内ならTrue。
+		/// 認証していなければチェックを求める
+		/// </summary>
+		/// <param name="checkUrl"></param>
+		/// <returns></returns>
+		private bool CanGoto(string checkUrl)
 		{
-			string TAG = "WebView_Loaded";
+			string TAG = "CanGoto";
 			string dbMsg = "";
+			bool retBool = true;
 			try {
-				VisibleTop();
+				List<string> GoogleDriveFolderNames = new List<string>();
+				dbMsg += "checkUrl=  " + checkUrl;
+				dbMsg += ";DriveId=  " + DriveId;
+				if (!checkUrl.StartsWith(@"https://drive.google.com/drive/u/0/folders")) {
+					dbMsg += "::googleDriveではない ";
+					retBool = false;
+				}
+				if(retBool) {
+					if (Constant.GDriveFolders == null) {
+						Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
+					}
+					int FoldersCount = Constant.GDriveFiles.Count();
+					dbMsg += ";FoldersCount=  " + FoldersCount + "件";
+					if (GoogleDriveFolderNames.Count < 1) {
+						//GoogleDriveUtil GDU = new GoogleDriveUtil();
+						//GoogleDriveFolders = GDU.GDFolderListUp(DriveId);
+						//FoldersCount = GoogleDriveFolders.Count();
+						//dbMsg += ">>" + FoldersCount + "件";
+			//			GoogleDriveFolderNames = new List<string>();
+			//12/18；取敢えずファイルで確認
+						foreach(Google.Apis.Drive.v3.Data.File forlder in Constant.GDriveFiles) {
+							GoogleDriveFolderNames.Add(@"https://drive.google.com/drive/u/0/folders/"+forlder.Id);
+						}
+						dbMsg += ">>" + GoogleDriveFolderNames.Count + "件";
+					}
+					if (GoogleDriveFolderNames.IndexOf(checkUrl)<0) {
+						dbMsg += "::該当フォルダ無し";
+						retBool = false;
+					}
+				}
+
+				dbMsg += ">retBool= " + retBool;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
+			return retBool;
 		}
 
 		/// <summary>
@@ -151,7 +203,7 @@ namespace TabCon.Views {
 				String uri = args.Uri;
 				dbMsg += ",uri=" + uri;
 				if (!uri.StartsWith("https://") && _isShowHttpsAlart) {
-					webView.CoreWebView2.ExecuteScriptAsync($"alert('{uri} is not safe, try an https link')");
+					webView.CoreWebView2.ExecuteScriptAsync($"alert('{uri} は安全な遷移先ではありません, https で始るURLをご利用ください')");
 					args.Cancel = true;
 				}
 				MyLog(TAG, dbMsg);
@@ -214,19 +266,9 @@ namespace TabCon.Views {
 			e.CanExecute = webView != null && webView.CanGoBack;
 		}
 
-		void BackCmdExecuted(object target, ExecutedRoutedEventArgs e)
-		{
-			webView.GoBack();
-		}
-
 		void ForwardCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = webView != null && webView.CanGoForward;
-		}
-
-		void ForwardCmdExecuted(object target, ExecutedRoutedEventArgs e)
-		{
-			webView.GoForward();
 		}
 
 		void RefreshCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -234,19 +276,9 @@ namespace TabCon.Views {
 			e.CanExecute = webView != null && webView.CoreWebView2 != null && !_isNavigating;
 		}
 
-		void RefreshCmdExecuted(object target, ExecutedRoutedEventArgs e)
-		{
-			webView.Reload();
-		}
-
 		void BrowseStopCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = webView != null && webView.CoreWebView2 != null && _isNavigating;
-		}
-
-		void BrowseStopCmdExecuted(object target, ExecutedRoutedEventArgs e)
-		{
-			webView.Stop();
 		}
 
 		void CoreWebView2RequiringCmdsCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -372,24 +404,6 @@ namespace TabCon.Views {
 			e.CanExecute = webView != null && !_isNavigating;
 		}
 
-		async void GoToPageCmdExecuted(object target, ExecutedRoutedEventArgs e)
-		{
-			// Setting webView.Source will not trigger a navigation if the Source is the same
-			// as the previous Source.  CoreWebView.Navigate() will always trigger a navigation.
-			await webView.EnsureCoreWebView2Async();
-			webView.CoreWebView2.Navigate((string)e.Parameter);
-		}
-		void WebView_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
-		{
-			_isNavigating = true;
-			RequeryCommands();
-		}
-
-		void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
-		{
-			_isNavigating = false;
-			RequeryCommands();
-		}
 
 		private static void OnShowNextWebResponseChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -410,6 +424,190 @@ namespace TabCon.Views {
 		public bool ShowNextWebResponse {
 			get => (bool)this.GetValue(ShowNextWebResponseProperty);
 			set => this.SetValue(ShowNextWebResponseProperty, value);
+		}
+
+///////////////////////////////////////////////////////////////////////////////////
+		/// <summary>
+		/// Backボタン
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="e"></param>
+		void BackCmdExecuted(object target, ExecutedRoutedEventArgs e)
+		{
+			webView.GoBack();
+		}
+
+		/// <summary>
+		/// Forwardボタン
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="e"></param>
+		void ForwardCmdExecuted(object target, ExecutedRoutedEventArgs e)
+		{
+			webView.GoForward();
+		}
+
+		/// <summary>
+		/// Refreshボタン
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="e"></param>
+		void RefreshCmdExecuted(object target, ExecutedRoutedEventArgs e)
+		{
+			webView.Reload();
+		}
+
+		/// <summary>
+		/// stopボタン
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="e"></param>
+		void BrowseStopCmdExecuted(object target, ExecutedRoutedEventArgs e)
+		{
+			webView.Stop();
+		}
+
+		/// <summary>
+		/// Goボタン
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="e"></param>
+		async void GoToPageCmdExecuted(object target, ExecutedRoutedEventArgs e)
+		{
+			// Setting webView.Source will not trigger a navigation if the Source is the same
+			// as the previous Source.  CoreWebView.Navigate() will always trigger a navigation.
+			await webView.EnsureCoreWebView2Async();
+			webView.CoreWebView2.Navigate((string)e.Parameter);
+		}
+
+		// イベントで設定される物 ///////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>
+		/// エレメントの読み込み終了
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void WebView_Loaded(object sender, RoutedEventArgs e)
+		{
+			string TAG = "WebView_Loaded";
+			string dbMsg = "";
+			try {
+				VisibleTop();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// コンテンツ読込み開始時のみ
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void WebView_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
+		{
+			string TAG = "NavigationStarting";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// コンテンツ読込み終了？
+		/// リダイレクト先を設定する
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+		{
+			string TAG = "NavigationCompleted";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				RedirectUrl = wv2.Source.AbsoluteUri;
+				dbMsg += ";RedirectUrl=  " + RedirectUrl;
+				_isNavigating = false;
+				RequeryCommands();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// ここから調査
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void WebView_SourceChanged(object sender, CoreWebView2SourceChangedEventArgs e)
+		{
+			string TAG = "SourceChanged";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				if (CanGoto(tUri)) {
+					_isNavigating = true;
+					RequeryCommands();
+				} else if (!RedirectUrl.Equals("")) {
+					dbMsg += ";RedirectUrl=  " + RedirectUrl;
+					webView.CoreWebView2.Navigate(RedirectUrl);
+				} else {
+					webView.CoreWebView2.Navigate(DriveId);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void WebView_SourceUpdated(object sender, DataTransferEventArgs e)
+		{
+			string TAG = "SourceUpdated";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void WebView_ContentLoading(object sender, CoreWebView2ContentLoadingEventArgs e)
+		{
+			string TAG = "ContentLoading";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		private void WebView_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+		{
+			string TAG = "WebMessageReceived";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		//async void CoreWebView2_WebResourceResponseReceived(object sender, CoreWebView2WebResourceResponseReceivedEventArgs e)

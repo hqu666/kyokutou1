@@ -11,6 +11,7 @@
 		xmlns:ig="http://schemas.infragistics.com/xaml"
 		xmlns:local="clr-namespace:TabCon"
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
+		xmlns:v="clr-namespace:TabCon.Views"
 	  xmlns:ct1="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
 	  mc:Ignorable="d"
           d:DesignHeight="450" d:DesignWidth="800"
@@ -35,8 +36,8 @@
 		<CommandBinding Command="NavigationCommands.GoToPage" Executed="GoToPageCmdExecuted" CanExecute="GoToPageCmdCanExecute"/>
 		<CommandBinding Command="NavigationCommands.IncreaseZoom" Executed="IncreaseZoomCmdExecuted" CanExecute="IncreaseZoomCmdCanExecute"/>
 		<CommandBinding Command="NavigationCommands.DecreaseZoom" Executed="DecreaseZoomCmdExecuted" CanExecute="DecreaseZoomCmdCanExecute"/>
-		<!--<CommandBinding Command="{x:Static local:MainWindow.InjectScriptCommand}" Executed="InjectScriptCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
-		<CommandBinding Command="{x:Static local:MainWindow.GetCookiesCommand}" Executed="GetCookiesCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
+		<!--<CommandBinding Command="{x:Static v:MainWindow.InjectScriptCommand}" Executed="InjectScriptCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>-->
+		<!--<CommandBinding Command="{x:Static local:MainWindow.GetCookiesCommand}" Executed="GetCookiesCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
 		<CommandBinding Command="{x:Static local:MainWindow.DOMContentLoadedCommand}" Executed="DOMContentLoadedCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
 		<CommandBinding Command="{x:Static local:MainWindow.NavigateWithWebResourceRequestCommand}" Executed="NavigateWithWebResourceRequestCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
 		<CommandBinding Command="{x:Static local:MainWindow.AddOrUpdateCookieCommand}" Executed="AddOrUpdateCookieCmdExecuted" CanExecute="CoreWebView2RequiringCmdsCanExecute"/>
@@ -59,6 +60,8 @@
 			<MenuItem Header="_File">
 				<MenuItem Header="_New Window" Command="ApplicationCommands.New"/>
 				<MenuItem Header="_Close" Command="ApplicationCommands.Close"/>
+				<MenuItem Header="_Inject Script..."/>
+
 				<!--<MenuItem Header="_Inject Script..." Command="{x:Static local:MainWindow.InjectScriptCommand}"/>-->
 			</MenuItem>
 			<MenuItem Header="_View">
@@ -74,7 +77,7 @@
 					<MenuItem Header="Delete Cookie" Command="{x:Static local:MainWindow.DeleteCookiesCommand}"/>
 					<MenuItem Header="Delete All Cookies" Command="{x:Static local:MainWindow.DeleteAllCookiesCommand}"/>-->
 				</MenuItem>
-				<MenuItem Header="Intercept _Response" IsCheckable="True" IsChecked="{Binding ElementName=MyWindow, Path=ShowNextWebResponse, Mode=TwoWay}"/>
+				<!--<MenuItem Header="Intercept _Response" IsCheckable="True" IsChecked="{Binding ElementName=MyWindow, Path=ShowNextWebResponse, Mode=TwoWay}"/>-->
 			</MenuItem>
 		</Menu>
 		<DockPanel x:Name="topPanel"
@@ -89,24 +92,29 @@
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseForward">Forward</Button>
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.Refresh">Refresh</Button>
 			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseStop">Stop</Button>
-			<Button DockPanel.Dock="Right" Command="NavigationCommands.GoToPage" CommandParameter="{Binding ElementName=addressBar,Path=Text}">Go</Button>
+			<Button DockPanel.Dock="Right" Command="NavigationCommands.GoToPage" 
+															CommandParameter="{Binding ElementName=addressBar,Path=Text}">Go</Button>
 
-			<Button x:Name="ButtonGo"
+			<!--<Button x:Name="ButtonGo"
 							DockPanel.Dock="Right"
 							Click="ButtonGo_Click"
 							Content="Go"
-							 />
+							 />-->
 			<TextBox Name="addressBar" 
 							Text="https://www.yahoo.co.jp/"
 							/>
 		</DockPanel>
 		<wv2:WebView2 Name = "webView"
-								  Source = "https://drive.google.com/drive/u/0/my-drive" 
 								  Loaded="WebView_Loaded"
 									NavigationStarting="WebView_NavigationStarting"
-									NavigationCompleted="WebView_NavigationCompleted"
+									NavigationCompleted="WebView_NavigationCompleted" 
+									SourceChanged="WebView_SourceChanged" 
+									ContentLoading="WebView_ContentLoading" SourceUpdated="WebView_SourceUpdated" WebMessageReceived="WebView_WebMessageReceived"
 								  />
 	<!--
+									  Source = "https://drive.google.com/drive/u/0/my-drive" 
+
+
 									              CreationProperties="{StaticResource EvergreenWebView2CreationProperties}"
 
 	https://developer.microsoft.com/en-us/microsoft-edge/webview2/　の　Evergreen Bootstrapperをインストール-->

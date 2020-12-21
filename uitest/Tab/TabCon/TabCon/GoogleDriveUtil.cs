@@ -32,7 +32,7 @@ namespace TabCon {
 			try {
 				string pageToken = null;
 				do {
-					var request = Constant.MyDriveService.Files.List();
+					FilesResource.ListRequest request = Constant.MyDriveService.Files.List();
 					request.Q = "(trashed = false)";
 					if(isOnlyFolder) {
 						request.Q += "and (mimeType = 'application/vnd.google-apps.folder')";
@@ -40,7 +40,7 @@ namespace TabCon {
 					if(pFolder != null) {
 						request.Q += "(parents = '" + pFolder + "')";
 					}
-					//	request.Q = "(mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+					request.Q = "(mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
 					request.Spaces = "drive";
 					request.Fields = "nextPageToken, files(id, name , parents ,driveId )";
 					request.PageToken = pageToken;
