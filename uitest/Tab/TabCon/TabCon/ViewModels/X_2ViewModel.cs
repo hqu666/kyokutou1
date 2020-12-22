@@ -21,13 +21,13 @@ using Livet;
 using Livet.Commands;
 using Livet.Messaging.Windows;
 using Livet.EventListeners;
-
-using MySql.Data.MySqlClient;
-
-using TabCon.Models;
-using TabCon.Enums;
 using Task = System.Threading.Tasks.Task;
 using Livet.Messaging;
+
+using MySql.Data.MySqlClient;
+using TabCon.Views;
+using TabCon.Models;
+using TabCon.Enums;
 
 namespace TabCon.ViewModels {
 	public class X_2ViewModel : ViewModel  {
@@ -243,6 +243,7 @@ namespace TabCon.ViewModels {
 			string TAG = "Initialize";
 			string dbMsg = "";
 			try {
+				GoogleFiles = new List<Google.Apis.Drive.v3.Data.File>();
 				EventComboSource = new Dictionary<string, string>()
 				{
 					{ "1", "案件イベント" },
@@ -1130,7 +1131,7 @@ namespace TabCon.ViewModels {
 			string dbMsg = "[GEventEdit]";
 			try {
 				//		ShowDriveBrouser();
-				ShowGoogleDrive();
+				ShowGoogleDriveAsync();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1333,12 +1334,16 @@ namespace TabCon.ViewModels {
 		#endregion
 
 		#region GoogleDrive
-		private ViewModelCommand _GoogleDriveShow;
+		/// <summary>
+		/// GoogleDriveに登録してあるファイル
+		/// </summary>
+		IList<Google.Apis.Drive.v3.Data.File> GoogleFiles;
 
+		private ViewModelCommand _GoogleDriveShow;
 		public ViewModelCommand GoogleDriveShow {
 			get {
 				if (_GoogleDriveShow == null) {
-					_GoogleDriveShow = new ViewModelCommand(ShowGoogleDrive);
+					_GoogleDriveShow = new ViewModelCommand(ShowGoogleDriveAsync);
 				}
 				return _GoogleDriveShow;
 			}
@@ -1346,13 +1351,41 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// GoogleDriveを表示する
 		/// </summary>
-		private void ShowGoogleDrive()
+		private async void ShowGoogleDriveAsync()
 		{
 			string TAG = "ShowGoogleDrive";
 			string dbMsg = "";
 			try {
-				using (var vm = new W_1ViewModel()) {
-					Messenger.Raise(new TransitionMessage(vm, "GoogleDriveShow"));
+				//using (var vm = new W_1ViewModel()) {
+				//	Messenger.Raise(new TransitionMessage(vm, "GoogleDriveShow"));
+				//}
+				//ViewModelを作成してパラメータを設定する
+				W_1ViewModel VM = new W_1ViewModel() {
+					TargetURLStr = Constant.WebStratUrl
+				};
+				W_1Window View = new W_1Window();
+				View.DataContext = VM;
+				View.ShowDialog();
+				//		TransitionMessage message = new TransitionMessage(VM, "GoogleDriveShow");
+				//TransitionMessage message = new TransitionMessage( typeof(W_1Window), VM, TransitionMode.Modal, "Transition");
+				//await Messenger.RaiseAsync(message);
+				//dbMsg += ",Response=" + message.Response;
+				dbMsg += ",Result=" + VM.TargetURLStr;
+				if (VM.TargetURLStr != null) {
+					//今回の選択結果
+					string[] passes = VM.TargetURLStr.Split('/');
+					string tFileId = passes[passes.Length - 1];
+			//		string tFileId = await GDriveUtil.FindByName(passEnd);
+					dbMsg += ",tFileId=" + tFileId;
+					File tInfo = GDriveUtil.FindById(tFileId);
+					dbMsg += ",Kind=" + tInfo.Kind;
+
+					//if(tInfo) {
+					//	IList<Google.Apis.Drive.v3.Data.File> AddGFiles = await GDriveUtil.GDFolderListUpAsyncBody(tFileId);
+					//}
+
+				} else {
+					dbMsg += "キャンセルされました";
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

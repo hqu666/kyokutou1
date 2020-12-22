@@ -171,23 +171,27 @@ namespace TabCon.ViewModels {
 			string TAG = "SourceChanged";
 			string dbMsg = "";
 			try {
-				dbMsg += "TargetURI=" + TargetURI;
-				if (CanGoto(TargetURI.ToString())) {
+				dbMsg += "RedirectUrl=" + RedirectUrl;
+				dbMsg += ">>TargetURI= " + TargetURI;
+				TargetURLStr = TargetURI.ToString();
+				RaisePropertyChanged("TargetURLStr");
+				if (CanGoto(TargetURLStr)) {
 					_isNavigating = true;
+					RedirectUrl = TargetURI.ToString();
 					RequeryCommands();
-				} else if (!RedirectUrl.Equals("")) {
-					dbMsg += ";RedirectUrl=  " + RedirectUrl;
-					TargetURLStr = RedirectUrl;
-					RaisePropertyChanged("TargetURLStr");
-					TargetURI = new Uri(TargetURLStr);
-					RaisePropertyChanged("TargetURI");
 				} else {
-					TargetURLStr = Constant.WebStratUrl;
+					if (!RedirectUrl.Equals("")) {
+						dbMsg += " >Redirect>  " + RedirectUrl;
+						TargetURLStr = RedirectUrl;
+					} else {
+						dbMsg += " >Reset>  " + Constant.WebStratUrl;
+						TargetURLStr = Constant.WebStratUrl;
+					}
 					RaisePropertyChanged("TargetURLStr");
 					TargetURI = new Uri(TargetURLStr);
 					RaisePropertyChanged("TargetURI");
 				}
-				dbMsg += ">>" + TargetURLStr;
+				dbMsg += " >> " + TargetURLStr;
 				RaisePropertyChanged();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -262,10 +266,43 @@ namespace TabCon.ViewModels {
 			string dbMsg = "";
 			try {
 				dbMsg += "RedirectUrl=" + RedirectUrl;
-				RedirectUrl = TargetURLStr;
+	//			RedirectUrl = TargetURLStr;
 				_isNavigating = false;
 				RequeryCommands();
-				dbMsg += ">>" + RedirectUrl;
+	//			dbMsg += ">>" + RedirectUrl;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+		#region Goボタンクリック
+		private ViewModelCommand _GoBTCommand;
+		public ViewModelCommand GoBTCommand {
+			get {
+				if (_GoBTCommand == null) {
+					_GoBTCommand = new ViewModelCommand(GoBTClick);
+				}
+				return _GoBTCommand;
+			}
+		}
+		private void GoBTClick()
+		{
+			string TAG = "ButtonGo_Click";
+			string dbMsg = "";
+			try {
+				dbMsg += ",TargetURLStr= " + TargetURLStr;
+				if (TargetURLStr.StartsWith("http://") || TargetURLStr.StartsWith("https://")) {
+					TargetURI = new Uri(TargetURLStr);
+					RaisePropertyChanged("TargetURI");
+				} else {
+					String titolStr = "URLを入力して下さい";
+					String msgStr = "アドレスバーにはhttp://もしくはhttps://で始るURLを入力して下さい";
+					MessageBoxButton buttns = MessageBoxButton.YesNo;
+					MessageBoxImage icon = MessageBoxImage.Exclamation;
+					MessageBoxResult res = MessageShowWPF(titolStr, msgStr, buttns, icon);
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -303,7 +340,6 @@ namespace TabCon.ViewModels {
 		}
 		#endregion
 
-
 		//Livet Messenger用///////////////////////
 		void RequeryCommands()
 		{
@@ -321,7 +357,7 @@ namespace TabCon.ViewModels {
 			// worth it, especially given that the WebView API explicitly documents which events
 			// signal the property value changes.
 			CommandManager.InvalidateRequerySuggested();
-		}   //////////////////////////////////////////////////////////////////////////////////////////
+		}  
 		new public void Dispose()
 		{
 			// 基本クラスのDispose()でCompositeDisposableに登録されたイベントを解放する。

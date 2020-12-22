@@ -12,14 +12,12 @@
 		xmlns:local="clr-namespace:TabCon"
 		xmlns:vm="clr-namespace:TabCon.ViewModels"
 		xmlns:v="clr-namespace:TabCon.Views"
-	  xmlns:ct1="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView"
 	  mc:Ignorable="d"
           d:DesignHeight="450" d:DesignWidth="800"
 		Title="Googleドライブフォルダ内ファイル一覧">
 	<!--WindowStartupLocation="CenterScreen"  Topmost="True"
 	   		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
 		ScrollViewer.VerticalScrollBarVisibility="Auto" 
-		xmlns:ct="clr-namespace:Microsoft.Toolkit.Win32.UI.Controls.WPF;assembly=Microsoft.Toolkit.Win32.UI.Controls"   
 	-->
 
 	<Page.DataContext>
