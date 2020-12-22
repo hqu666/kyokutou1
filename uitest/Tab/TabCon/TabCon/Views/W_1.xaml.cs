@@ -129,57 +129,6 @@ namespace TabCon.Views {
 		}
 
 		/// <summary>
-		/// GoogleDriveの指定フォルダ内ならTrue。
-		/// 認証していなければチェックを求める
-		/// </summary>
-		/// <param name="checkUrl"></param>
-		/// <returns></returns>
-		//private bool CanGoto(string checkUrl)
-		//{
-		//	string TAG = "CanGoto";
-		//	string dbMsg = "";
-		//	bool retBool = true;
-		//	try {
-		//		List<string> GoogleDriveFolderNames = new List<string>();
-		//		dbMsg += "checkUrl=  " + checkUrl;
-		//		dbMsg += ";DriveId=  " + DriveId;
-		//		if (!checkUrl.StartsWith(@"https://drive.google.com/drive/u/0/folders")) {
-		//			dbMsg += "::googleDriveではない ";
-		//			retBool = false;
-		//		}
-		//		if(retBool) {
-		//			if (Constant.GDriveFolders == null) {
-		//				Constant.GDriveFolders = new Dictionary<string, Google.Apis.Drive.v3.Data.File>();
-		//			}
-		//			int FoldersCount = Constant.GDriveFiles.Count();
-		//			dbMsg += ";FoldersCount=  " + FoldersCount + "件";
-		//			if (GoogleDriveFolderNames.Count < 1) {
-		//				//GoogleDriveUtil GDU = new GoogleDriveUtil();
-		//				//GoogleDriveFolders = GDU.GDFolderListUp(DriveId);
-		//				//FoldersCount = GoogleDriveFolders.Count();
-		//				//dbMsg += ">>" + FoldersCount + "件";
-		//	//			GoogleDriveFolderNames = new List<string>();
-		//	//12/18；取敢えずファイルで確認
-		//				foreach(Google.Apis.Drive.v3.Data.File forlder in Constant.GDriveFiles) {
-		//					GoogleDriveFolderNames.Add(@"https://drive.google.com/drive/u/0/folders/"+forlder.Id);
-		//				}
-		//				dbMsg += ">>" + GoogleDriveFolderNames.Count + "件";
-		//			}
-		//			if (GoogleDriveFolderNames.IndexOf(checkUrl)<0) {
-		//				dbMsg += "::該当フォルダ無し";
-		//				retBool = false;
-		//			}
-		//		}
-
-		//		dbMsg += ">retBool= " + retBool;
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//	return retBool;
-		//}
-
-		/// <summary>
 		/// HTTPS 以外のサイトに移動したときにユーザーに通知。
 		/// スクリプトが web コンテンツに挿入されるように関数を変更
 		/// </summary>
@@ -433,38 +382,25 @@ namespace TabCon.Views {
 		}
 
 		//オリジナル/////////////
-		private void ButtonGo_Click(object sender, RoutedEventArgs e)
-		{
-			string TAG = "ButtonGo_Click";
-			string dbMsg = "";
-			try {
-				if (webView != null && webView.CoreWebView2 != null) {
-					string urlStr = addressBar.Text;
-					dbMsg += ",addressBar.Text=" + urlStr;
-					if (urlStr.StartsWith("http://") || urlStr.StartsWith("https://")) {
-						Uri uri = new Uri(urlStr);
-						webView.CoreWebView2.Navigate(urlStr);
-					} else {
-						String titolStr = "URLを入力して下さい";
-						String msgStr = "アドレスバーにはhttp://もしくはhttps://で始るURLを入力して下さい";
-						MessageBoxButton buttns = MessageBoxButton.YesNo;
-						MessageBoxImage icon = MessageBoxImage.Exclamation;
-						MessageBoxResult res = MessageShowWPF(titolStr, msgStr, buttns, icon);
-					}
-				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-		//private void ButtonHome_Click(object sender, RoutedEventArgs e)
+		//private void ButtonGo_Click(object sender, RoutedEventArgs e)
 		//{
 		//	string TAG = "ButtonHome_Click";
 		//	string dbMsg = "";
 		//	try {
-		//		urlStr = @"https://www.yahoo.co.jp/";
-		//		dbMsg += ",urlStr=" + urlStr;
-		//		webView.CoreWebView2.Navigate(urlStr);
+		//		if (webView != null && webView.CoreWebView2 != null) {
+		//			string urlStr = addressBar.Text;
+		//			dbMsg += ",addressBar.Text=" + urlStr;
+		//			if (urlStr.StartsWith("http://") || urlStr.StartsWith("https://")) {
+		//				Uri uri = new Uri(urlStr);
+		//				webView.CoreWebView2.Navigate(urlStr);
+		//			} else {
+		//				String titolStr = "URLを入力して下さい";
+		//				String msgStr = "アドレスバーにはhttp://もしくはhttps://で始るURLを入力して下さい";
+		//				MessageBoxButton buttns = MessageBoxButton.YesNo;
+		//				MessageBoxImage icon = MessageBoxImage.Exclamation;
+		//				MessageBoxResult res = MessageShowWPF(titolStr, msgStr, buttns, icon);
+		//			}
+		//		}
 		//		MyLog(TAG, dbMsg);
 		//	} catch (Exception er) {
 		//		MyErrorLog(TAG, dbMsg, er);
@@ -472,51 +408,8 @@ namespace TabCon.Views {
 		//}
 		// イベントで設定される物 ///////////////////////////////////////////////////////////////////////////////////////
 		/* ViewModelに配置済み ///////////////////////////////////////////////////////////////////////////////////////
-		/// <summary>
-		/// コンテンツ読込み終了？
-		/// リダイレクト先を設定する
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
 		void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
-		{
-			string TAG = "NavigationCompleted";
-			string dbMsg = "";
-			try {
-				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
-				RedirectUrl = wv2.Source.AbsoluteUri;
-				dbMsg += ";RedirectUrl=  " + RedirectUrl;
-				_isNavigating = false;
-				RequeryCommands();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
 		private void WebView_SourceChanged(object sender, CoreWebView2SourceChangedEventArgs e)
-		{
-			string TAG = "SourceChanged";
-			string dbMsg = "";
-			try {
-				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
-				string tUri = wv2.Source.AbsoluteUri;
-				dbMsg += "AbsoluteUri=" + tUri;
-				if (CanGoto(tUri)) {
-					_isNavigating = true;
-					RequeryCommands();
-				} else if (!RedirectUrl.Equals("")) {
-					dbMsg += ";RedirectUrl=  " + RedirectUrl;
-					webView.CoreWebView2.Navigate(RedirectUrl);
-				} else {
-					webView.CoreWebView2.Navigate(DriveId);
-				}
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-		// ViewModelに配置済み /////////////////////////////////////////////////////////////////////////////////////*/
 
 		/// <summary>
 		/// エレメントの読み込み終了
@@ -534,6 +427,7 @@ namespace TabCon.Views {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+		// ViewModelに配置済み /////////////////////////////////////////////////////////////////////////////////////*/
 
 		/// <summary>
 		/// コンテンツ読込み開始時のみ
@@ -638,24 +532,6 @@ namespace TabCon.Views {
 
 		//	MessageBox.Show(messageBuilder.ToString(), caption);
 		//}
-
-		//void RequeryCommands()
-		//{
-		//	// Seems like there should be a way to bind CanExecute directly to a bool property
-		//	// so that the binding can take care keeping CanExecute up-to-date when the property's
-		//	// value changes, but apparently there isn't.  Instead we listen for the WebView events
-		//	// which signal that one of the underlying bool properties might have changed and
-		//	// bluntly tell all commands to re-check their CanExecute status.
-		//	//
-		//	// Another way to trigger this re-check would be to create our own bool dependency
-		//	// properties on this class, bind them to the underlying properties, and implement a
-		//	// PropertyChangedCallback on them.  That arguably more directly binds the status of
-		//	// the commands to the WebView's state, but at the cost of having an extraneous
-		//	// dependency property sitting around for each underlying property, which doesn't seem
-		//	// worth it, especially given that the WebView API explicitly documents which events
-		//	// signal the property value changes.
-		//	CommandManager.InvalidateRequerySuggested();
-		//}   
 		//////////////////////////////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{

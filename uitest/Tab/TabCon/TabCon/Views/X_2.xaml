@@ -472,11 +472,11 @@
 					<ImageBrush ImageSource="/TabCon;component/Resources/explore_icon.png" Stretch="UniformToFill"/>
 				</Button.Background>
 			</Button>
-			<Button Command="{Binding GoogleDriveShow}"
+			<!--<Button Command="{Binding GoogleDriveShow}"
 						Content="GoogleDrive" 
 						Grid.Row="12" Grid.Column="2" 
 							HorizontalAlignment="Right"  VerticalAlignment="Top" MinWidth="26"
-							 />
+							 />-->
 			<StackPanel Orientation="Horizontal" 	HorizontalAlignment="Right" Grid.Row="12" Grid.Column="3" >
 				<Label  x:Name="attachments_count_lb" 
 							Content="{Binding Path=AttachmentsCount}" 
@@ -491,14 +491,44 @@
 								Name="attachments_sp" 
 				/>
 			<Grid Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3" >
-				<ScrollViewer MaxHeight="120">
-					<ItemsControl ItemsSource="{Binding AttachmentsList}">
+				<ScrollViewer Height="80" MaxHeight="120" >
+
+					<ItemsControl ItemsSource="{Binding AttachmentsList}" >
+
+						<!--
+						<ItemsControl.ItemContainerStyle>
+							<Style>
+								<Setter Property="behaviors:DoubleClickBehavior.Command" 
+								Value="{Binding DataContext.DoubleClick, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+							</Style>
+						</ItemsControl.ItemContainerStyle>
+						MouseDoubleClick
+						-->
+
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<WrapPanel  Background="#7F99928E" />
+								<WrapPanel  Background="#7F99928E"
+								>
+									<!--'X_2ViewModel' のオブジェクトに、予期されたシグネチャと一致する 'GoogleDriveShow' というメソッドが見つかりませんでした。
+									<i:Interaction.Triggers>
+										<i:EventTrigger EventName="MouseLeftButtonUp">
+											<ei:CallMethodAction MethodName="GoogleDriveShow" TargetObject="{Binding}"/>
+										</i:EventTrigger>
+									</i:Interaction.Triggers>-->
+									<!--
+									<behaviors:Interaction.Triggers>
+										<behaviors:EventTrigger EventName="MouseLeftButtonUp">
+											<l:LivetCallMethodAction 
+														MethodTarget="{Binding }"
+														MethodName="GoogleDriveShow"
+														/>
+										</behaviors:EventTrigger>
+									</behaviors:Interaction.Triggers>-->
+								</WrapPanel>
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
-						<!--ここからファイルボタン-->
+
+						<!--ここからファイルボタン  -->
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<Border Name="border"
@@ -529,9 +559,6 @@
 															MethodName="DellAttachFile"
 															MethodParameter="{Binding}"
 																							/>
-													<!--MethodTarget="{Binding Source={StaticResource viewModel}}"
-															MethodParameter="{Binding Path=index}"
-													-->
 												</behaviors:EventTrigger>
 											</behaviors:Interaction.Triggers>
 										</Button>
@@ -547,81 +574,10 @@
 
 			</Grid>
 
-			<!--
-			 x:Name="Attachments_wp"
-			<Grid x:Name="attachments_g" 
-					 AllowDrop="true" 
-					Grid.Row="13" Grid.Column="1"   Grid.ColumnSpan="3"   
-					Background="#55D3D3D3">
-			-->
-			<!--Drop="Attachments_sp_Drop"-->
-			<!--
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto"  />
-				<ColumnDefinition Width="Auto"  />
-			</Grid.ColumnDefinitions>
-
-			-->
-			<!-- DataGrid（画面左側）：双方向バインド（UI上での変更がデータに反映される）Grid.ColumnSpan="4"  
-			 CanUserDeleteRows="True"		
-			-->
-			<!--AutoGenerateColumns	;	Columnsで定義していないBindingを表示しない-->
-			<!--
-			<DataGrid x:Name="Attachments_dg"
-				  Height="110"  Grid.ColumnSpan="5" Margin="0,0,-12,1" Width="487"
-				  HorizontalAlignment="Stretch"
-				   SelectionMode="Single" VerticalAlignment="Center" GridLinesVisibility="None"
-				  AutoGenerateColumns="False" Background="#55F0F0F0"
-				  ItemsSource="{Binding DataContext, Mode=TwoWay, RelativeSource={RelativeSource Self}}" 
-				  >
-				-->
-			<!--SelectionChanged="Attachments_SelectionChanged"-->
-			<!--
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Header=" " >
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate >
-								<Image Source="{Binding IconLink}" Margin="5,0,5,0" />
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Binding="{Binding Title}" Header="ファイル名" IsReadOnly="True"/>
-					<DataGridTextColumn Binding="{Binding Modifi}" Header="更新日" IsReadOnly="True" />
-					<DataGridTextColumn Binding="{Binding Size}" Header="サイズ"  IsReadOnly="True"/>
-					<DataGridTemplateColumn Header="解除" >
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate >
-								<Button  Style="{StaticResource bt-dell}"  Tag="{Binding}" IsEnabled="{Binding Actionable}"/>
-								-->
-			<!--Click="Release_Click"-->
-			<!--
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Header="削除" >
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate >
-								<Button Style="{StaticResource bt-dell}"  Tag="{Binding}" IsEnabled="{Binding Actionable}"/>
-								-->
-			<!--Click="RemoveAt_Click"-->
-			<!--
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-
-				</DataGrid.Columns>
-			</DataGrid>
-		</Grid>-->
-			<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。" 
+			<TextBlock Text="ファイルをドロップするか、クリックしてファイルを選択して下さい。\r\nGoogleドライブフォルダ内ファイル一覧は閉じた時のフォルダにあるファイルが登録されます" 
 						x:Name="attachments_tb"
 						Grid.Row="13" Grid.Column="1"  Grid.ColumnSpan="3" 
+						TextWrapping="Wrap"
 						TextAlignment="Center" 
 						HorizontalAlignment="Stretch"  
 						VerticalAlignment="Center" 

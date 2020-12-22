@@ -15,11 +15,6 @@
 	  mc:Ignorable="d"
           d:DesignHeight="450" d:DesignWidth="800"
 		Title="Googleドライブフォルダ内ファイル一覧">
-	<!--WindowStartupLocation="CenterScreen"  Topmost="True"
-	   		ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-		ScrollViewer.VerticalScrollBarVisibility="Auto" 
-	-->
-
 	<Page.DataContext>
 		<vm:W_1ViewModel/>
 	</Page.DataContext>
@@ -88,19 +83,18 @@
 							DockPanel.Dock="Left"
 							Content="Home" 
 							 />
-			<!--Click="ButtonHome_Click"-->
-
-			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseBack">Back</Button>
-			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseForward">Forward</Button>
-			<Button DockPanel.Dock="Left" Command="NavigationCommands.Refresh">Refresh</Button>
-			<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseStop">Stop</Button>
-			<Button DockPanel.Dock="Right" Command="NavigationCommands.GoToPage" 
-															CommandParameter="{Binding ElementName=addressBar,Path=Text}">Go</Button>
-			<TextBox Name="addressBar" 
-							Text="https://www.yahoo.co.jp/"
-							/>
-		</DockPanel>
-		<wv2:WebView2 Name = "webView"
+				<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseBack">Back</Button>
+				<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseForward">Forward</Button>
+				<Button DockPanel.Dock="Left" Command="NavigationCommands.Refresh">Refresh</Button>
+				<Button DockPanel.Dock="Left" Command="NavigationCommands.BrowseStop">Stop</Button>
+				<Button DockPanel.Dock="Right"
+							Command="{Binding GoBTCommand}"
+							CommandParameter="{Binding ElementName=addressBar,Path=Text}">Go</Button>
+				<TextBox Name="addressBar" 
+								Text="{Binding Path=TargetURLStr ,Mode=TwoWay }" 
+								/>
+			</DockPanel>
+			<wv2:WebView2 Name = "webView"
 								Source="{Binding Path=TargetURI ,Mode=TwoWay }" 
 							 >
 			<!---->

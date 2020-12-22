@@ -217,6 +217,12 @@ namespace TabCon.ViewModels {
 		///</summary>
 		public string eventFontColor { get; set; }
 		public List<int> TSList { get; set; }
+		/// <summary>
+		/// GoogleDriveに登録してあるファイル
+		/// </summary>
+		IList<Google.Apis.Drive.v3.Data.File> GoogleFiles;
+		string GoogleCrentFolderID;
+
 
 		public MySQL_Util MySQLUtil;
 
@@ -245,6 +251,8 @@ namespace TabCon.ViewModels {
 			try {
 				GoogleFiles = new List<Google.Apis.Drive.v3.Data.File>();
 				GoogleCrentFolderID = Constant.WebStratUrl;
+		//		GoogleDriveShow = new ViewModelCommand(ShowGoogleDrive);
+
 				EventComboSource = new Dictionary<string, string>()
 				{
 					{ "1", "案件イベント" },
@@ -1132,7 +1140,7 @@ namespace TabCon.ViewModels {
 			string dbMsg = "[GEventEdit]";
 			try {
 				//		ShowDriveBrouser();
-				ShowGoogleDriveAsync();
+				ShowGoogleDrive();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1334,18 +1342,15 @@ namespace TabCon.ViewModels {
 		}
 		#endregion
 
-		#region GoogleDrive
-		/// <summary>
-		/// GoogleDriveに登録してあるファイル
-		/// </summary>
-		IList<Google.Apis.Drive.v3.Data.File> GoogleFiles;
-		string GoogleCrentFolderID;
-
+		#region GoogleDriveShow
 		private ViewModelCommand _GoogleDriveShow;
 		public ViewModelCommand GoogleDriveShow {
+			//set {
+			//	_GoogleDriveShow = value;
+			//}
 			get {
 				if (_GoogleDriveShow == null) {
-					_GoogleDriveShow = new ViewModelCommand(ShowGoogleDriveAsync);
+					_GoogleDriveShow = new ViewModelCommand(ShowGoogleDrive);
 				}
 				return _GoogleDriveShow;
 			}
@@ -1353,7 +1358,7 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// GoogleDriveを表示する
 		/// </summary>
-		private async void ShowGoogleDriveAsync()
+		private void ShowGoogleDrive()
 		{
 			string TAG = "ShowGoogleDrive";
 			string dbMsg = "";
@@ -1383,7 +1388,7 @@ namespace TabCon.ViewModels {
 
 					if (tInfo.MimeType.Contains("folder")) {
 						GoogleCrentFolderID = tInfo.Id;
-						IList<Google.Apis.Drive.v3.Data.File> AddGFiles =  GDriveUtil.GDFileListUp(tInfo.Name, false);
+						IList<Google.Apis.Drive.v3.Data.File> AddGFiles = GDriveUtil.GDFileListUp(tInfo.Name, false);
 						dbMsg += ",フォルダ内=" + AddGFiles.Count + "件";
 						foreach (Google.Apis.Drive.v3.Data.File AddGFile in AddGFiles) {
 							dbMsg += " ," + AddGFile.MimeType;
@@ -1391,13 +1396,13 @@ namespace TabCon.ViewModels {
 								AddGoogleFiles(AddGFile);
 							}
 						}
-					} else{
+					} else {
 						AddGoogleFiles(tInfo);
 					}
 					MakeAttachmentsList();
 					// 添付ファイルリストにGoogleDrive登録済みのファイルを追加する
 					string index = AttachmentsList.Count().ToString();
-					dbMsg += ",登録前=" + index +　"件";
+					dbMsg += ",登録前=" + index + "件";
 					foreach (Google.Apis.Drive.v3.Data.File GoogleFile in GoogleFiles) {
 						dbMsg += "\r\n検索[" + GoogleFile.Id + "]" + GoogleFile.Name;
 						bool isAdd = true;
