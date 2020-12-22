@@ -244,6 +244,7 @@ namespace TabCon.ViewModels {
 			string dbMsg = "";
 			try {
 				GoogleFiles = new List<Google.Apis.Drive.v3.Data.File>();
+				GoogleCrentFolderID = Constant.WebStratUrl;
 				EventComboSource = new Dictionary<string, string>()
 				{
 					{ "1", "案件イベント" },
@@ -1338,6 +1339,7 @@ namespace TabCon.ViewModels {
 		/// GoogleDriveに登録してあるファイル
 		/// </summary>
 		IList<Google.Apis.Drive.v3.Data.File> GoogleFiles;
+		string GoogleCrentFolderID;
 
 		private ViewModelCommand _GoogleDriveShow;
 		public ViewModelCommand GoogleDriveShow {
@@ -1361,7 +1363,7 @@ namespace TabCon.ViewModels {
 				//}
 				//ViewModelを作成してパラメータを設定する
 				W_1ViewModel VM = new W_1ViewModel() {
-					TargetURLStr = Constant.WebStratUrl
+					TargetURLStr = GoogleCrentFolderID
 				};
 				W_1Window View = new W_1Window();
 				View.DataContext = VM;
@@ -1374,16 +1376,54 @@ namespace TabCon.ViewModels {
 				if (VM.TargetURLStr != null) {
 					//今回の選択結果
 					string[] passes = VM.TargetURLStr.Split('/');
-					string tFileId = passes[passes.Length - 1];
-			//		string tFileId = await GDriveUtil.FindByName(passEnd);
-					dbMsg += ",tFileId=" + tFileId;
-					File tInfo = GDriveUtil.FindById(tFileId);
-					dbMsg += ",Kind=" + tInfo.Kind;
+					string FolderID = passes[passes.Length - 1];
+					dbMsg += ",[ " + FolderID;
+					File tInfo = GDriveUtil.FindById(FolderID);
+					dbMsg += " ]" + tInfo.Name;
 
-					//if(tInfo) {
-					//	IList<Google.Apis.Drive.v3.Data.File> AddGFiles = await GDriveUtil.GDFolderListUpAsyncBody(tFileId);
-					//}
-
+					if (tInfo.MimeType.Contains("folder")) {
+						GoogleCrentFolderID = tInfo.Id;
+						IList<Google.Apis.Drive.v3.Data.File> AddGFiles =  GDriveUtil.GDFileListUp(tInfo.Name, false);
+						dbMsg += ",フォルダ内=" + AddGFiles.Count + "件";
+						foreach (Google.Apis.Drive.v3.Data.File AddGFile in AddGFiles) {
+							dbMsg += " ," + AddGFile.MimeType;
+							if (!AddGFile.MimeType.Contains("folder")) {
+								AddGoogleFiles(AddGFile);
+							}
+						}
+					} else{
+						AddGoogleFiles(tInfo);
+					}
+					MakeAttachmentsList();
+					// 添付ファイルリストにGoogleDrive登録済みのファイルを追加する
+					string index = AttachmentsList.Count().ToString();
+					dbMsg += ",登録前=" + index +　"件";
+					foreach (Google.Apis.Drive.v3.Data.File GoogleFile in GoogleFiles) {
+						dbMsg += "\r\n検索[" + GoogleFile.Id + "]" + GoogleFile.Name;
+						bool isAdd = true;
+						foreach (attachments Attachment in AttachmentsList) {
+							if (Attachment.google_file_id != null) {
+								if (GoogleFile.Id.Equals(Attachment.google_file_id)) {
+									dbMsg += " , 既存[" + Attachment.google_file_id + "]" + Attachment.google_file_name;
+									isAdd = false;
+								}
+							}
+						}
+						if (isAdd) {
+							dbMsg += ">>追加";
+							attachments attachment = new attachments();
+							attachment.summary = GoogleFile.Name;
+							attachment.google_file_id = GoogleFile.Id;
+							attachment.google_file_name = GoogleFile.Name;
+							attachment.methodTarget = this;
+							attachment.IsEnabled = true;
+							AttachmentsList.Add(attachment);
+						}
+					}
+					RaisePropertyChanged("AttachmentsList");
+					AttachmentsCount = AttachmentsList.Count();
+					RaisePropertyChanged("AttachmentsCount");
+					dbMsg += "\r\n登録後=" + AttachmentsCount + "件";
 				} else {
 					dbMsg += "キャンセルされました";
 				}
@@ -1392,7 +1432,53 @@ namespace TabCon.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 現在の添付ファイルに該当するファイルが無ければGoogleFilesにGoogleDrive登録済みのファイルを追加する
+		/// </summary>
+		public void AddGoogleFiles(Google.Apis.Drive.v3.Data.File AddGFile)
+		{
+			string TAG = "AddGoogleFiles";
+			string dbMsg = "";
+			try {
+				dbMsg += "検索[" + AddGFile.Id + "]" + AddGFile.Name;
+				bool isAdd = true;
+				foreach (Google.Apis.Drive.v3.Data.File  GoogleFile in GoogleFiles) {
+					if(GoogleFile.Id.Equals(AddGFile.Id)) {
+						dbMsg += " , 既存[" + GoogleFile.Id + "]" + GoogleFile.Name;
+						isAdd = false;
+					}
+				}
+				if(isAdd) {
+					dbMsg += ">>追加" ;
+					GoogleFiles.Add(AddGFile);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		#endregion
+
+		/// <summary>
+		/// 添付ファイルリストができていなければ生成する
+		/// </summary>
+		public void MakeAttachmentsList()
+		{
+			string TAG = "MakeAttachmentsList";
+			string dbMsg = "";
+			try {
+				if (AttachmentsList == null) {
+					dbMsg = "AttachmentsList生成";
+					AttachmentsList = new ObservableCollection<attachments>();
+				}
+				dbMsg += "：Attach=" + AttachmentsList.Count();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 
 		/// <summary>
@@ -1403,12 +1489,7 @@ namespace TabCon.ViewModels {
 			string TAG = "FilesFromLocal";
 			string dbMsg = "";
 			try {
-				if(AttachmentsList == null) {
-					dbMsg = "AttachmentsList生成";
-					AttachmentsList = new ObservableCollection<attachments>();
-				}
-				dbMsg += "：Attach=" + AttachmentsList.Count() ;
-				dbMsg += "に" + files.Length + "件を追加";
+				MakeAttachmentsList();
 				string index = AttachmentsList.Count().ToString();
 				foreach (string file in files) {
 					dbMsg += "\r\n" + file;

@@ -33,6 +33,36 @@ namespace TabCon.Models {
 			}
 		}
 
+		private string _google_file_name;
+		///<summary>
+		///GoogleDriveè„ÇÃï\é¶ñº
+		///</summary>
+		public string google_file_name{
+			get => _google_file_name;
+			set {
+				if (_google_file_name == value)
+					return;
+				_google_file_name = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		private string _google_file_id;
+		///<summary>
+		///GoogleDriveè„ÇÃéØï ñº
+		///</summary>
+		public string google_file_id {
+			get => _google_file_id;
+			set {
+				if (_google_file_id == value)
+					return;
+				_google_file_id = value;
+				RaisePropertyChanged();
+			}
+		}
+
+
+
 		private TabCon.ViewModels.X_2ViewModel _methodTarget;
 		/// <summary>
 		/// ContextÇ…Ç»ÇÈViewModel
@@ -80,6 +110,8 @@ namespace TabCon.Models {
 			return new attachments() {
 				index = this.index,
 				local_file_pass = this.local_file_pass,
+				google_file_id = this.google_file_id,
+				google_file_name = this.google_file_name,
 				methodTarget = this.methodTarget,
 				IsEnabled = this.IsEnabled,
 				summary = this.summary

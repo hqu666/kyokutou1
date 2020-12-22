@@ -164,7 +164,7 @@ namespace TabCon {
 		/// 対象フォルダ内の登録状況表示
 		/// </summary>
 		/// <returns></returns>
-		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp(string pFolder, bool isOnlyFolder)
+		public IList<Google.Apis.Drive.v3.Data.File> GDFileListUp(string pFolder, bool isOnlyFolder, bool isOnlyFile = true)
 		{
 			string TAG = "GDFileListUp";
 			string dbMsg = "[GoogleDriveUtil]";
@@ -177,7 +177,11 @@ namespace TabCon {
 				// フォルダIDの取得
 				FilesResource.ListRequest listRequest = Constant.MyDriveService.Files.List();
 				listRequest.PageSize = 1;   // 取得するフォルダの条件をクエリ構文で指定
+											//if(isOnlyFolder) {
 				listRequest.Q = "(name = '" + pFolder + "') and (mimeType = 'application/vnd.google-apps.folder') and (trashed = false)";
+				//}else{
+				//	listRequest.Q = "(name = '" + pFolder + "')  and (trashed = false)";
+				//}
 				listRequest.Fields = "nextPageToken, files(id)";
 				var folderId = listRequest.Execute().Files.First().Id;
 				dbMsg += "[" + folderId + "]";
@@ -422,7 +426,7 @@ namespace TabCon {
 
 
 		/// <summary>
-		/// idに該当するファイル・フォルダの名称を返す
+		/// idに該当するファイル・フォルダの情報を返す
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
