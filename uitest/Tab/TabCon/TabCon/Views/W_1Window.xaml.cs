@@ -381,53 +381,13 @@ namespace TabCon.Views {
 			webView.CoreWebView2.Navigate((string)e.Parameter);
 		}
 
-		//オリジナル/////////////
-		//private void ButtonGo_Click(object sender, RoutedEventArgs e)
-		//{
-		//	string TAG = "ButtonGo_Click";
-		//	string dbMsg = "";
-		//	try {
-		//		if (webView != null && webView.CoreWebView2 != null) {
-		//			string urlStr = addressBar.Text;
-		//			dbMsg += ",addressBar.Text=" + urlStr;
-		//			if (urlStr.StartsWith("http://") || urlStr.StartsWith("https://")) {
-		//				Uri uri = new Uri(urlStr);
-		//				webView.CoreWebView2.Navigate(urlStr);
-		//			} else {
-		//				String titolStr = "URLを入力して下さい";
-		//				String msgStr = "アドレスバーにはhttp://もしくはhttps://で始るURLを入力して下さい";
-		//				MessageBoxButton buttns = MessageBoxButton.YesNo;
-		//				MessageBoxImage icon = MessageBoxImage.Exclamation;
-		//				MessageBoxResult res = MessageShowWPF(titolStr, msgStr, buttns, icon);
-		//			}
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
 		// イベントで設定される物 ///////////////////////////////////////////////////////////////////////////////////////
 		/* ViewModelに配置済み ///////////////////////////////////////////////////////////////////////////////////////
 		void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
 		private void WebView_SourceChanged(object sender, CoreWebView2SourceChangedEventArgs e)
-
-		/// <summary>
-		/// エレメントの読み込み終了
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
 		private void WebView_Loaded(object sender, RoutedEventArgs e)
-		{
-			string TAG = "WebView_Loaded";
-			string dbMsg = "";
-			try {
-				VisibleTop();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
 		// ViewModelに配置済み /////////////////////////////////////////////////////////////////////////////////////*/
+		//以下は初回読み込み時のみ発生した
 
 		/// <summary>
 		/// コンテンツ読込み開始時のみ
@@ -489,6 +449,76 @@ namespace TabCon.Views {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+		private void WebView_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+		{
+			string TAG = "RequestBringIntoView";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void WebView_TargetUpdated(object sender, DataTransferEventArgs e)
+		{
+			string TAG = "TargetUpdated";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void WebView_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			string TAG = "MouseUp";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		private void WebView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			string TAG = "MouseLeftButtonDown";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
+		private void WebView_GotMouseCapture(object sender, MouseEventArgs e)
+		{
+			string TAG = "GotMouseCapture";
+			string dbMsg = "";
+			try {
+				Microsoft.Web.WebView2.Wpf.WebView2 wv2 = (Microsoft.Web.WebView2.Wpf.WebView2)sender;
+				string tUri = wv2.Source.AbsoluteUri;
+				dbMsg += "AbsoluteUri=" + tUri;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		//async void CoreWebView2_WebResourceResponseReceived(object sender, CoreWebView2WebResourceResponseReceivedEventArgs e)
 		//{

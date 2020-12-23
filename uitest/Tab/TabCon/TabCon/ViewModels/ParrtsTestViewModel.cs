@@ -31,7 +31,12 @@ namespace TabCon.ViewModels {
 		/// フォントサイズ
 		/// </summary>
 		public string CalcTextFontSize { get; set; }
-		
+
+
+		public string SuppliersClosing1 { get; set; }
+		public string SuppliersClosing2 { get; set; }
+
+
 		public ParrtsTestViewModel()
 		{
 			Initialize();
@@ -43,7 +48,10 @@ namespace TabCon.ViewModels {
 			CalcTexWidth = "200";
 			CalcTextFontSize = "18";
 			CalcResult = "0123456789";
-			RaisePropertyChanged();
+			SuppliersClosing1 = "5";
+			SuppliersClosing2 = "15";
+
+		RaisePropertyChanged();
 		}
 
 	}

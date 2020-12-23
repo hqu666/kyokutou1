@@ -105,8 +105,12 @@ namespace TabCon.ViewModels {
 		/// 遷移上限から外れた場合の戻し先
 		/// </summary>
 		public string RedirectUrl = "";
+	/// <summary>
+	/// 基本的な遷移先
+	/// </summary>
+		public string BaceUrl { set; get; }
 
-		public W_1ViewModel()
+	public W_1ViewModel()
 		{
 			TopPanelVisibility = "Hidden";
 			RaisePropertyChanged("TopPanelVisibility");
@@ -171,8 +175,8 @@ namespace TabCon.ViewModels {
 			string TAG = "SourceChanged";
 			string dbMsg = "";
 			try {
-				dbMsg += "RedirectUrl=" + RedirectUrl;
-				dbMsg += ">>TargetURI= " + TargetURI;
+				dbMsg += "RedirectUrl= " + RedirectUrl;
+				dbMsg += " >>TargetURI= " + TargetURI;
 				TargetURLStr = TargetURI.ToString();
 				RaisePropertyChanged("TargetURLStr");
 				if (CanGoto(TargetURLStr)) {
@@ -184,8 +188,8 @@ namespace TabCon.ViewModels {
 						dbMsg += " >Redirect>  " + RedirectUrl;
 						TargetURLStr = RedirectUrl;
 					} else {
-						dbMsg += " >Reset>  " + Constant.WebStratUrl;
-						TargetURLStr = Constant.WebStratUrl;
+						dbMsg += " >Reset>  " + BaceUrl;
+						TargetURLStr = BaceUrl;
 					}
 					RaisePropertyChanged("TargetURLStr");
 					TargetURI = new Uri(TargetURLStr);

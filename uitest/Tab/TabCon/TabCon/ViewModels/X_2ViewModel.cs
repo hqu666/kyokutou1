@@ -223,6 +223,11 @@ namespace TabCon.ViewModels {
 		IList<Google.Apis.Drive.v3.Data.File> GoogleFiles;
 		string GoogleCrentFolderID;
 
+		/// <summary>
+		/// 添付ファイルボタンキャプション
+		/// </summary>
+		public string GoogleDriveFolderName { get; set; }
+		
 
 		public MySQL_Util MySQLUtil;
 
@@ -266,6 +271,8 @@ namespace TabCon.ViewModels {
 					TSList.Add(i);
 				}
 				EventComboSelectedIndex = eventType - 1;
+				MakeEventFolder();
+
 				dbMsg += "[" + EventComboSelectedIndex + "]";
 				RaisePropertyChanged();
 				EventDateStart = tEvents.event_date_start;
@@ -313,6 +320,8 @@ namespace TabCon.ViewModels {
 				RaisePropertyChanged();
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
 
+
+
 				RaisePropertyChanged();
 				//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
@@ -339,8 +348,7 @@ namespace TabCon.ViewModels {
 				if (value != null) {
 					string msgStr = EventComboSource[value].ToString() + "が選択されました";
 					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
-					//		ReadTable(value);
+					MakeEventFolder();
 				}
 			}
 		}
@@ -1215,6 +1223,60 @@ namespace TabCon.ViewModels {
 		/// </summary>
 		public int AttachmentsCount { get; set; }
 
+		/// <summary>
+		/// 選択されたイベントに合わせ、該当するフォルダを作成する
+		/// </summary>
+		/// <param name="taregetEvent"></param>
+		/// <param name="tEvents"></param>
+		public void MakeEventFolder()
+		{
+			string TAG = "MakeEventFolder";
+			string dbMsg = "";
+			try {
+				dbMsg += "EventComboSelectedIndex=" + EventComboSelectedIndex;
+				string ApriName = "KSクラウド";
+				GoogleDriveFolderName = ApriName;
+
+				switch (EventComboSelectedIndex) {
+					case 0:
+						//案件管理番号：t_project_bases.project_code　の代わりに参照IDを使う		：X-2
+						GoogleDriveFolderName += "/案件/PR999" + tEvents.t_project_base_id;
+						////物件コード：m_properties.property_code　の代わりに参照IDを使う		：W-1
+						//GoogleDriveFolderName = ApriName + "/案件" + tEvents.t_project_base_id;
+						break;
+					case 1:
+						GoogleDriveFolderName += "/工程/" +String.Format("yyyyMMdd", tEvents.event_date_start)+ tEvents.event_time_start + "/" + tEvents.event_title;      //X-2
+																					////案件管理番号：t_project_bases.project_code　の代わりに参照IDを使う		：W-1
+																					//GoogleDriveFolderName = ApriName + "/案件" + tEvents.t_project_base_id;
+						break;
+					case 2:
+						GoogleDriveFolderName += "/イベント/" +String.Format("yyyyMMdd", tEvents.event_date_start ) + tEvents.event_time_start + "/" + tEvents.event_title;     //X-2																															  ////購買管理No：t_project_bases.project_code　の代わりに参照IDを使う		：W-1
+						break;
+				}
+				dbMsg += "=" + GoogleDriveFolderName;
+				RaisePropertyChanged();
+
+				string[] passStr = Constant.WebStratUrl.Split('/');
+				string parentFolderId = passStr[passStr.Length-1];
+				string rootFolderPass = Constant.WebStratUrl.Replace(parentFolderId,"");
+
+				passStr = GoogleDriveFolderName.Split('/');
+
+				foreach (string passName in passStr) {
+					File parentFolder = GDriveUtil.CreateFolder(passName, parentFolderId);
+					parentFolderId = parentFolder.Id;
+					dbMsg += "\r\n[" + parentFolderId+ "]" + passName;
+				}
+				GoogleCrentFolderID = rootFolderPass + parentFolderId;
+				dbMsg += "\r\n>>" + GoogleCrentFolderID;
+				MyLog(TAG, dbMsg);
+
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 		#region FileDlogShow	　単一ファイルの選択
 		private ViewModelCommand _FileDlogShow;
 
@@ -1367,8 +1429,10 @@ namespace TabCon.ViewModels {
 				//	Messenger.Raise(new TransitionMessage(vm, "GoogleDriveShow"));
 				//}
 				//ViewModelを作成してパラメータを設定する
+				dbMsg += ",GoogleCrentFolderID= " + GoogleCrentFolderID;
 				W_1ViewModel VM = new W_1ViewModel() {
-					TargetURLStr = GoogleCrentFolderID
+					TargetURLStr = GoogleCrentFolderID,
+					BaceUrl = GoogleCrentFolderID
 				};
 				W_1Window View = new W_1Window();
 				View.DataContext = VM;

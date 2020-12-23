@@ -48,7 +48,7 @@
                          Value="True">
 					<Setter TargetName="border"
                             Property="Background"
-                            Value="#FF154F99" />
+                            Value="#FF154F99" /> 
 					<Setter TargetName="border"
                             Property="TextBlock.Foreground"
                             Value="White" />

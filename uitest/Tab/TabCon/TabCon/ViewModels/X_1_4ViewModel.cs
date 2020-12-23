@@ -223,12 +223,15 @@ namespace TabCon.ViewModels
 					if (tDate < ev.event_date_start) {          // && 0< dEvents.Count
 						msgStr = ":開始" + tDate + ">>" + ev.event_date_start + ":" + EDays.Count + "件";
 						//				Application.Current.Dispatcher.Invoke(new System.Action(() => waitingDLog.SetMes(msgStr)));
-						dbMsg += msgStr;
+						dbMsg += "\r\n[" + ev.id + "]" + ev.event_title + "::" + msgStr;
 						aDay = new ADay(tDate, summarys, dEvents, this);
 						EDays.Add(aDay);
 						summarys = new List<string>();
 						dEvents = new ObservableCollection<t_events>();
 						cIndex=0;
+						if(ev.event_type==1) {
+							dbMsg += "[案件；" + ev.t_project_base_id + "]";
+						}
 					}
 					tDate = ev.event_date_start;
 					ev.childIndex = cIndex;
@@ -291,7 +294,11 @@ namespace TabCon.ViewModels
 											dbMsg += ">>スキップ" ;
 										} else if (rName.Equals("id")) {
 											OneEvent.id = (int)rVar;
-										}else if(rName.Equals("event_title")) {
+										} else if (rName.Equals("m_contract_id")) {
+											OneEvent.m_contract_id = (int)rVar;         //契約ID
+										} else if (rName.Equals("t_project_base_id")) {
+											OneEvent.t_project_base_id = (int)rVar;         //案件ID
+										} else if(rName.Equals("event_title")) {
 											OneEvent.event_title = (string)rVar;         //タイトル
 										} else if (rName.Equals("event_date_start")) {
 											OneEvent.event_date_start = (DateTime)rVar;              //開始日

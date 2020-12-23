@@ -134,6 +134,12 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="Controls\SuppliersClosingDatesControl.xaml.cs">
+      <DependentUpon>SuppliersClosingDatesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SuppliersClosingDatesWindow.xaml.cs">
+      <DependentUpon>SuppliersClosingDatesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WaitingCircle.xaml.cs">
       <DependentUpon>WaitingCircle.xaml</DependentUpon>
     </Compile>
@@ -346,6 +352,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\XamDataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SuppliersClosingDatesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SuppliersClosingDatesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
