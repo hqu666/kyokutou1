@@ -77,33 +77,20 @@ namespace TabCon.Controls
 			DisplaySet(SuppliersClosingDate);
 		}
 
-		//private void AnyTime_Click(object sender, RoutedEventArgs e)
-		//{
-		//	RadioButton RB = sender as RadioButton;
-		//	if((bool)RB.IsChecked) {
-		//		SuppliersClosingDate = 0;
-		//		DisplaySet(SuppliersClosingDate);
-		//	}if(!DisplayStr.Equals("")) {
-		//		SuppliersClosingDate = int.Parse(DisplayStr);
-		//		DisplaySet(SuppliersClosingDate);
-		//	}else{
-		//		SuppliersClosingDate = 30;
-		//		DisplaySet(SuppliersClosingDate);
-		//	}
-		//}
-
-
 		public void DisplaySet(int suppliersClosingDate)
 		{
 			DisplayStr = "";
+			AnyTimeBool = false;
+			MonthEndBool = false;
 			if (suppliersClosingDate == 0) {
 				AnyTimeBool = true;
 			} else if(29 < suppliersClosingDate) {
 				MonthEndBool = true;
 			} else {
 				DisplayStr = suppliersClosingDate.ToString();
-				AnyTimeBool = false;
-				MonthEndBool = false;
+				//IsCheckedのBindingで変えられなかったのでエレメント操作
+				AnyTime.IsChecked = false;
+				MonthEnd.IsChecked = false;
 			}
 			this.SetValTB.Text = DisplayStr;
 		}

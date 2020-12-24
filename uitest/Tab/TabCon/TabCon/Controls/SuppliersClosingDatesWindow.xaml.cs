@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 namespace TabCon.Controls {
 	/// <summary>
 	///締日用の日付け入力パレット（モダール）
+	///　DependencyPropertyでのデータ送受信に参照エラーが出るのでコードビハインド間のクラス参照で対応
 	/// </summary>
 	public partial class SuppliersClosingDatesWindow : Window {
 		/// <summary>
@@ -82,11 +83,15 @@ namespace TabCon.Controls {
 		private void this_loaded(object sender, RoutedEventArgs e)
 		{
 			Point pt = OwnerControl.ShowPanelBT.PointToScreen(new Point(0.0d, 0.0d));
-	//		Point pcp = OwnerControl.ShowPanelBT.PointFromScreen(new Point(0.0d, 0.0d));
-			this.Left = pt.X + 30;
-			this.Top = pt.Y + 30;
+			this.Left = pt.X + 15;
+			this.Top = pt.Y-2;
+			//if(0<(double)BaceGrid.ActualWidth) {
+			//	this.Width = this.BaceGrid.ActualWidth + 10;
+			//	this.Height = this.BaceGrid.ActualHeight + 10;
+			//}
+			//Point xpt = XEndBT.PointFromScreen(new Point(0.0d, 0.0d));
+			//Point ypt = YEndBT.PointFromScreen(new Point(0.0d, 0.0d));
 			DisplayStr = OwnerControl.SetValTB.Text;
-			//	DisplayStr = TargetTB.Text;
 		}
 
 		private void Button_Click(object sender, RoutedEventArgs e)
@@ -94,7 +99,6 @@ namespace TabCon.Controls {
 			Button BT = sender as Button;
 			DisplayStr = (string)BT.Content;
 			OwnerControl.SetValTB.Text = DisplayStr;
-			//	TargetTB.Text= DisplayStr ;
 			int SelectedInt = int.Parse(DisplayStr);
 			OwnerControl.DisplaySet(SelectedInt);
 			this.Close();
