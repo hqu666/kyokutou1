@@ -5,18 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TabCon.Controls"
         mc:Ignorable="d"
-		Width="117"
-		Height="162"
+		Width="112"
+		Height="168"
 		Topmost="True" ResizeMode="NoResize" 
+		x:Name="parent"
         Title="日選択" >
 	<Window.Resources>
 		<Style TargetType="Button">
 			<Setter Property="Width" Value="20"/>
 			<Setter Property="Height" Value="20"/>
 			<Setter Property="Margin" Value="1"/>
+			<Setter Property="Background" Value="White"/>
 		</Style>
+		<!--<Setter Property="BorderBrush" Value="Gray"/>-->
 	</Window.Resources>
-	<Grid>
+	<Grid DataContext="{Binding ElementName=parent}"
+				Background="DarkGray" >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition  Width="Auto"  />
 			<ColumnDefinition  Width="Auto"  />
@@ -181,5 +185,13 @@
 					Grid.Column="3"
 					Click="Button_Click"
 					/>
+		<TextBox 
+				Text="{Binding Path=DisplayStr, Mode=OneWay}" 
+				Grid.Row="5" 
+				Grid.Column="4"
+				Foreground="Magenta"
+			/>
+		<!--Background="Transparent"-->
+
 	</Grid>
 </Window>

@@ -31,10 +31,37 @@ namespace TabCon.ViewModels {
 		/// フォントサイズ
 		/// </summary>
 		public string CalcTextFontSize { get; set; }
+		public int SuppliersClosing1 { get; set; }
 
-
-		public string SuppliersClosing1 { get; set; }
-		public string SuppliersClosing2 { get; set; }
+		//private int _SuppliersClosing1;
+		//public int SuppliersClosing1 {  
+		//		get {
+		//			return _SuppliersClosing1;
+		//		}
+		//		set {
+		//			if (value == _SuppliersClosing1)
+		//				return;
+		//		_SuppliersClosing1 = value;
+		//			titolStr = "締日1";
+		//			string msgStr = _SuppliersClosing1 + "に設定されました";
+		//			System.Windows.MessageBox.Show(msgStr, titolStr, MessageBoxButton.OK);
+		//		}
+		//	}
+		public int SuppliersClosing2 { get; set; }
+		//private int _SuppliersClosing2;
+		//public int SuppliersClosing2 {
+		//	get {
+		//		return _SuppliersClosing2;
+		//	}
+		//	set {
+		//		if (value == _SuppliersClosing2)
+		//			return;
+		//		_SuppliersClosing2 = value;
+		//		titolStr = "締日2";
+		//		string msgStr = _SuppliersClosing2 + "に設定されました";
+		//		System.Windows.MessageBox.Show(msgStr, titolStr, MessageBoxButton.OK);
+		//	}
+		//}
 
 
 		public ParrtsTestViewModel()
@@ -48,8 +75,8 @@ namespace TabCon.ViewModels {
 			CalcTexWidth = "200";
 			CalcTextFontSize = "18";
 			CalcResult = "0123456789";
-			SuppliersClosing1 = "5";
-			SuppliersClosing2 = "15";
+			SuppliersClosing1 = 5;
+			SuppliersClosing2 =15;
 
 		RaisePropertyChanged();
 		}

@@ -134,8 +134,8 @@
     <Compile Include="Behaviors\CloseButtonBehavior.cs" />
     <Compile Include="Behaviors\PasswordBindBehavior.cs" />
     <Compile Include="Constant.cs" />
-    <Compile Include="Controls\SuppliersClosingDatesControl.xaml.cs">
-      <DependentUpon>SuppliersClosingDatesControl.xaml</DependentUpon>
+    <Compile Include="Controls\SuppliersClosingDateControl.xaml.cs">
+      <DependentUpon>SuppliersClosingDateControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SuppliersClosingDatesWindow.xaml.cs">
       <DependentUpon>SuppliersClosingDatesWindow.xaml</DependentUpon>
@@ -355,7 +355,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SuppliersClosingDatesControl.xaml">
+    <Page Include="Controls\SuppliersClosingDateControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="TabCon.Controls.SuppliersClosingDateControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			xmlns:local="clr-namespace:TabCon.Controls"
+             mc:Ignorable="d" >
+	<Grid VerticalAlignment="Center">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  Width="Auto"  />
+			<ColumnDefinition  Width="Auto"  />
+		</Grid.ColumnDefinitions>
+		<RadioButton Content="月末"
+				x:Name="MonthEnd"
+				IsChecked="{Binding Path=MonthEndBool, Mode=TwoWay}" 
+				Grid.Column="0" 
+				Checked="MonthEnd_Checked"
+				/>
+		<RadioButton Content="随時"
+				x:Name="AnyTime"
+				IsChecked="{Binding Path=AnyTimeBool, Mode=TwoWay}" 
+				Grid.Column="1"
+				Margin="5,0,0,0" 
+				Checked="AnyTime_Checked"
+				/>
+		<TextBox x:Name="SetValTB"
+			Text="{Binding Path=DisplayStr, Mode=TwoWay}" 
+			Grid.Column="2"
+			MinWidth="20"
+			Margin="5,0,0,0"
+			TextAlignment="Right"
+			/>
+		<Button x:Name="ShowPanelBT"
+			Click="Button_Click"
+			Grid.Column="3"
+			Margin="2,0,0,0"
+			Width="16"
+			>
+			<TextBlock Text="…" 
+						FontSize="12"
+						Margin="0,-8,0,0"
+						HorizontalAlignment="Center"/>
+		</Button>
+	</Grid>
+</UserControl>
