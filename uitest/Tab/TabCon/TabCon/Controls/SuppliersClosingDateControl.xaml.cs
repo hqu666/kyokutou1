@@ -1,27 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace TabCon.Controls
-{
+namespace TabCon.Controls {
 	/// <summary>
 	///締日用のカスタムコントロール
 	/// </summary>
 	public partial class SuppliersClosingDateControl : UserControl
     {
-
-
+		//ViewModelからBindingする場合はDependencyが必要
 		/// <summary>
 		/// 選択結果
 		/// </summary>
@@ -45,7 +31,6 @@ namespace TabCon.Controls
 			DisplaySet(int.Parse(e.NewValue.ToString()));
 		}
 
-
 		/// <summary>
 		/// 表示文字
 		/// </summary>
@@ -53,18 +38,17 @@ namespace TabCon.Controls
 		/// <summary>
 		/// 月末
 		/// </summary>
-		public bool MonthEndBool { get; set; }
-		/// <summary>
-		/// 随時
-		/// </summary>
-		public bool AnyTimeBool { get; set; }
+		//public bool MonthEndBool { get; set; }
+		///// <summary>
+		///// 随時
+		///// </summary>
+		//public bool AnyTimeBool { get; set; }
 
 		public SuppliersClosingDateControl()
 		{
 			this.InitializeComponent();
 			DisplaySet(SuppliersClosingDate);
 		}
-
 
 		private void MonthEnd_Checked(object sender, RoutedEventArgs e)
 		{
@@ -80,12 +64,12 @@ namespace TabCon.Controls
 		public void DisplaySet(int suppliersClosingDate)
 		{
 			DisplayStr = "";
-			AnyTimeBool = false;
-			MonthEndBool = false;
+			//AnyTimeBool = false;
+			//MonthEndBool = false;
 			if (suppliersClosingDate == 0) {
-				AnyTimeBool = true;
+				//AnyTimeBool = true;
 			} else if(29 < suppliersClosingDate) {
-				MonthEndBool = true;
+				//MonthEndBool = true;
 			} else {
 				DisplayStr = suppliersClosingDate.ToString();
 				//IsCheckedのBindingで変えられなかったのでエレメント操作
@@ -95,27 +79,12 @@ namespace TabCon.Controls
 			this.SetValTB.Text = DisplayStr;
 		}
 
-
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			SuppliersClosingDatesWindow View = new SuppliersClosingDatesWindow();
 			View.OwnerControl = this;
-		//	View.TargetTB = this.SetValTB;
 			View.ShowDialog();
 		}
 
 	}
 }
-
-
-//		/// <summary>
-//		/// クローズボックスなどで強制的にUnloadされた場合
-//		/// </summary>
-//		/// <param name="sender"></param>
-//		/// <param name="e"></param>
-//		private void UserControl_Unloaded(object sender, RoutedEventArgs e)
-//		{
-//			MyCallBack();
-//		}
-//	}
-//}

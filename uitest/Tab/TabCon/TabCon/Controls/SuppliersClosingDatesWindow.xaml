@@ -10,9 +10,6 @@
 		Width="120" 
 		Height="182"
 		>
-	<!--d:DesignWidth="118" 
-		d:DesignHeight="164"-->
-
 	<Window.Resources>
 		<Style TargetType="Button">
 			<Setter Property="Width" Value="22"/>
@@ -189,13 +186,5 @@
 					Grid.Column="3"
 					Click="Button_Click"
 					/>
-		<!--<TextBox 
-				Text="{Binding Path=DisplayStr, Mode=OneWay}" 
-				Grid.Row="5" 
-				Grid.Column="4"
-				Foreground="Magenta"
-			/>-->
-		<!--Background="Transparent"-->
-
 	</Grid>
 </Window>

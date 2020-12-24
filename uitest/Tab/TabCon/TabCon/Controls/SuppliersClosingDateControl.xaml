@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			xmlns:local="clr-namespace:TabCon.Controls"
              mc:Ignorable="d" >
 	<Grid VerticalAlignment="Center">
 		<Grid.ColumnDefinitions>
@@ -14,18 +13,19 @@
 		</Grid.ColumnDefinitions>
 		<RadioButton Content="月末"
 				x:Name="MonthEnd"
-				IsChecked="{Binding Path=MonthEndBool, Mode=TwoWay}" 
 				Grid.Column="0" 
 				Margin="0,2,0,0" 
 				Checked="MonthEnd_Checked"
 				/>
+		<!--IsChecked="{Binding Path=MonthEndBool, Mode=TwoWay}"-->
+
 		<RadioButton Content="随時"
 				x:Name="AnyTime"
-				IsChecked="{Binding Path=AnyTimeBool, Mode=TwoWay}" 
 				Grid.Column="1"
 				Margin="5,2,0,0" 
 				Checked="AnyTime_Checked"
 				/>
+		<!--IsChecked="{Binding Path=AnyTimeBool, Mode=TwoWay}"-->
 		<TextBox x:Name="SetValTB"
 			Text="{Binding Path=DisplayStr, Mode=TwoWay}" 
 			Grid.Column="2"
