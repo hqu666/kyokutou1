@@ -77,8 +77,7 @@ namespace TabCon.ViewModels {
 			CalcResult = "0123456789";
 			SuppliersClosing1 = 5;
 			SuppliersClosing2 =15;
-
-		RaisePropertyChanged();
+			RaisePropertyChanged();
 		}
 
 	}
