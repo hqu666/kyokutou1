@@ -278,9 +278,12 @@ namespace TabCon.ViewModels {
 				eventType = tEvents.event_type;
 				dbMsg += ",イベント種類=" + eventType;
 				if(eventType ==1) {
+					dbMsg += ",t_project_base_id=" + tEvents.t_project_base_id;
 					tProject = ReadProject(tEvents.t_project_base_id);
 					RaisePropertyChanged("tProject");
-					mSuppliers=ReadSupplier(tProject.m_supplier_id);
+					dbMsg += ",m_supplier_id=" + tProject.m_supplier_id;
+					mSuppliers = ReadSupplier(tProject.m_supplier_id);
+					dbMsg += ",name=" + mSuppliers.supplier_name;
 					RaisePropertyChanged("mSuppliers");
 				}
 				TSList = new List<int>() ;
@@ -1433,14 +1436,23 @@ namespace TabCon.ViewModels {
 			string TAG = "MakeEventFolder";
 			string dbMsg = "";
 			try {
+				if (Constant.MyDriveCredential == null) {
+					string msgStr = "Google認証を行ってください";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+					if (result == MessageBoxResult.OK) {
+						return;
+					}
+				}
+
 				dbMsg += "EventComboSelectedIndex=" + EventComboSelectedIndex;
 				string ApriName = "KSクラウド";
 				GoogleDriveFolderName = ApriName;
 
 				switch (EventComboSelectedIndex) {
 					case 0:
-						//案件管理番号：t_project_bases.project_code　の代わりに参照IDを使う		：X-2
-						GoogleDriveFolderName += "/案件/PR999" + tEvents.t_project_base_id;
+						//案件管理番号：X-2
+						GoogleDriveFolderName += "/案件/" + tProject.project_code;
 						////物件コード：m_properties.property_code　の代わりに参照IDを使う		：W-1
 						//GoogleDriveFolderName = ApriName + "/案件" + tEvents.t_project_base_id;
 						break;
@@ -1464,8 +1476,10 @@ namespace TabCon.ViewModels {
 
 				foreach (string passName in passStr) {
 					File parentFolder = GDriveUtil.CreateFolder(passName, parentFolderId);
-					parentFolderId = parentFolder.Id;
-					dbMsg += "\r\n[" + parentFolderId+ "]" + passName;
+					if(parentFolder != null) {
+						parentFolderId = parentFolder.Id;
+						dbMsg += "\r\n[" + parentFolderId + "]" + passName;
+					}
 				}
 				GoogleCrentFolderID = rootFolderPass + parentFolderId;
 				dbMsg += "\r\n>>" + GoogleCrentFolderID;
@@ -1625,6 +1639,14 @@ namespace TabCon.ViewModels {
 			string TAG = "ShowGoogleDrive";
 			string dbMsg = "";
 			try {
+				if(Constant.MyDriveCredential == null){
+					string msgStr = "Google認証を行ってください";
+					MessageBoxResult result = MessageShowWPF(titolStr, msgStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					dbMsg += ",result=" + result;
+					if (result == MessageBoxResult.OK) {
+						return;
+					}
+				}
 				//using (var vm = new W_1ViewModel()) {
 				//	Messenger.Raise(new TransitionMessage(vm, "GoogleDriveShow"));
 				//}

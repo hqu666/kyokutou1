@@ -227,6 +227,7 @@ namespace TabCon {
 				var queries = new List<string>() { $"name = '{ name }'" };
 				if (filter != SearchFilter.NONE) queries.Add(filter.ToQuery());
 				Task<File> folder = Task.Run(() => {
+		//			return FindByName( name);
 					return FindFile(queries);
 				});
 
@@ -235,6 +236,7 @@ namespace TabCon {
 				string folderId = null;
 				if (newFolder != null) {
 					 folderId = newFolder.Id;
+					dbMsg += ">既存>[" + folderId + "]";
 				}
 				if (folderId == null) {
 					File meta = new File();
