@@ -40,14 +40,25 @@ namespace TabCon.ViewModels {
 		//public GoogleDriveBrouser driveView;
 		//public WebWindow webWindow;
 
-		public t_project_bases tProject;
+		/// <summary>
+		/// 案件情報基本
+		/// </summary>
+		public t_project_bases tProject { set; get; }
+		/// <summary>
+		/// 取引先マスタ
+		/// </summary>
+		public m_suppliers mSuppliers { set; get; }
+
+		
 		//public IList<GAttachFile> sendFiles = new List<GAttachFile>();
 		///// <summary>
 		///// 添付ファイル　モデル
 		///// </summary>
 		//private AttachmentDataCollection attachmentDataCollection;
-
-
+		/// <summary>
+		/// ユーザーID（仮設定；1）
+		/// </summary>
+		public int UserID =1;
 		/// <summary>
 		/// このページで編集するEvent
 		/// </summary>
@@ -266,6 +277,12 @@ namespace TabCon.ViewModels {
 				};
 				eventType = tEvents.event_type;
 				dbMsg += ",イベント種類=" + eventType;
+				if(eventType ==1) {
+					tProject = ReadProject(tEvents.t_project_base_id);
+					RaisePropertyChanged("tProject");
+					mSuppliers=ReadSupplier(tProject.m_supplier_id);
+					RaisePropertyChanged("mSuppliers");
+				}
 				TSList = new List<int>() ;
 				for (int i=0 ; i<24; i++){
 					TSList.Add(i);
@@ -320,8 +337,6 @@ namespace TabCon.ViewModels {
 				RaisePropertyChanged();
 				dbMsg += "  ,案件= " + tEvents.t_project_base_id;
 
-
-
 				RaisePropertyChanged();
 				//		EventWrite(taregetEvent, tEvents);
 				MyLog(TAG, dbMsg);
@@ -353,6 +368,191 @@ namespace TabCon.ViewModels {
 			}
 		}
 		#endregion
+
+
+		/// <summary>
+		/// 案件情報読込み
+		/// </summary>
+		public t_project_bases ReadProject(int t_project_base_id)
+		{
+			string TAG = "ReadProject";
+			string dbMsg = "";
+			t_project_bases rProject = new t_project_bases();
+			try {
+				dbMsg += "[" + t_project_base_id + "]";
+				Type modelType = Type.GetType("TabCon.Models.t_project_bases");
+				dbMsg += ",type=" + modelType.FullName;
+				MySQLUtil = new MySQL_Util();
+				if (MySQLUtil.MySqlConnection()) {
+					using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+						mySqlConnection.Open();
+						using (MySqlCommand command = mySqlConnection.CreateCommand()) {
+							command.CommandText = $"SELECT * FROM {"t_project_bases"} where id =" + t_project_base_id;
+							using (MySqlDataReader reader = command.ExecuteReader()) {
+								int FieldCount = reader.FieldCount;
+								dbMsg += "," + FieldCount + "項目";
+								DateTime dt = DateTime.Now;
+								//一行づつデータを読み取りモデルに書込む
+								while (reader.Read()) {
+									 rProject = (t_project_bases)Activator.CreateInstance(modelType);
+									for (int i = 0; i < FieldCount; i++) {
+										string rName = reader.GetName(i);
+										string rType = reader.GetFieldType(i).Name;
+										dbMsg += "\r\n(" + i + ")" + rName + ",rType=" + rType;
+										var rVar = reader.GetValue(i);
+										dbMsg += ",rVar=" + rVar;
+										foreach (var rFeild in rProject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+											if (rFeild.Name.Equals(rName)) {
+												if (rVar == null || rVar.Equals("") || reader.IsDBNull(i)) {
+													dbMsg += "null";
+													if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+														rFeild.SetValue(rProject, dt);
+													} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+														rFeild.SetValue(rProject, UserID);
+													} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+														rFeild.SetValue(rProject, dt);
+													} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+														rFeild.SetValue(rProject, UserID);
+													} else {
+														//				rFeild.SetValue(rProject, "");
+													}
+												} else {
+													if (rType.Equals("Int32")) {
+														if (rVar == null) {
+															rFeild.SetValue(rProject, null);
+														} else {
+															rFeild.SetValue(rProject, reader.GetInt32(i));
+														}
+													} else if (rType.Equals("String")) {
+														rFeild.SetValue(rProject, reader.GetString(i));
+													} else if (rType.Equals("DateTime")) {
+														if ((DateTime)rVar < DateTime.Now.AddYears(-1000)) {
+															rFeild.SetValue(rProject, null);
+														} else {
+															rFeild.SetValue(rProject, reader.GetDateTime(i));
+														}
+													} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
+														rFeild.SetValue(rProject, reader.GetBoolean(i));
+													} else if (rType.Equals("SByte")) {
+														rFeild.SetValue(rProject, reader.GetSByte(i));
+													} else if (rType.Equals("MySqlDecimal")) {
+														rFeild.SetValue(rProject, reader.GetMySqlDecimal(i));
+													} else {
+														dbMsg += ",該当型無し";
+														//	rFeild.SetValue(rProject, reader.GetValue(i));
+													}
+												}
+											}
+										}   //フィールド名照合
+										dbMsg += ">>読取";
+										//	}
+									}
+								}
+							}
+						}
+					}
+					dbMsg += ",code=" + rProject.project_code + ",name=" + rProject.project_name;
+					MySQLUtil.DisConnect();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return rProject;
+		}
+
+
+		//		public m_suppliers mSuppliers { set; get; }
+
+		public m_suppliers ReadSupplier(int id)
+		{
+			string TAG = "ReadProject";
+			string dbMsg = "";
+			m_suppliers retModel = new m_suppliers();
+			try {
+				dbMsg += "[" + id + "]";
+				Type modelType = Type.GetType("TabCon.Models.m_suppliers");
+				dbMsg += ",type=" + modelType.FullName;
+				MySQLUtil = new MySQL_Util();
+				if (MySQLUtil.MySqlConnection()) {
+					using (MySqlConnection mySqlConnection = new MySqlConnection(Constant.ConnectionString)) {
+						mySqlConnection.Open();
+						using (MySqlCommand command = mySqlConnection.CreateCommand()) {
+							command.CommandText = $"SELECT * FROM {"m_suppliers"} where id =" + id;
+							using (MySqlDataReader reader = command.ExecuteReader()) {
+								int FieldCount = reader.FieldCount;
+								dbMsg += "," + FieldCount + "項目";
+								DateTime dt = DateTime.Now;
+								//一行づつデータを読み取りモデルに書込む
+								while (reader.Read()) {
+									retModel = (m_suppliers)Activator.CreateInstance(modelType);
+									for (int i = 0; i < FieldCount; i++) {
+										string rName = reader.GetName(i);
+										string rType = reader.GetFieldType(i).Name;
+										dbMsg += "\r\n(" + i + ")" + rName + ",rType=" + rType;
+										var rVar = reader.GetValue(i);
+										dbMsg += ",rVar=" + rVar;
+										foreach (var rFeild in retModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+											if (rFeild.Name.Equals(rName)) {
+												if (rVar == null || rVar.Equals("") || reader.IsDBNull(i)) {
+													dbMsg += "null";
+													if (rFeild.Name.Equals("updated_at") || rFeild.Name.Equals("updated_on")) {
+														rFeild.SetValue(retModel, dt);
+													} else if (rFeild.Name.Equals("modifier") || rFeild.Name.Equals("updated_user")) {
+														rFeild.SetValue(retModel, UserID);
+													} else if (rFeild.Name.Equals("created_at") || rFeild.Name.Equals("created_on")) {
+														rFeild.SetValue(retModel, dt);
+													} else if (rFeild.Name.Equals("creater") || rFeild.Name.Equals("created_user")) {
+														rFeild.SetValue(retModel, UserID);
+													} else {
+														//				rFeild.SetValue(rProject, "");
+													}
+												} else {
+													if (rType.Equals("Int32")) {
+														if (rVar == null) {
+															rFeild.SetValue(retModel, null);
+														} else {
+															rFeild.SetValue(retModel, reader.GetInt32(i));
+														}
+													} else if (rType.Equals("String")) {
+														rFeild.SetValue(retModel, reader.GetString(i));
+													} else if (rType.Equals("DateTime")) {
+														if ((DateTime)rVar < DateTime.Now.AddYears(-1000)) {
+															rFeild.SetValue(retModel, null);
+														} else {
+															rFeild.SetValue(retModel, reader.GetDateTime(i));
+														}
+													} else if (rType.Equals("Boolean")) {                       //tinyInt(1)
+														rFeild.SetValue(retModel, reader.GetBoolean(i));
+													} else if (rType.Equals("SByte")) {
+														rFeild.SetValue(retModel, reader.GetSByte(i));
+													} else if (rType.Equals("MySqlDecimal")) {
+														rFeild.SetValue(retModel, reader.GetMySqlDecimal(i));
+													} else {
+														dbMsg += ",該当型無し";
+														//	rFeild.SetValue(rProject, reader.GetValue(i));
+													}
+												}
+											}
+										}   //フィールド名照合
+										dbMsg += ">>読取";
+										//	}
+									}
+								}
+							}
+						}
+					}
+					dbMsg += ",code=" + retModel.supplier_cd + ",name=" + retModel.supplier_name;
+					MySQLUtil.DisConnect();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retModel;
+		}
+
+
 
 		/// <summary>
 		/// 開始直後、対象イベントの設定内容を読取りViewを初期構成

@@ -424,14 +424,21 @@
 		</StackPanel>-->
 			<Label  Content="案件番号"  Grid.Row="10" Grid.Column="0"   
 					HorizontalAlignment="Right" />
-			<TextBox  Grid.Row="10" Grid.Column="1" 
-					Name="order_tb"  Text="PR20060001" VerticalAlignment="Center"  />
+			<TextBox  Text="{Binding Path=tProject.project_code,Mode=TwoWay}"
+							Grid.Row="10" Grid.Column="1" 
+							Name="order_tb"   VerticalAlignment="Center"  />
 			<Label   Grid.Row="10" Grid.Column="2"  Content="管理番号" HorizontalAlignment="Right" />
-			<TextBox  Grid.Row="10" Grid.Column="3" 
-						Name="management_number_tb"  Text="123456789"  VerticalAlignment="Center" />
+			<TextBox  Text="{Binding Path=tProject.project_manage_code,Mode=TwoWay}"
+						Grid.Row="10" Grid.Column="3" 
+						Name="management_number_tb"   VerticalAlignment="Center" />
 			<Label  Grid.Row="11" Grid.Column="0"   Content="得意先" HorizontalAlignment="Right"  />
-			<TextBox  Grid.Row="11" Grid.Column="1"  Grid.ColumnSpan="3"
-						Name="customer_tb"  Text="ABCdef"   VerticalAlignment="Center"  />
+			<TextBox  Text="{Binding Path=mSuppliers.supplier_name,Mode=TwoWay}"
+						Grid.Row="11" Grid.Column="1" 
+						Name="customer_tb"    VerticalAlignment="Center"  />
+			<Label  Grid.Row="11" Grid.Column="2"   Content="施主" HorizontalAlignment="Right"  />
+			<TextBox  Text="{Binding Path=tProject.owner_name,Mode=TwoWay}"
+						Grid.Row="11" Grid.Column="3" 
+						 VerticalAlignment="Center"  />
 			<!--<Label Grid.Row="13" Grid.Column="0"   HorizontalAlignment="Right" VerticalAlignment="Top" Content="メモ"  Margin="0,5,5,0"  />-->
 			<!--<TextBox  Grid.Row="13"  Grid.Column="1" 
 						Name="momo_tb" Text="詳細" 
