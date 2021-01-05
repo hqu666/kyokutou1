@@ -95,6 +95,9 @@
     <PackageReference Include="Expression.Interaction">
       <Version>3.0.40218</Version>
     </PackageReference>
+    <PackageReference Include="Infragistics.DataPresenter.DataSources.OData">
+      <Version>16.1.1000</Version>
+    </PackageReference>
     <PackageReference Include="LivetCask">
       <Version>3.2.3.1</Version>
     </PackageReference>
@@ -141,10 +144,13 @@
       <Version>1.0.664.37</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
-      <Version>1.1.19</Version>
+      <Version>1.1.31</Version>
     </PackageReference>
     <PackageReference Include="MicrosoftExpressionInteractions">
       <Version>3.0.40218</Version>
+    </PackageReference>
+    <PackageReference Include="MySql.Data">
+      <Version>8.0.22</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>

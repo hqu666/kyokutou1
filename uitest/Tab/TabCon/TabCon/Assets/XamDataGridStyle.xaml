@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:igDP="http://infragistics.com/DataPresenter">
+                    xmlns:igDP="http://infragistics.com/DataPresenter"
+					>
 	<ResourceDictionary.MergedDictionaries>
 		<!--<ResourceDictionary Source="/Resources/Custom.Controls.Scrollbars.xaml" />-->
 		<ResourceDictionary Source="CheckboxResource.xaml" />
@@ -11,12 +12,12 @@
 		<Setter Property="AutoFit" Value="True" />
 		<Setter Property="GroupByAreaLocation" Value="None" />
 		<Setter Property="ScrollingMode" Value="Immediate" />
-		<!--<Setter Property="Theme" Value="Metro" />-->
 		<Setter Property="FieldSettings">
 			<Setter.Value>
 				<igDP:FieldSettings
                     AllowEdit="False"
                     CellClickAction="SelectRecord"
+                    LabelTextAlignment="Center"
                     />
 			</Setter.Value>
 		</Setter>
@@ -42,12 +43,27 @@
                     AllowEdit="False"
                     CellClickAction="SelectRecord"
                     LabelClickAction="Nothing"
+                    LabelTextAlignment="Center"
                     />
 			</Setter.Value>
 		</Setter>
 	</Style>
 
+	<Style TargetType="{x:Type igDP:DataRecordPresenter}">
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="HeaderAreaBackground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type igDP:XamDataGrid}, ResourceId=LabelBackground}}"/>
+		<Setter Property="HeaderAreaBackground" Value="{StaticResource KS25_ListHeaderBackgroundBrush}"/>
+	</Style>
+
+	<!--一覧のヘッダ部-->
+	<Style TargetType="{x:Type igDP:LabelPresenter}">
+		<Setter Property="Background" Value="{StaticResource KS25_ListHeaderBackgroundBrush}"/>
+		<Setter Property="Foreground" Value="{StaticResource KS24_ListHeaderForegroundBrush}"/>
+	</Style>
+
 	<!-- XamDataGrid -->
+	<!--編集用グリッド-->
 	<Style TargetType="{x:Type igDP:XamDataGrid}" x:Key="EditGrid">
 		<Setter Property="AutoFit" Value="False" />
 		<Setter Property="GroupByAreaLocation" Value="None" />
@@ -57,6 +73,7 @@
 				<igDP:FieldSettings
                     AllowEdit="True"
                     CellClickAction="EnterEditModeIfAllowed"
+                    LabelTextAlignment="Center"
                     />
 			</Setter.Value>
 		</Setter>
@@ -88,6 +105,7 @@
 		</Setter>
 	</Style>
 
+	<!--一覧の左上のチェックボックス（チェックで全てチェックオンオフ-->
 	<Style x:Key="CheckBoxHeaderPrefixArea" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
 		<Setter Property="Visibility" Value="Visible" />
 		<Setter Property="Template">
@@ -104,22 +122,25 @@
 		</Setter>
 		<Setter Property="Margin" Value="5" />
 	</Style>
+
 	<Style x:Key="CheckBoxHeaderPrefixAreaNoImage" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
 		<Setter Property="Visibility" Value="Visible" />
 		<Setter Property="Margin" Value="5" />
 	</Style>
 
+	<!--一覧のレコードヘッダと列ヘッダ・・・一番左上のやつ-->
 	<Style x:Key="RecordSelectorTargetHeader" TargetType="{x:Type igDP:HeaderPrefixArea}" BasedOn="{x:Null}">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type igDP:HeaderPrefixArea}">
-					<Label Content="対象"/>
+					<Label Content="対象" Background="{StaticResource KS25_ListHeaderBackgroundBrush}" Foreground="{StaticResource KS24_ListHeaderForegroundBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 		<Setter Property="Margin" Value="5" />
 	</Style>
 
+	<!--一覧のレコードヘッダがチェックボックスのとき-->
 	<Style x:Key="CheckBoxRecordSelector" TargetType="{x:Type igDP:RecordSelector}" BasedOn="{x:Null}">
 		<Setter Property="Template">
 			<Setter.Value>
@@ -140,7 +161,7 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type igDP:HeaderPrefixArea}">
-					<Label Content="対象"/>
+					<Label Content="対象" Background="{StaticResource KS25_ListHeaderBackgroundBrush}" Foreground="{StaticResource KS24_ListHeaderForegroundBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
@@ -169,11 +190,15 @@
 
 	<!--XamDataGridStyleから移動-->
 	<Style x:Key="RecordColor" TargetType="{x:Type igDP:DataRecordCellArea}">
+		<Setter Property="Background" Value="{StaticResource GridSplitterBackgroundBrush}"/>
+		<Setter Property="BackgroundAlternate" Value="{StaticResource GridSplitterBackgroundAlternateBrush}"/>
 		<Setter Property="BackgroundHover" Value="Transparent" />
 		<Setter Property="BackgroundSelected" Value="Transparent" />
 		<Setter Property="BackgroundActive" Value="{StaticResource SelectionHilightBrush}" />
 	</Style>
 	<Style x:Key="ClickableRecordColor" TargetType="{x:Type igDP:DataRecordCellArea}">
+		<Setter Property="Background" Value="{StaticResource GridSplitterBackgroundBrush}"/>
+		<Setter Property="BackgroundAlternate" Value="{StaticResource GridSplitterBackgroundAlternateBrush}"/>
 		<Setter Property="BackgroundHover" Value="Transparent" />
 		<Setter Property="BackgroundSelected" Value="Transparent" />
 		<Setter Property="BackgroundActive" Value="{StaticResource DoubleClickableSelectionHilightBrush}" />
@@ -183,12 +208,16 @@
 		<Style.Triggers>
 			<!--<DataTrigger Binding="{Binding DataItem.IsClickableRow}" Value="True">-->
 			<DataTrigger Binding="{Binding DataPresenter.DataContext.IsClickableRow}" Value="True">
+				<Setter Property="Background" Value="{StaticResource GridSplitterBackgroundBrush}"/>
+				<Setter Property="BackgroundAlternate" Value="{StaticResource GridSplitterBackgroundAlternateBrush}"/>
 				<Setter Property="BackgroundHover" Value="Transparent" />
 				<Setter Property="BackgroundSelected" Value="Transparent" />
 				<Setter Property="BackgroundActive" Value="{StaticResource DoubleClickableSelectionHilightBrush}" />
 			</DataTrigger>
 			<!--<DataTrigger Binding="{Binding DataItem.IsClickableRow}" Value="False">-->
 			<DataTrigger Binding="{Binding DataPresenter.DataContext.IsClickableRow}" Value="False">
+				<Setter Property="Background" Value="{StaticResource GridSplitterBackgroundBrush}"/>
+				<Setter Property="BackgroundAlternate" Value="{StaticResource GridSplitterBackgroundAlternateBrush}"/>
 				<Setter Property="BackgroundHover" Value="Transparent" />
 				<Setter Property="BackgroundSelected" Value="Transparent" />
 				<Setter Property="BackgroundActive" Value="{StaticResource SelectionHilightBrush}" />
