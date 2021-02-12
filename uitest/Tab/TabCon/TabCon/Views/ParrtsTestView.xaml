@@ -5,10 +5,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TabCon.Views"
-	  
 	  xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
 	  xmlns:controls="clr-namespace:TabCon.Controls"
-		mc:Ignorable="d" 
+	  xmlns:sg="http://schemas.grapecity.com/windows/spreadgrid/2012"
+	  mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ParrtsTestView">
 	<!--xmlns:valueeditors="clr-namespace:Microsoft.Expression.Utility.ValueEditors;assembly=Microsoft.Expression.Utility"
@@ -34,7 +34,6 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-
 		<Label  Content="電卓を表示" 
 						Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
 							Margin="5,24" VerticalAlignment="Center" Height="26"  
@@ -99,6 +98,28 @@
 				/>
 
 		</StackPanel>
+
+		<sg:GcSpreadGrid 
+			Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" ColumnCount="5" 
+			DefaultColumnWidth="50" Margin="0" RowCount="5" ShowScrollTip="Both" ReferenceStyle="R1C1" CanUserEditFormula="True" 
+		> 
+			<sg:GcSpreadGrid.Resources>                
+				<DataTemplate x:Key="DisplayElement">                    
+					<ProgressBar Minimum="0" Maximum="100" Height="15" Value="{Binding Value, FallbackValue=0, TargetNullValue=0}"/>
+					</DataTemplate>
+					<DataTemplate x:Key="EditElement">
+						<TextBox Text="{Binding Value, Mode=TwoWay}"/>
+					</DataTemplate>
+					</sg:GcSpreadGrid.Resources>
+					<sg:GcSpreadGrid.Columns>
+						<sg:Column>
+							<sg:Column.CellType>
+								<sg:DataTemplateCellType DisplayElementTemplate="{StaticResource DisplayElement}" EditElementTemplate="{StaticResource EditElement}"/>
+							</sg:Column.CellType>
+						</sg:Column>
+					</sg:GcSpreadGrid.Columns>
+		</sg:GcSpreadGrid>
+
 
 		<!--文字色判定-->
 		<Label  Content="文字色の白黒判定" 
