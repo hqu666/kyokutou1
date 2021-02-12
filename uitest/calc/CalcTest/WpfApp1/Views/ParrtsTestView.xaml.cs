@@ -42,6 +42,14 @@ namespace WpfApp1.Views {
 			Bt2Tbox.Width = int.Parse(TB.Text);
 		}
 
+		private void CalcTextShow_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (CalcTextShowX.Text.Equals("")) { return; }
+			if (CalcTextShowY.Text.Equals("")) { return; }
+			CalcCallBt.ShowX = double.Parse(CalcTextShowX.Text);
+			CalcCallBt.ShowY = double.Parse(CalcTextShowY.Text);
+		}
+
 		private void CalcTextDLogTitol_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			TextBox TB = sender as TextBox;

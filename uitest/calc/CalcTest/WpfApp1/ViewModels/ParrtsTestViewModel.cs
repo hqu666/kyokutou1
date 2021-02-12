@@ -23,6 +23,10 @@ namespace WpfApp1.ViewModels {
 		/// フォントサイズ
 		/// </summary>
 		public string CalcTextFontSize { get; set; }
+		/// 表示位置
+		/// </summary>
+		public string CalcTextShowX { get; set; }
+		public string CalcTextShowY { get; set; }
 
 		public ParrtsTestViewModel()
 		{
@@ -34,6 +38,8 @@ namespace WpfApp1.ViewModels {
 			CalcTextDLogTitol = "電卓を表示するフィールドから";
 			CalcTexWidth = "200";
 			CalcTextFontSize = "18";
+			CalcTextShowX = "200";
+			CalcTextShowY = "400";
 			CalcResult = "0123456789";
 			RaisePropertyChanged();
 		}

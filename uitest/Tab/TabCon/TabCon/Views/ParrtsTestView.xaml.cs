@@ -59,13 +59,12 @@ namespace TabCon.Views {
 			CalcCallBt.ViewTitle = TB.Text;
 		}
 
-		private void CalcTextShowPoint_TextChanged(object sender, TextChangedEventArgs e)
+		private void CalcTextShow_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if(CalcTextShowPointX.Text.Equals("")){ return; }
-			if (CalcTextShowPointY.Text.Equals("")) { return; }
-			double pX = double.Parse(CalcTextShowPointX.Text);
-			double pY = double.Parse(CalcTextShowPointY.Text);
-			CalcCallBt.ShowPoint = new Point(pX, pY);
+			if(CalcTextShowX.Text.Equals("")){ return; }
+			if (CalcTextShowY.Text.Equals("")) { return; }
+			CalcCallBt.ShowX = double.Parse(CalcTextShowX.Text);
+			CalcCallBt.ShowY = double.Parse(CalcTextShowY.Text);
 		}
 
 		///文字色判定//////////////////////////////////////////////

@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="CS_Calculator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CS_Calculator\CS_Calculator.dll</HintPath>
+      <HintPath>..\..\..\Tab\TabCon\CS_Calculator\bin\Release\CS_Calculator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

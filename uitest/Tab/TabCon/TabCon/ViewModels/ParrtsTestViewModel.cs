@@ -34,8 +34,8 @@ namespace TabCon.ViewModels {
 		/// <summary>
 		/// 表示位置
 		/// </summary>
-		public string CalcTextShowPointX { get; set; }
-		public string CalcTextShowPointY { get; set; }
+		public string CalcTextShowX { get; set; }
+		public string CalcTextShowY { get; set; }
 
 		public int SuppliersClosing1 { get; set; }
 
@@ -80,8 +80,8 @@ namespace TabCon.ViewModels {
 			CalcTextDLogTitol = "電卓を表示するフィールドから";
 			CalcTexWidth = "200";
 			CalcTextFontSize = "18";
-			CalcTextShowPointX = "200";
-			CalcTextShowPointY = "400";
+			CalcTextShowX = "200";
+			CalcTextShowY = "400";
 			CalcResult = "0123456789";
 			SuppliersClosing1 = 5;
 			SuppliersClosing2 =15;

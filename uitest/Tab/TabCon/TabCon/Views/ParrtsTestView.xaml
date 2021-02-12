@@ -59,16 +59,16 @@
 			<Label  Content="表示位置:x" 
 					Margin="5,5,0,5" VerticalAlignment="Center"  
 					/>
-			<TextBox 	x:Name="CalcTextShowPointX"
-						Text="{Binding CalcTextShowPointX,Mode=TwoWay}"
-						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShowPoint_TextChanged" 
+			<TextBox 	x:Name="CalcTextShowX"
+						Text="{Binding CalcTextShowX,Mode=TwoWay}"
+						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShow_TextChanged" 
 						/>
 			<Label  Content=":y" 
 					Margin="5,5,0,5" VerticalAlignment="Center"  
 					/>
-			<TextBox 	x:Name="CalcTextShowPointY"
-						Text="{Binding CalcTextShowPointY,Mode=TwoWay}"
-						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShowPoint_TextChanged" 
+			<TextBox 	x:Name="CalcTextShowY"
+						Text="{Binding CalcTextShowY,Mode=TwoWay}"
+						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShow_TextChanged" 
 						/>
 
 			<Label  Content="ダイアログタイトル" 
@@ -94,7 +94,8 @@
 			<cs_calculator:CalculatorButton  x:Name="CalcCallBt" 
 						TargetTextBox="{Binding ElementName=Bt2Tbox}"
 						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"
-						ShowPoint="200,400"
+						ShowX="{Binding ElementName=CalcTextShowX}"
+						ShowY="{Binding ElementName=CalcTextShowY}"
 				/>
 
 		</StackPanel>

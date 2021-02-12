@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
 			 FontSize="12"
 			 Height="Auto"
-			d:DesignWidth="300" 
+			d:DesignWidth="260" 
 			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
 			 Unloaded="UserControl_Unloaded" 
 			PreviewKeyDown="UserControl_PreviewKeyDown"
@@ -16,7 +16,7 @@
 	<UserControl.Resources>
 		<Style TargetType="Button">
 			<Setter Property="FontSize" Value="24" />
-			<Setter Property="MinHeight" Value="38" />
+			<Setter Property="MinHeight" Value="32" />
 			<Setter Property="Foreground" Value="Black" />
 			<Setter Property="Margin" Value="2" />
 			<Setter Property="VerticalAlignment" Value="Stretch" />
@@ -59,7 +59,7 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition MinWidth="45" Width="23*" />
+			<ColumnDefinition Width="23*" />
 			<ColumnDefinition Width="23*"/>
 			<ColumnDefinition MinWidth="45" Width="46*" />
 			<ColumnDefinition MinWidth="45" Width="46*" />
@@ -199,13 +199,11 @@
 		<Button x:Name="PlusBt" Content="+" 
 					Template="{StaticResource Calcbutton}"
 					Grid.Row="3" Grid.Column="4" Grid.RowSpan="2"
-					Height="106"
 					Click="PlusBt_Click"  />
 		<!--Command="{Binding PlusClick}"-->
 		<Button x:Name="EnterBt" Content="Enter"  FontSize="12"
 					Grid.Row="5" Grid.Column="4" Grid.RowSpan="2"
 					Template="{StaticResource Calcbutton}"
-					Height="106"
 				Click="EnterBt_Click"  />
 		<!--Command="{Binding PlusClick}"-->
 
