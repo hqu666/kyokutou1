@@ -32,6 +32,16 @@ namespace CS_Calculator {
 			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CalculatorButton), new PropertyMetadata(default(TextBox)));
 
 		/// <summary>
+		/// 表示位置
+		/// </summary>
+		public Point ShowPoint {
+			get { return (Point)GetValue(ShowPointProperty); }
+			set { SetValue(ShowPointProperty, value); }
+		}
+		public static readonly DependencyProperty ShowPointProperty =
+			DependencyProperty.Register("ShowPoint", typeof(Point), typeof(CalculatorButton), new PropertyMetadata(default(Point)));
+
+		/// <summary>
 		/// 電卓クラス
 		/// </summary>
 		public CS_CalculatorControl calculatorControl;
@@ -147,10 +157,18 @@ namespace CS_Calculator {
 					Content = calculatorControl,
 					ResizeMode = ResizeMode.NoResize
 				};
-				//書き込み先フィールドの左やや下に表示する
-				Point pt = TargetTextBox.PointToScreen(new Point(0.0d, 0.0d));
-				CalcWindow.Left = pt.X + 20;
-				CalcWindow.Top = pt.Y + 30;
+				//表示位置
+				if(0==ShowPoint.X && 0== ShowPoint.Y)
+				{
+					//指定が無ければ書き込み先フィールドの左やや下に表示する
+					Point pt = TargetTextBox.PointToScreen(new Point(0.0d, 0.0d));
+					CalcWindow.Left = pt.X + 20;
+					CalcWindow.Top = pt.Y + 30;
+				}else{
+					//指定された位置に表示
+					CalcWindow.Left = ShowPoint.X;
+					CalcWindow.Top = ShowPoint.Y;
+				}
 				CalcWindow.Topmost = true;
 				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
 				CalcWindow.Width = 300;

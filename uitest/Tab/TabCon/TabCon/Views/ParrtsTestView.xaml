@@ -5,13 +5,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TabCon.Views"
-	  xmlns:valueeditors="clr-namespace:Microsoft.Expression.Utility.ValueEditors;assembly=Microsoft.Expression.Utility"
-	  xmlns:coloreditor="clr-namespace:Microsoft.Expression.Utility.ValueEditors.ColorEditor;assembly=Microsoft.Expression.Utility"
+	  
 	  xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
 	  xmlns:controls="clr-namespace:TabCon.Controls"
 		mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ParrtsTestView">
+	<!--xmlns:valueeditors="clr-namespace:Microsoft.Expression.Utility.ValueEditors;assembly=Microsoft.Expression.Utility"
+	  xmlns:coloreditor="clr-namespace:Microsoft.Expression.Utility.ValueEditors.ColorEditor;assembly=Microsoft.Expression.Utility"-->
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -55,6 +56,21 @@
 						Text="{Binding CalcTexWidth,Mode=TwoWay}"
 						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTexWidth_TextChanged"  
 						/>
+			<Label  Content="表示位置:x" 
+					Margin="5,5,0,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextShowPointX"
+						Text="{Binding CalcTextShowPointX,Mode=TwoWay}"
+						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShowPoint_TextChanged" 
+						/>
+			<Label  Content=":y" 
+					Margin="5,5,0,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextShowPointY"
+						Text="{Binding CalcTextShowPointY,Mode=TwoWay}"
+						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShowPoint_TextChanged" 
+						/>
+
 			<Label  Content="ダイアログタイトル" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
@@ -78,6 +94,7 @@
 			<cs_calculator:CalculatorButton  x:Name="CalcCallBt" 
 						TargetTextBox="{Binding ElementName=Bt2Tbox}"
 						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"
+						ShowPoint="200,400"
 				/>
 
 		</StackPanel>
@@ -149,20 +166,20 @@
 							VerticalAlignment="Center" 
 							HorizontalAlignment="Right"
 							/>
-		<controls:SuppliersClosingDateControl 
+		<!--<controls:SuppliersClosingDateControl 
 				SuppliersClosingDate="{Binding SuppliersClosing1}"
 				Grid.Row="6" Grid.Column="1"  Grid.ColumnSpan="2"
-			/>
+			/>-->
 
 		<Label  Content="締日 条件②" 
 						Grid.Row="7" Grid.Column="0" 
 							VerticalAlignment="Center" 
 							HorizontalAlignment="Right"
 							/>
-		<controls:SuppliersClosingDateControl 
+		<!--<controls:SuppliersClosingDateControl 
 					SuppliersClosingDate="{Binding SuppliersClosing2}"
 					Grid.Row="7" Grid.Column="1"  Grid.ColumnSpan="2"
-				/>
+				/>-->
 
 
 	</Grid>

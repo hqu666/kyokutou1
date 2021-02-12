@@ -80,8 +80,8 @@ namespace CS_Calculator {
 		/// </summary>
 		public CS_CalculatorControl()
 		{
-			string TAG = "CS_CalculatorControl";
-			string dbMsg = "";
+			//string TAG = "CS_CalculatorControl";
+			//string dbMsg = "";
 			InitializeComponent();
 			CalcProcess.IsReadOnly = true;
 			this.Loaded += ThisLoaded;

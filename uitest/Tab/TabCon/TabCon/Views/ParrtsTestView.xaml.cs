@@ -59,6 +59,15 @@ namespace TabCon.Views {
 			CalcCallBt.ViewTitle = TB.Text;
 		}
 
+		private void CalcTextShowPoint_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if(CalcTextShowPointX.Text.Equals("")){ return; }
+			if (CalcTextShowPointY.Text.Equals("")) { return; }
+			double pX = double.Parse(CalcTextShowPointX.Text);
+			double pY = double.Parse(CalcTextShowPointY.Text);
+			CalcCallBt.ShowPoint = new Point(pX, pY);
+		}
+
 		///文字色判定//////////////////////////////////////////////
 		/// <summary>
 		/// 閾値変更
@@ -203,6 +212,5 @@ namespace TabCon.Views {
 			}
 			return result;
 		}
-
 	}
 }
