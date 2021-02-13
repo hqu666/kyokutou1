@@ -3,8 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
-		mc:Ignorable="d" 
+        xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
+        xmlns:sg="http://schemas.grapecity.com/windows/spreadgrid/2012"
+        mc:Ignorable="d" 
 		FontSize="14" 
 		WindowStartupLocation="CenterScreen"
 		Topmost="true" Height="500" Width="800"
@@ -23,7 +24,9 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<Label  Content="電卓を表示" 
@@ -88,10 +91,32 @@
 						ShowX="{Binding ElementName=CalcTextShowX}"
 						ShowY="{Binding ElementName=CalcTextShowY}"
 						/>
-
-
 		</StackPanel>
 
+
+        <!--<sg:GcSpreadGrid Name="MyGSGrid"
+            Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" RowCount="5" ColumnCount="5"
+            >
+            <sg:GcSpreadGrid.ContextMenu>
+                <ContextMenu>
+
+                    <MenuItem Header="電卓"
+                                 Click="MyGSGridContextMenu_Click" />
+                </ContextMenu>
+            </sg:GcSpreadGrid.ContextMenu>
+        </sg:GcSpreadGrid>-->
+
+        <DataGrid Name="MyDG"
+            Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+            >
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+
+                    <MenuItem Header="電卓"
+                                 Click="MyDGContextMenu_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
 	</Grid>
 
 
