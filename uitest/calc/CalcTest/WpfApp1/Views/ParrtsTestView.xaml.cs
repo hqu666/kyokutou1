@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using CS_Calculator;
+using WpfApp1.Models;
 
 namespace WpfApp1.Views {
 	/// <summary>
@@ -23,13 +24,16 @@ namespace WpfApp1.Views {
 		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
 			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
-			//VM.MyView = this;
+			VM.MyView = this;
+
+			/*コードビハインドで設定する場合
 			MyDG.ItemsSource = new ObservableCollection<Product> {
-			new Product { Name="化粧品", Price=1900, Tax=10 },
-			new Product { Name="洗剤", Price=500, Tax=10 },
-			new Product { Name="パン", Price=800, Tax=8 },
-			new Product { Name="牛乳", Price=800, Tax=8 }
-		};
+				new Product { Name="化粧品", Price=1900, Tax=10 },
+				new Product { Name="洗剤", Price=500, Tax=10 },
+				new Product { Name="パン", Price=800, Tax=8 },
+				new Product { Name="牛乳", Price=800, Tax=8 }
+			};
+			*/
 		}
 
 		private void MyDGContextMenu_Click(object sender, RoutedEventArgs e) {
@@ -43,15 +47,70 @@ namespace WpfApp1.Views {
 				// 列番号(0起算)
 				int columnIndex = DG.CurrentCell.Column.DisplayIndex;
 				dbMsg += "[" + rowIndex + " , " + columnIndex + "]";
-				Product rec = (Product)DG.CurrentCell.Item;
-				string orgVal = ((TextBlock)DG.Columns[columnIndex].GetCellContent(DG.SelectedItem)).Text;
+				TextBlock targetTextBlock = (TextBlock)DG.Columns[columnIndex].GetCellContent(DG.SelectedItem);
+				string orgVal = targetTextBlock.Text;
 				dbMsg += orgVal;
 				var result = 0;
 				if (int.TryParse(orgVal, out result)) {
 					dbMsg += "は数値で" + result;
+					CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+		//			calculatorControl.TargetTextBlock = targetTextBlock;
+
+					//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
+					Window CalcWindow = new Window {
+											Title = targetTextBlock.Name,
+											Content = calculatorControl,
+											ResizeMode = ResizeMode.NoResize
+										};
+					Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
+					//表示位置
+					Double ShowX = 0;
+					if (CalcTextShowX.Text != "") {
+						ShowX = Double.Parse(CalcTextShowX.Text);
+					}
+					Double ShowY = 0;
+					if (CalcTextShowY.Text != "") {
+						ShowY = Double.Parse(CalcTextShowY.Text);
+					}
+					dbMsg += ",指定座標[" + ShowX + "," + ShowY + "]";
+					if (0 == ShowX) {
+						//指定が無ければ書き込み先フィールドの左やや下に表示する
+						CalcWindow.Left = pt.X + 20;
+					} else {
+						//指定された位置に表示
+						CalcWindow.Left = ShowX;
+					}
+					if (0 == ShowY) {
+						//指定が無ければ書き込み先フィールドの左やや下に表示する
+						CalcWindow.Top = pt.Y + 30;
+					} else {
+						//指定された位置に表示
+						CalcWindow.Top = ShowY;
+					}
+					dbMsg += ">>[" + ShowX + "," + ShowY + "]";
+					CalcWindow.Topmost = true;
+					dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
+					CalcWindow.Width = 300;
+					CalcWindow.Height = 400;
+					dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+					string ViewTitle = "データグリッド" + DG.Name + "の"+ (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
+
+					dbMsg += ",ViewTitol=" + ViewTitle;
+
+					if (!ViewTitle.Equals("")) {
+						CalcWindow.Title = ViewTitle;
+					}
+					calculatorControl.CalcWindow = CalcWindow;
+					calculatorControl.InputStr = result.ToString();
+
+					//		calculatorControl.OperatKey = this.OperatKey;
+					Nullable<bool> dialogResult = CalcWindow.ShowDialog();
+					dbMsg += ",dialogResult=" + dialogResult;
+
 				} else {
 					String titolStr = "データグリッド" + DG.Name + "でコンテキストメニューで選択したアイテム";
-					String msgStr = (rowIndex+1) + "行目" + columnIndex + "列目（" + orgVal + "）は数値ではありません\r\n電卓は数値を入力するセルでご利用ください";
+					String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
+					msgStr += "\r\n電卓は数値を入力するセルでご利用ください";
 					MessageShowWPF( msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				}
 
@@ -136,6 +195,7 @@ namespace WpfApp1.Views {
 			return result;
 		}
 
+		/*
 		private class Product {
 			///<summary>
 			///製品名
@@ -171,6 +231,7 @@ namespace WpfApp1.Views {
 
 
 		}
+		*/
 	}
 }
 

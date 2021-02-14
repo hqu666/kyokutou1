@@ -107,13 +107,14 @@
         </sg:GcSpreadGrid>-->
 
         <DataGrid Name="MyDG"
-            Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                  ItemsSource="{Binding DGDatas, Mode=OneWay}" 
+                  SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"
             >
             <DataGrid.ContextMenu>
                 <ContextMenu>
-
-                    <MenuItem Header="電卓"
-                                 Click="MyDGContextMenu_Click" />
+                    <MenuItem Header="電卓" Command="{Binding DGContextMenuClick}"/>
+                    <!--<MenuItem Header="電卓" Click="MyDGContextMenu_Click" />-->
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

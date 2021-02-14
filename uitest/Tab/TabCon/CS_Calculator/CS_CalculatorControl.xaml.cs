@@ -13,6 +13,8 @@ namespace CS_Calculator {
 	/// 電卓
 	/// :ダイヤログなど別コントロールに組み込んで使用
 	/// </summary>
+	/// C:\work\2020\kyokuto\Smple\uitest\Tab\TabCon\CS_Calculator\CS_CalculatorControl.xaml.cs
+
 	public partial class CS_CalculatorControl : UserControl {
 
 		/// <summary>
@@ -24,6 +26,25 @@ namespace CS_Calculator {
 		}
 		public static readonly DependencyProperty TargetTextBoxtProperty =
 			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBox)));
+
+		public TextBlock TargetTextBlock {
+			get { return (TextBlock)GetValue(TargetTextBlockProperty); }
+			set { SetValue(TargetTextBlockProperty, value); }
+		}
+		public static readonly DependencyProperty TargetTextBlockProperty =
+			DependencyProperty.Register("TargetTextBlock", typeof(TextBlock), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBlock)));
+
+		/// <summary>
+		/// キーボードもしくはボタンクリックで入力される値
+		/// 初期値
+		/// </summary>
+	//	public string InputStr = "";
+		public string InputStr {
+			get { return (string)GetValue(InputStrProperty); }
+			set { SetValue(InputStrProperty, value); }
+		}
+		public static readonly DependencyProperty InputStrProperty =
+			DependencyProperty.Register("InputStr", typeof(string), typeof(CS_CalculatorControl), new PropertyMetadata(default(string)));
 
 		/// <summary>
 		/// 電卓を表示しているウィンドウ
@@ -38,10 +59,6 @@ namespace CS_Calculator {
 		/// 計算結果
 		/// </summary>
 		public double ProcessVal = 0.0;
-		/// <summary>
-		/// キーボードもしくはボタンクリックで入力される値
-		/// </summary>
-		public string InputStr = "";
 		/// <summary>
 		/// 入力確定値の配列
 		/// </summary>
@@ -97,7 +114,14 @@ namespace CS_Calculator {
 			string dbMsg = "";
 			try {
 				Initialize();
-				InputStr = TargetTextBox.Text;
+				if (TargetTextBox != null) {
+					dbMsg += ",TextBoxから";
+					InputStr = TargetTextBox.Text;
+				}else if (TargetTextBlock != null) {
+					dbMsg += ",TextBlockから";
+					InputStr = TargetTextBlock.Text;
+				}
+				dbMsg += ",InputStr=" + InputStr;
 				CalcProcess.Text = InputStr;
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Add <= OperatKey) {
@@ -506,7 +530,13 @@ namespace CS_Calculator {
 		public void MyCallBack()
 		{
 			string rText = (string)CalcResult.Content;
-			TargetTextBox.Text = (string)CalcResult.Content;
+			if (TargetTextBox != null) {
+				dbMsg += ",TextBoxへ";
+				TargetTextBox.Text = (string)CalcResult.Content;
+			} else if (TargetTextBlock != null) {
+				dbMsg += ",TextBlockへ";
+				TargetTextBlock.Text = (string)CalcResult.Content;
+			}
 			CalcWindow.Close();
 		}
 
