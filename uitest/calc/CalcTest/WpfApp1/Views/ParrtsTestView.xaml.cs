@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+//using System.Windows.Forms;
 using CS_Calculator;
 using WpfApp1.Models;
+using Infragistics;
 
 namespace WpfApp1.Views {
 	/// <summary>
@@ -25,6 +27,12 @@ namespace WpfApp1.Views {
 		{
 			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 			VM.MyView = this;
+
+			MyXDG.ContextMenu.Items.Clear();
+			System.Windows.Controls.MenuItem customMenu = new System.Windows.Controls.MenuItem();
+			customMenu.Header = "電卓";
+			customMenu.Command=VM.XDGContextMenuClick;
+			MyXDG.ContextMenu.Items.Add(customMenu);
 
 			/*コードビハインドで設定する場合
 			MyDG.ItemsSource = new ObservableCollection<Product> {

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Infragistics.Controls;
+using Infragistics.Windows.DataPresenter;
 
 namespace CS_Calculator {
 	/// <summary>
@@ -27,6 +29,9 @@ namespace CS_Calculator {
 		public static readonly DependencyProperty TargetTextBoxtProperty =
 			DependencyProperty.Register("TargetTextBox", typeof(TextBox), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBox)));
 
+		/// <summary>
+		/// DataGridのセル
+		/// </summary>
 		public TextBlock TargetTextBlock {
 			get { return (TextBlock)GetValue(TargetTextBlockProperty); }
 			set { SetValue(TargetTextBlockProperty, value); }
@@ -35,10 +40,35 @@ namespace CS_Calculator {
 			DependencyProperty.Register("TargetTextBlock", typeof(TextBlock), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBlock)));
 
 		/// <summary>
+		/// XamDataGridのセル
+		/// </summary>
+		public Cell TargetCell {
+			get { return (Cell)GetValue(TargetCellProperty); }
+			set { SetValue(TargetCellProperty, value); }
+		}
+		public static readonly DependencyProperty TargetCellProperty =
+			DependencyProperty.Register("TargetField", typeof(Cell), typeof(CS_CalculatorControl), new PropertyMetadata(default(Cell)));
+		//
+		//public Field TargetField {
+		//	get { return (Field)GetValue(TargetFieldProperty); }
+		//	set { SetValue(TargetFieldProperty, value); }
+		//}
+		//public static readonly DependencyProperty TargetFieldProperty =
+		//	DependencyProperty.Register("TargetField", typeof(Field), typeof(CS_CalculatorControl), new PropertyMetadata(default(Field)));
+
+
+		//public TextField TargetTextField {
+		//	get { return (TextBlock)GetValue(TargetTextFieldProperty); }
+		//	set { SetValue(TargetTextFieldProperty, value); }
+		//}
+		//public static readonly DependencyProperty TargetTextFieldProperty =
+		//	DependencyProperty.Register("TargetTextField", typeof(TextField), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextField)));
+
+		/// <summary>
 		/// キーボードもしくはボタンクリックで入力される値
 		/// 初期値
 		/// </summary>
-	//	public string InputStr = "";
+		//	public string InputStr = "";
 		public string InputStr {
 			get { return (string)GetValue(InputStrProperty); }
 			set { SetValue(InputStrProperty, value); }
@@ -120,7 +150,12 @@ namespace CS_Calculator {
 				}else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockから";
 					InputStr = TargetTextBlock.Text;
+				}else if (TargetCell != null){
+					dbMsg += ",XamDataGridのCellから";
+					InputStr = TargetCell.Value.ToString();
 				}
+
+
 				dbMsg += ",InputStr=" + InputStr;
 				CalcProcess.Text = InputStr;
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
@@ -540,6 +575,9 @@ namespace CS_Calculator {
 				} else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockへ";
 					TargetTextBlock.Text = (string)CalcResult.Content;
+				}else if (TargetCell != null){
+					dbMsg += ",XamDataGridのCellへ";
+					TargetCell.Value = (int)CalcResult.Content;
 				}
 				CalcWindow.Close();
 					MyLog(TAG, dbMsg);

@@ -4,11 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
-        mc:Ignorable="d" 
+		xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
+		xmlns:ig="http://schemas.infragistics.com/xaml"
+		mc:Ignorable="d" 
 		FontSize="14" 
 		WindowStartupLocation="CenterScreen"
 		Topmost="true" Height="500" Width="800"
-      Title="ParrtsTestView">
+      Title="電卓dllの組み込み">
 
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
@@ -25,15 +27,14 @@
 			<RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Label  Content="電卓を表示" 
-						Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
-							Margin="5,5,5,5" VerticalAlignment="Center"  
-							/>
+
 		<StackPanel Orientation="Horizontal"
-							Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
+							Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
 							Margin="0,5,5,5">
 			<Label  Content="フォントサイズ" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
@@ -72,8 +73,11 @@
 						/>
 
 		</StackPanel>
+		<Label  Content="TextBoxに専用ボタンで" 
+						Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"  
+							/>
 		<StackPanel Orientation="Horizontal"
-							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+							Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
 							Margin="0,5,5,5">
 			<!--電卓で計算した結果-->
 			<TextBox x:Name="Bt2Tbox"
@@ -96,7 +100,12 @@
         <!--<sg:GcSpreadGrid Name="MyGSGrid"
             Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" RowCount="5" ColumnCount="5"
             >
-            <sg:GcSpreadGrid.ContextMenu>
+		<sg:GcSpreadGrid.Columns>
+			<c1:DataGridTextColumn Header="Column1" Binding="{Binding Column1}" IsReadOnly="True" />
+			<c1:DataGridTextColumn Header="Column2" Binding="{Binding Column2}" />
+			<c1:DataGridTextColumn Header="Column3" Binding="{Binding Column3}" />
+		<sg:GcSpreadGrid.Columns>
+		<sg:GcSpreadGrid.ContextMenu>
                 <ContextMenu>
 
                     <MenuItem Header="電卓"
@@ -104,9 +113,43 @@
                 </ContextMenu>
             </sg:GcSpreadGrid.ContextMenu>
         </sg:GcSpreadGrid>-->
+		<Label  Content="XamDataGridにContextMenuで" 
+						Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"  
+							/>
+		<igWPF:XamDataGrid Name="MyXDG" 
+                  Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
+				  >
+			<!--ActiveCell="{Binding XDGActiveCell, Mode=OneWay}"-->
+			<igWPF:XamDataGrid.FieldLayoutSettings>
+				<!--レコード追加
+				<igDP:FieldLayoutSettings AddNewRecordLocation="OnTopFixed" AllowAddNew="False"-->
+				<igWPF:FieldLayoutSettings 
+					SelectionTypeRecord="None"
+					SelectionTypeField="None" 
+					SelectionTypeCell="Single" 
+					/>
+			</igWPF:XamDataGrid.FieldLayoutSettings>
+			<!--<igWPF:XamDataGrid.FieldLayouts>
+				<igWPF:FieldLayout  Key="Name" />
+				<igWPF:FieldLayout  Key="Price"/>
+				<igWPF:FieldLayout  Key="Tax"/>
+			</igWPF:XamDataGrid.FieldLayouts>-->
 
-        <DataGrid Name="MyDG"
-                  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
+			<igWPF:XamDataGrid.ContextMenu>
+				<ContextMenu Name="XDG_org_menu">
+					<!--<MenuItem Header="電卓" Command="{Binding XDGContextMenuClick}"/>-->
+					<!--<MenuItem Header="電卓" Click="MyXDGContextMenu_Click" />-->
+				</ContextMenu>
+			</igWPF:XamDataGrid.ContextMenu>
+		</igWPF:XamDataGrid>
+		<!--                  SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"-->
+
+		<Label  Content="DataGridにContextMenuで" 
+						Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"  
+							/>
+		<DataGrid Name="MyDG"
+                  Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
                   ItemsSource="{Binding DGDatas, Mode=OneWay}" 
                   SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"
             >
