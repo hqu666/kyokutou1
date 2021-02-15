@@ -863,13 +863,13 @@ namespace CS_Calculator {
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-			Console.WriteLine(TAG + "[CS_Calculator:CS_CalculatorControl]" + dbMsg);
+			Console.WriteLine(TAG + "[CalcTest.CS_Calculator:CS_CalculatorControl]" + dbMsg);
 #endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			Console.WriteLine(TAG + "[CS_Calculator:CS_CalculatorControl] : " + dbMsg + "でエラー発生;" + err);
+			Console.WriteLine(TAG + "[CalcTest.CS_Calculator:CS_CalculatorControl] : " + dbMsg + "でエラー発生;" + err);
 		}
 
 		public MessageBoxResult MessageShowWPF(String msgStr,

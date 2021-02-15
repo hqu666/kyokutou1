@@ -95,7 +95,7 @@ namespace WpfApp1.ViewModels {
 			RaisePropertyChanged();
 		}
 
-		#region FileDlogShow	　基底DataGridのコンテキストメニューから電卓を呼び出す
+		#region DGContextMenuClick	　基底DataGridのコンテキストメニューから電卓を呼び出す
 		private ViewModelCommand _DGContextMenuClick;
 
 		public ViewModelCommand DGContextMenuClick {
@@ -126,8 +126,9 @@ namespace WpfApp1.ViewModels {
 				var result = 0;
 				if (int.TryParse(orgVal, out result)) {
 					dbMsg += "は数値で" + result;
+					//電卓クラスを生成して書き込み先の参照を渡す
 					CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
-					//			calculatorControl.TargetTextBlock = targetTextBlock;
+					calculatorControl.TargetTextBlock = targetTextBlock;
 
 					//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 					Window CalcWindow = new Window {

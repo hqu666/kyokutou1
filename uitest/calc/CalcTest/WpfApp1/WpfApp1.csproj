@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="CS_Calculator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Tab\TabCon\CS_Calculator\bin\Release\CS_Calculator.dll</HintPath>
+      <HintPath>..\CS_Calculator\bin\Debug\CS_Calculator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Product.cs" />
     <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
     <Compile Include="Views\ParrtsTestView.xaml.cs">
       <DependentUpon>ParrtsTestView.xaml</DependentUpon>
@@ -106,5 +107,6 @@
       <Version>3.2.3.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
-        xmlns:sg="http://schemas.grapecity.com/windows/spreadgrid/2012"
         mc:Ignorable="d" 
 		FontSize="14" 
 		WindowStartupLocation="CenterScreen"
@@ -107,7 +106,7 @@
         </sg:GcSpreadGrid>-->
 
         <DataGrid Name="MyDG"
-                  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
                   ItemsSource="{Binding DGDatas, Mode=OneWay}" 
                   SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"
             >
