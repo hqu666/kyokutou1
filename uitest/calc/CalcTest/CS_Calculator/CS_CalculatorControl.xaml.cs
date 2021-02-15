@@ -568,16 +568,18 @@ namespace CS_Calculator {
 			string dbMsg = "";
 			try
 			{
-				string rText = (string)CalcResult.Content;
+				string rText = (string)CalcResult.Content.ToString();
+				dbMsg += ",rText=" + rText;
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxへ";
-					TargetTextBox.Text = (string)CalcResult.Content;
+					TargetTextBox.Text = rText;
 				} else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockへ";
-					TargetTextBlock.Text = (string)CalcResult.Content;
+					TargetTextBlock.Text = rText;
 				}else if (TargetCell != null){
 					dbMsg += ",XamDataGridのCellへ";
-					TargetCell.Value = (int)CalcResult.Content;
+					//IntのCellなら四捨五入した整数が入る
+					TargetCell.Value =double.Parse( rText);
 				}
 				CalcWindow.Close();
 					MyLog(TAG, dbMsg);
