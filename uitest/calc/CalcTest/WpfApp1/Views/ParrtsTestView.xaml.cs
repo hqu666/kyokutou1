@@ -28,11 +28,11 @@ namespace WpfApp1.Views {
 			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 			VM.MyView = this;
 
-			MyXDG.ContextMenu.Items.Clear();
-			System.Windows.Controls.MenuItem customMenu = new System.Windows.Controls.MenuItem();
-			customMenu.Header = "電卓";
-			customMenu.Command=VM.XDGContextMenuClick;
-			MyXDG.ContextMenu.Items.Add(customMenu);
+//		MyXDG.ContextMenu.Items.Clear();
+			//System.Windows.Controls.MenuItem customMenu = new System.Windows.Controls.MenuItem();
+			//customMenu.Header = "電卓";
+			//customMenu.Command=VM.XDGContextMenuClick;
+			//MyXDG.ContextMenu.Items.Add(customMenu);
 
 			/*コードビハインドで設定する場合
 			MyDG.ItemsSource = new ObservableCollection<Product> {
