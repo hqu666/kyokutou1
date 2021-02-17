@@ -7,6 +7,11 @@ using System.Windows.Controls;
 using WpfApp1.Models;
 using CS_Calculator;
 using Infragistics.Windows.DataPresenter;
+using System.Collections.Generic;
+using GrapeCity.Windows.SpreadGrid;
+using System.Windows.Data;
+using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
+using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
 namespace WpfApp1.ViewModels {
 	public class ParrtsTestViewModel : ViewModel {
@@ -35,6 +40,20 @@ namespace WpfApp1.ViewModels {
 		/// </summary>
 		public string CalcTextShowX { get; set; }
 		public string CalcTextShowY { get; set; }
+
+		private List<Product> _GsGlist;
+		/// <summary>
+		/// GcSpreadGridのItemsSource
+		/// </summary>
+		public List<Product> GsGlist {
+			get => _GsGlist;
+			set {
+				if (_GsGlist == value)
+					return;
+				_GsGlist = value;
+				RaisePropertyChanged();
+			}
+		}
 
 		private ObservableCollection<Product> _DGDatas;
 		/// <summary>
@@ -78,7 +97,6 @@ namespace WpfApp1.ViewModels {
 			}
 		}
 
-
 		/// <summary>
 		/// ここからスタート
 		/// </summary>
@@ -97,6 +115,29 @@ namespace WpfApp1.ViewModels {
 			CalcTextShowY = "400";
 			CalcResult = "0123456789";
 
+			GsGlist = new List<Product>();
+			GsGlist.Add(new Product() { Name ="みるきーくいん", Price = 2080, Tax = 8});
+			GsGlist.Add(new Product() { Name = "徳陽ほうじ茶", Price = 298, Tax =10 });
+			GsGlist.Add(new Product() { Name = "バスサイズ石鹸", Price =140, Tax =10});
+			GsGlist.Add(new Product() { Name = "５袋ラーメン", Price = 298, Tax = 8});
+
+			/* 動的生成例：
+			 * https://docs.grapecity.com/help/spread-wpf-2/GrapeCity.WPF.SpreadGrid~GrapeCity.Windows.SpreadGrid.BindingDataField~Binding.html
+			MyView.MyGsGrid.AutoGenerateColumns = false;
+			MyView.MyGsGrid.ItemsSource = GsGlist;
+			MyView.MyGsGrid.ColumnCount = 3;
+
+			PropertyDataField dataField1 = new PropertyDataField();
+			dataField1.Property = "Name";
+			MyView.MyGsGrid.Columns[0].DataField = dataField1;
+
+			BindingDataField dataField2 = new BindingDataField();
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Price");
+			dataField2.Binding = binding;
+			MyView.MyGsGrid.Columns[1].DataField = dataField2;
+			*/
+
 			/// XamDataGridに初期値を書き込むj
 			XDGDatas = new ObservableCollection<Product> {
 				new Product { Name="LEDシーリング", Price=4980, Tax=10 },
@@ -114,6 +155,132 @@ namespace WpfApp1.ViewModels {
 			};
 			RaisePropertyChanged();
 		}
+
+		#region MyGsGridContextMenuClick	　GcSpreadGridのコンテキストメニューから電卓を呼び出す
+		private ViewModelCommand _MyGsGridContextMenuClick;
+
+		public ViewModelCommand MyGsGridContextMenuClick {
+			get {
+				if (_MyGsGridContextMenuClick == null)
+				{
+					_MyGsGridContextMenuClick = new ViewModelCommand(CalcDlogGsG);
+				}
+				return _MyGsGridContextMenuClick;
+			}
+		}
+		/// <summary>
+		/// GcSpreadGridのコンテキストメニューから電卓を呼び出す
+		/// </summary>
+		public void CalcDlogGsG()
+		{
+			string TAG = "CalcDlogGsG";
+			string dbMsg = "";
+			try
+			{
+				GcSpreadGrid DG = MyView.MyGsGrid;
+				DG.Focus();
+				GsSGCell activeCell = DG.ActiveCell;
+				if (activeCell != null)
+				{
+					// 行番号(0起算)
+					int rowIndex = activeCell.Position.Row;
+					// 列番号(0起算)
+					int columnIndex = activeCell.Position.Column;
+					dbMsg += "[" + rowIndex + " , " + columnIndex + "]";
+					string orgVal = activeCell.Value.ToString();
+					dbMsg += orgVal;
+					var result = 0;
+					if (int.TryParse(orgVal, out result))
+					{
+						dbMsg += "は数値で" + result;
+						//電卓クラスを生成して書き込み先の参照を渡す
+						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+						calculatorControl.TargetGsCell = activeCell;
+
+						//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
+						Window CalcWindow = new Window
+						{
+							//				Title = targetTextBlock.Name,
+							Content = calculatorControl,
+							ResizeMode = ResizeMode.NoResize
+						};
+						//				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
+						//表示位置
+						Double ShowX = 0;
+						if (CalcTextShowX != "")
+						{
+							ShowX = Double.Parse(CalcTextShowX);
+						}
+						Double ShowY = 0;
+						if (CalcTextShowY != "")
+						{
+							ShowY = Double.Parse(CalcTextShowY);
+						}
+						dbMsg += ",指定座標[" + ShowX + "," + ShowY + "]";
+						if (0 == ShowX)
+						{
+							//指定が無ければ書き込み先フィールドの左やや下に表示する
+							//					CalcWindow.Left = pt.X + 20;
+						}
+						else
+						{
+							//指定された位置に表示
+							CalcWindow.Left = ShowX;
+						}
+						if (0 == ShowY)
+						{
+							//指定が無ければ書き込み先フィールドの左やや下に表示する
+							//					CalcWindow.Top = pt.Y + 30;
+						}
+						else
+						{
+							//指定された位置に表示
+							CalcWindow.Top = ShowY;
+						}
+						dbMsg += ">>[" + ShowX + "," + ShowY + "]";
+						CalcWindow.Topmost = true;
+						dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
+						CalcWindow.Width = 300;
+						CalcWindow.Height = 400;
+						dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+						string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
+						//			ViewTitle += activeCell.Record;
+						ViewTitle += ":" + activeCell.Position.ColumnName;
+						dbMsg += ",ViewTitol=" + ViewTitle;
+
+						if (!ViewTitle.Equals(""))
+						{
+							CalcWindow.Title = ViewTitle;
+						}
+						calculatorControl.CalcWindow = CalcWindow;
+						calculatorControl.InputStr = result.ToString();
+
+						//		calculatorControl.OperatKey = this.OperatKey;
+						Nullable<bool> dialogResult = CalcWindow.ShowDialog();
+						dbMsg += ",dialogResult=" + dialogResult;
+
+					}
+					else
+					{
+						String titolStr = "XamDataGrid:" + DG.Name + "でコンテキストメニューで選択したアイテム";
+						String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
+						msgStr += "\r\n電卓は数値を入力するセルでご利用ください";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					}
+				}
+				else
+				{
+					dbMsg += ",activeCell == null";
+				}
+				MyLog(TAG, dbMsg);
+			}
+			catch (Exception er)
+			{
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
 
 		#region XDGContextMenuClick	　XamDataGridのコンテキストメニューから電卓を呼び出す
 		private ViewModelCommand _XDGContextMenuClick;
@@ -139,7 +306,7 @@ namespace WpfApp1.ViewModels {
 				XamDataGrid DG = MyView.MyXDG;
 				DG.Focus();
 				DataPresenterBase.SelectedItemHolder selectedItems = DG.SelectedItems;
-				Cell activeCell = DG.ActiveCell;
+				XDGCell activeCell = DG.ActiveCell;
 				if(activeCell != null){
 					// 行番号(0起算)
 					int rowIndex = activeCell.Record.Index;
@@ -240,8 +407,6 @@ namespace WpfApp1.ViewModels {
 		}
 		#endregion
 
-
-
 		#region XDGCEllRIGHTClick	　XamDataGridのCellを右クリックで電卓を呼び出す
 		private ViewModelCommand _XDGCEllRIGHTClick;
 
@@ -266,7 +431,7 @@ namespace WpfApp1.ViewModels {
 				XamDataGrid DG = MyView.MyXDG2;
 				DG.Focus();
 				DataPresenterBase.SelectedItemHolder selectedItems = DG.SelectedItems;
-				Cell activeCell = DG.ActiveCell;
+				XDGCell activeCell = DG.ActiveCell;
 				if (activeCell != null)
 				{
 					// 行番号(0起算)

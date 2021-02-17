@@ -49,6 +49,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GrapeCity.WPF.SpreadGrid, Version=3.0.4501.2015, Culture=neutral, PublicKeyToken=5c5c8ff7a6858ccc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\SpreadWPF3\SpreadGrid\Bin\v3.0.4501.2015\GrapeCity.WPF.SpreadGrid.dll</HintPath>
+    </Reference>
     <Reference Include="InfragisticsWPF4.DataPresenter.v12.2, Version=12.2.20122.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Infragistics\NetAdvantage 2012.2\WPF\CLR4.0\Bin\WPFOnly\InfragisticsWPF4.DataPresenter.v12.2.dll</HintPath>

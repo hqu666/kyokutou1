@@ -14,13 +14,15 @@
 		mc:Ignorable="d" 
 		FontSize="14" 
 		WindowStartupLocation="CenterScreen"
-		Topmost="true" Height="800" Width="800"
+		Topmost="true" Height="800" Width="1200"
       Title="電卓dllの組み込み">
 
 	<Grid Margin="0,0,0,0" >
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="10" />
 			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="10" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
@@ -104,33 +106,25 @@
 						/>
 		</StackPanel>
 
-		<Label  Content="GcSpreadGridにContextMenuで（調査中）" 
-						Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"  
+		<Label  Content="GcSpreadGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+						Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
-		<!--<sg:GcSpreadGrid Name="MyGSGrid"
-						Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+		<sg:GcSpreadGrid  Name="MyGsGrid"
+						Grid.Row="4" Grid.Column="1"
 						RowCount="5" ColumnCount="3"
-				>
-		</sg:GcSpreadGrid>-->
-		<!--<sg:GcSpreadGrid.Columns>
-				<c1:DataGridTextColumn Header="Column1" Binding="{Binding Column1}" IsReadOnly="True" />
-				<c1:DataGridTextColumn Header="Column2" Binding="{Binding Column2}" />
-				<c1:DataGridTextColumn Header="Column3" Binding="{Binding Column3}" />
-			<sg:GcSpreadGrid.Columns>-->
-		<!--<sg:GcSpreadGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="電卓"
-                                 Click="MyGSGridContextMenu_Click" />
-                </ContextMenu>
-            </sg:GcSpreadGrid.ContextMenu>-->
+						ItemsSource="{Binding GsGlist, Mode=OneWay}" 
+						>
+			<sg:GcSpreadGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="電卓" Command="{Binding MyGsGridContextMenuClick}"/>
+				</ContextMenu>
+			</sg:GcSpreadGrid.ContextMenu>
+		</sg:GcSpreadGrid>
 
-		<Label  Content="XamDataGridにContextMenuで" 
-						Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"  
+		<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+						Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
-		<Label  Content="(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
-						Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"   HorizontalAlignment="Right" 
-							/>
-		<Label  Content="(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
+		<Label  Content="①標準コンテキストメニューを残す(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
 						Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" 
 							/>
 		<igWPF:XamDataGrid Name="MyXDG" 
@@ -159,20 +153,11 @@
 				</ContextMenu>
 			</igWPF:XamDataGrid.ContextMenu>
 		</igWPF:XamDataGrid>
-		<!--
-							CommandParameter="{Binding ElementName=CenterSlipEstimateGrid}"
-					CommandParameter="{Binding XDGContextMenuClick}"
-
-		<igWPF:Field Name="Price">
-						<igWPF:FieldMenuItem Header="電卓" Command="{Binding XDGContextMenuClick}"/>
-					</igWPF:Field>-->
-		<!--  
-		SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"-->
-		<Label  Content="コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
-						Grid.Row="9" Grid.Column="1" VerticalAlignment="Center"
+		<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
+						Grid.Row="7" Grid.Column="4" VerticalAlignment="Center"
 							/>
 		<igWPF:XamDataGrid Name="MyXDG2" 
-                  Grid.Row="10" Grid.Column="1"
+                  Grid.Row="8" Grid.Column="4"
 				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
 				  >
 			<igWPF:XamDataGrid.Resources>
@@ -199,7 +184,6 @@
 				</behaviors:EventTrigger>
 			</behaviors:Interaction.Triggers>
 		</igWPF:XamDataGrid>
-
 
 		<Label  Content="DataGrid(TextBlock)にContextMenuで" 
 						Grid.Row="11" Grid.Column="1" VerticalAlignment="Center"  

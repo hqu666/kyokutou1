@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using GrapeCity.Windows.SpreadGrid;
 using Infragistics.Controls;
 using Infragistics.Windows.DataPresenter;
+using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
+using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
-namespace CS_Calculator {
+namespace CS_Calculator{
 	/// <summary>
 	/// 電卓
 	/// :ダイヤログなど別コントロールに組み込んで使用
@@ -42,27 +45,22 @@ namespace CS_Calculator {
 		/// <summary>
 		/// XamDataGridのセル
 		/// </summary>
-		public Cell TargetCell {
-			get { return (Cell)GetValue(TargetCellProperty); }
+		public XDGCell TargetCell {
+			get { return (XDGCell)GetValue(TargetCellProperty); }
 			set { SetValue(TargetCellProperty, value); }
 		}
 		public static readonly DependencyProperty TargetCellProperty =
-			DependencyProperty.Register("TargetField", typeof(Cell), typeof(CS_CalculatorControl), new PropertyMetadata(default(Cell)));
-		//
-		//public Field TargetField {
-		//	get { return (Field)GetValue(TargetFieldProperty); }
-		//	set { SetValue(TargetFieldProperty, value); }
-		//}
-		//public static readonly DependencyProperty TargetFieldProperty =
-		//	DependencyProperty.Register("TargetField", typeof(Field), typeof(CS_CalculatorControl), new PropertyMetadata(default(Field)));
+			DependencyProperty.Register("TargetField", typeof(XDGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(XDGCell)));
 
-
-		//public TextField TargetTextField {
-		//	get { return (TextBlock)GetValue(TargetTextFieldProperty); }
-		//	set { SetValue(TargetTextFieldProperty, value); }
-		//}
-		//public static readonly DependencyProperty TargetTextFieldProperty =
-		//	DependencyProperty.Register("TargetTextField", typeof(TextField), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextField)));
+		/// <summary>
+		/// GcSpreadGridのセル
+		/// </summary>
+		public GsSGCell TargetGsCell {
+			get { return (GsSGCell)GetValue(TargetGsCellProperty); }
+			set { SetValue(TargetGsCellProperty, value); }
+		}
+		public static readonly DependencyProperty TargetGsCellProperty =
+			DependencyProperty.Register("TargetGsCell", typeof(GsSGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(GsSGCell)));
 
 		/// <summary>
 		/// キーボードもしくはボタンクリックで入力される値
@@ -134,13 +132,13 @@ namespace CS_Calculator {
 			this.Loaded += ThisLoaded;
 		}
 		/// <summary>
-		/// 読込み完了後、エレメント参照やプロセスの始動を行う
+		/// 読込み完了後、エレメント参照やプロセスの始動を行う	TargetGsCell
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
-			string TAG = "UserControl_KeyDown";
+			string TAG = "ThisLoaded";
 			string dbMsg = "";
 			try {
 				Initialize();
@@ -153,9 +151,12 @@ namespace CS_Calculator {
 				}else if (TargetCell != null){
 					dbMsg += ",XamDataGridのCellから";
 					InputStr = TargetCell.Value.ToString();
+				}else if (TargetGsCell != null){
+					dbMsg += ",GcSpreadGridのCell ";
+					dbMsg += TargetGsCell.Position.Row + "レコード"+ TargetGsCell.Position.ColumnName+ "から";
+					InputStr = TargetGsCell.Text;
+					//.Value.ToString();でもOK
 				}
-
-
 				dbMsg += ",InputStr=" + InputStr;
 				CalcProcess.Text = InputStr;
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
@@ -580,6 +581,11 @@ namespace CS_Calculator {
 					dbMsg += ",XamDataGridのCellへ";
 					//IntのCellなら四捨五入した整数が入る
 					TargetCell.Value =double.Parse( rText);
+				}else if (TargetGsCell != null){
+					dbMsg += ",GcSpreadGridのCell ";
+					dbMsg += TargetGsCell.Position.Row + "レコード" + TargetGsCell.Position.ColumnName + "へ";
+					TargetGsCell.Value =double.Parse( rText);
+					//TargetGsCell.Text = rText;では戻らない
 				}
 				CalcWindow.Close();
 					MyLog(TAG, dbMsg);
