@@ -1,0 +1,209 @@
+﻿<Window x:Class="CS_CalcTest.Views.CalcTestView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
+	  xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:igDP="http://infragistics.com/DataPresenter"
+             xmlns:igEditors="http://infragistics.com/Editors"
+      xmlns:sg="http://schemas.grapecity.com/windows/spreadgrid/2012"
+		xmlns:gss="http://schemas.grapecity.com/windows/spreadsheet/2020"
+		mc:Ignorable="d" 
+		FontSize="14" 
+		WindowStartupLocation="CenterScreen"
+		Topmost="true" Height="800" Width="1200"
+      Title="電卓dllの組み込み" SizeToContent="WidthAndHeight">
+
+	<Grid Margin="0,0,0,0" >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="10" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="10" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
+							Margin="0,5,5,5">
+			<Label  Content="フォントサイズ" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextFontSize" 
+						Text="{Binding CalcTextFontSize,Mode=TwoWay}"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextFontSize_TextChanged"  
+						/>
+			<Label  Content="幅" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTexWidth" x:Uid="CalcTexWidth"
+						Text="{Binding CalcTexWidth,Mode=TwoWay}"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTexWidth_TextChanged"  
+						/>
+			<Label  Content="表示位置:x" 
+					Margin="5,5,0,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextShowX"
+						Text="{Binding CalcTextShowX,Mode=TwoWay}"
+						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShow_TextChanged" 
+						/>
+			<Label  Content=":y" 
+					Margin="5,5,0,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextShowY"
+						Text="{Binding CalcTextShowY,Mode=TwoWay}"
+						Margin="0,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextShow_TextChanged" 
+						/>
+			<Label  Content="ダイアログタイトル" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcTextDLogTitol" 
+						Text="{Binding CalcTextDLogTitol,Mode=TwoWay}"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextDLogTitol_TextChanged" 
+						/>
+
+		</StackPanel>
+		<Label  Content="TextBoxに専用ボタンで" 
+						Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"  
+							/>
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+							Margin="0,5,5,5">
+			<!--電卓で計算した結果-->
+			<TextBox x:Name="Bt2Tbox"
+							Width="{Binding ElementName=CalcTexWidth}"
+							FontSize="{Binding ElementName=CalcTextFontSize}"
+							Text="{Binding CalcResult ,Mode=TwoWay}"/>
+			<!--電卓を表示するボタン
+				TargetTextBoxに計算結果を書き写すフィールドを指定
+				ViewTitleはダイヤログタイトルで指定しなければフィールド名を表示-->
+			<cs_calculator:CalculatorButton 
+						x:Name="CalcCallBt" 
+						TargetTextBox="{Binding ElementName=Bt2Tbox}"
+						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"
+						ShowX="{Binding ElementName=CalcTextShowX}"
+						ShowY="{Binding ElementName=CalcTextShowY}"
+						/>
+		</StackPanel>
+
+		<Label  Content="GcSpreadGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+						Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
+							/>
+		<sg:GcSpreadGrid  Name="MyGsGrid"
+						Grid.Row="4" Grid.Column="1"
+						RowCount="1" ColumnCount="1"
+						DefaultColumnWidth="120" 
+						ShowResizeTip="Both" 
+						ItemsSource="{Binding GsGlist, Mode=OneWay}" 
+						>
+
+				<sg:GcSpreadGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="電卓" Command="{Binding MyGsGridContextMenuClick}"/>
+				</ContextMenu>
+			</sg:GcSpreadGrid.ContextMenu>
+		</sg:GcSpreadGrid>
+
+		<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+						Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
+							/>
+		<Label  Content="①標準コンテキストメニューを残す(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
+						Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" 
+							/>
+		<igWPF:XamDataGrid Name="MyXDG" 
+                  Grid.Row="8" Grid.Column="1"
+				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
+				  >
+			<!--ActiveCell="{Binding XDGActiveCell, Mode=OneWay}"-->
+			<igWPF:XamDataGrid.FieldLayoutSettings>
+				<!--レコード追加
+				<igDP:FieldLayoutSettings AddNewRecordLocation="OnTopFixed" AllowAddNew="False"-->
+				<igWPF:FieldLayoutSettings 
+					SelectionTypeRecord="None"
+					SelectionTypeField="None" 
+					SelectionTypeCell="Single" 
+					/>
+			</igWPF:XamDataGrid.FieldLayoutSettings>
+			<!--<igWPF:XamDataGrid.FieldLayouts>
+				<igWPF:FieldLayout  Key="Name" />
+				<igWPF:FieldLayout  Key="Price">
+				</igWPF:FieldLayout>
+				<igWPF:FieldLayout  Key="Tax"/>
+			</igWPF:XamDataGrid.FieldLayouts>-->
+			<igWPF:XamDataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="電卓" Command="{Binding XDGContextMenuClick}"/>
+				</ContextMenu>
+			</igWPF:XamDataGrid.ContextMenu>
+		</igWPF:XamDataGrid>
+		<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
+						Grid.Row="7" Grid.Column="4" VerticalAlignment="Center"
+							/>
+		<igWPF:XamDataGrid Name="MyXDG2" 
+                  Grid.Row="8" Grid.Column="4"
+				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
+				  >
+			<igWPF:XamDataGrid.Resources>
+				<Style TargetType="DataGridCell">
+					<Setter Property="ContextMenu">
+						<Setter.Value>
+							<ContextMenu>
+								<MenuItem Header="電卓" Command="{Binding XDGCEllRIGHTClick}"/>
+							</ContextMenu>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</igWPF:XamDataGrid.Resources>
+			<igWPF:XamDataGrid.FieldLayoutSettings>
+				<igWPF:FieldLayoutSettings 
+					SelectionTypeRecord="None"
+					SelectionTypeField="None" 
+					SelectionTypeCell="Single" 
+					/>
+			</igWPF:XamDataGrid.FieldLayoutSettings>
+			<behaviors:Interaction.Triggers>
+				<behaviors:EventTrigger EventName="MouseRightButtonUp">
+					<behaviors:InvokeCommandAction Command="{Binding XDGCEllRIGHTClick}" />
+				</behaviors:EventTrigger>
+			</behaviors:Interaction.Triggers>
+		</igWPF:XamDataGrid>
+
+		<Label  Content="DataGrid(TextBlock)にContextMenuで" 
+						Grid.Row="11" Grid.Column="1" VerticalAlignment="Center"  
+							/>
+		<DataGrid Name="MyDG"
+                  Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2"
+                  ItemsSource="{Binding DGDatas, Mode=OneWay}" 
+                  SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"
+            >
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="電卓" Command="{Binding DGContextMenuClick}"/>
+					<!--<MenuItem Header="電卓" Click="MyDGContextMenu_Click" />-->
+				</ContextMenu>
+			</DataGrid.ContextMenu>
+		</DataGrid>
+	</Grid>
+
+
+</Window>
