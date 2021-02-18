@@ -4,17 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-      xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
 	  xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf"
-      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:igDP="http://infragistics.com/DataPresenter"
-             xmlns:igEditors="http://infragistics.com/Editors"
       xmlns:sg="http://schemas.grapecity.com/windows/spreadgrid/2012"
-		xmlns:gss="http://schemas.grapecity.com/windows/spreadsheet/2020"
-		mc:Ignorable="d" 
-		FontSize="14" 
-		WindowStartupLocation="CenterScreen"
-		Topmost="true" Height="800" Width="1200"
+      xmlns:cs_calculator="clr-namespace:CS_Calculator;assembly=CS_Calculator"
+	  mc:Ignorable="d" 
+	  FontSize="14" 
+	  WindowStartupLocation="CenterScreen"
+	  Topmost="true" Height="800" Width="1200"
       Title="電卓dllの組み込み" SizeToContent="WidthAndHeight">
 
 	<Grid Margin="0,0,0,0" >
@@ -116,7 +112,6 @@
 						ShowResizeTip="Both" 
 						ItemsSource="{Binding GsGlist, Mode=OneWay}" 
 						>
-
 				<sg:GcSpreadGrid.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="電卓" Command="{Binding MyGsGridContextMenuClick}"/>
@@ -130,36 +125,29 @@
 		<Label  Content="①標準コンテキストメニューを残す(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
 						Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" 
 							/>
-		<igWPF:XamDataGrid Name="MyXDG" 
+	
+	<igWPF:XamDataGrid Name="MyXDG" 
                   Grid.Row="8" Grid.Column="1"
 				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
 				  >
-			<!--ActiveCell="{Binding XDGActiveCell, Mode=OneWay}"-->
 			<igWPF:XamDataGrid.FieldLayoutSettings>
-				<!--レコード追加
-				<igDP:FieldLayoutSettings AddNewRecordLocation="OnTopFixed" AllowAddNew="False"-->
 				<igWPF:FieldLayoutSettings 
 					SelectionTypeRecord="None"
 					SelectionTypeField="None" 
 					SelectionTypeCell="Single" 
 					/>
 			</igWPF:XamDataGrid.FieldLayoutSettings>
-			<!--<igWPF:XamDataGrid.FieldLayouts>
-				<igWPF:FieldLayout  Key="Name" />
-				<igWPF:FieldLayout  Key="Price">
-				</igWPF:FieldLayout>
-				<igWPF:FieldLayout  Key="Tax"/>
-			</igWPF:XamDataGrid.FieldLayouts>-->
 			<igWPF:XamDataGrid.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="電卓" Command="{Binding XDGContextMenuClick}"/>
 				</ContextMenu>
 			</igWPF:XamDataGrid.ContextMenu>
 		</igWPF:XamDataGrid>
-		<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
+	
+	<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
 						Grid.Row="7" Grid.Column="4" VerticalAlignment="Center"
 							/>
-		<igWPF:XamDataGrid Name="MyXDG2" 
+	<igWPF:XamDataGrid Name="MyXDG2" 
                   Grid.Row="8" Grid.Column="4"
 				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
 				  >
@@ -199,11 +187,8 @@
 			<DataGrid.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="電卓" Command="{Binding DGContextMenuClick}"/>
-					<!--<MenuItem Header="電卓" Click="MyDGContextMenu_Click" />-->
 				</ContextMenu>
 			</DataGrid.ContextMenu>
 		</DataGrid>
 	</Grid>
-
-
 </Window>

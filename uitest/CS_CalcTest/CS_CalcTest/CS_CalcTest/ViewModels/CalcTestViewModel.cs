@@ -534,7 +534,7 @@ namespace CS_CalcTest.ViewModels {
 		#endregion
 
 
-		#region DGContextMenuClick	　基底DataGridのコンテキストメニューから電卓を呼び出す
+		#region DGContextMenuClick	　規定DataGridのコンテキストメニューから電卓を呼び出す
 		private ViewModelCommand _DGContextMenuClick;
 
 		public ViewModelCommand DGContextMenuClick {
