@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
+//using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
 //using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
 namespace CS_Calculator{
@@ -49,27 +49,35 @@ namespace CS_Calculator{
 		//public static readonly DependencyProperty TargetCellProperty =
 		//	DependencyProperty.Register("TargetField", typeof(XDGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(XDGCell)));
 
-		/// <summary>
-		/// GcSpreadGridのセル
-		/// </summary>
-		public GsSGCell TargetGsCell {
-			get { return (GsSGCell)GetValue(TargetGsCellProperty); }
-			set { SetValue(TargetGsCellProperty, value); }
-		}
-		public static readonly DependencyProperty TargetGsCellProperty =
-			DependencyProperty.Register("TargetGsCell", typeof(GsSGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(GsSGCell)));
+		///// <summary>
+		///// GcSpreadGridのセル
+		///// </summary>
+		//public GsSGCell TargetGsCell {
+		//	get { return (GsSGCell)GetValue(TargetGsCellProperty); }
+		//	set { SetValue(TargetGsCellProperty, value); }
+		//}
+		//public static readonly DependencyProperty TargetGsCellProperty =
+		//	DependencyProperty.Register("TargetGsCell", typeof(GsSGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(GsSGCell)));
 
 		/// <summary>
 		/// キーボードもしくはボタンクリックで入力される値
 		/// 初期値
 		/// </summary>
-		//	public string InputStr = "";
 		public string InputStr {
 			get { return (string)GetValue(InputStrProperty); }
 			set { SetValue(InputStrProperty, value); }
 		}
 		public static readonly DependencyProperty InputStrProperty =
 			DependencyProperty.Register("InputStr", typeof(string), typeof(CS_CalculatorControl), new PropertyMetadata(default(string)));
+
+		public string ResultStr {
+			get { return (string)GetValue(ResultStrProperty); }
+			set { SetValue(ResultStrProperty, value); }
+		}
+		public static readonly DependencyProperty ResultStrProperty =
+			DependencyProperty.Register("ResultStr", typeof(string), typeof(CS_CalculatorControl), new PropertyMetadata(default(string)));
+
+
 
 		/// <summary>
 		/// 電卓を表示しているウィンドウ
@@ -128,6 +136,38 @@ namespace CS_Calculator{
 			CalcProcess.IsReadOnly = true;
 			this.Loaded += ThisLoaded;
 		}
+
+		/// <summary>
+		/// CEと合わせ、初期化処理
+		/// </summary>
+		public void Initialize()
+		{
+			string TAG = "ThisLoaded";
+			string dbMsg = "";
+			try
+			{
+				dbMsg += ",InputStr=" + InputStr;
+				BeforeVals = new ObservableCollection<BeforeVal>();
+				ProcessVal = 0.0;
+				isDecimal = false;
+				BeforeOperation = "";
+				CalcResult.Content = "";
+				CalcOperation.Content = "";
+				CalcProcess.Text = "";          //InputStr
+				IsBegin = true;
+				//DataGridの場合
+				CalcProgress.ItemsSource = BeforeVals;
+				CalcProgress.Items.Refresh();
+				//	CalcProgress.Content = "";									//ラベルの場合
+				CalcProcess.Focus();
+				MyLog(TAG, dbMsg);
+			}
+			catch (Exception er)
+			{
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		/// <summary>
 		/// 読込み完了後、エレメント参照やプロセスの始動を行う	TargetGsCell
 		/// </summary>
@@ -148,13 +188,14 @@ namespace CS_Calculator{
 				//}else if (TargetCell != null){
 				//	dbMsg += ",XamDataGridのCellから";
 				//	InputStr = TargetCell.Value.ToString();
-				}else if (TargetGsCell != null){
-					dbMsg += ",GcSpreadGridのCell ";
-					dbMsg += TargetGsCell.Position.Row + "レコード"+ TargetGsCell.Position.ColumnName+ "から";
-					InputStr = TargetGsCell.Text;
-					//.Value.ToString();でもOK
+				//}else if (TargetGsCell != null){
+				//	dbMsg += ",GcSpreadGridのCell ";
+				//	dbMsg += TargetGsCell.Position.Row + "レコード"+ TargetGsCell.Position.ColumnName+ "から";
+				//	InputStr = TargetGsCell.Text;
+				//	//.Value.ToString();でもOK
 				}
 				dbMsg += ",InputStr=" + InputStr;
+				//		OnPropertyChanged("InputStr");
 				CalcProcess.Text = InputStr;
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Add <= OperatKey) {
@@ -182,27 +223,6 @@ namespace CS_Calculator{
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-		}
-
-		/// <summary>
-		/// CEと合わせ、初期化処理
-		/// </summary>
-		public void Initialize()
-		{
-			InputStr = "";
-			BeforeVals = new ObservableCollection<BeforeVal>();
-			ProcessVal = 0.0;
-			isDecimal = false;
-			BeforeOperation = "";
-			CalcResult.Content = "";
-			CalcOperation.Content = "";
-			CalcProcess.Text = "";
-			IsBegin = true;
-			//DataGridの場合
-			CalcProgress.ItemsSource = BeforeVals;
-			CalcProgress.Items.Refresh();
-			//	CalcProgress.Content = "";									//ラベルの場合
-			CalcProcess.Focus();
 		}
 
 		/// <summary>
@@ -357,7 +377,9 @@ namespace CS_Calculator{
 					}
 					dbMsg += "＞結果＞" + ProcessVal;
 					//計算結果と経過を更新	:SetResult
-					CalcResult.Content = ProcessVal.ToString();
+					ResultStr = ProcessVal.ToString();
+					CalcResult.Content = ResultStr;     //ProcessVal.ToString();
+					OnPropertyChanged("ResultStr");
 					//DataGridの場合
 					CalcProgress.DataContext = BeforeVals;
 					CalcProgress.Items.Refresh();
@@ -566,26 +588,26 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try
 			{
-				string rText = (string)CalcResult.Content.ToString();
-				dbMsg += ",rText=" + rText;
+				this.ResultStr = (string)CalcResult.Content.ToString();
+				dbMsg += ",戻り値=" + ResultStr;
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxへ";
-					TargetTextBox.Text = rText;
+					TargetTextBox.Text = ResultStr;
 				} else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockへ";
-					TargetTextBlock.Text = rText;
+					TargetTextBlock.Text = ResultStr;
 				//}else if (TargetCell != null){
 				//	dbMsg += ",XamDataGridのCellへ";
 				//	//IntのCellなら四捨五入した整数が入る
 				//	TargetCell.Value =double.Parse( rText);
-				}else if (TargetGsCell != null){
-					dbMsg += ",GcSpreadGridのCell ";
-					dbMsg += TargetGsCell.Position.Row + "レコード" + TargetGsCell.Position.ColumnName + "へ";
-					TargetGsCell.Value =double.Parse( rText);
-					//TargetGsCell.Text = rText;では戻らない
+				//}else if (TargetGsCell != null){
+				//	dbMsg += ",GcSpreadGridのCell ";
+				//	dbMsg += TargetGsCell.Position.Row + "レコード" + TargetGsCell.Position.ColumnName + "へ";
+				//	TargetGsCell.Value =double.Parse(ResultStr);
+				//	//TargetGsCell.Text = rText;では戻らない
 				}
 				CalcWindow.Close();
-					MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			}
 			catch (Exception er)
 			{

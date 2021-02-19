@@ -41,6 +41,10 @@ namespace WpfApp1.ViewModels {
 		public string CalcTextShowX { get; set; }
 		public string CalcTextShowY { get; set; }
 
+		public double CalcWindowWidth = 180;
+		public double CalcWindowHeight = 250;
+
+
 		private List<Product> _GsGlist;
 		/// <summary>
 		/// GcSpreadGridのItemsSource
@@ -111,8 +115,10 @@ namespace WpfApp1.ViewModels {
 			CalcTextDLogTitol = "電卓を表示するフィールドから";
 			CalcTexWidth = "200";
 			CalcTextFontSize = "18";
-			CalcTextShowX = "200";
+			CalcTextShowX = "1200";
 			CalcTextShowY = "400";
+			CalcWindowWidth = 180;
+			CalcWindowHeight = 250;
 			CalcResult = "0123456789";
 
 			GsGlist = new List<Product>();
@@ -195,8 +201,8 @@ namespace WpfApp1.ViewModels {
 						dbMsg += "は数値で" + result;
 						//電卓クラスを生成して書き込み先の参照を渡す
 						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
-						calculatorControl.TargetGsCell = activeCell;
-
+			//			calculatorControl.TargetGsCell = activeCell;
+			//	組込み先のライブラリバージョン不一致などで使えないことが有るのでエレメント指定はできない
 						//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 						Window CalcWindow = new Window
 						{
@@ -240,8 +246,8 @@ namespace WpfApp1.ViewModels {
 						dbMsg += ">>[" + ShowX + "," + ShowY + "]";
 						CalcWindow.Topmost = true;
 						dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-						CalcWindow.Width = 300;
-						CalcWindow.Height = 400;
+						CalcWindow.Width = CalcWindowWidth;
+						CalcWindow.Height = CalcWindowHeight;
 						dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
 						string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
 						//			ViewTitle += activeCell.Record;
@@ -255,10 +261,14 @@ namespace WpfApp1.ViewModels {
 						calculatorControl.CalcWindow = CalcWindow;
 						calculatorControl.InputStr = result.ToString();
 
-						//		calculatorControl.OperatKey = this.OperatKey;
+						////		calculatorControl.OperatKey = this.OperatKey;
 						Nullable<bool> dialogResult = CalcWindow.ShowDialog();
-						dbMsg += ",dialogResult=" + dialogResult;
-
+						dbMsg += ",dialogResult=" + dialogResult;		//falseが返される
+		//				if (dialogResult != null){
+							string resultStr = calculatorControl.ResultStr;
+							dbMsg += ",戻り値=" + resultStr;
+							activeCell.Value = double.Parse(resultStr);
+			//			}
 					}
 					else
 					{
@@ -568,6 +578,7 @@ namespace WpfApp1.ViewModels {
 					//電卓クラスを生成して書き込み先の参照を渡す
 					CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
 					calculatorControl.TargetTextBlock = targetTextBlock;
+					calculatorControl.InputStr = targetTextBlock.Text;
 
 					//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 					Window CalcWindow = new Window {
@@ -603,8 +614,8 @@ namespace WpfApp1.ViewModels {
 					dbMsg += ">>[" + ShowX + "," + ShowY + "]";
 					CalcWindow.Topmost = true;
 					dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-					CalcWindow.Width = 300;
-					CalcWindow.Height = 400;
+					CalcWindow.Width = CalcWindowWidth;
+					CalcWindow.Height = CalcWindowHeight;
 					dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
 					string ViewTitle = "データグリッド" + DG.Name + "の" + (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
 
@@ -619,7 +630,11 @@ namespace WpfApp1.ViewModels {
 					//		calculatorControl.OperatKey = this.OperatKey;
 					Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 					dbMsg += ",dialogResult=" + dialogResult;
-
+					if(dialogResult != false){
+						string resultStr = calculatorControl.ResultStr;
+						dbMsg += ",resultStr=" + resultStr;
+						targetTextBlock.Text= resultStr;
+					}
 				} else {
 					String titolStr = "データグリッド" + DG.Name + "でコンテキストメニューで選択したアイテム";
 					String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";

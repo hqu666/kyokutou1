@@ -195,12 +195,16 @@ namespace WpfApp1.ViewModels {
 						dbMsg += "は数値で" + result;
 						//電卓クラスを生成して書き込み先の参照を渡す
 						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
-						calculatorControl.TargetGsCell = activeCell;
+						//			calculatorControl.TargetGsCell = activeCell;
+						string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
+						//			ViewTitle += activeCell.Record;
+						ViewTitle += ":" + activeCell.Position.ColumnName;
+						dbMsg += ",ViewTitol=" + ViewTitle;
 
 						//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 						Window CalcWindow = new Window
 						{
-							//				Title = targetTextBlock.Name,
+							Title = ViewTitle,
 							Content = calculatorControl,
 							ResizeMode = ResizeMode.NoResize
 						};
@@ -243,15 +247,11 @@ namespace WpfApp1.ViewModels {
 						CalcWindow.Width = 300;
 						CalcWindow.Height = 400;
 						dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-						string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
-						//			ViewTitle += activeCell.Record;
-						ViewTitle += ":" + activeCell.Position.ColumnName;
-						dbMsg += ",ViewTitol=" + ViewTitle;
 
-						if (!ViewTitle.Equals(""))
-						{
-							CalcWindow.Title = ViewTitle;
-						}
+						//if (!ViewTitle.Equals(""))
+						//{
+						//	CalcWindow.Title = ViewTitle;
+						//}
 						calculatorControl.CalcWindow = CalcWindow;
 						calculatorControl.InputStr = result.ToString();
 
