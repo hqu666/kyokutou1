@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GrapeCity.Windows.SpreadGrid;
-using Infragistics.Controls;
-using Infragistics.Windows.DataPresenter;
 using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
-using XDGCell = Infragistics.Windows.DataPresenter.Cell;
+//using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
 namespace CS_Calculator{
 	/// <summary>
@@ -42,15 +39,15 @@ namespace CS_Calculator{
 		public static readonly DependencyProperty TargetTextBlockProperty =
 			DependencyProperty.Register("TargetTextBlock", typeof(TextBlock), typeof(CS_CalculatorControl), new PropertyMetadata(default(TextBlock)));
 
-		/// <summary>
-		/// XamDataGridのセル
-		/// </summary>
-		public XDGCell TargetCell {
-			get { return (XDGCell)GetValue(TargetCellProperty); }
-			set { SetValue(TargetCellProperty, value); }
-		}
-		public static readonly DependencyProperty TargetCellProperty =
-			DependencyProperty.Register("TargetField", typeof(XDGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(XDGCell)));
+		///// <summary>
+		///// XamDataGridのセル
+		///// </summary>
+		//public XDGCell TargetCell {
+		//	get { return (XDGCell)GetValue(TargetCellProperty); }
+		//	set { SetValue(TargetCellProperty, value); }
+		//}
+		//public static readonly DependencyProperty TargetCellProperty =
+		//	DependencyProperty.Register("TargetField", typeof(XDGCell), typeof(CS_CalculatorControl), new PropertyMetadata(default(XDGCell)));
 
 		/// <summary>
 		/// GcSpreadGridのセル
@@ -148,9 +145,9 @@ namespace CS_Calculator{
 				}else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockから";
 					InputStr = TargetTextBlock.Text;
-				}else if (TargetCell != null){
-					dbMsg += ",XamDataGridのCellから";
-					InputStr = TargetCell.Value.ToString();
+				//}else if (TargetCell != null){
+				//	dbMsg += ",XamDataGridのCellから";
+				//	InputStr = TargetCell.Value.ToString();
 				}else if (TargetGsCell != null){
 					dbMsg += ",GcSpreadGridのCell ";
 					dbMsg += TargetGsCell.Position.Row + "レコード"+ TargetGsCell.Position.ColumnName+ "から";
@@ -577,10 +574,10 @@ namespace CS_Calculator{
 				} else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockへ";
 					TargetTextBlock.Text = rText;
-				}else if (TargetCell != null){
-					dbMsg += ",XamDataGridのCellへ";
-					//IntのCellなら四捨五入した整数が入る
-					TargetCell.Value =double.Parse( rText);
+				//}else if (TargetCell != null){
+				//	dbMsg += ",XamDataGridのCellへ";
+				//	//IntのCellなら四捨五入した整数が入る
+				//	TargetCell.Value =double.Parse( rText);
 				}else if (TargetGsCell != null){
 					dbMsg += ",GcSpreadGridのCell ";
 					dbMsg += TargetGsCell.Position.Row + "レコード" + TargetGsCell.Position.ColumnName + "へ";

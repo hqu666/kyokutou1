@@ -135,6 +135,9 @@
     <PackageReference Include="GrapeCity.Documents.Excel">
       <Version>4.0.3</Version>
     </PackageReference>
+    <PackageReference Include="Infragistics.DataPresenter.DataSources.OData">
+      <Version>16.1.1000</Version>
+    </PackageReference>
     <PackageReference Include="LivetCask">
       <Version>3.2.3.2</Version>
     </PackageReference>
