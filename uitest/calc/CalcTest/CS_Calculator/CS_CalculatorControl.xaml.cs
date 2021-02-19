@@ -96,6 +96,7 @@ namespace CS_Calculator{
 		/// 入力確定値の配列
 		/// </summary>
 		public ObservableCollection<BeforeVal> BeforeVals;
+	//	public Dictionary<string, string> BeforeValDec { get; set; }
 		/// <summary>
 		/// 小数点以下の処理が必要
 		/// </summary>
@@ -197,6 +198,8 @@ namespace CS_Calculator{
 				dbMsg += ",InputStr=" + InputStr;
 				//		OnPropertyChanged("InputStr");
 				CalcProcess.Text = InputStr;
+	//			BeforeValDec = new Dictionary<string, string>(){{ "", InputStr },	};
+
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Add <= OperatKey) {
 					string NextOperation = "";
@@ -385,6 +388,10 @@ namespace CS_Calculator{
 					CalcProgress.Items.Refresh();
 					ProgressRefresh();
 					OnPropertyChanged("BeforeVals");
+
+					//string[] cItem = { CalcOperation.Content.ToString(), InputStr };
+					//CalcProcessCB.Items.Insert(0, InputStr);
+
 					InputStr = "";
 					CalcProcess.Text = InputStr;
 
@@ -917,6 +924,31 @@ namespace CS_Calculator{
 			}
 			//			CalcProcess.Focus();
 		}
+
+		private void CorpBt_Click(object sender, RoutedEventArgs e)
+		{
+			string TAG = "CorpBt_Click";
+			string dbMsg = "";
+			try
+			{
+				if (CalcProgress.IsVisible){
+					dbMsg = "非表示";
+					CalcProgress.Visibility = Visibility.Collapsed;
+					CorpBt.Content = "△";
+				}
+				else{
+					dbMsg = "表示";
+					CalcProgress.Visibility = Visibility.Visible;
+					CorpBt.Content = "▼";
+				}
+				MyLog(TAG, dbMsg);
+			}
+			catch (Exception er)
+			{
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName)
