@@ -222,6 +222,7 @@ namespace CS_Calculator{
 					dbMsg += ",=" + NextOperation;
 					ProcessedFunc(NextOperation);
 				}
+				CorpProgress();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -933,13 +934,14 @@ namespace CS_Calculator{
 			{
 				if (CalcProgress.IsVisible){
 					dbMsg = "非表示";
-					CalcProgress.Visibility = Visibility.Collapsed;
-					CorpBt.Content = "△";
-				}
-				else{
+					CorpProgress();
+					}
+				else
+				{
 					dbMsg = "表示";
+					KeyGrid.Visibility = Visibility.Collapsed;
 					CalcProgress.Visibility = Visibility.Visible;
-					CorpBt.Content = "▼";
+					CorpBt.Content = "△";
 				}
 				MyLog(TAG, dbMsg);
 			}
@@ -949,6 +951,15 @@ namespace CS_Calculator{
 			}
 		}
 
+		/// <summary>
+		/// 経過リストを畳む
+		/// </summary>
+		private void CorpProgress(){
+			CalcProgress.Visibility = Visibility.Collapsed;
+			KeyGrid.Visibility = Visibility.Visible;
+			CorpBt.Content = "▼";
+			EnterBt.Focus();
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName)
