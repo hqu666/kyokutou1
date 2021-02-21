@@ -73,39 +73,43 @@
 		<Label x:Name="CalcResult" 
 						Grid.Row="0" Grid.Column="0"
 						VerticalAlignment="Top"
-						FontSize="18"
+						FontSize="14"
 						/>
 		<!--						Content="{Binding ResultStr ,Mode=TwoWay}"
 		-->
+
+		<!--<StackPanel Orientation="Horizontal"  Grid.Row="1"  Height="16">
+		</StackPanel>Grid.Column="0" Grid.ColumnSpan="3"-->
 		<Grid Name="ProsessGrid"
-				Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
+				Grid.Row="1" 
 				>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="20*" />
-				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="15" />
+				<ColumnDefinition Width="130"/>
 				<ColumnDefinition Width="18" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions >
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<Label x:Name="CalcOperation" Content="+" Margin="2,0,2,0"
-					Grid.Row="0" Grid.Column="0" 
-					FontSize="12" Padding="0"
-						/>
+					Grid.Row="0" Grid.Column="0" Padding="0"
+					FontSize="12" 
+					/>
 			<TextBox x:Name="CalcProcess"
 					Grid.Row="0" Grid.Column="1" 
-							HorizontalAlignment="Stretch"
-							TextAlignment="Right"
-							FontSize="12"  Padding="0"
-							MinWidth="90"
-							IsReadOnly="True" 
-							BorderThickness="0"
-							/>
-			<!--		Text="{Binding InputStr ,Mode=TwoWay}"	-->
-			<!--<StackPanel Orientation="Horizontal"  Height="16">
-			</StackPanel>-->
+					FontSize="12"  Padding="0"
+					HorizontalAlignment="Stretch"		
+					IsReadOnly="True" 
+					BorderThickness="0"
+					/>
+			<!--	
+							TextAlignment="Left"
+
+			Text="{Binding InputStr ,Mode=TwoWay}"	-->
+			<!---->
 			<Button Name="CorpBt"
 						Grid.Row="0" Grid.Column="2" 
+						HorizontalAlignment="Right"
 						MinHeight="6"
 						Content="▼"
 						FontSize="8" Click="CorpBt_Click"
@@ -116,7 +120,6 @@
 							HeadersVisibility="None"
 							AutoGenerateColumns="True"
 							ColumnWidth="SizeToCells"
-						
 							MaxHeight="152"
 							MaxWidth="157"
 							HorizontalAlignment="Stretch"
@@ -140,7 +143,7 @@
 							Height="20"
 							IsEditable="True"/>-->
 		<Grid Name="KeyGrid"
-				Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"
+				Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
 				>

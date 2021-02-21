@@ -82,12 +82,8 @@
     </ApplicationDefinition>
     <Compile Include="Models\Product.cs" />
     <Compile Include="ViewModels\CalcTestViewModel.cs" />
-    <Compile Include="ViewModels\ParrtsTestViewModel.cs" />
     <Compile Include="Views\CalcTestView.xaml.cs">
       <DependentUpon>CalcTestView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ParrtsTestView.xaml.cs">
-      <DependentUpon>ParrtsTestView.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -96,10 +92,6 @@
     <Page Include="Views\CalcTestView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ParrtsTestView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

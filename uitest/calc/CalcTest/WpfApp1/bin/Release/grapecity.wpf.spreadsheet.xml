@@ -1,0 +1,2580 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>GrapeCity.Wpf.SpreadSheet</name>
+  </assembly>
+  <members>
+    <member name="M:BlendModeEffects.BlendModeEffect.#ctor">
+      <summary><see cref="T:BlendModeEffects.BlendModeEffect" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:BlendModeEffects.ScreenEffect.#ctor">
+      <summary><see cref="T:BlendModeEffects.ScreenEffect" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.AlternatingStyle.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.AlternatingStyle" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.AlternatingStyles.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.AlternatingStyles" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.ArgbColorInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ArgbColorInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.BeforeRightClickEventArgs">
+      <summary><see cref="!:UIManager.BeforeRightClick" />イベントのデータを提供します。このクラスは継承できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BeforeRightClickEventArgs.Cancel">
+      <summary>処理が終了したときにデフォルトの右クリックアクションを実行するかどうかを示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BeforeRightClickEventArgs.ContextMenu">
+      <summary>このイベントに関連付けられた<see cref="P:GrapeCity.Wpf.SpreadSheet.BeforeRightClickEventArgs.ContextMenu" />を取得または設定します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.BindingDataField">
+      <summary>データソースの値を取得または設定するために指定された<see cref="T:System.Windows.Data.Binding" />を使用する <see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" />を定義します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.BindingDataField.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.BindingDataField" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BindingDataField.Binding">
+      <summary>連結を取得または設定します。</summary>
+      <value><see cref="T:System.Windows.Data.Binding" />型の値。値が <c>null</c> の場合、データフィールドは機能しません。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.BorderInfo">
+      <summary>オブジェクトの境界線を表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.BorderInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.BorderInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BorderInfo.Color">
+      <summary>オブジェクトの基本色を取得または設定します。</summary>
+      <value>色。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BorderInfo.LineStyle">
+      <summary>境界線の線スタイルを取得または設定します。</summary>
+      <value>線スタイル。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.BordersInfo">
+      <summary>RangeまたはStyleオブジェクトの上下左右の境界線を表すBorderオブジェクトのコレクション。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.BordersInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.BordersInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.Bottom">
+      <summary>範囲の下罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.Diagonal">
+      <summary>範囲内の各セルの左下隅から右上への罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.DiagonalDown">
+      <summary>範囲内の各セルの左上隅から右下への罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.DiagonalUp">
+      <summary>範囲内の各セルの左下隅から右上への罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.InsideHorizontal">
+      <summary>範囲の下罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.Left">
+      <summary>範囲の左罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.Right">
+      <summary>範囲の右罫線。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.BordersInfo.Top">
+      <summary>範囲の上罫線。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.BuiltInCommands">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />のすべての組み込みコマンドを表します。 このクラスは <see langword="static class" /> であるため、継承や初期化できません。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ApplyBuiltInCellStyle">
+      <summary>小数点以下2桁で組み込みセルスタイルの数値書式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ApplyFilterSelection">
+      <summary>現在の選択にフィルターを適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.AutoSumSelectedCells">
+      <summary>[Alt+=] 選択範囲の下にSUM数式を配置します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.Backspace">
+      <summary>[Backspace] セルに空のテキストを入力して編集モードになります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.Bold">
+      <summary>[Ctrl+B] [Ctrl+2] 現在の選択を太字にします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CalculateWorksheets">
+      <summary>[F9] 開いているワークブックのすべてのワークシートを計算します。[Shift+F9]アクティブなワークシートのみを計算します。このフィールドは読み取り専用です。</summary>
+      <remarks>コマンドパラメーターが<c>true</c>の場合は、アクティブなワークシートのみを計算します。</remarks>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CancelEditing">
+      <summary>[Esc] セルの編集中にエスケープキーを押すと、操作を中止し、セルは元の状態のままになります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CheckAutoFilterAndSortAvailability">
+      <summary>AutoFilterとSort が利用可能かどうかを確認します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CheckAutoFilterAvailability">
+      <summary>AutoFilter が利用可能かどうかを確認します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ClearAll">
+      <summary>すべての選択されているセルをクリアします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ClearFilterSelection">
+      <summary>現在選択されているオートフィルタの並び替え・フィルタをクリアします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ClearFormat">
+      <summary>選択されているセルの書式をクリアします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CopyFormulaFromCellAbove">
+      <summary>[Ctrl+']アクティブ・現在のセルの上にあるセルに数式をコピーし、セルを編集モードのままにします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CopySelectedCells">
+      <summary>[Ctrl+C]テキスト、数式、書式設定、境界線、塗りつぶしなど、すべてをクリップボードにコピーします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CopyValueFromCellAbove">
+      <summary>[Ctrl+Shift+"]選択されているセルの上にあるセルに値をコピーし、セルを編集モードのままにします。セルが数式の場合は、値のみがコピーされます。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CurrencyFormat">
+      <summary>[Ctrl+Shift+$]小数点以下2桁の通貨形式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.CutSelectedCells">
+      <summary>[Ctrl+X]切り取りは、テキスト、数式、書式設定、境界線、塗りつぶしなどすべてをクリップボードに配置します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.DateFormat">
+      <summary>[Ctrl-Shift-#]日、月と年で日付書式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.Delete">
+      <summary>[Delete]セル値を削除します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.EditActiveCell">
+      <summary>[F2]セル内のテキストの末尾にカーソルを置いて、セル編集モードになります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.EditWorksheetName">
+      <summary>アクティブなシートの名前の編集を開始します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.EnterArrayFormula">
+      <summary>[Ctrl+Shift+Enter] 配列数式を入力します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.EnterSameDataInMultipleCells">
+      <summary>[Ctrl+Enter] 複数のセルが選択されている場合、すべてのセルに同じデータを一度に入力します。単一のセルが選択されている場合、値が入力され、同じセルが選択されたままになります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendLastCellDownSelection">
+      <summary>[Ctrl+Shift+Down]現在の選択範囲の下端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendLastCellLeftSelection">
+      <summary>[Ctrl+Shift+Left]現在の選択の左端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendLastCellRightSelection">
+      <summary>[Ctrl+Shift+Right]現在の選択の右端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendLastCellUpSelection">
+      <summary>[Ctrl+Shift+Up]現在の選択の上端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneCellDownSelection">
+      <summary>[Shift+Down]現在の選択範囲の下端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneCellLeftSelection">
+      <summary>[Shift+Left]現在の選択の左端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneCellRightSelection">
+      <summary>[Shift+Right]現在の選択の右端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneCellUpSelection">
+      <summary>[Shift+Up]現在の選択の上端全体を拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneScreenDownSelection">
+      <summary>[Shift+PgDn]選択範囲を下方向への拡張は、ワークシートウィンドウのサイズによって異なります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneScreenLeftSelection">
+      <summary>[Alt+Shift+PgUp]現在の選択範囲を1画面左に拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneScreenRightSelection">
+      <summary>[Alt+Shift+PgDn]現在の選択範囲を1画面右に拡張します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ExtendOneScreenUpSelection">
+      <summary>[Shift+PgUp]選択範囲を上方向への拡張は、ワークシートウィンドウのサイズによって異なります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.FontCommand">
+      <summary>選択したセルを垂直方向または水平方向に調整します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.FormatCells">
+      <summary>[Ctrl+1][最後に使用したタブ]が選択された状態で[セルの書式設定]ダイアログボックスを表示します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.GeneralFormat">
+      <summary>[Ctrl+Shift+~]一般的な番号書式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.HideUnhideRowsColumns">
+      <summary>[Ctrl+0]現在の選択範囲と交差する列を非表示にします。[Ctrl+9]現在の選択範囲と交差する行を非表示にします。[Ctrl+Shift+0]現在の選択範囲と交差する非表示列を再表示します。[Ctrl+Shift+9]現在の選択範囲と交差する非表示行を再表示します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.InsertCurrentDate">
+      <summary>[Ctrl+;] 現在の日付を固定値として挿入します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.InsertCurrentTime">
+      <summary>[Ctrl+Shift+:] 現在の時刻を固定値として挿入します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.Italic">
+      <summary>[Ctrl+I] [Ctrl+3]現在の選択を斜体にします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveActiveCell">
+      <summary>[Enter]選択範囲内のすべてのセルを左上から右下に循環します。[Shift+Enter]選択範囲内のすべてのセルを右下から左上に循環します。[Tab] 複数のセルが選択されている場合、アクティブセルを右に移動します。[Shift+Tab]複数のセルが選択されている場合、アクティブセルを左に移動します。[Ctrl+.]選択範囲内のすべてのセルを左上から右下に循環します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveDown">
+      <summary>[Down]現在の選択範囲を下のセルに移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveDownByScreen">
+      <summary>[PgDn]現在の選択範囲を1画面下に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveDownDataEdge">
+      <summary>[Ctrl+Down]アクティブセルが空の場合、Spreadはアクティブセルの下にある最初の空でないセルで停止します。アクティブセルが空でない場合、アクティブセルの下にある最後の空でないセルで停止します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLastCellDown">
+      <summary>[Ctrl+Down]現在の選択範囲を列データセルの次の空でない行に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLastCellLeft">
+      <summary>[Ctrl+Left]現在の選択範囲を行データセルの前の空でない列に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLastCellRight">
+      <summary>[Ctrl+Right]現在の選択範囲を行データセルの次の空でない列に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLastCellUp">
+      <summary>[Ctrl+Up]現在の選択範囲を列データセルの前の空でない行に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLeft">
+      <summary>[Left]現在の選択範囲を左のセルに移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLeftByScreen">
+      <summary>[Alt+PgUp]現在の選択範囲を1画面左に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveLeftDataEdge">
+      <summary>[Ctrl+Down]アクティブセルが空の場合、Spreadは左の最初の空でないセルで停止します。アクティブセルが空でない場合、左のの最後の空でないセルで停止します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveRight">
+      <summary>[Right]現在の選択範囲を右のセルに移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveRightByScreen">
+      <summary>[Alt+PgDn]現在の選択範囲を1画面右に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveRightDataEdge">
+      <summary>[Ctrl+Right]アクティブセルが空の場合、Spreadは右の最初の空でないセルで停止します。アクティブセルが空でない場合、右のの最後の空でないセルで停止します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveToFirstCell">
+      <summary>[Ctrl+Home]ウィンドウ枠の固定が有効になっている場合、現在のペインの左上のセルに移動します。ウィンドウ枠の固定が無効になっている場合、ワークシートの左上のセル（A1）に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveToFirstCellInRow">
+      <summary>[Home]行の先頭に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveToLastCell">
+      <summary>[Ctrl+End]最後のセルは、データを含む最後の行・列の交差点にあります。最後のセルにはデータが含まれる場合と含まれない場合があります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveToLastCellInRow">
+      <summary>[End]行の最後に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveUp">
+      <summary>[Up]現在の選択範囲を上のセルに移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveUpByScreen">
+      <summary>[PgUp]現在の選択範囲を1画面上に移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.MoveUpDataEdge">
+      <summary>[Ctrl+Up]アクティブセルが空の場合、Spreadはアクティブセルの上にある最初の空でないセルで停止します。アクティブセルが空でない場合、アクティブセルの上にある最後の空でないセルで停止します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.NumberFormat">
+      <summary>[Ctrl+Shift+!]小数点以下2桁、桁区切り記号、負の値にはマイナス記号（-）などで数値形式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.PasteContentFromClipboard">
+      <summary>[Ctrl+V] クリップボードからすべて（内容と書式）を貼り付けます。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.PercentageFormat">
+      <summary>[Ctrl+Shift+%]小数点以下なしでパーセンテージ書式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ReApplySortFilterSelection">
+      <summary>現在選択されているオートフィルタの並び替え・フィルタを再適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ScientificFormat">
+      <summary>[Ctrl+Shift+^]小数点以下2桁で指数形式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.SelectActiveCell">
+      <summary>[Shift+Backspace] 複数のセルが選択されている場合、アクティブセルのみを選択されたままにします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.SelectEntireColumn">
+      <summary>[Ctrl+Space] 現在の選択範囲の列全体を選択します。現在の選択範囲が複数の列にまたがっている場合、選択範囲と交差するすべての列が選択されます。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.SelectEntireRow">
+      <summary>[Shift+Space] 現在の選択範囲の行全体を選択します。現在の選択範囲が複数の行にまたがっている場合、選択範囲と交差するすべての行が選択されます。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.SelectEntireTableOrWorksheet">
+      <summary>[Ctrl+A]テーブル全体またはワークシート全体を選択します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeBringForward">
+      <summary>シェイプを前面に出します。 このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeBringToFront">
+      <summary>シェイプを最前面へ移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeGroup">
+      <summary>選択した描画オブジェクトをグループ化します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeReGroup">
+      <summary>描画オブジェクトを再グループ化します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeSendBackward">
+      <summary>シェイプを背面へ移動します。 このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeSendToBack">
+      <summary>シェイプを最背面へ移動します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShapeUnGroup">
+      <summary>選択した描画オブジェクトをグループ化解除します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShowActiveCell">
+      <summary>[Ctrl+Backspace] ワークシートのアクティブセルを表示するために画面をスクロールします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.ShowSubEditor">
+      <summary>[Alt+Down]セル型にサブエディタがある場合、サブエディタを表示します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.SortSelection">
+      <summary>現在の選択範囲に対して昇順/降順で並べ替えます。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.StopEditing">
+      <summary>値を入力し、同じセルを選択したままにします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.StopSheetTabEditing">
+      <summary>値を入力し、同じシートのタブを選択したままにします。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.Strikethrough">
+      <summary>[Ctrl+5]現在の選択範囲に取り消し線を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.TimeFormat">
+      <summary>[Ctrl+Shift+#]時と分および午前と午後などで日付書式を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.BuiltInCommands.Underscoring">
+      <summary>[Ctrl+U] [Ctrl+4]現在の選択範囲に下線を適用します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellData">
+      <summary>セルのデータを表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.CellData.Empty">
+      <summary>空のセル値を表します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellData.CellFormat">
+      <summary>セル書式を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellData.Formula">
+      <summary>セル数式を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellData.IsSpilled">
+      <summary>セルがスピルされるかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellData.Value">
+      <summary>セル値を取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellData.Create(System.Object,GrapeCity.Spreadsheet.CfExecutedResult)">
+      <summary>セルデータを作成します。</summary>
+      <param name="value">セルデータの値。</param>
+      <param name="cfExecutedResult">セルデータの書式情報が含まれています。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellData.GetText(GrapeCity.Spreadsheet.IWorkbook)">
+      <summary>セルの表示テキストを取得します。</summary>
+      <param name="workbook">対象するワークブック。</param>
+      <returns>セルの表示テキスト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellData.IsEmpty">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.CellData" />値が空かどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellStyleInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.CellStyleInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CFIconInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.CFIconInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.ColorInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ColorInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />内の列を表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.ColumnInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Borders">
+      <summary>指定したオブジェクトの境界線を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.BordersInfo" />オブジェクトを取得します。</summary>
+      <value>指定したオブジェクトの境界線。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Column2">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最後の列の0から始まる列番号を取得します。</summary>
+      <value>最後の列の0から始まる列番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最後の領域の最初の列番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.DataField">
+      <summary>この列のセルがデータソースの値をどのように取得または設定するかを記述する<see cref="T:GrapeCity.Wpf.SpreadSheet.DataField" />を取得または設定します。</summary>
+      <value>デフォルトでは<see langword="null" />です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Hidden">
+      <summary>列が表示されるかどうかを示す値を取得または設定します。</summary>
+      <value>
+        列が表示される場合は<c>true</c>、それ以外の場合は<c>false</c>。デフォルト値は<c>true</c>です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Index">
+      <summary>この列のインデックスを<see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />内に取得します。</summary>
+      <value>列インデックスを示す<c>int</c>値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Locked">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />がロックされているかどうかを示す値を取得または設定します。</summary>
+      <value>
+        ロックされている場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.MergePolicy">
+      <summary>マージポリシーを示す値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Name">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" />の名前を取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" />の名前を示す<see cref="T:System.String" />値。</value>
+      <remarks>名前の大文字と小文字は区別されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.PageBreak">
+      <summary>改ページの位置を取得または設定します。</summary>
+      <value>改ページの位置を表す<see cref="!:Spreadsheet.PageBreak" />値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Row">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最初の行の0から始まる行番号を取得します。</summary>
+      <value>最初の行の0から始まる行番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最初の領域の最初の行番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Row2">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最後の行の0から始まる行番号を取得します。</summary>
+      <value>最後の行の0から始まる行番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最後の領域の最初の行番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ColumnInfo.Width">
+      <summary>列幅を示す値を取得または設定します。</summary>
+      <value>列幅を示す<c>double</c>値。負の値は、値が設定されないことを意味します。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.ColumnInfoCollection">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" />のコレクションを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DataField">
+      <summary>データフィールドの抽象基本クラスを提供します。データフィールドは、列がデータソースの値をどのように取得または設定するかを記述するために使用されます。データソースを<see cref="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.DataSource" />に連結すると、各<see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" />のデータフィールドが割り当てられます。このクラスは<see langword="abstract" />で初期化できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.DataField.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.DataField" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DataFieldConverter">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.DataField" />オブジェクトを他の表現との間で相互に変換する型コンバータを提供します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.DataFieldConverter.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.DataFieldConverter" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.DataFieldConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+      <summary>このコンバータが、指定したコンテキストを使用して、指定したソース型のオブジェクトを<see cref="T:GrapeCity.Wpf.SpreadSheet.DataField" />オブジェクトに変換できるかどうかを示す値を取得します。</summary>
+      <param name="context">書式指定コンテキストを提供する<see cref="T:System.ComponentModel.ITypeDescriptorContext" />。</param>
+      <param name="sourceType">変換元の型を表す<see cref="T:System.Type" />。</param>
+      <returns>
+        このオブジェクトが変換を実行できる場合は<c>true</c>。それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.DataFieldConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+      <summary>このコンバータが、指定したコンテキストを使用して、オブジェクトを指定した型に変換できるかどうかを返します。</summary>
+      <param name="context">書式指定コンテキストを提供する<see cref="T:System.ComponentModel.ITypeDescriptorContext" />。</param>
+      <param name="destinationType">変換元の型を表す<see cref="T:System.Type" />。</param>
+      <returns>
+        このコンバータが変換を実行できる場合は<c>true</c>。それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.DataFieldConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+      <summary>指定したコンテキストとカルチャ情報を使用して、指定したオブジェクトをこのコンバータの型に変換します。</summary>
+      <param name="context">書式指定コンテキストを提供する<see cref="T:System.ComponentModel.ITypeDescriptorContext" />。</param>
+      <param name="culture">現在のカルチャとして使用する<see cref="T:System.Globalization.CultureInfo" />。</param>
+      <param name="value">変換する<see cref="T:System.Object" />。</param>
+      <returns>変換された値を表す<see cref="T:System.Object" />。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.DataFieldConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
+      <summary>指定したコンテキストとカルチャ情報を使用して、指定された値オブジェクトを特定の型に変換します。</summary>
+      <param name="context">書式指定コンテキストを提供する<see cref="T:System.ComponentModel.ITypeDescriptorContext" />。</param>
+      <param name="culture">現在のカルチャとして使用する<see cref="T:System.Globalization.CultureInfo" />。</param>
+      <param name="value">変換する<see cref="T:System.Object" />。</param>
+      <param name="destinationType">value パラメーターの変換先の<see cref="T:System.Type" />。</param>
+      <returns>変換された値を表す<see cref="T:System.Object" />。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DataItemCreatedEventArgs">
+      <summary><see cref="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataItemCreated" />イベントのデータを提供します。このクラスは継承できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataItemCreatedEventArgs.DataItem">
+      <summary>データ項目を取得または設定します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DataValidationContext">
+      <summary>データ検証エラーを表示するためのデータコンテキスト。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.AlertStyle">
+      <summary>データ検証からのアラートスタイル。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.EditingErrorException">
+      <summary>無効な編集値を入力したことによる例外メッセージ。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.ErrorMessage">
+      <summary>データ検証からのエラーメッセージ。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.ErrorTitle">
+      <summary>データ検証からのエラータイトル。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.InputMessage">
+      <summary>入力検証からのエラーメッセージ。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.InputTitle">
+      <summary>入力検証からのエラータイトル。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.IsDirectEditingException">
+      <summary>無効な編集値を入力した後、内部例外によってエラーが発生したことを示します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.IsEditError">
+      <summary>無効な値を入力した後、データ検証によってエラーが発生したことを示します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.IsFocused">
+      <summary>セルのエラーがアクティブ化されていることを示します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.IsInvalid">
+      <summary>現在の検証が無効であることを示します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.ShowError">
+      <summary>データ検証で無効な値を入力するとエラーが表示されることを示します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.DataValidationContext.ShowInput">
+      <summary>データ検証で値が無効な場合にメッセージが表示されることを示します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.FeaturesInfo">
+      <summary>機能の設定を表します。 このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.FeaturesInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.FeaturesInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FeaturesInfo.AutoFormatting">
+      <summary>入力した数式から自動検出された数値形式でセルを形式するかどうか示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.FontInfo">
+      <summary>オブジェクトのフォント属性（フォント名、フォントサイズ、色など）を格納します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.FontInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.FontInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Bold">
+      <summary>フォントが太字の場合はTrue。</summary>
+      <value>
+        太字の場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Color">
+      <summary>オブジェクトの基本色を取得または設定します。</summary>
+      <value>色。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Italic">
+      <summary>フォントスタイルが斜体の場合はTrue</summary>
+      <value>
+        斜体の場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Name">
+      <summary>オブジェクトの名前を表す値を取得または設定します。</summary>
+      <value>名前。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Size">
+      <summary>フォントのサイズ（ポイント単位）を取得または設定します。</summary>
+      <value>サイズ（ポイント単位）を表す倍精度値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.SizeInPixels">
+      <summary>フォントのサイズ（ピクセル単位）を取得または設定します。</summary>
+      <value>サイズ（ピクセル単位）を表す倍精度値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Strikethrough">
+      <summary>フォントが取り消し線付きの場合はTrue。</summary>
+      <value>
+        取り消し線の場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Subscript">
+      <summary>フォントが下付き文字の場合はTrue。デフォルトはFalseです。</summary>
+      <value>
+        下付き文字の場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+      <remarks>このプロパティは、XLSXのインポート/エクスポート時にのみ効果があります。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Superscript">
+      <summary>フォントが上付き文字の場合はTrue。デフォルトはFalseです。</summary>
+      <value>
+        上付き文字の場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+      <remarks>このプロパティは、XLSXのインポート/エクスポート時にのみ効果があります。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.ThemeFont">
+      <summary>指定したオブジェクトに関連付けられた、適用されるフォントスキームのテーマフォントを取得または設定します。</summary>
+      <value>テーマフォント。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.FontInfo.Underline">
+      <summary>フォントに適用される下線の種類を取得または設定します。</summary>
+      <value>下線。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.GcFormulaBar">
+      <summary>GcFormulaBar</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcFormulaBar" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.AssociatedSpread">
+      <summary>関連付けられた<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロールを取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.Expandable">
+      <summary>数式バーが拡張可能かどうかを示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.Expanded">
+      <summary>数式テキストボックスが拡張されるかどうかを示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.ShowEditingButtons">
+      <summary>編集ボタンが表示されるかどうかを示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.InitializeComponent">
+      <summary>InitializeComponent</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.GcFormulaBar.ExpandChanged">
+      <summary>数式バーが展開または折りたたまれたときに発生します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet">
+      <summary>Spreadsheet コンポーネントを表します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.BeforeRightClickEvent">
+      <summary><see cref="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.BeforeRightClick" />ルーティングイベントを識別します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataItemCreatedEvent">
+      <summary><see cref="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataItemCreated" />ルーティングイベントを識別します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ActiveCellBackground">
+      <summary>アクティブセルの背景を取得または設定します。</summary>
+      <value>アクティブセルの背景を表す<see cref="T:System.Windows.Media.Brush" />オブジェクト。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.AllowCellOverflow">
+      <summary>データが隣の空のセルに表示できるどうかを示す<see cref="T:System.Boolean" />値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.AllowUserZoom">
+      <summary>ユーザーが［Ctrl］キーとマウスホイールを使用してコントロールの表示を拡大／縮小できるかどうかを取得または設定します。</summary>
+      <value>
+        ユーザーがコントロールの表示を拡大／縮小できる場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.AutoFitMode">
+      <summary>自動調整モードを取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.AutoFitMode" /> 値は自動調整モードを表します。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataValidationStyle">
+      <summary>データ検証のシンボルのスタイルを取得または設定します。</summary>
+      <remarks><see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataValidationTemplate" />が<c>null</c>でない場合、このプロパティは使用されません。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataValidationTemplate">
+      <summary>データ検証の内容の表示に使用されるデータテンプレートを取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Date1904">
+      <summary>日付のシリアル値からの変換/シリアル値への変換に使用される日付方式が1904年1月1日から始まるかどうかを取得または設定します。</summary>
+      <value>
+        日付方式が1904年に始まる場合は<c>true</c>、それ以外の場合は<c>false</c>。デフォルトは<c>false</c>です。</value>
+      <remarks>同じワークブックセットに含まれるすべてのワークブックは、同じ<see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Date1904" />の値を共有します。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DocumentUri">
+      <summary>シートのドキュメントURIを取得または設定します。</summary>
+      <value>シートのドキュメントURI。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DragDropMode">
+      <summary>ドラッグ＆ドロップモードを取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.DragDropMode" /> 値は、ドラッグ＆ドロップモードを表します。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.EditingColumn">
+      <summary>EditingColumnのインデックス値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.EditingRow">
+      <summary>EditingRowのインデックス値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.EditingWorksheet">
+      <summary>現在の編集ワークシートを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Features">
+      <summary>機能の設定を操作する<see cref="!:Spreadsheet.Features" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.FormatCellsRecentTab">
+      <summary>[セルの書式設定]ダイアログで最後に使用されたタブを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.HorizontalScrollBarSmallChange">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の垂直方向のスクロール方法を指定する値を取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の垂直方向のスクロール方法を指定する<see cref="T:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode" />値。 デフォルトは<see cref="F:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode.Row" />です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.HorizontalScrollMode">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の水平方向のスクロール方法を指定する値を取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の水平方向のスクロール方法を指定する<see cref="T:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode" />値。 デフォルトは<see cref="F:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode.Column" />です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.HoverCellBackground">
+      <summary>アクティブセルの背景を取得または設定します。</summary>
+      <value>ポイントされたセルの背景を表す<see cref="T:System.Windows.Media.Brush" />オブジェクト。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.IsEditing">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />が編集モードにあるかどうかを示すブール値を取得または設定します。</summary>
+      <value>
+        <see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />が編集モードにある場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.IsFormulaSelecting">
+      <summary>数式が選択されているかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.IsProcessing">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />がUI操作を実行しているかどうかを示すブール値を取得または設定します。</summary>
+      <value>
+        <see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />がUI操作を処理している場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.MergedCellSelectionPolicy">
+      <summary>結合したセルと共に使用する選択ポリシーを取得または設定します。</summary>
+      <value>選択ポリシーを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.MergedCellSelectionPolicy" />値。</value>
+      <remarks>このプロパティを使用して、結合したヘッダセルの選択方法を指定します。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Names">
+      <summary>指定したワークブック内のすべての名前（ワークシートに固有の名前もすべて含む）を表す<see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Names" />コレクションを取得します。</summary>
+      <value>指定したワークブック内のすべての名前を表す<see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Names" />コレクション。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.SaveLinkValues">
+      <summary>外部参照値がワークブックと共に保存されるかどうかを示すブール値を取得または設定します。外部参照値を保存すると、それらの値を参照するセルを計算するときに#REF!エラーが返されません。</summary>
+      <value>
+        外部参照値がワークブックと共に保存される場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.SelectionBackground">
+      <summary>選択範囲の背景を取得または設定します。</summary>
+      <value>選択範囲の背景を表す<see cref="T:System.Windows.Media.Brush" />オブジェクト。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.SelectionStyle">
+      <summary>このシートの選択範囲の描画方法を取得または設定します。</summary>
+      <value>選択されたセルのスタイルを決定する<see cref="T:GrapeCity.Wpf.SpreadSheet.SelectionStyle" />値。</value>
+      <remarks>このプロパティが<see cref="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.Renderer" />に設定されている場合、選択範囲は半透明のブラシを使用して描画されます。<see cref="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.Both" />に設定すると、選択範囲は半透明のブラシと定義された色を使用して描画されます。 また、<see cref="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.Color" />に設定すると、選択は定義された色を使用して描画されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.SharedObjects">
+      <summary>共有オブジェクトマネージャを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Sheets">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />のシートに対して<see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ShowHorizontalScroll">
+      <summary>水平スクロールバーをユーザーインタフェースに表示するかどうかを示すブール値を取得または設定します。</summary>
+      <remarks>値が<c>true</c>または<c>false</c>の場合は、水平スクロールバーが表示されないことを示します。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ShowSheetTabs">
+      <summary>シートタブをユーザーインタフェースに表示するかどうかを示すブール値を取得または設定します。</summary>
+      <remarks>値が<c>true</c>または<c>false</c> の場合は、シートタブが表示されないことを示します。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ShowVerticalScroll">
+      <summary>垂直スクロールバーをユーザーインタフェースに表示するかどうかを示すブール値を取得または設定します。</summary>
+      <remarks>値が<c>true</c>または<c>false</c>の場合は、垂直スクロールバーが表示されないことを示します。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Styles">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />のスタイルに対して<see cref="T:GrapeCity.Wpf.SpreadSheet.CellStyleInfoCollection" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.UpdateLinks">
+      <summary>リンクの更新に関するワークブックの設定を示す<see cref="!:Spreadsheet.UpdateLinks" />定数を取得または設定します。</summary>
+      <value>リンクの更新に関するワークブックの設定。</value>
+      <remarks>リンクの更新は、物理ファイルに使用します。外部ワークブックがすでに開かれている場合、ワークブックは常にリンクされます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.VerticalScrollBarSmallChange">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の水平方向のスクロール方法を指定する値を取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の水平方向のスクロール方法を指定する<see cref="T:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode" />値。 デフォルトは<see cref="F:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode.Column" />です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.VerticalScrollMode">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の垂直方向のスクロール方法を指定する値を取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の垂直方向のスクロール方法を指定する<see cref="T:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode" />値。 デフォルトは<see cref="F:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode.Row" />です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ViewMode">
+      <summary>セルの表示モードを示す<see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ViewMode" />値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Workbook">
+      <summary>コントロールに関連付けられたワークブックを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.WorkbookName">
+      <summary><see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Workbook" />の名前を取得または設定します。</summary>
+      <value><see cref="P:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Workbook" />の名前を示す文字列値。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ArrangeOverride(System.Windows.Size)">
+      <summary><see cref="T:System.Windows.Controls.Control" />オブジェクトの内容を配置し、そのサイズを設定するために呼び出されます。</summary>
+      <param name="arrangeBounds">内容の配置に使用する計算されたサイズ。</param>
+      <returns>コントロールのサイズ。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.CreateCellEditCommand(System.Object,System.String)">
+      <summary>指定した値からセル編集コマンドを作成します。</summary>
+      <param name="value">新しいセルの値。</param>
+      <returns>セル編集コマンドを表す<see cref="T:GrapeCity.Spreadsheet.Commands.Command" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DeselectNewRow">
+      <summary>新しい行を選択解除します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.GetCell(System.Windows.Media.Visual,System.Int32@,System.Int32@)">
+      <summary>指定した<paramref name="element" />オブジェクトを含むセル位置を取得します。</summary>
+      <param name="element">セルに表示する視覚要素。</param>
+      <param name="position">指定した<paramref name="element" />を基準とした位置。</param>
+      <param name="paneRow"><paramref name="element" />を含む行ペインインデックス。</param>
+      <param name="paneColumn"><paramref name="element" />を含む列ペインインデックス。</param>
+      <returns>セルに指定された要素が含まれています。 行インデックスが-1の場合、セルは新しい行に属します。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.GetCell(System.Windows.Media.Visual,System.Windows.Point,System.Int32@,System.Int32@)">
+      <summary>指定した<paramref name="element" />オブジェクトを含むセル位置を取得します。</summary>
+      <param name="element">セルに表示する視覚要素。</param>
+      <param name="position">指定した<paramref name="element" />を基準とした位置。</param>
+      <param name="paneRow"><paramref name="element" />を含む行ペインインデックス。</param>
+      <param name="paneColumn"><paramref name="element" />を含む列ペインインデックス。</param>
+      <returns>セルに指定された要素が含まれています。 行インデックスが-1の場合、セルは新しい行に属します。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.GetCell(System.Windows.Media.Visual,System.Windows.Input.MouseEventArgs,System.Boolean,System.Int32@,System.Int32@)">
+      <summary>指定した<paramref name="element" />オブジェクトを含むセル位置を取得します。</summary>
+      <param name="element">セルに表示する視覚要素。</param>
+      <param name="e">対応するマウスイベント引数。</param>
+      <param name="paneRow"><paramref name="element" />を含む行ペインインデックス。</param>
+      <param name="paneColumn"><paramref name="element" />を含む列ペインインデックス。</param>
+      <param name="includeAutoMergedCells">
+        自動マージされたセルが含まれている場合は<c>true</c>、それ以外の場合は<c>false</c>。</param>
+      <returns>セルに指定された要素が含まれています。 行インデックスが-1の場合、セルは新しい行に属します。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.GetCell(System.Windows.Media.Visual,System.Windows.Point,System.Boolean,System.Int32@,System.Int32@)">
+      <summary>指定した<paramref name="element" />オブジェクトを含むセル位置を取得します。</summary>
+      <param name="element">セルに表示する視覚要素。</param>
+      <param name="position">指定した<paramref name="element" />を基準とした位置。</param>
+      <param name="paneRow"><paramref name="element" />を含む行ペインインデックス。</param>
+      <param name="paneColumn"><paramref name="element" />を含む列ペインインデックス。</param>
+      <param name="includeAutoMergedCells">
+        自動マージされたセルが含まれている場合は<c>true</c>、それ以外の場合は<c>false</c>。</param>
+      <returns>セルに指定された要素が含まれています。 行インデックスが-1の場合、セルは新しい行に属します。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.GetCellLocation(System.Windows.Point,System.Int32@,System.Int32@)">
+      <summary>指定されたマウス位置のセル位置を取得します。</summary>
+      <param name="position" />
+      <param name="row" />
+      <param name="column" />
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.GetVisualChild(System.Int32)">
+      <summary><see cref="M:System.Windows.Media.Visual.GetVisualChild(System.Int32)" />をオーバーライドし、子要素のコレクションから指定したインデックスにある子を返します。</summary>
+      <param name="index">要求する子要素の、コレクション内での 0 から始まるインデックス。</param>
+      <returns>要求された子要素。null は返されません。指定したインデックスが範囲外の場合は例外がスローされます。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.IsActiveNewCell(System.Int32)">
+      <summary>新しい行のセルがアクティブかどうかを示すブール値を取得します。</summary>
+      <param name="column">新しい行のセルの列インデックス。</param>
+      <returns>
+        新しい行のセルがアクティブである場合、<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.MeasureOverride(System.Windows.Size)">
+      <summary>コントロールを再測定するために呼び出されます。</summary>
+      <param name="constraint">メソッドが返すことができる最大サイズ。</param>
+      <returns>コントロールのサイズ。最大値は<paramref name="constraint" />によって指定されます。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnContextMenuOpening(System.Windows.Controls.ContextMenuEventArgs)">
+      <summary>未処理の <see cref="E:System.Windows.FrameworkElement.ContextMenuOpening" />ルーティングイベントが、その経路上でこのクラスに到達したときに呼び出されます。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Controls.ContextMenuEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnGotFocus(System.Windows.RoutedEventArgs)">
+      <summary>未処理の <see cref="E:System.Windows.UIElement.GotFocus" />イベントが、その経路上でこの要素に到達したときに呼び出されます。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.RoutedEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnGotKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventArgs)">
+      <summary>未処理の<see cref="!:Keyboard.GotKeyboardFocus" />イベントが、その経路上で、このクラスから派生した要素に到達したときに呼び出されます。このイベントに対するクラス処理を追加するには、このメソッドを実装します。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.KeyboardFocusChangedEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnMouseDown(System.Windows.Input.MouseButtonEventArgs)">
+      <summary>未処理の<see cref="!:ouse.MouseDown" />イベントが、その経路上で、このクラスから派生した要素に到達したときに呼び出されます。このイベントに対するクラス処理を追加するには、このメソッドを実装します。</summary>
+      <param name="e">イベントデータを含む <see cref="T:System.Windows.Input.MouseButtonEventArgs" />。このイベントデータは、押されたマウスボタンに関する詳細と Handled 状態を報告します。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnMouseWheel(System.Windows.Input.MouseWheelEventArgs)">
+      <summary>Spreadは、マウスホイールを処理するためのすべての許可を取ります。子コントロールには許可がありません。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.MouseWheelEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnPreviewKeyDown(System.Windows.Input.KeyEventArgs)">
+      <summary>未処理の<see cref="!:Keyboard.PreviewKeyDown" />イベントが、その経路上で、このクラスから派生した要素に到達したときに呼び出されます。このイベントに対するクラス処理を追加するには、このメソッドを実装します。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.KeyEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnPreviewMouseDown(System.Windows.Input.MouseButtonEventArgs)">
+      <summary>未処理の<see cref="!:Mouse.PreviewMouseDown" />ルーティングイベントが、そのルート上で、このクラスから派生した要素に到達すると呼び出されます。 <para>このイベントに対するクラス処理を追加するには、このメソッドを実装します。</para></summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.MouseButtonEventArgs" />。 このイベントデータは、1 つ以上のマウス ボタンが押されたことを報告します。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnPreviewTextInput(System.Windows.Input.TextCompositionEventArgs)">
+      <summary>未処理の<see cref="!:TextCompositionManager.PreviewTextInput" />イベントが、そのルート上で、このクラスから派生した要素に到達すると呼び出されます。 <para>このイベントに対するクラス処理を追加するには、このメソッドを実装します。</para></summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.TextCompositionEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnRender(System.Windows.Media.DrawingContext)">
+      <summary>派生クラスでオーバーライドされると、レイアウトシステムの指示で行われる描画操作に参加します。この要素に対する描画の指示は、このメソッドの呼び出し時に直接使用されるわけではなく、後からレイアウト処理や描画処理で非同期に使用されるときまで保存されます。</summary>
+      <param name="drawingContext">特定の要素に対する描画の指示。 このコンテキストはレイアウトシステムに提供されます。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OnRenderSizeChanged(System.Windows.SizeChangedInfo)">
+      <summary>指定した情報を最終的なイベント データの一部として使用して、<see cref="E:System.Windows.FrameworkElement.SizeChanged" />イベントを発生します。</summary>
+      <param name="sizeInfo">変更に関係する、古いサイズと新しいサイズの詳細。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OpenExcel(System.String,GrapeCity.Spreadsheet.IO.OpenXml.ImportContext)">
+      <summary>Excelファイルを開いて、Spread に読み込みます。</summary>
+      <param name="filename">開くファイルの名前とパス。</param>
+      <param name="context">開く設定を示す <see cref="T:GrapeCity.Spreadsheet.IO.OpenXml.ImportContext" /> オブジェクト。</param>
+      <returns>
+        ファイルが正常に開かれた場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OpenExcel(System.String,GrapeCity.Spreadsheet.IO.OpenXml.ImportOptions)">
+      <summary>Excelファイルを開いて、Spread に読み込みます。</summary>
+      <param name="filename">開くファイルの名前とパス。</param>
+      <param name="options">開く設定を示す <see cref="T:GrapeCity.Spreadsheet.IO.OpenXml.ImportOptions" /> 値。</param>
+      <returns>
+        ファイルが正常に開かれた場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OpenExcel(System.IO.Stream,GrapeCity.Spreadsheet.IO.OpenXml.ImportOptions)">
+      <summary>Excelファイルを開いて、Spread に読み込みます。</summary>
+      <param name="stream">Excelファイルを含むストリーム。</param>
+      <param name="options">開く設定を示す <see cref="T:GrapeCity.Spreadsheet.IO.OpenXml.ImportOptions" /> 値。</param>
+      <returns>
+        ファイルが正常に開かれた場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.OpenExcel(System.IO.Stream,GrapeCity.Spreadsheet.IO.OpenXml.ImportContext)">
+      <summary>Excelファイルを開いて、Spread に読み込みます。</summary>
+      <param name="stream">Excelファイルを含むストリーム。</param>
+      <param name="context">開く設定を示す <see cref="T:GrapeCity.Spreadsheet.IO.OpenXml.ImportContext" /> オブジェクト。</param>
+      <returns>
+        ファイルが正常に開かれた場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Print(System.Int32,GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings,System.Boolean)">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" /> を出力します。</summary>
+      <param name="sheetIndex">印刷するワークシートを示す整数値。 デフォルト値<c>-1</c>は、ワークブック全体が印刷されることを意味します。</param>
+      <param name="printSettings">印刷設定。</param>
+      <param name="showDialog">
+        印刷ダイアログを表示する場合は<c>true</c>、それ以外の場合は<c>false</c>。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.PrintToDocument(System.Int32,GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings)">
+      <summary><see cref="!:GcSpreadSheett" />を、<see cref="T:System.Windows.Controls.DocumentViewer" />コントロールに表示できるドキュメントに出力します。</summary>
+      <param name="sheetIndex">印刷するワークシートを示す整数値。 デフォルト値<c>-1</c>は、ワークブック全体が印刷されることを意味します。</param>
+      <param name="printSettings">印刷設定。</param>
+      <returns>ページ分割された内容を含み、<see cref="T:System.Windows.Controls.DocumentViewer" /> コントロールに表示できる、<see cref="T:System.Windows.Documents.IDocumentPaginatorSource" /> オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Refresh">
+      <summary>Spreadのクライアント領域を無効にし、それ自体を再描画させます。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.Reset">
+      <summary>コンポーネントを最初の状態にリセットします。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ScrollToActiveCell">
+      <summary>アクティブセルまでスクロールします。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ScrollToCell(System.Int32,System.Int32,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.ScrollMode,System.Boolean,System.Boolean)">
+      <summary>指定したセルまでスクロールします。</summary>
+      <param name="paneRow" />
+      <param name="paneColumn" />
+      <param name="modelRow">対象行のインデックス。負の場合、垂直スクロールを無視します。</param>
+      <param name="modelColumn">対象列のインデックス。負の場合、水平スクロールを無視します。</param>
+      <param name="mode" />
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.SelectNewRow(System.Int32,System.Int32,System.Int32)">
+      <summary>新しい行に範囲を選択します。</summary>
+      <param name="column">選択範囲の左端の列のインデックスを示す整数値。</param>
+      <param name="column2">選択範囲の右端の列のインデックスを示す整数値。</param>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.BeforeRightClick">
+      <summary>デフォルトの右クリックアクションの前に、オブジェクトが右クリックされたときに発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataItemCreated">
+      <summary>新しいデータ項目が作成されたときに発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.ExtensionResolve">
+      <summary>拡張機能の解決が失敗したときに発生します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GradientColorStopInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GradientColorStopInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.GradientInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GradientInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.IndexColorInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.IndexColorInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.InteriorInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.InteriorInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.Color">
+      <summary>解説セクションの表に示されているように、オブジェクトの基本色を取得または設定します。</summary>
+      <value>オブジェクトの基本色を表す<see cref="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.Color" />値。</value>
+      <remarks>戻り値は、内部記憶から保存された値です。 インデックスカラーの場合、<see cref="!:ColorIndex" />とは異なります。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.Gradient">
+      <summary>選択範囲のInteriorオブジェクトのIGradientプロパティを取得します。</summary>
+      <value>内部のグラデーションを表す<see cref="T:GrapeCity.Spreadsheet.IGradient" />オブジェクト。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.Pattern">
+      <summary>内部パターンを表す<see cref="T:GrapeCity.Spreadsheet.PatternType" />値を取得または設定します。</summary>
+      <value>内部パターンを表す<see cref="T:GrapeCity.Spreadsheet.PatternType" />値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.PatternColor">
+      <summary>内部パターンの色を取得または設定します。</summary>
+      <value>内部パターンの色を表す<see cref="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.Color" />値。</value>
+      <remarks>戻り値は、内部記憶から保存された値です。 インデックスカラーの場合、<see cref="!:ColorIndex" />とは異なります。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.PatternTintAndShade">
+      <summary>パターン色の明暗を指定する値を取得または設定します。</summary>
+      <value>TintAndShadeプロパティには、-1（最も暗い）～1（最も明るい）の数値を指定できます。0は中間的な明るさです。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.InteriorInfo.TintAndShade">
+      <summary>色の明暗を指定する値を取得または設定します。</summary>
+      <value>TintAndShadeプロパティには、-1（最も暗い）～1（最も明るい）の数値を指定できます。0は中間的な明るさです。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.LinearGradientInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.LinearGradientInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.NameInfo">
+      <summary>定義名を表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.NameInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.NameInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.NameInfo.Comment">
+      <summary>この定義名に関連付けられたコメントを取得または設定します。</summary>
+      <value>この定義名に関連付けられたコメントを表す文字列値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.NameInfo.Name">
+      <summary>定義名の名前を取得または設定します。</summary>
+      <value>定義名の名前を表す文字列値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.NameInfo.RefersTo">
+      <summary>定義名が参照しているA1形式の数式を取得します。</summary>
+      <param name="contextRow">コンテキスト行インデックスを示す整数値。</param>
+      <param name="contextColumn">コンテキスト列インデックスを示す整数値。</param>
+      <value>定義名が参照している数式を表す文字列値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.NameInfo.Scope">
+      <summary>名前のスコープをローカルワークシートとして取得します。</summary>
+      <value>名前のスコープを示す<see cref="T:GrapeCity.Spreadsheet.Worksheet" />オブジェクト。名前のスコープがワークブック全体である場合は<c>null</c>を返します。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.NameInfo.Visible">
+      <summary>この定義名がユーザーに表示されるかどうかを決定するプロパティを取得または設定します。</summary>
+      <value>
+        この定義名が表示される場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.NameInfoCollection">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.NameInfo" />のコレクションを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.PaintingContext">
+      <summary>描画コンテキストを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.Culture">
+      <summary>現在の文化を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.EditingWorksheet">
+      <summary>編集されたワークシートかどうかを示す<see cref="T:GrapeCity.Spreadsheet.IWorksheet" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.HoverCellBackground">
+      <summary>ホバーしたセルの背景を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.HoverManager">
+      <summary>背景のホバリングマネージャ。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.Spread">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロールを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.ViewMode">
+      <summary>セルの表示モードを示す<see cref="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.ViewMode" />値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.Workbook">
+      <summary>現在のワークブックを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.Worksheet">
+      <summary>現在のワークシートを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PaintingContext.ZoomScale">
+      <summary>現在のビューのウィンドウズーム率（%）を取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.PaintingContext.GetBackground(GrapeCity.Wpf.SpreadSheet.CellData)">
+      <summary>セルの背景を取得します。</summary>
+      <param name="cellData"><see cref="T:GrapeCity.Wpf.SpreadSheet.CellData" />オブジェクトはセルデータを示します。</param>
+      <returns>セルの背景を表す<see cref="T:System.Windows.Media.Brush" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.PaintingContext.GetBrush(GrapeCity.Spreadsheet.Fill)">
+      <summary><see cref="T:GrapeCity.Spreadsheet.Fill" />値を<see cref="T:System.Windows.Media.Brush" />オブジェクトに変換します。</summary>
+      <param name="color">カラー値。</param>
+      <returns>変換した<see cref="T:System.Windows.Media.Brush" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.PaintingContext.GetBrush(GrapeCity.Spreadsheet.Color)">
+      <summary><see cref="T:GrapeCity.Spreadsheet.Color" />値を<see cref="T:System.Windows.Media.Brush" />オブジェクトに変換します。</summary>
+      <param name="color">カラー値。</param>
+      <returns>変換した<see cref="T:System.Windows.Media.Brush" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.PaintingContext.GetNormalStyleFormat">
+      <summary>標準スタイル書式を取得します。</summary>
+      <returns>標準スタイル書式を表す<see cref="T:GrapeCity.Spreadsheet.StyleFormat" />値。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.PropertyDataField">
+      <summary>データソースの値を取得または設定するために使用された<see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfo" />プロパティ名を指定します。</summary>
+      <example> 次の例は、<see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />をデータソースにバインドし、<see cref="T:GrapeCity.Wpf.SpreadSheet.PropertyDataField" />および<see cref="T:GrapeCity.Wpf.SpreadSheet.BindingDataField" />を使用してすべての列のバインディングを設定します。 <code lang="CS" source="XmlCommentsSampleCode_CS\Column.cs" region="Column_DataField" /><code lang="VB" source="XmlCommentsSampleCode_VB\Column.vb" region="Column_DataField" /></example>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.PropertyDataField.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.PropertyDataField" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.Converter">
+      <summary>データソースの値を取得または設定するときに使用するコンバータを取得または設定します。</summary>
+      <value><see cref="T:System.Windows.Data.IValueConverter" />型の値。デフォルト値は<c>null</c>です。</value>
+      <example> 次の例は、<see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />をデータソースにバインドし、<see cref="T:GrapeCity.Wpf.SpreadSheet.PropertyDataField" />および<see cref="T:GrapeCity.Wpf.SpreadSheet.BindingDataField" />を使用してすべての列のバインディングを設定します。 <code lang="CS" source="XmlCommentsSampleCode_CS\Column.cs" region="Column_DataField" /><code lang="VB" source="XmlCommentsSampleCode_VB\Column.vb" region="Column_DataField" /></example>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.ConverterCulture">
+      <summary>コンバータを評価するカルチャを取得または設定します。</summary>
+      <value><see cref="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.Converter" />に渡すカルチャ。値が<c>null</c>の場合は、<see cref="P:System.Globalization.CultureInfo.CurrentCulture" />が使用されます。デフォルト値は<c>null</c>です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.ConverterParameter">
+      <summary><see cref="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.Converter" />に渡すパラメーターを取得または設定します。</summary>
+      <value><see cref="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.Converter" />に渡すパラメーター。デフォルト値は<c>null</c>です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.PropertyDataField.Property">
+      <summary>プロパティ名を取得または設定します。</summary>
+      <value>プロパティ名を示す<c>string</c>。データソース内のデータ項目のプロパティまたはデータテーブルの列名である可能性があります。値が<c>null</c>の場合、データソースから値を取得するときにデータ項目が返され、設定できません。デフォルト値は<c>null</c>です。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.RangeInfo">
+      <summary>シートの範囲を表すインターフェイス。このクラスは<see langword="abstract" />であるため、初期化できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.RangeInfo.Column">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最初の列の0から始まる列番号を取得します。</summary>
+      <value>最初の列の0から始まる列番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最初の領域の最初の列番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.RangeInfo.Column2">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最後の列の0から始まる列番号を取得します。</summary>
+      <value>最後の列の0から始まる列番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最後の領域の最初の列番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.RangeInfo.Row">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最初の行の0から始まる行番号を取得します。</summary>
+      <value>最初の行の0から始まる行番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最初の領域の最初の行番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.RangeInfo.Row2">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最後の行の0から始まる行番号を取得します。</summary>
+      <value>最後の行の0から始まる行番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最後の領域の最初の行番号が返されます。</remarks>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SelectionInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SelectionInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SelectionInfo.Column">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最初の列の0から始まる列番号を取得します。</summary>
+      <value>最初の列の0から始まる列番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最初の領域の最初の列番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SelectionInfo.Column2">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最後の列の0から始まる列番号を取得します。</summary>
+      <value>最後の列の0から始まる列番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最後の領域の最初の列番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SelectionInfo.Row">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最初の行の0から始まる行番号を取得します。</summary>
+      <value>最初の行の0から始まる行番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最初の領域の最初の行番号が返されます。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SelectionInfo.Row2">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />の最後の行の0から始まる行番号を取得します。</summary>
+      <value>最後の行の0から始まる行番号を示す整数。</value>
+      <remarks>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />に複数の領域が含まれている場合は、最後の領域の最初の行番号が返されます。</remarks>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SelectionInfoCollection">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SelectionInfo" />のコレクションを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SharedObjects">
+      <summary>共有オブジェクトマネージャを表します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SharedObjects.Clear">
+      <summary>すべてのキャッシュしたデータをクリアします。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SharedObjects.GetBrush(GrapeCity.Spreadsheet.Color@)">
+      <summary><see cref="T:System.Windows.Media.Brush" />オブジェクトを <see cref="T:GrapeCity.Spreadsheet.Color" /> 値から取得します。</summary>
+      <param name="color"><see cref="T:System.Windows.Media.Brush" />オブジェクト。</param>
+      <returns><see cref="T:GrapeCity.Spreadsheet.Color" />値。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SharedObjects.GetBrush(GrapeCity.Spreadsheet.Fill@)">
+      <summary><see cref="T:System.Windows.Media.Brush" />オブジェクトを <see cref="T:GrapeCity.Spreadsheet.Color" /> 値から取得します。</summary>
+      <param name="color"><see cref="T:System.Windows.Media.Brush" />オブジェクト。</param>
+      <returns><see cref="T:GrapeCity.Spreadsheet.Fill" />値。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SharedObjects.GetColor(GrapeCity.Spreadsheet.Color@)">
+      <summary><see cref="T:System.Windows.Media.Color" />値を <see cref="T:GrapeCity.Spreadsheet.Color" /> 値から取得します。</summary>
+      <param name="color"><see cref="T:System.Windows.Media.Color" />値。</param>
+      <returns><see cref="T:GrapeCity.Spreadsheet.Color" />値。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SheetInfo">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />内のシートを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.AutoGenerateColumns">
+      <summary>列が自動的に作成されるかどうかを示す値を取得または設定します。</summary>
+      <value>
+        列が自動的に作成される場合は<see langword="true" />、それ以外の場合は<see langword="false" />。デフォルト値は<see langword="true" />です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Behaviors">
+      <summary>操作の動作を取得または設定します。</summary>
+      <value>操作の動作を表す<see cref="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Behaviors" />値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.ColumnCount">
+      <summary>この <see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" /> 内の列数を取得または設定します。</summary>
+      <value>この <see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" /> の列数を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Columns">
+      <summary>シートにある列の<see cref="T:GrapeCity.Wpf.SpreadSheet.ColumnInfoCollection" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.DataAllowAddNew">
+      <summary>シートが連結されている場合、ユーザーに新しい行の追加を許可するかどうかを取得または設定します。</summary>
+      <value>
+        新しい行を追加できる場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.DataSource">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />の行の生成に使用されるデータソースを取得または設定します。</summary>
+      <value><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />の行の生成に使用されるデータソース。デフォルト値は<c>null</c>です。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Name">
+      <summary>シートの名前を取得または設定します。</summary>
+      <value>シートの名前を示す文字列値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.RowCount">
+      <summary>この <see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" /> 内の行数を取得または設定します。</summary>
+      <value>この <see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" /> の行数を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Selections">
+      <summary>シート内の選択範囲の<see cref="T:GrapeCity.Wpf.SpreadSheet.SelectionInfoCollection" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Sort">
+      <summary>シート内のソートの<see cref="T:GrapeCity.Wpf.SpreadSheet.SortInfo" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.SummaryColumn">
+      <summary>アウトラインの集計列の位置を取得または設定します。</summary>
+      <value>アウトラインの詳細列に対する集計列の位置。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.SummaryRow">
+      <summary>アウトラインの集計行の位置を取得または設定します。</summary>
+      <value>アウトラインの詳細行に対する集計行の位置。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfo.Visible">
+      <summary>シートが表示されるかどうかを決定する<see cref="T:GrapeCity.Spreadsheet.SheetVisibility" />値を取得または設定します。</summary>
+      <value>シートが表示されるかどうかを示す<see cref="T:GrapeCity.Spreadsheet.SheetVisibility" />値を返します。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetInfo" />のコレクションを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection.Count">
+      <summary>コレクションに含まれるシートの数を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection.Item(System.Int32)">
+      <summary>指定したインデックスにあるシートを取得します。</summary>
+      <param name="index">インデックスを示す<c>int</c>値。</param>
+      <value>指定したインデックスにあるシート。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection.Add">
+      <summary>コレクションにシートを追加します。</summary>
+      <returns>追加されたシートのインデックス。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection.Clear">
+      <summary>コレクションをクリアします。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection.IndexOf(GrapeCity.Wpf.SpreadSheet.SheetInfo)">
+      <summary>シートのインデックスを取得します。</summary>
+      <param name="item">インデックスを取得するシート。</param>
+      <returns>シートのインデックス。<c>-1</c>は項目がリストに存在しないことを意味します。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetInfoCollection.RemoveAt(System.Int32)">
+      <summary>コレクションからシートを削除します。</summary>
+      <param name="index">削除するシートの位置を示す<c>int</c>値。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetStyles.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetStyles" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SheetView.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SheetView" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.DefaultGridlineColor">
+      <summary>消費アプリケーションがデフォルトのグリッド線の色（システムに依存）を使用するかどうかを示す値を取得または設定します。colorIdで指定された色をオーバーライドします。</summary>
+      <value>
+        消費アプリケーションがデフォルトのグリッド線の色を使用する場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.DisplayGridlines">
+      <summary>このシートにグリッド線が表示されるかどうかを示す値を取得または設定します。</summary>
+      <value>
+        このシートにグリッド線が表示される場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.DisplayHeadings">
+      <summary>シートに行および列見出しが表示されるかどうかを示す値を取得または設定します。</summary>
+      <value>
+        シートに行および列見出しが表示される場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.DisplayOutline">
+      <summary>シートにアウトライン記号が表示されているかどうかを示す値を取得または設定します。</summary>
+      <value>
+        シートにアウトライン記号が表示されている場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.DisplayZeros">
+      <summary>このウィンドウが、ゼロの値を含むセルに0を表示するかどうかを示す値を取得または設定します。</summary>
+      <value>
+        このウィンドウが、ゼロの値を含むセルに0を表示する場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.FreezePanes">
+      <summary>分割されたペインが固定されるかどうかを示す値を取得または設定します。</summary>
+      <value>
+        分割されたペインが固定される場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+      <remarks><see cref="P:GrapeCity.Wpf.SpreadSheet.SheetView.FreezePanes" />が<c>true</c>であり、<see cref="P:GrapeCity.Wpf.SpreadSheet.SheetView.Split" />が<c>false</c>である、またはその逆の可能性があります。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.GridlineColorIndex">
+      <summary>グリッド線の色を取得または設定します。これはRGB値ではなくインデックスカラー値（ICV）です。</summary>
+      <value>グリッド線の色を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.Split">
+      <summary>シートビューが分割されているかどうかを示す値を取得または設定します。</summary>
+      <value>
+        シートビューが分割されている場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+      <remarks><see cref="P:GrapeCity.Wpf.SpreadSheet.SheetView.FreezePanes" />が<c>true</c>であり、<see cref="P:GrapeCity.Wpf.SpreadSheet.SheetView.Split" />が<c>false</c>である、またはその逆の可能性があります。</remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.SplitColumn">
+      <summary>ウィンドウをペインに分割する位置を示す列番号（分割線の左にある列の数）を取得または設定します。</summary>
+      <value>分割列を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.SplitHorizontal">
+      <summary>分割された水平ウィンドウの位置（ポイント単位）を取得または設定します。</summary>
+      <value>分割された水平ウィンドウの位置（ポイント単位）を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.SplitRow">
+      <summary>ウィンドウをペインに分割する位置を示す行番号（分割線の上にある行の数）を取得または設定します。</summary>
+      <value>分割行を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.SplitVertical">
+      <summary>分割された垂直ウィンドウの位置（ポイント単位）を取得または設定します。</summary>
+      <value>分割された垂直ウィンドウの位置（ポイント単位）を表す整数値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.TabSelected">
+      <summary>このシートが選択されているかどうかを示す値を取得または設定します。</summary>
+      <value>
+        このシートが選択されている場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SheetView.ZoomScale">
+      <summary>現在のビューのウィンドウズーム率（%）を取得または設定します。</summary>
+      <value>現在のビューのウィンドウズーム率（%）を表す整数値。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SortFieldInfo">
+      <summary>すべてのソート情報を含むオブジェクトを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SortFieldInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SortFieldInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortFieldInfo.DataOption">
+      <summary>SortFieldオブジェクトで指定された範囲内のテキストの並べ替え方法を示すデータオプションを取得または設定します。</summary>
+      <value>テキストの並べ替え方法を示すデータオプション。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortFieldInfo.Key">
+      <summary>現在並べ替えられている範囲を取得します。</summary>
+      <value>現在並べ替えられている範囲。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortFieldInfo.Order">
+      <summary>キーで指定された値の並べ替え順序を取得または設定します。</summary>
+      <value>キーで指定された値の並べ替え順序。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortFieldInfo.SortOn">
+      <summary>セルの並べ替えの基準となる属性を取得または設定します。</summary>
+      <value>セルの並べ替えの基準となる属性を表す<see cref="T:GrapeCity.Spreadsheet.SortOn" />値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortFieldInfo.SortOnValue">
+      <summary>指定した<see cref="T:GrapeCity.Spreadsheet.ISortField" />オブジェクトの、並べ替えの基準となる値を取得します。</summary>
+      <value>指定した<see cref="T:GrapeCity.Spreadsheet.ISortField" />オブジェクトの、並べ替えの基準となる値。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.SortInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SortInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortInfo.Header">
+      <summary>最初の行に見出し情報が含まれているかどうかを示す値を取得または設定します。</summary>
+      <value>
+        最初の行に見出し情報が含まれている場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortInfo.MatchCase">
+      <summary>並べ替えの際に大文字と小文字を区別するかどうかを示す値を取得または設定します。</summary>
+      <value>
+        並べ替えの際に大文字と小文字を区別する場合は<c>true</c>、大文字と小文字を区別しない場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortInfo.Orientation">
+      <summary>並べ替えの方向を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortInfo.Range">
+      <summary>並べ替えを行う値の範囲を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.SortInfo.SortFields">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.SortInfo" />内のソートフィールドの<see cref="T:GrapeCity.Wpf.SpreadSheet.SortFieldInfoCollection" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Borders">
+      <summary>指定したオブジェクトの境界線を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.BordersInfo" />オブジェクトを取得します。</summary>
+      <value>指定したオブジェクトの境界線。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.CellType">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />のセルのセル型を取得または設定します。</summary>
+      <value>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />のセル型。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Font">
+      <summary>指定したオブジェクトのフォントを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.FontInfo" />オブジェクトを取得します。</summary>
+      <value>指定したオブジェクトのフォント。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.HorizontalAlignment">
+      <summary>水平方向の配置を取得または設定します。</summary>
+      <value>水平方向の配置。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.IndentLevel">
+      <summary>インデントレベルを取得または設定します。</summary>
+      <value>インデントレベル。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Interior">
+      <summary>指定したオブジェクトの内部を表す<see cref="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Interior" />オブジェクトを取得します。</summary>
+      <value>指定したオブジェクトの内部。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Locked">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.RangeInfo" />がロックされているかどうかを示す値を取得または設定します。</summary>
+      <value>
+        ロックされている場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.NumberFormat">
+      <summary>現在のセルの数値書式を取得または設定します。</summary>
+      <value>数値書式。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Orientation">
+      <summary>テキストの向きを取得または設定します。</summary>
+      <value>テキストの向きを表す整数値。</value>
+      <remarks><see cref="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Orientation" />に設定できる特別な値があります。<see cref="T:GrapeCity.Spreadsheet.Alignment" />から見つけることができます。 <para> 横書きテキスト：<see cref="F:GrapeCity.Spreadsheet.Alignment.HorizontalText" /></para><para> 上向きのテキスト：<see cref="F:GrapeCity.Spreadsheet.Alignment.UpwardText" /></para><para> 下向きのテキスト：<see cref="F:GrapeCity.Spreadsheet.Alignment.DownwardText" /></para><para> 縦書きテキスト：<see cref="F:GrapeCity.Spreadsheet.Alignment.VerticalText" /></para></remarks>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.ShrinkToFit">
+      <summary>使用可能な列の幅に収まるようにテキストを自動的に縮小するかどうかを示す値を取得または設定します。</summary>
+      <value>
+        テキストを自動的に縮小する場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.Style">
+      <summary>セルのスタイルを取得または設定します。</summary>
+      <value>セルのスタイルを表す<see cref="T:GrapeCity.Spreadsheet.BuiltInStyle" />値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.StyleName">
+      <summary>セルのスタイルを取得または設定します。</summary>
+      <value>セルのスタイルを表す文字列値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.VerticalAlignment">
+      <summary>垂直方向の配置を取得または設定します。</summary>
+      <value>垂直方向の配置。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.StyleObjectInfo.WrapText">
+      <summary>オブジェクト内のテキストが折り返されるかどうかを示す値を取得または設定します。</summary>
+      <value>
+        オブジェクト内のテキストが折り返される場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.ThemeColorInfo.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ThemeColorInfo" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.TreeHelper.FindVisualParrent``1(System.Windows.DependencyObject)">
+      <summary>ビジュアルオブジェクトの親を表す<see cref="!:T" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.TreeHelper.IsBelongTo(System.Windows.DependencyObject,System.Windows.DependencyObject)">
+      <summary><paramref name="originalSource" />が<paramref name="container" />に属している必要があるかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.ValidationErrorIndicator">
+      <summary>セルの検証エラーを表示します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.ValidationErrorIndicator.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.ValidationErrorIndicator" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ValidationErrorIndicator.IsActived">
+      <summary>このインスタンスがフォーカスを取得したかどうかを示す値を取得します。</summary>
+      <value>
+        このインスタンスがフォーカスを取得した場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ValidationErrorIndicator.IsEditError">
+      <summary>編集値が無効かどうかを示す値を取得します。</summary>
+      <value>
+        このインスタンスが無効な場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.ValidationErrorIndicator.IsInvalid">
+      <summary>現在の値が無効かどうかを示す値を取得します。</summary>
+      <value>
+        値が無効な場合は<c>true</c>、それ以外の場合は<c>false</c>。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellLocation">
+      <summary>セルの位置への参照を表します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellLocation.#ctor(GrapeCity.Wpf.SpreadSheet.SpreadsheetAreas,System.Int32,System.Int32)">
+      <summary><see cref="T:GrapeCity.Spreadsheet.Reference" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="area">セルの領域を示す<see cref="T:GrapeCity.Wpf.SpreadSheet.SpreadsheetAreas" />値。</param>
+      <param name="row">セルの一番上の行のインデックスを示す整数値。</param>
+      <param name="column">セルの左端の列のインデックスを示す整数値。</param>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.CellLocation.Empty">
+      <summary>静的な空の<see cref="T:GrapeCity.Wpf.SpreadSheet.CellLocation" />を表す値を取得します。 このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellLocation.Area">
+      <summary>セルの領域を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellLocation.Column">
+      <summary>セルの列インデックスを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellLocation.Row">
+      <summary>セルの行インデックスを取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellLocation.IsEmpty">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.CellLocation" />値が空かどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.IFormulaEditor">
+      <summary>数式の編集をサポートするセルエディタを表します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.CanChangeReferenceSource">
+      <summary>他のワークシートからの参照を選択できるかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.CurrentPosition">
+      <summary>現在のキャレット位置を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.FocusOnWorkingSheet">
+      <summary>選択した参照のワークシートをアクティブにするかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.Foreground">
+      <summary>エディタの背景を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.FormulaAsRelative">
+      <summary>エディタが相対参照を優先するかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.IncludeReferenceSource">
+      <summary>ワークシートが選択した参照に含まれるかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.IncludeStructureObjectReference">
+      <summary>エディタが構造化オブジェクト式として参照を選択できるかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.IsAppendingMode">
+      <summary>???</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.IsSupportedFormula">
+      <summary>エディタが参照の選択をサポートするかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.SelectionLength">
+      <summary>選択範囲の長さを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.SelectionStart">
+      <summary>選択の開始位置を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.StartWithEqualSign">
+      <summary>エディタが「=」で始まるかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.Text">
+      <summary>エディタのテキストを取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.ApplyStyleForRange(System.Int32,System.Int32,System.Windows.Media.Brush)">
+      <summary>エディタで指定したテキストに色を設定します。</summary>
+      <param name="charIndex">変更されたテキストの開始位置。</param>
+      <param name="charLength">変更されたテキストの長さ。</param>
+      <param name="color">新しい色。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.SelectEntireText">
+      <summary>テキスト全体を選択します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.Clicked">
+      <summary>ユーザーがエディタをクリックするときに発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.FormulaChanged">
+      <summary>マウスの選択によって数式が変更された後に発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.OnKeyDown">
+      <summary>ユーザーがキーを押したときに発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.IFormulaEditor.TextChanged">
+      <summary>エディタのテキストが変更されたときに発生します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.AutoFitMode">
+      <summary>ユーザーが自動調整できることを示します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.AutoFitMode.None">
+      <summary>行/列の自動調整ができません。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.AutoFitMode.Column">
+      <summary>列の自動調整のみができます。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.AutoFitMode.Row">
+      <summary>行の自動調整のみができます。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.AutoFitMode.All">
+      <summary>行と列の両方を自動調整できます。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DataValidationStyle">
+      <summary>データ検証のマークスタイルを取得します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DataValidationStyle.RedEllipse">
+      <summary>セルの中央に配置された赤い楕円。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DataValidationStyle.RedTriangle">
+      <summary>セルの右上に配置された赤い三角形。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DataValidationStyle.GreenTriangle">
+      <summary>セルの左上に配置された緑の三角形。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DragDropMode">
+      <summary>ユーザーがドラッグ＆ドロップができることを示します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DragDropMode.None">
+      <summary>ユーザーがドラッグ＆ドロップすることができません。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DragDropMode.Range">
+      <summary>ユーザーがセル範囲をドラッグ＆ドロップできるようにします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DragDropMode.Column">
+      <summary>ユーザーが列（1つ以上）をドラッグ＆ドロップできるようにします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DragDropMode.Row">
+      <summary>ユーザーが行（1つ以上）をドラッグ＆ドロップできるようにします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.DragDropMode.All">
+      <summary>ユーザーがセル範囲、列、行をドラッグ＆ドロップできるようにします。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の水平方向のスクロール方法を指定します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode.Column">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />を列単位でスクロールします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode.Pixel">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />をピクセル単位でスクロールします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.HorizontalScrollMode.PixelAndColumn">
+      <summary>ピクセル単位で<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />をスクロールしますが、スクロールが終了すると、列単位に切り替えます。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.MergedCellSelectionPolicy">
+      <summary>セル結合を扱うときの選択のタイプを表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.MergedCellSelectionPolicy.Default">
+      <summary>選択のデフォルト動作を指定します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.MergedCellSelectionPolicy.Ignore">
+      <summary>選択が結合したセルを無視することを指定します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.MergedCellSelectionPolicy.Contained">
+      <summary>選択が範囲に含まれることを指定します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.MergedCellSelectionPolicy.Intersected">
+      <summary>選択した範囲と交差するすべての範囲を含む選択範囲を指定します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.ScrollMode">
+      <summary>ビューポートをスクロールする方法を表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.ScrollMode.TopLeft">
+      <summary>アンカーセルが左上のセルになる位置までスクロールします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.ScrollMode.Nearest">
+      <summary>アンカーセルを表示するために、最小限にスクロールします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.ScrollMode.Center">
+      <summary>アンカーセルがビューポートの中央にある位置までスクロールします。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SelectionStyle">
+      <summary>選択したセルの表示スタイルを指定します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.Renderer">
+      <summary>セルが選択されたときのレンダラのデフォルト設定を使用します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.Color">
+      <summary>セルが選択されている場合、選択色を使用します。</summary>
+      <remarks>このオプションでは、選択したセルを再描画する必要があります。 選択したセルが大きい場合、描画のパフォーマンスが低下する可能性があります。</remarks>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.None">
+      <summary>選択中のセルの表示方法を変更しません。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SelectionStyle.Both">
+      <summary>セルが選択されている場合、選択色の設定とレンダラーの両方を使用します。</summary>
+      <remarks>このオプションでは、選択したセルを再描画する必要があります。 選択したセルが大きい場合、描画のパフォーマンスが低下する可能性があります。</remarks>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.SpreadsheetAreas">
+      <summary>Spreadコントロールの領域を表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SpreadsheetAreas.Worksheet">
+      <summary>ワークシート。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SpreadsheetAreas.ColumnHeader">
+      <summary>列ヘッダ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.SpreadsheetAreas.RowHeader">
+      <summary>行ヘッダ。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の垂直方向のスクロール方法を指定します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode.Row">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />を行単位でスクロールします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode.Pixel">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />をピクセル単位でスクロールします。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.VerticalScrollMode.PixelAndRow">
+      <summary>ピクセル単位で<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />をスクロールしますが、スクロールが終了すると、行単位に切り替えます。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.ViewMode">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の表示モードを表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.ViewMode.Normal">
+      <summary>通常の編集可能なスプレッドシート。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.ViewMode.ViewOnly">
+      <summary>編集不可能なスプレッドシート。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.ViewMode.Print">
+      <summary>スプレッドシートを印刷します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.BeforeRightClickEventHandler">
+      <summary><see cref="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataItemCreated" />ルーティングイベントを処理するメソッドを表します。</summary>
+      <param name="sender">イベントのハンドラーがアタッチされているオブジェクト。</param>
+      <param name="e">イベントのデータ。</param>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.DataItemCreatedEventHandler">
+      <summary><see cref="E:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet.DataItemCreated" />ルーティングイベントを処理するメソッドを表します。</summary>
+      <param name="sender">イベントのハンドラーがアタッチされているオブジェクト。</param>
+      <param name="e">イベントのデータ。</param>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.CellBackground">
+      <summary>セルの背景コントロールを表します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellBackground.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.CellBackground" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellBackground.OnMouseEnter(System.Windows.Input.MouseEventArgs)">
+      <summary>未処理の<see cref="F:System.Windows.Input.Mouse.MouseEnterEvent" />添付イベントが、この要素で発生したときに呼び出されます。このイベントに対するクラス処理を追加するには、このメソッドを実装します。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.MouseEventArgs" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellBackground.OnMouseLeave(System.Windows.Input.MouseEventArgs)">
+      <summary>未処理の<see cref="F:System.Windows.Input.Mouse.MouseLeaveEvent" />添付イベントが、この要素で発生したときに呼び出されます。このイベントに対するクラス処理を追加するには、このメソッドを実装します。</summary>
+      <param name="e">イベントデータを含む<see cref="T:System.Windows.Input.MouseEventArgs" />。</param>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase">
+      <summary>任意のセル型の基本クラスを表します。このクラスは <see langword="abstract" /> であるため、初期化できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.CancelCommand">
+      <summary>編集が停止されますが、古い値が保持されます。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.UniqueKey">
+      <summary>セル型の一意<see cref="T:System.Guid" />キーを取得します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.Clone">
+      <summary>このセル型をクローンします。</summary>
+      <returns>このセル型のクローンしたインスタンスを表す<see cref="T:GrapeCity.Spreadsheet.ICellType" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.ContainsFocus(System.Windows.FrameworkElement,System.Windows.IInputElement)">
+      <summary><paramref name="element" />のフォーカス範囲が<paramref name="editor" />に属するかどうかを示すブール値を取得します。</summary>
+      <param name="editor">セルエディタを示す <see cref="T:System.Windows.FrameworkElement" /> オブジェクト。</param>
+      <param name="element">フォーカスした要素を示す <see cref="T:System.Windows.IInputElement" /> オブジェクト。</param>
+      <returns>
+        <paramref name="element" />のフォーカス範囲が<paramref name="editor" />に属する場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.Export(System.Xml.XmlWriter,GrapeCity.Spreadsheet.IO.OpenXml.ExportContext)">
+      <summary>セル型のデータをエクスポートします。</summary>
+      <param name="writer">XMLライターを示す <see cref="T:System.Xml.XmlWriter" /> オブジェクト。</param>
+      <param name="context">エクスポートコンテキストを示す <see cref="T:GrapeCity.Spreadsheet.IO.OpenXml.ExportContext" /> オブジェクト。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.GetEditingCommand(GrapeCity.Spreadsheet.Worksheet,System.Int32,System.Int32,System.Boolean,GrapeCity.Wpf.SpreadSheet.CellData,System.Windows.FrameworkElement)">
+      <summary>編集後に実行される編集コマンドを取得します。</summary>
+      <param name="worksheet">編集ワークシート。</param>
+      <param name="row">編集セルの行インデックス。</param>
+      <param name="column">編集セルの列インデックス。</param>
+      <param name="arrayFormula">
+        編集コマンドを配列数式として作成する必要がある場合は<c>true</c>、それ以外の場合は<c>false</c>。</param>
+      <param name="cellData">現在のセルのデータ。</param>
+      <param name="editor">セルエディタを示す <see cref="T:System.Windows.FrameworkElement" /> オブジェクト。</param>
+      <returns>編集コマンドを表す<see cref="T:GrapeCity.Spreadsheet.Commands.Command" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.GetEditingElement(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData,System.EventArgs)">
+      <summary>指定したセルの編集要素を取得します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">編集セルの行インデックス。</param>
+      <param name="column">編集セルの列インデックス。</param>
+      <param name="cellData">現在のセルのデータ。</param>
+      <param name="eventArgs">編集に関連付けられた<see cref="T:System.EventArgs" />オブジェクト。</param>
+      <returns>編集要素を表す<see cref="T:System.Windows.FrameworkElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.GetEditingValue(GrapeCity.Spreadsheet.Worksheet,System.Int32,System.Int32,System.Windows.FrameworkElement)">
+      <summary>編集した値を表す編集オブジェクトを取得します。</summary>
+      <param name="worksheet">編集ワークシート。</param>
+      <param name="row">編集セルの行インデックス。</param>
+      <param name="column">編集セルの列インデックス。</param>
+      <param name="editor">セルエディタを示す <see cref="T:System.Windows.FrameworkElement" /> オブジェクト。</param>
+      <returns>編集値を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.GetFormatter(System.Globalization.CultureInfo)">
+      <summary>セルのデータをテキストとして書式するために使用される<see cref="T:GrapeCity.Spreadsheet.IFormatter" />オブジェクトを取得します。</summary>
+      <param name="culture"><see cref="T:GrapeCity.Spreadsheet.IFormatter" />オブジェクトの指定したカルチャ。</param>
+      <returns>セルデータをテキストとして書式するために使用される<see cref="T:GrapeCity.Spreadsheet.IFormatter" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.GetPreferredHeight(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Object,GrapeCity.Spreadsheet.CfExecutedResult@,System.Double)">
+      <summary>セルのコンテンツ全体を表示するために使用される最適なセルの高さを取得します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="cellValue">セル値。</param>
+      <param name="cellFormat">セルの書式設定。</param>
+      <param name="width">現在のセル幅。</param>
+      <returns>セルのコンテンツ全体を表示できる優先セルの高さ。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.GetPreferredWidth(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Object,GrapeCity.Spreadsheet.CfExecutedResult@,System.Double)">
+      <summary>セルのコンテンツ全体を表示するために使用される最適なセルの幅を取得します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="cellValue">セル値。</param>
+      <param name="cellFormat">セルの書式設定。</param>
+      <param name="height">現在のセルの高さ。</param>
+      <returns>セルのコンテンツ全体を表示できる優先セルの幅。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.Import(System.Xml.XmlReader,GrapeCity.Spreadsheet.IO.OpenXml.ImportContext)">
+      <summary>セル型のデータをインポートします。</summary>
+      <param name="reader">XMLリーダーを表す <see cref="T:System.Xml.XmlReader" /> オブジェクト。</param>
+      <param name="context">インポートコンテキストを示す <see cref="T:GrapeCity.Spreadsheet.IO.OpenXml.ImportContext" /> オブジェクト。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.IsFormulaEditorSupported">
+      <summary>エディタが数式の編集をサポートすることを示すブール値を取得します。</summary>
+      <returns>
+        エディタが数式の編集をサポートする場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.IsRequiredExport">
+      <summary>セル型のデータをXLSX形式にエクスポートする必要があるかどうかを示す値を取得します。</summary>
+      <returns>
+        セル型のデータをXLSX形式にエクスポートする必要がある場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.PaintBackground(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData)">
+      <summary>セルの背景を描画します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">描画セルの行インデックス。</param>
+      <param name="column">描画セルの列インデックス。</param>
+      <param name="cellData">描画セルのデータ。</param>
+      <returns>描画セルの背景を表す<see cref="T:System.Windows.UIElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.PaintContent(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData)">
+      <summary>セルの内容を描画します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">描画セルの行インデックス。</param>
+      <param name="column">描画セルの列インデックス。</param>
+      <param name="cellData">描画セルのデータ。</param>
+      <returns>描画セルの内容を表す<see cref="T:System.Windows.UIElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.Parse(System.String)">
+      <summary>指定した文字列をセル型のデータ型に解析し、それをオブジェクトとして返します。</summary>
+      <param name="s">解析するシート上のセルの文字列。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.ProcessReversedKey(System.Windows.Input.KeyEventArgs,System.Windows.IInputElement)">
+      <summary>特殊なキーに対してコマンドを返します。</summary>
+      <param name="e">入力したキー操作を示す<see cref="T:System.Windows.Input.KeyEventArgs" />オブジェクト。</param>
+      <returns>実行されるコマンドを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.ICellTypeCommand" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.SetEditingText(System.Windows.FrameworkElement,System.String)">
+      <summary>編集コントロールにテキストを設定します。</summary>
+      <param name="editingControl" />
+      <param name="text" />
+      <returns>セル型のハンドルが編集コントロールを更新する場合はtrue、 セル型が編集コントロールを更新しない場合はfalseです。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeBase.ToNumberFormat">
+      <summary>このセル型の対応する<see cref="T:GrapeCity.Spreadsheet.NumberFormat" />値を取得します。</summary>
+      <returns>このセル型の対応する<see cref="T:GrapeCity.Spreadsheet.NumberFormat" />値。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter">
+      <summary>実行するCellTypeCommandのパラメーターを定義します。このクラスは継承できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter.Cell">
+      <summary>アクティブセルの現在の位置。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter.Spread">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />オブジェクトを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter.Value">
+      <summary>セル値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter.Worksheet">
+      <summary>現在のアクティブシート。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand">
+      <summary>メッセージを表示するコマンドを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand.#ctor(System.String,System.String)">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="messasge">表示するメッセージを示す文字列値。</param>
+      <param name="caption">表示するタイトルを示す文字列値。</param>
+      <param name="button">どのボタン（一つ以上）を表示するかを指定する<see cref="T:System.Windows.Controls.Button" />値。</param>
+      <param name="icon">表示するアイコンを指定する<see cref="!:Icon" />値。</param>
+      <param name="defaultResult">メッセージボックスのデフォルト結果を指定する<see cref="!:DefaultResult" />値。</param>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand.UndoSupport">
+      <summary>このコマンドがアンドゥ可能かどうかを示す<see cref="P:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand.UndoSupport" />値を取得します。</summary>
+      <value>このコマンドの<see cref="P:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand.UndoSupport" />値。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.ErrorUICommand.Clone">
+      <summary>コマンドオブジェクトをクローンします。</summary>
+      <returns>クローンしたコマンドオブジェクト。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の標準セル型を表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.Clone">
+      <summary>このセル型をクローンします。</summary>
+      <returns>このセル型のクローンしたインスタンスを表す<see cref="T:GrapeCity.Spreadsheet.ICellType" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.ContainsFocus(System.Windows.FrameworkElement,System.Windows.IInputElement)">
+      <summary><paramref name="element" />のフォーカス範囲が<paramref name="editor" />に属するかどうかを示すブール値を取得します。</summary>
+      <param name="editor">セルエディタを示す <see cref="T:System.Windows.FrameworkElement" /> オブジェクト。</param>
+      <param name="element">フォーカスした要素を示す <see cref="T:System.Windows.IInputElement" /> オブジェクト。</param>
+      <returns>
+        <paramref name="element" />のフォーカス範囲が<paramref name="editor" />に属する場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.FromWorkbook(GrapeCity.Spreadsheet.IWorkbook)">
+      <summary>指定した<see cref="T:GrapeCity.Spreadsheet.IWorkbook" />オブジェクトから<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType" />インスタンスを取得します。</summary>
+      <param name="workbook"><see cref="T:GrapeCity.Spreadsheet.IWorkbook" />オブジェクト。</param>
+      <returns><see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType" />インスタンス。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.GetEditingCommand(GrapeCity.Spreadsheet.Worksheet,System.Int32,System.Int32,System.Boolean,GrapeCity.Wpf.SpreadSheet.CellData,System.Windows.FrameworkElement)">
+      <summary>編集後に実行される編集コマンドを取得します。</summary>
+      <param name="worksheet">編集ワークシート。</param>
+      <param name="row">編集セルの行インデックス。</param>
+      <param name="column">編集セルの列インデックス。</param>
+      <param name="arrayFormula">
+        編集コマンドを配列数式として作成する必要がある場合は<c>true</c>、それ以外の場合は<c>false</c>。</param>
+      <param name="cellData">現在のセルのデータ。</param>
+      <param name="editor">セルエディタを示す <see cref="T:System.Windows.FrameworkElement" /> オブジェクト。</param>
+      <returns>編集コマンドを表す<see cref="T:GrapeCity.Spreadsheet.Commands.Command" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.GetEditingElement(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData,System.EventArgs)">
+      <summary>指定したセルの編集要素を取得します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">編集セルの行インデックス。</param>
+      <param name="column">編集セルの列インデックス。</param>
+      <param name="cellData">現在のセルのデータ。</param>
+      <param name="eventArgs">編集に関連付けられた<see cref="T:System.EventArgs" />オブジェクト。</param>
+      <returns>編集要素を表す<see cref="T:System.Windows.FrameworkElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.GetEditingValue(GrapeCity.Spreadsheet.Worksheet,System.Int32,System.Int32,System.Windows.FrameworkElement)">
+      <summary>編集した値を表す編集オブジェクトを取得します。</summary>
+      <param name="worksheet">編集ワークシート。</param>
+      <param name="row">編集セルの行インデックス。</param>
+      <param name="column">編集セルの列インデックス。</param>
+      <param name="editor">セルエディタを示す <see cref="T:System.Windows.FrameworkElement" /> オブジェクト。</param>
+      <returns>編集値を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.GetFormatter(System.Globalization.CultureInfo)">
+      <summary>セルのデータをテキストとして書式するために使用される<see cref="T:GrapeCity.Spreadsheet.IFormatter" />オブジェクトを取得します。</summary>
+      <param name="culture"><see cref="T:GrapeCity.Spreadsheet.IFormatter" />オブジェクトの指定したカルチャ。</param>
+      <returns>セルデータをテキストとして書式するために使用される<see cref="T:GrapeCity.Spreadsheet.IFormatter" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.GetPreferredHeight(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Object,GrapeCity.Spreadsheet.CfExecutedResult@,System.Double)">
+      <summary>セルのコンテンツ全体を表示するために使用される最適なセルの高さを取得します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="cellValue">セル値。</param>
+      <param name="cellFormat">セルの書式設定。</param>
+      <param name="width">現在のセル幅。</param>
+      <returns>セルのコンテンツ全体を表示できる優先セルの高さ。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.GetPreferredWidth(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Object,GrapeCity.Spreadsheet.CfExecutedResult@,System.Double)">
+      <summary>セルのコンテンツ全体を表示するために使用される最適なセルの幅を取得します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="cellValue">セル値。</param>
+      <param name="cellFormat">セルの書式設定。</param>
+      <param name="height">現在のセルの高さ。</param>
+      <returns>セルのコンテンツ全体を表示できる優先セルの幅。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.PaintBackground(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData)">
+      <summary>セルの背景を描画します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">描画セルの行インデックス。</param>
+      <param name="column">描画セルの列インデックス。</param>
+      <param name="cellData">描画セルのデータ。</param>
+      <returns>描画セルの背景を表す<see cref="T:System.Windows.UIElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.PaintBackground(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData,System.Boolean)">
+      <summary>セルの背景を描画します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">描画セルの行インデックス。</param>
+      <param name="column">描画セルの列インデックス。</param>
+      <param name="cellData">描画セルのデータ。</param>
+      <param name="createTransparentBackground">trueの場合、透明なホバー背景を作成します。</param>
+      <returns>描画セルの背景を表す<see cref="T:System.Windows.UIElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.PaintContent(GrapeCity.Wpf.SpreadSheet.PaintingContext,System.Int32,System.Int32,GrapeCity.Wpf.SpreadSheet.CellData)">
+      <summary>セルの内容を描画します。</summary>
+      <param name="paintingContext">描画コンテキスト。</param>
+      <param name="row">描画セルの行インデックス。</param>
+      <param name="column">描画セルの列インデックス。</param>
+      <param name="cellData">描画セルのデータ。</param>
+      <returns>描画セルの内容を表す<see cref="T:System.Windows.UIElement" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.UniversalCellType.ToNumberFormat">
+      <summary>このセル型の対応する<see cref="T:GrapeCity.Spreadsheet.NumberFormat" />値を取得します。</summary>
+      <returns>このセル型の対応する<see cref="T:GrapeCity.Spreadsheet.NumberFormat" />値。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData">
+      <summary>編集データを表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.Empty">
+      <summary>編集データのデフォルト値を取得します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.Error">
+      <summary>編集中にエラーを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値を取得します。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.Formula">
+      <summary>編集数式を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.IsError">
+      <summary>この値が編集値にエラーを表すかどうかを示すブール値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.Message">
+      <summary>表示するメッセージを示す文字列値を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.NumberFormatId">
+      <summary>数値書式のIDを示す整数値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.Value">
+      <summary>編集値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.WrapText">
+      <summary>編集セルのテキストの折り返し状態を示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.FromFormula(System.String)">
+      <summary>入力した数式を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値を取得します。</summary>
+      <param name="formula">編集中の数式テキスト。</param>
+      <returns>入力した数式を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.EditingData.FromValue(System.Object)">
+      <summary>入力した値を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値を取得します。</summary>
+      <param name="value">編集する値。</param>
+      <returns>入力した値を表す<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.EditingData" />値。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.IAllowDropDownElement">
+      <summary>ドロップダウンボタンを含む編集要素に共通の機能を定義します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.IAllowDropDownElement.IsDropDownOpened">
+      <summary>
+        ドロップダウンが開いている場合は<see langword="true" />、それ以外の場合は<see langword="false" />。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.IAllowDropDownElement.ShowDropDown">
+      <summary>ドロップダウンを開きます。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverManager">
+      <summary>背景のホバーマネージャを表します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverManager.Highlight(GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport)">
+      <summary>指定した<see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport" />コントロールを強調表示します。</summary>
+      <param name="backgroundHover"><see cref="T:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport" />オブジェクト。</param>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport">
+      <summary>ホバー背景をサポートするコントロールを表します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport.HoverManager">
+      <summary>背景のホバーマネージャを取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport.Clear">
+      <summary>ホバーしたセルの背景をクリアします。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.IBackgroundHoverSupport.Highlight">
+      <summary>ホバーしたセルの背景を強調表示します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.CellType.ICellTypeCommand">
+      <summary>特殊なキーを入力したときに実行できるセル型のコマンドを定義します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.ICellTypeCommand.CanExecute(GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter)">
+      <summary>現在の状態でこのコマンドを実行できるかどうかを判断するメソッドを定義します。</summary>
+      <param name="parameter">コマンドによって使用されるデータ。コマンドにデータを渡す必要がない場合は、このオブジェクトを null に設定できます。</param>
+      <returns>
+        このコマンドが実行される場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.CellType.ICellTypeCommand.Execute(GrapeCity.Wpf.SpreadSheet.CellType.CellTypeCommandParameter)">
+      <summary>コマンドの起動時に呼び出されるメソッドを定義します。</summary>
+      <param name="parameter">コマンドによって使用されるデータ。コマンドにデータを渡す必要がない場合は、このオブジェクトを null に設定できます。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.ColorToBrushConverter.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.ColorToBrushConverter" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl">
+      <summary>ComboxColorControl</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl.InitializeComponent">
+      <summary>InitializeComponent</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl.RaiseItemClicked">
+      <summary>SelectedColorChangedイベントを発生します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl.RaiseSelectedColorChanged">
+      <summary>SelectedColorChangedイベントを発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl.ItemClicked">
+      <summary>選択色が変更されたときに発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.Controls.ComboxColorControl.SelectedColorChanged">
+      <summary>選択色が変更されたときに発生します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.DashesMenuItem.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.DashesMenuItem" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Controls.FillControl">
+      <summary>FillControl</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.FillControl.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.FillControl" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.FillControl.InitializeComponent">
+      <summary>InitializeComponent</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.FillControl.RaiseItemClicked">
+      <summary>SelectedColorChangedイベントを発生します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.Controls.FillControl.ItemClicked">
+      <summary>選択色が変更されたときに発生します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.LineWeightMenuItem.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.LineWeightMenuItem" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.#ctor">
+      <summary>デフォルトのコンストラクタ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.DecimalDigitsProperty">
+      <summary>DependencyPropertyをDecimalDigitsのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.DelayProperty">
+      <summary>DependencyPropertyをDelayのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.FormatProperty">
+      <summary>DependencyPropertyをFormatのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.IncrementProperty">
+      <summary>DependencyPropertyをIncrementのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.InputWidthProperty">
+      <summary>DependencyPropertyをInputWidthのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.IntervalProperty">
+      <summary>DependencyPropertyをIntervalのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.MaximumProperty">
+      <summary>DependencyPropertyをMaximumのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.MinimumProperty">
+      <summary>DependencyPropertyをMinimumのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.SizeDefinitionProperty">
+      <summary>DependencyPropertyをSizeDefinitionのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.TextProperty">
+      <summary>DependencyPropertyをTextのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.ValueProperty">
+      <summary>DependencyPropertyをValueのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.DecimalDigits">
+      <summary>valueプロパティから加算または減算される値を取得または設定します</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Delay">
+      <summary>スピナーが押されている間に、繰り返しが開始されるまで待機する時間（ミリ秒単位）を取得または設定します。負の値は指定できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Format">
+      <summary>値の文字列形式を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Header">
+      <summary>要素のヘッダを取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Icon">
+      <summary>要素のアイコンを取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Increment">
+      <summary>valueプロパティから加算または減算される値を取得または設定します</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.InputWidth">
+      <summary>スピナーの値入力部分の幅を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Interval">
+      <summary>繰り返しが開始されてから、繰り返しの間隔をミリ秒単位で取得または設定します。 値は負でない必要があります。 これは依存関係プロパティです。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Maximum">
+      <summary>最大値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Minimum">
+      <summary>最小値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.SizeDefinition">
+      <summary>要素のSizeDefinitionを取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Text">
+      <summary>スピナーから現在のテキストを取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.Value">
+      <summary>現在の値を取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.BindQuickAccessItem(System.Windows.FrameworkElement)">
+      <summary>クイックアクセスの作成に使用するプロパティを連結するには、このメソッドをオーバーライドする必要があります。</summary>
+      <param name="element">ツール バーの項目。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.OnApplyTemplate">
+      <summary>派生クラスでオーバーライドされた場合、アプリケーションコードまたは内部プロセスによって <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" /> メソッドが呼び出されるたびに呼び出されます。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.OnKeyUp(System.Windows.Input.KeyEventArgs)">
+      <summary>未処理のSystem.Windows.Input.Keyboard.KeyUp�イベントが、その経路上で、このクラスから派生した要素に到達したときに呼び出されます。このイベントに対するクラス処理を追加するには、このメソッドを実装します。</summary>
+      <param name="e">イベントデータを含むSystem.Windows.Input.KeyEventArgs。</param>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.Controls.Spinner.ValueChanged">
+      <summary>値が変更されたときに発生します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.SpinnerNullable.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.SpinnerNullable" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Controls.SpinnerNullable.ValueNullableProperty">
+      <summary>DependencyPropertyをValueのバッキング ストアとして使用します。 これにより、アニメーション、スタイル、連結などが可能になります。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Controls.SpinnerNullable.Value">
+      <summary>現在の値を取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Controls.TempMenuItem.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Controls.TempMenuItem" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Core.ConverterBase`2.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Core.ConverterBase`2" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Core.ResolveExtensionEventArgs">
+      <summary>拡張機能の解決に使用する値を提供するクラスを表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Core.ResolveExtensionEventArgs.Key">
+      <summary>解決する項目のキーを取得します。</summary>
+      <value>解決する項目名。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Core.ResolveExtensionEventHandler">
+      <summary>拡張機能の解決が失敗したときに発生します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs">
+      <summary>すべての組み込みダイアログを表します。 このクラスは <see langword="static class" /> であるため、継承や初期化できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.ConditionalFormatting(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Boolean,GrapeCity.Spreadsheet.FormatConditionType,GrapeCity.Spreadsheet.FormatConditionOperator,System.Boolean,GrapeCity.Spreadsheet.TopBottom,System.Boolean,System.Int32,System.Int32)">
+      <summary>ワークブック内ですべての条件付き書式設定ルールを管理する条件付き書式設定ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="createRule">
+        条件付き書式ルールの作成ダイアログを表示する場合は<c>true</c>。</param>
+      <returns>セルの書式設定ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.ContextMenu(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Windows.Input.ICommand)">
+      <summary>Spreadにコンテキストメニューを作成します。</summary>
+      <param name="spread"><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />。</param>
+      <param name="onExecutedCommand">メニュー項目が選択されたときに実行するコマンド。</param>
+      <returns><see cref="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.ContextMenu(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Windows.Input.ICommand)" />。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.ContextMenu(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Object,System.Windows.Input.ICommand)">
+      <summary>Spreadにコンテキストメニューを作成します。</summary>
+      <param name="spread"><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />。</param>
+      <param name="target">このコンテキストメニューの対象。</param>
+      <param name="onExecutedCommand">メニュー項目が選択されたときに実行するコマンド。</param>
+      <returns><see cref="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.ContextMenu(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Windows.Input.ICommand)" />。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.CreateTable(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>新しいテーブルを追加するためのテーブルの挿入ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <returns>テーブルの挿入ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.DataValidation(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Boolean)">
+      <summary>セルに入力できるデータの種類を制限するデータ検証ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="applyAll">
+        <c>true</c>に設定する場合、同じ設定で他のすべてのセルに変更を適用します。<c>false</c>に設定する場合、選択したセルのみに変更を適用します。</param>
+      <returns>セルの書式設定ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.DefinedName(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,GrapeCity.Spreadsheet.IName,GrapeCity.Spreadsheet.CellReference,GrapeCity.Spreadsheet.IRange)">
+      <summary>ワークブック/ワークシートにセル範囲の名前を作成または編集します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="definedName">編集する定義名のオブジェクト。<c>null</c>を使用して、新しい定義名を作成します。</param>
+      <param name="contextCell">定義名を変更するコンテキストセル。<see cref="F:GrapeCity.Spreadsheet.CellReference.Empty" />を使用して、現在のアクティブセルを参照します。</param>
+      <param name="range">新しい定義名を作成するデフォルトの範囲。</param>
+      <returns>名前の定義ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.FormatCells(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,GrapeCity.Spreadsheet.IRange,GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs)">
+      <summary>セルの設定をカスタマイズするセルの書式設定ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="range">動作する現在のセル範囲。</param>
+      <param name="activeTab">デフォルトのアクティブタブ。</param>
+      <returns>セルの書式設定ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.FormatCells(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,GrapeCity.Spreadsheet.IRange,GrapeCity.Spreadsheet.StyleFormat,GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs,System.Int32,System.Object,System.Boolean)">
+      <summary>セルの設定をカスタマイズするセルの書式設定ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="range">動作する現在のセル範囲。</param>
+      <param name="styleFormat">現在の設定として表示する<see cref="T:GrapeCity.Spreadsheet.StyleFormat" />値。</param>
+      <param name="activeTab">デフォルトのアクティブタブ。</param>
+      <param name="numFmtCategory">デフォルトで選択されている数値書式のカテゴリ。</param>
+      <param name="cellValue">プレビューとして表示するセル値。</param>
+      <returns>セルの書式設定ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.FormatCells(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,GrapeCity.Spreadsheet.StyleFormat,GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs)">
+      <summary>セルの設定をカスタマイズするセルの書式設定ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="styleFormat">現在の設定として表示する<see cref="T:GrapeCity.Spreadsheet.StyleFormat" />値。</param>
+      <param name="activeTab">デフォルトのアクティブタブ。</param>
+      <returns>セルの書式設定ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.NameManager(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>[名前の管理]ダイアログを表示します。</summary>
+      <param name="spread" />
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.PageSetup(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupTab,System.Boolean)">
+      <summary>SpreadSheetのページ設定を変更するためのページ設定ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="ativeTab">デフォルトのタブ。</param>
+      <param name="isPrint">
+        印刷モード（一部の設定は変更不可）を示す場合は<c>true</c>。 すべての設定が使用可能の場合は<c>false</c>。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.PrintPreview(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.Int32,GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings)">
+      <summary>エンドユーザーが印刷出力をプレビュー表示できる別のアプリケーションウィンドウを開きます。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="sheetIndex">印刷するワークシートを示す整数値。 デフォルト値<c>-1</c>は、ワークブック全体が印刷されることを意味します。</param>
+      <param name="printSettings">印刷設定。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.ResizeTable(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,GrapeCity.Spreadsheet.ITable)">
+      <summary>テーブルのサイズを変更するためのテーブルのサイズ変更ダイアログを表示します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="table">サイズを変更する必要がある<see cref="T:GrapeCity.Spreadsheet.ITable" />。</param>
+      <returns>テーブルのサイズ変更ダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.BuiltInDialogs.Sort(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet,System.String,System.Boolean,System.Boolean)">
+      <summary>ユーザー設定の並べ替えダイアログを表示して、複数の列または行による並べ替え、大文字と小文字を区別する並べ替えなど、より多くのオプションを選択します。</summary>
+      <param name="spread">動作する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロール。</param>
+      <param name="name">AutoFilterを含むコンテナーオブジェクトの名前。</param>
+      <param name="isWorksheet">コンテナーオブジェクトがワークシート（テーブル）であるかどうか。</param>
+      <param name="isFromContextMenu">フィルターコンテキストメニューからダイアログを開くかどうか。</param>
+      <returns>ユーザー設定の並べ替えダイアログを表す<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />オブジェクト。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.CfRuleData">
+      <summary>内部使用のみ。このクラスは<see langword="abstract" />であるため、初期化できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.CfRuleData.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.CfRuleData" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.ColorPickerControl">
+      <summary>ColorPickerControl</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.ColorPickerControl.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.ColorPickerControl" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.ColorPickerControl.InitializeComponent">
+      <summary>InitializeComponent</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupHelper">
+      <summary>ページ設定ヘルパーを表します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupHelper.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupHelper" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog">
+      <summary>組み込みダイアログを表します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog.Owner">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />を所有する<see cref="T:System.Windows.Window" />を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog.Value">
+      <summary>ダイアログの値を取得または設定します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog.Close">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog" />を手動で閉じます。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog.Show(System.Double,System.Double)">
+      <summary>ウィンドウを開き、開いたウィンドウが閉じるのを待機せずに制御を戻します。</summary>
+      <param name="x">新しいウィンドウのX座標。<see cref="F:System.Double.NaN" />を使用して、所有者ウィンドウの中央に揃えます。</param>
+      <param name="y">新しいウィンドウのY座標。<see cref="F:System.Double.NaN" />を使用して、所有者ウィンドウの上下中央に揃えます。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Dialogs.IDialog.ShowDialog(System.Double,System.Double)">
+      <summary>ウィンドウを開き、新しく開いたウィンドウが閉じられたときにのみ戻ります。</summary>
+      <param name="x">新しいウィンドウのX座標。<see cref="F:System.Double.NaN" />を使用して、所有者ウィンドウの中央に揃えます。</param>
+      <param name="y">新しいウィンドウのY座標。<see cref="F:System.Double.NaN" />を使用して、所有者ウィンドウの上下中央に揃えます。</param>
+      <returns>
+        ユーザーが[OK]を選択した場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs">
+      <summary>セルの書式設定ダイアログのすべてのタブを表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs.Number">
+      <summary>「表示形式」タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs.Alignment">
+      <summary>「配置」タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs.Font">
+      <summary>「フォント」タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs.Border">
+      <summary>「罫線」タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs.Fill">
+      <summary>「塗りつぶし」タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.FormatCellsTabs.Protection">
+      <summary>「保護」タブ。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupTab">
+      <summary>PageSetupフォーム上のタブ項目を表します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupTab.Page">
+      <summary>タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupTab.Margins">
+      <summary>余白タブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupTab.HeaderFooter">
+      <summary>ヘッダ/フッタタブ。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Dialogs.PageSetupTab.Sheet">
+      <summary>シートタブ。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings">
+      <summary>印刷設定を表します。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings.Collated">
+      <summary>プリンターがその出力を照合するかどうかを示す値を取得または設定します。</summary>
+      <value>プリンターがその出力を照合するかどうかを示すブール値。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings.FromPage">
+      <summary>印刷する開始ページインデックスを取得または設定します。</summary>
+      <value><c>1</c>から始まる整数値。デフォルト値は<c>0</c>で、最初のページから印刷することを指定します。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings.IncludeHiddenSheets">
+      <summary>非表示のワークシートを印刷するかどうかを示す値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings.PrintArea">
+      <summary>印刷される範囲を取得または設定します。</summary>
+      <value>印刷される範囲を表す<see cref="T:GrapeCity.Spreadsheet.Reference" />値。 <see cref="F:GrapeCity.Spreadsheet.Reference.Empty" />は、ワークシートで現在定義されている印刷領域を示します。</value>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Printing.PrintSettings.ToPage">
+      <summary>印刷する終了ページインデックスを取得または設定します。</summary>
+      <value><c>1</c>で始まる整数値。デフォルト値は<c>0</c>で、最後のページに印刷することを指定します。</value>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.UI.ClipboardMonitor">
+      <summary>内部使用のみ。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.ClipboardMonitor.CreateFrom(GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>指定された<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />コントロールから<see cref="T:GrapeCity.Wpf.SpreadSheet.UI.ClipboardMonitor" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="spread"><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" /> コントロール。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.ClipboardMonitor.Dispose">
+      <summary>アンマネージリソースの解放またはリセットに関連付けられたアプリケーション定義のタスクを実行します。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.UI.ClipboardMonitor.ClipboardUpdate">
+      <summary>クリップボードの内容が変更されたときに発生します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.UI.WpfUIManager">
+      <summary>内部使用のみ。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.WpfUIManager.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.UI.WpfUIManager" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.WpfUIManager.OnActiveCellChanged(GrapeCity.Spreadsheet.IWorksheet,System.Int32,System.Int32)">
+      <summary>アクティブワークシートのアクティブセルが変更されたときに発生します。</summary>
+      <param name="worksheet">アクティブワークシート。</param>
+      <param name="row">アクティブセルの行インデックス。</param>
+      <param name="column">アクティブセルの列インデックス。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.WpfUIManager.ResolveImageData(GrapeCity.Spreadsheet.IMedia,System.Int32@,System.Int32@)">
+      <summary>画像データを読み込みます。</summary>
+      <param name="media">画像バイナリデータを含む<see cref="T:GrapeCity.Spreadsheet.IMedia" />オブジェクト。</param>
+      <param name="width">画像の幅（ピクセル単位）。</param>
+      <param name="height">画像の高さ（ピクセル単位）。</param>
+      <returns>
+        画像データが正常に読み込まれる場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.WpfUIManager.ResolveImageData(System.String)">
+      <summary>画像データを読み込みます。</summary>
+      <param name="media">画像バイナリデータを含む<see cref="T:GrapeCity.Spreadsheet.IMedia" />オブジェクト。</param>
+      <param name="width">画像の幅（ピクセル単位）。</param>
+      <param name="height">画像の高さ（ピクセル単位）。</param>
+      <returns>
+        画像データが正常に読み込まれる場合は<c>true</c>、それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />に関連するコマンドを表します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.IncludeShapes">
+      <summary>コマンドがシェイプで機能するかどうかを示すブール値を取得または設定します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.Name">
+      <summary>コマンドの名前を取得します。</summary>
+      <value>コマンドの名前。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.CanExecute(System.Object,GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand" />が<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の現在の状態で実行できるかどうかを決定します。</summary>
+      <param name="parameter">ハンドラーに渡されるユーザー定義パラメーター。</param>
+      <param name="spread">
+        コマンド ハンドラーの検索を開始する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />。</param>
+      <returns>
+        現在のコマンドの対象に対してコマンドを実行できる場合は<c>true</c>。それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.CanExecute(System.Object)">
+      <summary>サポートされていません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.CanExecuteCore(System.Object,GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>この<see cref="T:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand" />が<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />の現在の状態で実行できるかどうかを決定します。</summary>
+      <param name="parameter">ハンドラーに渡されるユーザー定義パラメーター。</param>
+      <param name="spread">
+        コマンド ハンドラーの検索を開始する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />。</param>
+      <returns>
+        現在のコマンドの対象に対してコマンドを実行できる場合は<c>true</c>。それ以外の場合は<c>false</c>。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.Execute(System.Object,GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>対象の<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />で<see cref="T:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand" />を実行します。</summary>
+      <param name="parameter">ハンドラーに渡されるユーザー定義パラメーター。</param>
+      <param name="spread">
+        コマンド ハンドラーの検索を開始する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />。</param>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.Execute(System.Object)">
+      <summary>サポートされていません。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.ExecuteCore(System.Object,GrapeCity.Wpf.SpreadSheet.GcSpreadSheet)">
+      <summary>対象の<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />で<see cref="T:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand" />を実行します。</summary>
+      <param name="parameter">ハンドラーに渡されるユーザー定義パラメーター。</param>
+      <param name="spread">
+        コマンド ハンドラーの検索を開始する<see cref="T:GrapeCity.Wpf.SpreadSheet.GcSpreadSheet" />。</param>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.UI.Commands.SpreadCommand.CanExecuteChanged">
+      <summary>コマンドを実行するかどうかに影響するような変更があった場合に発生します。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Xaml.BindingDataObject">
+      <summary>このクラスは内部でのみ使用されます。開発時にコードで使用しないでください。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Xaml.BindingDataObject.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Xaml.BindingDataObject" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Xaml.BindingDataObject.SelectedObject">
+      <summary>このプロパティは内部でのみ使用されます。開発時にコードで使用しないでください。</summary>
+    </member>
+    <member name="E:GrapeCity.Wpf.SpreadSheet.Xaml.BindingDataObject.PropertyChanged">
+      <summary>このイベントは内部でのみ使用されます。開発時にコードで使用しないでください。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject">
+      <summary>このクラスは内部でのみ使用されます。開発時にコードで使用しないでください。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject.#ctor">
+      <summary><see cref="T:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject.TextProperty">
+      <summary>このフィールドは内部でのみ使用されます。開発時にコードで使用しないでください。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="F:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject.ValueProperty">
+      <summary>このフィールドは内部でのみ使用されます。開発時にコードで使用しないでください。このフィールドは読み取り専用です。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject.Text">
+      <summary>このプロパティは内部でのみ使用されます。開発時にコードで使用しないでください。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Xaml.BindingValueObject.Value">
+      <summary>このプロパティは内部でのみ使用されます。開発時にコードで使用しないでください。</summary>
+    </member>
+    <member name="T:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1">
+      <summary><see cref="!:T" />のコレクションを表します。このクラスは <see langword="abstract" /> であるため、初期化できません。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1.Count">
+      <summary>コレクションに含まれるシートの数を取得します。</summary>
+    </member>
+    <member name="P:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1.Item(System.Int32)">
+      <summary>指定したインデックスにあるシートを取得します。</summary>
+      <param name="index">インデックスを示す<c>int</c>値。</param>
+      <value>指定したインデックスにあるシート。</value>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1.Add">
+      <summary>コレクションにシートを追加します。</summary>
+      <returns>追加されたシートのインデックス。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1.Clear">
+      <summary>コレクションをクリアします。</summary>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1.IndexOf(`0)">
+      <summary>シートのインデックスを取得します。</summary>
+      <param name="item">インデックスを取得するシート。</param>
+      <returns>シートのインデックス。<c>-1</c>は項目がリストに存在しないことを意味します。</returns>
+    </member>
+    <member name="M:GrapeCity.Wpf.SpreadSheet.Xaml.XamlCollection`1.RemoveAt(System.Int32)">
+      <summary>コレクションからシートを削除します。</summary>
+      <param name="index">削除するシートの位置を示す<c>int</c>値。</param>
+    </member>
+    <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+      <summary>GeneratedInternalTypeHelper。このクラスは継承できません。</summary>
+    </member>
+    <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.#ctor">
+      <summary><see cref="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+  </members>
+</doc>

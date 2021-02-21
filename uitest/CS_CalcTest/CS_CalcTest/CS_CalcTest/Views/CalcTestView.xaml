@@ -119,7 +119,7 @@
 			</sg:GcSpreadGrid.ContextMenu>
 		</sg:GcSpreadGrid>
 
-		<!--<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+		<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
 						Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
 		<Label  Content="①標準コンテキストメニューを残す(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
@@ -174,7 +174,7 @@
 					<behaviors:InvokeCommandAction Command="{Binding XDGCEllRIGHTClick}" />
 				</behaviors:EventTrigger>
 			</behaviors:Interaction.Triggers>
-		</igWPF:XamDataGrid>-->
+		</igWPF:XamDataGrid>
 
 		<Label  Content="DataGrid(TextBlock)にContextMenuで" 
 						Grid.Row="11" Grid.Column="1" VerticalAlignment="Center"  

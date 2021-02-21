@@ -41,6 +41,10 @@ namespace CS_CalcTest.ViewModels {
 		public string CalcTextShowX { get; set; }
 		public string CalcTextShowY { get; set; }
 
+		public double CalcWindowWidth = 180;
+		public double CalcWindowHeight = 250;
+
+
 		private List<Product> _GsGlist;
 		/// <summary>
 		/// GcSpreadGridのItemsSource
@@ -111,8 +115,10 @@ namespace CS_CalcTest.ViewModels {
 			CalcTextDLogTitol = "電卓を表示するフィールドから";
 			CalcTexWidth = "200";
 			CalcTextFontSize = "18";
-			CalcTextShowX = "200";
+			CalcTextShowX = "1200";
 			CalcTextShowY = "400";
+			CalcWindowWidth = 180;
+			CalcWindowHeight = 250;
 			CalcResult = "0123456789";
 
 			GsGlist = new List<Product>();
@@ -175,13 +181,11 @@ namespace CS_CalcTest.ViewModels {
 		{
 			string TAG = "CalcDlogGsG";
 			string dbMsg = "";
-			try
-			{
+			try{
 				GcSpreadGrid DG = MyView.MyGsGrid;
 				DG.Focus();
 				GsSGCell activeCell = DG.ActiveCell;
-				if (activeCell != null)
-				{
+				if (activeCell != null){
 					// 行番号(0起算)
 					int rowIndex = activeCell.Position.Row;
 					// 列番号(0起算)
@@ -190,77 +194,305 @@ namespace CS_CalcTest.ViewModels {
 					string orgVal = activeCell.Value.ToString();
 					dbMsg += orgVal;
 					var result = 0;
+					if (int.TryParse(orgVal, out result)){
+						dbMsg += "は数値で" + result;
+						//タイトルの初期値は書き戻し先のフィールド名
+						string ViewTitle = "データグリッド" + DG.Name + "の" + (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
+						 if(!CalcTextDLogTitol.Equals(""))	{
+							ViewTitle = CalcTextDLogTitol;
+						}
+						dbMsg += "[" + CalcWindowWidth + " × " + CalcWindowHeight + "]";
+						//				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
+						Double ShowX = 0;
+						Double ShowY = 0;
+						dbMsg += ",指定座標(" + CalcTextShowX + "," + CalcTextShowY + ")";
+						if (CalcTextShowX != ""){
+							ShowX = Double.Parse(CalcTextShowX);
+						}
+						if (CalcTextShowY != ""){
+							ShowY = Double.Parse(CalcTextShowY);
+						}
+						dbMsg += ">>(" + ShowX + "," + ShowY + ")";
+						//電卓クラスを生成して書き込み先の参照を渡す
+						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+						Window CalcWindow = new Window{                           //Windowを生成
+							Title = ViewTitle,
+							Width = CalcWindowWidth,
+							Height = CalcWindowHeight,
+							Left = ShowX,
+							Top = ShowY,
+							Content = calculatorControl,
+							ResizeMode = ResizeMode.NoResize,
+							Topmost=true
+						};
+						dbMsg += ">>(" + CalcWindow.Left + " , " + CalcWindow.Top + ")[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+						calculatorControl.CalcWindow = CalcWindow;				//dllからクローズなどのwindow制御を行う
+						calculatorControl.InputStr = result.ToString();             //dllに元の書込み値を渡すv
+						//	calculatorControl.TargetGsCell = activeCell;書き戻すElementを指定すると
+						//	組込み先のライブラリバージョン不一致などで使えない
+						Nullable<bool> dialogResult = CalcWindow.ShowDialog();			//ダイアログ表示
+						dbMsg += ",dialogResult=" + dialogResult;       //falseが返される
+						string resultStr = calculatorControl.ResultStr;	//ダイアログを閉じるまでここには進まない
+						dbMsg += ",戻り値=" + resultStr;
+						if(resultStr != null){
+							activeCell.Value = double.Parse(resultStr);
+						}
+					}else{
+						String titolStr = "XamDataGrid:" + DG.Name + "でコンテキストメニューで選択したアイテム";
+						String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
+						msgStr += "\r\n電卓は数値を入力するセルでご利用ください";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					}
+				}else{
+					dbMsg += ",activeCell == null";
+				}
+				MyLog(TAG, dbMsg);
+			}
+			catch (Exception er){
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+		#region XDGContextMenuClick	　XamDataGridのコンテキストメニューから電卓を呼び出す
+		private ViewModelCommand _XDGContextMenuClick;
+
+		public ViewModelCommand XDGContextMenuClick {
+			get {
+				if (_XDGContextMenuClick == null)
+				{
+					_XDGContextMenuClick = new ViewModelCommand(CalcDlogXDG);
+				}
+				return _XDGContextMenuClick;
+			}
+		}
+		/// <summary>
+		/// XamDataGridのコンテキストメニューから電卓を呼び出す
+		/// </summary>
+		public void CalcDlogXDG()
+		{
+			string TAG = "CalcDlogXDG";
+			string dbMsg = "";
+			try{
+				XamDataGrid DG = MyView.MyXDG;
+				DG.Focus();
+				DataPresenterBase.SelectedItemHolder selectedItems = DG.SelectedItems;
+				XDGCell activeCell = DG.ActiveCell;
+				if (activeCell != null){
+					// 行番号(0起算)
+					int rowIndex = activeCell.Record.Index;
+					// 列番号(0起算)
+					int columnIndex = activeCell.Field.Index;
+					dbMsg += "[" + rowIndex + " , " + columnIndex + "]";
+					string orgVal = activeCell.Value.ToString();
+					dbMsg += orgVal;
+					var result = 0;
+					if (int.TryParse(orgVal, out result)){
+						dbMsg += "は数値で" + result;
+						//タイトルの初期値は書き戻し先のフィールド名
+						string ViewTitle = "データグリッド" + DG.Name + "の" + (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
+						if (!CalcTextDLogTitol.Equals("")){
+							ViewTitle = CalcTextDLogTitol;
+						}
+						dbMsg += "[" + CalcWindowWidth + " × " + CalcWindowHeight + "]";
+						//				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
+						Double ShowX = 0;
+						Double ShowY = 0;
+						dbMsg += ",指定座標(" + CalcTextShowX + "," + CalcTextShowY + ")";
+						if (CalcTextShowX != ""){
+							ShowX = Double.Parse(CalcTextShowX);
+						}
+						if (CalcTextShowY != ""){
+							ShowY = Double.Parse(CalcTextShowY);
+						}
+
+						dbMsg += ">>(" + ShowX + "," + ShowY + ")";
+						//電卓クラスを生成して書き込み先の参照を渡す
+						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+						Window CalcWindow = new Window{                           //Windowを生成
+							Title = ViewTitle,
+							Width = CalcWindowWidth,
+							Height = CalcWindowHeight,
+							Left = ShowX,
+							Top = ShowY,
+							Content = calculatorControl,
+							ResizeMode = ResizeMode.NoResize,
+							Topmost = true
+						};
+						dbMsg += ">>(" + CalcWindow.Left + " , " + CalcWindow.Top + ")[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+						calculatorControl.CalcWindow = CalcWindow;              //dllからクローズなどのwindow制御を行う
+						calculatorControl.InputStr = result.ToString();             //dllに元の書込み値を渡すv
+																					//	calculatorControl.TargetGsCell = activeCell;書き戻すElementを指定すると
+																					//	組込み先のライブラリバージョン不一致などで使えない
+						Nullable<bool> dialogResult = CalcWindow.ShowDialog();          //ダイアログ表示
+						dbMsg += ",dialogResult=" + dialogResult;       //falseが返される
+						string resultStr = calculatorControl.ResultStr; //ダイアログを閉じるまでここには進まない
+						dbMsg += ",戻り値=" + resultStr;
+						if (resultStr != null){
+							activeCell.Value = double.Parse(resultStr);
+						}
+					}else	{
+						String titolStr = "XamDataGrid:" + DG.Name + "でコンテキストメニューで選択したアイテム";
+						String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
+						msgStr += "\r\n電卓は数値を入力するセルでご利用ください";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					}
+				}else{
+					dbMsg += ",activeCell == null";
+				}
+				MyLog(TAG, dbMsg);
+			}catch (Exception er){
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		#endregion
+
+		#region XDGCEllRIGHTClick	　XamDataGridのCellを右クリックで電卓を呼び出す
+		private ViewModelCommand _XDGCEllRIGHTClick;
+
+		public ViewModelCommand XDGCEllRIGHTClick {
+			get {
+				if (_XDGCEllRIGHTClick == null){
+					_XDGCEllRIGHTClick = new ViewModelCommand(CalcDlogXDG2);
+				}
+				return _XDGCEllRIGHTClick;
+			}
+		}
+		/// <summary>
+		/// XamDataGridのCellを右クリックで電卓を呼び出す
+		/// </summary>
+		public void CalcDlogXDG2()
+		{
+			string TAG = "CalcDlogXDG2";
+			string dbMsg = "";
+			try
+			{
+				XamDataGrid DG = MyView.MyXDG2;
+				DG.Focus();
+				DataPresenterBase.SelectedItemHolder selectedItems = DG.SelectedItems;
+				XDGCell activeCell = DG.ActiveCell;
+				if (activeCell != null)
+				{
+					// 行番号(0起算)
+					int rowIndex = activeCell.Record.Index;
+					// 列番号(0起算)
+					int columnIndex = activeCell.Field.Index;
+					dbMsg += "[" + rowIndex + " , " + columnIndex + "]";
+					string orgVal = activeCell.Value.ToString();
+					dbMsg += orgVal;
+					var result = 0;
 					if (int.TryParse(orgVal, out result))
 					{
 						dbMsg += "は数値で" + result;
-						//電卓クラスを生成して書き込み先の参照を渡す
-						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
-						calculatorControl.TargetGsCell = activeCell;
-
-						//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
-						Window CalcWindow = new Window
-						{
-							//				Title = targetTextBlock.Name,
-							Content = calculatorControl,
-							ResizeMode = ResizeMode.NoResize
-						};
+						//タイトルの初期値は書き戻し先のフィールド名
+						string ViewTitle = "データグリッド" + DG.Name + "の" + (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
+						if (!CalcTextDLogTitol.Equals("")) {
+							ViewTitle = CalcTextDLogTitol;
+						}
+						dbMsg += "[" + CalcWindowWidth + " × " + CalcWindowHeight + "]";
 						//				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
-						//表示位置
 						Double ShowX = 0;
-						if (CalcTextShowX != "")
-						{
+						Double ShowY = 0;
+						dbMsg += ",指定座標(" + CalcTextShowX + "," + CalcTextShowY + ")";
+						if (CalcTextShowX != "") {
 							ShowX = Double.Parse(CalcTextShowX);
 						}
-						Double ShowY = 0;
-						if (CalcTextShowY != "")
-						{
+						if (CalcTextShowY != "") {
 							ShowY = Double.Parse(CalcTextShowY);
 						}
-						dbMsg += ",指定座標[" + ShowX + "," + ShowY + "]";
-						if (0 == ShowX)
-						{
-							//指定が無ければ書き込み先フィールドの左やや下に表示する
-							//					CalcWindow.Left = pt.X + 20;
-						}
-						else
-						{
-							//指定された位置に表示
-							CalcWindow.Left = ShowX;
-						}
-						if (0 == ShowY)
-						{
-							//指定が無ければ書き込み先フィールドの左やや下に表示する
-							//					CalcWindow.Top = pt.Y + 30;
-						}
-						else
-						{
-							//指定された位置に表示
-							CalcWindow.Top = ShowY;
-						}
-						dbMsg += ">>[" + ShowX + "," + ShowY + "]";
-						CalcWindow.Topmost = true;
-						dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-						CalcWindow.Width = 300;
-						CalcWindow.Height = 400;
-						dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-						string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
-						//			ViewTitle += activeCell.Record;
-						ViewTitle += ":" + activeCell.Position.ColumnName;
-						dbMsg += ",ViewTitol=" + ViewTitle;
 
-						if (!ViewTitle.Equals(""))
-						{
-							CalcWindow.Title = ViewTitle;
+						dbMsg += ">>(" + ShowX + "," + ShowY + ")";
+						//電卓クラスを生成して書き込み先の参照を渡す
+						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+						Window CalcWindow = new Window {                           //Windowを生成
+							Title = ViewTitle,
+							Width = CalcWindowWidth,
+							Height = CalcWindowHeight,
+							Left = ShowX,
+							Top = ShowY,
+							Content = calculatorControl,
+							ResizeMode = ResizeMode.NoResize,
+							Topmost = true
+						};
+						dbMsg += ">>(" + CalcWindow.Left + " , " + CalcWindow.Top + ")[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+						calculatorControl.CalcWindow = CalcWindow;              //dllからクローズなどのwindow制御を行う
+						calculatorControl.InputStr = result.ToString();             //dllに元の書込み値を渡すv
+																					//	calculatorControl.TargetGsCell = activeCell;書き戻すElementを指定すると
+																					//	組込み先のライブラリバージョン不一致などで使えない
+						Nullable<bool> dialogResult = CalcWindow.ShowDialog();          //ダイアログ表示
+						dbMsg += ",dialogResult=" + dialogResult;       //falseが返される
+						string resultStr = calculatorControl.ResultStr; //ダイアログを閉じるまでここには進まない
+						dbMsg += ",戻り値=" + resultStr;
+						if (resultStr != null) {
+							activeCell.Value = double.Parse(resultStr);
 						}
-						calculatorControl.CalcWindow = CalcWindow;
-						calculatorControl.InputStr = result.ToString();
+						////電卓クラスを生成して書き込み先の参照を渡す
+						//CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+						//calculatorControl.TargetCell = activeCell;
 
-						//		calculatorControl.OperatKey = this.OperatKey;
-						Nullable<bool> dialogResult = CalcWindow.ShowDialog();
-						dbMsg += ",dialogResult=" + dialogResult;
+						////Windowを生成；タイトルの初期値は書き戻し先のフィールド名
+						//Window CalcWindow = new Window
+						//{
+						//	//				Title = targetTextBlock.Name,
+						//	Content = calculatorControl,
+						//	ResizeMode = ResizeMode.NoResize
+						//};
+						////				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
+						////表示位置
+						//Double ShowX = 0;
+						//if (CalcTextShowX != "")
+						//{
+						//	ShowX = Double.Parse(CalcTextShowX);
+						//}
+						//Double ShowY = 0;
+						//if (CalcTextShowY != "")
+						//{
+						//	ShowY = Double.Parse(CalcTextShowY);
+						//}
+						//dbMsg += ",指定座標[" + ShowX + "," + ShowY + "]";
+						//if (0 == ShowX)
+						//{
+						//	//指定が無ければ書き込み先フィールドの左やや下に表示する
+						//	//					CalcWindow.Left = pt.X + 20;
+						//}
+						//else
+						//{
+						//	//指定された位置に表示
+						//	CalcWindow.Left = ShowX;
+						//}
+						//if (0 == ShowY)
+						//{
+						//	//指定が無ければ書き込み先フィールドの左やや下に表示する
+						//	//					CalcWindow.Top = pt.Y + 30;
+						//}
+						//else
+						//{
+						//	//指定された位置に表示
+						//	CalcWindow.Top = ShowY;
+						//}
+						//dbMsg += ">>[" + ShowX + "," + ShowY + "]";
+						//CalcWindow.Topmost = true;
+						//dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
+						//CalcWindow.Width = 300;
+						//CalcWindow.Height = 400;
+						//dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+						//string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
+						////			ViewTitle += activeCell.Record;
+						//ViewTitle += ":" + activeCell.Field.Label;
+						//dbMsg += ",ViewTitol=" + ViewTitle;
 
-					}
-					else
+						//if (!ViewTitle.Equals(""))
+						//{
+						//	CalcWindow.Title = ViewTitle;
+						//}
+						//calculatorControl.CalcWindow = CalcWindow;
+						//calculatorControl.InputStr = result.ToString();
+
+						////		calculatorControl.OperatKey = this.OperatKey;
+						//Nullable<bool> dialogResult = CalcWindow.ShowDialog();
+						//dbMsg += ",dialogResult=" + dialogResult;
+
+					} else
 					{
 						String titolStr = "XamDataGrid:" + DG.Name + "でコンテキストメニューで選択したアイテム";
 						String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
@@ -279,258 +511,6 @@ namespace CS_CalcTest.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		#endregion
-
-
-		#region XDGContextMenuClick	　XamDataGridのコンテキストメニューから電卓を呼び出す
-		private ViewModelCommand _XDGContextMenuClick;
-
-		public ViewModelCommand XDGContextMenuClick {
-			get {
-				if (_XDGContextMenuClick == null)
-				{
-		//			_XDGContextMenuClick = new ViewModelCommand(CalcDlogXDG);
-				}
-				return _XDGContextMenuClick;
-			}
-		}
-		///// <summary>
-		///// XamDataGridのコンテキストメニューから電卓を呼び出す
-		///// </summary>
-		//public void CalcDlogXDG()
-		//{
-		//	string TAG = "CalcDlogXDG";
-		//	string dbMsg = "";
-		//	try
-		//	{
-		//		XamDataGrid DG = MyView.MyXDG;
-		//		DG.Focus();
-		//		DataPresenterBase.SelectedItemHolder selectedItems = DG.SelectedItems;
-		//		XDGCell activeCell = DG.ActiveCell;
-		//		if(activeCell != null){
-		//			// 行番号(0起算)
-		//			int rowIndex = activeCell.Record.Index;
-		//			// 列番号(0起算)
-		//			int columnIndex = activeCell.Field.Index;
-		//			dbMsg += "[" + rowIndex + " , " + columnIndex + "]";
-		//			string orgVal = activeCell.Value.ToString();
-		//			dbMsg += orgVal;
-		//			var result = 0;
-		//			if (int.TryParse(orgVal, out result))
-		//			{
-		//				dbMsg += "は数値で" + result;
-		//				//電卓クラスを生成して書き込み先の参照を渡す
-		//				CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
-		//				calculatorControl.TargetCell = activeCell;
-
-		//				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
-		//				Window CalcWindow = new Window
-		//				{
-		//	//				Title = targetTextBlock.Name,
-		//					Content = calculatorControl,
-		//					ResizeMode = ResizeMode.NoResize
-		//				};
-		////				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
-		//				//表示位置
-		//				Double ShowX = 0;
-		//				if (CalcTextShowX != "")
-		//				{
-		//					ShowX = Double.Parse(CalcTextShowX);
-		//				}
-		//				Double ShowY = 0;
-		//				if (CalcTextShowY != "")
-		//				{
-		//					ShowY = Double.Parse(CalcTextShowY);
-		//				}
-		//				dbMsg += ",指定座標[" + ShowX + "," + ShowY + "]";
-		//				if (0 == ShowX)
-		//				{
-		//					//指定が無ければ書き込み先フィールドの左やや下に表示する
-		////					CalcWindow.Left = pt.X + 20;
-		//				}
-		//				else
-		//				{
-		//					//指定された位置に表示
-		//					CalcWindow.Left = ShowX;
-		//				}
-		//				if (0 == ShowY)
-		//				{
-		//					//指定が無ければ書き込み先フィールドの左やや下に表示する
-		////					CalcWindow.Top = pt.Y + 30;
-		//				}
-		//				else
-		//				{
-		//					//指定された位置に表示
-		//					CalcWindow.Top = ShowY;
-		//				}
-		//				dbMsg += ">>[" + ShowX + "," + ShowY + "]";
-		//				CalcWindow.Topmost = true;
-		//				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-		//				CalcWindow.Width = 300;
-		//				CalcWindow.Height = 400;
-		//				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-		//				string ViewTitle =  DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
-		//	//			ViewTitle += activeCell.Record;
-		//				ViewTitle += ":" + activeCell.Field.Label;
-		//			   dbMsg += ",ViewTitol=" + ViewTitle;
-
-		//				if (!ViewTitle.Equals(""))
-		//				{
-		//					CalcWindow.Title = ViewTitle;
-		//				}
-		//				calculatorControl.CalcWindow = CalcWindow;
-		//				calculatorControl.InputStr = result.ToString();
-
-		//				//		calculatorControl.OperatKey = this.OperatKey;
-		//				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
-		//				dbMsg += ",dialogResult=" + dialogResult;
-
-		//			}
-		//			else
-		//			{
-		//				String titolStr = "XamDataGrid:" + DG.Name + "でコンテキストメニューで選択したアイテム";
-		//				String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
-		//				msgStr += "\r\n電卓は数値を入力するセルでご利用ください";
-		//				MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-		//			}
-		//		}
-		//		else
-		//		{
-		//			dbMsg += ",activeCell == null";
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	}
-		//	catch (Exception er)
-		//	{
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
-		#endregion
-
-		#region XDGCEllRIGHTClick	　XamDataGridのCellを右クリックで電卓を呼び出す
-		private ViewModelCommand _XDGCEllRIGHTClick;
-
-		public ViewModelCommand XDGCEllRIGHTClick {
-			get {
-				if (_XDGCEllRIGHTClick == null)
-				{
-		//			_XDGCEllRIGHTClick = new ViewModelCommand(CalcDlogXDG2);
-				}
-				return _XDGCEllRIGHTClick;
-			}
-		}
-		/// <summary>
-		/// XamDataGridのCellを右クリックで電卓を呼び出す
-		/// </summary>
-		//public void CalcDlogXDG2()
-		//{
-		//	string TAG = "CalcDlogXDG2";
-		//	string dbMsg = "";
-		//	try
-		//	{
-		//		XamDataGrid DG = MyView.MyXDG2;
-		//		DG.Focus();
-		//		DataPresenterBase.SelectedItemHolder selectedItems = DG.SelectedItems;
-		//		XDGCell activeCell = DG.ActiveCell;
-		//		if (activeCell != null)
-		//		{
-		//			// 行番号(0起算)
-		//			int rowIndex = activeCell.Record.Index;
-		//			// 列番号(0起算)
-		//			int columnIndex = activeCell.Field.Index;
-		//			dbMsg += "[" + rowIndex + " , " + columnIndex + "]";
-		//			string orgVal = activeCell.Value.ToString();
-		//			dbMsg += orgVal;
-		//			var result = 0;
-		//			if (int.TryParse(orgVal, out result))
-		//			{
-		//				dbMsg += "は数値で" + result;
-		//				//電卓クラスを生成して書き込み先の参照を渡す
-		//				CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
-		//				calculatorControl.TargetCell = activeCell;
-
-		//				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
-		//				Window CalcWindow = new Window
-		//				{
-		//					//				Title = targetTextBlock.Name,
-		//					Content = calculatorControl,
-		//					ResizeMode = ResizeMode.NoResize
-		//				};
-		//				//				Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
-		//				//表示位置
-		//				Double ShowX = 0;
-		//				if (CalcTextShowX != "")
-		//				{
-		//					ShowX = Double.Parse(CalcTextShowX);
-		//				}
-		//				Double ShowY = 0;
-		//				if (CalcTextShowY != "")
-		//				{
-		//					ShowY = Double.Parse(CalcTextShowY);
-		//				}
-		//				dbMsg += ",指定座標[" + ShowX + "," + ShowY + "]";
-		//				if (0 == ShowX)
-		//				{
-		//					//指定が無ければ書き込み先フィールドの左やや下に表示する
-		//					//					CalcWindow.Left = pt.X + 20;
-		//				}
-		//				else
-		//				{
-		//					//指定された位置に表示
-		//					CalcWindow.Left = ShowX;
-		//				}
-		//				if (0 == ShowY)
-		//				{
-		//					//指定が無ければ書き込み先フィールドの左やや下に表示する
-		//					//					CalcWindow.Top = pt.Y + 30;
-		//				}
-		//				else
-		//				{
-		//					//指定された位置に表示
-		//					CalcWindow.Top = ShowY;
-		//				}
-		//				dbMsg += ">>[" + ShowX + "," + ShowY + "]";
-		//				CalcWindow.Topmost = true;
-		//				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-		//				CalcWindow.Width = 300;
-		//				CalcWindow.Height = 400;
-		//				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-		//				string ViewTitle = DG.Name + "[" + (rowIndex + 1) + "," + (columnIndex + 1) + "]";
-		//				//			ViewTitle += activeCell.Record;
-		//				ViewTitle += ":" + activeCell.Field.Label;
-		//				dbMsg += ",ViewTitol=" + ViewTitle;
-
-		//				if (!ViewTitle.Equals(""))
-		//				{
-		//					CalcWindow.Title = ViewTitle;
-		//				}
-		//				calculatorControl.CalcWindow = CalcWindow;
-		//				calculatorControl.InputStr = result.ToString();
-
-		//				//		calculatorControl.OperatKey = this.OperatKey;
-		//				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
-		//				dbMsg += ",dialogResult=" + dialogResult;
-
-		//			}
-		//			else
-		//			{
-		//				String titolStr = "XamDataGrid:" + DG.Name + "でコンテキストメニューで選択したアイテム";
-		//				String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";
-		//				msgStr += "\r\n電卓は数値を入力するセルでご利用ください";
-		//				MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Exclamation);
-		//			}
-		//		}
-		//		else
-		//		{
-		//			dbMsg += ",activeCell == null";
-		//		}
-		//		MyLog(TAG, dbMsg);
-		//	}
-		//	catch (Exception er)
-		//	{
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
 		#endregion
 
 
@@ -568,6 +548,7 @@ namespace CS_CalcTest.ViewModels {
 					//電卓クラスを生成して書き込み先の参照を渡す
 					CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
 					calculatorControl.TargetTextBlock = targetTextBlock;
+					calculatorControl.InputStr = targetTextBlock.Text;
 
 					//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 					Window CalcWindow = new Window {
@@ -603,8 +584,8 @@ namespace CS_CalcTest.ViewModels {
 					dbMsg += ">>[" + ShowX + "," + ShowY + "]";
 					CalcWindow.Topmost = true;
 					dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-					CalcWindow.Width = 300;
-					CalcWindow.Height = 400;
+					CalcWindow.Width = CalcWindowWidth;
+					CalcWindow.Height = CalcWindowHeight;
 					dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
 					string ViewTitle = "データグリッド" + DG.Name + "の" + (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
 
@@ -619,7 +600,11 @@ namespace CS_CalcTest.ViewModels {
 					//		calculatorControl.OperatKey = this.OperatKey;
 					Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 					dbMsg += ",dialogResult=" + dialogResult;
-
+					if(dialogResult != false){
+						string resultStr = calculatorControl.ResultStr;
+						dbMsg += ",resultStr=" + resultStr;
+						targetTextBlock.Text= resultStr;
+					}
 				} else {
 					String titolStr = "データグリッド" + DG.Name + "でコンテキストメニューで選択したアイテム";
 					String msgStr = (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目（" + orgVal + "）は数値ではありません";

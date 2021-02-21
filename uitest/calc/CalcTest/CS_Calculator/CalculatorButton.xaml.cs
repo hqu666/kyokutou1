@@ -5,8 +5,6 @@ using System.Windows.Input;
 
 namespace CS_Calculator
 {
-
-
 	/// <summary>
 	/// クリックするとダイヤログで電卓を表示するボタン
 	/// </summary>
@@ -38,8 +36,25 @@ namespace CS_Calculator
 		}
 		public static readonly DependencyProperty ShowYProperty =
 			DependencyProperty.Register("ShowY", typeof(Double), typeof(CalculatorButton), new PropertyMetadata(default(Double)));
-	
-			/// <summary>
+
+		/// <summary>
+		/// ウインドウ幅
+		/// </summary>
+		public Double CalcWindowWidth {
+			get { return (Double)GetValue(CalcWindowWidthProperty); }
+			set { SetValue(CalcWindowWidthProperty, value); }
+		}
+		public static readonly DependencyProperty CalcWindowWidthProperty =
+			DependencyProperty.Register("CalcWindowWidth", typeof(Double), typeof(CalculatorButton), new PropertyMetadata(default(Double)));
+
+		public Double CalcWindowHeight {
+			get { return (Double)GetValue(CalcWindowHeightProperty); }
+			set { SetValue(CalcWindowHeightProperty, value); }
+		}
+		public static readonly DependencyProperty CalcWindowHeightProperty =
+			DependencyProperty.Register("CalcWindowHeight", typeof(Double), typeof(CalculatorButton), new PropertyMetadata(default(Double)));
+
+		/// <summary>
 		/// ダイアログタイトル
 		/// </summary>
 		public string ViewTitle {
@@ -48,6 +63,7 @@ namespace CS_Calculator
 		}
 		public static readonly DependencyProperty ViewTitleProperty =
 			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
+
 
 		/// <summary>
 		/// 電卓クラス
@@ -66,6 +82,12 @@ namespace CS_Calculator
 		public CalculatorButton()
 		{
 			InitializeComponent();
+			if(CalcWindowWidth == 0) {
+					CalcWindowWidth = 180;
+			}
+			if (CalcWindowHeight == 0) {
+				CalcWindowHeight = 250;
+			}
 			this.Loaded += This_loaded;
 		}
 		//リソースの読込みが終わったら
@@ -150,43 +172,38 @@ namespace CS_Calculator
 					MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 					return;
 				}
-				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
-				CalcWindow = new Window {
-					Title = TargetTextBox.Name,
-					Content = calculatorControl,
-					ResizeMode = ResizeMode.NoResize
-				};
+				if (TargetTextBox != null) {
+					ViewTitle = "TextBox:" + TargetTextBox.Name;
+				}
 				Point pt = TargetTextBox.PointToScreen(new Point(0.0d, 0.0d));
 				//表示位置
-				if (0 == ShowX)
-				{
+				if (0 == ShowX){
 					//指定が無ければ書き込み先フィールドの左やや下に表示する
-					CalcWindow.Left = pt.X + 20;
-				}
-				else
-				{
-					//指定された位置に表示
-					CalcWindow.Left = ShowX;
-				}
-				if ( 0== ShowY)
-				{
-					//指定が無ければ書き込み先フィールドの左やや下に表示する
-					CalcWindow.Top = pt.Y + 30;
+					ShowX = pt.X + 20;
 				}else{
 					//指定された位置に表示
-					CalcWindow.Top = ShowY;
+					ShowX = ShowX;
 				}
-				CalcWindow.Topmost = true;
-				dbMsg += "(" + CalcWindow.Left + " , " + CalcWindow.Top + ")";
-				CalcWindow.Width = 300;
-				CalcWindow.Height = 400;
-				dbMsg += "[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-				dbMsg += ",ViewTitol=" + ViewTitle;
-
-				if (!ViewTitle.Equals("")) {
-					CalcWindow.Title = ViewTitle;
+				if ( 0== ShowY){
+					//指定が無ければ書き込み先フィールドの左やや下に表示する
+					ShowY = pt.Y + 30;
+				}else{
+					//指定された位置に表示
+					ShowY = ShowY;
 				}
-				calculatorControl.CalcWindow = CalcWindow;
+				//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
+				Window CalcWindow = new Window {                           //Windowを生成
+					Title = ViewTitle,
+					Width = CalcWindowWidth,
+					Height = CalcWindowHeight,
+					Left = ShowX,
+					Top = ShowY,
+					Content = calculatorControl,
+					ResizeMode = ResizeMode.NoResize,
+					Topmost = true
+				};
+				dbMsg += ">>(" + CalcWindow.Left + " , " + CalcWindow.Top + ")[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
+				calculatorControl.CalcWindow = CalcWindow;              //dllからクローズなどのwindow制御を行う
 				calculatorControl.OperatKey = this.OperatKey;
 				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 				dbMsg += ",dialogResult=" + dialogResult;
