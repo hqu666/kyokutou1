@@ -598,12 +598,16 @@ namespace CS_Calculator{
 			{
 				this.ResultStr = (string)CalcResult.Content.ToString();
 				dbMsg += ",戻り値=" + ResultStr;
+				if (this.ResultStr ==null || this.ResultStr.Equals("")){
+					this.ResultStr = this.InputStr;
+					dbMsg += ">>" + this.ResultStr;
+				}
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxへ";
-					TargetTextBox.Text = ResultStr;
+					TargetTextBox.Text = this.ResultStr;
 				} else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockへ";
-					TargetTextBlock.Text = ResultStr;
+					TargetTextBlock.Text = this.ResultStr;
 				//}else if (TargetCell != null){
 				//	dbMsg += ",XamDataGridのCellへ";
 				//	//IntのCellなら四捨五入した整数が入る
@@ -614,7 +618,10 @@ namespace CS_Calculator{
 				//	TargetGsCell.Value =double.Parse(ResultStr);
 				//	//TargetGsCell.Text = rText;では戻らない
 				}
-				CalcWindow.Close();
+				if(CalcWindow != null)
+				{
+					CalcWindow.Close();
+				}
 				MyLog(TAG, dbMsg);
 			}
 			catch (Exception er)
