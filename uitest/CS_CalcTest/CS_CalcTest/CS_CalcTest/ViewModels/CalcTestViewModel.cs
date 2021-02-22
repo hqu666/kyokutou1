@@ -213,8 +213,7 @@ namespace CS_CalcTest.ViewModels {
 							ShowY = Double.Parse(CalcTextShowY);
 						}
 						dbMsg += ">>(" + ShowX + "," + ShowY + ")";
-						//電卓クラスを生成して書き込み先の参照を渡す
-						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
+						CS_CalculatorControl calculatorControl = new CS_CalculatorControl();    //電卓クラスを生成
 						Window CalcWindow = new Window{                           //Windowを生成
 							Title = ViewTitle,
 							Width = CalcWindowWidth,
@@ -226,8 +225,8 @@ namespace CS_CalcTest.ViewModels {
 							Topmost=true
 						};
 						dbMsg += ">>(" + CalcWindow.Left + " , " + CalcWindow.Top + ")[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
-						calculatorControl.CalcWindow = CalcWindow;				//dllからクローズなどのwindow制御を行う
-						calculatorControl.InputStr = result.ToString();             //dllに元の書込み値を渡すv
+						calculatorControl.CalcWindow = CalcWindow;				//dllからクローズなどのwindow制御を行う為の指定
+						calculatorControl.InputStr = result.ToString();             //dllに元の書込み値を渡す
 						//	calculatorControl.TargetGsCell = activeCell;書き戻すElementを指定すると
 						//	組込み先のライブラリバージョン不一致などで使えない
 						Nullable<bool> dialogResult = CalcWindow.ShowDialog();			//ダイアログ表示

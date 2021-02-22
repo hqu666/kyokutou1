@@ -181,43 +181,6 @@ namespace WpfApp1.Views {
 			return result;
 		}
 
-		/*
-		private class Product {
-			///<summary>
-			///製品名
-			///</summary>
-			private string _Name;
-			public string Name {
-				get => _Name;
-				set {
-					if (_Name == value)
-						return;
-					_Name = value;
-				}
-			}
-			private int _Price;
-			public int Price {
-				get => _Price;
-				set {
-					if (_Price == value)
-						return;
-					_Price = value;
-				}
-			}
-
-			private int _Tax;
-			public int Tax {
-				get => _Tax;
-				set {
-					if (_Tax == value)
-						return;
-					_Tax = value;
-				}
-			}
-
-
-		}
-		*/
 	}
 }
 
