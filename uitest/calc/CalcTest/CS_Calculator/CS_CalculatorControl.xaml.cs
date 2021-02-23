@@ -974,6 +974,80 @@ namespace CS_Calculator{
 			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		/// <summary>
+		/// 経過に記録されたアイテムを分割する
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ProgressItemSepareat(object sender, RoutedEventArgs e) {
+			string TAG = "ProgressItemSepareat";
+			string dbMsg = "";
+			try {
+				//最新状態を取得
+				CalcProgress.Items.Refresh();
+				BeforeVal selectedItem = (BeforeVal)CalcProgress.SelectedItem;
+				int selectedIndex = CalcProgress.SelectedIndex;
+				int insertPosition = selectedIndex+1;
+				string selectedValueString = selectedItem.Value.ToString();
+				dbMsg += selectedValueString;
+				int srtLen = selectedValueString.Length;
+				int sepPosition = (int)srtLen / 2;
+				dbMsg += ";" + srtLen+ "文字中" + sepPosition + "から";
+				string insertValStr = selectedValueString.Substring(sepPosition, (srtLen - sepPosition));
+				dbMsg += "=" + insertValStr;
+				BeforeVal insertRecord = new BeforeVal();
+				insertRecord.Operater = AddStr;
+				insertRecord.Value = double.Parse(insertValStr);
+
+				string titolStr = "電卓；入力値の変更";
+				String msgStr = "["+ insertPosition + "番目]" + selectedValueString + "を分割します。\r\n";
+				msgStr += "\r\nよろしいですか？";
+				msgStr += "\r\n(中心で分割して演算子は" + insertRecord.Operater + "で" + insertRecord.Value + "にします)";
+				MessageBoxResult dResurt = MessageShowWPF(msgStr, titolStr, MessageBoxButton.OKCancel, MessageBoxImage.Error);
+				if (dResurt == MessageBoxResult.OK){
+					dbMsg += "分割開始";
+					BeforeVals.Insert(insertPosition, insertRecord);
+					BeforeVals[selectedIndex].Value = double.Parse(selectedValueString.Substring(0,sepPosition));
+
+					CalcProgress.ItemsSource = BeforeVals;
+					CalcProgress.Items.Refresh();
+					ProcessVal = ReCalk();
+					CalcResult.Content = ProcessVal;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+
+		}
+
+		private void ProgressItemDelete(object sender, RoutedEventArgs e) {
+			string TAG = "ProgressItemDelete";
+			string dbMsg = "";
+			try {
+				BeforeVal selectedItem = (BeforeVal)CalcProgress.SelectedItem;
+				int selectedIndex = CalcProgress.SelectedIndex;
+				string selectedValueString = selectedItem.Value.ToString();
+				int insertPosition = selectedIndex + 1;
+				string titolStr = "電卓；入力値の削除";
+				String msgStr = "[" + insertPosition + "番目]" + selectedValueString + "を削除します。\r\n";
+				msgStr += "\r\nよろしいですか？";
+				MessageBoxResult dResurt = MessageShowWPF(msgStr, titolStr, MessageBoxButton.OKCancel, MessageBoxImage.Error);
+				if (dResurt == MessageBoxResult.OK) {
+					dbMsg += "削除開始";
+					BeforeVals.RemoveAt(selectedIndex);
+					CalcProgress.ItemsSource = BeforeVals;
+					CalcProgress.Items.Refresh();
+					ProcessVal = ReCalk();
+					CalcResult.Content = ProcessVal;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)
 		{

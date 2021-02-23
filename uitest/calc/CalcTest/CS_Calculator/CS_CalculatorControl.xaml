@@ -132,6 +132,13 @@
 							SelectedCellsChanged="CalcProgress_SelectedCellsChanged" 
 							CellEditEnding="CalcProgress_CellEditEnding" 
 							>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="分割" Click="ProgressItemSepareat"/>
+					<MenuItem Header="消去" Click="ProgressItemDelete"/>
+			</ContextMenu>
+			</DataGrid.ContextMenu>
+
 		</DataGrid>
 		<!--
 					HorizontalAlignment="Right" 
