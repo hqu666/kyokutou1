@@ -974,6 +974,16 @@ namespace CS_Calculator{
 			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		private void DataGridTextColumn_Opened(object sender, RoutedEventArgs e) {
+			string TAG = "DataGridTextColumn_Opened";
+			string dbMsg = "";
+			try {
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		/// <summary>
 		/// 経過に記録されたアイテムを分割する
 		/// </summary>

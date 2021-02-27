@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CS_Calculator"
+           xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+          xmlns:local="clr-namespace:CS_Calculator"
              mc:Ignorable="d" 
 			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
 			 Unloaded="UserControl_Unloaded" 
@@ -15,7 +16,7 @@
 			Width="180"
 	-->
 	<UserControl.Resources>
-		<Style TargetType="Button">
+		<Style  TargetType="Button">
 			<Setter Property="FontSize" Value="18" />
 			<Setter Property="MinHeight" Value="24" />
 			<Setter Property="Foreground" Value="Black" />
@@ -56,6 +57,16 @@
 				</Trigger>
 			</ControlTemplate.Triggers>
 		</ControlTemplate>
+
+		<ContextMenu x:Key="CellConMenu">
+			<MenuItem Header="分割" Click="ProgressItemSepareat"/>
+			<MenuItem Header="消去" Click="ProgressItemDelete"/>
+		</ContextMenu>
+		<Style x:Name="StyleForDataCell" TargetType="{x:Type DataGridCell}" >
+			<!--<EventSetter Event="MouseRightButtonUp" Handler="ProgressItemSepareat" />-->
+			<Setter Property="ContextMenu" Value="{StaticResource CellConMenu}"/>
+		</Style>
+		<!--https://social.msdn.microsoft.com/Forums/aspnet/ja-JP/2c1a9456-c824-4531-a3ed-d0b294961a43/datagriditemitem?forum=wpfja-->
 	</UserControl.Resources>
 
 	<Grid>
@@ -102,11 +113,6 @@
 					IsReadOnly="True" 
 					BorderThickness="0"
 					/>
-			<!--	
-							TextAlignment="Left"
-
-			Text="{Binding InputStr ,Mode=TwoWay}"	-->
-			<!---->
 			<Button Name="CorpBt"
 						Grid.Row="0" Grid.Column="2" 
 						HorizontalAlignment="Right"
@@ -118,7 +124,7 @@
 		<DataGrid x:Name="CalcProgress" 
 							Grid.Row="2" Grid.Column="0"  Grid.ColumnSpan="3" 
 							HeadersVisibility="None"
-							AutoGenerateColumns="True"
+							AutoGenerateColumns="False"
 							ColumnWidth="SizeToCells"
 							MaxHeight="152"
 							MaxWidth="157"
@@ -127,18 +133,19 @@
 							HorizontalContentAlignment="Right"
 							ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							ScrollViewer.VerticalScrollBarVisibility="Visible"
+							SelectionUnit="Cell"
 							CanUserAddRows ="False" 
 							CanUserReorderColumns="True"
 							SelectedCellsChanged="CalcProgress_SelectedCellsChanged" 
 							CellEditEnding="CalcProgress_CellEditEnding" 
 							>
-			<DataGrid.ContextMenu>
-				<ContextMenu>
-					<MenuItem Header="分割" Click="ProgressItemSepareat"/>
-					<MenuItem Header="消去" Click="ProgressItemDelete"/>
-			</ContextMenu>
-			</DataGrid.ContextMenu>
+			<!--							CellStyle="{StaticResource StyleForDataCell}"
+>-->
 
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="none" Binding="{Binding Operater}"/>
+				<DataGridTextColumn Header="none" Binding="{Binding Value}"/>
+			</DataGrid.Columns>
 		</DataGrid>
 		<!--
 					HorizontalAlignment="Right" 
@@ -154,6 +161,14 @@
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
 				>
+			<Grid.Resources>
+					<!--<Style x:Key="ButtonStyle" TargetType="Button"
+								BasedOn="{StaticResource BasicStyle}">
+						<Setter Property="BorderBrush" Value="Orange" />
+						<Setter Property="BorderThickness" Value="2" />
+						<Setter Property="Foreground" Value="Red" />
+					</Style>-->
+				</Grid.Resources>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="40*" />
 				<ColumnDefinition Width="40*" />
