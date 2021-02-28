@@ -511,13 +511,18 @@ namespace CS_Calculator{
 			string TAG = "CalcProgress_SelectedCellsChanged";
 			string dbMsg = "";
 			try {
-				DataGrid DG = sender as DataGrid;
+				//			DataGrid DG = sender as DataGrid;
+				DataGrid DG = CalcProgress;
 				int selectedIndex = DG.SelectedIndex;
 				dbMsg += "[" + selectedIndex + "]";
-				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
-				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
-				IsPrgresEdit = true;
-				dbMsg += "＞＞既存値変更開始" + IsPrgresEdit;
+				if(DG.SelectedItem == null) {
+					dbMsg += "SelectedItem=null" ;
+				} else {
+					BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
+					dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
+					IsPrgresEdit = true;
+					dbMsg += "＞＞既存値変更開始" + IsPrgresEdit;
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -968,10 +973,24 @@ namespace CS_Calculator{
 			EnterBt.Focus();
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void OnPropertyChanged(string propertyName)
-		{
-			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		//private void CalcProgress_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
+		//	string TAG = "CalcProgress_ContextMenuOpening";
+		//	string dbMsg = "";
+		//	try {
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
+		protected override void OnMouseRightButtonUp(MouseButtonEventArgs e) {
+			string TAG = "OnMouseRightButtonUp";
+			string dbMsg = "";
+			try {
+				//		e.Handled = true;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		private void DataGridTextColumn_Opened(object sender, RoutedEventArgs e) {
@@ -1057,6 +1076,11 @@ namespace CS_Calculator{
 			}
 		}
 
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void OnPropertyChanged(string propertyName) {
+			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
 		////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg)

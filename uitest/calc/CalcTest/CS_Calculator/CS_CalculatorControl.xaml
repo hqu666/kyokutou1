@@ -62,7 +62,7 @@
 			<MenuItem Header="分割" Click="ProgressItemSepareat"/>
 			<MenuItem Header="消去" Click="ProgressItemDelete"/>
 		</ContextMenu>
-		<Style x:Name="StyleForDataCell" TargetType="{x:Type DataGridCell}" >
+		<Style x:Key="StyleForDataCell" TargetType="{x:Type DataGridCell}" >
 			<!--<EventSetter Event="MouseRightButtonUp" Handler="ProgressItemSepareat" />-->
 			<Setter Property="ContextMenu" Value="{StaticResource CellConMenu}"/>
 		</Style>
@@ -125,6 +125,7 @@
 							Grid.Row="2" Grid.Column="0"  Grid.ColumnSpan="3" 
 							HeadersVisibility="None"
 							AutoGenerateColumns="False"
+							CellStyle="{StaticResource StyleForDataCell}"
 							ColumnWidth="SizeToCells"
 							MaxHeight="152"
 							MaxWidth="157"
@@ -133,13 +134,15 @@
 							HorizontalContentAlignment="Right"
 							ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							ScrollViewer.VerticalScrollBarVisibility="Visible"
-							SelectionUnit="Cell"
 							CanUserAddRows ="False" 
 							CanUserReorderColumns="True"
 							SelectedCellsChanged="CalcProgress_SelectedCellsChanged" 
-							CellEditEnding="CalcProgress_CellEditEnding" 
+							CellEditEnding="CalcProgress_CellEditEnding"
 							>
-			<!--							CellStyle="{StaticResource StyleForDataCell}"
+			<!--		
+										SelectionUnit="Cell" だとselectitemが取得できない
+										 ContextMenuOpening="CalcProgress_ContextMenuOpening" 
+
 >-->
 
 			<DataGrid.Columns>
