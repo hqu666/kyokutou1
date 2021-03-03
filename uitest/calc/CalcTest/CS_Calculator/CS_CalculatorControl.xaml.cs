@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
+using System;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interactivity;
+using System.Windows.Interop;
 //using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
 //using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
@@ -161,6 +167,32 @@ namespace CS_Calculator{
 				CalcProgress.Items.Refresh();
 				//	CalcProgress.Content = "";									//ラベルの場合
 				CalcProcess.Focus();
+
+				//IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
+				//MENUITEMINFO item1 = new MENUITEMINFO();
+				//item1.cbSize = (uint)Marshal.SizeOf(item1);
+				//item1.fMask = MIIM_FTYPE;
+				//item1.fType = MFT_SEPARATOR;
+				//InsertMenuItem(hSysMenu, 5, true, ref item1);
+
+				//MENUITEMINFO item2 = new MENUITEMINFO();
+				//item2.cbSize = (uint)Marshal.SizeOf(item2);
+				//item2.fMask = MIIM_STRING | MIIM_ID;
+				//item2.wID = MENU_ID_01;
+				//item2.dwTypeData = "てすと1";
+				//InsertMenuItem(hSysMenu, 6, true, ref item2);
+
+				//MENUITEMINFO item3 = new MENUITEMINFO();
+				//item3.cbSize = (uint)Marshal.SizeOf(item2);
+				//item3.fMask = MIIM_STRING | MIIM_ID;
+				//item3.wID = MENU_ID_02;
+				//item3.dwTypeData = "てすと2";
+				//InsertMenuItem(hSysMenu, 6, true, ref item3);
+
+				//計算の優先順位は電卓処理から
+				PCOMenu.IsEnabled = true;
+				PFAOMenu.IsEnabled = false;
+
 				MyLog(TAG, dbMsg);
 			}
 			catch (Exception er)
@@ -982,11 +1014,16 @@ namespace CS_Calculator{
 		//		MyErrorLog(TAG, dbMsg, er);
 		//	}
 		//}
+
+		/// <summary>
+		/// マウス右クリック
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnMouseRightButtonUp(MouseButtonEventArgs e) {
 			string TAG = "OnMouseRightButtonUp";
 			string dbMsg = "";
 			try {
-				//		e.Handled = true;
+				//		e.Handled = true;				//上書きさせる
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1076,6 +1113,25 @@ namespace CS_Calculator{
 			}
 		}
 
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PriorityFourArithmeticOperation(object sender, RoutedEventArgs e) {
+			PCOMenu.IsEnabled = true;
+			PFAOMenu.IsEnabled = false;
+		}
+
+		/// <summary>
+		/// 電卓処理：現在の結果に次の演算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PriorityCalcOperation(object sender, RoutedEventArgs e) {
+			PFAOMenu.IsEnabled = true;
+			PCOMenu.IsEnabled = false;
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) {
@@ -1130,7 +1186,6 @@ namespace CS_Calculator{
 			public string Operater { get; set; }
 			public double Value { get; set; }
 		}
-
 	}
 
 }

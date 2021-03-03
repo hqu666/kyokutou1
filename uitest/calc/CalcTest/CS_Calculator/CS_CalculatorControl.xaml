@@ -11,6 +11,12 @@
 			PreviewKeyDown="UserControl_PreviewKeyDown"
 			 KeyDown="UserControl_KeyDown"
 	>
+	<UserControl.ContextMenu>
+			<ContextMenu>
+			<MenuItem x:Name="PFAOMenu" Header="四則演算の優先順位で計算" Click="PriorityFourArithmeticOperation"/>
+			<MenuItem  x:Name="PCOMenu" Header="電卓処理：現在の結果に次の演算" Click="PriorityCalcOperation"/>
+			</ContextMenu>
+		</UserControl.ContextMenu>
 	<!--FontSize="12"
 					  Height="250"
 			Width="180"
@@ -57,6 +63,15 @@
 				</Trigger>
 			</ControlTemplate.Triggers>
 		</ControlTemplate>
+	
+	<ContextMenu x:Key="OpeConMenu">
+			<MenuItem Header="四則演算の優先順位で計算" Click="ProgressItemSepareat"/>
+			<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ProgressItemDelete"/>
+		</ContextMenu>
+		<Style x:Key="StyleForWindow" TargetType="{x:Type Label}" >
+			<!--<EventSetter Event="MouseRightButtonUp" Handler="ProgressItemSepareat" />-->
+			<Setter Property="ContextMenu" Value="{StaticResource OpeConMenu}"/>
+		</Style>
 
 		<ContextMenu x:Key="CellConMenu">
 			<MenuItem Header="分割" Click="ProgressItemSepareat"/>
@@ -70,6 +85,12 @@
 	</UserControl.Resources>
 
 	<Grid>
+		<!--<Grid.ContextMenu>
+			<ContextMenu>
+				<MenuItem Header="四則演算の優先順位で計算" Click="ProgressItemSepareat"/>
+				<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ProgressItemDelete"/>
+			</ContextMenu>
+		</Grid.ContextMenu>-->
 		<!--<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="40*" />
 			<ColumnDefinition/>
@@ -105,7 +126,8 @@
 			<Label x:Name="CalcOperation" Content="+" Margin="2,0,2,0"
 					Grid.Row="0" Grid.Column="0" Padding="0"
 					FontSize="12" 
-					/>
+					>
+			</Label>
 			<TextBox x:Name="CalcProcess"
 					Grid.Row="0" Grid.Column="1" 
 					FontSize="12"  Padding="0"
