@@ -92,6 +92,11 @@ namespace CS_Calculator{
 
 		public string SelectOperater { get; set; }
 		public string SelectValue { get; set; }
+	
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		public bool IsPriorityFourArithmeticOperation = false;
 
 
 		/// <summary>
@@ -190,8 +195,9 @@ namespace CS_Calculator{
 				//InsertMenuItem(hSysMenu, 6, true, ref item3);
 
 				//計算の優先順位は電卓処理から
-				PCOMenu.IsEnabled = true;
-				PFAOMenu.IsEnabled = false;
+				IsPriorityFourArithmeticOperation = SetOperationPriority(false);
+				//PCOMenu.IsEnabled = true;
+				//PFAOMenu.IsEnabled = false;
 
 				MyLog(TAG, dbMsg);
 			}
@@ -442,6 +448,41 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
+		/// 演算本体
+		/// </summary>
+		/// <param name="ResultNow"></param>
+		/// <param name="beforeVal"></param>
+		/// <returns></returns>
+		private double ReCalkBody(double ResultNow,BeforeVal beforeVal ) {
+			string TAG = "ReCalkBody";
+			string dbMsg = "";
+			try {
+				string bOperater = beforeVal.Operater;
+				double bValue = beforeVal.Value;
+				dbMsg += bOperater + " " + bValue;
+				if (bOperater.Equals("")) {
+					dbMsg += "＜＜開始";
+					ResultNow = bValue;
+				} else if (bOperater.Equals(AddStr)) {
+					ResultNow += bValue;
+				} else if (bOperater.Equals(SubtractStr)) {
+					ResultNow -= bValue;
+				} else if (bOperater.Equals(MultiplyStr)) {
+					ResultNow *= bValue;
+				} else if (bOperater.Equals(DivideStr)) {
+					if (ResultNow != 0) {
+						ResultNow /= bValue;
+					}
+				}
+				dbMsg += "=" + ResultNow;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return ResultNow;
+		}
+
+		/// <summary>
 		/// 再計算
 		///  : Deleteなど追加する演算が無ければ演算子は"",値は0を指定して下さい
 		/// </summary>
@@ -454,24 +495,22 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			double ResultNow = 0.0;
 			try {
-				foreach (var BeforeVal in BeforeVals) {
-					string bOperater = BeforeVal.Operater;
-					double bValue = BeforeVal.Value;
-					dbMsg += "\r\n" + bOperater + " " + bValue;
-					if (bOperater.Equals("")) {
-						dbMsg += "＜＜開始";
-						ResultNow = bValue;
-					} else if (bOperater.Equals(AddStr)) {
-						ResultNow += bValue;
-					} else if (bOperater.Equals(SubtractStr)) {
-						ResultNow -= bValue;
-					} else if (bOperater.Equals(MultiplyStr)) {
-						ResultNow *= bValue;
-					} else if (bOperater.Equals(DivideStr)) {
-						if (ResultNow != 0) {
-							ResultNow /= bValue;
+				dbMsg += "BeforeVals=" + BeforeVals.Count + "組";
+				if(0< BeforeVals.Count) {
+					dbMsg += "Operation=" + IsPriorityFourArithmeticOperation;
+					if (IsPriorityFourArithmeticOperation) {
+						dbMsg += ">>四則演算処理へ";
+						ResultNow = ReCalkPFO();
+					} else {
+						dbMsg += ">>電卓処理";
+						foreach (BeforeVal beforeVal in BeforeVals) {
+							//string bOperater = beforeVal.Operater;
+							//double bValue = beforeVal.Value;
+							//dbMsg += "\r\n" + bOperater + " " + bValue;
+							ResultNow = ReCalkBody(ResultNow, beforeVal);
 						}
 					}
+					CalcResult.Content = ResultNow;
 				}
 				dbMsg += "=" + ResultNow;
 				MyLog(TAG, dbMsg);
@@ -480,6 +519,73 @@ namespace CS_Calculator{
 			}
 			return ResultNow;
 		}
+
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		/// <returns></returns>
+		private double ReCalkPFO() {
+			string TAG = "ReCalkPFO";
+			string dbMsg = "";
+			double ResultNow = 0.0;
+			try {
+				dbMsg += "BeforeVals=" + BeforeVals.Count + "組";
+				ObservableCollection<BeforeVal> PFOVals = new ObservableCollection<BeforeVal>();
+				string bOperater = "";
+				double bValue = 0.0;
+				foreach (BeforeVal beforeVal in BeforeVals) {
+					string nOperater = beforeVal.Operater;
+					double nValue = beforeVal.Value;
+					dbMsg += "\r\n" + nOperater + " " + nValue;
+					BeforeVal pfoVal = new BeforeVal();
+					if (nOperater.Equals("")) {
+						dbMsg += "＜＜開始";
+						pfoVal.Operater = nOperater;
+						pfoVal.Value = nValue;
+						PFOVals.Add(pfoVal);
+					} else if (nOperater.Equals(AddStr) || nOperater.Equals(SubtractStr)) {
+						dbMsg += "＜＜和差";
+						pfoVal.Operater = nOperater;
+						pfoVal.Value = nValue;
+						PFOVals.Add(pfoVal);
+					} else if (nOperater.Equals(MultiplyStr)) {
+						dbMsg += "積>>";
+						BeforeVal bPFOVal = PFOVals[PFOVals.Count - 1];
+						dbMsg += bPFOVal.Value + "×" + nValue;
+						bPFOVal.Value *= nValue;
+						dbMsg += "=" + bPFOVal.Value ;
+						PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
+					} else if (nOperater.Equals(DivideStr)) {
+						dbMsg += "商>>";
+						BeforeVal bPFOVal = PFOVals[PFOVals.Count - 1];
+						dbMsg += bPFOVal.Value;
+						if (bPFOVal.Value != 0) {
+							dbMsg +=  "÷" + nValue;
+							bPFOVal.Value /= nValue;
+						}else{
+							bPFOVal.Value = 0;
+						}
+						PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
+					}
+				}
+				dbMsg += "PFOVals=" + PFOVals.Count + "組";
+				foreach (BeforeVal beforeVal in PFOVals) {
+					bOperater = beforeVal.Operater;
+					bValue = beforeVal.Value;
+					dbMsg += "\r\n" + bOperater + " " + bValue;
+					ResultNow = ReCalkBody(ResultNow, beforeVal);
+				}
+
+				dbMsg += "=" + ResultNow;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return ResultNow;
+		}
+
+
+
 
 		/// <summary>
 		/// 計算経過の更新
@@ -612,12 +718,11 @@ namespace CS_Calculator{
 						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 						IsPrgresEdit = false;
 						textEdit.Text=BeforeVals[selectedIndex].Value.ToString();
-				//		CalcProcess.Focus();
 						return;
 					}
 				}
+				ProcessVal = ReCalk();
 				MyLog(TAG, dbMsg);
-			//	ProgressEdit(selectedIndex, fieldName, eValue);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -979,9 +1084,7 @@ namespace CS_Calculator{
 				if (CalcProgress.IsVisible){
 					dbMsg = "非表示";
 					CorpProgress();
-					}
-				else
-				{
+				}else{
 					dbMsg = "表示";
 					KeyGrid.Visibility = Visibility.Collapsed;
 					CalcProgress.Visibility = Visibility.Visible;
@@ -1003,33 +1106,8 @@ namespace CS_Calculator{
 			KeyGrid.Visibility = Visibility.Visible;
 			CorpBt.Content = "▼";
 			EnterBt.Focus();
+			ProcessVal = ReCalk();
 		}
-
-		//private void CalcProgress_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
-		//	string TAG = "CalcProgress_ContextMenuOpening";
-		//	string dbMsg = "";
-		//	try {
-		//		MyLog(TAG, dbMsg);
-		//	} catch (Exception er) {
-		//		MyErrorLog(TAG, dbMsg, er);
-		//	}
-		//}
-
-		/// <summary>
-		/// マウス右クリック
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnMouseRightButtonUp(MouseButtonEventArgs e) {
-			string TAG = "OnMouseRightButtonUp";
-			string dbMsg = "";
-			try {
-				//		e.Handled = true;				//上書きさせる
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
 		private void DataGridTextColumn_Opened(object sender, RoutedEventArgs e) {
 			string TAG = "DataGridTextColumn_Opened";
 			string dbMsg = "";
@@ -1114,24 +1192,68 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
-		/// 四則演算の優先順位で計算
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void PriorityFourArithmeticOperation(object sender, RoutedEventArgs e) {
-			PCOMenu.IsEnabled = true;
-			PFAOMenu.IsEnabled = false;
-		}
-
-		/// <summary>
 		/// 電卓処理：現在の結果に次の演算
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void PriorityCalcOperation(object sender, RoutedEventArgs e) {
-			PFAOMenu.IsEnabled = true;
-			PCOMenu.IsEnabled = false;
+			IsPriorityFourArithmeticOperation = SetOperationPriority(false);
 		}
+
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PriorityFourArithmeticOperation(object sender, RoutedEventArgs e) {
+			IsPriorityFourArithmeticOperation= SetOperationPriority(true);
+		}
+
+		/// <summary>
+		/// trueで四則演算の優先順位で計算 に切替
+		/// </summary>
+		/// <param name="retBool"></param>
+		/// <returns></returns>
+		public bool SetOperationPriority(bool retBool) {
+			string TAG = "SetOperationPriority";
+			string dbMsg = "";
+			try {
+				IsPriorityFourArithmeticOperation = retBool;
+				PCOMenu.IsEnabled = false;
+				PFAOMenu.IsEnabled = false;
+				if (retBool) {
+					dbMsg += "四則演算の優先順位で計算 に切替";
+					PCOMenu.IsEnabled = true;
+				} else {
+					dbMsg += "電卓処理 に切替";
+					PFAOMenu.IsEnabled = true;
+				}
+				ProcessVal = ReCalk();
+	//			CalcResult.Content = ProcessVal;
+				dbMsg += "、 retBool＝" + retBool;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
+
+		/// <summary>
+		/// マウス右クリック
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnMouseRightButtonUp(MouseButtonEventArgs e) {
+			string TAG = "OnMouseRightButtonUp";
+			string dbMsg = "";
+			try {
+				//		e.Handled = true;				//上書きさせる
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) {

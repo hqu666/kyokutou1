@@ -12,11 +12,11 @@
 			 KeyDown="UserControl_KeyDown"
 	>
 	<UserControl.ContextMenu>
-			<ContextMenu>
+		<ContextMenu>
 			<MenuItem x:Name="PFAOMenu" Header="四則演算の優先順位で計算" Click="PriorityFourArithmeticOperation"/>
 			<MenuItem  x:Name="PCOMenu" Header="電卓処理：現在の結果に次の演算" Click="PriorityCalcOperation"/>
-			</ContextMenu>
-		</UserControl.ContextMenu>
+		</ContextMenu>
+	</UserControl.ContextMenu>
 	<!--FontSize="12"
 					  Height="250"
 			Width="180"
@@ -63,8 +63,8 @@
 				</Trigger>
 			</ControlTemplate.Triggers>
 		</ControlTemplate>
-	
-	<ContextMenu x:Key="OpeConMenu">
+
+		<ContextMenu x:Key="OpeConMenu">
 			<MenuItem Header="四則演算の優先順位で計算" Click="ProgressItemSepareat"/>
 			<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ProgressItemDelete"/>
 		</ContextMenu>
@@ -117,7 +117,8 @@
 				>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="15" />
-				<ColumnDefinition Width="130"/>
+				<ColumnDefinition Width="42.5"/>
+				<ColumnDefinition Width="87.5"/>
 				<ColumnDefinition Width="18" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions >
@@ -133,14 +134,14 @@
 					FontSize="12"  Padding="0"
 					HorizontalAlignment="Stretch"		
 					IsReadOnly="True" 
-					BorderThickness="0"
+					BorderThickness="0" Grid.ColumnSpan="2"
 					/>
 			<Button Name="CorpBt"
-						Grid.Row="0" Grid.Column="2" 
+						Grid.Row="0" Grid.Column="3" 
 						HorizontalAlignment="Right"
 						MinHeight="6"
 						Content="▼"
-						FontSize="8" Click="CorpBt_Click"
+						FontSize="8" Click="CorpBt_Click" Margin="0,1,1,1"
 				/>
 		</Grid>
 		<DataGrid x:Name="CalcProgress" 
@@ -187,13 +188,13 @@
 				VerticalAlignment="Stretch"
 				>
 			<Grid.Resources>
-					<!--<Style x:Key="ButtonStyle" TargetType="Button"
+				<!--<Style x:Key="ButtonStyle" TargetType="Button"
 								BasedOn="{StaticResource BasicStyle}">
 						<Setter Property="BorderBrush" Value="Orange" />
 						<Setter Property="BorderThickness" Value="2" />
 						<Setter Property="Foreground" Value="Red" />
 					</Style>-->
-				</Grid.Resources>
+			</Grid.Resources>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="40*" />
 				<ColumnDefinition Width="40*" />
@@ -214,96 +215,96 @@
 					Grid.Row="0" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
 					Click="ClearBt_Click">
-		</Button>
-		<!--Command="{Binding ClearClick}"-->
-		<Button x:Name="SlashBt" Content="/" 
+			</Button>
+			<!--Command="{Binding ClearClick}"-->
+			<Button x:Name="SlashBt" Content="/" 
 					Grid.Row="0" Grid.Column="1" FontSize="14"
 					Template="{StaticResource Calcbutton}"
 					Click="SlashBt_Click"  />
-		<!--Command="{Binding SlashClick}"-->
-		<Button x:Name="AsteriskBt" Content="*" 
+			<!--Command="{Binding SlashClick}"-->
+			<Button x:Name="AsteriskBt" Content="*" 
 					Grid.Row="0" Grid.Column="2"
 					Template="{StaticResource Calcbutton}"
 					Click="AsteriskBt_Click"  />
-		<!--Command="{Binding AsteriskClick}"-->
-		<Button x:Name="MinusBt" Content="-" 
+			<!--Command="{Binding AsteriskClick}"-->
+			<Button x:Name="MinusBt" Content="-" 
 					Grid.Row="0" Grid.Column="3"
 					Template="{StaticResource Calcbutton}"
 					Click="MinusBt_Click" />
-		<!--Command="{Binding MinusClick}"-->
+			<!--Command="{Binding MinusClick}"-->
 
-		<Button x:Name="SevenBt" Content="7" 
+			<Button x:Name="SevenBt" Content="7" 
 					Grid.Row="1" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
 					Click="SevenBt_Click" />
-		<!--Command="{Binding SevenClick}"-->
-		<Button x:Name="EightBt" Content="8" 
+			<!--Command="{Binding SevenClick}"-->
+			<Button x:Name="EightBt" Content="8" 
 					Grid.Row="1" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"
 					Click="EightBt_Click"  />
-		<!--Command="{Binding EightClick}"-->
-		<Button x:Name="NineBt" Content="9" 
+			<!--Command="{Binding EightClick}"-->
+			<Button x:Name="NineBt" Content="9" 
 					Grid.Row="1" Grid.Column="2"
 					Template="{StaticResource Calcbutton}"
 					Click="NineBt_Click"  />
-		<!--Command="{Binding NineClick}"-->
-		<Button x:Name="FourBt" Content="4" 
+			<!--Command="{Binding NineClick}"-->
+			<Button x:Name="FourBt" Content="4" 
 					Grid.Row="2" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
 					Click="FourBt_Click" />
-		<!--Command="{Binding FourBtClick}"-->
-		<Button x:Name="FiveBt" Content="5" 
+			<!--Command="{Binding FourBtClick}"-->
+			<Button x:Name="FiveBt" Content="5" 
 					Grid.Row="2" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"
 					Click="FiveBt_Click"  />
-		<!--Command="{Binding FiveClick}"-->
-		<Button x:Name="SixBt" Content="6" 
+			<!--Command="{Binding FiveClick}"-->
+			<Button x:Name="SixBt" Content="6" 
 					Grid.Row="2" Grid.Column="2"
 					Template="{StaticResource Calcbutton}"
 					Click="SixBt_Click"  />
-		<!--Command="{Binding SixClick}"-->
+			<!--Command="{Binding SixClick}"-->
 
-		<Button x:Name="OneBt" Content="1" 
+			<Button x:Name="OneBt" Content="1" 
 					Grid.Row="3" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
 					Click="OneBt_Click"/>
-		<!--Command="{Binding OneBtClick}"-->
-		<Button x:Name="TwoBt" Content="2" 
+			<!--Command="{Binding OneBtClick}"-->
+			<Button x:Name="TwoBt" Content="2" 
 					Grid.Row="3" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"
 					Click="TwoBt_Click"  />
-		<!--Command="{Binding TwoClick}"-->
-		<Button x:Name="ThreeBt" Content="3" 
+			<!--Command="{Binding TwoClick}"-->
+			<Button x:Name="ThreeBt" Content="3" 
 					Grid.Row="3" Grid.Column="2"
 					Template="{StaticResource Calcbutton}"
 					Click="ThreeBt_Click"  />
-		<!--Command="{Binding ThreeClick}"-->
-		<!--Content="CE&#xa;Delete"  FontSize="12"-->
-		<Button x:Name="ClearAllBt" Content="CE"  FontSize="18"
+			<!--Command="{Binding ThreeClick}"-->
+			<!--Content="CE&#xa;Delete"  FontSize="12"-->
+			<Button x:Name="ClearAllBt" Content="CE"  FontSize="18"
 					Grid.Row="4" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
 					Click="ClearAllBt_Click"	/>
-		<Button x:Name="ZeroBt" Content="0" 
+			<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="4" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"
 					Click="ZeroBt_Click" />
-		<!--Command="{Binding ZeroClick}"-->
-		<Button x:Name="PeriodBt" Content="." 
+			<!--Command="{Binding ZeroClick}"-->
+			<Button x:Name="PeriodBt" Content="." 
 					Grid.Row="4" Grid.Column="2"
 					Template="{StaticResource Calcbutton}"
 					Click="PeriodBt_Click"  />
-		<!--Command="{Binding PeriodClick}"-->
+			<!--Command="{Binding PeriodClick}"-->
 
-		<Button x:Name="PlusBt" Content="+" 
+			<Button x:Name="PlusBt" Content="+" 
 					Template="{StaticResource Calcbutton}"
 					Grid.Row="1" Grid.Column="3" Grid.RowSpan="2"
 					Click="PlusBt_Click"  />
-		<!--Command="{Binding PlusClick}"-->
-		<Button x:Name="EnterBt" Content="Enter"  FontSize="11"
+			<!--Command="{Binding PlusClick}"-->
+			<Button x:Name="EnterBt" Content="Enter"  FontSize="11"
 					Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"
 					Template="{StaticResource Calcbutton}"
 				Click="EnterBt_Click"  />
-		<!--Command="{Binding PlusClick}"-->
+			<!--Command="{Binding PlusClick}"-->
 		</Grid>
 	</Grid>
 
