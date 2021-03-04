@@ -30,6 +30,48 @@
 			<Setter Property="VerticalAlignment" Value="Stretch" />
 			<Setter Property="HorizontalAlignment" Value="Stretch" />
 		</Style>
+
+		<ControlTemplate x:Key="FuncButton"
+									TargetType="Button"
+									>
+				<Border Name="border"
+                    BorderThickness="1"
+                    BorderBrush="DarkGray"
+                    CornerRadius="1"
+					Padding="0"
+                    TextBlock.Foreground="Black"
+					Background="LightCyan"
+					VerticalAlignment="Top"
+					Height="14"
+					>
+				<ContentPresenter VerticalAlignment="Center"
+                                  HorizontalAlignment="Center" 
+								  />
+			</Border>
+
+			<ControlTemplate.Triggers>
+				<!--マウスオーバー時-->
+				<Trigger Property="IsMouseOver"
+                         Value="True">
+					<Setter TargetName="border"
+                            Property="Background"
+                            Value="#FFEFFFFF" />
+				</Trigger>
+
+				<!--クリック時-->
+				<!--<Trigger Property="IsPressed"
+                         Value="True">
+					<Setter TargetName="border"
+                            Property="Background"
+                            Value="#FF154F99" />
+					<Setter TargetName="border"
+                            Property="TextBlock.Foreground"
+                            Value="White" />
+				</Trigger>-->
+			</ControlTemplate.Triggers>
+		</ControlTemplate>
+
+
 		<ControlTemplate x:Key="Calcbutton"
                          TargetType="Button">
 
@@ -96,6 +138,7 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>-->
 		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -182,8 +225,49 @@
 							Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"
 							Height="20"
 							IsEditable="True"/>-->
-		<Grid Name="KeyGrid"
+		<Grid Name="FunctionGrid"
 				Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="40*" />
+				<ColumnDefinition Width="40*" />
+				<ColumnDefinition Width="40*" />
+				<ColumnDefinition Width="40*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions >
+				<RowDefinition Height="16" />
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Button x:Name="PowerBt" Content="^" 
+					FontSize="10" 
+					Grid.Row="0" Grid.Column="0"
+					Template="{StaticResource FuncButton}" 
+					Click="PowerBt_Click"
+					/>
+			<Button x:Name="SqrtBt" Content="√" 
+					Grid.Row="0" Grid.Column="1"
+					FontSize="8" 
+					Template="{StaticResource FuncButton}" 
+					Click="SqrtBt_Click"
+					 />
+			<Button x:Name="ParenBt" Content="("  
+					Grid.Row="0" Grid.Column="2" 
+						FontSize="8" 
+					Template="{StaticResource FuncButton}" 
+					Click="ParenBt_Click"
+					 />
+			<Button x:Name="ParenthesisBt" Content=")" 
+					Grid.Row="0" Grid.Column="3" 
+					FontSize="8" 
+					Template="{StaticResource FuncButton}" 
+					Click="ParenthesisBt_Click"
+					 />
+		</Grid>
+
+			<Grid Name="KeyGrid"
+				Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
 				>

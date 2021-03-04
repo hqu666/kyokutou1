@@ -125,6 +125,11 @@ namespace CS_Calculator{
 		private static string SubtractStr = "-";
 		private static string DivideStr = "/";
 		private static string MultiplyStr = "*";
+		private static string PowerStr = "^";
+		private static string SqrtStr = "√";
+		private static string ParenStr = "(";	
+		private static string ParenthesisStr = ")";
+
 
 		public Key OperatKey;
 
@@ -409,7 +414,6 @@ namespace CS_Calculator{
 					BeforeVals.Add(NowInput);
 					dbMsg += ",演算前=" + ProcessVal;
 					if (BeforeOperation.Equals("") || BeforeVals.Count<1) {
-						//BeforeOperation.Equals("") || IsBegin
 						//演算子が無ければそのまま格納
 						ProcessVal = BeforeVals[BeforeVals.Count - 1].Value;
 						IsBegin = false;
@@ -427,10 +431,6 @@ namespace CS_Calculator{
 					CalcProgress.Items.Refresh();
 					ProgressRefresh();
 					OnPropertyChanged("BeforeVals");
-
-					//string[] cItem = { CalcOperation.Content.ToString(), InputStr };
-					//CalcProcessCB.Items.Insert(0, InputStr);
-
 					InputStr = "";
 					CalcProcess.Text = InputStr;
 
@@ -583,9 +583,6 @@ namespace CS_Calculator{
 			}
 			return ResultNow;
 		}
-
-
-
 
 		/// <summary>
 		/// 計算経過の更新
@@ -770,6 +767,99 @@ namespace CS_Calculator{
 			{
 				MyErrorLog(TAG, dbMsg, er);
 			}
+		}
+
+		/// <summary>
+		///階乗 ^n
+		/// </summary>
+		private void PowerFunc() {
+			string TAG = "Power";
+			string dbMsg = "階乗:作成中";
+			try {
+				string NextOperation = PowerStr;
+				//			ProcessedFunc(NextOperation);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		/// <summary>
+		///階乗 ^n
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PowerBt_Click(object sender, RoutedEventArgs e) {
+			PowerFunc();
+		}
+		/// <summary>
+		/// 平方根 ^1/n
+		/// </summary>
+		private void SqrtFunc() {
+			string TAG = "Power";
+			string dbMsg = "平方根:作成中";
+			try {
+				string NextOperation = SqrtStr;
+				//			ProcessedFunc(NextOperation);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 平方根　
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>　^0.5
+		private void SqrtBt_Click(object sender, RoutedEventArgs e) {
+			SqrtFunc();
+		}
+
+		/// <summary>
+		/// 優先範囲開始の設定
+		/// </summary>
+		private void ParenFunc() {
+			string TAG = "ParenFunc";
+			string dbMsg = "";
+			try {
+				string NextOperation = ParenStr;
+	//			ProcessedFunc(NextOperation);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		/// <summary>
+		/// 優先範囲開始　(
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ParenBt_Click(object sender, RoutedEventArgs e) {
+			ParenFunc();
+		}
+
+		/// <summary>
+		/// 優先範囲終了の設定
+		/// </summary>
+		private void ParenthesisFunc() {
+			string TAG = "ParenthesisFunc";
+			string dbMsg = "";
+			try {
+				string NextOperation = ParenthesisStr;
+				//			ProcessedFunc(NextOperation);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 優先範囲終了　)
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ParenthesisBt_Click(object sender, RoutedEventArgs e) {
+			ParenthesisFunc();
 		}
 
 		/// <summary>
