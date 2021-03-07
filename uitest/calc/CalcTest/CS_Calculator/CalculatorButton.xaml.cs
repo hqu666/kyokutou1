@@ -75,6 +75,10 @@ namespace CS_Calculator
 		public Window CalcWindow;
 
 		public Key OperatKey;
+		/// <summary>
+		/// Shiftキーを押された
+		/// </summary>
+		private bool IsShiftKey = false;
 
 		/// <summary>
 		/// このクラスの起点
@@ -128,22 +132,42 @@ namespace CS_Calculator
 						OperatKey = key;
 						CalcBT_Click(new object(), new RoutedEventArgs());
 						break;
+					case Key.D8:
+					case Key.D9:
+						if (IsShiftKey) {
+							OperatKey = key;
+							CalcBT_Click(new object(), new RoutedEventArgs());
+						}
+						break;
 					default:
 						if (Key.D0 <= key && key <= Key.D9) {
 							dbMsg += "=最上列";
+							dbMsg += ";Shift解除";
 						} else if (Key.NumPad0 <= key && key <= Key.NumPad9) {
 							dbMsg += "=Numパッド";
 						} else if (Key.Decimal == key) {
 							dbMsg += "=小数点";
 						} else if (Key.Return == key) {
 							dbMsg += "=Return";
+						}else	if (key == Key.LeftShift || key == Key.RightShift) {
+								IsShiftKey = true;
+								dbMsg += ";Shift押下中";
 						} else {
-							String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
-							String titolStr = "電卓表示フィールド";
-							MessageShowWPF(msgStr, titolStr);
+						String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
+						String titolStr = "電卓表示フィールド";
+						MessageShowWPF(msgStr, titolStr);
 						}
 						break;
 				}
+
+				//if (key == Key.LeftShift || key == Key.RightShift) {
+				//	IsShiftKey = true;
+				//	dbMsg += ";Shift押下中";
+				//} else {
+				//	IsShiftKey = false;
+				//	dbMsg += ";Shift解除";
+				//}
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
