@@ -169,7 +169,7 @@ namespace CS_Calculator{
 		/// </summary>
 		public void Initialize()
 		{
-			string TAG = "ThisLoaded";
+			string TAG = "Initialize";
 			string dbMsg = "";
 			try
 			{
@@ -239,14 +239,14 @@ namespace CS_Calculator{
 				}else if (TargetTextBlock != null) {
 					dbMsg += ",TextBlockから";
 					InputStr = TargetTextBlock.Text;
-				//}else if (TargetCell != null){
-				//	dbMsg += ",XamDataGridのCellから";
-				//	InputStr = TargetCell.Value.ToString();
-				//}else if (TargetGsCell != null){
-				//	dbMsg += ",GcSpreadGridのCell ";
-				//	dbMsg += TargetGsCell.Position.Row + "レコード"+ TargetGsCell.Position.ColumnName+ "から";
-				//	InputStr = TargetGsCell.Text;
-				//	//.Value.ToString();でもOK
+					//}else if (TargetCell != null){
+					//	dbMsg += ",XamDataGridのCellから";
+					//	InputStr = TargetCell.Value.ToString();
+					//}else if (TargetGsCell != null){
+					//	dbMsg += ",GcSpreadGridのCell ";
+					//	dbMsg += TargetGsCell.Position.Row + "レコード"+ TargetGsCell.Position.ColumnName+ "から";
+					//	InputStr = TargetGsCell.Text;
+					//	//.Value.ToString();でもOK
 				}
 				dbMsg += ",InputStr=" + InputStr;
 				//		OnPropertyChanged("InputStr");
@@ -272,11 +272,13 @@ namespace CS_Calculator{
 							NextOperation = MultiplyStr;
 							break;
 						case Key.D8:
-							Key2ButtonClickerAsync(ParenBt);
+							//起動時はD8しか来ない
+							ParenFunc();
+					//		Key2ButtonClickerAsync(ParenBt);
 							break;
-						case Key.D9:
-							Key2ButtonClickerAsync(ParenthesisBt);
-							break;
+						//case Key.D9:
+						//	Key2ButtonClickerAsync(ParenthesisBt);
+						//	break;
 					}
 					dbMsg += ",=" + NextOperation;
 					ProcessedFunc(NextOperation);
@@ -1112,6 +1114,8 @@ namespace CS_Calculator{
 			string TAG = "UserControl_KeyDown";
 			string dbMsg = "";
 			try {
+				ModifierKeys keyboardModifiers = Keyboard.Modifiers;
+				dbMsg += "複合キー=" + keyboardModifiers;
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
 				if (IsPrgresEdit) {
@@ -1148,7 +1152,7 @@ namespace CS_Calculator{
 							break;
 						case Key.NumPad8:
 						case Key.D8:
-							if (IsShiftKey) {
+							if (keyboardModifiers == ModifierKeys.Shift) {
 								Key2ButtonClickerAsync(ParenBt);
 							} else {
 								Key2ButtonClickerAsync(EightBt);
@@ -1156,7 +1160,7 @@ namespace CS_Calculator{
 							break;
 						case Key.NumPad9:
 						case Key.D9:
-							if(IsShiftKey) {
+							if (keyboardModifiers == ModifierKeys.Shift) {
 								Key2ButtonClickerAsync(ParenthesisBt);
 							} else {
 								Key2ButtonClickerAsync(NineBt);
@@ -1192,13 +1196,13 @@ namespace CS_Calculator{
 						//	break;
 					}
 				}
-				if(key == Key.LeftShift || key == Key.RightShift) {
-					IsShiftKey = true;
-					dbMsg += ";Shift押下中";
-				} else {
-					IsShiftKey = false;
-					dbMsg += ";Shift解除";
-				}
+				//if(key == Key.LeftShift || key == Key.RightShift) {
+				//	IsShiftKey = true;
+				//	dbMsg += ";Shift押下中";
+				//} else {
+				//	IsShiftKey = false;
+				//	dbMsg += ";Shift解除";
+				//}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1456,13 +1460,13 @@ namespace CS_Calculator{
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-			Console.WriteLine(TAG + "[CalcTest.CS_Calculator:CS_CalculatorControl]" + dbMsg);
+			Console.WriteLine(TAG + "[CS_CalculatorControl]" + dbMsg);
 #endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err)
 		{
-			Console.WriteLine(TAG + "[CalcTest.CS_Calculator:CS_CalculatorControl] : " + dbMsg + "でエラー発生;" + err);
+			Console.WriteLine(TAG + "[CS_CalculatorControl] : " + dbMsg + "でエラー発生;" + err);
 		}
 
 		public MessageBoxResult MessageShowWPF(String msgStr,

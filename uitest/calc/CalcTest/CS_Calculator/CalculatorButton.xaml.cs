@@ -120,8 +120,18 @@ namespace CS_Calculator
 			string dbMsg = "";
 			try {
 				TextBox TF = sender as TextBox;
+				ModifierKeys keyboardModifiers = Keyboard.Modifiers;
+				dbMsg += "複合キー=" + keyboardModifiers;
+				//if(keyboardModifiers == ModifierKeys.Shift) {
+				//	IsShiftKey = true;
+				//	dbMsg += ";Shift押下";
+				//}else{
+				//	IsShiftKey = false;
+				//	dbMsg += ";Shift解除";
+				//}
+
 				Key key = e.Key;
-				dbMsg += "key=" + key.ToString();
+				dbMsg +=",key=" + key.ToString();
 				switch (key) {
 					case Key.Add:
 					case Key.OemPlus:
@@ -134,10 +144,21 @@ namespace CS_Calculator
 						break;
 					case Key.D8:
 					case Key.D9:
-						if (IsShiftKey) {
+						if (keyboardModifiers == ModifierKeys.Shift) {
+							dbMsg += ";Shift押下中";
 							OperatKey = key;
 							CalcBT_Click(new object(), new RoutedEventArgs());
 						}
+						//if (IsShiftKey) {
+						//	// D8だけが渡される
+						//	OperatKey = key;
+						//	CalcBT_Click(new object(), new RoutedEventArgs());
+						//}
+						break;
+					case Key.LeftShift:
+					case Key.RightShift:
+						//IsShiftKey = true;
+						//dbMsg += ";Shift押下";
 						break;
 					default:
 						if (Key.D0 <= key && key <= Key.D9) {
@@ -149,13 +170,13 @@ namespace CS_Calculator
 							dbMsg += "=小数点";
 						} else if (Key.Return == key) {
 							dbMsg += "=Return";
-						}else	if (key == Key.LeftShift || key == Key.RightShift) {
-								IsShiftKey = true;
-								dbMsg += ";Shift押下中";
+						//}else	if (key == Key.LeftShift || key == Key.RightShift) {
+						//		IsShiftKey = true;
+						//		dbMsg += ";Shift押下中";
 						} else {
-						String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
-						String titolStr = "電卓表示フィールド";
-						MessageShowWPF(msgStr, titolStr);
+							String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
+							String titolStr = "電卓表示フィールド";
+							MessageShowWPF(msgStr, titolStr);
 						}
 						break;
 				}
