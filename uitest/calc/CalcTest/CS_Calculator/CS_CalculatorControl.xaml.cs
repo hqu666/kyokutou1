@@ -213,7 +213,7 @@ namespace CS_Calculator{
 				IsPriorityFourArithmeticOperation = SetOperationPriority(false);
 				//PCOMenu.IsEnabled = true;
 				//PFAOMenu.IsEnabled = false;
-
+				MemoryComb.Visibility = Visibility.Hidden;
 				MyLog(TAG, dbMsg);
 			}
 			catch (Exception er)
@@ -251,11 +251,10 @@ namespace CS_Calculator{
 				dbMsg += ",InputStr=" + InputStr;
 				//		OnPropertyChanged("InputStr");
 				CalcProcess.Text = InputStr;
-	//			BeforeValDec = new Dictionary<string, string>(){{ "", InputStr },	};
-
+				//			BeforeValDec = new Dictionary<string, string>(){{ "", InputStr },	};
+				string NextOperation = "";
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Add <= OperatKey) {
-					string NextOperation = "";
 					switch (OperatKey) {
 						case Key.Add:
 						case Key.OemPlus:
@@ -271,17 +270,17 @@ namespace CS_Calculator{
 						case Key.Multiply:
 							NextOperation = MultiplyStr;
 							break;
-						case Key.D8:
-							//起動時はD8しか来ない
-							ParenFunc();
-					//		Key2ButtonClickerAsync(ParenBt);
-							break;
-						//case Key.D9:
-						//	Key2ButtonClickerAsync(ParenthesisBt);
-						//	break;
 					}
 					dbMsg += ",=" + NextOperation;
 					ProcessedFunc(NextOperation);
+				} else if (OperatKey == Key.D8) {
+					//起動時はD8しか来ない
+					//NextOperation = ParenStr;
+					//ProcessedFunc(NextOperation);
+					//ParenCount++;
+
+					ParenFunc();
+					//		Key2ButtonClickerAsync(ParenBt);
 				}
 				CorpProgress();
 				MyLog(TAG, dbMsg);
@@ -435,7 +434,7 @@ namespace CS_Calculator{
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
 					dbMsg += ",演算前=" + ProcessVal;
-					if (BeforeOperation.Equals("") || BeforeVals.Count<1) {
+					if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
 						//演算子が無ければそのまま格納
 						ProcessVal = (double)BeforeVals[BeforeVals.Count - 1].Value;
 						IsBegin = false;
@@ -457,6 +456,12 @@ namespace CS_Calculator{
 					CalcProcess.Text = InputStr;
 
 					CalcOperation.Content = NextOperation;
+				}else if(NextOperation.EndsWith(ParenStr)) {
+					BeforeVal NowInput = new BeforeVal();
+					NowInput.Operater = NextOperation;
+					NowInput.Value = null;
+					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+					BeforeVals.Add(NowInput);
 				} else {
 					dbMsg += ",入力無し：演算子から入力された";
 					//演算値が無ければ入力する値の演算区分だけを記入
@@ -525,12 +530,15 @@ namespace CS_Calculator{
 						ResultNow = ReCalkPFO();
 					} else {
 						dbMsg += ">>電卓処理";
+						string NowOperationsStr = "";
 						foreach (BeforeVal beforeVal in BeforeVals) {
 							//string bOperater = beforeVal.Operater;
 							//double bValue = beforeVal.Value;
 							//dbMsg += "\r\n" + bOperater + " " + bValue;
+							NowOperationsStr += beforeVal.Operater + beforeVal.Value;
 							ResultNow = ReCalkBody(ResultNow, beforeVal);
 						}
+						NowOperations.Content = (string)NowOperationsStr;
 					}
 					CalcResult.Content = ResultNow;
 				}
@@ -555,10 +563,12 @@ namespace CS_Calculator{
 				ObservableCollection<BeforeVal> PFOVals = new ObservableCollection<BeforeVal>();
 				string bOperater = "";
 				double bValue = 0.0;
+				string NowOperationsStr = "";
 				foreach (BeforeVal beforeVal in BeforeVals) {
 					string nOperater = beforeVal.Operater;
 					double nValue = (double)beforeVal.Value;
 					dbMsg += "\r\n" + nOperater + " " + nValue;
+					NowOperationsStr += beforeVal.Operater + beforeVal.Value;
 					BeforeVal pfoVal = new BeforeVal();
 					if (nOperater.Equals("")) {
 						dbMsg += "＜＜開始";
@@ -590,6 +600,7 @@ namespace CS_Calculator{
 						PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
 					}
 				}
+				NowOperations.Content = (string)NowOperationsStr;
 				dbMsg += "PFOVals=" + PFOVals.Count + "組";
 				foreach (BeforeVal beforeVal in PFOVals) {
 					bOperater = beforeVal.Operater;
@@ -844,42 +855,51 @@ namespace CS_Calculator{
 			string TAG = "ParenFunc";
 			string dbMsg = "";
 			try {
-				//直前の入力を格納
-				BeforeVal NowInput = new BeforeVal();
-				NowInput.Operater = CalcOperation.Content.ToString();
-				if (!InputStr.Equals("")) {
-					dbMsg += ",InputStr=" + InputStr;
-					NowInput.Value = Double.Parse(InputStr);
-				} else {
-					dbMsg += ",InputStr=空白" ;
-					if (BeforeOperation.Equals(ParenStr)) {
-						dbMsg += ",優先範囲=" + ParenCount + "階層";
-					} else if (!CalcOperation.Equals("")) {
-						dbMsg += ",先頭";
-						NowInput.Operater = MultiplyStr;
-						//dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
-						//BeforeVals.Add(NowInput);
-						//ProcessVal = ReCalk();
-						//InputStr = "";
-					}
-				}
-				if(NowInput.Operater.Equals("") && InputStr.Equals("")) {
-					dbMsg += ",演算子、数値ともに無し" ;
-				} else {
-					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
-					BeforeVals.Add(NowInput);
-					ProcessVal = ReCalk();
-					InputStr = "";
-				}
+				string NextOperation = ParenStr;
+				ProcessedFunc(NextOperation);
 
-				NowInput = new BeforeVal();
-				NowInput.Operater = ParenStr;
-				NowInput.Value = null;
-				BeforeVals.Add(NowInput);
-				ParenCount++;
-				BeforeOperation = NowInput.Operater;
+				/*
+					//直前の入力を格納
+					BeforeVal NowInput = new BeforeVal();
+					NowInput.Operater = CalcOperation.Content.ToString();
+					if (!InputStr.Equals("")) {
+						dbMsg += ",InputStr=" + InputStr;
+						NowInput.Value = Double.Parse(InputStr);
+					} else {
+						dbMsg += ",InputStr=空白" ;
+						if (BeforeOperation.Equals(ParenStr)) {
+							dbMsg += ",優先範囲=" + ParenCount + "階層";
+						} else if (!CalcOperation.Equals("")) {
+							dbMsg += ",先頭";
+							NowInput.Operater = MultiplyStr;
+							//dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+							//BeforeVals.Add(NowInput);
+							//ProcessVal = ReCalk();
+							//InputStr = "";
+						}
+					}
+					//if(NowInput.Operater.Equals("") && InputStr.Equals("")) {
+					//	dbMsg += ",演算子、数値ともに無し" ;
+					//} else {
+						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+						BeforeVals.Add(NowInput);
+						ProcessVal = ReCalk();
+						InputStr = "";
+					//}
+
+					NowInput = new BeforeVal();
+					NowInput.Operater = ParenStr;
+					NowInput.Value = null;
+					BeforeVals.Add(NowInput);
+					BeforeOperation = NowInput.Operater;
+					*/
+
+
 				//演算子を優先部開始にして
-				CalcProcess.Text = ParenStr;
+				CalcOperation.Content = ParenStr;
+				NowOperations.Content += ParenStr;
+				ParenCount++;
+				dbMsg += ",優先範囲開始=" + ParenCount + "階層";
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1114,8 +1134,10 @@ namespace CS_Calculator{
 			string TAG = "UserControl_KeyDown";
 			string dbMsg = "";
 			try {
+				//押されているModifiersキーを取得
 				ModifierKeys keyboardModifiers = Keyboard.Modifiers;
 				dbMsg += "複合キー=" + keyboardModifiers;
+				//主キーを取得
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
 				if (IsPrgresEdit) {
@@ -1188,12 +1210,18 @@ namespace CS_Calculator{
 						case Key.Enter:
 							Key2ButtonClickerAsync(EnterBt);
 							break;
-						//case Key.LeftShift:
-						//case Key.RightShift:
-						//	IsShiftKey = true;
-						//	break;
-						//default:
-						//	break;
+						case Key.M:
+							if (keyboardModifiers == ModifierKeys.Control) {
+								Key2ButtonClickerAsync(MemorySaveBt);
+							}
+							break;
+
+							//case Key.LeftShift:
+							//case Key.RightShift:
+							//	IsShiftKey = true;
+							//	break;
+							//default:
+							//	break;
 					}
 				}
 				//if(key == Key.LeftShift || key == Key.RightShift) {
@@ -1434,6 +1462,87 @@ namespace CS_Calculator{
 			return retBool;
 		}
 
+		/// <summary>
+		/// その時点の計算結果をメモリーコンボボックスに追加
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MemorySaveBt_Click(object sender, RoutedEventArgs e) {
+			string TAG = "MemorySaveBt_Click";
+			string dbMsg = "";
+			try {
+				dbMsg += "ProcessVal=" + ProcessVal;
+				if (0 !=ProcessVal) {
+					bool IsPreexist = false;
+					foreach (var pItem in MemoryComb.Items){
+						if(pItem.ToString().Equals(ProcessVal.ToString())) {
+							IsPreexist = true;
+						}
+					}
+					if(IsPreexist) {
+						string titolStr = "電卓：メモリへの追加"; ;
+						String msgStr = ProcessVal +"は既にメモリに登録済みです。";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Information);
+					} else {
+						MemoryComb.Items.Add(ProcessVal.ToString());
+						dbMsg += "＞＞" + MemoryComb.Items.Count + "件";
+						MemoryComb.Visibility = Visibility.Visible;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// メモリコンボボックスで選択したアイテムを入力枠にコピーする
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MemoryComb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			string TAG = "MemoryComb_SelectionChanged";
+			string dbMsg = "";
+			try {
+				ComboBox cb = MemoryComb;       // (ComboBox)sender;
+				InputStr = cb.SelectedItem.ToString();
+				//	String sele = MemoryComb.Text;
+				dbMsg += "選択値=" + InputStr;
+				CalcProcess.Text = InputStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// メモリーから記録されたアイテムを削除する
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MemoryItemDeleat(object sender, RoutedEventArgs e) {
+			string TAG = "MemoryItemDeleat";
+			string dbMsg = "";
+			try {
+				ComboBox cb = MemoryComb;		// (ComboBox)sender;
+				//先頭は-1？？
+				if(cb.SelectedValue != null) {
+					string titolStr = "電卓：メモリから削除"; ;
+					String msgStr = "[" + (cb.SelectedIndex + 1) + "]" + cb.SelectedValue + "をメモリから削除します。";
+					MessageBoxResult res = MessageShowWPF(msgStr, titolStr, MessageBoxButton.YesNo, MessageBoxImage.Information);
+					if (res.Equals(MessageBoxResult.Yes)) {
+						MemoryComb.Items.RemoveAt(cb.SelectedIndex);
+						dbMsg += "＞＞" + MemoryComb.Items.Count + "件";
+						if (MemoryComb.Items.Count < 1) {
+							MemoryComb.Visibility = Visibility.Hidden;
+						}
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		/// <summary>
 		/// マウス右クリック
@@ -1504,6 +1613,7 @@ namespace CS_Calculator{
 			public string Operater { get; set; }
 			public double? Value { get; set; }
 		}
+
 	}
 
 }

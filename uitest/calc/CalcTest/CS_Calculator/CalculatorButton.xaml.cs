@@ -263,7 +263,7 @@ namespace CS_Calculator
 		public static void MyLog(string TAG, string dbMsg)
 		{
 #if DEBUG
-			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg);
+			Console.WriteLine(TAG + "[CalculatorButtun]" + dbMsg);
 #endif
 		}
 
