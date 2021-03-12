@@ -100,9 +100,6 @@ namespace CS_Calculator
 			string TAG = "this_loaded";
 			string dbMsg = "";
 			try {
-				//calculatorControl = new CS_CalculatorControl();
-				//calculatorControl.TargetTextBox = this.TargetTextBox;
-
 				TargetTextBox.KeyDown += new KeyEventHandler(TFKeyDown);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -122,14 +119,6 @@ namespace CS_Calculator
 				TextBox TF = sender as TextBox;
 				ModifierKeys keyboardModifiers = Keyboard.Modifiers;
 				dbMsg += "複合キー=" + keyboardModifiers;
-				//if(keyboardModifiers == ModifierKeys.Shift) {
-				//	IsShiftKey = true;
-				//	dbMsg += ";Shift押下";
-				//}else{
-				//	IsShiftKey = false;
-				//	dbMsg += ";Shift解除";
-				//}
-
 				Key key = e.Key;
 				dbMsg +=",key=" + key.ToString();
 				switch (key) {
@@ -149,16 +138,10 @@ namespace CS_Calculator
 							OperatKey = key;
 							CalcBT_Click(new object(), new RoutedEventArgs());
 						}
-						//if (IsShiftKey) {
-						//	// D8だけが渡される
-						//	OperatKey = key;
-						//	CalcBT_Click(new object(), new RoutedEventArgs());
-						//}
 						break;
 					case Key.LeftShift:
 					case Key.RightShift:
-						//IsShiftKey = true;
-						//dbMsg += ";Shift押下";
+						//ShiftKey で誤動作しないように捕獲
 						break;
 					default:
 						if (Key.D0 <= key && key <= Key.D9) {
@@ -170,9 +153,6 @@ namespace CS_Calculator
 							dbMsg += "=小数点";
 						} else if (Key.Return == key) {
 							dbMsg += "=Return";
-						//}else	if (key == Key.LeftShift || key == Key.RightShift) {
-						//		IsShiftKey = true;
-						//		dbMsg += ";Shift押下中";
 						} else {
 							String msgStr = "数値以外(" + key.ToString() + ")が入力されました";
 							String titolStr = "電卓表示フィールド";
@@ -180,15 +160,6 @@ namespace CS_Calculator
 						}
 						break;
 				}
-
-				//if (key == Key.LeftShift || key == Key.RightShift) {
-				//	IsShiftKey = true;
-				//	dbMsg += ";Shift押下中";
-				//} else {
-				//	IsShiftKey = false;
-				//	dbMsg += ";Shift解除";
-				//}
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
