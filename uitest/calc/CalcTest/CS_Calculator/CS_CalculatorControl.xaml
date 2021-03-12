@@ -22,7 +22,7 @@
 			Width="180"
 	-->
 	<UserControl.Resources>
-		<Style  TargetType="Button">
+		<Style  TargetType="Button" x:Name="button_bace">
 			<Setter Property="FontSize" Value="18" />
 			<Setter Property="MinHeight" Value="24" />
 			<Setter Property="Foreground" Value="Black" />
@@ -59,7 +59,7 @@
 				</Trigger>
 
 				<!--クリック時-->
-				<!--<Trigger Property="IsPressed"
+				<Trigger Property="IsPressed"
                          Value="True">
 					<Setter TargetName="border"
                             Property="Background"
@@ -67,7 +67,7 @@
 					<Setter TargetName="border"
                             Property="TextBlock.Foreground"
                             Value="White" />
-				</Trigger>-->
+				</Trigger>
 			</ControlTemplate.Triggers>
 		</ControlTemplate>
 
@@ -144,21 +144,14 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-
-		<Label x:Name="NowOperations" 
-						Grid.Row="0" Grid.Column="0"
-						VerticalAlignment="Top"
-						FontSize="11"
-						Margin="0"
-						Padding="0"
-						/>
 		<Label x:Name="CalcResult" 
-						Grid.Row="1" Grid.Column="0"
+						Grid.Row="0" Grid.Column="0"
 						VerticalAlignment="Top"
 						FontSize="14"
 						/>
 		<!--						Content="{Binding ResultStr ,Mode=TwoWay}"
 		-->
+
 
 		<!--<StackPanel Orientation="Horizontal"  Grid.Row="1"  Height="16">
 		</StackPanel>Grid.Column="0" Grid.ColumnSpan="3"-->
@@ -167,33 +160,45 @@
 				>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="15" />
-				<ColumnDefinition Width="42.5"/>
-				<ColumnDefinition Width="87.5"/>
+				<ColumnDefinition Width="130"/>
 				<ColumnDefinition Width="18" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions >
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
+			<TextBox x:Name="NowOperations" 
+						Grid.Row="0" Grid.Column="0"
+						Grid.ColumnSpan="2"
+						VerticalAlignment="Top"
+						FontSize="10"
+						Margin="0"
+						Padding="0" 
+						IsReadOnly="True" 
+						BorderThickness="0" 
+						TextAlignment="Right" Background="{x:Null}" 
+						/>
+			<Button Name="CorpBt"
+						Grid.Row="0" Grid.Column="2" 
+						HorizontalAlignment="Right"
+						MinHeight="5"
+						Content="▼"
+						FontSize="8" Click="CorpBt_Click" Margin="0"
+				/>
 			<Label x:Name="CalcOperation" Content="+" Margin="2,0,2,0"
-					Grid.Row="0" Grid.Column="0" Padding="0"
+					Grid.Row="1" Grid.Column="0" Padding="0"
 					FontSize="11" 
 					Background="#FFFBF6C1" 
 					>
 			</Label>
 			<TextBox x:Name="CalcProcess"
-					Grid.Row="0" Grid.Column="1" 
+					Grid.Row="1" Grid.Column="1" 
+					Grid.ColumnSpan="2"
 					FontSize="11"  Padding="0"
 					HorizontalAlignment="Stretch"		
 					IsReadOnly="True" 
-					BorderThickness="0" Grid.ColumnSpan="2"
+					BorderThickness="0" 
 					/>
-			<Button Name="CorpBt"
-						Grid.Row="0" Grid.Column="3" 
-						HorizontalAlignment="Right"
-						MinHeight="6"
-						Content="▼"
-						FontSize="8" Click="CorpBt_Click" Margin="0,1,1,1"
-				/>
 		</Grid>
 		<DataGrid x:Name="CalcProgress" 
 							Grid.Row="3" Grid.Column="0"  Grid.ColumnSpan="3" 
@@ -202,7 +207,6 @@
 							CellStyle="{StaticResource StyleForDataCell}"
 							ColumnWidth="SizeToCells"
 							MaxHeight="152"
-							MaxWidth="157"
 							HorizontalAlignment="Stretch"
 							VerticalAlignment="Stretch"
 							HorizontalContentAlignment="Right"
@@ -264,8 +268,8 @@
 					<ColumnDefinition Width="40*" />
 					<ColumnDefinition Width="40*" />
 					<ColumnDefinition Width="40*" />
-					<ColumnDefinition Width="40*" />
-					<ColumnDefinition Width="40*" />
+					<!--<ColumnDefinition Width="40*" />
+					<ColumnDefinition Width="40*" />-->
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions >
 					<RowDefinition Height="16" />
@@ -284,24 +288,24 @@
 					</ComboBox.ContextMenu>
 				</ComboBox>
 				<Button x:Name="MemorySaveBt" Content="MS" 
-					FontSize="10" 
+					FontSize="9" 
 					Grid.Row="0" Grid.Column="1"
 					Template="{StaticResource FuncButton}" Click="MemorySaveBt_Click" 
 					/>
 				<Button x:Name="ParenBt" Content="("  
 					Grid.Row="0" Grid.Column="2" 
-						FontSize="8" 
+					FontSize="7" 
 					Template="{StaticResource FuncButton}" 
 					Click="ParenBt_Click"
 					 />
 				<Button x:Name="ParenthesisBt" Content=")" 
 					Grid.Row="0" Grid.Column="3" 
-					FontSize="8" 
+					FontSize="7" 
 					Template="{StaticResource FuncButton}" 
 					Click="ParenthesisBt_Click"
 					 />
-				<Button x:Name="PowerBt" Content="X²" 
-					FontSize="10" 
+				<!--<Button x:Name="PowerBt" Content="X²" 
+					FontSize="9" 
 					Grid.Row="0" Grid.Column="4"
 					Template="{StaticResource FuncButton}" 
 					Click="PowerBt_Click"
@@ -311,7 +315,7 @@
 					FontSize="8" 
 					Template="{StaticResource FuncButton}" 
 					Click="SqrtBt_Click"
-					 />
+					 />-->
 			</Grid>
 			<!--Content="C&#xa;BackSpace"-->
 			<Button x:Name="ClearBt" Content="C" FontSize="18"

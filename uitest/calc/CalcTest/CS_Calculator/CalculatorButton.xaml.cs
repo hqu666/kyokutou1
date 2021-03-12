@@ -100,8 +100,8 @@ namespace CS_Calculator
 			string TAG = "this_loaded";
 			string dbMsg = "";
 			try {
-				calculatorControl = new CS_CalculatorControl();
-				calculatorControl.TargetTextBox = this.TargetTextBox;
+				//calculatorControl = new CS_CalculatorControl();
+				//calculatorControl.TargetTextBox = this.TargetTextBox;
 
 				TargetTextBox.KeyDown += new KeyEventHandler(TFKeyDown);
 			} catch (Exception er) {
@@ -205,6 +205,11 @@ namespace CS_Calculator
 			string TAG = "CalcBT_Click";
 			string dbMsg = "";
 			try {
+				//演算子も決まった時点でインスタンス作成
+				calculatorControl = new CS_CalculatorControl();
+				calculatorControl.TargetTextBox = this.TargetTextBox;
+				calculatorControl.OperatKey = this.OperatKey;
+
 				double number;
 				if (double.TryParse(TargetTextBox.Text, out number)) {
 					dbMsg += ",入力の変換結果=" + number;
@@ -249,7 +254,7 @@ namespace CS_Calculator
 				};
 				dbMsg += ">>(" + CalcWindow.Left + " , " + CalcWindow.Top + ")[" + CalcWindow.Width + " × " + CalcWindow.Height + "]";
 				calculatorControl.CalcWindow = CalcWindow;              //dllからクローズなどのwindow制御を行う
-				calculatorControl.OperatKey = this.OperatKey;
+	//			calculatorControl.OperatKey = this.OperatKey;
 				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 				dbMsg += ",dialogResult=" + dialogResult;
 
