@@ -273,7 +273,7 @@ namespace CS_Calculator{
 					CalcProcess.Text = InputStr;
 				} else {
 					dbMsg += ",BeforeVals残り=" + BeforeVals.Count + "件";
-					if (1 < BeforeVals.Count) {
+					if (0 < BeforeVals.Count) {
 						//最終確定入力を読出し
 						BeforeVal LastInput = BeforeVals[BeforeVals.Count - 1];
 						string LastOperatier = LastInput.Operater;
@@ -309,23 +309,29 @@ namespace CS_Calculator{
 						////計算過程から最終確定値と演算子を消去
 						////CalcProgress.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
 						////CalcProgressScroll.ScrollToBottom();
-					} else {
-						//最終入力の
-						BeforeVal LastInput = BeforeVals[0];
-						if(LastInput == null) {
-							dbMsg += ",LastInput=null" ;
-						} else {
-							//演算子を転記
-							string LastOperatier = LastInput.Operater;
-							//値を読み出し
-							double LastValue = (double)LastInput.Value;
-							dbMsg += "＝" + LastOperatier + " : " + LastValue;
-							string LastInputStr = LastValue.ToString();
-							Initialize();
-							//格納値をクリアした後で最終入力をフィールドに書き戻す
-							CalcOperation.Content = LastOperatier;
-							CalcProcess.Text = LastInputStr;
-						}
+					//} else if(0==BeforeVals.Count) {
+					//	//最終入力の
+					//	BeforeVal LastInput = BeforeVals[0];
+					//	if(LastInput == null) {
+					//		dbMsg += ",LastInput=null" ;
+					//	} else {
+					//		string LastInputStr = "";
+					//		//演算子を転記
+					//		string LastOperatier = LastInput.Operater;
+					//		dbMsg += "＝" + LastOperatier ;
+					//		if (LastInput.Value == null) {
+					//			dbMsg += ",Value=null";
+					//		} else {
+					//			dbMsg += ",値を読み出し";
+					//			double LastValue = (double)LastInput.Value;
+					//			dbMsg +=  " : " + LastValue;
+					//			LastInputStr = LastValue.ToString();
+					//		}
+					//		Initialize();
+					//		//格納値をクリアした後で最終入力をフィールドに書き戻す
+					//		CalcOperation.Content = LastOperatier;
+					//		CalcProcess.Text = LastInputStr;
+					//	}
 					}
 				}
 				dbMsg += ">残り>" + BeforeVals.Count + "件";
@@ -977,6 +983,11 @@ namespace CS_Calculator{
 			ParenthesisFunc();
 		}
 
+		private void OperaterInput(string operaterStr) {
+			ProcessedFunc(operaterStr);
+			NowOperations.Text += operaterStr;
+		}
+
 		/// <summary>
 		/// 除算
 		/// </summary>
@@ -995,75 +1006,48 @@ namespace CS_Calculator{
 						MessageBox.Show("0は除算できません。割られる値から入力して下さい。");
 					}else{
 						dbMsg += ">>最初の値を登録";
-						string NextOperation = DivideStr;
-						ProcessedFunc(NextOperation);
+						OperaterInput(DivideStr);
 					}
 				} else if (ProcessVal == 0) {
 					MessageBox.Show("ここまでの演算結果が0になっています。0は除算できません");
 				} else {
 					dbMsg += ">>通常登録";
-					string NextOperation = DivideStr;
-					ProcessedFunc(NextOperation);
+					OperaterInput(DivideStr);
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		/// <summary>
-		/// 積算
-		/// </summary>
-		private void MultiplyFunc()
-		{
-			string NextOperation = MultiplyStr;
-			ProcessedFunc(NextOperation);
-		}
-		/// <summary>
-		/// 減算
-		/// </summary>
-		private void MinusFunc()
-		{
-			string NextOperation = SubtractStr;
-			ProcessedFunc(NextOperation);
-		}
+
 		/// <summary>
 		/// 加算
 		/// </summary>
 		private void PlusFunc()
 		{
-			string NextOperation = AddStr;
-			ProcessedFunc(NextOperation);
+			OperaterInput(AddStr);
 		}
-
 		/// <summary>
-		/// 数字の逐次入力
+		/// 加算
 		/// </summary>
-		/// <param name="inputStr"></param>
-		private void NumInput(string inputStr) {
-			InputStr += inputStr;
-			CalcProcess.Text = InputStr;
-			NowOperations.Text += InputStr;
-		}
-
-		/// <summary>
-		/// 小数点
-		/// </summary>
-		private void DecimalFunc()
-		{
-			isDecimal = true;
-			NumInput(".");
-		}
 		private void PlusBt_Click(object sender, RoutedEventArgs e)
 		{
-			PlusFunc();
+			OperaterInput(AddStr);
+			//	PlusFunc();
 		}
+		/// <summary>
+		/// 減算
+		/// </summary>
 		private void MinusBt_Click(object sender, RoutedEventArgs e)
 		{
-			MinusFunc();
+			OperaterInput(SubtractStr);
 		}
+		/// <summary>
+		/// 積算
+		/// </summary>
 		private void AsteriskBt_Click(object sender, RoutedEventArgs e)
 		{
-			MultiplyFunc();
+			OperaterInput(MultiplyStr);
 		}
 		private void SlashBt_Click(object sender, RoutedEventArgs e)
 		{
@@ -1080,6 +1064,24 @@ namespace CS_Calculator{
 		private void ClearAllBt_Click(object sender, RoutedEventArgs e)
 		{
 			Initialize();
+		}
+
+		/// <summary>
+		/// 数字の逐次入力
+		/// </summary>
+		/// <param name="inputStr"></param>
+		private void NumInput(string inputStr) {
+			InputStr += inputStr;
+			CalcProcess.Text = InputStr;
+			NowOperations.Text += InputStr;
+		}
+
+		/// <summary>
+		/// 小数点
+		/// </summary>
+		private void DecimalFunc() {
+			isDecimal = true;
+			NumInput(".");
 		}
 
 		private void PeriodBt_Click(object sender, RoutedEventArgs e)
