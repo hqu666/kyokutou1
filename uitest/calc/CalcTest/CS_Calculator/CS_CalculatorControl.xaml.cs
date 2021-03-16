@@ -586,17 +586,32 @@ namespace CS_Calculator{
 				dbMsg += ",演算結果=" + parenResult + "]";
 				dbMsg += ",経過配列=" + ParenVals.Count + "件";
 				dbMsg += ",優先範囲出現数：開始=" + ParenCount + "回/終了="+ ParenthesisCount+"回";
+				ParenCount -= ParenthesisCount;
+				dbMsg += ">>" + ParenCount +  "回";
 				dbMsg += ",積商乗算優先=" + isADPPriority ;
 				int iParenCount = 0;
 				int iValCount = 0;								//範囲内の未処理入力値数
 				bool isParsonOnly = false;					//優先範囲指定のみ：関数ではない
 				BeforeVal bVal = new BeforeVal();		//経過各行
 				int valsCount = 0;                              //経過行数
+				int valsEnd = ParenVals.Count;           //行数
 				foreach (BeforeVal iVal in ParenVals) {
 					valsCount++;
+					dbMsg += "\r\n" + valsCount + "/" + valsEnd + "行目" ;
+					int valsRest = valsEnd - valsCount;                                   //残り行数
+					dbMsg += ":残り" + valsRest;
+					dbMsg += ":優先範囲内" + iParenCount + "階層";
+					int beforeCount = resurtVals.Count - 1;
+					string beforeOperater = "";
+					double? beforeValue = null;
+					if (0< beforeCount) {
+						beforeOperater = resurtVals[beforeCount].Operater;
+						beforeValue = resurtVals[beforeCount].Value;
+						dbMsg += "[前回" + beforeCount + "]=" + beforeOperater + beforeValue;
+					}
 					string iOperater = iVal.Operater;
 					double? iValue = iVal.Value;
-					dbMsg += "\r\n"+ valsCount +"列目："+ iOperater + iValue;
+					dbMsg += ":"+ iOperater + iValue;
 					if (iOperater.Equals("") ) {            //|| iOperater==null
 						dbMsg += ">経過リスト開始>そのまま格納";
 						resurtVals.Add(iVal);
@@ -610,29 +625,50 @@ namespace CS_Calculator{
 						iParenCount++;
 						iValCount = 1;
 						dbMsg += "：優先範囲開始[" + iParenCount + "]";
+						parenResult = 0.0;          //要るか？
 						if (iValue == null) {
 							dbMsg += ">数値無し>そのまま格納";
 							resurtVals.Add(iVal);
-							//				ParenCount--;
 						} else {
 							dbMsg += ">>優先範囲内計算開始";
 							parenResult = (double)iValue;
 						}
 						ParenCount--;
-					} else if (iOperater.EndsWith(ParenthesisStr)) {
+					} else if (iOperater.Equals(ParenthesisStr)) {
 						dbMsg += "：優先範囲終了;";
-
-						if (1 == iValCount && isParsonOnly) {
-							ParenCount--;
-							int bCount = resurtVals.Count - 1;
-							dbMsg += "[" + bCount + "件]=" + resurtVals[bCount].Operater + resurtVals[bCount].Value;
-							dbMsg += ">関数ではない>積算に置き換える";
-							resurtVals.RemoveAt(bCount);
-							iParenCount = -1;
+						dbMsg += "：範囲集計値=" + parenResult;
+						if (parenResult == 0.0) {
+							if(iValue !=null) {
+								dbMsg += ">続けて数値がある>" + iValue;
+								parenResult = (double)iValue;
+							}
+						} else {
+							parenResult = ReCalkBody(parenResult, iVal);
 						}
-						BeforeVal aVal = RemainPason(iValCount, parenResult, isParsonOnly);
-						dbMsg += ">範囲内集計値>"+ aVal.Operater+ aVal.Value;
-						resurtVals.Add(aVal);
+						dbMsg += ">>" + parenResult;
+							//if (0 < iParenCount) {
+							//	dbMsg += "：優先範囲残り=" + iParenCount + "階層";
+							//}
+							//if (1 == iValCount) {
+							//	if (isParsonOnly) {
+							//		dbMsg += "は関数ではないので積算に置き換え";
+							//		//	resurtVals.RemoveAt(bCount);
+							//		iParenCount--;
+							//	}
+							//	//			ParenCount--;
+							//}
+						if(parenResult !=0.0) {
+							BeforeVal aVal = RemainPason(iValCount, parenResult, isParsonOnly);
+							dbMsg += ">範囲内集計値>" + aVal.Operater + aVal.Value;
+							resurtVals.Add(aVal);
+						}
+						//if (iValue != null) {
+						//		dbMsg += ">続けて数値がある>" + iValue;
+						//		aVal.Operater = MultiplyStr;
+						//		aVal.Value = (double)iValue;
+						//		dbMsg += ">範囲継続値>" + aVal.Operater + aVal.Value + "を追加";
+						//		resurtVals.Add(aVal);
+						//	}
 						//if ( isParsonOnly) {        //1 == iValCount &&
 						//} else { 
 						//	dbMsg += ">関数なので範囲終端追加";
@@ -640,20 +676,30 @@ namespace CS_Calculator{
 						//	bVal.Value = null;
 						//	resurtVals.Add(bVal);
 						//}
-					} else {
+						parenResult = 0.0;
+						iParenCount--;
+				} else {
 						iValCount++;
 						dbMsg += ",未処理入力値数" + iValCount+"組";
-						if (isADPPriority) {
+						if (isADPPriority && (iOperater.Equals(AddStr) || iOperater.Equals(SubtractStr))) {
 							dbMsg += ">演算子優先順位有り>";
-							if (iOperater.Equals(AddStr) || iOperater.Equals(SubtractStr)) {
-								dbMsg += ">和差>そのまま格納";
-								resurtVals.Add(iVal);
-							}else{
+							//if (iOperater.Equals(AddStr) || iOperater.Equals(SubtractStr)) {
+							dbMsg += ">和差>そのまま格納";
+							resurtVals.Add(iVal);
+							//}else{
+							//	parenResult = ReCalkBody(parenResult, iVal);
+							//	iValCount--;
+							//}
+						} else{
+							if(0<iParenCount && beforeValue != null) {
+								dbMsg += ">前値"+ beforeValue;
+								parenResult = ReCalkBody((double)beforeValue, iVal);
+								dbMsg += "を" + parenResult+"に置き換え";
+								resurtVals[beforeCount].Value = parenResult;
+								parenResult = 0.0;
+							} else {
 								parenResult = ReCalkBody(parenResult, iVal);
-								iValCount--;
 							}
-						}else{
-							parenResult = ReCalkBody(parenResult, iVal);
 							iValCount--;
 						}
 						//			ParenCount--;
@@ -661,7 +707,8 @@ namespace CS_Calculator{
 					//ループ終端でも優先範囲が完結しない場合の処理に渡す
 					bVal.Operater = iVal.Operater;
 					bVal.Value = iVal.Value;
-					dbMsg += "[" + resurtVals.Count + "件]=" + resurtVals[resurtVals.Count - 1].Operater + resurtVals[resurtVals.Count - 1].Value;
+					int eCount = resurtVals.Count - 1;
+					dbMsg += "[終端" + (eCount + 1) + "件]=" + resurtVals[eCount].Operater + resurtVals[eCount].Value;
 				}
 				iParenCount -= ParenthesisCount;
 				dbMsg += "\r\n優先範囲処理：残り=" + iParenCount + "回";
@@ -685,7 +732,7 @@ namespace CS_Calculator{
 				MyLog(TAG, dbMsg);
 				if (0 < ParenCount) {
 					if(isADPPriority) {
-							isADPPriority = false;
+						isADPPriority = false;
 					}else{
 						isADPPriority = true;
 					}
@@ -1446,7 +1493,7 @@ namespace CS_Calculator{
 				//var provider = new ButtonAutomationPeer(targetBt) as IInvokeProvider;
 				//provider.Invoke();
 				//もしくは	ClearBt_Click(new object(), new RoutedEventArgs());
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
