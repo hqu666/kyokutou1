@@ -777,8 +777,13 @@ namespace CS_Calculator{
 				int iParenCount = 0;
 				int ParenthesisCount = 0;
 				NowOperations.Text = "";        //+= BeforeVals[0].Value.ToString();
-				//中置記法を数えて,経過表示を更新する
+				string PFAOStr = "";
+				int valsCount = 0;                              //経過行数
+				int valsEnd = BeforeVals.Count;           //行数
+														 //中置記法を数えて,経過表示を更新する
 				foreach (BeforeVal iVal in BeforeVals) {
+					valsCount++;
+					dbMsg += "\r\nSouce" + valsCount + "/" + valsEnd + "行目";
 					string iOperater = iVal.Operater;
 					double? iValue = iVal.Value;
 					dbMsg += "\r\n" + iOperater + iValue;
@@ -786,43 +791,54 @@ namespace CS_Calculator{
 						NowOperations.Text += iOperater;
 						if (iOperater.EndsWith(ParenStr)) {
 							iParenCount++;
-						}else if(iOperater.Equals(ParenthesisStr)){
-							ParenthesisCount++; 
+							if (1 < valsCount) {
+								if (BeforeVals[valsCount - 2].Value != null) {
+									PFAOStr += "*(";
+								} else {
+									PFAOStr += iOperater;
+								}
+							} else {
+								PFAOStr += iOperater;
 							}
+						} else if(iOperater.Equals(ParenthesisStr)){
+							ParenthesisCount++;
+							if(iValue==null) {
+								PFAOStr += iOperater;
+							}else{
+								PFAOStr += ")*";
+							}
+						} else {
+							PFAOStr += iOperater;
+						}
 					}
 					NowOperations.Text += iValue;
+					PFAOStr += iValue;
 				}
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
 				int deficitParenthesis = iParenCount - ParenthesisCount;
 				dbMsg += "：)不足＝"+ deficitParenthesis;
 				if (IsPriorityFourArithmeticOperation) {
 					dbMsg += ">>四則演算処理:";
-					string NOText = NowOperations.Text;
-					if (NOText.Equals("")) {
+					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
 					} else {
-						dbMsg += "入力状況" + NOText;
+						dbMsg += "入力状況" + PFAOStr;
 						for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
-							NOText += ParenthesisStr;
+							PFAOStr += ParenthesisStr;
 						}
-						dbMsg += ">優先範囲終端補完>" + NOText;
-						//Regex reg = new Regex(@"[0-9]-?");
-						//NOText = reg.Replace(NOText, "*(");
-						//dbMsg += ">s>" + NOText;
-						//reg = new Regex(")[0-9]");
-						//NOText = reg.Replace(NOText, "*(");
-						//dbMsg += ">>" + NOText;
+						dbMsg += ">優先範囲終端補完>" + PFAOStr;
 						try {
 							//式を計算する .NET5?
 							System.Data.DataTable dt = new System.Data.DataTable();
-							ProcessVal = (double)dt.Compute(NOText, "");
-
-							CalcResult.Content = ProcessVal.ToString();
+							var pVal =dt.Compute(PFAOStr, "");
+							CalcResult.Content = pVal.ToString();
+							ProcessVal = double.Parse((string)CalcResult.Content);
 						} catch (Exception er) {
-							//String msgStr = "計算できない入力になっています。\r\n";
-							//msgStr += "\r\n修正をお願いします";
-							//string titolStr = "電卓：結果表示";
-				//			MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+							String msgStr = "計算できない入力になっています。\r\n";
+							msgStr += "\r\n"+ PFAOStr;
+							msgStr += "\r\n修正をお願いします";
+							string titolStr = "電卓：結果表示";
+							MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 							MyErrorLog(TAG, dbMsg, er);
 						}
 					}
@@ -837,7 +853,7 @@ namespace CS_Calculator{
 			}
 		}
 
-		private double ReCalkEnd(ObservableCollection<BeforeVal> ParenVals) {
+		private void ReCalkEnd(ObservableCollection<BeforeVal> ParenVals) {
 			string TAG = "ReCalkEnd";
 			string dbMsg = "";
 			double ResultNow = 0.0;
@@ -858,17 +874,17 @@ namespace CS_Calculator{
 #endif
 				if (0 < ParenVals.Count) {
 					dbMsg += "\r\nOperation=" + IsPriorityFourArithmeticOperation;
-					if (IsPriorityFourArithmeticOperation) {
-						dbMsg += ">>四則演算処理へ";
-						ResultNow = ReCalkPFO(ParenVals);
-					} else {
+					//if (IsPriorityFourArithmeticOperation) {
+					//	dbMsg += ">>四則演算処理へ";
+					//	ResultNow = ReCalkPFO(ParenVals);
+					//} else {
 						dbMsg += ">>電卓処理";
 						foreach (BeforeVal beforeVal in ParenVals) {
 							if (beforeVal.Value != null) {
 								ResultNow = ReCalkBody(ResultNow, beforeVal);
 							}
 						}
-					}
+					//}
 					ProcessVal = ResultNow;
 					CalcResult.Content = ProcessVal.ToString();
 				}
@@ -877,7 +893,6 @@ namespace CS_Calculator{
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			return ResultNow;
 		}
 
 		/// <summary>

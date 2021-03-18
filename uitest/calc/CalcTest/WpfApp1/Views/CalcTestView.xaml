@@ -102,7 +102,7 @@
 						/>
 		</StackPanel>
 
-		<Label  Content="GcSpreadGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+		<!--<Label  Content="GcSpreadGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
 						Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
 		<sg:GcSpreadGrid  Name="MyGsGrid"
@@ -117,7 +117,7 @@
 					<MenuItem Header="電卓" Command="{Binding MyGsGridContextMenuClick}"/>
 				</ContextMenu>
 			</sg:GcSpreadGrid.ContextMenu>
-		</sg:GcSpreadGrid>
+		</sg:GcSpreadGrid>-->
 
 		<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
 						Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
