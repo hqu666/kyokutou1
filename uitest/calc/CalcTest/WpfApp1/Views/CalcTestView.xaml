@@ -77,6 +77,23 @@
 						Text="{Binding CalcTextDLogTitol,Mode=TwoWay}"
 						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcTextDLogTitol_TextChanged" 
 						/>
+			<Label  Content="サイズ[" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcDLogWidth" 
+						Text="{Binding CalcWindowWidthStr,Mode=TwoWay}"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcDLogWidth_TextChanged" 
+						/>
+			<Label  Content="×" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<TextBox 	x:Name="CalcDLogHight" 
+						Text="{Binding CalcWindowHeightStr,Mode=TwoWay}"
+						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcDLogHight_TextChanged"
+						/>
+			<Label  Content="]" 
+					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
 
 		</StackPanel>
 		<Label  Content="TextBoxに専用ボタンで" 

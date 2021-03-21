@@ -12,6 +12,7 @@ using GrapeCity.Windows.SpreadGrid;
 using System.Windows.Data;
 using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
 using XDGCell = Infragistics.Windows.DataPresenter.Cell;
+using System.Configuration;
 
 namespace WpfApp1.ViewModels {
 	public class CalcTestViewModel : ViewModel {
@@ -40,6 +41,9 @@ namespace WpfApp1.ViewModels {
 		/// </summary>
 		public string CalcTextShowX { get; set; }
 		public string CalcTextShowY { get; set; }
+
+		public string CalcWindowWidthStr { get; set; }
+		public string CalcWindowHeightStr { get; set; }
 
 		public double CalcWindowWidth = 180;
 		public double CalcWindowHeight = 250;
@@ -111,55 +115,98 @@ namespace WpfApp1.ViewModels {
 
 		public void Initialize()
 		{
-			//パラメータの初期値
-			CalcTextDLogTitol = "電卓を表示するフィールドから";
-			CalcTexWidth = "200";
-			CalcTextFontSize = "18";
-			CalcTextShowX = "1200";
-			CalcTextShowY = "400";
-			CalcWindowWidth = 180;
-			CalcWindowHeight = 250;
-			CalcResult = "0123456789";
+			string TAG = "Initialize";
+			string dbMsg = "";
+			try {
+				//値を取得
+				CalcTextFontSize = Properties.Settings.Default.CalcTextFontSize;
+				CalcTexWidth = Properties.Settings.Default.CalcTexWidth;
+				CalcTextShowX = Properties.Settings.Default.CalcTextShowX;
+				CalcTextShowY = Properties.Settings.Default.CalcTextShowY;
+				CalcTextDLogTitol = Properties.Settings.Default.CalcTextDLogTitol;      //setting.Value.ValueXml.InnerText;
+				CalcWindowWidthStr = Properties.Settings.Default.CalcWindowWidthStr;
+				CalcWindowHeightStr = Properties.Settings.Default.CalcWindowHeightStr;
+				CalcResult = Properties.Settings.Default.CalcResult;
+				//パラメータの初期値
+				if (CalcTextFontSize == null) {
+					CalcTextFontSize = "18";
+				}
+				dbMsg += ",CalcTextFontSize=" + CalcTextFontSize;
+				if (CalcTextDLogTitol == null) {
+					CalcTextDLogTitol = "電卓を表示するフィールドから";
+				}
+				dbMsg += ",CalcTextDLogTitol=" + CalcTextDLogTitol;
+				if (CalcTexWidth == null) {
+					CalcTexWidth = "200";
+				}
+				dbMsg += ",CalcTexWidth=" + CalcTexWidth;
+				if (CalcTextShowX == null) {
+					CalcTextShowX = "1200";
+				}
+				dbMsg += ",(" + CalcTextShowX;
+				if (CalcTextShowY == null) {
+					CalcTextShowY = "400";
+				}
+				dbMsg += "　、" + CalcTextShowY + ")";
+				if (CalcWindowWidthStr == null) {
+					CalcWindowWidthStr = "180";
+				}
+				CalcWindowWidth = double.Parse(CalcWindowWidthStr);
+				dbMsg += ",[" + CalcWindowWidth;
+				if (CalcWindowHeightStr == null) {
+					CalcWindowHeightStr = "250";
+				}
+				CalcWindowHeight = double.Parse(CalcWindowHeightStr);
+				dbMsg += "×" + CalcWindowHeight + "]";
+				if (CalcResult == null) {
+					CalcResult = "0123456789";
+				}
+				dbMsg += ",CalcResult＝" + CalcResult;
+				RaisePropertyChanged();
 
-			GsGlist = new List<Product>();
-			GsGlist.Add(new Product() { Name ="みるきーくいん", Price = 2080, Tax = 8});
-			GsGlist.Add(new Product() { Name = "徳陽ほうじ茶", Price = 298, Tax =10 });
-			GsGlist.Add(new Product() { Name = "バスサイズ石鹸", Price =140, Tax =10});
-			GsGlist.Add(new Product() { Name = "５袋ラーメン", Price = 298, Tax = 8});
+				GsGlist = new List<Product>();
+				GsGlist.Add(new Product() { Name = "みるきーくいん", Price = 2080, Tax = 8 });
+				GsGlist.Add(new Product() { Name = "徳陽ほうじ茶", Price = 298, Tax = 10 });
+				GsGlist.Add(new Product() { Name = "バスサイズ石鹸", Price = 140, Tax = 10 });
+				GsGlist.Add(new Product() { Name = "５袋ラーメン", Price = 298, Tax = 8 });
 
-			/* 動的生成例：
-			 * https://docs.grapecity.com/help/spread-wpf-2/GrapeCity.WPF.SpreadGrid~GrapeCity.Windows.SpreadGrid.BindingDataField~Binding.html
-			MyView.MyGsGrid.AutoGenerateColumns = false;
-			MyView.MyGsGrid.ItemsSource = GsGlist;
-			MyView.MyGsGrid.ColumnCount = 3;
+				/* 動的生成例：
+				 * https://docs.grapecity.com/help/spread-wpf-2/GrapeCity.WPF.SpreadGrid~GrapeCity.Windows.SpreadGrid.BindingDataField~Binding.html
+				MyView.MyGsGrid.AutoGenerateColumns = false;
+				MyView.MyGsGrid.ItemsSource = GsGlist;
+				MyView.MyGsGrid.ColumnCount = 3;
 
-			PropertyDataField dataField1 = new PropertyDataField();
-			dataField1.Property = "Name";
-			MyView.MyGsGrid.Columns[0].DataField = dataField1;
+				PropertyDataField dataField1 = new PropertyDataField();
+				dataField1.Property = "Name";
+				MyView.MyGsGrid.Columns[0].DataField = dataField1;
 
-			BindingDataField dataField2 = new BindingDataField();
-			Binding binding = new Binding();
-			binding.Path = new PropertyPath("Price");
-			dataField2.Binding = binding;
-			MyView.MyGsGrid.Columns[1].DataField = dataField2;
-			*/
+				BindingDataField dataField2 = new BindingDataField();
+				Binding binding = new Binding();
+				binding.Path = new PropertyPath("Price");
+				dataField2.Binding = binding;
+				MyView.MyGsGrid.Columns[1].DataField = dataField2;
+				*/
 
-			/// XamDataGridに初期値を書き込むj
-			XDGDatas = new ObservableCollection<Product> {
+				/// XamDataGridに初期値を書き込むj
+				XDGDatas = new ObservableCollection<Product> {
 				new Product { Name="LEDシーリング", Price=4980, Tax=10 },
 				new Product { Name="歯磨き粉", Price=298, Tax=10 },
 				new Product { Name="おにぎり", Price=124, Tax=8 },
 				new Product { Name="緑茶", Price=800, Tax=8 }
 			};
 
-			/// 基底DataGridに初期値を書き込むj
-			DGDatas = new ObservableCollection<Product> {
+				/// 基底DataGridに初期値を書き込むj
+				DGDatas = new ObservableCollection<Product> {
 				new Product { Name="化粧品", Price=1900, Tax=10 },
 				new Product { Name="洗剤", Price=500, Tax=10 },
 				new Product { Name="パン", Price=800, Tax=8 },
 				new Product { Name="牛乳", Price=800, Tax=8 }
 			};
-			RaisePropertyChanged();
+				RaisePropertyChanged();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		#region MyGsGridContextMenuClick	　GcSpreadGridのコンテキストメニューから電卓を呼び出す

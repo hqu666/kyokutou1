@@ -96,7 +96,7 @@ namespace CS_Calculator{
 		/// <summary>
 		/// 四則演算の優先順位で計算
 		/// </summary>
-		public bool IsPriorityFourArithmeticOperation = true;
+		public bool IsPriorityFourArithmeticOperation = false;
 
 
 		/// <summary>
@@ -192,9 +192,9 @@ namespace CS_Calculator{
 
 				//計算の優先順位は電卓処理から
 				IsPriorityFourArithmeticOperation = SetOperationPriority(false);
-#if DEBUG
-				IsPriorityFourArithmeticOperation = SetOperationPriority(true);
-#endif
+//#if DEBUG
+//				IsPriorityFourArithmeticOperation = SetOperationPriority(true);
+//#endif
 				MemoryComb.Visibility = Visibility.Hidden;
 				MyLog(TAG, dbMsg);
 			}
@@ -786,7 +786,7 @@ namespace CS_Calculator{
 					dbMsg += "\r\nSouce" + valsCount + "/" + valsEnd + "行目";
 					string iOperater = iVal.Operater;
 					double? iValue = iVal.Value;
-					dbMsg += "\r\n" + iOperater + iValue;
+					dbMsg += ":" + iOperater + iValue;
 					if (!iOperater.Equals("")) {
 						NowOperations.Text += iOperater;
 						if (iOperater.EndsWith(ParenStr)) {

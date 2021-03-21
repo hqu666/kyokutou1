@@ -22,5 +22,14 @@ namespace WpfApp1.Properties {
 				return defaultInstance;
 			}
 		}
+
+		public string CalcTextDLogTitol { get; internal set; }
+		public string CalcTexWidth { get; internal set; }
+		public string CalcTextFontSize { get; internal set; }
+		public string CalcTextShowX { get; internal set; }
+		public string CalcTextShowY { get; internal set; }
+		public string CalcWindowWidthStr { get; internal set; }
+		public string CalcWindowHeightStr { get; internal set; }
+		public string CalcResult { get; internal set; }
 	}
 }

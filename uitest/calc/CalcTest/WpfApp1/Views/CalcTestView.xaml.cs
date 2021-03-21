@@ -123,11 +123,15 @@ namespace WpfApp1.Views {
 			TextBox TB = sender as TextBox;
 			Bt2Tbox.FontSize = int.Parse(TB.Text);
 			CalcCallBt.MinWidth = int.Parse(CalcTextFontSize.Text) * 1.4;
+			Properties.Settings.Default.CalcTextFontSize = TB.Text;
+			Properties.Settings.Default.Save();
 		}
 
 		private void CalcTexWidth_TextChanged(object sender, TextChangedEventArgs e) {
 			TextBox TB = sender as TextBox;
 			Bt2Tbox.Width = int.Parse(TB.Text);
+			Properties.Settings.Default.CalcTexWidth = TB.Text;
+			Properties.Settings.Default.Save();
 		}
 
 		private void CalcTextShow_TextChanged(object sender, TextChangedEventArgs e) {
@@ -135,11 +139,28 @@ namespace WpfApp1.Views {
 			if (CalcTextShowY.Text.Equals("")) { return; }
 			CalcCallBt.ShowX = double.Parse(CalcTextShowX.Text);
 			CalcCallBt.ShowY = double.Parse(CalcTextShowY.Text);
+			Properties.Settings.Default.CalcTextShowX = CalcTextShowX.Text;
+			Properties.Settings.Default.CalcTextShowY = CalcTextShowY.Text;
+			Properties.Settings.Default.Save();
 		}
 
 		private void CalcTextDLogTitol_TextChanged(object sender, TextChangedEventArgs e) {
 			TextBox TB = sender as TextBox;
 			CalcCallBt.ViewTitle = TB.Text;
+			Properties.Settings.Default.CalcTextDLogTitol = TB.Text;
+			Properties.Settings.Default.Save();
+		}
+
+		private void CalcDLogWidth_TextChanged(object sender, TextChangedEventArgs e) {
+			TextBox TB = sender as TextBox;
+			Properties.Settings.Default.CalcWindowWidthStr = TB.Text;
+			Properties.Settings.Default.Save();
+		}
+
+		private void CalcDLogHight_TextChanged(object sender, TextChangedEventArgs e) {
+			TextBox TB = sender as TextBox;
+			Properties.Settings.Default.CalcWindowHeightStr = TB.Text;
+			Properties.Settings.Default.Save();
 		}
 
 		////////////////////////////////////////////////////////////////
@@ -180,7 +201,6 @@ namespace WpfApp1.Views {
 			}
 			return result;
 		}
-
 	}
 }
 
