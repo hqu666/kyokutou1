@@ -135,13 +135,21 @@ namespace WpfApp1.Views {
 		}
 
 		private void CalcTextShow_TextChanged(object sender, TextChangedEventArgs e) {
-			if (CalcTextShowX.Text.Equals("")) { return; }
-			if (CalcTextShowY.Text.Equals("")) { return; }
-			CalcCallBt.ShowX = double.Parse(CalcTextShowX.Text);
-			CalcCallBt.ShowY = double.Parse(CalcTextShowY.Text);
-			Properties.Settings.Default.CalcTextShowX = CalcTextShowX.Text;
-			Properties.Settings.Default.CalcTextShowY = CalcTextShowY.Text;
-			Properties.Settings.Default.Save();
+			string TAG = "CalcTextShow_TextChanged";
+			string dbMsg = "";
+			try {
+				if (CalcTextShowX.Text.Equals("")) { return; }
+				if (CalcTextShowY.Text.Equals("")) { return; }
+				CalcCallBt.ShowX = double.Parse(CalcTextShowX.Text);
+				CalcCallBt.ShowY = double.Parse(CalcTextShowY.Text);
+				dbMsg = "(" + CalcTextShowX.Text + "," + CalcTextShowY.Text + ")";
+				//Properties.Settings.Default.CalcTextShowX = CalcTextShowX.Text;
+				//Properties.Settings.Default.CalcTextShowY = CalcTextShowY.Text;
+				//Properties.Settings.Default.Save();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		private void CalcTextDLogTitol_TextChanged(object sender, TextChangedEventArgs e) {

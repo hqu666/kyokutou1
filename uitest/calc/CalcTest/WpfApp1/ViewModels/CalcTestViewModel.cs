@@ -37,10 +37,33 @@ namespace WpfApp1.ViewModels {
 		/// フォントサイズ
 		/// </summary>
 		public string CalcTextFontSize { get; set; }
-		/// 表示位置
+	
+		private string _CalcTextShowX;
+		/// <summary>
+		/// 表示位置X座標
 		/// </summary>
-		public string CalcTextShowX { get; set; }
-		public string CalcTextShowY { get; set; }
+		public string CalcTextShowX {
+			get => _CalcTextShowX;
+			set {
+				if (_CalcTextShowX == value)
+					return;
+					_CalcTextShowX = value;
+					Properties.Settings.Default.CalcTextShowX = _CalcTextShowX;
+					Properties.Settings.Default.Save();
+			}
+		}
+
+		private string _CalcTextShowY;
+		public string CalcTextShowY {
+			get => _CalcTextShowY;
+			set {
+				if (_CalcTextShowY == value)
+					return;
+					_CalcTextShowY = value;
+					Properties.Settings.Default.CalcTextShowY = _CalcTextShowY;
+					Properties.Settings.Default.Save();
+			}
+		}
 
 		public string CalcWindowWidthStr { get; set; }
 		public string CalcWindowHeightStr { get; set; }
@@ -128,37 +151,39 @@ namespace WpfApp1.ViewModels {
 				CalcWindowHeightStr = Properties.Settings.Default.CalcWindowHeightStr;
 				CalcResult = Properties.Settings.Default.CalcResult;
 				//パラメータの初期値
-				if (CalcTextFontSize == null) {
+				if (CalcTextFontSize == null || CalcTextFontSize.Equals("")) {
 					CalcTextFontSize = "18";
 				}
 				dbMsg += ",CalcTextFontSize=" + CalcTextFontSize;
-				if (CalcTextDLogTitol == null) {
+				if (CalcTextDLogTitol == null || CalcTextFontSize.Equals("")) {
 					CalcTextDLogTitol = "電卓を表示するフィールドから";
 				}
 				dbMsg += ",CalcTextDLogTitol=" + CalcTextDLogTitol;
-				if (CalcTexWidth == null) {
+				if (CalcTexWidth == null || CalcTextDLogTitol.Equals("")) {
 					CalcTexWidth = "200";
 				}
 				dbMsg += ",CalcTexWidth=" + CalcTexWidth;
-				if (CalcTextShowX == null) {
+				dbMsg += ",(" + CalcTextShowX + "," + CalcTextShowY + ")";
+				if (CalcTextShowX == null || CalcTextShowX.Equals("")) {
 					CalcTextShowX = "1200";
+					dbMsg += ">>x=" + CalcTextShowX;
 				}
-				dbMsg += ",(" + CalcTextShowX;
-				if (CalcTextShowY == null) {
+				if (CalcTextShowY == null || CalcTextShowY.Equals("")) {
 					CalcTextShowY = "400";
+					dbMsg += ">>y=" + CalcTextShowY + ")";
 				}
-				dbMsg += "　、" + CalcTextShowY + ")";
-				if (CalcWindowWidthStr == null) {
+				dbMsg += ",[" + CalcWindowWidth + "×" + CalcWindowHeight + "]";
+				if (CalcWindowWidthStr == null || CalcWindowWidthStr.Equals("")) {
 					CalcWindowWidthStr = "180";
 				}
 				CalcWindowWidth = double.Parse(CalcWindowWidthStr);
-				dbMsg += ",[" + CalcWindowWidth;
-				if (CalcWindowHeightStr == null) {
+				dbMsg += ">>[" + CalcWindowWidth;
+				if (CalcWindowHeightStr == null || CalcWindowHeightStr.Equals("")) {
 					CalcWindowHeightStr = "250";
 				}
 				CalcWindowHeight = double.Parse(CalcWindowHeightStr);
 				dbMsg += "×" + CalcWindowHeight + "]";
-				if (CalcResult == null) {
+				if (CalcResult == null || CalcResult.Equals("")) {
 					CalcResult = "0123456789";
 				}
 				dbMsg += ",CalcResult＝" + CalcResult;
@@ -602,12 +627,12 @@ namespace WpfApp1.ViewModels {
 		////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg) {
 #if DEBUG
-			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg);
+			Console.WriteLine(TAG + "[CS_Calculator:CalcTestViewModel]" + dbMsg);
 #endif
 		}
 
 		public static void MyErrorLog(string TAG, string dbMsg, Exception err) {
-			Console.WriteLine(TAG + "[CS_Calculator:CalculatorButtun]" + dbMsg + "でエラー発生;" + err);
+			Console.WriteLine(TAG + "[CS_Calculator:CalcTestViewModel]" + dbMsg + "でエラー発生;" + err);
 		}
 
 

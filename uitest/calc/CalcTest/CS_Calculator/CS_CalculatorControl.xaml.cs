@@ -8,9 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using System;
+using System.Configuration;
 using System.Runtime.InteropServices;
-using System.Windows;
 using System.Windows.Interactivity;
 using System.Windows.Interop;
 using System.Text.RegularExpressions;
@@ -190,6 +189,8 @@ namespace CS_Calculator{
 				CalcProgress.Items.Refresh();
 				CalcResult.Focus();
 
+				//	IsPriorityFourArithmeticOperation = Properties.Settings.Default.IsPriorityFourArithmeticOperation;
+	
 				//計算の優先順位は電卓処理から
 				IsPriorityFourArithmeticOperation = SetOperationPriority(false);
 //#if DEBUG
