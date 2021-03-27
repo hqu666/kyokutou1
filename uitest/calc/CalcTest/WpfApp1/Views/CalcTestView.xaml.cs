@@ -170,6 +170,20 @@ namespace WpfApp1.Views {
 			Properties.Settings.Default.CalcWindowHeightStr = TB.Text;
 			Properties.Settings.Default.Save();
 		}
+		private void IsPoCK_Click(object sender, RoutedEventArgs e) {
+			string TAG = "IsPoCK_Click";
+			string dbMsg = "";
+			try {
+				CheckBox CB = sender as CheckBox;
+				bool isCK= (bool)CB.IsChecked;
+				dbMsg = "IsPO=" + isCK;
+				Properties.Settings.Default.IsPO = isCK;
+				Properties.Settings.Default.Save();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 
 		////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg) {
@@ -209,6 +223,7 @@ namespace WpfApp1.Views {
 			}
 			return result;
 		}
+
 	}
 }
 

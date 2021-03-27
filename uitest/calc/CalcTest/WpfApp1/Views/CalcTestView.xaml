@@ -91,8 +91,13 @@
 						Text="{Binding CalcWindowHeightStr,Mode=TwoWay}"
 						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcDLogHight_TextChanged"
 						/>
-			<Label  Content="]" 
+			<Label  Content="] " 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
+					/>
+			<CheckBox x:Name="IsPoCK" 
+					IsChecked="{Binding IsPo,Mode=TwoWay}"
+					Content="演算子の優先順位で計算"
+					Margin="5,5,5,5" VerticalAlignment="Center" Click="IsPoCK_Click"  
 					/>
 
 		</StackPanel>

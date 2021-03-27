@@ -118,5 +118,28 @@ namespace WpfApp1.Properties {
                 this["CalcResult"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool IsPO {
+            get {
+                return ((bool)(this["IsPO"]));
+            }
+            set {
+                this["IsPO"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string 設定 {
+            get {
+                return ((string)(this["設定"]));
+            }
+            set {
+                this["設定"] = value;
+            }
+        }
     }
 }

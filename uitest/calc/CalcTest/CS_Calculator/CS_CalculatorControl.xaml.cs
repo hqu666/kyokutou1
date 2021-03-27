@@ -83,6 +83,16 @@ namespace CS_Calculator{
 		public static readonly DependencyProperty ResultStrProperty =
 			DependencyProperty.Register("ResultStr", typeof(string), typeof(CS_CalculatorControl), new PropertyMetadata(default(string)));
 
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		public bool IsPO {
+			get { return (bool)GetValue(IsPOProperty); }
+			set { SetValue(IsPOProperty, value); }
+		}
+		public static readonly DependencyProperty IsPOProperty =
+			DependencyProperty.Register("IsPO", typeof(bool), typeof(CS_CalculatorControl), new PropertyMetadata(default(bool)));
+
 
 		/// <summary>
 		/// 電卓を表示しているウィンドウ
@@ -92,12 +102,6 @@ namespace CS_Calculator{
 		public string SelectOperater { get; set; }
 		public string SelectValue { get; set; }
 	
-		/// <summary>
-		/// 四則演算の優先順位で計算
-		/// </summary>
-		public bool IsPriorityFourArithmeticOperation = false;
-
-
 		/// <summary>
 		/// 計算結果
 		/// </summary>
@@ -189,14 +193,15 @@ namespace CS_Calculator{
 				CalcProgress.Items.Refresh();
 				CalcResult.Focus();
 
-				//	IsPriorityFourArithmeticOperation = Properties.Settings.Default.IsPriorityFourArithmeticOperation;
+				//	IsPO = Properties.Settings.Default.IsPO;
 	
 				//計算の優先順位は電卓処理から
-				IsPriorityFourArithmeticOperation = SetOperationPriority(false);
+	//			IsPO = SetOperationPriority(false);
 //#if DEBUG
-//				IsPriorityFourArithmeticOperation = SetOperationPriority(true);
+//				IsPO = SetOperationPriority(true);
 //#endif
 				MemoryComb.Visibility = Visibility.Hidden;
+				CorpProgress();
 				MyLog(TAG, dbMsg);
 			}
 			catch (Exception er)
@@ -225,6 +230,8 @@ namespace CS_Calculator{
 				}
 				dbMsg += ",InputStr=" + InputStr;
 				CalcProcess.Text = InputStr;
+				//計算経過
+				NowOperations.Text = InputStr;              // BeforeVals[0].Value.ToString(); 
 				string NextOperation = "";
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Add <= OperatKey) {
@@ -250,9 +257,6 @@ namespace CS_Calculator{
 					NextOperation = ParenStr;
 					ParenFunc();
 				}
-				CorpProgress();
-				//計算経過
-				NowOperations.Text = BeforeVals[0].Value.ToString(); 
 				NowOperations.Text += NextOperation;  
 				dbMsg += ",NowOperations=" + NowOperations.Text;
 
@@ -818,7 +822,7 @@ namespace CS_Calculator{
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
 				int deficitParenthesis = iParenCount - ParenthesisCount;
 				dbMsg += "：)不足＝"+ deficitParenthesis;
-				if (IsPriorityFourArithmeticOperation) {
+				if (IsPO) {
 					dbMsg += ">>四則演算処理:";
 					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
@@ -845,7 +849,7 @@ namespace CS_Calculator{
 					}
 				} else {
 					dbMsg += ">>電卓処理";
-					CalcParen(ResultNow, BeforeVals, iParenCount, ParenthesisCount, IsPriorityFourArithmeticOperation);
+					CalcParen(ResultNow, BeforeVals, iParenCount, ParenthesisCount, IsPO);
 				}
 
 				MyLog(TAG, dbMsg);
@@ -874,8 +878,8 @@ namespace CS_Calculator{
 				}
 #endif
 				if (0 < ParenVals.Count) {
-					dbMsg += "\r\nOperation=" + IsPriorityFourArithmeticOperation;
-					//if (IsPriorityFourArithmeticOperation) {
+					dbMsg += "\r\nOperation=" + IsPO;
+					//if (IsPO) {
 					//	dbMsg += ">>四則演算処理へ";
 					//	ResultNow = ReCalkPFO(ParenVals);
 					//} else {
@@ -1709,7 +1713,7 @@ namespace CS_Calculator{
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void PriorityCalcOperation(object sender, RoutedEventArgs e) {
-			IsPriorityFourArithmeticOperation = SetOperationPriority(false);
+			IsPO = SetOperationPriority(false);
 		}
 
 		/// <summary>
@@ -1718,7 +1722,7 @@ namespace CS_Calculator{
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void PriorityFourArithmeticOperation(object sender, RoutedEventArgs e) {
-			IsPriorityFourArithmeticOperation= SetOperationPriority(true);
+			IsPO= SetOperationPriority(true);
 		}
 
 		/// <summary>
@@ -1730,7 +1734,7 @@ namespace CS_Calculator{
 			string TAG = "SetOperationPriority";
 			string dbMsg = "";
 			try {
-				IsPriorityFourArithmeticOperation = retBool;
+				IsPO = retBool;
 				PCOMenu.IsEnabled = false;
 				PFAOMenu.IsEnabled = false;
 				if (retBool) {

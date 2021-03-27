@@ -71,6 +71,10 @@ namespace WpfApp1.ViewModels {
 		public double CalcWindowWidth = 180;
 		public double CalcWindowHeight = 250;
 
+		/// <summary>
+		/// 演算子の優先順位で計算"
+		/// </summary>
+		public bool IsPO { get; set; }
 
 		private List<Product> _GsGlist;
 		/// <summary>
@@ -149,6 +153,7 @@ namespace WpfApp1.ViewModels {
 				CalcTextDLogTitol = Properties.Settings.Default.CalcTextDLogTitol;      //setting.Value.ValueXml.InnerText;
 				CalcWindowWidthStr = Properties.Settings.Default.CalcWindowWidthStr;
 				CalcWindowHeightStr = Properties.Settings.Default.CalcWindowHeightStr;
+				IsPO = Properties.Settings.Default.IsPO;
 				CalcResult = Properties.Settings.Default.CalcResult;
 				//パラメータの初期値
 				if (CalcTextFontSize == null || CalcTextFontSize.Equals("")) {
@@ -186,7 +191,11 @@ namespace WpfApp1.ViewModels {
 				if (CalcResult == null || CalcResult.Equals("")) {
 					CalcResult = "0123456789";
 				}
-				dbMsg += ",CalcResult＝" + CalcResult;
+				dbMsg += ",IsPO＝" + IsPO;
+				//if (Properties.Settings.Default.IsPO == null) {
+				//	IsPO =false;
+				//	dbMsg += ">>IsPO=" + IsPO;
+				//}
 				RaisePropertyChanged();
 
 				GsGlist = new List<Product>();
