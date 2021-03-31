@@ -187,9 +187,8 @@ namespace CS_Calculator{
 				CalcResult.Content = "";
 				//計算経過
 				NowOperations.FontSize = 11;
-				NowOperations.Text += "";
-				//CalcOperation.Content = "";
-				//CalcProcess.Text = "";
+				NowOperations.Text = "";
+				dbMsg += ",計算経過=" + NowOperations.Text;
 				IsBegin = true;
 				//経過リスト
 				CalcProgress.ItemsSource = BeforeVals;
@@ -439,9 +438,20 @@ namespace CS_Calculator{
 				//	BeforeVals[BeforeVals.Count - 1].Value= double.Parse(InputStr);
 
 				if (!InputStr.Equals("") ) {
-					if (BeforeOperation.EndsWith(ParenStr)) {
-						dbMsg += ",前の格納=" + BeforeVals[BeforeVals.Count - 1].Operater+ BeforeVals[BeforeVals.Count - 1].Value;
-						BeforeVals[BeforeVals.Count - 1].Value = double.Parse(InputStr);
+					string bInputOperater = "";
+					double ? bInputValue = null;
+					int bIndex = BeforeVals.Count - 1;
+					dbMsg += ",前の格納[" + bIndex + "]";
+					if(-1<bIndex) {
+						BeforeVal bInput = BeforeVals[bIndex];
+						bInputOperater = bInput.Operater;
+						bInputValue = bInput.Value;
+						dbMsg += bInputOperater + bInputValue;
+					}else{
+						dbMsg += "未格納";
+					}
+					if (bInputOperater.EndsWith(ParenStr) && bInputValue ==null && 1 < bIndex) {
+						BeforeVals[bIndex].Value = double.Parse(InputStr);
 						dbMsg += ",>>" + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
 						InputStr = "";
 					} else {
@@ -465,8 +475,8 @@ namespace CS_Calculator{
 						CalcResult.Content = ResultStr;     //ProcessVal.ToString();
 						OnPropertyChanged("ResultStr");
 						InputStr = "";
-					}
-				} else if (NextOperation.EndsWith(ParenStr)) {
+				}
+			} else if (NextOperation.EndsWith(ParenStr)) {
 					dbMsg += ",優先開始";
 					NowInput.Value = null;
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
