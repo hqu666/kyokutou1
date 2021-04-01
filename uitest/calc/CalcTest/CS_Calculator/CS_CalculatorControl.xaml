@@ -186,7 +186,7 @@
 						Content="▼"
 						FontSize="8" Click="CorpBt_Click" Margin="0"
 				/>
-			<Label x:Name="CalcOperation" Content="+" Margin="2,0,2,0"
+			<!--<Label x:Name="CalcOperation" Content="+" Margin="2,0,2,0"
 					Grid.Row="1" Grid.Column="0" Padding="0"
 					FontSize="11" 
 					Background="#FFFBF6C1" 
@@ -199,7 +199,7 @@
 					HorizontalAlignment="Stretch"		
 					IsReadOnly="True" 
 					BorderThickness="0" 
-					/>
+					/>-->
 		</Grid>
 		<DataGrid x:Name="CalcProgress" 
 							Grid.Row="3" Grid.Column="0"  Grid.ColumnSpan="3" 

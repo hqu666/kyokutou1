@@ -161,10 +161,7 @@ namespace CS_Calculator{
 		/// </summary>
 		public CS_CalculatorControl()
 		{
-			//string TAG = "CS_CalculatorControl";
-			//string dbMsg = "";
 			InitializeComponent();
-			CalcProcess.IsReadOnly = true;
 			this.Loaded += ThisLoaded;
 		}
 
@@ -363,14 +360,13 @@ namespace CS_Calculator{
 			string TAG = "EnterFunc";
 			string dbMsg = "";
 			try {
-		//		InputStr = CalcProcess.Text;
+				BeforeOperation = "";
 				dbMsg += "最終入力" + InputStr;
 				if (BeforeOperation.Equals(ParenthesisStr) && !InputStr.Equals("")) {
 					dbMsg += "；優先範囲終端直後の数値";
 					BeforeVals[BeforeVals.Count - 1].Value = double.Parse(InputStr);
 					ProgressRefresh();
 					ReCalk();
-				//	ResultStr = ProcessVal.ToString();
 					CalcResult.Content = ResultStr; 
 					OnPropertyChanged("ResultStr");
 				} else if (InputStr.Equals("")) {
@@ -633,13 +629,6 @@ namespace CS_Calculator{
 					dbMsg += ":" + iOperater + iValue;
 					int valsRest = valsEnd - valsCount;                                   //残り行数
 					dbMsg += ":残り" + valsRest;
-			//		dbMsg += ":優先範囲内" + iParenCount + "階層";
-					//int beforeCount = resurtVals.Count - 1;
-					//BeforeVal pBeforeVal = new BeforeVal();
-					//if (1< valsCount) {
-					//	pBeforeVal = ParenVals[valsCount - 2];
-					//	dbMsg += "[前回" + beforeCount + "]=" + pBeforeVal.Operater + pBeforeVal.Value;
-					//}
 					if (iOperater.Equals("") ) {            //|| iOperater==null
 						dbMsg += ">経過リスト開始>そのまま格納";
 						resurtVals.Add(iVal);
@@ -679,20 +668,6 @@ namespace CS_Calculator{
 							dbMsg += ">範囲内集計値>" + aVal.Operater + aVal.Value;
 							resurtVals.Add(aVal);
 						}
-						//if (iValue != null) {
-						//		dbMsg += ">続けて数値がある>" + iValue;
-						//		aVal.Operater = MultiplyStr;
-						//		aVal.Value = (double)iValue;
-						//		dbMsg += ">範囲継続値>" + aVal.Operater + aVal.Value + "を追加";
-						//		resurtVals.Add(aVal);
-						//	}
-						//if ( isParsonOnly) {        //1 == iValCount &&
-						//} else { 
-						//	dbMsg += ">関数なので範囲終端追加";
-						//	bVal.Operater = ParenthesisStr;
-						//	bVal.Value = null;
-						//	resurtVals.Add(bVal);
-						//}
 						parenResult = 0.0;
 						iParenCount--;
 				} else {
@@ -704,18 +679,15 @@ namespace CS_Calculator{
 						if (resEndVals.Value != null) {
 							dbMsg += "に演算";
 							parenResult = ReCalkBody((double)resEndVals.Value, iVal);
-							//							if (0<iParenCount && pBeforeVal.Value != null) {
-							//					dbMsg += ">前値"+ pBeforeVal.Value;
-							//		parenResult = ReCalkBody((double)pBeforeVal.Value, iVal);
 						} else {
 							dbMsg += "," + parenResult + "に演算";
 							parenResult = ReCalkBody(parenResult, iVal);
 						}
-						if(parenResult == 0) {
-							resurtVals[resEnd].Value = null;
-						} else {
-							resurtVals[resEnd].Value = parenResult;
-						}
+						//if(parenResult == 0) {
+						//	resurtVals[resEnd].Value = null;
+						//} else {
+						//	resurtVals[resEnd].Value = parenResult;				//ここを通ると
+						//}
 						parenResult = 0.0;
 						iValCount--;
 					}
@@ -1216,15 +1188,6 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				OperaterInput(ParenStr);
-
-				//		string NextOperation = ParenStr;
-				//		ProcessedFunc(NextOperation);
-				//		//演算子を優先部開始にして
-				////		if(!NowOperations.Text.Equals("")) {
-				////			//Parenが起動トリガになった場合を避けて、電卓上での入力後にのみ追記
-				////			NowOperations.Text += ParenStr;
-				////			dbMsg += ",NowOperations=" + NowOperations.Text;
-				////		}
 				ParenCount++;
 				dbMsg += ",優先範囲開始=" + ParenCount + "階層";
 				MyLog(TAG, dbMsg);
@@ -1251,7 +1214,6 @@ namespace CS_Calculator{
 				dbMsg += ",優先範囲残り=" + ParenCount + "階層";
 				dbMsg += ",BeforeOperation=" + BeforeOperation + ",現在の入力" + InputStr;
 				dbMsg += ",最終確定値=" + BeforeVals[BeforeVals.Count-1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-				dbMsg += ",表示値=" + CalcOperation.Content.ToString() + CalcProcess.Text;
 				//		ProcessedFunc(NextOperation); を使わず、ここで独自処理
 				BeforeVal NowInput = new BeforeVal();
 				NowInput.Operater = BeforeOperation;					//20210330: CalcOperation.Content.ToString();
@@ -1302,7 +1264,6 @@ namespace CS_Calculator{
 			string TAG = "DivideFunc";
 			string dbMsg = "";
 			try {
-				string InputStr = CalcProcess.Text;
 				dbMsg += ",現在=" + InputStr;
 				 ReCalk();
 				dbMsg += ",ここまでの演算結果=" + ProcessVal;
