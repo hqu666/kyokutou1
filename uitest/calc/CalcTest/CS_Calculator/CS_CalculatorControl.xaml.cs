@@ -362,14 +362,15 @@ namespace CS_Calculator{
 			try {
 				BeforeOperation = "";
 				dbMsg += "最終入力" + InputStr;
-				if (BeforeOperation.Equals(ParenthesisStr) && !InputStr.Equals("")) {
-					dbMsg += "；優先範囲終端直後の数値";
-					BeforeVals[BeforeVals.Count - 1].Value = double.Parse(InputStr);
-					ProgressRefresh();
-					ReCalk();
-					CalcResult.Content = ResultStr; 
-					OnPropertyChanged("ResultStr");
-				} else if (InputStr.Equals("")) {
+				//if (BeforeOperation.Equals(ParenthesisStr) && !InputStr.Equals("")) {
+				//	dbMsg += "；優先範囲終端直後の数値";
+				//	BeforeVals[BeforeVals.Count - 1].Value = double.Parse(InputStr);
+				//	ProgressRefresh();
+				//	ReCalk();
+				//	CalcResult.Content = ResultStr; 
+				//	OnPropertyChanged("ResultStr");
+				//} else 
+				if (InputStr.Equals("")) {
 					dbMsg += "処理する入力が無い";
 					MyLog(TAG, dbMsg);
 					MyCallBack();
@@ -575,10 +576,11 @@ namespace CS_Calculator{
 				dbMsg += "優先範囲階層の深さ＝" + iValCount;
 				dbMsg += ",非関数=" + isParsonOnly;
 				aVal.Operater = ParenStr;
-				if (1 == iValCount && isParsonOnly) {
-					dbMsg += ">関数ではない>積算に置き換え";
-					aVal.Operater = MultiplyStr;
-				}
+				aVal.Operater = ParenStr;
+				//if (1 == iValCount && isParsonOnly) {
+				//	dbMsg += ">関数ではない>積算に置き換え";
+				//	aVal.Operater = MultiplyStr;
+				//}
 				aVal.Value = ResultNow;
 				dbMsg += aVal.Operater + aVal.Value;
 #if DEBUG
@@ -642,10 +644,10 @@ namespace CS_Calculator{
 						iParenCount++;
 						iValCount = 1;
 						dbMsg += "：優先範囲開始[" + iParenCount + "]";
-						parenResult = 0.0;          //要るか？
+						resurtVals.Add(iVal);
 						if (iValue == null) {
 							dbMsg += ">数値無し>そのまま格納";
-							resurtVals.Add(iVal);
+					//		resurtVals.Add(iVal);
 						} else {
 							dbMsg += ">>優先範囲内計算開始";
 							parenResult = (double)iValue;
@@ -663,32 +665,44 @@ namespace CS_Calculator{
 							parenResult = ReCalkBody(parenResult, iVal);
 						}
 						dbMsg += ">>" + parenResult;
-						if(parenResult !=0.0) {
-							BeforeVal aVal = RemainPason(iValCount, parenResult, isParsonOnly);
-							dbMsg += ">範囲内集計値>" + aVal.Operater + aVal.Value;
+						//if(parenResult !=0.0) {
+						BeforeVal aVal = RemainPason(iValCount, parenResult, isParsonOnly);
+						dbMsg += ">範囲内集計値>" + aVal.Operater + aVal.Value;
+						resurtVals.Add(aVal);
+						//}
+						dbMsg += "：：範囲終了：iParenCount=" + iParenCount;
+						if (0< iParenCount) {
+							aVal = new BeforeVal();       //経過各行
+							aVal.Operater = ParenthesisStr;
+							aVal.Value = null;
 							resurtVals.Add(aVal);
+							iParenCount--;
+							dbMsg += ">>" + iParenCount;
+							parenResult = 0.0;
 						}
-						parenResult = 0.0;
-						iParenCount--;
-				} else {
+					} else {
 						iValCount++;
 						dbMsg += ",未処理入力値数" + iValCount+"組";
 						int resEnd = resurtVals.Count - 1;
 						BeforeVal resEndVals = resurtVals[resEnd];
-						dbMsg += "、結果配列[" + (resEnd + 1) + "件目]=" + resEndVals.Operater + resEndVals.Value ;
+						dbMsg += "、結果配列[" + (resEnd + 1) + "件目]=" + resEndVals.Operater + resEndVals.Value;
 						if (resEndVals.Value != null) {
 							dbMsg += "に演算";
 							parenResult = ReCalkBody((double)resEndVals.Value, iVal);
 						} else {
-							dbMsg += "," + parenResult + "に演算";
+							dbMsg += ",parenResult=" + parenResult + "に演算";
 							parenResult = ReCalkBody(parenResult, iVal);
 						}
-						//if(parenResult == 0) {
-						//	resurtVals[resEnd].Value = null;
-						//} else {
-						//	resurtVals[resEnd].Value = parenResult;				//ここを通ると
-						//}
-						parenResult = 0.0;
+						if (resEndVals.Operater.EndsWith(ParenStr)) {
+							dbMsg += "に演算:Paren直後";
+					//		resurtVals[resEnd].Value = parenResult;
+						}
+						//			//if (parenResult == 0) {
+						//			//	resurtVals[resEnd].Value = null;
+						//			//} else {
+						//			//	//resurtVals[resEnd].Value = parenResult;             //ここを通ると
+						//			//}
+						////			parenResult = 0.0;
 						iValCount--;
 					}
 					//ループ終端でも優先範囲が完結しない場合の処理に渡す
@@ -881,72 +895,72 @@ namespace CS_Calculator{
 		/// 四則演算の優先順位で計算
 		/// </summary>
 		/// <returns></returns>
-		private double ReCalkPFO(ObservableCollection<BeforeVal> ParenVals) {
-			string TAG = "ReCalkPFO";
-			string dbMsg = "";
-			double ResultNow = 0.0;
-			try {
-				dbMsg += "BeforeVals=" + ParenVals.Count + "組";
-				ObservableCollection<BeforeVal> PFOVals = new ObservableCollection<BeforeVal>();
-				string bOperater = "";
-				double bValue = 0.0;
-				foreach (BeforeVal beforeVal in ParenVals) {
-					string nOperater = beforeVal.Operater;
-					double? nValue = null;
-					if(beforeVal.Value!=null) {
-						nValue = (double)beforeVal.Value;
-					}
-					dbMsg += "\r\n" + nOperater + " " + nValue;
-					BeforeVal pfoVal = new BeforeVal();
-					if (nOperater.Equals("")) {
-						dbMsg += "＜＜開始";
-						pfoVal.Operater = nOperater;
-						pfoVal.Value = nValue;
-						PFOVals.Add(pfoVal);
-					} else if (nOperater.Equals(AddStr) || nOperater.Equals(SubtractStr)) {
-						dbMsg += "＜＜和差";
-						pfoVal.Operater = nOperater;
-						pfoVal.Value = nValue;
-						PFOVals.Add(pfoVal);
-					} else if (nOperater.Equals(MultiplyStr)) {
-						dbMsg += "積>>";
-						BeforeVal bPFOVal = PFOVals[PFOVals.Count - 1];
-						dbMsg += bPFOVal.Value + "×" + nValue;
-						bPFOVal.Value *= nValue;
-						dbMsg += "=" + bPFOVal.Value ;
-						PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
-					} else if (nOperater.Equals(DivideStr)) {
-						dbMsg += "商>>";
-						BeforeVal bPFOVal = PFOVals[PFOVals.Count - 1];
-						dbMsg += bPFOVal.Value;
-						if (bPFOVal.Value != 0) {
-							dbMsg +=  "÷" + nValue;
-							bPFOVal.Value /= nValue;
-						}else{
-							bPFOVal.Value = 0;
-						}
-						PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
-					} else if (nOperater.Equals(ParenStr)) {
-						dbMsg += "(" + nValue;
-					} else if (nOperater.Equals(ParenthesisStr)) {
-						dbMsg += ")" + nValue;
-					}
-				}
-				dbMsg += "PFOVals=" + PFOVals.Count + "組";
-				foreach (BeforeVal beforeVal in PFOVals) {
-					bOperater = beforeVal.Operater;
-					bValue = (double)beforeVal.Value;
-					dbMsg += "\r\n" + bOperater + " " + bValue;
-					ResultNow = ReCalkBody(ResultNow, beforeVal);
-				}
+		//private double ReCalkPFO(ObservableCollection<BeforeVal> ParenVals) {
+		//	string TAG = "ReCalkPFO";
+		//	string dbMsg = "";
+		//	double ResultNow = 0.0;
+		//	try {
+		//		dbMsg += "BeforeVals=" + ParenVals.Count + "組";
+		//		ObservableCollection<BeforeVal> PFOVals = new ObservableCollection<BeforeVal>();
+		//		string bOperater = "";
+		//		double bValue = 0.0;
+		//		foreach (BeforeVal beforeVal in ParenVals) {
+		//			string nOperater = beforeVal.Operater;
+		//			double? nValue = null;
+		//			if(beforeVal.Value!=null) {
+		//				nValue = (double)beforeVal.Value;
+		//			}
+		//			dbMsg += "\r\n" + nOperater + " " + nValue;
+		//			BeforeVal pfoVal = new BeforeVal();
+		//			if (nOperater.Equals("")) {
+		//				dbMsg += "＜＜開始";
+		//				pfoVal.Operater = nOperater;
+		//				pfoVal.Value = nValue;
+		//				PFOVals.Add(pfoVal);
+		//			} else if (nOperater.Equals(AddStr) || nOperater.Equals(SubtractStr)) {
+		//				dbMsg += "＜＜和差";
+		//				pfoVal.Operater = nOperater;
+		//				pfoVal.Value = nValue;
+		//				PFOVals.Add(pfoVal);
+		//			} else if (nOperater.Equals(MultiplyStr)) {
+		//				dbMsg += "積>>";
+		//				BeforeVal bPFOVal = PFOVals[PFOVals.Count - 1];
+		//				dbMsg += bPFOVal.Value + "×" + nValue;
+		//				bPFOVal.Value *= nValue;
+		//				dbMsg += "=" + bPFOVal.Value ;
+		//				PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
+		//			} else if (nOperater.Equals(DivideStr)) {
+		//				dbMsg += "商>>";
+		//				BeforeVal bPFOVal = PFOVals[PFOVals.Count - 1];
+		//				dbMsg += bPFOVal.Value;
+		//				if (bPFOVal.Value != 0) {
+		//					dbMsg +=  "÷" + nValue;
+		//					bPFOVal.Value /= nValue;
+		//				}else{
+		//					bPFOVal.Value = 0;
+		//				}
+		//				PFOVals[PFOVals.Count - 1].Value = bPFOVal.Value;
+		//			} else if (nOperater.Equals(ParenStr)) {
+		//				dbMsg += "(" + nValue;
+		//			} else if (nOperater.Equals(ParenthesisStr)) {
+		//				dbMsg += ")" + nValue;
+		//			}
+		//		}
+		//		dbMsg += "PFOVals=" + PFOVals.Count + "組";
+		//		foreach (BeforeVal beforeVal in PFOVals) {
+		//			bOperater = beforeVal.Operater;
+		//			bValue = (double)beforeVal.Value;
+		//			dbMsg += "\r\n" + bOperater + " " + bValue;
+		//			ResultNow = ReCalkBody(ResultNow, beforeVal);
+		//		}
 
-				dbMsg += "=" + ResultNow;
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-			return ResultNow;
-		}
+		//		dbMsg += "=" + ResultNow;
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//	return ResultNow;
+		//}
 
 		/// <summary>
 		/// 計算経過の更新
