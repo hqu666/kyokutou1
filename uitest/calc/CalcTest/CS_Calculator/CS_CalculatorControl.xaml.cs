@@ -379,8 +379,12 @@ namespace CS_Calculator{
 					ProcessedFunc("");
 				} else {
 					dbMsg += "," + InputStr + "を" + BeforeOperation;
-		//			ReCalk();
-					ProcessedFunc("Enter");
+					//BeforeVal eVals = new BeforeVal();
+					// eVals.Operater= BeforeOperation;
+					//eVals.Value = Double.Parse(InputStr);
+					//dbMsg += eVals.Operater + eVals.Value;
+
+					ProcessedFunc(BeforeOperation);
 				}
 				for (int i = ParenCount; 0<i ; i--){
 					dbMsg += ",優先範囲" + i + "/" + ParenCount;
@@ -473,8 +477,8 @@ namespace CS_Calculator{
 						CalcResult.Content = ResultStr;     //ProcessVal.ToString();
 						OnPropertyChanged("ResultStr");
 						InputStr = "";
-				}
-			} else if (NextOperation.EndsWith(ParenStr)) {
+					}
+				} else if (NextOperation.EndsWith(ParenStr)) {
 					dbMsg += ",優先開始";
 					NowInput.Value = null;
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
@@ -714,13 +718,18 @@ namespace CS_Calculator{
 				}
 
 				dbMsg += ">中置記法対応後>" + resurtVals.Count + "組=";
-#if DEBUG
+
+				//#if DEBUG
+				string afterStr = "";
 				foreach (BeforeVal iVal in resurtVals) {
 					string iOperater = iVal.Operater;
 					double? iValue = iVal.Value;
-					dbMsg += "" + iOperater + iValue;
+					afterStr += "" + iOperater + iValue;
 				}
-#endif
+				dbMsg += afterStr;
+				afterStr = afterStr.Replace(")(" ,MultiplyStr);
+				dbMsg += ">>"+afterStr;
+				//#endif
 				dbMsg += "\r\n優先範囲出現数：残り=" + ParenCount + "回";
 				MyLog(TAG, dbMsg);
 				//if (0 < ParenCount) {
@@ -797,12 +806,12 @@ namespace CS_Calculator{
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
 				int deficitParenthesis = iParenCount - ParenthesisCount;
 				dbMsg += "：)不足＝"+ deficitParenthesis;
+				dbMsg += "入力状況" + PFAOStr;
 				if (IsPO) {
 					dbMsg += ">>四則演算処理:";
 					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
 					} else {
-						dbMsg += "入力状況" + PFAOStr;
 						for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
 							PFAOStr += ParenthesisStr;
 						}
@@ -824,20 +833,105 @@ namespace CS_Calculator{
 					}
 				} else {
 					dbMsg += ">>電卓処理";
-					if(0< iParenCount) {
+					if (0< iParenCount) {
 						dbMsg += ">>優先範囲有り";
+						StrInParenCalc(PFAOStr);
 						CalcParen(ResultNow, BeforeVals, iParenCount, ParenthesisCount);
 					}else{
 						dbMsg += ">>優先範囲無し";
 						ReCalkEnd(BeforeVals);
 					}
 				}
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		/// <summary>
+		/// 演算子の出現位置
+		/// </summary>
+		/// <param name="pStr"></param>
+		/// <returns></returns>
+		private int OpraterIndex(string pStr) {
+			string TAG = "OpraterIndex";
+			string dbMsg = "";
+			int retInt = -1;
+			try {
+				dbMsg += "pStr=" + pStr;
+				int AddPoint = pStr.IndexOf(AddStr);
+				if(-1< AddPoint) {
+					dbMsg += "、AddPoint=" + AddPoint;
+					retInt = AddPoint;
+				}
+				int SubtractPoint = pStr.IndexOf(SubtractStr);
+				if (-1 < SubtractPoint) {
+					dbMsg += "、SubtractPoint=" + SubtractPoint;
+					if(retInt> SubtractPoint) {
+						retInt = SubtractPoint;
+					}
+				}
+				int DividePoint = pStr.IndexOf(DivideStr);
+				if (-1 < DividePoint) {
+					dbMsg += "、DivideStrPoint=" + DividePoint;
+					if (retInt > DividePoint) {
+						retInt = DividePoint;
+					}
+				}
+				int MultiplyPoint = pStr.IndexOf(MultiplyStr);
+				if (-1 < MultiplyPoint) {
+					dbMsg += "、MultiplyPoint=" + MultiplyPoint;
+					if (retInt > MultiplyPoint) {
+						retInt = MultiplyPoint;
+					}
+				}
+				dbMsg += "、retInt=" + retInt;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retInt;
+		}
+
+		/// <summary>
+		/// 文字列で渡された数式から優先計算範囲が無くなるまで処理
+		/// </summary>
+		/// <param name="pStr"></param>
+		private void StrInParenCalc(string pStr) {
+			string TAG = "StrInParenCalc";
+			string dbMsg = "";
+			try {
+				string inParenStr = pStr;			// pStr.Substring(startPoint, endPoint);
+				while(-1< inParenStr.IndexOf(ParenStr)){
+					dbMsg += "\r\n" + inParenStr;
+					int startPoint = inParenStr.IndexOf(ParenStr)+2;
+					int endPoint = inParenStr.IndexOf(ParenthesisStr)- startPoint;
+					dbMsg += ",優先範囲" + startPoint + "～" + endPoint;
+					inParenStr = inParenStr.Substring(startPoint, endPoint);
+					dbMsg += "=" + inParenStr;
+				}
+				dbMsg += ">>" + inParenStr;
+				int cInt = 0;
+				while (-1 < OpraterIndex(inParenStr)) {
+					int endPoint = OpraterIndex(inParenStr);
+					string calcStr = inParenStr.Substring(0, endPoint);
+					string remStr = inParenStr.Substring(endPoint);
+					dbMsg += "\r\ncalcStr=" + calcStr;
+					try {
+						System.Data.DataTable dt = new System.Data.DataTable();
+						var pVal = dt.Compute(calcStr, "");
+						inParenStr = pVal.ToString() + remStr;
+						dbMsg += ">>" + inParenStr;
+					} catch (Exception er) {
+						MyErrorLog(TAG, dbMsg, er);
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		private void ReCalkEnd(ObservableCollection<BeforeVal> ParenVals) {
 			string TAG = "ReCalkEnd";
