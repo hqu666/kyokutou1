@@ -807,15 +807,15 @@ namespace CS_Calculator{
 				int deficitParenthesis = iParenCount - ParenthesisCount;
 				dbMsg += "：)不足＝"+ deficitParenthesis;
 				dbMsg += "入力状況" + PFAOStr;
+				for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
+					PFAOStr += ParenthesisStr;
+				}
+				dbMsg += ">優先範囲終端補完>" + PFAOStr;
 				if (IsPO) {
 					dbMsg += ">>四則演算処理:";
 					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
 					} else {
-						for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
-							PFAOStr += ParenthesisStr;
-						}
-						dbMsg += ">優先範囲終端補完>" + PFAOStr;
 						try {
 							//式を計算する .NET5?
 							System.Data.DataTable dt = new System.Data.DataTable();
@@ -867,21 +867,21 @@ namespace CS_Calculator{
 				int SubtractPoint = pStr.IndexOf(SubtractStr);
 				if (-1 < SubtractPoint) {
 					dbMsg += "、SubtractPoint=" + SubtractPoint;
-					if(retInt> SubtractPoint) {
+					if(retInt> SubtractPoint || retInt == -1) {
 						retInt = SubtractPoint;
 					}
 				}
 				int DividePoint = pStr.IndexOf(DivideStr);
 				if (-1 < DividePoint) {
 					dbMsg += "、DivideStrPoint=" + DividePoint;
-					if (retInt > DividePoint) {
+					if (retInt > DividePoint || retInt==-1) {
 						retInt = DividePoint;
 					}
 				}
 				int MultiplyPoint = pStr.IndexOf(MultiplyStr);
 				if (-1 < MultiplyPoint) {
 					dbMsg += "、MultiplyPoint=" + MultiplyPoint;
-					if (retInt > MultiplyPoint) {
+					if (retInt > MultiplyPoint || retInt == -1) {
 						retInt = MultiplyPoint;
 					}
 				}
@@ -901,32 +901,70 @@ namespace CS_Calculator{
 			string TAG = "StrInParenCalc";
 			string dbMsg = "";
 			try {
+				int startPoint = 0;
+				int endPoint = 0;
+				int pCount = 0;
 				string inParenStr = pStr;			// pStr.Substring(startPoint, endPoint);
 				while(-1< inParenStr.IndexOf(ParenStr)){
+					pCount++;
 					dbMsg += "\r\n" + inParenStr;
-					int startPoint = inParenStr.IndexOf(ParenStr)+2;
-					int endPoint = inParenStr.IndexOf(ParenthesisStr)- startPoint;
+					startPoint = inParenStr.IndexOf(ParenStr)+2;
+					endPoint = inParenStr.IndexOf(ParenthesisStr);
 					dbMsg += ",優先範囲" + startPoint + "～" + endPoint;
-					inParenStr = inParenStr.Substring(startPoint, endPoint);
-					dbMsg += "=" + inParenStr;
+					inParenStr = inParenStr.Substring(startPoint, (endPoint- startPoint));
+					dbMsg += "で" + inParenStr;
 				}
-				dbMsg += ">>" + inParenStr;
-				int cInt = 0;
-				while (-1 < OpraterIndex(inParenStr)) {
-					int endPoint = OpraterIndex(inParenStr);
+				dbMsg += ",pCount=" + pCount;
+				string brforeParenStr = pStr.Substring(0, startPoint-2);
+				dbMsg += ",brfore=" + brforeParenStr;
+				string afterParenStr = pStr.Substring(endPoint);
+				for (int tCount = 0; tCount < pCount; tCount++) {
+					//優先範囲終了記号を消去
+					afterParenStr= afterParenStr.Replace(ParenthesisStr,"");
+				}
+				dbMsg += " 　と　" + inParenStr;
+				dbMsg += " 　と　" + afterParenStr;
+				//演算子が無くなるまで先頭から計算
+				while (0 < OpraterIndex(inParenStr)) {
+					endPoint = OpraterIndex(inParenStr);
 					string calcStr = inParenStr.Substring(0, endPoint);
 					string remStr = inParenStr.Substring(endPoint);
 					dbMsg += "\r\ncalcStr=" + calcStr;
+					endPoint = OpraterIndex(remStr);
+					calcStr += remStr.Substring(0, endPoint);
+					remStr = remStr.Substring(endPoint);
+					if(endPoint<2) {
+						//演算子と数字で2文字以上なければ
+						remStr = "";
+					}
+					dbMsg += ">>" + calcStr;
 					try {
 						System.Data.DataTable dt = new System.Data.DataTable();
 						var pVal = dt.Compute(calcStr, "");
-						inParenStr = pVal.ToString() + remStr;
+						inParenStr = pVal.ToString()+ remStr;
 						dbMsg += ">>" + inParenStr;
 					} catch (Exception er) {
 						MyErrorLog(TAG, dbMsg, er);
 					}
 				}
+				inParenStr = brforeParenStr + inParenStr + afterParenStr;
+				dbMsg += "、範囲内計算後=" + inParenStr;
+				try {
+					System.Data.DataTable dt = new System.Data.DataTable();
+					var pVal = dt.Compute(inParenStr, "");
+					inParenStr = pVal.ToString() ;
+					dbMsg += ">>" + inParenStr;
+				} catch (Exception er) {
+					MyErrorLog(TAG, dbMsg, er);
+				}
 				MyLog(TAG, dbMsg);
+				if (-1 == OpraterIndex(inParenStr)) {
+					dbMsg += ">>最終値になった" ;
+					ProcessVal = Double.Parse(inParenStr);
+					CalcResult.Content = ProcessVal.ToString();
+				}else{
+					StrInParenCalc(inParenStr);
+				}
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
