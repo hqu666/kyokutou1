@@ -839,7 +839,7 @@ namespace CS_Calculator{
 		//				CalcParen(ResultNow, BeforeVals, iParenCount, ParenthesisCount);
 					}else{
 						dbMsg += ">>優先範囲無し";
-						string rStr = ClacreterCalc(PFAOStr);
+						string rStr = CalculatorCalc(PFAOStr);
 						ProcessVal = Double.Parse(rStr);
 						CalcResult.Content = ProcessVal.ToString();
 						//		ReCalkEnd(BeforeVals);
@@ -937,8 +937,10 @@ namespace CS_Calculator{
 					}
 					dbMsg += " 　と　" + inParenStr;
 					dbMsg += " 　と　範囲後=" + afterParenStr;
+				}else{
+
 				}
-				inParenStr = ClacreterCalc(inParenStr);
+				inParenStr = CalculatorCalc(inParenStr);
 				inParenStr = brforeParenStr + inParenStr + afterParenStr;
 				dbMsg += "、範囲内計算後=" + inParenStr;
 				MyLog(TAG, dbMsg);
@@ -959,8 +961,8 @@ namespace CS_Calculator{
 		/// </summary>
 		/// <param name="pStr"></param>
 		/// <returns></returns>
-		private string ClacreterCalc(string pStr) {
-			string TAG = "ClacreterCalc";
+		private string CalculatorCalc(string pStr) {
+			string TAG = "CalculatorCalc";
 			string dbMsg = "";
 			string inParenStr = pStr;           // pStr.Substring(startPoint, endPoint);
 			try {
@@ -971,13 +973,16 @@ namespace CS_Calculator{
 					endPoint = OpraterIndex(inParenStr);
 					string calcStr = inParenStr.Substring(0, endPoint);
 					string remStr = inParenStr.Substring(endPoint);
-					dbMsg += "\r\ncalcStr=" + calcStr;
+					dbMsg += "\r\n前値:" + endPoint + "まで=" + calcStr;
 					endPoint = OpraterIndex(remStr);
 					calcStr += remStr.Substring(0, endPoint);
-					remStr = remStr.Substring(endPoint);
-					if (endPoint < 2) {
+					dbMsg += ",後値：" + endPoint + "まで=" + calcStr;
+					if(endPoint==0) {
+					}else if (endPoint < 2) {
 						//演算子と数字で2文字以上なければ
 						remStr = "";
+					}else{
+						remStr = remStr.Substring(endPoint);
 					}
 					dbMsg += ">>" + calcStr;
 					try {
