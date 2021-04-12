@@ -904,43 +904,75 @@ namespace CS_Calculator{
 			string TAG = "StrInParenCalc";
 			string dbMsg = "";
 			try {
-				int startPoint = 0;
-				int endPoint = 0;
+		//		int endPoint = 0;
 				int pCount = 0;
 				string brforeParenStr = "";
 				string afterParenStr = "";
 				string inParenStr = pStr;           // pStr.Substring(startPoint, endPoint);
 				dbMsg += "," + inParenStr;
-				if(-1 < inParenStr.IndexOf(ParenStr)) {
-					while (-1 < inParenStr.IndexOf(ParenStr)) {
-						pCount++;
-						startPoint = inParenStr.IndexOf(ParenStr) + 2;
-						endPoint = inParenStr.IndexOf(ParenthesisStr);
-						dbMsg += ",優先範囲" + startPoint + "～" + endPoint;
-						int pLength = endPoint - startPoint;
-						if (0 < pLength) {
-							dbMsg += ",優先範囲後有り";
-							inParenStr = inParenStr.Substring(startPoint, pLength);
-						} else {
-							dbMsg += ",優先範囲後無し";
-							inParenStr = inParenStr.Substring(startPoint);
-						}
-						dbMsg += "で" + inParenStr;
+				int startPoint = inParenStr.IndexOf(ParenStr);
+				int endPoint = inParenStr.IndexOf(ParenthesisStr);
+				int calcLength = endPoint- startPoint;
+				dbMsg += ",優先範囲の位置" + startPoint + "～" + +endPoint + "(" + calcLength + "文字)まで";
+				if (-1 < startPoint) {
+					//優先範囲と前後に分ける
+					string beforeStr = inParenStr.Substring(0,startPoint-1);
+					string calcStr = inParenStr.Substring(startPoint+1);
+					string remStr = "";                 //残りを記録
+					if (-1 < endPoint) {
+						calcStr = inParenStr.Substring(startPoint, calcLength);
+						remStr = inParenStr.Substring(endPoint+1);
 					}
-					dbMsg += ",pCount=" + pCount;
-					brforeParenStr = pStr.Substring(0, startPoint - 2);
-					dbMsg += ",範囲前=" + brforeParenStr;
-					afterParenStr = pStr.Substring(endPoint);
-					//for (int tCount = 0; tCount < pCount; tCount++) {
-					//優先範囲終了記号を一つ消去
-					afterParenStr = afterParenStr.Replace(ParenthesisStr, "");
-					//}
-					dbMsg += " 　と　" + inParenStr;
-					dbMsg += " 　と　範囲後=" + afterParenStr;
-					inParenStr = CalculatorCalc(inParenStr);
-					inParenStr = brforeParenStr + inParenStr + afterParenStr;
+					//開始に続いて数値が有るところまで
+					while (-1 < calcStr.IndexOf(ParenStr)) {
+						startPoint++;
+						calcLength--;
+						beforeStr = inParenStr.Substring(0,startPoint-1);
+						calcStr = inParenStr.Substring(startPoint+1);
+						if (-1 < endPoint) {
+							calcStr = inParenStr.Substring(startPoint, calcLength);
+						}
+					}
+					dbMsg += "\r\n直後にParen:startPoint=" + startPoint + "～" + endPoint + "(" + calcLength + "文字)に修正";
+					dbMsg += "," + beforeStr + " と " + calcStr + " と " + remStr;
+					calcStr = CalculatorCalc(calcStr);
+					/*
+							//優先範囲が無くなるまで
+							while (-1 < inParenStr.IndexOf(ParenStr)) {
+								pCount++;
+								startPoint = inParenStr.IndexOf(ParenStr) + 2;
+								endPoint = inParenStr.IndexOf(ParenthesisStr);
+								dbMsg += ",優先範囲" + startPoint + "～" + endPoint;
+								int pLength = endPoint - startPoint;
+								if (0 < pLength) {
+									dbMsg += ",優先範囲後有り";
+									inParenStr = inParenStr.Substring(startPoint, pLength);
+								} else {
+									dbMsg += ",優先範囲後無し";
+									inParenStr = inParenStr.Substring(startPoint);
+								}
+								dbMsg += "で" + inParenStr;
+							}
+							//0413優先範囲内の計算結果に残りを繋げて再帰
+
+							dbMsg += "\r\npCount=" + pCount;
+							brforeParenStr = pStr.Substring(0, startPoint - 2);
+							dbMsg += ",範囲前=" + brforeParenStr;
+							afterParenStr = pStr.Substring(endPoint);
+							//for (int tCount = 0; tCount < pCount; tCount++) {
+							//優先範囲終了記号を一つ消去
+							afterParenStr = afterParenStr.Replace(ParenthesisStr, "");
+							//}
+							dbMsg += " 　と　" + inParenStr;
+							dbMsg += " 　と　範囲後=" + afterParenStr;
+							inParenStr = CalculatorCalc(inParenStr);
+							inParenStr = brforeParenStr + inParenStr + afterParenStr;
+							*/
+					//beforeStr = beforeStr.Replace(ParenStr, "");
+					//remStr = remStr.Replace(ParenthesisStr, "");
+					inParenStr = beforeStr + calcStr + remStr;
 					dbMsg += "、範囲内計算後=" + inParenStr;
-					if(1< pCount) {
+					if(-1 < inParenStr.IndexOf(ParenStr)) {                         //1< pCount
 						dbMsg += ">>再帰";
 						MyLog(TAG, dbMsg);
 						StrInParenCalc(inParenStr);
