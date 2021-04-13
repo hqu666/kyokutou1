@@ -833,6 +833,7 @@ namespace CS_Calculator{
 					}
 				} else {
 					dbMsg += ">>電卓処理";
+					MyLog(TAG, dbMsg);
 					if (0< iParenCount) {
 						dbMsg += ">>優先範囲有り";
 						StrInParenCalc(PFAOStr);
@@ -889,7 +890,7 @@ namespace CS_Calculator{
 					}
 				}
 				dbMsg += "、retInt=" + retInt;
-				MyLog(TAG, dbMsg);
+		//		MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -904,10 +905,7 @@ namespace CS_Calculator{
 			string TAG = "StrInParenCalc";
 			string dbMsg = "";
 			try {
-		//		int endPoint = 0;
-				int pCount = 0;
-				string brforeParenStr = "";
-				string afterParenStr = "";
+				double finishVal = 0;
 				string inParenStr = pStr;           // pStr.Substring(startPoint, endPoint);
 				dbMsg += "," + inParenStr;
 				int startPoint = inParenStr.IndexOf(ParenStr);
@@ -934,61 +932,28 @@ namespace CS_Calculator{
 						}
 					}
 					dbMsg += "\r\n直後にParen:startPoint=" + startPoint + "～" + endPoint + "(" + calcLength + "文字)に修正";
-					dbMsg += "," + beforeStr + " と " + calcStr + " と " + remStr;
+					dbMsg += ";" + beforeStr + " と " + calcStr + " と " + remStr;
 					calcStr = CalculatorCalc(calcStr);
-					/*
-							//優先範囲が無くなるまで
-							while (-1 < inParenStr.IndexOf(ParenStr)) {
-								pCount++;
-								startPoint = inParenStr.IndexOf(ParenStr) + 2;
-								endPoint = inParenStr.IndexOf(ParenthesisStr);
-								dbMsg += ",優先範囲" + startPoint + "～" + endPoint;
-								int pLength = endPoint - startPoint;
-								if (0 < pLength) {
-									dbMsg += ",優先範囲後有り";
-									inParenStr = inParenStr.Substring(startPoint, pLength);
-								} else {
-									dbMsg += ",優先範囲後無し";
-									inParenStr = inParenStr.Substring(startPoint);
-								}
-								dbMsg += "で" + inParenStr;
-							}
-							//0413優先範囲内の計算結果に残りを繋げて再帰
-
-							dbMsg += "\r\npCount=" + pCount;
-							brforeParenStr = pStr.Substring(0, startPoint - 2);
-							dbMsg += ",範囲前=" + brforeParenStr;
-							afterParenStr = pStr.Substring(endPoint);
-							//for (int tCount = 0; tCount < pCount; tCount++) {
-							//優先範囲終了記号を一つ消去
-							afterParenStr = afterParenStr.Replace(ParenthesisStr, "");
-							//}
-							dbMsg += " 　と　" + inParenStr;
-							dbMsg += " 　と　範囲後=" + afterParenStr;
-							inParenStr = CalculatorCalc(inParenStr);
-							inParenStr = brforeParenStr + inParenStr + afterParenStr;
-							*/
-					//beforeStr = beforeStr.Replace(ParenStr, "");
-					//remStr = remStr.Replace(ParenthesisStr, "");
 					inParenStr = beforeStr + calcStr + remStr;
 					dbMsg += "、範囲内計算後=" + inParenStr;
 					if(-1 < inParenStr.IndexOf(ParenStr)) {                         //1< pCount
-						dbMsg += ">>再帰";
+						dbMsg += ">優先範囲残り>再帰";
 						MyLog(TAG, dbMsg);
 						StrInParenCalc(inParenStr);
 					}
 				}
 				//混入防止
-				string testStr = inParenStr.Replace(ParenStr,"");
+				dbMsg += "、優先範囲除去=" + inParenStr;
+				string testStr = inParenStr.Replace(ParenStr, "");
 				testStr = testStr.Replace(ParenthesisStr, "");
-				inParenStr = CalculatorCalc(testStr);
+				inParenStr = CalculatorCalc(testStr);			//余計？
 				dbMsg += "、終了判定前=" + inParenStr;
-				if (-1 == OpraterIndex(inParenStr)) {
-					dbMsg += ">>最終値になった" ;
+				if (double.TryParse(inParenStr, out finishVal)) {       //-1 == OpraterIndex(inParenStr)
+					dbMsg += ">>最終値="+ finishVal;
 					ProcessVal = Double.Parse(inParenStr);
 					CalcResult.Content = ProcessVal.ToString();
 				}else{
-					dbMsg += ">>再帰";
+					dbMsg += ">非数値>再帰";
 					MyLog(TAG, dbMsg);
 					StrInParenCalc(inParenStr);
 				}
