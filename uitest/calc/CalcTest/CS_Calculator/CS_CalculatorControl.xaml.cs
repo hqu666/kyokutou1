@@ -123,12 +123,17 @@ namespace CS_Calculator{
 		/// </summary>
 		public string BeforeOperation = "";
 		/// <summary>
+		/// 入力値を負数にする
+		/// </summary>
+		public bool isMinus = false;
+
+		/// <summary>
 		/// 入力した演算子
 		/// </summary>
 		public string NowOperation = "";
 		public string LineBreakStr = "\n";                  //XAML中は&#10;
 		private static string AddStr = "+";
-		private static string SubtractStr = "-";
+		private static string SubtractStr = "-";				//演算子ではなく数値を負数化する
 		private static string DivideStr = "/";
 		private static string MultiplyStr = "*";
 		private static string PowerStr = "^";
@@ -233,20 +238,21 @@ namespace CS_Calculator{
 				NowOperations.Text = InputStr;              // BeforeVals[0].Value.ToString(); 
 				string NextOperation = "";
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
-				if (Key.Add <= OperatKey) {
+				if (Key.Multiply <= OperatKey) {     
 					switch (OperatKey) {
-						case Key.Add:
-						case Key.OemPlus:
+						case Key.Add:					//85
+						case Key.OemPlus:				//141
 							NextOperation = AddStr;
 							break;
-						case Key.Subtract:
-						case Key.OemMinus:
-							NextOperation = SubtractStr;
+						case Key.Subtract:			//87
+						case Key.OemMinus:      //143
+							isMinus = true;
+		//					NextOperation = SubtractStr;
 							break;
-						case Key.Divide:
+						case Key.Divide:				//89
 							NextOperation = DivideStr;
 							break;
-						case Key.Multiply:
+						case Key.Multiply:      //84 テンキー
 							NextOperation = MultiplyStr;
 							break;
 					}
@@ -432,6 +438,10 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				dbMsg += ",渡された演算子=" + NextOperation;
+				if (isMinus) {
+					dbMsg += ">>負数化" ;
+					InputStr = SubtractStr + InputStr;
+				}
 				dbMsg += ",現在の入力値=" + InputStr;
 				BeforeVal NowInput = new BeforeVal();
 				NowInput.Operater = NextOperation;
@@ -489,8 +499,11 @@ namespace CS_Calculator{
 				//	CalcOperation.Content = NextOperation;
 				}
 				ProgressRefresh();
-
-				BeforeOperation = NextOperation;
+				if (! NextOperation.Equals(SubtractStr)) {
+					// -　は演算子ではなく値の負数化なので　それ以外を更新
+					BeforeOperation = NextOperation;
+				}
+				//入力値を待つ為
 				NowOperations.Text += NextOperation;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -992,11 +1005,12 @@ namespace CS_Calculator{
 						dbMsg += "\r\n前値=" + calcStr;
 						string remStr = inOperateStr.Substring(endPoint);
 						dbMsg += ",以降:" + remStr;
-						if(remStr.StartsWith(MultiplyStr) || remStr.StartsWith(DivideStr)) {
-							//残りの先頭が積商なら
-							remStr = remStr.Substring(1);
-							dbMsg += ">>" + remStr;
-						}
+						//0414:ここで　*0.0-2 でループ
+						//if(remStr.StartsWith(MultiplyStr) || remStr.StartsWith(DivideStr)) {
+						//	//残りの先頭が積商なら
+						//	remStr = remStr.Substring(1);
+						//	dbMsg += ">>" + remStr;
+						//}
 						string oprand = remStr.Substring(1, 1);
 						dbMsg += ",演算子:" + oprand;
 						double secVal = 0;
@@ -1283,7 +1297,6 @@ namespace CS_Calculator{
 			string dbMsg = "階乗:作成中";
 			try {
 				string NextOperation = PowerStr;
-				//			ProcessedFunc(NextOperation);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1305,7 +1318,6 @@ namespace CS_Calculator{
 			string dbMsg = "平方根:作成中";
 			try {
 				string NextOperation = SqrtStr;
-				//			ProcessedFunc(NextOperation);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1393,8 +1405,8 @@ namespace CS_Calculator{
 		}
 
 		private void OperaterInput(string operaterStr) {
+			isMinus = false;
 			ProcessedFunc(operaterStr);
-	//		NowOperations.Text += operaterStr;
 		}
 
 		/// <summary>
@@ -1448,7 +1460,9 @@ namespace CS_Calculator{
 		/// </summary>
 		private void MinusBt_Click(object sender, RoutedEventArgs e)
 		{
-			OperaterInput(SubtractStr);
+			isMinus = true;
+			//再計算実行までの一時表示
+			NowOperations.Text += SubtractStr;
 		}
 		/// <summary>
 		/// 積算
@@ -1480,7 +1494,6 @@ namespace CS_Calculator{
 		/// <param name="inputStr"></param>
 		private void NumInput(string inputStr) {
 			InputStr += inputStr;
-	//		CalcProcess.Text = InputStr;
 			NowOperations.Text += InputStr;
 		}
 
@@ -1560,7 +1573,7 @@ namespace CS_Calculator{
 				} else {
 					switch (key) {
 						case Key.NumPad1:
-						case Key.D1:
+						case Key.D1:		
 							Key2ButtonClickerAsync(OneBt);
 							break;
 						case Key.NumPad2:
@@ -1632,7 +1645,7 @@ namespace CS_Calculator{
 							break;
 					}
 				}
-		//		MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -1663,7 +1676,7 @@ namespace CS_Calculator{
 							break;
 					}
 				}
-//				MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
