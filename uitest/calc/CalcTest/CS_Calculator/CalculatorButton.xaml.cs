@@ -122,9 +122,16 @@ namespace CS_Calculator
 				Key key = e.Key;
 				dbMsg +=",key=" + key.ToString();
 				switch (key) {
+					case Key.Subtract:
+						if(TF.Text.Equals("")||TF.Text.Equals("-")) {
+							dbMsg += "-一文字で数値を待つ";
+						}else{
+							OperatKey = key;
+							CalcBT_Click(new object(), new RoutedEventArgs());
+						}
+						break;
 					case Key.Add:
 					case Key.OemPlus:
-					case Key.Subtract:
 					case Key.OemMinus:
 					case Key.Divide:
 					case Key.Multiply:

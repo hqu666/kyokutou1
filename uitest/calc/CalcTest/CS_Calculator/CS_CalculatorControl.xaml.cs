@@ -258,7 +258,7 @@ namespace CS_Calculator{
 					}
 					dbMsg += ",=" + NextOperation;
 					ProcessedFunc(NextOperation);
-					NowOperations.Text += NextOperation;
+			//		NowOperations.Text += NextOperation;
 				} else if (OperatKey == Key.D8) {
 					NextOperation = ParenStr;
 					ParenFunc();
@@ -499,10 +499,10 @@ namespace CS_Calculator{
 				//	CalcOperation.Content = NextOperation;
 				}
 				ProgressRefresh();
-				if (! NextOperation.Equals(SubtractStr)) {
-					// -　は演算子ではなく値の負数化なので　それ以外を更新
-					BeforeOperation = NextOperation;
-				}
+				//if (! NextOperation.Equals(SubtractStr)) {
+				//	// -　は演算子ではなく値の負数化なので　それ以外を更新
+				BeforeOperation = NextOperation;
+				//}
 				//入力値を待つ為
 				NowOperations.Text += NextOperation;
 				MyLog(TAG, dbMsg);
@@ -1645,7 +1645,7 @@ namespace CS_Calculator{
 							break;
 					}
 				}
-				MyLog(TAG, dbMsg);
+		//		MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
