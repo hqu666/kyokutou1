@@ -258,7 +258,8 @@ namespace CS_Calculator{
 					}
 					dbMsg += ",=" + NextOperation;
 					ProcessedFunc(NextOperation);
-			//		NowOperations.Text += NextOperation;
+					BeforeOperation = NextOperation;
+					//		NowOperations.Text += NextOperation;
 				} else if (OperatKey == Key.D8) {
 					NextOperation = ParenStr;
 					ParenFunc();
@@ -316,7 +317,9 @@ namespace CS_Calculator{
 						BeforeVals.RemoveAt(BeforeVals.Count - 1);
 						ReCalk();
 						CalcResult.Content = ProcessVal;
-						BeforeOperation = LastOperatier;
+						if(!LastOperatier.Equals("")) {
+							BeforeOperation = LastOperatier;
+						}
 						//計算過程を更新
 						CalcProgress.ItemsSource = BeforeVals;
 						CalcProgress.Items.Refresh();
@@ -366,16 +369,8 @@ namespace CS_Calculator{
 			string TAG = "EnterFunc";
 			string dbMsg = "";
 			try {
-				BeforeOperation = "";
+	//			BeforeOperation = "";			//ここで空白にすると二項しかない時点で演算子が消える
 				dbMsg += "最終入力" + InputStr;
-				//if (BeforeOperation.Equals(ParenthesisStr) && !InputStr.Equals("")) {
-				//	dbMsg += "；優先範囲終端直後の数値";
-				//	BeforeVals[BeforeVals.Count - 1].Value = double.Parse(InputStr);
-				//	ProgressRefresh();
-				//	ReCalk();
-				//	CalcResult.Content = ResultStr; 
-				//	OnPropertyChanged("ResultStr");
-				//} else 
 				if (InputStr.Equals("")) {
 					dbMsg += "処理する入力が無い";
 					MyLog(TAG, dbMsg);
@@ -384,13 +379,8 @@ namespace CS_Calculator{
 					IsBegin = false;
 					ProcessedFunc("");
 				} else {
-					dbMsg += "," + InputStr + "を" + BeforeOperation;
-					//BeforeVal eVals = new BeforeVal();
-					// eVals.Operater= BeforeOperation;
-					//eVals.Value = Double.Parse(InputStr);
-					//dbMsg += eVals.Operater + eVals.Value;
-
-					ProcessedFunc(BeforeOperation);
+					dbMsg += "," + InputStr;
+					ProcessedFunc("");
 				}
 				for (int i = ParenCount; 0<i ; i--){
 					dbMsg += ",優先範囲" + i + "/" + ParenCount;
@@ -446,8 +436,6 @@ namespace CS_Calculator{
 				BeforeVal NowInput = new BeforeVal();
 				NowInput.Operater = NextOperation;
 				dbMsg += ",前の演算子=" + BeforeOperation;
-				//if (BeforeOperation.Equals(ParenthesisStr) && !InputStr.Equals("")) {
-				//	BeforeVals[BeforeVals.Count - 1].Value= double.Parse(InputStr);
 
 				if (!InputStr.Equals("") ) {
 					string bInputOperater = "";
@@ -468,8 +456,9 @@ namespace CS_Calculator{
 						InputStr = "";
 					} else {
 						//演算値が有れば配列格納
+						double InputValue = Double.Parse(InputStr);
 						NowInput.Operater = BeforeOperation;                // 20210330:CalcOperation.Content.ToString();
-						NowInput.Value = Double.Parse(InputStr);
+						NowInput.Value = InputValue;
 						dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
 						BeforeVals.Add(NowInput);
 						dbMsg += ",演算前=" + ProcessVal;
@@ -504,6 +493,7 @@ namespace CS_Calculator{
 				BeforeOperation = NextOperation;
 				//}
 				//入力値を待つ為
+				dbMsg += ",BeforeOperation=" + BeforeOperation;
 				NowOperations.Text += NextOperation;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -766,7 +756,7 @@ namespace CS_Calculator{
 		{
 			string TAG = "ReCalk";
 			string dbMsg = "";
-			double ResultNow = 0.0;
+	//		double ResultNow = 0.0;
 			try {
 				dbMsg += "BeforeVals=" + BeforeVals.Count + "組";
 				int iParenCount = 0;
@@ -881,13 +871,14 @@ namespace CS_Calculator{
 					dbMsg += "、AddPoint=" + AddPoint;
 					retInt = AddPoint;
 				}
-				int SubtractPoint = pStr.IndexOf(SubtractStr);
-				if (-1 < SubtractPoint) {
-					dbMsg += "、SubtractPoint=" + SubtractPoint;
-					if(retInt> SubtractPoint || retInt == -1) {
-						retInt = SubtractPoint;
-					}
-				}
+				// -  は演算子ではなく値の負数化
+				//int SubtractPoint = pStr.IndexOf(SubtractStr);
+				//if (-1 < SubtractPoint) {
+				//	dbMsg += "、SubtractPoint=" + SubtractPoint;
+				//	if(retInt> SubtractPoint || retInt == -1) {
+				//		retInt = SubtractPoint;
+				//	}
+				//}
 				int DividePoint = pStr.IndexOf(DivideStr);
 				if (-1 < DividePoint) {
 					dbMsg += "、DivideStrPoint=" + DividePoint;
@@ -1676,7 +1667,7 @@ namespace CS_Calculator{
 							break;
 					}
 				}
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
