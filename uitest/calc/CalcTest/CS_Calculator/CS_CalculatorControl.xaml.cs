@@ -1449,11 +1449,37 @@ namespace CS_Calculator{
 		/// <summary>
 		/// 減算
 		/// </summary>
+		private void MinusFunc() {
+			string TAG = "MinusFunc";
+			string dbMsg = "";
+			try {
+				isMinus = true;
+				int beforeValsCount = BeforeVals.Count;
+				if(0< beforeValsCount) {
+					BeforeVal bInput = new BeforeVal();
+					bInput.Operater = BeforeOperation;
+					double secVal = 0;
+					if (double.TryParse(InputStr, out secVal)) {
+						bInput.Value = secVal;
+						InputStr = "";
+					}
+					dbMsg = "格納"+ bInput.Operater+ bInput.Value;
+					BeforeVals.Add(bInput);
+					dbMsg = "(" + BeforeVals.Count +"件)";
+				}
+				//再計算実行までの一時表示
+				NowOperations.Text += SubtractStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+		/// <summary>
+		/// 減算
+		/// </summary>
 		private void MinusBt_Click(object sender, RoutedEventArgs e)
 		{
-			isMinus = true;
-			//再計算実行までの一時表示
-			NowOperations.Text += SubtractStr;
+			MinusFunc();
 		}
 		/// <summary>
 		/// 積算
