@@ -428,55 +428,74 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				dbMsg += ",渡された演算子=" + NextOperation;
-				if (isMinus) {
-					dbMsg += ">>負数化" ;
-					InputStr = SubtractStr + InputStr;
-				}
-				dbMsg += ",現在の入力値=" + InputStr;
 				BeforeVal NowInput = new BeforeVal();
+				dbMsg += ",現在の入力値=" + InputStr;
 				NowInput.Operater = NextOperation;
 				dbMsg += ",前の演算子=" + BeforeOperation;
 
 				if (!InputStr.Equals("") ) {
-					string bInputOperater = "";
-					double ? bInputValue = null;
-					int bIndex = BeforeVals.Count - 1;
-					dbMsg += ",前の格納[" + bIndex + "]";
-					if(-1<bIndex) {
-						BeforeVal bInput = BeforeVals[bIndex];
-						bInputOperater = bInput.Operater;
-						bInputValue = bInput.Value;
-						dbMsg += bInputOperater + bInputValue;
-					}else{
-						dbMsg += "未格納";
-					}
-					if (bInputOperater.EndsWith(ParenStr) && bInputValue ==null && 1 < bIndex) {
-						BeforeVals[bIndex].Value = double.Parse(InputStr);
-						dbMsg += ",>>" + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
-						InputStr = "";
-					} else {
-						//演算値が有れば配列格納
-						double InputValue = Double.Parse(InputStr);
-						NowInput.Operater = BeforeOperation;                // 20210330:CalcOperation.Content.ToString();
-						NowInput.Value = InputValue;
-						dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
-						BeforeVals.Add(NowInput);
-						dbMsg += ",演算前=" + ProcessVal;
-						if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
-							//演算子が無ければそのまま格納
-							ProcessVal = (double)BeforeVals[BeforeVals.Count - 1].Value;
-							IsBegin = false;
-						} else {
+					if (isMinus) {
+						dbMsg += ">>負数化";
+						//			BeforeOperation = SubtractStr;
+						NowInput.Operater = null;
+						//		InputStr = SubtractStr + InputStr;
+						double secVal = 0;
+						if (double.TryParse(InputStr, out secVal)) {
+							//残りが負数を含む数値なら演算子無しと判定
+							NowInput.Operater = SubtractStr;
+							NowInput.Value = secVal;
+							BeforeVals.Add(NowInput);
+							InputStr = "";
+							isMinus = false;
+							MyLog(TAG, dbMsg);
 							//演算子が有れば演算
 							ReCalk();
+						} else {
+							dbMsg += ">>数値化できず";
 						}
-						dbMsg += "＞結果＞" + ProcessVal;
-						//計算結果と経過を更新	:SetResult
-						ResultStr = ProcessVal.ToString();
-						CalcResult.Content = ResultStr;     //ProcessVal.ToString();
-						OnPropertyChanged("ResultStr");
-						InputStr = "";
+					}else{
+						string bInputOperater = "";
+						double? bInputValue = null;
+						int bIndex = BeforeVals.Count - 1;
+						dbMsg += ",前の格納[" + bIndex + "]";
+						if (-1 < bIndex) {
+							BeforeVal bInput = BeforeVals[bIndex];
+							bInputOperater = bInput.Operater;
+							bInputValue = bInput.Value;
+							dbMsg += bInputOperater + bInputValue;
+						} else {
+							dbMsg += "未格納";
+						}
+						if (bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
+							BeforeVals[bIndex].Value = double.Parse(InputStr);
+							dbMsg += ",>>" + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+							InputStr = "";
+						} else {
+							//演算値が有れば配列格納
+							double InputValue = Double.Parse(InputStr);
+							NowInput.Operater = BeforeOperation;                // 20210330:CalcOperation.Content.ToString();
+							NowInput.Value = InputValue;
+							dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
+							BeforeVals.Add(NowInput);
+							dbMsg += ",演算前=" + ProcessVal;
+							if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
+								//演算子が無ければそのまま格納
+								ProcessVal = (double)BeforeVals[BeforeVals.Count - 1].Value;
+								IsBegin = false;
+							} else {
+								MyLog(TAG, dbMsg);
+								//演算子が有れば演算
+								ReCalk();
+							}
+							dbMsg += "＞続き：結果＞" + ProcessVal;
+							//計算結果と経過を更新	:SetResult
+							ResultStr = ProcessVal.ToString();
+							CalcResult.Content = ResultStr;     //ProcessVal.ToString();
+							OnPropertyChanged("ResultStr");
+							InputStr = "";
+						}
 					}
+					dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				} else if (NextOperation.EndsWith(ParenStr)) {
 					dbMsg += ",優先開始";
 					NowInput.Value = null;
@@ -758,7 +777,7 @@ namespace CS_Calculator{
 			string dbMsg = "";
 	//		double ResultNow = 0.0;
 			try {
-				dbMsg += "BeforeVals=" + BeforeVals.Count + "組";
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				int iParenCount = 0;
 				int ParenthesisCount = 0;
 				NowOperations.Text = "";        //+= BeforeVals[0].Value.ToString();
@@ -836,9 +855,9 @@ namespace CS_Calculator{
 					}
 				} else {
 					dbMsg += ">>電卓処理";
-					MyLog(TAG, dbMsg);
 					if (0< iParenCount) {
 						dbMsg += ">>優先範囲有り";
+						MyLog(TAG, dbMsg);
 						StrInParenCalc(PFAOStr);
 		//				CalcParen(ResultNow, BeforeVals, iParenCount, ParenthesisCount);
 					}else{
@@ -847,9 +866,10 @@ namespace CS_Calculator{
 						ProcessVal = Double.Parse(rStr);
 						CalcResult.Content = ProcessVal.ToString();
 						//		ReCalkEnd(BeforeVals);
+						MyLog(TAG, dbMsg);
 					}
 				}
-				MyLog(TAG, dbMsg);
+		//		MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -909,6 +929,7 @@ namespace CS_Calculator{
 			string TAG = "StrInParenCalc";
 			string dbMsg = "";
 			try {
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				double finishVal = 0;
 				string inParenStr = pStr;           // pStr.Substring(startPoint, endPoint);
 				dbMsg += "," + inParenStr;
@@ -985,28 +1006,44 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			string inOperateStr = pStr;           // pStr.Substring(startPoint, endPoint);
 			try {
+				string calcStr = "";
+				string remStr = "";
 				dbMsg += ",開始=" + inOperateStr;
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				int endPoint = OpraterIndex(inOperateStr);
 				dbMsg += ",演算子の位置" + endPoint + "まで" ;
-				if (0 < endPoint) {
+				int subtractPoint = inOperateStr.IndexOf(SubtractStr);
+				dbMsg += ",-の位置" + subtractPoint + "まで";
+				if (0 < endPoint || 0 < subtractPoint) {
 					//演算子が無くなるまで先頭から計算
-					while (0 < OpraterIndex(inOperateStr)) {
+					while (0 < OpraterIndex(inOperateStr) || 0< subtractPoint) {
 						endPoint = OpraterIndex(inOperateStr);
-						string calcStr = inOperateStr.Substring(0, endPoint);
+						subtractPoint = inOperateStr.IndexOf(SubtractStr);
+						dbMsg += ",-の位置" + subtractPoint + "まで";
+						if (0 < endPoint) {
+						} else if (-1 < subtractPoint) {
+							endPoint = subtractPoint;
+						}
+							calcStr = inOperateStr.Substring(0, endPoint);
 						dbMsg += "\r\n前値=" + calcStr;
-						string remStr = inOperateStr.Substring(endPoint);
+						remStr = inOperateStr.Substring(endPoint);
 						dbMsg += ",以降:" + remStr;
+						//0418:ここで　-2*でループ
+						if (remStr.Equals(MultiplyStr)) {
+							inOperateStr = calcStr;
+							break;
+						}
 						//0414:ここで　*0.0-2 でループ
 						//if(remStr.StartsWith(MultiplyStr) || remStr.StartsWith(DivideStr)) {
 						//	//残りの先頭が積商なら
 						//	remStr = remStr.Substring(1);
 						//	dbMsg += ">>" + remStr;
 						//}
-						string oprand = remStr.Substring(1, 1);
+						string oprand = inOperateStr.Substring(endPoint, 1);
 						dbMsg += ",演算子:" + oprand;
 						double secVal = 0;
 						if (double.TryParse(remStr.Substring(1), out secVal)) {
-						//残りが負数を含む数値なら演算子無しと判定
+							//残りが負数を含む数値なら演算子無しと判定
 							endPoint = -1;
 							calcStr = inOperateStr;
 							dbMsg += "、渡されたのは2値だけ";
@@ -1014,13 +1051,19 @@ namespace CS_Calculator{
 						} else {
 							endPoint = OpraterIndex(remStr.Substring(1));
 							dbMsg += ",次は：" + endPoint + "まで";
-						//}
-						//if (endPoint == -1) {
-						//	calcStr = inOperateStr;
-						//	dbMsg += "、渡されたのは2値だけ";
-						//	remStr = "";
-						//}else{
-							calcStr += remStr.Substring(0, endPoint+1);
+							if(endPoint <1) {
+								subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
+								if (0< subtractPoint) {
+									endPoint= subtractPoint;
+								}
+							}
+							//}
+							//if (endPoint == -1) {
+							//	calcStr = inOperateStr;
+							//	dbMsg += "、渡されたのは2値だけ";
+							//	remStr = "";
+							//}else{
+							calcStr += remStr.Substring(0, endPoint + 1);
 							remStr = inOperateStr.Substring(endPoint + 2);
 						}
 						dbMsg += ">>" + calcStr;
@@ -1028,7 +1071,7 @@ namespace CS_Calculator{
 							dbMsg += ",Compute=" + calcStr;
 							System.Data.DataTable dt = new System.Data.DataTable();
 							var pVal = dt.Compute(calcStr, "");
-							inOperateStr = pVal.ToString() ;
+							inOperateStr = pVal.ToString();
 							dbMsg += "=" + inOperateStr;
 						} catch (Exception er) {
 							MyErrorLog(TAG, dbMsg, er);
@@ -1037,9 +1080,36 @@ namespace CS_Calculator{
 						inOperateStr += remStr;
 						dbMsg += ">>" + inOperateStr;
 					}
-				} else{
+				//}else if(-1<subtractPoint) {
+				//		dbMsg += ",減算だけ：Compute=" + inOperateStr;
+				//		calcStr = inOperateStr.Substring(0, subtractPoint+1);
+				//		dbMsg += "\r\n前値=" + calcStr;
+				//		remStr = inOperateStr.Substring(subtractPoint+1);
+				//		dbMsg += ",以降:" + remStr;
+				//		endPoint = OpraterIndex(remStr);
+				//		dbMsg += ",演算子の位置" + endPoint + "まで";
+				//		subtractPoint = inOperateStr.IndexOf(SubtractStr);
+				//		dbMsg += ",-の位置" + subtractPoint + "まで";
+				//		if (-1< endPoint) {
+				//			calcStr+= remStr.Substring(0, endPoint);
+				//			remStr = remStr.Substring(endPoint);
+				//		}else if(-1<subtractPoint) {
+				//			calcStr += remStr.Substring(0, subtractPoint);
+				//			remStr = remStr.Substring(subtractPoint);
+				//		}
+				//		dbMsg += ",計算:" + calcStr+ ",次へ:" + remStr;
+				//	try {
+				//		System.Data.DataTable dt = new System.Data.DataTable();
+				//		var pVal = dt.Compute(calcStr, "");
+				//		inOperateStr = pVal.ToString() + remStr;
+				//		dbMsg += "=" + inOperateStr;
+				//	} catch (Exception er) {
+				//		MyErrorLog(TAG, dbMsg, er);
+				//	}
+				} else {
 					dbMsg += "、演算子無し";
 				}
+				dbMsg += ",結果=" + inOperateStr;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1054,20 +1124,9 @@ namespace CS_Calculator{
 			double ResultNow = 0.0;
 			try {
 				dbMsg += "最終処理前" + ParenVals.Count + "組\r\n";
-#if DEBUG
 				//入力値が侵食されていない事を確認する
-				foreach (BeforeVal iVal in BeforeVals) {
-					string iOperater = iVal.Operater;
-					double? iValue = iVal.Value;
-					dbMsg += "" + iOperater + iValue;
-				}
-				dbMsg += "=";
-				foreach (BeforeVal iVal in ParenVals) {
-					string iOperater = iVal.Operater;
-					double? iValue = iVal.Value;
-					dbMsg += "" + iOperater + iValue;
-				}
-#endif
+				dbMsg += "" + ValsLog(BeforeVals);
+				dbMsg += "=" + ValsLog(ParenVals);
 				if (0 < ParenVals.Count) {
 						dbMsg += ">>電卓処理";
 					bool isParenCalcAfter = true;
@@ -1396,8 +1455,9 @@ namespace CS_Calculator{
 		}
 
 		private void OperaterInput(string operaterStr) {
-			isMinus = false;
 			ProcessedFunc(operaterStr);
+			//前に負数が有れば格納後に負数対応解除
+		//	isMinus = false;
 		}
 
 		/// <summary>
@@ -1409,23 +1469,24 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				dbMsg += ",現在=" + InputStr;
-				 ReCalk();
-				dbMsg += ",ここまでの演算結果=" + ProcessVal;
+		//		 ReCalk();
+				dbMsg += ",ここまでの入力=" + NowOperations.Text+",配列格納=" + ValsLog(BeforeVals) +"="	+ProcessVal;
 				if (BeforeVals.Count < 1 ) {
 					dbMsg += ",最初の値が無い";
 					if (InputStr.Equals("")) {
 						MessageBox.Show("0は除算できません。割られる値から入力して下さい。");
 					}else{
 						dbMsg += ">>最初の値を登録";
+						MyLog(TAG, dbMsg);
 						OperaterInput(DivideStr);
 					}
 				//} else if (ProcessVal == 0) {
 				//	MessageBox.Show("ここまでの演算結果が0になっています。0は除算できません");
 				} else {
 					dbMsg += ">>通常登録";
+					MyLog(TAG, dbMsg);
 					OperaterInput(DivideStr);
 				}
-				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -1453,6 +1514,7 @@ namespace CS_Calculator{
 			string TAG = "MinusFunc";
 			string dbMsg = "";
 			try {
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				isMinus = true;
 				int beforeValsCount = BeforeVals.Count;
 				if(0< beforeValsCount) {
@@ -1463,9 +1525,9 @@ namespace CS_Calculator{
 						bInput.Value = secVal;
 						InputStr = "";
 					}
-					dbMsg = "格納"+ bInput.Operater+ bInput.Value;
+					dbMsg += "格納"+ bInput.Operater+ bInput.Value;
 					BeforeVals.Add(bInput);
-					dbMsg = "(" + BeforeVals.Count +"件)";
+					dbMsg += "[" + BeforeVals.Count +"件目]";
 				}
 				//再計算実行までの一時表示
 				NowOperations.Text += SubtractStr;
@@ -2006,6 +2068,21 @@ namespace CS_Calculator{
 		{
 			Console.WriteLine(TAG + "[CS_CalculatorControl] : " + dbMsg + "でエラー発生;" + err);
 		}
+
+		public string ValsLog(IEnumerable<BeforeVal> testVals) {
+#if DEBUG
+			string retStr = "";
+			//入力値が侵食されていない事を確認する
+			foreach (BeforeVal iVal in testVals) {
+				string iOperater = iVal.Operater;
+				double? iValue = iVal.Value;
+				retStr += "" + iOperater + iValue;
+			}
+#endif
+			return retStr;
+		}
+
+
 
 		public MessageBoxResult MessageShowWPF(String msgStr,
 																				String titolStr = null,
