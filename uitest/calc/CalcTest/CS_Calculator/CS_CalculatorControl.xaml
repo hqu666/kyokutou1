@@ -269,8 +269,8 @@
 					<ColumnDefinition Width="40*" />
 					<ColumnDefinition Width="40*" />
 					<ColumnDefinition Width="40*" />
-					<!--<ColumnDefinition Width="40*" />
-					<ColumnDefinition Width="40*" />-->
+					<ColumnDefinition Width="40*" />
+					<!--	<ColumnDefinition Width="40*" />-->
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions >
 					<RowDefinition Height="16" />
@@ -280,7 +280,6 @@
 					Grid.Row="0" Grid.Column="0"
 					Margin="2" 
 					SelectionChanged="MemoryComb_SelectionChanged" 
-
 					>
 					<ComboBox.ContextMenu>
 						<ContextMenu>
@@ -317,6 +316,66 @@
 					Template="{StaticResource FuncButton}" 
 					Click="SqrtBt_Click"
 					 />-->
+				<ToggleButton 
+					x:Name="FunkBt" 
+					Grid.Row="0" Grid.Column="4" 
+					FontSize="7" 
+					BorderThickness="1"
+                    BorderBrush="DarkGray"
+					Padding="0"
+                    TextBlock.Foreground="Black"
+					Background= "LightYellow"
+					VerticalAlignment="Top" Margin="1,1,1,0" MinHeight="14"
+					Loaded="FunkBt_Loaded"
+				>
+					<ToggleButton.ContextMenu>
+						<ContextMenu>
+							<MenuItem Header="四則演算の優先順位で計算" Click="ChangeToPO"/>
+							<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ChangeToCalculator"/>
+							<Separator />
+							<MenuItem Header="Exit" />
+						</ContextMenu>
+					</ToggleButton.ContextMenu>
+					<WrapPanel Margin="0,0">
+						<TextBlock Text="func"/>
+						<Border Width="1"/>
+						<Path Width="6" Height="4" Stretch="Fill" Fill="Black" Data="F1 M0,0 L10,0 L5,10 Z "/>
+					</WrapPanel>
+				</ToggleButton>
+				<!--<Button x:Name="FunkBt" Content="func" 
+					Grid.Row="0" Grid.Column="4" 
+					FontSize="7" 
+					BorderThickness="1"
+                    BorderBrush="DarkGray"
+					Padding="0"
+                    TextBlock.Foreground="Black"
+					Background= "LightYellow"
+					VerticalAlignment="Top" Margin="1,1,1,0" MinHeight="14"
+					 Click="FunkBt_Click"
+					 >-->
+					<!--<Button.ContextMenu>
+						<ContextMenu>
+							<MenuItem Header="四則演算の優先順位で計算" Click="ProgressItemSepareat"/>
+							<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ProgressItemDelete"/>
+						</ContextMenu>
+					</Button.ContextMenu>-->
+
+				<!--</Button>-->
+				<!--
+				
+				<ComboBox x:Name="FuncComb" 
+					FontSize="10" 
+					Grid.Row="0" Grid.Column="5"
+					Margin="2" 
+					SelectionChanged="FuncComb_SelectionChanged" 
+					>
+					<ComboBox.ContextMenu>
+						<ContextMenu>
+							<MenuItem Header="電卓モード" Click="ToCalc"/>
+							<MenuItem Header="演算子の優先順位で計算" Click="ToPo"/>
+						</ContextMenu>
+					</ComboBox.ContextMenu>
+				</ComboBox>-->
 			</Grid>
 			<!--Content="C&#xa;BackSpace"-->
 			<Button x:Name="ClearBt" Content="C" FontSize="18"

@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using System.Windows.Interactivity;
 using System.Windows.Interop;
 using System.Text.RegularExpressions;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 //using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
 //using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
@@ -233,9 +235,24 @@ namespace CS_Calculator{
 					InputStr = TargetTextBlock.Text;
 				}
 				dbMsg += ",InputStr=" + InputStr;
-		//		CalcProcess.Text = InputStr;
-				//計算経過
-				NowOperations.Text = InputStr;              // BeforeVals[0].Value.ToString(); 
+				if (!InputStr.Equals("")) {
+					double frastVal;
+					if (double.TryParse(InputStr, out frastVal)) {       //-1 == OpraterIndex(inParenStr)
+						dbMsg += ">>数値=" + frastVal;
+						ProcessVal = frastVal;
+						CalcResult.Content = ProcessVal.ToString();
+						BeforeVal NowInput = new BeforeVal();
+						NowInput.Operater = null;
+						NowInput.Value = frastVal;
+						BeforeVals.Add(NowInput);
+						InputStr = frastVal.ToString();
+					} else {
+						dbMsg += ">非数値>再帰";
+					}
+				}
+				NowOperations.Text = InputStr;
+				InputStr = "";
+															//計算経過
 				string NextOperation = "";
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Multiply <= OperatKey) {     
@@ -780,15 +797,86 @@ namespace CS_Calculator{
 				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				int iParenCount = 0;
 				int ParenthesisCount = 0;
-				NowOperations.Text = "";        //+= BeforeVals[0].Value.ToString();
 				string PFAOStr = "";
+				int deficitParenthesis = 0;
+				/*			string lastStr = "";
+							string OrgStr = NowOperations.Text;
+							//ここまでの入力を補完
+							while(0<OrgStr.Length) {
+								//int OpraterPoint = OpraterIndex(OrgStr);
+								//if (-1 < OpraterPoint) {
+								//	OpraterPoint = OrgStr.Length - 1;
+								//}
+								//ReadStr = OrgStr.Substring(0, OpraterPoint);
+								//OrgStr = OrgStr.Substring( OpraterPoint);
+								//dbMsg += "\r\n" + OpraterPoint + "まで" + ReadStr + ":残り" + OrgStr;
+								//try {
+								//	//式を計算する .NET5?
+								//	System.Data.DataTable dt = new System.Data.DataTable();
+								//	var pVal = dt.Compute(ReadStr, "");
+								//	dbMsg += ";読み取り値は数値";
+								//	//CalcResult.Content = pVal.ToString();
+								//	//ProcessVal = double.Parse((string)CalcResult.Content);
+								//} catch (Exception er) {
+								//	MyErrorLog(TAG, dbMsg, er);
+								//}
+								int ParenPoint = OrgStr.IndexOf(ParenStr);      //最初の優先範囲開始
+								if(-1< ParenPoint) {
+									PFAOStr = OrgStr.Substring(0, ParenPoint);
+									OrgStr = OrgStr.Substring(ParenPoint+1); //OrgStr.Replace(ReadStr,"");
+									if(PFAOStr.Equals("")) {
+										PFAOStr += ParenStr;
+									}else{
+										PFAOStr += (MultiplyStr+ParenStr);
+									}
+									iParenCount++;
+								}else{
+									if (PFAOStr.Equals("")) {
+										PFAOStr = OrgStr;
+									} else {
+										PFAOStr += OrgStr;
+									}
+									OrgStr ="";
+								}
+								dbMsg += "\r\n(:" + ParenPoint + "まで" + PFAOStr + ":残り" + OrgStr;
+								if(0 < OrgStr.Length) {
+									int ParenthesisPoint = OrgStr.LastIndexOf(ParenthesisStr);  //最後の優先範囲終了
+									if(-1< ParenthesisPoint) {
+										lastStr = OrgStr.Substring(ParenthesisPoint)+ lastStr;
+										OrgStr = OrgStr.Substring(0, ParenthesisPoint-1);
+										ParenthesisCount++;
+									}else{
+										lastStr = OrgStr+ lastStr;
+										OrgStr = "";
+									}
+									dbMsg += "):" + ParenthesisPoint + "から" + lastStr + ":残り" + OrgStr;
+								}
+							}
+							PFAOStr += lastStr;
+							dbMsg += "\r\nNowOperationsの読み取り結果:" + PFAOStr + "に開始" + iParenCount + "件:終了" + ParenthesisCount;
+							int deficitParenthesis = iParenCount - ParenthesisCount;
+							dbMsg += "：)不足＝" + deficitParenthesis;
+							dbMsg += "入力状況" + PFAOStr;
+							for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
+								PFAOStr += ParenthesisStr;
+							}
+							dbMsg += ">優先範囲終端補完>" + PFAOStr;
+							*/
+				iParenCount = 0;
+				ParenthesisCount = 0;
+				PFAOStr = "";
 				int valsCount = 0;                              //経過行数
 				int valsEnd = BeforeVals.Count;           //行数
-														 //中置記法を数えて,経過表示を更新する
+				NowOperations.Text = "";        //+= BeforeVals[0].Value.ToString();
+
+				//中置記法を数えて,経過表示を更新する
 				foreach (BeforeVal iVal in BeforeVals) {
 					valsCount++;
 					dbMsg += "\r\nSouce" + valsCount + "/" + valsEnd + "行目";
 					string iOperater = iVal.Operater;
+					if(iOperater==null) {
+						iOperater = "";
+					}
 					double? iValue = iVal.Value;
 					dbMsg += ":" + iOperater + iValue;
 					if (!iOperater.Equals("")) {
@@ -826,7 +914,7 @@ namespace CS_Calculator{
 					PFAOStr += iValue;
 				}
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
-				int deficitParenthesis = iParenCount - ParenthesisCount;
+				deficitParenthesis = iParenCount - ParenthesisCount;
 				dbMsg += "：)不足＝"+ deficitParenthesis;
 				dbMsg += "入力状況" + PFAOStr;
 				for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
@@ -1531,6 +1619,7 @@ namespace CS_Calculator{
 				}
 				//再計算実行までの一時表示
 				NowOperations.Text += SubtractStr;
+				ReCalk();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -2029,6 +2118,55 @@ namespace CS_Calculator{
 						}
 					}
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void FunkBt_Loaded(object sender, RoutedEventArgs e) {
+			string TAG = "FunkBt_Loaded";
+			string dbMsg = "";
+			try {
+				var btn = (ToggleButton)sender;
+
+				btn.SetBinding(ToggleButton.IsCheckedProperty, new Binding("IsOpen") { Source=btn.ContextMenu });
+				btn.ContextMenu.PlacementTarget = btn;
+				btn.ContextMenu.Placement = PlacementMode.Bottom;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ChangeToPO(object sender, RoutedEventArgs e) {
+			string TAG = "ChangeToPO";
+			string dbMsg = "";
+			try {
+				IsPO = true;
+				ReCalk();
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 電卓処理：現在の結果に次の演算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ChangeToCalculator(object sender, RoutedEventArgs e) {
+			string TAG = "ChangeToCalculator";
+			string dbMsg = "";
+			try {
+				IsPO = false;
+				ReCalk();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
