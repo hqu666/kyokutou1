@@ -455,11 +455,11 @@ namespace CS_Calculator{
 						dbMsg += ">>負数化";
 						//			BeforeOperation = SubtractStr;
 						NowInput.Operater = null;
-						//		InputStr = SubtractStr + InputStr;
+						InputStr = SubtractStr + InputStr;
 						double secVal = 0;
 						if (double.TryParse(InputStr, out secVal)) {
 							//残りが負数を含む数値なら演算子無しと判定
-							NowInput.Operater = SubtractStr;
+				//			NowInput.Operater = SubtractStr;
 							NowInput.Value = secVal;
 							BeforeVals.Add(NowInput);
 							InputStr = "";
@@ -484,9 +484,11 @@ namespace CS_Calculator{
 							dbMsg += "未格納";
 						}
 						if (bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
+							dbMsg += "優先範囲の開始";
 							BeforeVals[bIndex].Value = double.Parse(InputStr);
-							dbMsg += ",>>" + BeforeVals[BeforeVals.Count - 1].Operater + BeforeVals[BeforeVals.Count - 1].Value;
+							dbMsg += ",>>" + BeforeVals[bIndex].Operater + BeforeVals[bIndex].Value;
 							InputStr = "";
+							ReCalk();			//0420;演算子-の後で再計算させる
 						} else {
 							//演算値が有れば配列格納
 							double InputValue = Double.Parse(InputStr);
@@ -951,9 +953,15 @@ namespace CS_Calculator{
 					}else{
 						dbMsg += ">>優先範囲無し";
 						string rStr = CalculatorCalc(PFAOStr);
-						ProcessVal = Double.Parse(rStr);
-						CalcResult.Content = ProcessVal.ToString();
-						//		ReCalkEnd(BeforeVals);
+						dbMsg += ">rStr=" + rStr;
+						double JudgeVal = 0;
+						if (double.TryParse(rStr, out JudgeVal)) {
+							ProcessVal = JudgeVal;
+							CalcResult.Content = ProcessVal.ToString();
+							//		ReCalkEnd(BeforeVals);
+						}else{
+							dbMsg += ">>数値にならず";
+						}
 						MyLog(TAG, dbMsg);
 					}
 				}
@@ -966,9 +974,10 @@ namespace CS_Calculator{
 		/// <summary>
 		/// 演算子の出現位置
 		/// </summary>
-		/// <param name="pStr"></param>
+		/// <param name="pStr">演算子を含む文字列</param>
+		/// <param name="inSubString">-を演算子として判定する</param>
 		/// <returns></returns>
-		private int OpraterIndex(string pStr) {
+		private int OpraterIndex(string pStr, bool inSubString=false)  {
 			string TAG = "OpraterIndex";
 			string dbMsg = "";
 			int retInt = -1;
@@ -979,14 +988,24 @@ namespace CS_Calculator{
 					dbMsg += "、AddPoint=" + AddPoint;
 					retInt = AddPoint;
 				}
-				// -  は演算子ではなく値の負数化
-				//int SubtractPoint = pStr.IndexOf(SubtractStr);
-				//if (-1 < SubtractPoint) {
-				//	dbMsg += "、SubtractPoint=" + SubtractPoint;
-				//	if(retInt> SubtractPoint || retInt == -1) {
-				//		retInt = SubtractPoint;
-				//	}
-				//}
+				if (inSubString) {
+					dbMsg += "、-を演算子に含める";
+					// -  は演算子ではなく値の負数化
+					int SubtractPoint = pStr.IndexOf(SubtractStr);
+					if (0 < SubtractPoint) {
+						//if (0== SubtractPoint) {
+						//	dbMsg += ">先頭の負数を拾った：再帰";
+						//	retInt=OpraterIndex(pStr.Remove(0,1), true);
+						//	dbMsg += ">"+ retInt;
+						//}
+						dbMsg += "、SubtractPoint=" + SubtractPoint;
+						if (retInt > SubtractPoint || retInt == -1) {
+							retInt = SubtractPoint;
+						}
+					} else if (0 == SubtractPoint) {
+						dbMsg += ">先頭の負数を拾った";
+					}
+				}
 				int DividePoint = pStr.IndexOf(DivideStr);
 				if (-1 < DividePoint) {
 					dbMsg += "、DivideStrPoint=" + DividePoint;
@@ -1002,7 +1021,7 @@ namespace CS_Calculator{
 					}
 				}
 				dbMsg += "、retInt=" + retInt;
-		//		MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -1050,6 +1069,16 @@ namespace CS_Calculator{
 					//dbMsg += "\r\n直後にParen:startPoint=" + startPoint + "～" + endPoint + "(" + calcLength + "文字)に修正";
 					dbMsg += ";" + beforeStr + " と " + calcStr + " と " + remStr;
 					calcStr = CalculatorCalc(calcStr);
+					double JudgeVal = 0;
+					if (double.TryParse(calcStr, out JudgeVal)) {
+						dbMsg += ">一値になった";
+						if (beforeStr.EndsWith(ParenStr) && remStr.StartsWith(ParenthesisStr)) {
+							dbMsg += ">優先範囲内";
+							beforeStr = beforeStr.Substring(0, beforeStr.Length-2) + MultiplyStr;
+							remStr = remStr.Remove(0,1);
+						}
+					}
+					dbMsg += ">>" + beforeStr + " と " + calcStr + " と " + remStr;
 					inParenStr = beforeStr + calcStr + remStr;
 					dbMsg += "、範囲内計算後=" + inParenStr;
 					if(-1 < inParenStr.IndexOf(ParenStr)) {                         //1< pCount
@@ -1097,103 +1126,105 @@ namespace CS_Calculator{
 				string calcStr = "";
 				string remStr = "";
 				dbMsg += ",開始=" + inOperateStr;
-				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
-				int endPoint = OpraterIndex(inOperateStr);
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + "[" + BeforeVals.Count + "件目]配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal + "\r\n";
+				int endPoint = OpraterIndex(inOperateStr,true);
 				dbMsg += ",演算子の位置" + endPoint + "まで" ;
 				int subtractPoint = inOperateStr.IndexOf(SubtractStr);
 				dbMsg += ",-の位置" + subtractPoint + "まで";
-				if (0 < endPoint || 0 < subtractPoint) {
-					//演算子が無くなるまで先頭から計算
-					while (0 < OpraterIndex(inOperateStr) || 0< subtractPoint) {
-						endPoint = OpraterIndex(inOperateStr);
+
+				if (0 < endPoint) {     // || 0 < subtractPoint
+										//演算子が無くなるまで先頭から計算
+					while (0 < OpraterIndex(inOperateStr,true) || 0< subtractPoint) {
+						endPoint = OpraterIndex(inOperateStr,true);
+						dbMsg += "\r\n演算子の位置:" + endPoint + "まで";
 						subtractPoint = inOperateStr.IndexOf(SubtractStr);
 						dbMsg += ",-の位置" + subtractPoint + "まで";
-						if (0 < endPoint) {
+						if (-1 < endPoint) {
 						} else if (-1 < subtractPoint) {
 							endPoint = subtractPoint;
+							dbMsg += ",-だった" ;
 						}
+						if (-1 < endPoint) {
 							calcStr = inOperateStr.Substring(0, endPoint);
-						dbMsg += "\r\n前値=" + calcStr;
-						remStr = inOperateStr.Substring(endPoint);
-						dbMsg += ",以降:" + remStr;
-						//0418:ここで　-2*でループ
-						if (remStr.Equals(MultiplyStr)) {
-							inOperateStr = calcStr;
-							break;
-						}
-						//0414:ここで　*0.0-2 でループ
-						//if(remStr.StartsWith(MultiplyStr) || remStr.StartsWith(DivideStr)) {
-						//	//残りの先頭が積商なら
-						//	remStr = remStr.Substring(1);
-						//	dbMsg += ">>" + remStr;
-						//}
-						string oprand = inOperateStr.Substring(endPoint, 1);
-						dbMsg += ",演算子:" + oprand;
-						double secVal = 0;
-						if (double.TryParse(remStr.Substring(1), out secVal)) {
-							//残りが負数を含む数値なら演算子無しと判定
-							endPoint = -1;
-							calcStr = inOperateStr;
-							dbMsg += "、渡されたのは2値だけ";
-							remStr = "";
-						} else {
-							endPoint = OpraterIndex(remStr.Substring(1));
-							dbMsg += ",次は：" + endPoint + "まで";
-							if(endPoint <1) {
-								subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
-								if (0< subtractPoint) {
-									endPoint= subtractPoint;
-								}
+							dbMsg += "\r\n前値=" + calcStr;
+							remStr = inOperateStr.Substring(endPoint);
+							dbMsg += ",以降:" + remStr;
+							//0418:ここで　-2*でループ
+							if (remStr.Equals(MultiplyStr)) {
+								inOperateStr = calcStr;
+								break;
 							}
+							//0414:ここで　*0.0-2 でループ
+							//if(remStr.StartsWith(MultiplyStr) || remStr.StartsWith(DivideStr)) {
+							//	//残りの先頭が積商なら
+							//	remStr = remStr.Substring(1);
+							//	dbMsg += ">>" + remStr;
 							//}
-							//if (endPoint == -1) {
-							//	calcStr = inOperateStr;
-							//	dbMsg += "、渡されたのは2値だけ";
-							//	remStr = "";
-							//}else{
-							calcStr += remStr.Substring(0, endPoint + 1);
-							remStr = inOperateStr.Substring(endPoint + 2);
+							string oprand = inOperateStr.Substring(endPoint, 1);
+							dbMsg += ",演算子:" + oprand;
+							double secVal = 0;
+							if (double.TryParse(remStr.Substring(1), out secVal)) {
+								//残りが負数を含む数値なら演算子無しと判定
+								endPoint = -1;
+								calcStr = inOperateStr;
+								dbMsg += "、渡されたのは2値だけ";
+								remStr = "";
+							} else {
+								endPoint = OpraterIndex(remStr.Substring(1),true);
+								dbMsg += ",次は：" + endPoint + "まで";
+								if (endPoint < 1) {
+									subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
+									if (0 < subtractPoint) {
+										endPoint = subtractPoint;
+									}
+								}
+								calcStr += remStr.Substring(0, endPoint + 1);
+								remStr = inOperateStr.Substring(endPoint + 2);
+								subtractPoint = inOperateStr.IndexOf(SubtractStr);
+							}
+							dbMsg += ">>" + calcStr;
+							try {
+								dbMsg += ",Compute=" + calcStr;
+								System.Data.DataTable dt = new System.Data.DataTable();
+								var pVal = dt.Compute(calcStr, "");
+								inOperateStr = pVal.ToString();
+								dbMsg += "=" + inOperateStr;
+							} catch (Exception er) {
+								MyErrorLog(TAG, dbMsg, er);
+							}
+							dbMsg += ",残り=" + remStr;
+							inOperateStr += remStr;
+						} else {
+							dbMsg += "::演算子無し";
 						}
-						dbMsg += ">>" + calcStr;
-						try {
-							dbMsg += ",Compute=" + calcStr;
-							System.Data.DataTable dt = new System.Data.DataTable();
-							var pVal = dt.Compute(calcStr, "");
-							inOperateStr = pVal.ToString();
-							dbMsg += "=" + inOperateStr;
-						} catch (Exception er) {
-							MyErrorLog(TAG, dbMsg, er);
-						}
-						dbMsg += ",残り=" + remStr;
-						inOperateStr += remStr;
-						dbMsg += ">>" + inOperateStr;
 					}
-				//}else if(-1<subtractPoint) {
-				//		dbMsg += ",減算だけ：Compute=" + inOperateStr;
-				//		calcStr = inOperateStr.Substring(0, subtractPoint+1);
-				//		dbMsg += "\r\n前値=" + calcStr;
-				//		remStr = inOperateStr.Substring(subtractPoint+1);
-				//		dbMsg += ",以降:" + remStr;
-				//		endPoint = OpraterIndex(remStr);
-				//		dbMsg += ",演算子の位置" + endPoint + "まで";
-				//		subtractPoint = inOperateStr.IndexOf(SubtractStr);
-				//		dbMsg += ",-の位置" + subtractPoint + "まで";
-				//		if (-1< endPoint) {
-				//			calcStr+= remStr.Substring(0, endPoint);
-				//			remStr = remStr.Substring(endPoint);
-				//		}else if(-1<subtractPoint) {
-				//			calcStr += remStr.Substring(0, subtractPoint);
-				//			remStr = remStr.Substring(subtractPoint);
-				//		}
-				//		dbMsg += ",計算:" + calcStr+ ",次へ:" + remStr;
-				//	try {
-				//		System.Data.DataTable dt = new System.Data.DataTable();
-				//		var pVal = dt.Compute(calcStr, "");
-				//		inOperateStr = pVal.ToString() + remStr;
-				//		dbMsg += "=" + inOperateStr;
-				//	} catch (Exception er) {
-				//		MyErrorLog(TAG, dbMsg, er);
-				//	}
+					dbMsg += ">>" + inOperateStr;
+					//}else if(-1<subtractPoint) {
+					//		dbMsg += ",減算だけ：Compute=" + inOperateStr;
+					//		calcStr = inOperateStr.Substring(0, subtractPoint+1);
+					//		dbMsg += "\r\n前値=" + calcStr;
+					//		remStr = inOperateStr.Substring(subtractPoint+1);
+					//		dbMsg += ",以降:" + remStr;
+					//		endPoint = OpraterIndex(remStr);
+					//		dbMsg += ",演算子の位置" + endPoint + "まで";
+					//		subtractPoint = inOperateStr.IndexOf(SubtractStr);
+					//		dbMsg += ",-の位置" + subtractPoint + "まで";
+					//		if (-1< endPoint) {
+					//			calcStr+= remStr.Substring(0, endPoint);
+					//			remStr = remStr.Substring(endPoint);
+					//		}else if(-1<subtractPoint) {
+					//			calcStr += remStr.Substring(0, subtractPoint);
+					//			remStr = remStr.Substring(subtractPoint);
+					//		}
+					//		dbMsg += ",計算:" + calcStr+ ",次へ:" + remStr;
+					//	try {
+					//		System.Data.DataTable dt = new System.Data.DataTable();
+					//		var pVal = dt.Compute(calcStr, "");
+					//		inOperateStr = pVal.ToString() + remStr;
+					//		dbMsg += "=" + inOperateStr;
+					//	} catch (Exception er) {
+					//		MyErrorLog(TAG, dbMsg, er);
+					//	}
 				} else {
 					dbMsg += "、演算子無し";
 				}
@@ -1602,24 +1633,35 @@ namespace CS_Calculator{
 			string TAG = "MinusFunc";
 			string dbMsg = "";
 			try {
-				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
-				isMinus = true;
-				int beforeValsCount = BeforeVals.Count;
-				if(0< beforeValsCount) {
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + "[" + BeforeVals.Count + "件目]配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal + ":前の演算子" + BeforeOperation + "\r\n";
+				if (!BeforeOperation.Equals("") ){
+					dbMsg += "別の演算子が入っている";
 					BeforeVal bInput = new BeforeVal();
 					bInput.Operater = BeforeOperation;
-					double secVal = 0;
-					if (double.TryParse(InputStr, out secVal)) {
-						bInput.Value = secVal;
-						InputStr = "";
-					}
-					dbMsg += "格納"+ bInput.Operater+ bInput.Value;
+					bInput.Value = null;
+					dbMsg += ",前の値を格納" + bInput.Operater + bInput.Value;
 					BeforeVals.Add(bInput);
-					dbMsg += "[" + BeforeVals.Count +"件目]";
+					dbMsg += "[" + BeforeVals.Count + "件目]";
 				}
-				//再計算実行までの一時表示
-				NowOperations.Text += SubtractStr;
-				ReCalk();
+				//		string testStr = NowOperations.Text.Substring;
+				OperaterInput(SubtractStr);
+				isMinus = true;
+				////int beforeValsCount = BeforeVals.Count;
+				////if(0< beforeValsCount) {
+				////	BeforeVal bInput = new BeforeVal();
+				////	bInput.Operater = BeforeOperation;
+				////	double secVal = 0;
+				////	if (double.TryParse(InputStr, out secVal)) {
+				////		bInput.Value = secVal;
+				////		InputStr = "";
+				////	}
+				////	dbMsg += ",前の値を格納"+ bInput.Operater+ bInput.Value;
+				////	BeforeVals.Add(bInput);
+				////	dbMsg += "[" + BeforeVals.Count +"件目]";
+				////}
+				////再計算実行までの一時表示
+				//NowOperations.Text += SubtractStr;
+		//		ReCalk();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
