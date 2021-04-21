@@ -483,6 +483,9 @@ namespace CS_Calculator{
 						} else {
 							dbMsg += "未格納";
 						}
+						if(bInputOperater == null) {
+							bInputOperater = "";
+						}
 						if (bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
 							dbMsg += "優先範囲の開始";
 							BeforeVals[bIndex].Value = double.Parse(InputStr);
@@ -1134,16 +1137,16 @@ namespace CS_Calculator{
 
 				if (0 < endPoint) {     // || 0 < subtractPoint
 										//演算子が無くなるまで先頭から計算
-					while (0 < OpraterIndex(inOperateStr,true) || 0< subtractPoint) {
+					while (0 < OpraterIndex(inOperateStr,true) ) {          //|| 0< subtractPoint
 						endPoint = OpraterIndex(inOperateStr,true);
 						dbMsg += "\r\n演算子の位置:" + endPoint + "まで";
-						subtractPoint = inOperateStr.IndexOf(SubtractStr);
-						dbMsg += ",-の位置" + subtractPoint + "まで";
-						if (-1 < endPoint) {
-						} else if (-1 < subtractPoint) {
-							endPoint = subtractPoint;
-							dbMsg += ",-だった" ;
-						}
+						//subtractPoint = inOperateStr.IndexOf(SubtractStr);
+						//dbMsg += ",-の位置" + subtractPoint + "まで";
+						//if (-1 < endPoint) {
+						//} else if (-1 < subtractPoint) {
+						//	endPoint = subtractPoint;
+						//	dbMsg += ",-だった" ;
+						//}
 						if (-1 < endPoint) {
 							calcStr = inOperateStr.Substring(0, endPoint);
 							dbMsg += "\r\n前値=" + calcStr;
@@ -1162,25 +1165,38 @@ namespace CS_Calculator{
 							//}
 							string oprand = inOperateStr.Substring(endPoint, 1);
 							dbMsg += ",演算子:" + oprand;
+							int nextPoint = OpraterIndex(remStr, true);
+							string secValStr = remStr;
+							dbMsg += "３項目以降" + nextPoint + "から";
+							if (0 < nextPoint) {
+								secValStr = remStr.Substring(0, nextPoint);
+								remStr = remStr.Substring(nextPoint);
+								dbMsg += "::"+ remStr;
+							}
+							dbMsg += "::2項目＝" + secValStr;
 							double secVal = 0;
-							if (double.TryParse(remStr.Substring(1), out secVal)) {
-								//残りが負数を含む数値なら演算子無しと判定
-								endPoint = -1;
-								calcStr = inOperateStr;
-								dbMsg += "、渡されたのは2値だけ";
-								remStr = "";
+							if (double.TryParse(secValStr, out secVal)) {
+					//		if (double.TryParse(remStr.Substring(1), out secVal)) {
+								calcStr += inOperateStr + secVal.ToString();
+									//残りが負数を含む数値なら演算子無しと判定
+								//endPoint = -1;
+								//calcStr = inOperateStr;
+								//dbMsg += "、渡されたのは2値だけ";
+								//remStr = "";
 							} else {
-								endPoint = OpraterIndex(remStr.Substring(1),true);
-								dbMsg += ",次は：" + endPoint + "まで";
-								if (endPoint < 1) {
-									subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
-									if (0 < subtractPoint) {
-										endPoint = subtractPoint;
-									}
-								}
-								calcStr += remStr.Substring(0, endPoint + 1);
-								remStr = inOperateStr.Substring(endPoint + 2);
-								subtractPoint = inOperateStr.IndexOf(SubtractStr);
+								calcStr += secValStr;
+								remStr = "";
+								//endPoint = OpraterIndex(remStr.Substring(1),true);
+								//dbMsg += ",次は：" + endPoint + "まで";
+								//if (endPoint < 1) {
+								//	subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
+								//	if (0 < subtractPoint) {
+								//		endPoint = subtractPoint;
+								//	}
+								//}
+								//calcStr += remStr.Substring(0, endPoint + 1);
+								//remStr = inOperateStr.Substring(endPoint + 2);
+								//subtractPoint = inOperateStr.IndexOf(SubtractStr);
 							}
 							dbMsg += ">>" + calcStr;
 							try {
@@ -1195,7 +1211,7 @@ namespace CS_Calculator{
 							dbMsg += ",残り=" + remStr;
 							inOperateStr += remStr;
 						} else {
-							dbMsg += "::演算子無し";
+							dbMsg += "::演算子は無くなった";
 						}
 					}
 					dbMsg += ">>" + inOperateStr;
@@ -1704,7 +1720,7 @@ namespace CS_Calculator{
 		/// <param name="inputStr"></param>
 		private void NumInput(string inputStr) {
 			InputStr += inputStr;
-			NowOperations.Text += InputStr;
+			NowOperations.Text += inputStr;
 		}
 
 		/// <summary>
