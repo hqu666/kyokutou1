@@ -11,16 +11,6 @@
 			PreviewKeyDown="UserControl_PreviewKeyDown"
 			 KeyDown="UserControl_KeyDown"
 	>
-	<UserControl.ContextMenu>
-		<ContextMenu>
-			<MenuItem x:Name="PFAOMenu" Header="四則演算の優先順位で計算" Click="PriorityFourArithmeticOperation"/>
-			<MenuItem  x:Name="PCOMenu" Header="電卓処理：現在の結果に次の演算" Click="PriorityCalcOperation"/>
-		</ContextMenu>
-	</UserControl.ContextMenu>
-	<!--FontSize="12"
-					  Height="250"
-			Width="180"
-	-->
 	<UserControl.Resources>
 		<Style  TargetType="Button" x:Name="button_bace">
 			<Setter Property="FontSize" Value="18" />
@@ -127,16 +117,6 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<!--<Grid.ContextMenu>
-			<ContextMenu>
-				<MenuItem Header="四則演算の優先順位で計算" Click="ProgressItemSepareat"/>
-				<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ProgressItemDelete"/>
-			</ContextMenu>
-		</Grid.ContextMenu>-->
-		<!--<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="40*" />
-			<ColumnDefinition/>
-		</Grid.ColumnDefinitions>-->
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -149,12 +129,6 @@
 						VerticalAlignment="Top"
 						FontSize="14"
 						/>
-		<!--						Content="{Binding ResultStr ,Mode=TwoWay}"
-		-->
-
-
-		<!--<StackPanel Orientation="Horizontal"  Grid.Row="1"  Height="16">
-		</StackPanel>Grid.Column="0" Grid.ColumnSpan="3"-->
 		<Grid Name="ProsessGrid"
 				Grid.Row="2" 
 				>
@@ -186,20 +160,6 @@
 						Content="▼"
 						FontSize="8" Click="CorpBt_Click" Margin="0"
 				/>
-			<!--<Label x:Name="CalcOperation" Content="+" Margin="2,0,2,0"
-					Grid.Row="1" Grid.Column="0" Padding="0"
-					FontSize="11" 
-					Background="#FFFBF6C1" 
-					>
-			</Label>
-			<TextBox x:Name="CalcProcess"
-					Grid.Row="1" Grid.Column="1" 
-					Grid.ColumnSpan="3"
-					FontSize="11"  Padding="0"
-					HorizontalAlignment="Stretch"		
-					IsReadOnly="True" 
-					BorderThickness="0" 
-					/>-->
 		</Grid>
 		<DataGrid x:Name="CalcProgress" 
 							Grid.Row="3" Grid.Column="0"  Grid.ColumnSpan="3" 
@@ -330,11 +290,14 @@
 				>
 					<ToggleButton.ContextMenu>
 						<ContextMenu>
-							<MenuItem Header="四則演算の優先順位で計算" Click="ChangeToPO"/>
-							<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ChangeToCalculator"/>
-							<Separator />
-							<MenuItem Header="Exit" />
+							<MenuItem x:Name="PFAOMenu" Header="数式入力" Click="ChangeToPO"/>
+							<MenuItem x:Name="PCOMenu" Header="電卓処理" Click="ChangeToCalculator"/>
 						</ContextMenu>
+						<!--
+													<Separator />
+							<MenuItem Header="Exit" />
+						-->
+
 					</ToggleButton.ContextMenu>
 					<WrapPanel Margin="0,0">
 						<TextBlock Text="func"/>
@@ -342,40 +305,6 @@
 						<Path Width="6" Height="4" Stretch="Fill" Fill="Black" Data="F1 M0,0 L10,0 L5,10 Z "/>
 					</WrapPanel>
 				</ToggleButton>
-				<!--<Button x:Name="FunkBt" Content="func" 
-					Grid.Row="0" Grid.Column="4" 
-					FontSize="7" 
-					BorderThickness="1"
-                    BorderBrush="DarkGray"
-					Padding="0"
-                    TextBlock.Foreground="Black"
-					Background= "LightYellow"
-					VerticalAlignment="Top" Margin="1,1,1,0" MinHeight="14"
-					 Click="FunkBt_Click"
-					 >-->
-					<!--<Button.ContextMenu>
-						<ContextMenu>
-							<MenuItem Header="四則演算の優先順位で計算" Click="ProgressItemSepareat"/>
-							<MenuItem Header="電卓処理：現在の結果に次の演算" Click="ProgressItemDelete"/>
-						</ContextMenu>
-					</Button.ContextMenu>-->
-
-				<!--</Button>-->
-				<!--
-				
-				<ComboBox x:Name="FuncComb" 
-					FontSize="10" 
-					Grid.Row="0" Grid.Column="5"
-					Margin="2" 
-					SelectionChanged="FuncComb_SelectionChanged" 
-					>
-					<ComboBox.ContextMenu>
-						<ContextMenu>
-							<MenuItem Header="電卓モード" Click="ToCalc"/>
-							<MenuItem Header="演算子の優先順位で計算" Click="ToPo"/>
-						</ContextMenu>
-					</ComboBox.ContextMenu>
-				</ComboBox>-->
 			</Grid>
 			<!--Content="C&#xa;BackSpace"-->
 			<Button x:Name="ClearBt" Content="C" FontSize="18"

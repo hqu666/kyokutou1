@@ -162,6 +162,11 @@ namespace CS_Calculator{
 		/// 優先範囲の階層
 		/// </summary>
 		private int ParenCount = 0;
+		/// <summary>
+		/// 再帰回数
+		/// </summary>
+		private int recursionCount = 0;
+		private int recursionCount2 = 0;
 
 		/// <summary>
 		/// 起動処理
@@ -951,10 +956,12 @@ namespace CS_Calculator{
 					if (0< iParenCount) {
 						dbMsg += ">>優先範囲有り";
 						MyLog(TAG, dbMsg);
+						recursionCount = 0;
 						StrInParenCalc(PFAOStr);
 		//				CalcParen(ResultNow, BeforeVals, iParenCount, ParenthesisCount);
 					}else{
 						dbMsg += ">>優先範囲無し";
+						recursionCount2 = 0;
 						string rStr = CalculatorCalc(PFAOStr);
 						dbMsg += ">rStr=" + rStr;
 						double JudgeVal = 0;
@@ -1039,10 +1046,11 @@ namespace CS_Calculator{
 			string TAG = "StrInParenCalc";
 			string dbMsg = "";
 			try {
+				string inParenStr = pStr;           // pStr.Substring(startPoint, endPoint);
+				recursionCount++;
+				dbMsg += "[" + recursionCount+"回目="+ inParenStr;
 				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				double finishVal = 0;
-				string inParenStr = pStr;           // pStr.Substring(startPoint, endPoint);
-				dbMsg += "," + inParenStr;
 				int startPoint = inParenStr.LastIndexOf(ParenStr);		//最後の優先範囲開始
 				int endPoint = inParenStr.IndexOf(ParenthesisStr);	//最初の優先範囲終了：反転する可能性あり
 				int calcLength = endPoint- startPoint;
@@ -1071,14 +1079,23 @@ namespace CS_Calculator{
 					//}
 					//dbMsg += "\r\n直後にParen:startPoint=" + startPoint + "～" + endPoint + "(" + calcLength + "文字)に修正";
 					dbMsg += ";" + beforeStr + " と " + calcStr + " と " + remStr;
+					MyLog(TAG, dbMsg);
+					dbMsg += "\r\n範囲内計算結果：CalculatorCalc(" + calcStr;
+					recursionCount2 = 0;
 					calcStr = CalculatorCalc(calcStr);
+					dbMsg += ")=" + calcStr;
 					double JudgeVal = 0;
 					if (double.TryParse(calcStr, out JudgeVal)) {
 						dbMsg += ">一値になった";
 						if (beforeStr.EndsWith(ParenStr) && remStr.StartsWith(ParenthesisStr)) {
 							dbMsg += ">優先範囲内";
-							beforeStr = beforeStr.Substring(0, beforeStr.Length-2) + MultiplyStr;
-							remStr = remStr.Remove(0,1);
+							beforeStr = beforeStr.Substring(0, beforeStr.Length-2) ;
+							if(!beforeStr.EndsWith(MultiplyStr)) {
+								beforeStr +=  MultiplyStr;
+							}
+							if(remStr.StartsWith(ParenthesisStr)) {
+								remStr = remStr.Remove(0, 1);
+							}
 						}
 					}
 					dbMsg += ">>" + beforeStr + " と " + calcStr + " と " + remStr;
@@ -1088,22 +1105,28 @@ namespace CS_Calculator{
 						dbMsg += ">優先範囲残り>再帰";
 						MyLog(TAG, dbMsg);
 						StrInParenCalc(inParenStr);
+						//再帰後の結果ならないので強制的に止める
+						return;
 					}
 				}
 				//else{
-					//混入防止
-					dbMsg += "、優先範囲除去=" + inParenStr;
-					string testStr = inParenStr.Replace(ParenStr, "");
-					while (-1 < testStr.IndexOf(ParenthesisStr)) {
-						testStr = testStr.Replace(ParenthesisStr, "");
-					}
-					dbMsg += ">>" + testStr;
-					inParenStr = CalculatorCalc(testStr);           //余計？
-			//	}
+				//混入防止
+				dbMsg += "、優先範囲除去=" + inParenStr;
+				//string testStr = inParenStr.Replace(ParenStr, "");
+				//while (-1 < testStr.IndexOf(ParenthesisStr)) {
+				//	testStr = testStr.Replace(ParenthesisStr, "");
+				//}
+				//dbMsg += ">>" + testStr;
+				//MyLog(TAG, dbMsg);
+				//recursionCount2 = 0;
+				//inParenStr = CalculatorCalc(testStr);           //余計？
+				//	}
+				inParenStr = CalculatorCalc(inParenStr); 
 				dbMsg += "、終了判定前=" + inParenStr;
 				if (double.TryParse(inParenStr, out finishVal)) {       //-1 == OpraterIndex(inParenStr)
 					dbMsg += ">>最終値="+ finishVal;
-					ProcessVal = Double.Parse(inParenStr);
+					ProcessVal = finishVal;
+//					ProcessVal = Double.Parse(inParenStr);
 					CalcResult.Content = ProcessVal.ToString();
 				}else{
 					dbMsg += ">非数値>再帰";
@@ -1124,29 +1147,24 @@ namespace CS_Calculator{
 		private string CalculatorCalc(string pStr) {
 			string TAG = "CalculatorCalc";
 			string dbMsg = "";
-			string inOperateStr = pStr;           // pStr.Substring(startPoint, endPoint);
+			string inOperateStr = pStr;  
 			try {
+				recursionCount2++;
+				dbMsg += "[" + recursionCount2 + "回目=" + inOperateStr;
 				string calcStr = "";
 				string remStr = "";
 				dbMsg += ",開始=" + inOperateStr;
 				dbMsg += ",ここまでの入力=" + NowOperations.Text + "[" + BeforeVals.Count + "件目]配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal + "\r\n";
 				int endPoint = OpraterIndex(inOperateStr,true);
 				dbMsg += ",演算子の位置" + endPoint + "まで" ;
-				int subtractPoint = inOperateStr.IndexOf(SubtractStr);
-				dbMsg += ",-の位置" + subtractPoint + "まで";
+				//int subtractPoint = inOperateStr.IndexOf(SubtractStr);
+				//dbMsg += ",-の位置" + subtractPoint + "まで";
 
 				if (0 < endPoint) {     // || 0 < subtractPoint
-										//演算子が無くなるまで先頭から計算
-					while (0 < OpraterIndex(inOperateStr,true) ) {          //|| 0< subtractPoint
+					//演算子が無くなるまで先頭から計算
+					while (0 < OpraterIndex(inOperateStr,true) ) { 
 						endPoint = OpraterIndex(inOperateStr,true);
 						dbMsg += "\r\n演算子の位置:" + endPoint + "まで";
-						//subtractPoint = inOperateStr.IndexOf(SubtractStr);
-						//dbMsg += ",-の位置" + subtractPoint + "まで";
-						//if (-1 < endPoint) {
-						//} else if (-1 < subtractPoint) {
-						//	endPoint = subtractPoint;
-						//	dbMsg += ",-だった" ;
-						//}
 						if (-1 < endPoint) {
 							calcStr = inOperateStr.Substring(0, endPoint);
 							dbMsg += "\r\n前値=" + calcStr;
@@ -1157,12 +1175,6 @@ namespace CS_Calculator{
 								inOperateStr = calcStr;
 								break;
 							}
-							//0414:ここで　*0.0-2 でループ
-							//if(remStr.StartsWith(MultiplyStr) || remStr.StartsWith(DivideStr)) {
-							//	//残りの先頭が積商なら
-							//	remStr = remStr.Substring(1);
-							//	dbMsg += ">>" + remStr;
-							//}
 							string oprand = inOperateStr.Substring(endPoint, 1);
 							dbMsg += ",演算子:" + oprand;
 							int nextPoint = OpraterIndex(remStr, true);
@@ -1172,12 +1184,14 @@ namespace CS_Calculator{
 								secValStr = remStr.Substring(0, nextPoint);
 								remStr = remStr.Substring(nextPoint);
 								dbMsg += "::"+ remStr;
+							}else{
+								remStr = "";
 							}
 							dbMsg += "::2項目＝" + secValStr;
 							double secVal = 0;
 							if (double.TryParse(secValStr, out secVal)) {
 					//		if (double.TryParse(remStr.Substring(1), out secVal)) {
-								calcStr += inOperateStr + secVal.ToString();
+								calcStr += secVal.ToString();
 									//残りが負数を含む数値なら演算子無しと判定
 								//endPoint = -1;
 								//calcStr = inOperateStr;
@@ -1185,7 +1199,7 @@ namespace CS_Calculator{
 								//remStr = "";
 							} else {
 								calcStr += secValStr;
-								remStr = "";
+		//						remStr = "";
 								//endPoint = OpraterIndex(remStr.Substring(1),true);
 								//dbMsg += ",次は：" + endPoint + "まで";
 								//if (endPoint < 1) {
@@ -1214,33 +1228,7 @@ namespace CS_Calculator{
 							dbMsg += "::演算子は無くなった";
 						}
 					}
-					dbMsg += ">>" + inOperateStr;
-					//}else if(-1<subtractPoint) {
-					//		dbMsg += ",減算だけ：Compute=" + inOperateStr;
-					//		calcStr = inOperateStr.Substring(0, subtractPoint+1);
-					//		dbMsg += "\r\n前値=" + calcStr;
-					//		remStr = inOperateStr.Substring(subtractPoint+1);
-					//		dbMsg += ",以降:" + remStr;
-					//		endPoint = OpraterIndex(remStr);
-					//		dbMsg += ",演算子の位置" + endPoint + "まで";
-					//		subtractPoint = inOperateStr.IndexOf(SubtractStr);
-					//		dbMsg += ",-の位置" + subtractPoint + "まで";
-					//		if (-1< endPoint) {
-					//			calcStr+= remStr.Substring(0, endPoint);
-					//			remStr = remStr.Substring(endPoint);
-					//		}else if(-1<subtractPoint) {
-					//			calcStr += remStr.Substring(0, subtractPoint);
-					//			remStr = remStr.Substring(subtractPoint);
-					//		}
-					//		dbMsg += ",計算:" + calcStr+ ",次へ:" + remStr;
-					//	try {
-					//		System.Data.DataTable dt = new System.Data.DataTable();
-					//		var pVal = dt.Compute(calcStr, "");
-					//		inOperateStr = pVal.ToString() + remStr;
-					//		dbMsg += "=" + inOperateStr;
-					//	} catch (Exception er) {
-					//		MyErrorLog(TAG, dbMsg, er);
-					//	}
+					dbMsg += ">while後>" + inOperateStr;
 				} else {
 					dbMsg += "、演算子無し";
 				}
@@ -1639,6 +1627,10 @@ namespace CS_Calculator{
 		/// </summary>
 		private void PlusBt_Click(object sender, RoutedEventArgs e)
 		{
+			if (BeforeOperation.Equals(AddStr)) {
+				MyLog("PlusBt_Click", AddStr + "重複");
+				return;
+			}
 			OperaterInput(AddStr);
 			//	PlusFunc();
 		}
@@ -1650,7 +1642,8 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				dbMsg += ",ここまでの入力=" + NowOperations.Text + "[" + BeforeVals.Count + "件目]配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal + ":前の演算子" + BeforeOperation + "\r\n";
-				if (!BeforeOperation.Equals("") ){
+				if (!BeforeOperation.Equals("")  && !BeforeOperation.Equals(ParenStr)) {
+				//0421;( が余計に追加されていた
 					dbMsg += "別の演算子が入っている";
 					BeforeVal bInput = new BeforeVal();
 					bInput.Operater = BeforeOperation;
@@ -1688,6 +1681,10 @@ namespace CS_Calculator{
 		/// </summary>
 		private void MinusBt_Click(object sender, RoutedEventArgs e)
 		{
+			if (BeforeOperation.Equals(SubtractStr)) {
+				MyLog("MinusBt_Click", SubtractStr + "重複");
+				return;
+			}
 			MinusFunc();
 		}
 		/// <summary>
@@ -1695,10 +1692,18 @@ namespace CS_Calculator{
 		/// </summary>
 		private void AsteriskBt_Click(object sender, RoutedEventArgs e)
 		{
+			if (BeforeOperation.Equals(MultiplyStr)) {
+				MyLog("AsteriskBt_Click", MultiplyStr+"重複");
+				return;
+			}
 			OperaterInput(MultiplyStr);
 		}
 		private void SlashBt_Click(object sender, RoutedEventArgs e)
 		{
+			if(BeforeOperation.Equals(DivideStr)){
+			//演算子の重複は中断
+				return;
+			}
 			DivideFunc();
 		}
 		private void EnterBt_Click(object sender, RoutedEventArgs e)
@@ -1726,14 +1731,14 @@ namespace CS_Calculator{
 		/// <summary>
 		/// 小数点
 		/// </summary>
-		private void DecimalFunc() {
-			isDecimal = true;
-			NumInput(".");
-		}
-
 		private void PeriodBt_Click(object sender, RoutedEventArgs e)
 		{
-			DecimalFunc();
+			if (InputStr.Contains(".")) {
+				MyLog("PeriodBt_Click", "小数点重複");
+				return;
+			}
+			isDecimal = true;
+			NumInput(".");
 		}
 		private void ZeroBt_Click(object sender, RoutedEventArgs e)
 		{
