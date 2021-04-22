@@ -211,7 +211,6 @@ namespace CS_Calculator{
 //#if DEBUG
 //				IsPO = SetOperationPriority(true);
 //#endif
-				MemoryComb.Visibility = Visibility.Hidden;
 				CorpProgress();
 				MyLog(TAG, dbMsg);
 			}
@@ -232,6 +231,8 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				Initialize();
+				//起動時はメモリコンボを非表示
+				MemoryComb.Visibility = Visibility.Hidden;
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxから";
 					InputStr = TargetTextBox.Text;
@@ -252,7 +253,7 @@ namespace CS_Calculator{
 						BeforeVals.Add(NowInput);
 						InputStr = frastVal.ToString();
 					} else {
-						dbMsg += ">非数値>再帰";
+						dbMsg += ">呼び出し元の値無し";
 					}
 				}
 				NowOperations.Text = InputStr;
@@ -287,7 +288,6 @@ namespace CS_Calculator{
 					ParenFunc();
 				}
 				dbMsg += ",NowOperations=" + NowOperations.Text;
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1157,17 +1157,14 @@ namespace CS_Calculator{
 				dbMsg += ",ここまでの入力=" + NowOperations.Text + "[" + BeforeVals.Count + "件目]配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal + "\r\n";
 				int endPoint = OpraterIndex(inOperateStr,true);
 				dbMsg += ",演算子の位置" + endPoint + "まで" ;
-				//int subtractPoint = inOperateStr.IndexOf(SubtractStr);
-				//dbMsg += ",-の位置" + subtractPoint + "まで";
-
-				if (0 < endPoint) {     // || 0 < subtractPoint
+				if (0 < endPoint) { 
 					//演算子が無くなるまで先頭から計算
 					while (0 < OpraterIndex(inOperateStr,true) ) { 
 						endPoint = OpraterIndex(inOperateStr,true);
-						dbMsg += "\r\n演算子の位置:" + endPoint + "まで";
+						dbMsg += "\r\n演算子の位置:" + endPoint;
 						if (-1 < endPoint) {
 							calcStr = inOperateStr.Substring(0, endPoint);
-							dbMsg += "\r\n前値=" + calcStr;
+							dbMsg += "；前値=" + calcStr;
 							remStr = inOperateStr.Substring(endPoint);
 							dbMsg += ",以降:" + remStr;
 							//0418:ここで　-2*でループ
@@ -1179,25 +1176,24 @@ namespace CS_Calculator{
 							dbMsg += ",演算子:" + oprand;
 							int nextPoint = OpraterIndex(remStr, true);
 							string secValStr = remStr;
-							dbMsg += "３項目以降" + nextPoint + "から";
+							dbMsg += "3項目以降" ;
 							if (0 < nextPoint) {
+								dbMsg += "[" + nextPoint + "]から";
 								secValStr = remStr.Substring(0, nextPoint);
 								remStr = remStr.Substring(nextPoint);
 								dbMsg += "::"+ remStr;
 							}else{
+								dbMsg += "無し";
 								remStr = "";
 							}
 							dbMsg += "::2項目＝" + secValStr;
 							double secVal = 0;
 							if (double.TryParse(secValStr, out secVal)) {
-					//		if (double.TryParse(remStr.Substring(1), out secVal)) {
-								calcStr += secVal.ToString();
-									//残りが負数を含む数値なら演算子無しと判定
-								//endPoint = -1;
-								//calcStr = inOperateStr;
-								//dbMsg += "、渡されたのは2値だけ";
-								//remStr = "";
+								//	+-は正負符号扱で演算子が消える
+								dbMsg += "＞数値のみ" ;
+								calcStr += oprand+secVal.ToString();
 							} else {
+								dbMsg += "＞演算子を含む";
 								calcStr += secValStr;
 		//						remStr = "";
 								//endPoint = OpraterIndex(remStr.Substring(1),true);
@@ -2117,6 +2113,7 @@ namespace CS_Calculator{
 				dbMsg += "ProcessVal=" + ProcessVal;
 				if (0 !=ProcessVal) {
 					bool IsPreexist = false;
+
 					foreach (var pItem in MemoryComb.Items){
 						if(pItem.ToString().Equals(ProcessVal.ToString())) {
 							IsPreexist = true;
@@ -2148,10 +2145,22 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				ComboBox cb = MemoryComb;       // (ComboBox)sender;
-				InputStr = cb.SelectedItem.ToString();
-				//	String sele = MemoryComb.Text;
-				dbMsg += "選択値=" + InputStr;
-		//		CalcProcess.Text = InputStr;
+				if(-1<cb.SelectedIndex) {
+					string oprater = NowOperations.Text.Substring(NowOperations.Text.Length - 1);
+					dbMsg += "演算子=" + oprater;
+					if (OpraterIndex(oprater, true) < 0) {
+						string titolStr = "電卓：メモリーから呼出し";
+						string msgStr = "演算子を入力して下さい。";
+						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+						return;
+					}
+
+					InputStr = cb.SelectedItem.ToString();
+					dbMsg += "選択値=" + InputStr;
+					EnterFunc();
+				}
+				//	選択を外して、再び同じ値でも動作させる
+				cb.SelectedIndex = -1;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -2170,14 +2179,15 @@ namespace CS_Calculator{
 				ComboBox cb = MemoryComb;		// (ComboBox)sender;
 				//先頭は-1？？
 				if(cb.SelectedValue != null) {
-					string titolStr = "電卓：メモリから削除"; ;
+					string titolStr = "電卓：メモリーから削除"; ;
 					String msgStr = "[" + (cb.SelectedIndex + 1) + "]" + cb.SelectedValue + "をメモリから削除します。";
 					MessageBoxResult res = MessageShowWPF(msgStr, titolStr, MessageBoxButton.YesNo, MessageBoxImage.Information);
 					if (res.Equals(MessageBoxResult.Yes)) {
 						MemoryComb.Items.RemoveAt(cb.SelectedIndex);
-						dbMsg += "＞＞" + MemoryComb.Items.Count + "件";
+						dbMsg += "＞削除＞" + MemoryComb.Items.Count + "件";
 						if (MemoryComb.Items.Count < 1) {
 							MemoryComb.Visibility = Visibility.Hidden;
+							dbMsg += "＞＞コンボボックス非表示" ;
 						}
 					}
 				}
