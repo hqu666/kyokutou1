@@ -1048,32 +1048,21 @@ namespace CS_Calculator{
 				dbMsg += ",ここまでの入力=" + NowOperations.Text + ",配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal;
 				double finishVal = 0;
 				int startPoint = inParenStr.LastIndexOf(ParenStr);		//最後の優先範囲開始
-				int endPoint = inParenStr.IndexOf(ParenthesisStr);	//最初の優先範囲終了：反転する可能性あり
-				int calcLength = endPoint- startPoint;
-				dbMsg += ",優先範囲の位置" + startPoint + "～" + +endPoint + "(" + calcLength + "文字)まで";
+				dbMsg += ",優先範囲の位置" + startPoint;
 				if (-1 < startPoint) {
+					int endPoint = inParenStr.IndexOf(ParenthesisStr);  //最初の優先範囲終了：反転する可能性あり
+					int calcLength = endPoint - startPoint;
+					dbMsg += "～" + +endPoint + "(" + calcLength + "文字)まで";
 					//優先範囲と前後に分ける
 					string beforeStr = inParenStr.Substring(0,startPoint);
 					string calcStr = inParenStr.Substring(startPoint+1);
 					calcLength = calcStr.IndexOf(ParenthesisStr);
 					string remStr = "";                 //残りを記録
 					if (-1 < calcLength) {
-					//	calcLength =  startPoint- endPoint;
 						dbMsg += ",範囲修正＝" + startPoint + "から" + calcLength + "文字";
 						remStr = calcStr.Substring( calcLength+1);
 						calcStr = inParenStr.Substring(startPoint+1, calcLength);
 					}
-					////開始に続いて数値が有るところまで
-					//while (-1 < calcStr.IndexOf(ParenStr)) {
-					//	startPoint++;
-					//	calcLength--;
-					//	beforeStr = inParenStr.Substring(0,startPoint-1);
-					//	calcStr = inParenStr.Substring(startPoint+1);
-					//	if (-1 < endPoint) {
-					//		calcStr = inParenStr.Substring(startPoint, calcLength);
-					//	}
-					//}
-					//dbMsg += "\r\n直後にParen:startPoint=" + startPoint + "～" + endPoint + "(" + calcLength + "文字)に修正";
 					dbMsg += ";" + beforeStr + " と " + calcStr + " と " + remStr;
 					MyLog(TAG, dbMsg);
 					dbMsg += "\r\n範囲内計算結果：CalculatorCalc(" + calcStr;
@@ -1105,24 +1094,13 @@ namespace CS_Calculator{
 						return;
 					}
 				}
-				//else{
 				//混入防止
 				dbMsg += "、優先範囲除去=" + inParenStr;
-				//string testStr = inParenStr.Replace(ParenStr, "");
-				//while (-1 < testStr.IndexOf(ParenthesisStr)) {
-				//	testStr = testStr.Replace(ParenthesisStr, "");
-				//}
-				//dbMsg += ">>" + testStr;
-				//MyLog(TAG, dbMsg);
-				//recursionCount2 = 0;
-				//inParenStr = CalculatorCalc(testStr);           //余計？
-				//	}
 				inParenStr = CalculatorCalc(inParenStr); 
 				dbMsg += "、終了判定前=" + inParenStr;
 				if (double.TryParse(inParenStr, out finishVal)) {       //-1 == OpraterIndex(inParenStr)
 					dbMsg += ">>最終値="+ finishVal;
 					ProcessVal = finishVal;
-//					ProcessVal = Double.Parse(inParenStr);
 					CalcResult.Content = ProcessVal.ToString();
 				}else{
 					dbMsg += ">非数値>再帰";
@@ -1183,26 +1161,31 @@ namespace CS_Calculator{
 								remStr = "";
 							}
 							dbMsg += "::2項目＝" + secValStr;
-							double secVal = 0;
-							if (double.TryParse(secValStr, out secVal)) {
-								//	+-は正負符号扱で演算子が消える
-								dbMsg += "＞数値のみ" ;
-								calcStr += oprand+secVal.ToString();
-							} else {
-								dbMsg += "＞演算子を含む";
+							if(secValStr.StartsWith(SubtractStr)) {
+								dbMsg += "＞演算子-を含む";
 								calcStr += secValStr;
-		//						remStr = "";
-								//endPoint = OpraterIndex(remStr.Substring(1),true);
-								//dbMsg += ",次は：" + endPoint + "まで";
-								//if (endPoint < 1) {
-								//	subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
-								//	if (0 < subtractPoint) {
-								//		endPoint = subtractPoint;
-								//	}
-								//}
-								//calcStr += remStr.Substring(0, endPoint + 1);
-								//remStr = inOperateStr.Substring(endPoint + 2);
-								//subtractPoint = inOperateStr.IndexOf(SubtractStr);
+							}else{
+								double secVal = 0;
+								if (double.TryParse(secValStr, out secVal)) {
+									//	+-は正負符号扱で演算子が消える
+									dbMsg += "＞数値のみ";
+									calcStr += oprand + secVal.ToString();
+								} else {
+									dbMsg += "＞演算子を含む";
+									calcStr += secValStr;
+									//						remStr = "";
+									//endPoint = OpraterIndex(remStr.Substring(1),true);
+									//dbMsg += ",次は：" + endPoint + "まで";
+									//if (endPoint < 1) {
+									//	subtractPoint = inOperateStr.IndexOf(remStr.Substring(1));
+									//	if (0 < subtractPoint) {
+									//		endPoint = subtractPoint;
+									//	}
+									//}
+									//calcStr += remStr.Substring(0, endPoint + 1);
+									//remStr = inOperateStr.Substring(endPoint + 2);
+									//subtractPoint = inOperateStr.IndexOf(SubtractStr);
+								}
 							}
 							dbMsg += ">>" + calcStr;
 							try {
