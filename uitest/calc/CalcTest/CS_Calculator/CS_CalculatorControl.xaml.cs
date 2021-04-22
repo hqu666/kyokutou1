@@ -302,80 +302,93 @@ namespace CS_Calculator{
 			string TAG = "ClearFunc";
 			string dbMsg = "";
 			try {
-			//	InputStr = CalcProcess.Text;
-				dbMsg += ",入力状況=" + InputStr;
-				if (0 < InputStr.Length) {
-					//入力エリアに文字が有る間は一文字づつ消去
-					InputStr = InputStr.Substring(0, InputStr.Length - 1);
-		//			CalcProcess.Text = InputStr;
-				} else {
-					dbMsg += ",BeforeVals残り=" + BeforeVals.Count + "件";
-					if (0 < BeforeVals.Count) {
-						//最終確定入力を読出し
-						BeforeVal LastInput = BeforeVals[BeforeVals.Count - 1];
-						string LastOperatier = LastInput.Operater;
-						dbMsg += ",演算子=" + LastOperatier;            //Parenなど
-		//				CalcOperation.Content = LastOperatier;
-						if (LastInput.Value == null) {
-							dbMsg += ">>値はnull";			//Parenなど
-						} else { 
-							//値を転記
-							double LastValue = (double)LastInput.Value;
-							dbMsg += "＝" + LastOperatier + " : " + LastValue;
-							InputStr = LastValue.ToString();
-							if (InputStr.Contains("E")) {
-								dbMsg += ">>値は指数";
-								int bp = 16;
-								string[] rStr = InputStr.Split('E');
-								InputStr = rStr[0].Replace(".", "") + "0";
-								dbMsg += ",sVer=" + InputStr;
-								int pStr = int.Parse(rStr[1].Substring(1, rStr[1].Length - 1)) - bp;
-								dbMsg += ",残り=" + pStr;
-								InputStr += Math.Pow(10, pStr).ToString().Replace("1", "");
+				string nowOperationsText = NowOperations.Text;
+				dbMsg += ",ここまでの入力=" + nowOperationsText + ",配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal;
+				if(0<nowOperationsText.Length) {
+					string targetStr = NowOperations.Text.Substring(NowOperations.Text.Length - 1);
+					dbMsg += ",削除対象=" + targetStr;
+					dbMsg += ",入力状況=" + BeforeOperation + InputStr;
+					if (0 < InputStr.Length) {
+						dbMsg += "：：確定前：：";
+						//入力エリアに文字が有る間（）は一文字づつ消去
+						if (InputStr.Contains("E")) {
+							dbMsg += ">>値は指数";
+							int bp = 16;
+							string[] rStrs = InputStr.Split('E');
+							InputStr = rStrs[0].Replace(".", "") + "0";
+							dbMsg += ",sVer=" + InputStr;
+							int pStr = int.Parse(rStrs[1].Substring(1, rStrs[1].Length - 1)) - bp;
+							dbMsg += ",残り=" + pStr;
+							InputStr += Math.Pow(10, pStr).ToString().Replace("1", "");
+						} else {
+							dbMsg += ">>値は指数無し";
+							InputStr = InputStr.Remove(InputStr.Length - 1);
+						}
+						//計算経過から削除
+						NowOperations.Text = NowOperations.Text.Remove(NowOperations.Text.Length - 1);
+						if (BeforeVals.Count<1) {
+							dbMsg += "：：確定無し：：";
+							ProcessVal = 0;
+							CalcResult.Content = ProcessVal;
+						}
+					} else {
+						dbMsg += ",BeforeVals残り=" + BeforeVals.Count + "件";
+						if (0 < BeforeVals.Count) {
+							BeforeVal LastInput = BeforeVals[BeforeVals.Count - 1];
+							//読み出したら消す
+							BeforeVals.RemoveAt(BeforeVals.Count - 1);
+							BeforeOperation = LastInput.Operater;
+							if(BeforeOperation == null) {
+								BeforeOperation = "";
 							}
-		//					CalcProcess.Text = InputStr;
+							double? LastValue = LastInput.Value;
+							dbMsg += ",最終確定入力;;" + BeforeOperation + LastValue;
+							if (LastValue == null) {
+								InputStr = "";
+							} else {
+								string LastValueStr = LastValue.ToString();
+								//if (LastValueStr.Contains("E")) {
+								//	dbMsg += ">>値は指数";
+								//	int bp = 16;
+								//	string[] rStrs = LastValueStr.Split('E');
+								//	LastValueStr = rStrs[0].Replace(".", "") + "0";
+								//					dbMsg += ",sVer=" + LastValueStr;
+								//					int pStr = int.Parse(rStrs[1].Substring(1, rStrs[1].Length - 1)) - bp;
+								//					dbMsg += ",残り=" + pStr;
+								//	LastValueStr += Math.Pow(10, pStr).ToString().Replace("1", "");
+								//}else{
+								//	dbMsg += ">>値は指数無し";
+								//	LastValueStr = LastValueStr.Remove(LastValueStr.Length - 1, 1);
+								//}
+								double JudgeVal = 0;
+								if (double.TryParse(LastValueStr, out JudgeVal)) {
+									InputStr = LastValueStr;
+								} else {
+									dbMsg += ">>数値化不能=" + LastValueStr;
+									InputStr = "";
+								}
+							}
+
+							dbMsg += ">InputStr>" + InputStr;
+							ReCalk();
+							CalcResult.Content = ProcessVal;
+							//計算過程を更新
+							CalcProgress.ItemsSource = BeforeVals;
+							CalcProgress.Items.Refresh();
+							//if (0 == OpraterIndex(targetStr, true)) {
+							//	dbMsg += ">>Oprater";
+							//	BeforeOperation = "";
+							//}
+							NowOperations.Text += BeforeOperation + InputStr;
 						}
-						///最後の確定入力を消去
-						BeforeVals.RemoveAt(BeforeVals.Count - 1);
-						ReCalk();
-						CalcResult.Content = ProcessVal;
-						if(!LastOperatier.Equals("")) {
-							BeforeOperation = LastOperatier;
-						}
-						//計算過程を更新
-						CalcProgress.ItemsSource = BeforeVals;
-						CalcProgress.Items.Refresh();
-						////計算過程から最終確定値と演算子を消去
-						////CalcProgress.Content = ProssesStr.Substring(0, (ProssesStr.Length - InputStr.Length - LastOperatier.Length - LineBreakStr.Length));
-						////CalcProgressScroll.ScrollToBottom();
-					//} else if(0==BeforeVals.Count) {
-					//	//最終入力の
-					//	BeforeVal LastInput = BeforeVals[0];
-					//	if(LastInput == null) {
-					//		dbMsg += ",LastInput=null" ;
-					//	} else {
-					//		string LastInputStr = "";
-					//		//演算子を転記
-					//		string LastOperatier = LastInput.Operater;
-					//		dbMsg += "＝" + LastOperatier ;
-					//		if (LastInput.Value == null) {
-					//			dbMsg += ",Value=null";
-					//		} else {
-					//			dbMsg += ",値を読み出し";
-					//			double LastValue = (double)LastInput.Value;
-					//			dbMsg +=  " : " + LastValue;
-					//			LastInputStr = LastValue.ToString();
-					//		}
-					//		Initialize();
-					//		//格納値をクリアした後で最終入力をフィールドに書き戻す
-					//		CalcOperation.Content = LastOperatier;
-					//		CalcProcess.Text = LastInputStr;
-					//	}
 					}
-				}
-				dbMsg += ">残り>" + BeforeVals.Count + "件";
-				if (BeforeVals.Count < 1) {
-					IsBegin = true;
+					dbMsg += ">残り>" + BeforeVals.Count + "件";
+					if (BeforeVals.Count < 1) {
+						IsBegin = true;
+					}
+					dbMsg += ",削除後=" + NowOperations.Text + ",配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal;
+				}else{
+					dbMsg += "：：削除対象無し：：";
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -1623,9 +1636,11 @@ namespace CS_Calculator{
 		/// </summary>
 		private void PlusBt_Click(object sender, RoutedEventArgs e)
 		{
-			if (BeforeOperation.Equals(AddStr)) {
-				MyLog("PlusBt_Click", AddStr + "重複");
-				return;
+			if(BeforeOperation != null) {
+				if (BeforeOperation.Equals(AddStr) && InputStr.Equals("")) {
+					MyLog("PlusBt_Click", AddStr + "重複");
+					return;
+				}
 			}
 			OperaterInput(AddStr);
 			//	PlusFunc();
@@ -1677,9 +1692,11 @@ namespace CS_Calculator{
 		/// </summary>
 		private void MinusBt_Click(object sender, RoutedEventArgs e)
 		{
-			if (BeforeOperation.Equals(SubtractStr)) {
-				MyLog("MinusBt_Click", SubtractStr + "重複");
-				return;
+			if (BeforeOperation != null) {
+				if (BeforeOperation.Equals(SubtractStr) && InputStr.Equals("")) {
+					MyLog("MinusBt_Click", SubtractStr + "重複");
+					return;
+				}
 			}
 			MinusFunc();
 		}
@@ -1688,17 +1705,21 @@ namespace CS_Calculator{
 		/// </summary>
 		private void AsteriskBt_Click(object sender, RoutedEventArgs e)
 		{
-			if (BeforeOperation.Equals(MultiplyStr)) {
-				MyLog("AsteriskBt_Click", MultiplyStr+"重複");
-				return;
+			if (BeforeOperation != null) {
+				if (BeforeOperation.Equals(MultiplyStr) && InputStr.Equals("")) {
+					MyLog("AsteriskBt_Click", MultiplyStr + "重複");
+					return;
+				}
 			}
 			OperaterInput(MultiplyStr);
 		}
 		private void SlashBt_Click(object sender, RoutedEventArgs e)
 		{
-			if(BeforeOperation.Equals(DivideStr)){
-			//演算子の重複は中断
-				return;
+			if (BeforeOperation != null) {
+				if (BeforeOperation.Equals(DivideStr) && InputStr.Equals("")) {
+					MyLog("SlashBt_Click", DivideStr + "重複");
+					return;
+				}
 			}
 			DivideFunc();
 		}
