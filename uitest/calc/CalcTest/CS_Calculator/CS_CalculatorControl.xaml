@@ -185,8 +185,8 @@
 >-->
 
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="none" Binding="{Binding Operater}"/>
-				<DataGridTextColumn Header="none" Binding="{Binding Value}" Width="*"/>
+				<DataGridTextColumn Header="Operater" Binding="{Binding Operater}"/>
+				<DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*"/>
 			</DataGrid.Columns>
 		</DataGrid>
 

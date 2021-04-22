@@ -347,19 +347,6 @@ namespace CS_Calculator{
 								InputStr = "";
 							} else {
 								string LastValueStr = LastValue.ToString();
-								//if (LastValueStr.Contains("E")) {
-								//	dbMsg += ">>値は指数";
-								//	int bp = 16;
-								//	string[] rStrs = LastValueStr.Split('E');
-								//	LastValueStr = rStrs[0].Replace(".", "") + "0";
-								//					dbMsg += ",sVer=" + LastValueStr;
-								//					int pStr = int.Parse(rStrs[1].Substring(1, rStrs[1].Length - 1)) - bp;
-								//					dbMsg += ",残り=" + pStr;
-								//	LastValueStr += Math.Pow(10, pStr).ToString().Replace("1", "");
-								//}else{
-								//	dbMsg += ">>値は指数無し";
-								//	LastValueStr = LastValueStr.Remove(LastValueStr.Length - 1, 1);
-								//}
 								double JudgeVal = 0;
 								if (double.TryParse(LastValueStr, out JudgeVal)) {
 									InputStr = LastValueStr;
@@ -375,10 +362,6 @@ namespace CS_Calculator{
 							//計算過程を更新
 							CalcProgress.ItemsSource = BeforeVals;
 							CalcProgress.Items.Refresh();
-							//if (0 == OpraterIndex(targetStr, true)) {
-							//	dbMsg += ">>Oprater";
-							//	BeforeOperation = "";
-							//}
 							NowOperations.Text += BeforeOperation + InputStr;
 						}
 					}
@@ -1348,7 +1331,7 @@ namespace CS_Calculator{
 			string TAG = "CalcProgress_SelectedCellsChanged";
 			string dbMsg = "";
 			try {
-				//			DataGrid DG = sender as DataGrid;
+				dbMsg += "既存値変更開始状態" + IsPrgresEdit;
 				DataGrid DG = CalcProgress;
 				int selectedIndex = DG.SelectedIndex;
 				dbMsg += "[" + selectedIndex + "]";
@@ -1382,45 +1365,57 @@ namespace CS_Calculator{
 				dbMsg += "[" + selectedIndex + "]";
 				BeforeVal selectedItem = (BeforeVal)DG.SelectedItem;
 				dbMsg += "=" + selectedItem.Operater + " : " + selectedItem.Value;
-				string fieldName = (string)e.Column.Header;
-				dbMsg += ",fieldName" + fieldName;
 				TextBox textEdit = (TextBox)e.EditingElement;
 				string eValue = textEdit.Text;
-				dbMsg += " : " + eValue;
-				if (fieldName.Equals("Operater")) {
-					if (eValue.Equals(AddStr) ||
-						eValue.Equals(SubtractStr) ||
-						eValue.Equals(DivideStr) ||
-						eValue.Equals(MultiplyStr)) {
-						dbMsg += ",問題無し";
-						ProgressEdit(selectedIndex, fieldName, eValue);
-					} else {
-						String msgStr = "演算子(+-*/)以外が入力されています\r\n";
-						msgStr += eValue;
-						msgStr += "\r\n修正をお願いします";
-						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
-						IsPrgresEdit = false;
-						textEdit.Text = BeforeVals[selectedIndex].Operater.ToString();
-				//		CalcProcess.Focus();
-						return;
+				dbMsg += " :TextBox= " + eValue;
+				string fieldName = (string)e.Column.Header;
+				dbMsg += ",fieldName=" + fieldName;
+				if (fieldName == null || fieldName.Equals("none")) {
+					if(eValue == selectedItem.Operater) {
+						fieldName= "Operater";
+					} else if (eValue == selectedItem.Value.ToString()) {
+						fieldName = "Value";
 					}
-				} else if (fieldName.Equals("Value")) {
-					double number;
-					if (double.TryParse(eValue, out number)) {
-						dbMsg += ",入力の変換結果=" + number;
-						dbMsg += ",問題無し";
-						ProgressEdit(selectedIndex, fieldName, eValue);
-					} else {
-						String msgStr = "数値以外が入力されています\r\n";
-						msgStr += eValue;
-						msgStr += "\r\n修正をお願いします";
-						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
-						IsPrgresEdit = false;
-						textEdit.Text=BeforeVals[selectedIndex].Value.ToString();
-						return;
-					}
+					dbMsg += ">>" + fieldName;
 				}
-				 ReCalk();
+				//BeforeVals[selectedIndex].Operater= selectedItem.Operater;
+				//BeforeVals[selectedIndex].Value = selectedItem.Value;
+
+				if (fieldName.Equals("Operater")) {
+						if (eValue.Equals(AddStr) ||
+							eValue.Equals(SubtractStr) ||
+							eValue.Equals(DivideStr) ||
+							eValue.Equals(MultiplyStr)) {
+							dbMsg += ",問題無し";
+							ProgressEdit(selectedIndex, fieldName, eValue);
+						} else {
+							String msgStr = "演算子以外が入力されています\r\n";
+							msgStr += eValue;
+							msgStr += "\r\n修正をお願いします";
+							MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+							IsPrgresEdit = false;
+							textEdit.Text = BeforeVals[selectedIndex].Operater.ToString();
+					//		CalcProcess.Focus();
+							return;
+						}
+					} else if (fieldName.Equals("Value")) {
+						double number;
+						if (double.TryParse(eValue, out number)) {
+							dbMsg += ",入力の変換結果=" + number;
+							dbMsg += ",問題無し";
+							ProgressEdit(selectedIndex, fieldName, eValue);
+						} else {
+							String msgStr = "数値以外が入力されています\r\n";
+							msgStr += eValue;
+							msgStr += "\r\n修正をお願いします";
+							MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+							IsPrgresEdit = false;
+							textEdit.Text=BeforeVals[selectedIndex].Value.ToString();
+							return;
+						}
+					}
+					
+				ReCalk();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -2011,8 +2006,8 @@ namespace CS_Calculator{
 			string TAG = "ProgressItemSepareat";
 			string dbMsg = "";
 			try {
-				//最新状態を取得
-				CalcProgress.Items.Refresh();
+				//最新状態を取得:'Refresh' は、AddNew トランザクションまたは EditItem トランザクションの実行中は許可されません。
+	//			CalcProgress.Items.Refresh();
 				BeforeVal selectedItem = (BeforeVal)CalcProgress.SelectedItem;
 				int selectedIndex = CalcProgress.SelectedIndex;
 				int insertPosition = selectedIndex+1;
