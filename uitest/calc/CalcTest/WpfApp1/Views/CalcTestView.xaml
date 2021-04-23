@@ -96,7 +96,7 @@
 					/>
 			<CheckBox x:Name="IsPoCK" 
 					IsChecked="{Binding IsPo,Mode=TwoWay}"
-					Content="演算子の優先順位で計算"
+					Content="「数式入力」で起動する"
 					Margin="5,5,5,5" VerticalAlignment="Center" Click="IsPoCK_Click"  
 					/>
 
@@ -141,7 +141,7 @@
 			</sg:GcSpreadGrid.ContextMenu>
 		</sg:GcSpreadGrid>-->
 
-		<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
+		<!--<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
 						Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
 		<Label  Content="①標準コンテキストメニューを残す(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
@@ -164,9 +164,9 @@
 					<MenuItem Header="電卓" Command="{Binding XDGContextMenuClick}"/>
 				</ContextMenu>
 			</igWPF:XamDataGrid.ContextMenu>
-		</igWPF:XamDataGrid>
+		</igWPF:XamDataGrid>-->
 	
-	<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
+	<!--<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
 						Grid.Row="7" Grid.Column="4" VerticalAlignment="Center"
 							/>
 	<igWPF:XamDataGrid Name="MyXDG2" 
@@ -196,7 +196,7 @@
 					<behaviors:InvokeCommandAction Command="{Binding XDGCEllRIGHTClick}" />
 				</behaviors:EventTrigger>
 			</behaviors:Interaction.Triggers>
-		</igWPF:XamDataGrid>
+		</igWPF:XamDataGrid>-->
 
 		<Label  Content="DataGrid(TextBlock)にContextMenuで" 
 						Grid.Row="11" Grid.Column="1" VerticalAlignment="Center"  

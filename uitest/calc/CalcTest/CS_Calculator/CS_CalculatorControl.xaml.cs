@@ -138,8 +138,8 @@ namespace CS_Calculator{
 		private static string SubtractStr = "-";				//演算子ではなく数値を負数化する
 		private static string DivideStr = "/";
 		private static string MultiplyStr = "*";
-		private static string PowerStr = "^";
-		private static string SqrtStr = "√";
+		private static string PowerStr = "Pow(";       // "^";
+		private static string SqrtStr = "SqrtStr(";       //"√";
 		private static string ParenStr = "(";	
 		private static string ParenthesisStr = ")";
 
@@ -203,11 +203,6 @@ namespace CS_Calculator{
 				CalcProgress.ItemsSource = BeforeVals;
 				CalcProgress.Items.Refresh();
 				CalcResult.Focus();
-
-				//	IsPO = Properties.Settings.Default.IsPO;
-	
-				//計算の優先順位は電卓処理から
-	//			IsPO = SetOperationPriority(false);
 //#if DEBUG
 //				IsPO = SetOperationPriority(true);
 //#endif
@@ -288,6 +283,9 @@ namespace CS_Calculator{
 					ParenFunc();
 				}
 				dbMsg += ",NowOperations=" + NowOperations.Text;
+				//計算の優先順位は電卓処理から
+				IsPO = SetOperationPriority(false);
+
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -624,53 +622,131 @@ namespace CS_Calculator{
 			return rcResultNow;
 		}
 
-		/// <summary>
-		/// パーレン内計算値格納
-		/// パーレンの最終値が1ブロックだけなら積算に置き換え
-		/// </summary>
-		/// <param name="iValCount">優先範囲階層の深さ</param>
-		/// <param name="ResultNow">集計値</param>
-		/// <param name="bVal">対象の経過行</param>
-		/// <param name="isParsonOnly">優先範囲指定のみ：関数の場合はFalse</param>
-		/// <returns></returns>
-		public BeforeVal RemainPason(int iValCount, double? ResultNow,  bool isParsonOnly) {
-			string TAG = "RemainPason";
+		/*
+				/// <summary>
+				/// パーレン内計算値格納
+				/// パーレンの最終値が1ブロックだけなら積算に置き換え
+				/// </summary>
+				/// <param name="iValCount">優先範囲階層の深さ</param>
+				/// <param name="ResultNow">集計値</param>
+				/// <param name="bVal">対象の経過行</param>
+				/// <param name="isParsonOnly">優先範囲指定のみ：関数の場合はFalse</param>
+				/// <returns></returns>
+				public BeforeVal RemainPason(int iValCount, double? ResultNow,  bool isParsonOnly) {
+					string TAG = "RemainPason";
+					string dbMsg = "";
+					BeforeVal aVal = new BeforeVal();
+					try {
+		#if DEBUG
+						dbMsg += "\r\n処理前＝";
+						foreach (BeforeVal iVal in BeforeVals) {
+							string iOperater = iVal.Operater;
+							double? iValue = iVal.Value;
+							dbMsg += "" + iOperater + iValue;
+						}
+						dbMsg += "\r\n";
+		#endif
+						dbMsg += "集計値＝" + ResultNow;
+						dbMsg += "優先範囲階層の深さ＝" + iValCount;
+						dbMsg += ",非関数=" + isParsonOnly;
+						aVal.Operater = ParenStr;
+						//if (1 == iValCount && isParsonOnly) {
+						//	dbMsg += ">関数ではない>積算に置き換え";
+						//	aVal.Operater = MultiplyStr;
+						//}
+						aVal.Value = ResultNow;
+						dbMsg += aVal.Operater + aVal.Value;
+		#if DEBUG
+						dbMsg += "\r\n処理後＝";
+						foreach (BeforeVal iVal in BeforeVals) {
+							string iOperater = iVal.Operater;
+							double? iValue = iVal.Value;
+							dbMsg += "" + iOperater + iValue;
+						}
+		#endif
+						MyLog(TAG, dbMsg);
+					} catch (Exception er) {
+						MyErrorLog(TAG, dbMsg, er);
+					}
+					return aVal;
+				}
+		*/
+
+		private void FunctionCalc(string inFunctionStr) {
+			string TAG = "CalculatorCalc";
 			string dbMsg = "";
-			BeforeVal aVal = new BeforeVal();
 			try {
-#if DEBUG
-				dbMsg += "\r\n処理前＝";
-				foreach (BeforeVal iVal in BeforeVals) {
-					string iOperater = iVal.Operater;
-					double? iValue = iVal.Value;
-					dbMsg += "" + iOperater + iValue;
+				string valStr = "0";
+				dbMsg += "," + inFunctionStr;
+				while(0< inFunctionStr.Length) {
+					int powerStart = inFunctionStr.LastIndexOf(PowerStr);
+					int SqrtStart = inFunctionStr.LastIndexOf(SqrtStr);
+					dbMsg += ",二乗" + powerStart + "、平方根" + SqrtStart;
+					string funkName = "";
+					string beforeStr = "";
+					if (powerStart < SqrtStart) {
+						funkName = SqrtStr;
+						beforeStr = inFunctionStr.Substring(0, SqrtStart);
+					} else if ( SqrtStart< powerStart) {
+						funkName = PowerStr;
+						beforeStr = inFunctionStr.Substring(0, powerStart);
+					} else if (-1==SqrtStart && -1== powerStart) {
+					}
+					dbMsg += ",計算対象" + funkName;
+					int parenStart = inFunctionStr.LastIndexOf(ParenStr);
+					string remStr = inFunctionStr.Substring(parenStart+1);
+					int parenEnd = remStr.IndexOf(ParenthesisStr);
+					valStr = remStr.Substring(0, parenEnd);
+					remStr = remStr.Substring(parenEnd+1);
+					dbMsg += "," + parenStart + "～" + parenEnd ;
+					dbMsg += "," + beforeStr + "　と　" + valStr + "　と　" + remStr;
+					try {
+						System.Data.DataTable dt = new System.Data.DataTable();
+						var pVal = dt.Compute(valStr, "");
+						double secVal = 0;
+						if (double.TryParse(pVal.ToString(), out secVal)) {
+							double fRes = 0;
+							if (funkName.Equals(PowerStr)) {
+								fRes = Math.Pow(secVal, 2);
+							} else if (funkName.Equals(SqrtStr)) {
+								fRes = Math.Sqrt(secVal);
+							}
+							valStr = fRes.ToString();
+						}
+					} catch (Exception er) {
+						MyErrorLog(TAG, dbMsg, er);
+					}
+					inFunctionStr = beforeStr + valStr + remStr;
+					dbMsg += "結果::" + funkName;
 				}
-				dbMsg += "\r\n";
-#endif
-				dbMsg += "集計値＝" + ResultNow;
-				dbMsg += "優先範囲階層の深さ＝" + iValCount;
-				dbMsg += ",非関数=" + isParsonOnly;
-				aVal.Operater = ParenStr;
-				//if (1 == iValCount && isParsonOnly) {
-				//	dbMsg += ">関数ではない>積算に置き換え";
-				//	aVal.Operater = MultiplyStr;
-				//}
-				aVal.Value = ResultNow;
-				dbMsg += aVal.Operater + aVal.Value;
-#if DEBUG
-				dbMsg += "\r\n処理後＝";
-				foreach (BeforeVal iVal in BeforeVals) {
-					string iOperater = iVal.Operater;
-					double? iValue = iVal.Value;
-					dbMsg += "" + iOperater + iValue;
-				}
-#endif
+				CalcResult.Content = valStr.ToString();
+				ProcessVal = double.Parse((string)CalcResult.Content);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-			return aVal;
 		}
+
+		private string FunctionCalcBody(string pStr) {
+			string TAG = "FunctionCalcBody";
+			string dbMsg = "";
+			string retStr = "";
+			try {
+				dbMsg = "," + pStr;
+				int valStart = pStr.IndexOf(ParenStr);
+				string valStr = pStr.Substring(valStart, pStr.Length - 2);
+
+				if (pStr.StartsWith(PowerStr)) {
+
+				} else if (pStr.StartsWith(PowerStr)) {
+				}
+
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retStr;
+		}
+
 
 		/// <summary>
 		/// 再計算
@@ -817,6 +893,9 @@ namespace CS_Calculator{
 					dbMsg += ">>四則演算処理:";
 					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
+					}else if(PFAOStr.Contains(PowerStr) ||
+								PFAOStr.Contains(SqrtStr)) {
+						FunctionCalc(PFAOStr);
 					} else {
 						try {
 							//式を計算する .NET5?
@@ -1283,47 +1362,31 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
-		///階乗 ^n
+		///累乗 ^n
 		/// </summary>
-		private void PowerFunc() {
-			string TAG = "Power";
-			string dbMsg = "階乗:作成中";
+		private void PowerFunc(object sender, RoutedEventArgs e) {
+			string TAG = "PowerFunc";
+			string dbMsg = "累乗";
 			try {
-				string NextOperation = PowerStr;
+				OperaterInput(PowerStr);          //Math.Pow
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		/// <summary>
-		///階乗 ^n
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void PowerBt_Click(object sender, RoutedEventArgs e) {
-			PowerFunc();
-		}
+			
 		/// <summary>
 		/// 平方根 ^1/n
 		/// </summary>
-		private void SqrtFunc() {
-			string TAG = "Power";
-			string dbMsg = "平方根:作成中";
+		private void SqrtFunc(object sender, RoutedEventArgs e) {
+			string TAG = "SqrtFunc";
+			string dbMsg = "平方根";
 			try {
-				string NextOperation = SqrtStr;
+				OperaterInput(SqrtStr);             //Math.Sqrt(
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-		}
-
-		/// <summary>
-		/// 平方根　
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>　^0.5
-		private void SqrtBt_Click(object sender, RoutedEventArgs e) {
-			SqrtFunc();
 		}
 
 		/// <summary>
@@ -1402,8 +1465,6 @@ namespace CS_Calculator{
 
 		private void OperaterInput(string operaterStr) {
 			ProcessedFunc(operaterStr);
-			//前に負数が有れば格納後に負数対応解除
-		//	isMinus = false;
 		}
 
 		/// <summary>
@@ -1415,7 +1476,6 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				dbMsg += ",現在=" + InputStr;
-		//		 ReCalk();
 				dbMsg += ",ここまでの入力=" + NowOperations.Text+",配列格納=" + ValsLog(BeforeVals) +"="	+ProcessVal;
 				if (BeforeVals.Count < 1 ) {
 					dbMsg += ",最初の値が無い";
@@ -1426,8 +1486,6 @@ namespace CS_Calculator{
 						MyLog(TAG, dbMsg);
 						OperaterInput(DivideStr);
 					}
-				//} else if (ProcessVal == 0) {
-				//	MessageBox.Show("ここまでの演算結果が0になっています。0は除算できません");
 				} else {
 					dbMsg += ">>通常登録";
 					MyLog(TAG, dbMsg);
@@ -1445,6 +1503,7 @@ namespace CS_Calculator{
 		{
 			OperaterInput(AddStr);
 		}
+
 		/// <summary>
 		/// 加算
 		/// </summary>
@@ -1457,8 +1516,8 @@ namespace CS_Calculator{
 				}
 			}
 			OperaterInput(AddStr);
-			//	PlusFunc();
 		}
+
 		/// <summary>
 		/// 減算
 		/// </summary>
@@ -1477,30 +1536,14 @@ namespace CS_Calculator{
 					BeforeVals.Add(bInput);
 					dbMsg += "[" + BeforeVals.Count + "件目]";
 				}
-				//		string testStr = NowOperations.Text.Substring;
 				OperaterInput(SubtractStr);
 				isMinus = true;
-				////int beforeValsCount = BeforeVals.Count;
-				////if(0< beforeValsCount) {
-				////	BeforeVal bInput = new BeforeVal();
-				////	bInput.Operater = BeforeOperation;
-				////	double secVal = 0;
-				////	if (double.TryParse(InputStr, out secVal)) {
-				////		bInput.Value = secVal;
-				////		InputStr = "";
-				////	}
-				////	dbMsg += ",前の値を格納"+ bInput.Operater+ bInput.Value;
-				////	BeforeVals.Add(bInput);
-				////	dbMsg += "[" + BeforeVals.Count +"件目]";
-				////}
-				////再計算実行までの一時表示
-				//NowOperations.Text += SubtractStr;
-		//		ReCalk();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
 		/// <summary>
 		/// 減算
 		/// </summary>
@@ -1514,6 +1557,7 @@ namespace CS_Calculator{
 			}
 			MinusFunc();
 		}
+
 		/// <summary>
 		/// 積算
 		/// </summary>
@@ -1780,7 +1824,6 @@ namespace CS_Calculator{
 				if (CalcProgress.IsVisible){
 					dbMsg = "非表示";
 					CorpProgress();
-		//			ProcessVal = ReCalk();
 				} else {
 					dbMsg = "表示";
 					KeyGrid.Visibility = Visibility.Collapsed;
@@ -1788,9 +1831,7 @@ namespace CS_Calculator{
 					CorpBt.Content = "△";
 				}
 				MyLog(TAG, dbMsg);
-			}
-			catch (Exception er)
-			{
+			}catch (Exception er){
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
@@ -1804,17 +1845,16 @@ namespace CS_Calculator{
 			KeyGrid.Visibility = Visibility.Visible;
 			CorpBt.Content = "▼";
 			EnterBt.Focus();
-		//	ProcessVal = ReCalk();
 		}
-		private void DataGridTextColumn_Opened(object sender, RoutedEventArgs e) {
-			string TAG = "DataGridTextColumn_Opened";
-			string dbMsg = "";
-			try {
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//private void DataGridTextColumn_Opened(object sender, RoutedEventArgs e) {
+		//	string TAG = "DataGridTextColumn_Opened";
+		//	string dbMsg = "";
+		//	try {
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		/// <summary>
 		/// 経過に記録されたアイテムを分割する
@@ -1860,7 +1900,6 @@ namespace CS_Calculator{
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
-
 		}
 
 		private void ProgressItemDelete(object sender, RoutedEventArgs e) {
@@ -1881,8 +1920,23 @@ namespace CS_Calculator{
 					CalcProgress.ItemsSource = BeforeVals;
 					CalcProgress.Items.Refresh();
 					ReCalk();
-				//	CalcResult.Content = ProcessVal;
 				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// 四則演算の優先順位で計算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void ChangeToPO(object sender, RoutedEventArgs e) {
+			string TAG = "ChangeToPO";
+			string dbMsg = "";
+			try {
+				IsPO = SetOperationPriority(true);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -1894,17 +1948,15 @@ namespace CS_Calculator{
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void PriorityCalcOperation(object sender, RoutedEventArgs e) {
-			IsPO = SetOperationPriority(false);
-		}
-
-		/// <summary>
-		/// 四則演算の優先順位で計算
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void PriorityFourArithmeticOperation(object sender, RoutedEventArgs e) {
-			IsPO= SetOperationPriority(true);
+		private void ChangeToCalculator(object sender, RoutedEventArgs e) {
+			string TAG = "ChangeToCalculator";
+			string dbMsg = "";
+			try {
+				IsPO = SetOperationPriority(false);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		/// <summary>
@@ -1917,17 +1969,22 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				IsPO = retBool;
-				PCOMenu.IsEnabled = false;
-				PFAOMenu.IsEnabled = false;
+				//メニューをすべて非表示
+				PCOMenu.Visibility = Visibility.Collapsed;
+				PFAOMenu.Visibility = Visibility.Collapsed;
+				TBMenuSeparator.Visibility = Visibility.Collapsed;
+				TBMenuFunc.Visibility = Visibility.Collapsed;
+				//状況に見合うメニューだけを表示
 				if (retBool) {
-					dbMsg += "四則演算の優先順位で計算 に切替";
-					PCOMenu.IsEnabled = true;
+					dbMsg += "数式入力 に切替";
+					PCOMenu.Visibility = Visibility.Visible;
+					TBMenuSeparator.Visibility = Visibility.Visible;
+					TBMenuFunc.Visibility = Visibility.Visible;
 				} else {
 					dbMsg += "電卓処理 に切替";
-					PFAOMenu.IsEnabled = true;
+					PFAOMenu.Visibility = Visibility.Visible;
 				}
 				ReCalk();
-	//			CalcResult.Content = ProcessVal;
 				dbMsg += "、 retBool＝" + retBool;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -2046,41 +2103,6 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-		/// <summary>
-		/// 四則演算の優先順位で計算
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ChangeToPO(object sender, RoutedEventArgs e) {
-			string TAG = "ChangeToPO";
-			string dbMsg = "";
-			try {
-				IsPO = true;
-				ReCalk();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
-		/// <summary>
-		/// 電卓処理：現在の結果に次の演算
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ChangeToCalculator(object sender, RoutedEventArgs e) {
-			string TAG = "ChangeToCalculator";
-			string dbMsg = "";
-			try {
-				IsPO = false;
-				ReCalk();
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
-
 		/// <summary>
 		/// マウス右クリック
 		/// </summary>

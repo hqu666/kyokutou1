@@ -187,6 +187,7 @@ namespace CS_Calculator
 				calculatorControl = new CS_CalculatorControl();
 				calculatorControl.TargetTextBox = this.TargetTextBox;
 				calculatorControl.OperatKey = this.OperatKey;
+				calculatorControl.IsPO = false;
 
 				double number;
 				if (double.TryParse(TargetTextBox.Text, out number)) {

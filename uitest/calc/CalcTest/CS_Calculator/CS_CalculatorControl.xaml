@@ -149,6 +149,7 @@
 						FontSize="10"
 						Margin="0"
 						Padding="0" 
+						TextWrapping="Wrap"
 						IsReadOnly="True" 
 						BorderThickness="0" 
 						TextAlignment="Right" Background="{x:Null}" 
@@ -264,18 +265,6 @@
 					Template="{StaticResource FuncButton}" 
 					Click="ParenthesisBt_Click"
 					 />
-				<!--<Button x:Name="PowerBt" Content="X²" 
-					FontSize="9" 
-					Grid.Row="0" Grid.Column="4"
-					Template="{StaticResource FuncButton}" 
-					Click="PowerBt_Click"
-					/>
-				<Button x:Name="SqrtBt" Content="²√ｘ" 
-					Grid.Row="0" Grid.Column="5"
-					FontSize="8" 
-					Template="{StaticResource FuncButton}" 
-					Click="SqrtBt_Click"
-					 />-->
 				<ToggleButton 
 					x:Name="FunkBt" 
 					Grid.Row="0" Grid.Column="4" 
@@ -292,12 +281,12 @@
 						<ContextMenu>
 							<MenuItem x:Name="PFAOMenu" Header="数式入力" Click="ChangeToPO"/>
 							<MenuItem x:Name="PCOMenu" Header="電卓処理" Click="ChangeToCalculator"/>
+							<Separator x:Name="TBMenuSeparator" />
+							<MenuItem  x:Name="TBMenuFunc" Header="関数">
+								<MenuItem  Header="X²" Click="PowerFunc"/>
+								<MenuItem Header="²√ｘ" Click="SqrtFunc"/>
+							</MenuItem>
 						</ContextMenu>
-						<!--
-													<Separator />
-							<MenuItem Header="Exit" />
-						-->
-
 					</ToggleButton.ContextMenu>
 					<WrapPanel Margin="0,0">
 						<TextBlock Text="func"/>
