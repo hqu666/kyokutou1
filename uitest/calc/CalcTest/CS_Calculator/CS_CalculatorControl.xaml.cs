@@ -1035,6 +1035,46 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
+		/// 優先範囲の開始記号に対する終了記号の数をチェックし修正して戻す
+		/// </summary>
+		/// <param name="pStr">検査対象とする文字数</param>
+		/// <returns>pStr</returns>
+		private string CheckParenBalance(string pStr) {
+			string TAG = "CheckParenBalance";
+			string dbMsg = "";
+			string retStr = "";
+			try {
+				string remStr = pStr;
+				int startCount = 0;
+				int endCount = 0;
+				dbMsg += "、" + pStr;
+				int startIndex = pStr.IndexOf(ParenStr);
+				int endIndex = pStr.LastIndexOf(ParenthesisStr);
+				while (startIndex != -1 && endIndex != -1) {
+					startCount++;
+					remStr = remStr.Remove(0, startIndex);
+					endIndex = remStr.LastIndexOf(ParenthesisStr);
+					if(-1< endIndex) {
+						endCount++;
+					}
+					startIndex = remStr.IndexOf(ParenStr);
+				}
+				dbMsg += "、開始=" + startCount+"/終了=" + endCount;
+				if(startCount< endCount) {
+					pStr = pStr.Replace(ParenthesisStr,"");
+				} else if (endCount< startCount) {
+					pStr = pStr.Replace(ParenStr, "");
+				}
+
+				dbMsg += ">>" + pStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retStr;
+		}
+
+		/// <summary>
 		/// 文字列で渡された数式から優先計算範囲が無くなるまで処理
 		/// </summary>
 		/// <param name="pStr"></param>
@@ -1072,21 +1112,25 @@ namespace CS_Calculator{
 					double JudgeVal = 0;
 					if (double.TryParse(calcStr, out JudgeVal)) {
 						dbMsg += ">一値になった";
-						if (beforeStr.EndsWith(ParenStr) && remStr.StartsWith(ParenthesisStr)) {
-							dbMsg += ">優先範囲内";
-							beforeStr = beforeStr.Substring(0, beforeStr.Length-2) ;
-							if(!beforeStr.EndsWith(MultiplyStr)) {
-								beforeStr +=  MultiplyStr;
-							}
-							if(remStr.StartsWith(ParenthesisStr)) {
-								remStr = remStr.Remove(0, 1);
+						if (remStr.StartsWith(ParenthesisStr)) {
+							dbMsg += ">優先範囲終了削除";
+							remStr = remStr.Remove(0, 1);
+							if (beforeStr.EndsWith(ParenStr)) {
+								dbMsg += ">優先範囲開始削除";
+								beforeStr = beforeStr.Remove(beforeStr.Length - 1);
+								//beforeStr = beforeStr.Substring(0, beforeStr.Length - 2);
+								//if (!beforeStr.EndsWith(MultiplyStr)) {
+								//	beforeStr += MultiplyStr;
+								//}
 							}
 						}
 					}
 					dbMsg += ">>" + beforeStr + " と " + calcStr + " と " + remStr;
 					inParenStr = beforeStr + calcStr + remStr;
 					dbMsg += "、範囲内計算後=" + inParenStr;
-					if(-1 < inParenStr.IndexOf(ParenStr)) {                         //1< pCount
+					if (-1 < inParenStr.IndexOf(ParenStr)) {                         //1< pCount
+						//inParenStr = CheckParenBalance(inParenStr);
+						//dbMsg += "、範囲数確認後=" + inParenStr;
 						dbMsg += ">優先範囲残り>再帰";
 						MyLog(TAG, dbMsg);
 						StrInParenCalc(inParenStr);
