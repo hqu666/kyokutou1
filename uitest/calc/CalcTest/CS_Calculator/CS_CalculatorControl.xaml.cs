@@ -142,8 +142,8 @@ namespace CS_Calculator{
 		private static string ParenthesisStr = ")";
 	
 		private static string PowerStr = "Pow(";       // "^";
-		private static string SqrtStr = "SqrtStr(";       //"√";
-		private static string[] functions={PowerStr,SqrtStr};
+		private static string SqrtStr = "Sqrt(";       //"√";
+		private static string[]Functions={PowerStr,SqrtStr};
 
 		public Key OperatKey;
 
@@ -451,6 +451,9 @@ namespace CS_Calculator{
 				NowInput.Operater = NextOperation;
 				dbMsg += ",前の演算子=" + BeforeOperation;
 				bool isReCalk = false;
+				//if (0==BeforeVals.Count && NextOperation.EndsWith(ParenStr)) {
+				//	dbMsg += "最初が関数の場合";
+				//} else 
 				if (!InputStr.Equals("") ) {
 					if (isMinus) {
 						dbMsg += ">>負数化";
@@ -492,9 +495,6 @@ namespace CS_Calculator{
 							dbMsg += ",>>" + BeforeVals[bIndex].Operater + BeforeVals[bIndex].Value;
 							InputStr = "";
 							isReCalk = true;
-							//ReCalk();			//0420;演算子-の後で再計算させる
-						//}else if(bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
-						//	dbMsg += "値に続く関数の開始";
 						} else {
 							//演算値が有れば配列格納
 							double InputValue = Double.Parse(InputStr);
@@ -520,12 +520,14 @@ namespace CS_Calculator{
 						NowInput.Value = null;
 						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 						BeforeVals.Add(NowInput);
+						isReCalk = true;
 					}
 				} else if (NextOperation.Equals(ParenthesisStr)) {
 					dbMsg += ",値無しの優先終了";
 					NowInput.Value = null;
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
+					isReCalk = true;
 				} else if (NextOperation.Equals(ParenStr)) {
 					dbMsg += ",優先開始";
 					NowInput.Value = null;
@@ -534,15 +536,22 @@ namespace CS_Calculator{
 					InputStr = "";
 				} else if (NextOperation.EndsWith(ParenStr)) {
 					dbMsg += ",関数の場合";
-					NowInput = new BeforeVal();
-					NowInput.Operater = BeforeOperation;
-					NowInput.Value = null;
-					dbMsg += ">>前の値を格納=" + NowInput.Operater + " : " + NowInput.Value;
-					BeforeVals.Add(NowInput);
+					if (BeforeOperation.Equals("")) {
+						dbMsg += "::前の値無し；関数から始まる式";
+						dbMsg += ">>今回の値を格納=" + NowInput.Operater + " : " + NowInput.Value;
+						BeforeVals.Add(NowInput);
+					} else {
+						BeforeVal BeforeInput = new BeforeVal();
+						BeforeInput.Operater = BeforeOperation;
+						BeforeInput.Value = null;
+						dbMsg += ">>前の値を格納=" + BeforeInput.Operater + " : " + BeforeInput.Value;
+						BeforeVals.Add(BeforeInput);
+						NowOperations.Text += BeforeOperation;
+					}
 				} else {
 					dbMsg += ",入力無し：演算子から入力された";
 				}
-				dbMsg += "入力=" + NowOperations.Text + ">結果>配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal;
+				dbMsg += "入力=" + NowOperations.Text + ">結果>配列格納[" + BeforeVals.Count + "]" + ValsLog(BeforeVals) + "=" + ProcessVal + ";再計算" + isReCalk;
 				MyLog(TAG, dbMsg);
 				if (isReCalk) {
 					ReCalk();
@@ -555,8 +564,12 @@ namespace CS_Calculator{
 				}
 
 				ProgressRefresh();
-				if(NextOperation.Equals(ParenthesisStr)) {
+				if (NextOperation.Equals(ParenthesisStr)) {
 					BeforeOperation = "";
+	//				NowOperations.Text += NextOperation;
+				} else if (NextOperation.EndsWith(ParenStr)) {
+					BeforeOperation = "";
+					NowOperations.Text += NextOperation;
 				} else {
 					BeforeOperation = NextOperation;
 					//Parenthesis以外は配列格納が次回になるので補完して終わる
@@ -680,28 +693,34 @@ namespace CS_Calculator{
 			try {
 				string valStr = "0";
 				dbMsg += "," + inFunctionStr;
-				while(0< inFunctionStr.Length) {
-					int powerStart = inFunctionStr.LastIndexOf(PowerStr);
-					int SqrtStart = inFunctionStr.LastIndexOf(SqrtStr);
-					dbMsg += ",二乗" + powerStart + "、平方根" + SqrtStart;
+				string beforeStr = inFunctionStr;
+				string remStr = inFunctionStr;
+				while (0< beforeStr.Length ||0 < remStr.Length) {
+					dbMsg += "\r\n" + beforeStr.Length + "文字中";
+					int funcStart = -1;
 					string funkName = "";
-					string beforeStr = "";
-					if (powerStart < SqrtStart) {
-						funkName = SqrtStr;
-						beforeStr = inFunctionStr.Substring(0, SqrtStart);
-					} else if ( SqrtStart< powerStart) {
-						funkName = PowerStr;
-						beforeStr = inFunctionStr.Substring(0, powerStart);
-					} else if (-1==SqrtStart && -1== powerStart) {
-						dbMsg += ">>関数無し";
+					beforeStr = "";
+					foreach (string fName in Functions) {
+						funcStart = inFunctionStr.LastIndexOf(fName);
+						if(-1< funcStart) {
+							funkName = fName;
+							beforeStr = inFunctionStr.Substring(0, funcStart);
+							break;
+						}
 					}
 					dbMsg += ",計算対象" + funkName;
 					int parenStart = inFunctionStr.LastIndexOf(ParenStr);
-					string remStr = inFunctionStr.Substring(parenStart+1);
+					//ParenStr無しで-1で先頭から最後までが代入される
+					remStr = inFunctionStr.Substring(parenStart+1);
 					int parenEnd = remStr.IndexOf(ParenthesisStr);
-					valStr = remStr.Substring(0, parenEnd);
-					remStr = remStr.Substring(parenEnd+1);
-					dbMsg += "," + parenStart + "～" + parenEnd ;
+					dbMsg += "," + parenStart + "～" + parenEnd;
+					if (-1< parenEnd) {
+						valStr = remStr.Substring(0, parenEnd);
+						remStr = remStr.Substring(parenEnd + 1);
+					}else{
+						valStr = remStr;
+						remStr = "";
+					}
 					dbMsg += "," + beforeStr + "　と　" + valStr + "　と　" + remStr;
 					try {
 						System.Data.DataTable dt = new System.Data.DataTable();
@@ -713,6 +732,9 @@ namespace CS_Calculator{
 								fRes = Math.Pow(secVal, 2);
 							} else if (funkName.Equals(SqrtStr)) {
 								fRes = Math.Sqrt(secVal);
+							} else if (funkName.Equals("")) {
+								dbMsg += ">>関数無し";
+								fRes = secVal;
 							}
 							valStr = fRes.ToString();
 						}
@@ -1594,6 +1616,7 @@ namespace CS_Calculator{
 		}
 		private void ClearAllBt_Click(object sender, RoutedEventArgs e)
 		{
+			InputStr = "";
 			Initialize();
 		}
 
