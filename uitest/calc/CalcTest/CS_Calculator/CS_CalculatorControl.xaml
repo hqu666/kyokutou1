@@ -280,11 +280,22 @@
 					<ToggleButton.ContextMenu>
 						<ContextMenu>
 							<MenuItem x:Name="PFAOMenu" Header="数式入力" Click="ChangeToPO"/>
-							<MenuItem x:Name="PCOMenu" Header="電卓処理" Click="ChangeToCalculator"/>
+							<MenuItem x:Name="PCOMenu" Header="電卓処理に戻す" Click="ChangeToCalculator"/>
 							<Separator x:Name="TBMenuSeparator" />
 							<MenuItem  x:Name="TBMenuFunc" Header="関数">
-								<MenuItem  Header="X²" Click="PowerFunc"/>
-								<MenuItem Header="²√ｘ" Click="SqrtFunc"/>
+								<MenuItem  Header="X²  :Pow" Click="PowerFunc"/>
+								<MenuItem Header="²√ｘ ;Squrt" Click="SqrtFunc"/>
+								<MenuItem Header="三角関数">
+									<MenuItem  Header="sin  :Sin" Click="SinFunc"/>
+									<MenuItem Header="cos ;Cos" Click="CosFunc"/>
+									<MenuItem  Header="tan  :Tan" Click="TanFunc"/>
+									<MenuItem  Header="sin⁻¹ :Asin" Click="AsinrFunc"/>
+									<MenuItem Header="cos⁻¹ ;Acos" Click="AcosFunc"/>
+									<MenuItem  Header="tan⁻¹  :Atan" Click="AtanFunc"/>
+								</MenuItem>
+								<MenuItem Header="定数">
+									<MenuItem Header="π      ;PI" Click="PIFunc"/>
+								</MenuItem>
 							</MenuItem>
 						</ContextMenu>
 					</ToggleButton.ContextMenu>

@@ -143,7 +143,14 @@ namespace CS_Calculator{
 	
 		private static string PowerStr = "Pow(";       // "^";
 		private static string SqrtStr = "Sqrt(";       //"√";
-		private static string[]Functions={PowerStr,SqrtStr};
+		private static string SinStr = "Sin(";             //Math.Sin(
+		private static string CosStr = "Cos(";             //Math.Cos(
+		private static string TanStr = "Tan(";             //Math.Tan(
+		private static string AsinStr = "Asin(";             //Math.Asin(
+		private static string AcosStr = "Acos(";             //Math.Acos(
+		private static string AtanStr = "Atan(";             //Math.Atan(
+		private static string[]Functions={PowerStr,SqrtStr, SinStr , CosStr , TanStr , AsinStr, AcosStr , AtanStr };
+		private static string PiStr = "PI";             //Math.PI :定数
 
 		public Key OperatKey;
 
@@ -547,7 +554,7 @@ namespace CS_Calculator{
 						dbMsg += ">>前の値を格納=" + BeforeInput.Operater + " : " + BeforeInput.Value;
 						BeforeVals.Add(BeforeInput);
 
-						NowOperations.Text += BeforeOperation;
+			//			NowOperations.Text += BeforeOperation;
 						NowInput.Value = null;
 						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 						BeforeVals.Add(NowInput);
@@ -740,6 +747,18 @@ namespace CS_Calculator{
 								fRes = Math.Pow(secVal, 2);
 							} else if (funkName.Equals(SqrtStr)) {
 								fRes = Math.Sqrt(secVal);
+							} else if (funkName.Equals(SinStr)) {
+								fRes = Math.Sin(secVal);
+							} else if (funkName.Equals(CosStr)) {
+								fRes = Math.Cos(secVal);
+							} else if (funkName.Equals(TanStr)) {
+								fRes = Math.Tan(secVal);
+							} else if (funkName.Equals(AsinStr)) {
+								fRes = Math.Asin(secVal);
+							} else if (funkName.Equals(AcosStr)) {
+								fRes = Math.Acos(secVal);
+							} else if (funkName.Equals(AtanStr)) {
+								fRes = Math.Atan(secVal);
 							} else if (funkName.Equals("")) {
 								dbMsg += ">>関数無し";
 								fRes = secVal;
@@ -900,6 +919,10 @@ namespace CS_Calculator{
 				for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
 					PFAOStr += ParenthesisStr;
 				}
+				//if(PFAOStr.Contains(PiStr)) {
+				//	string piStr = Math.PI.ToString();
+				//	PFAOStr = PFAOStr.Replace(PiStr, piStr);
+				//}
 				dbMsg += ">優先範囲終端補完後>" + PFAOStr;
 				if (IsPO) {
 					dbMsg += ">>四則演算処理:";
@@ -1401,6 +1424,72 @@ namespace CS_Calculator{
 			}
 		}
 
+		private void SinFunc(object sender, RoutedEventArgs e) {
+			string TAG = "SinFunc";
+			string dbMsg = "Sin";
+			try {
+				OperaterInput(SinStr);             //Math.Sin(
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void CosFunc(object sender, RoutedEventArgs e) {
+			string TAG = "CosFunc";
+			string dbMsg = "Cos";
+			try {
+				OperaterInput(CosStr);             //Math.Cos(
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void TanFunc(object sender, RoutedEventArgs e) {
+			string TAG = "TanFunc";
+			string dbMsg = "Tan";
+			try {
+				OperaterInput(TanStr);             //Math.Tan(
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void AsinrFunc(object sender, RoutedEventArgs e) {
+			string TAG = "AsinrFunc";
+			string dbMsg = "Asin";
+			try {
+				OperaterInput(AsinStr);             //Math.Asin(
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void AcosFunc(object sender, RoutedEventArgs e) {
+			string TAG = "AsinrFunc";
+			string dbMsg = "Acos";
+			try {
+				OperaterInput(AsinStr);             //Math.Acos(
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void AtanFunc(object sender, RoutedEventArgs e) {
+			string TAG = "AsinrFunc";
+			string dbMsg = "Atan";
+			try {
+				OperaterInput(AtanStr);             //Math.Atan(
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		/// <summary>
 		/// 優先範囲開始の設定
 		/// </summary>
@@ -1614,6 +1703,20 @@ namespace CS_Calculator{
 		private void NumInput(string inputStr) {
 			InputStr += inputStr;
 			NowOperations.Text += inputStr;
+		}
+		private void PIFunc(object sender, RoutedEventArgs e) {
+			string TAG = "PIFunc";
+			string dbMsg = "π";
+			try {
+				//if (PFAOStr.Contains(PiStr)) {
+				string piStr = Math.PI.ToString();
+				//	PFAOStr = PFAOStr.Replace(PiStr, piStr);
+				//}
+				NumInput(piStr);
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		/// <summary>
