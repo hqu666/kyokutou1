@@ -546,7 +546,11 @@ namespace CS_Calculator{
 						BeforeInput.Value = null;
 						dbMsg += ">>前の値を格納=" + BeforeInput.Operater + " : " + BeforeInput.Value;
 						BeforeVals.Add(BeforeInput);
+
 						NowOperations.Text += BeforeOperation;
+						NowInput.Value = null;
+						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+						BeforeVals.Add(NowInput);
 					}
 				} else {
 					dbMsg += ",入力無し：演算子から入力された";
@@ -687,8 +691,12 @@ namespace CS_Calculator{
 				}
 		*/
 
+		/// <summary>
+		/// 関数から計算して最終値になるまでループする
+		/// </summary>
+		/// <param name="inFunctionStr"></param>
 		private void FunctionCalc(string inFunctionStr) {
-			string TAG = "CalculatorCalc";
+			string TAG = "FunctionCalc";
 			string dbMsg = "";
 			try {
 				string valStr = "0";
@@ -751,27 +759,6 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-		private string FunctionCalcBody(string pStr) {
-			string TAG = "FunctionCalcBody";
-			string dbMsg = "";
-			string retStr = "";
-			try {
-				dbMsg = "," + pStr;
-				int valStart = pStr.IndexOf(ParenStr);
-				string valStr = pStr.Substring(valStart, pStr.Length - 2);
-
-				if (pStr.StartsWith(PowerStr)) {
-
-				} else if (pStr.StartsWith(PowerStr)) {
-				}
-
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-			return retStr;
-		}
-
 
 		/// <summary>
 		/// 再計算
