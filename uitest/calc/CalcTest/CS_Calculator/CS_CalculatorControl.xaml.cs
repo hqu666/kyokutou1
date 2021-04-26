@@ -924,12 +924,19 @@ namespace CS_Calculator{
 				//	PFAOStr = PFAOStr.Replace(PiStr, piStr);
 				//}
 				dbMsg += ">優先範囲終端補完後>" + PFAOStr;
+				bool isFunc = false;
+				foreach (string fName in Functions) {
+					if(PFAOStr.Contains(fName)) {
+						isFunc = true;
+						dbMsg += ">>関数を含む:";
+					}
+				}
+
 				if (IsPO) {
 					dbMsg += ">>四則演算処理:";
 					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
-					}else if(PFAOStr.Contains(PowerStr) ||
-								PFAOStr.Contains(SqrtStr)) {
+					}else if(isFunc) {
 						FunctionCalc(PFAOStr);
 					} else {
 						try {
