@@ -140,7 +140,8 @@ namespace CS_Calculator{
 		private static string MultiplyStr = "*";
 		private static string ParenStr = "(";
 		private static string ParenthesisStr = ")";
-	
+		private static string[] MyOperaters = { AddStr, SubtractStr, DivideStr, MultiplyStr, ParenStr, ParenthesisStr };
+
 		private static string PowerStr = "Pow(";       // "^";
 		private static string SqrtStr = "Sqrt(";       //"√";
 		private static string SinStr = "Sin(";             //Math.Sin(
@@ -780,6 +781,71 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
+		/// このアプリ内で使える演算子と関数ならtrue
+		/// </summary>
+		/// <param name="operaterStr"></param>
+		private bool IsMyOperater(string operaterStr) {
+			string TAG = "IsMyOperater";
+			string dbMsg = "";
+			bool retBool = false;
+			try {
+				bool isFunc = false;
+				dbMsg += ",検査対象=" + operaterStr;
+				foreach (string fName in Functions) {
+					if (operaterStr.Contains(fName)) {
+						dbMsg += ">>関数:" + fName + "を含む:";
+						isFunc = true;
+						operaterStr = operaterStr.Replace(fName,"");
+					}
+				}
+				string repStr = "";
+				if(!isFunc) {
+					if(operaterStr.Contains(ParenStr)) {
+						dbMsg += ">>" + ParenStr  ;
+						repStr = operaterStr.Replace(ParenStr, "");
+						if (0 == repStr.Length) {
+							dbMsg += "のみ含む:"; 
+						}else{
+							dbMsg += "も含む:";
+							operaterStr = repStr;
+						}
+					}
+				}
+				repStr = "";
+				if (operaterStr.Contains(ParenthesisStr)) {
+					dbMsg += ">>" + ParenthesisStr;
+					repStr = operaterStr.Replace(ParenthesisStr, "");
+					if (0 == repStr.Length) {
+						dbMsg += "のみ含む:"; ;
+					} else {
+						dbMsg += "も含む:";
+						operaterStr = repStr;
+					}
+				}
+
+				dbMsg += ",残り=" + operaterStr;
+				retBool = false;
+				foreach (string oName in MyOperaters) {
+					if (operaterStr.Equals(oName)) {
+						dbMsg += ">>演算子:" + oName  ;
+						retBool = true;
+					}
+				}
+				if(!retBool) {
+					if (isFunc) {
+						dbMsg += "関数のみ含む:"; ;
+						retBool = true;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
+
+		/// <summary>
 		/// 再計算
 		///  : Deleteなど追加する演算が無ければ演算子は"",値は0を指定して下さい
 		/// </summary>
@@ -1319,10 +1385,13 @@ namespace CS_Calculator{
 				//BeforeVals[selectedIndex].Value = selectedItem.Value;
 
 				if (fieldName.Equals("Operater")) {
-						if (eValue.Equals(AddStr) ||
-							eValue.Equals(SubtractStr) ||
-							eValue.Equals(DivideStr) ||
-							eValue.Equals(MultiplyStr)) {
+						if (
+						//eValue.Equals(AddStr) ||
+						//	eValue.Equals(SubtractStr) ||
+						//	eValue.Equals(DivideStr) ||
+						//	eValue.Equals(MultiplyStr) ||
+							IsMyOperater(eValue)
+							) {
 							dbMsg += ",問題無し";
 							ProgressEdit(selectedIndex, fieldName, eValue);
 						} else {
