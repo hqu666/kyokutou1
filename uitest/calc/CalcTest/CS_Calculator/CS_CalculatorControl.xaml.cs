@@ -150,8 +150,10 @@ namespace CS_Calculator{
 		private static string AsinStr = "Asin(";             //Math.Asin(
 		private static string AcosStr = "Acos(";             //Math.Acos(
 		private static string AtanStr = "Atan(";             //Math.Atan(
-		private static string[]Functions={PowerStr,SqrtStr, SinStr , CosStr , TanStr , AsinStr, AcosStr , AtanStr };
+		private static string[]MyFunctions={PowerStr,SqrtStr, SinStr , CosStr , TanStr , AsinStr, AcosStr , AtanStr };
+	
 		private static string PiStr = "PI";             //Math.PI :定数
+		private static string[] MyConstants = { PiStr };
 
 		public Key OperatKey;
 
@@ -510,6 +512,7 @@ namespace CS_Calculator{
 							NowInput.Value = InputValue;
 							dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
 							BeforeVals.Add(NowInput);
+							InputStr = "";				//0428
 							dbMsg += ",演算前=" + ProcessVal;
 							if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
 								//演算子が無ければそのまま格納
@@ -716,7 +719,7 @@ namespace CS_Calculator{
 					int funcStart = -1;
 					string funkName = "";
 					beforeStr = "";
-					foreach (string fName in Functions) {
+					foreach (string fName in MyFunctions) {
 						funcStart = inFunctionStr.LastIndexOf(fName);
 						if(-1< funcStart) {
 							funkName = fName;
@@ -791,7 +794,7 @@ namespace CS_Calculator{
 			try {
 				bool isFunc = false;
 				dbMsg += ",検査対象=" + operaterStr;
-				foreach (string fName in Functions) {
+				foreach (string fName in MyFunctions) {
 					if (operaterStr.Contains(fName)) {
 						dbMsg += ">>関数:" + fName + "を含む:";
 						isFunc = true;
@@ -834,6 +837,38 @@ namespace CS_Calculator{
 				if(!retBool) {
 					if (isFunc) {
 						dbMsg += "関数のみ含む:"; ;
+						retBool = true;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
+		/// <summary>
+		/// 定数を含め数値として扱えればtrue
+		/// </summary>
+		/// <param name="valueStr"></param>
+		/// <returns></returns>
+		private bool IsMyValue(string valueStr) {
+			string TAG = "IsMyValue";
+			string dbMsg = "";
+			bool retBool = false;
+			try {
+				dbMsg += ",検査対象=" + valueStr;
+				foreach (string vName in MyFunctions) {
+					if (valueStr.Contains(vName)) {
+						dbMsg += ">>定数:" + vName + "を含む:";
+						retBool = true;
+					}
+				}
+				if (!retBool) {
+					double number;
+					if (double.TryParse(valueStr, out number)) {
+						dbMsg += ",入力の変換結果=" + number;
+						dbMsg += "数値のみ:";
 						retBool = true;
 					}
 				}
@@ -991,7 +1026,7 @@ namespace CS_Calculator{
 				//}
 				dbMsg += ">優先範囲終端補完後>" + PFAOStr;
 				bool isFunc = false;
-				foreach (string fName in Functions) {
+				foreach (string fName in MyFunctions) {
 					if(PFAOStr.Contains(fName)) {
 						isFunc = true;
 						dbMsg += ">>関数を含む:";
@@ -1381,17 +1416,9 @@ namespace CS_Calculator{
 					}
 					dbMsg += ">>" + fieldName;
 				}
-				//BeforeVals[selectedIndex].Operater= selectedItem.Operater;
-				//BeforeVals[selectedIndex].Value = selectedItem.Value;
 
 				if (fieldName.Equals("Operater")) {
-						if (
-						//eValue.Equals(AddStr) ||
-						//	eValue.Equals(SubtractStr) ||
-						//	eValue.Equals(DivideStr) ||
-						//	eValue.Equals(MultiplyStr) ||
-							IsMyOperater(eValue)
-							) {
+						if (IsMyOperater(eValue)) {
 							dbMsg += ",問題無し";
 							ProgressEdit(selectedIndex, fieldName, eValue);
 						} else {
@@ -1401,14 +1428,15 @@ namespace CS_Calculator{
 							MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 							IsPrgresEdit = false;
 							textEdit.Text = BeforeVals[selectedIndex].Operater.ToString();
-					//		CalcProcess.Focus();
-							return;
+							NowOperations.Focus();
+						return;
 						}
 					} else if (fieldName.Equals("Value")) {
-						double number;
-						if (double.TryParse(eValue, out number)) {
-							dbMsg += ",入力の変換結果=" + number;
-							dbMsg += ",問題無し";
+					//	double number;
+						if (IsMyValue(eValue)) {
+			//			if (double.TryParse(eValue, out number)) {
+					//		dbMsg += ",入力の変換結果=" + number;
+							dbMsg += ",問題無し"; 
 							ProgressEdit(selectedIndex, fieldName, eValue);
 						} else {
 							String msgStr = "数値以外が入力されています\r\n";
