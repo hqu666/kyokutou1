@@ -256,7 +256,7 @@ namespace CS_Calculator{
 						CalcResult.Content = ProcessVal.ToString();
 						BeforeVal NowInput = new BeforeVal();
 						NowInput.Operater = null;
-						NowInput.Value = frastVal;
+						NowInput.Value = InputStr;
 						BeforeVals.Add(NowInput);
 						InputStr = frastVal.ToString();
 					} else {
@@ -504,7 +504,7 @@ namespace CS_Calculator{
 						double secVal = 0;
 						if (double.TryParse(InputStr, out secVal)) {
 							//残りが負数を含む数値なら演算子無しと判定
-							NowInput.Value = secVal;
+							NowInput.Value = InputStr;
 							BeforeVals.Add(NowInput);
 							InputStr = "";
 							isMinus = false;
@@ -517,7 +517,7 @@ namespace CS_Calculator{
 						}
 					}else{
 						string bInputOperater = "";
-						double? bInputValue = null;
+						string bInputValue = null;
 						int bIndex = BeforeVals.Count - 1;
 						dbMsg += ",前の格納[" + bIndex + "]";
 						if (-1 < bIndex) {
@@ -533,22 +533,25 @@ namespace CS_Calculator{
 						}
 						if (bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
 							dbMsg += "値に続く関数、優先範囲の開始";
-							BeforeVals[bIndex].Value = double.Parse(InputStr);
+							BeforeVals[bIndex].Value = InputStr;
 							dbMsg += ",>>" + BeforeVals[bIndex].Operater + BeforeVals[bIndex].Value;
 							InputStr = "";
 							isReCalk = true;
 						} else {
 							//演算値が有れば配列格納
-							double InputValue = Double.Parse(InputStr);
 							NowInput.Operater = BeforeOperation; 
-							NowInput.Value = InputValue;
+							NowInput.Value = InputStr;
 							dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
 							BeforeVals.Add(NowInput);
 							InputStr = "";				//0428
 							dbMsg += ",演算前=" + ProcessVal;
 							if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
-								//演算子が無ければそのまま格納
-								ProcessVal = (double)BeforeVals[BeforeVals.Count - 1].Value;
+								double pVal;
+								string bStr = BeforeVals[BeforeVals.Count - 1].Value;
+								if (double.TryParse(bStr, out pVal)) {       //-1 == OpraterIndex(inParenStr)
+									//演算子が無ければそのまま格納
+									ProcessVal = pVal;
+								}
 								IsBegin = false;
 							} else {
 								isReCalk = true;
@@ -653,7 +656,8 @@ namespace CS_Calculator{
 					if (rcbeforeVal.Value == null) {
 						dbMsg += "；Valueが0";
 					} else {
-						bValue = (double)rcbeforeVal.Value;
+						if (double.TryParse(rcbeforeVal.Value, out bValue)) {
+						}
 						dbMsg += bValue;
 					}
 					if (bOperater.Equals("")) {
@@ -802,13 +806,11 @@ namespace CS_Calculator{
 					if(iOperater==null) {
 						iOperater = "";
 					}
-					double? iValue = iVal.Value;
-					if(iValue ==null) {
-						iValStr = "";
-					}else{
-						iValStr = iValue.ToString();
+					iValStr = iVal.Value;
+					if (iValStr.Equals(PiStr)) {
+						iValStr = Math.PI.ToString();
 					}
-					dbMsg += ":" + iOperater + iValue;
+					dbMsg += ":" + iOperater + iValStr;
 					if (!iOperater.Equals("")) {
 						NowOperations.Text += iOperater;
 						if (iOperater.EndsWith(ParenStr)) {
@@ -831,7 +833,7 @@ namespace CS_Calculator{
 						} else if(iOperater.Equals(ParenthesisStr)){
 							dbMsg += ">>Parenthesis側";
 							ParenthesisCount++;
-							if(iValue==null) {
+							if(iValStr == null && !iValStr.Equals("")) {
 								PFAOStr += iOperater;
 							}else{
 								PFAOStr += ")*";
@@ -840,8 +842,8 @@ namespace CS_Calculator{
 							PFAOStr += iOperater;
 						}
 					}
-					NowOperations.Text += iValue;
-					PFAOStr += iValue;
+					NowOperations.Text += iValStr;
+					PFAOStr += iValStr;
 				}
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
 				deficitParenthesis = iParenCount - ParenthesisCount;
@@ -855,10 +857,6 @@ namespace CS_Calculator{
 				for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
 					PFAOStr += ParenthesisStr;
 				}
-				//if(PFAOStr.Contains(PiStr)) {
-				//	string piStr = Math.PI.ToString();
-				//	PFAOStr = PFAOStr.Replace(PiStr, piStr);
-				//}
 				dbMsg += ">優先範囲終端補完後>" + PFAOStr;
 				bool isFunc = false;
 				foreach (string fName in MyFunctions) {
@@ -1152,7 +1150,7 @@ namespace CS_Calculator{
 				//DataGridの場合
 				CalcProgress.ItemsSource = BeforeVals;
 				CalcProgress.Items.Refresh();
-				int lastRow = CalcProgress.Items.Count - 1;             //書込み結果で取得＞だめならソースで＞ (BeforeVals.Count - 1);
+				int lastRow = CalcProgress.Items.Count - 1;             //書込み結果で取得＞だめならソースで＞
 				dbMsg += "、最終=" + lastRow;
 				if (-1 < lastRow) {
 					CalcProgress.ScrollIntoView(CalcProgress.Items.GetItemAt(lastRow));
@@ -1180,7 +1178,7 @@ namespace CS_Calculator{
 				if (fieldName.Equals("Operater")) {
 					BeforeVals[selectedIndex].Operater = eValue;
 				} else if (fieldName.Equals("Value")) {
-					BeforeVals[selectedIndex].Value = double.Parse(eValue);
+					BeforeVals[selectedIndex].Value = eValue;
 				}
 				dbMsg += ">>" + BeforeVals[selectedIndex].Operater + "=" + BeforeVals[selectedIndex].Value;
 				 ReCalk();
@@ -1742,10 +1740,10 @@ namespace CS_Calculator{
 			string dbMsg = "π";
 			try {
 				//if (PFAOStr.Contains(PiStr)) {
-				string piStr = Math.PI.ToString();
+		//		string piStr = Math.PI.ToString();
 				//	PFAOStr = PFAOStr.Replace(PiStr, piStr);
 				//}
-				NumInput(piStr);
+				NumInput(PiStr);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -2028,7 +2026,7 @@ namespace CS_Calculator{
 				dbMsg += "=" + insertValStr;
 				BeforeVal insertRecord = new BeforeVal();
 				insertRecord.Operater = AddStr;
-				insertRecord.Value = double.Parse(insertValStr);
+				insertRecord.Value = insertValStr;
 
 				string titolStr = "電卓；入力値の変更";
 				String msgStr = "["+ insertPosition + "番目]" + selectedValueString + "を分割します。\r\n";
@@ -2038,7 +2036,7 @@ namespace CS_Calculator{
 				if (dResurt == MessageBoxResult.OK){
 					dbMsg += "分割開始";
 					BeforeVals.Insert(insertPosition, insertRecord);
-					BeforeVals[selectedIndex].Value = double.Parse(selectedValueString.Substring(0,sepPosition));
+					BeforeVals[selectedIndex].Value = selectedValueString.Substring(0,sepPosition);
 
 					CalcProgress.ItemsSource = BeforeVals;
 					CalcProgress.Items.Refresh();
@@ -2292,7 +2290,7 @@ namespace CS_Calculator{
 			//入力値が侵食されていない事を確認する
 			foreach (BeforeVal iVal in testVals) {
 				string iOperater = iVal.Operater;
-				double? iValue = iVal.Value;
+				string iValue = iVal.Value;
 				retStr += "" + iOperater + iValue;
 			}
 #endif
@@ -2334,9 +2332,9 @@ namespace CS_Calculator{
 		/// </summary>
 		public class BeforeVal {
 			public string Operater { get; set; }
-			public double? Value { get; set; }
+			public string Value { get; set; }
 		}
-
+		//20210428 			public double? Value { get; set; }
 	}
 
 }
