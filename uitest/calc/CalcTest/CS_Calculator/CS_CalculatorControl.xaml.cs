@@ -263,9 +263,9 @@ namespace CS_Calculator{
 						dbMsg += ">呼び出し元の値無し";
 					}
 				}
-				NowOperations.Text = InputStr;
-				InputStr = "";
-															//計算経過
+				//			NowOperations.Text = InputStr;
+				//計算経過
+				InputStr = "";              //渡された初期値を空白化して2項目を待つ
 				string NextOperation = "";
 				dbMsg += ",OperatKey=" + OperatKey.ToString();
 				if (Key.Multiply <= OperatKey) {     
@@ -289,6 +289,7 @@ namespace CS_Calculator{
 					dbMsg += ",=" + NextOperation;
 					ProcessedFunc(NextOperation);
 					BeforeOperation = NextOperation;
+					NowOperations.Text = NextOperation;
 				} else if (OperatKey == Key.D8) {
 					NextOperation = ParenStr;
 					ParenFunc();
@@ -297,7 +298,6 @@ namespace CS_Calculator{
 				//計算の優先順位は電卓処理から
 				dbMsg += ",数式入力=" + IsPO;
 				IsPO = SetOperationPriority(IsPO);
-
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -487,9 +487,13 @@ namespace CS_Calculator{
 			string TAG = "ProcessedFunc";
 			string dbMsg = "";
 			try {
+	//			bool isWithInput=false;			//入力値に続いて入力された
 				dbMsg += ",渡された演算子=" + NextOperation;
 				BeforeVal NowInput = new BeforeVal();
 				dbMsg += ",現在の入力値=" + InputStr;
+				//if(InputStr !=null && !InputStr.Equals("")) {
+				//	isWithInput = true;
+				//}
 				NowInput.Operater = NextOperation;
 				dbMsg += ",前の演算子=" + BeforeOperation;
 				bool isReCalk = false;
@@ -627,6 +631,9 @@ namespace CS_Calculator{
 						NowOperations.Text += NextOperation;
 					} else{
 						dbMsg += "＞＞四則演算子からの入力開始を無視";
+						//if(isWithInput) {
+						//	NowOperations.Text += NextOperation;
+						//}
 					}
 				}
 				dbMsg += ",BeforeOperation=" + BeforeOperation;
@@ -1739,10 +1746,6 @@ namespace CS_Calculator{
 			string TAG = "PIFunc";
 			string dbMsg = "π";
 			try {
-				//if (PFAOStr.Contains(PiStr)) {
-		//		string piStr = Math.PI.ToString();
-				//	PFAOStr = PFAOStr.Replace(PiStr, piStr);
-				//}
 				NumInput(PiStr);
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
