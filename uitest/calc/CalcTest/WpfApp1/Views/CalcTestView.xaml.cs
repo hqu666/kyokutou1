@@ -22,6 +22,7 @@ namespace WpfApp1.Views {
 		{
 			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
 			VM.MyView = this;
+			IsPoCK.IsChecked = true;
 		}
 
 		private void MyDGContextMenu_Click(object sender, RoutedEventArgs e) {
@@ -177,6 +178,7 @@ namespace WpfApp1.Views {
 				CheckBox CB = sender as CheckBox;
 				bool isCK= (bool)CB.IsChecked;
 				dbMsg = "IsPO=" + isCK;
+				CalcCallBt.IsPO = isCK;
 				Properties.Settings.Default.IsPO = isCK;
 				Properties.Settings.Default.Save();
 				MyLog(TAG, dbMsg);

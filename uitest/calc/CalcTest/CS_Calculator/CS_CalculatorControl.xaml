@@ -307,10 +307,10 @@
 				</ToggleButton>
 			</Grid>
 			<!--Content="C&#xa;BackSpace"-->
-			<Button x:Name="ClearBt" Content="C" FontSize="18"
+			<Button x:Name="ClearAllBt" Content="C" FontSize="18"
 					Grid.Row="1" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
-					Click="ClearBt_Click">
+					Click="ClearAllBt_Click">
 			</Button>
 			<!--Command="{Binding ClearClick}"-->
 			<Button x:Name="SlashBt" Content="/" 
@@ -375,11 +375,11 @@
 					Template="{StaticResource Calcbutton}"
 					Click="ThreeBt_Click"  />
 			<!--Command="{Binding ThreeClick}"-->
-			<!--Content="CE&#xa;Delete"  FontSize="12"-->
-			<Button x:Name="ClearAllBt" Content="CE"  FontSize="18"
+			<!--Content="CE&#xa;Delete"  FontSize="12"						-->
+			<Button x:Name="ClearBt" Content="CE"  FontSize="18"
 					Grid.Row="5" Grid.Column="0"
 					Template="{StaticResource Calcbutton}"
-					Click="ClearAllBt_Click"	/>
+					Click="ClearBt_Click"	/>
 			<Button x:Name="ZeroBt" Content="0" 
 					Grid.Row="5" Grid.Column="1"
 					Template="{StaticResource Calcbutton}"

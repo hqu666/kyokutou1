@@ -64,6 +64,15 @@ namespace CS_Calculator
 		public static readonly DependencyProperty ViewTitleProperty =
 			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
 
+		/// <summary>
+		/// 数式入力
+		/// </summary>
+		public bool IsPO {
+			get { return (bool)GetValue(IsPOProperty); }
+			set { SetValue(IsPOProperty, value); }
+		}
+		public static readonly DependencyProperty IsPOProperty =
+			DependencyProperty.Register("IsPO", typeof(bool), typeof(CalculatorButton), new PropertyMetadata(default(bool)));
 
 		/// <summary>
 		/// 電卓クラス
@@ -187,7 +196,7 @@ namespace CS_Calculator
 				calculatorControl = new CS_CalculatorControl();
 				calculatorControl.TargetTextBox = this.TargetTextBox;
 				calculatorControl.OperatKey = this.OperatKey;
-				calculatorControl.IsPO = false;
+				calculatorControl.IsPO = this.IsPO;
 
 				double number;
 				if (double.TryParse(TargetTextBox.Text, out number)) {

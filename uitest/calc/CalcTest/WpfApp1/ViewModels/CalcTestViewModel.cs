@@ -154,6 +154,8 @@ namespace WpfApp1.ViewModels {
 				CalcWindowWidthStr = Properties.Settings.Default.CalcWindowWidthStr;
 				CalcWindowHeightStr = Properties.Settings.Default.CalcWindowHeightStr;
 				IsPO = Properties.Settings.Default.IsPO;
+				dbMsg += ",数式入力=" + IsPO;
+				IsPO = true;
 				CalcResult = Properties.Settings.Default.CalcResult;
 				//パラメータの初期値
 				if (CalcTextFontSize == null || CalcTextFontSize.Equals("")) {
