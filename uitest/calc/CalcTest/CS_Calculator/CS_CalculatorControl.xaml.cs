@@ -709,6 +709,14 @@ namespace CS_Calculator{
 			try {
 				string valStr = "0";
 				dbMsg += "," + inFunctionStr;
+				if(inFunctionStr.Contains("*)*")) {
+					inFunctionStr.Replace("*)*", ")*");
+					dbMsg += ">>" + inFunctionStr;
+				} else if (inFunctionStr.Contains("**")) {
+					inFunctionStr.Replace("**", "*");
+					dbMsg += ">>" + inFunctionStr;
+				}
+
 				string beforeStr = inFunctionStr;
 				string remStr = inFunctionStr;
 				while (0< beforeStr.Length ||0 < remStr.Length) {
@@ -814,8 +822,14 @@ namespace CS_Calculator{
 						iOperater = "";
 					}
 					iValStr = iVal.Value;
-					if (iValStr.Equals(PiStr)) {
-						iValStr = Math.PI.ToString();
+					if(iValStr==null) {
+						iValStr = "";
+					}else{
+						foreach (string  iConst in MyConstants) {
+							if (iValStr.Equals(PiStr)) {
+								iValStr = Math.PI.ToString();
+							}
+						}
 					}
 					dbMsg += ":" + iOperater + iValStr;
 					if (!iOperater.Equals("")) {
@@ -2058,10 +2072,11 @@ namespace CS_Calculator{
 			try {
 				BeforeVal selectedItem = (BeforeVal)CalcProgress.SelectedItem;
 				int selectedIndex = CalcProgress.SelectedIndex;
-				string selectedValueString = selectedItem.Value.ToString();
-				int insertPosition = selectedIndex + 1;
+				string selectedOperater = selectedItem.Operater;
+				string selectedValue = selectedItem.Value;
+				int delPosition = selectedIndex + 1;
 				string titolStr = "電卓；入力値の削除";
-				String msgStr = "[" + insertPosition + "番目]" + selectedValueString + "を削除します。\r\n";
+				String msgStr = "[" + delPosition + "番目]" + selectedOperater+ selectedValue + "を削除します。\r\n";
 				msgStr += "\r\nよろしいですか？";
 				MessageBoxResult dResurt = MessageShowWPF(msgStr, titolStr, MessageBoxButton.OKCancel, MessageBoxImage.Error);
 				if (dResurt == MessageBoxResult.OK) {
