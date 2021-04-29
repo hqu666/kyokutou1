@@ -709,11 +709,14 @@ namespace CS_Calculator{
 			try {
 				string valStr = "0";
 				dbMsg += "," + inFunctionStr;
-				if(inFunctionStr.Contains("*)*")) {
-					inFunctionStr.Replace("*)*", ")*");
+				if(inFunctionStr.Contains("*)")) {
+					inFunctionStr=inFunctionStr.Replace("*)", ")*");
 					dbMsg += ">>" + inFunctionStr;
 				} else if (inFunctionStr.Contains("**")) {
-					inFunctionStr.Replace("**", "*");
+					inFunctionStr=inFunctionStr.Replace("**", "*");
+					dbMsg += ">>" + inFunctionStr;
+				} else if (inFunctionStr.EndsWith("*")) {
+					inFunctionStr=inFunctionStr.Remove(inFunctionStr.Length-1,1);
 					dbMsg += ">>" + inFunctionStr;
 				}
 
@@ -721,6 +724,19 @@ namespace CS_Calculator{
 				string remStr = inFunctionStr;
 				while (0< beforeStr.Length ||0 < remStr.Length) {
 					dbMsg += "\r\n" + beforeStr.Length + "文字中";
+					if (inFunctionStr.Contains("*)")) {
+						inFunctionStr = inFunctionStr.Replace("*)", ")*");
+						dbMsg += ">>" + inFunctionStr;
+					} 
+					if (inFunctionStr.Contains("**")) {
+						inFunctionStr = inFunctionStr.Replace("**", "*");
+						dbMsg += ">>" + inFunctionStr;
+					} 
+					if (inFunctionStr.EndsWith("*")) {
+						inFunctionStr = inFunctionStr.Remove(inFunctionStr.Length - 1, 1);
+						dbMsg += ">>" + inFunctionStr;
+					}
+
 					int funcStart = -1;
 					string funkName = "";
 					beforeStr = "";
@@ -2186,7 +2202,7 @@ namespace CS_Calculator{
 						MemoryComb.Visibility = Visibility.Visible;
 					}
 				}
-		//		MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -2201,8 +2217,15 @@ namespace CS_Calculator{
 			string TAG = "MemoryComb_SelectionChanged";
 			string dbMsg = "";
 			try {
-				ComboBox cb = MemoryComb;       // (ComboBox)sender;
-				if(-1<cb.SelectedIndex) {
+				ComboBox cb = (ComboBox)sender;
+				if(cb ==null) {
+					cb = MemoryComb;       // (ComboBox)sender;
+				}
+				int selectedIndex = cb.SelectedIndex;
+				string selectStr = cb.SelectedValue.ToString();
+				dbMsg += "[" + selectedIndex + "]"+ selectStr;
+				if (-1<cb.SelectedIndex) {
+				/*
 					string oprater = NowOperations.Text.Substring(NowOperations.Text.Length - 1);
 					dbMsg += "演算子=" + oprater;
 					if (OpraterIndex(oprater, true) < 0) {
@@ -2211,7 +2234,7 @@ namespace CS_Calculator{
 						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 						return;
 					}
-
+					*/
 					InputStr = cb.SelectedItem.ToString();
 					dbMsg += "選択値=" + InputStr;
 					EnterFunc();
