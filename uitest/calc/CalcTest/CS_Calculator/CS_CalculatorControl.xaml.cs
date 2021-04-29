@@ -2219,25 +2219,38 @@ namespace CS_Calculator{
 			try {
 				ComboBox cb = (ComboBox)sender;
 				if(cb ==null) {
+					dbMsg += "senderを拾えない";
 					cb = MemoryComb;       // (ComboBox)sender;
 				}
 				int selectedIndex = cb.SelectedIndex;
-				string selectStr = cb.SelectedValue.ToString();
-				dbMsg += "[" + selectedIndex + "]"+ selectStr;
-				if (-1<cb.SelectedIndex) {
-				/*
-					string oprater = NowOperations.Text.Substring(NowOperations.Text.Length - 1);
-					dbMsg += "演算子=" + oprater;
-					if (OpraterIndex(oprater, true) < 0) {
-						string titolStr = "電卓：メモリーから呼出し";
-						string msgStr = "演算子を入力して下さい。";
-						MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
-						return;
+				if (-1 < cb.SelectedIndex) {
+					dbMsg += "[" + selectedIndex + "]";
+					if (cb.SelectedValue == null) {
+						dbMsg += "SelectedValueが無い";
+					} else {
+						string selectStr = cb.SelectedValue.ToString();
+						dbMsg += selectStr;
+						/*
+							string oprater = NowOperations.Text.Substring(NowOperations.Text.Length - 1);
+							dbMsg += "演算子=" + oprater;
+							if (OpraterIndex(oprater, true) < 0) {
+								string titolStr = "電卓：メモリーから呼出し";
+								string msgStr = "演算子を入力して下さい。";
+								MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
+								return;
+							}
+							*/
+						InputStr = selectStr;		// cb.SelectedItem.ToString();
+						dbMsg += "選択値=" + InputStr;
+						NowOperations.Text += selectStr;
+						dbMsg += "演算子=" + BeforeOperation;
+														//if(BeforeOperation != null && !BeforeOperation.Equals("")) {
+														//	ProcessedFunc("");
+														//}
+														//		EnterFunc();
 					}
-					*/
-					InputStr = cb.SelectedItem.ToString();
-					dbMsg += "選択値=" + InputStr;
-					EnterFunc();
+				} else{
+					dbMsg += "選択されていない";
 				}
 				//	選択を外して、再び同じ値でも動作させる
 				cb.SelectedIndex = -1;
