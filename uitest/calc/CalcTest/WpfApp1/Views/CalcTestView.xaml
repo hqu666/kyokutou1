@@ -96,19 +96,22 @@
 			<Label  Content="] " 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
-		</StackPanel>
-		<StackPanel Orientation="Horizontal"
-							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
-							Margin="0,5,5,5"  Background="AliceBlue">
 			<ComboBox  x:Name="CalcVerComb" 
+				Height="24"
 				SelectedIndex="{Binding CalcVer,Mode=TwoWay}" 
 				SelectionChanged="CalcVerComb_SelectionChanged"
 				>
 				<ComboBoxItem IsSelected="True">Ver1:電卓処理のみ</ComboBoxItem>
 				<ComboBoxItem>Var2:三角関数まで</ComboBoxItem>
 			</ComboBox>
+		</StackPanel>
+		<StackPanel x:Name="SecFuncPanel"
+							Orientation="Horizontal"
+							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
+							Margin="0,5,5,5"  Background="AliceBlue">
 			<CheckBox x:Name="IsPoCK" 
-					IsChecked="{Binding IsPo,Mode=TwoWay}"
+					IsChecked="{Binding IsPo,
+					Mode=TwoWay}"
 					Content="「数式入力」で起動する"
 					Margin="5,5,5,5" VerticalAlignment="Center" 
 					Click="IsPoCK_Click"  

@@ -20,9 +20,35 @@ namespace WpfApp1.Views {
 		}
 		private void ThisLoaded(object sender, RoutedEventArgs e)
 		{
-			//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
-			VM.MyView = this;
-			IsPoCK.IsChecked = true;
+			string TAG = "ThisLoaded";
+			string dbMsg = "";
+			try {
+
+				//ViewModelのViewプロパティに自分のインスタンス（つまりViewのインスタンス）を渡しています。
+				VM.MyView = this;
+				int CalcVer = Properties.Settings.Default.CalcVer;
+				dbMsg += ",摘要Ver=" +( CalcVer+1);
+				if (CalcVer < 0) {
+					CalcVer = 0;
+				}
+				if (0 == CalcVer) {
+					dbMsg += ":Ver,1";
+					this.SecFuncPanel.Visibility = Visibility.Collapsed;
+					Properties.Settings.Default.IsPO = false;
+					Properties.Settings.Default.Save();
+				} else {
+					dbMsg += ":Ver,2";
+					this.SecFuncPanel.Visibility = Visibility.Visible;
+					bool? IsPO = Properties.Settings.Default.IsPO;
+					dbMsg += ",摘要Ver=" + IsPO;
+					if (IsPO != null) {
+						IsPoCK.IsChecked = IsPO;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
 		}
 
 		private void MyDGContextMenu_Click(object sender, RoutedEventArgs e) {
@@ -177,13 +203,22 @@ namespace WpfApp1.Views {
 			try {
 				ComboBox CB = sender as ComboBox;
 				if(CB == null) {
-					dbMsg = "未選択";
+					dbMsg += "未選択";
 				} else{
 					int SelectedIndex = CB.SelectedIndex;
 					dbMsg = "[" + SelectedIndex +"]";
 					CalcCallBt.CalcVer = SelectedIndex;
 					Properties.Settings.Default.CalcVer = SelectedIndex;
 					Properties.Settings.Default.Save();
+					if(0==SelectedIndex ) {
+						dbMsg += "Ver,1";
+						this.SecFuncPanel.Visibility = Visibility.Collapsed;
+						Properties.Settings.Default.IsPO = false;
+						Properties.Settings.Default.Save();
+					} else {
+						dbMsg += "Ver,2";
+						this.SecFuncPanel.Visibility = Visibility.Visible;
+					}
 				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

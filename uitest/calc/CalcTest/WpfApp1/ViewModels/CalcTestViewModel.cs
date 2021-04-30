@@ -76,7 +76,8 @@ namespace WpfApp1.ViewModels {
 		/// 演算子の優先順位で計算"
 		/// </summary>
 		public bool IsPO { get; set; }
-
+		/*System.Windows.Data Error: 40 : BindingExpression path error: 'IsPo' property not found on 'object' ''CalcTestViewModel' (HashCode=50838910)'. BindingExpression:Path=IsPo; DataItem='CalcTestViewModel' (HashCode=50838910); target element is 'CheckBox' (Name='IsPoCK'); target property is 'IsChecked' (type 'Nullable`1')
+*/
 		private List<Product> _GsGlist;
 		/// <summary>
 		/// GcSpreadGridのItemsSource
@@ -196,9 +197,21 @@ namespace WpfApp1.ViewModels {
 					CalcVer = 0;
 					dbMsg += ">>" + CalcVer;
 				}
-				IsPO = Properties.Settings.Default.IsPO;
-				dbMsg += ",数式入力=" + IsPO;
-	//			IsPO = true;
+				if (0 == CalcVer) {
+					dbMsg += ":Ver,1";
+					IsPO = false;
+					Properties.Settings.Default.IsPO = IsPO;
+					Properties.Settings.Default.Save();
+				} else {
+					dbMsg += ":Ver,2";
+					bool? IsPOTest = Properties.Settings.Default.IsPO;
+					dbMsg += ",数式入力=" + IsPOTest;
+					if (IsPOTest != null) {
+						IsPO = (bool)IsPOTest;
+					}else{
+						dbMsg += "未指定";
+					}
+				}
 				CalcResult = Properties.Settings.Default.CalcResult;
 				RaisePropertyChanged();
 

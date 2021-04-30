@@ -249,22 +249,24 @@ namespace CS_Calculator{
 			try {
 				Initialize();
 				dbMsg += "機能バージョン=" + CalcVer;
-				FunctionGrid.Visibility = Visibility.Collapsed;
-				FunctionGrid.Height = 0;
 				if (CalcVer==null) {
 					dbMsg += "未設定";
 					CalcVer = 0;
-				} else if(CalcVer==0) {
+				} 
+				if(CalcVer==0) {
 					dbMsg += "電卓処理まで" ;
+					IsPO = false;
+					FunctionGrid.Visibility = Visibility.Collapsed;
+					//			FunctionGrid.Height = 0;
 				} else if (CalcVer == 1) {
 					dbMsg += "三角関数まで";
 					FunctionGrid.Visibility = Visibility.Visible;
 					//計算の優先順位は電卓処理から
-					dbMsg += ",数式入力=" + IsPO;
 					IsPO = SetOperationPriority(IsPO);
 					//起動時はメモリコンボを非表示
 					MemoryComb.Visibility = Visibility.Hidden;
 				}
+				dbMsg += ",数式入力=" + IsPO;
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxから";
 					InputStr = TargetTextBox.Text;
