@@ -647,7 +647,7 @@ namespace CS_Calculator{
 					BeforeOperation = "";
 	//				NowOperations.Text += NextOperation;
 				} else if (NextOperation.EndsWith(ParenStr)) {
-					BeforeOperation = "";
+					BeforeOperation = "";           //BeforeOperation = NextOperation;	だと関数が二重書込みされる
 					NowOperations.Text += NextOperation;
 				} else {
 					if (0 < BeforeVals.Count) {
@@ -1031,6 +1031,48 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 			return retInt;
+		}
+
+		/// <summary>
+		/// 末尾から順次文字を読み出し演算子と関数に相当する文字列だけを返す
+		/// </summary>
+		/// <param name="pStr"></param>
+		/// <returns></returns>
+		private string LastOprater(string pStr) {
+			string TAG = "LastOprater";
+			string dbMsg = "";
+			string retStr = "";
+			try {
+				dbMsg += "、pStr=" + pStr;
+				int lastCount = 0;
+				string testStr = "";
+				while( testStr.Length< pStr.Length) {
+					lastCount++;
+					dbMsg += "\r\n[" + lastCount + "]";
+					testStr = pStr.Substring(pStr.Length- lastCount);
+					dbMsg += testStr ;
+					int oIndex = OpraterIndex(testStr, true);
+					if(-1< oIndex) {
+						retStr = testStr;
+					}else{
+						foreach (string fName in MyFunctions) {
+							if (fName.Equals(testStr)) {
+								retStr = testStr;
+								break;
+							}
+						}
+					}
+					if (!retStr.Equals("")) {
+						break;
+					}
+				}
+
+				dbMsg += ">>" + retStr;
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retStr;
 		}
 
 		/// <summary>
@@ -2275,14 +2317,15 @@ namespace CS_Calculator{
 								return;
 							}
 							*/
+						string lastOprater = LastOprater(NowOperations.Text);
+						dbMsg += "演算子=" + lastOprater;
 						InputStr = selectStr;		// cb.SelectedItem.ToString();
 						dbMsg += "選択値=" + InputStr;
 						NowOperations.Text += selectStr;
-						dbMsg += "演算子=" + BeforeOperation;
-														//if(BeforeOperation != null && !BeforeOperation.Equals("")) {
-														//	ProcessedFunc("");
-														//}
-														//		EnterFunc();
+						//if(BeforeOperation != null && !BeforeOperation.Equals("")) {
+						//	ProcessedFunc("");
+						//}
+						//		EnterFunc();
 					}
 				} else{
 					dbMsg += "選択されていない";
