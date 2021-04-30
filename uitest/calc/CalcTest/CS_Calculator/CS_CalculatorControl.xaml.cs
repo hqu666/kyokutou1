@@ -1141,24 +1141,26 @@ namespace CS_Calculator{
 								inOperateStr = calcStr;
 								break;
 							}
+							//電卓処理は四則演算子の一文字のみ
 							string oprand = inOperateStr.Substring(endPoint, 1);
 							dbMsg += ",演算子:" + oprand;
-							int nextPoint = OpraterIndex(remStr, true);
-							string secValStr = remStr;
-							dbMsg += "3項目以降" ;
+				//			calcStr += oprand;
+							string secValStr = remStr.Substring(oprand.Length);
+							dbMsg += ",以降="+ secValStr;
+							int nextPoint = OpraterIndex(secValStr, true);
+					//		string secValStr = remStr;
+							dbMsg += ",3項目以降 [nextPoint:" + nextPoint + "]から" ;
 							if (0 < nextPoint) {
-								dbMsg += "[" + nextPoint + "]から";
-								secValStr = remStr.Substring(0, nextPoint);
-								remStr = remStr.Substring(nextPoint);
-								dbMsg += "::"+ remStr;
+								remStr = secValStr.Substring(nextPoint);
+								secValStr = secValStr.Substring(0, nextPoint);
 							}else{
 								dbMsg += "無し";
 								remStr = "";
 							}
-							dbMsg += "::2項目＝" + secValStr;
-							if(secValStr.StartsWith(SubtractStr)) {
+							dbMsg += ">2項目＝" + secValStr+",残り" + remStr;
+							if (secValStr.StartsWith(SubtractStr)) {
 								dbMsg += "＞演算子-を含む";
-								calcStr += secValStr;
+								calcStr += oprand+secValStr;
 							}else{
 								double secVal = 0;
 								if (double.TryParse(secValStr, out secVal)) {
@@ -1170,6 +1172,7 @@ namespace CS_Calculator{
 									calcStr += secValStr;
 								}
 							}
+							
 							dbMsg += ">>" + calcStr;
 							try {
 								dbMsg += ",Compute=" + calcStr;
