@@ -83,6 +83,16 @@ namespace CS_Calculator{
 		}
 		public static readonly DependencyProperty ResultStrProperty =
 			DependencyProperty.Register("ResultStr", typeof(string), typeof(CS_CalculatorControl), new PropertyMetadata(default(string)));
+		/// <summary>
+		/// 電卓の機能バージョン
+		/// Ver1:FunctionGridと関連機能にマスク
+		/// </summary>
+		public int? CalcVer {
+			get { return (int)GetValue(CalcVerProperty); }
+			set { SetValue(CalcVerProperty, value); }
+		}
+		public static readonly DependencyProperty CalcVerProperty =
+			DependencyProperty.Register("CalcVer", typeof(int), typeof(CS_CalculatorControl), new PropertyMetadata(default(int)));
 
 		/// <summary>
 		/// 四則演算の優先順位で計算
@@ -190,7 +200,7 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
-		/// CEと合わせ、初期化処理
+		/// CAと合わせ、初期化処理
 		/// </summary>
 		public void Initialize()
 		{
@@ -238,8 +248,23 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				Initialize();
-				//起動時はメモリコンボを非表示
-				MemoryComb.Visibility = Visibility.Hidden;
+				dbMsg += "機能バージョン=" + CalcVer;
+				FunctionGrid.Visibility = Visibility.Collapsed;
+				FunctionGrid.Height = 0;
+				if (CalcVer==null) {
+					dbMsg += "未設定";
+					CalcVer = 0;
+				} else if(CalcVer==0) {
+					dbMsg += "電卓処理まで" ;
+				} else if (CalcVer == 1) {
+					dbMsg += "三角関数まで";
+					FunctionGrid.Visibility = Visibility.Visible;
+					//計算の優先順位は電卓処理から
+					dbMsg += ",数式入力=" + IsPO;
+					IsPO = SetOperationPriority(IsPO);
+					//起動時はメモリコンボを非表示
+					MemoryComb.Visibility = Visibility.Hidden;
+				}
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxから";
 					InputStr = TargetTextBox.Text;
@@ -248,6 +273,9 @@ namespace CS_Calculator{
 					InputStr = TargetTextBlock.Text;
 				}
 				dbMsg += ",InputStr=" + InputStr;
+				//計算経過
+				NowOperations.Text = InputStr;
+				//フィールド値を渡されていたら、数値検証して最初の値＝最初の計算結果として変数化
 				if (!InputStr.Equals("")) {
 					double frastVal;
 					if (double.TryParse(InputStr, out frastVal)) {       //-1 == OpraterIndex(inParenStr)
@@ -259,15 +287,13 @@ namespace CS_Calculator{
 						NowInput.Value = InputStr;
 						BeforeVals.Add(NowInput);
 						InputStr = frastVal.ToString();
+						InputStr = "";              //渡された初期値を空白化して2項目を待つ
 					} else {
 						dbMsg += ">呼び出し元の値無し";
 					}
 				}
-				//			NowOperations.Text = InputStr;
-				//計算経過
-				InputStr = "";              //渡された初期値を空白化して2項目を待つ
 				string NextOperation = "";
-				dbMsg += ",OperatKey=" + OperatKey.ToString();
+				dbMsg += ",演算子=" + OperatKey.ToString();
 				if (Key.Multiply <= OperatKey) {     
 					switch (OperatKey) {
 						case Key.Add:					//85
@@ -287,17 +313,14 @@ namespace CS_Calculator{
 							break;
 					}
 					dbMsg += ",=" + NextOperation;
-					ProcessedFunc(NextOperation);
+					//正規の入力処理					ProcessedFunc(NextOperation);　を通さず
 					BeforeOperation = NextOperation;
-					NowOperations.Text = NextOperation;
 				} else if (OperatKey == Key.D8) {
 					NextOperation = ParenStr;
 					ParenFunc();
 				}
-				dbMsg += ",NowOperations=" + NowOperations.Text;
-				//計算の優先順位は電卓処理から
-				dbMsg += ",数式入力=" + IsPO;
-				IsPO = SetOperationPriority(IsPO);
+				NowOperations.Text += NextOperation;
+				dbMsg += ",渡された入力=" + NowOperations.Text;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -903,7 +926,7 @@ namespace CS_Calculator{
 					}
 				}
 				if (IsPO) {
-					dbMsg += ">>四則演算処理:";
+					dbMsg += ">>数式入力:";
 					if (PFAOStr.Equals("")) {
 						CalcResult.Content = InputStr.ToString();
 					}else if(isFunc) {
@@ -2023,6 +2046,13 @@ namespace CS_Calculator{
 			CalcProgress.Visibility = Visibility.Collapsed;
 			FunctionGrid.Visibility = Visibility.Visible;
 			KeyGrid.Visibility = Visibility.Visible;
+			if (CalcVer == null) {
+				FunctionGrid.Visibility = Visibility.Collapsed;
+			} else if (CalcVer == 0) {
+				FunctionGrid.Visibility = Visibility.Collapsed;
+			} else if (CalcVer == 1) {
+				FunctionGrid.Visibility = Visibility.Visible;
+			}
 			CorpBt.Content = "▼";
 			EnterBt.Focus();
 		}

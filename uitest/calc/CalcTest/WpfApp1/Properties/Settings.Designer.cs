@@ -141,5 +141,17 @@ namespace WpfApp1.Properties {
                 this["設定"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CalcVer {
+            get {
+                return ((int)(this["CalcVer"]));
+            }
+            set {
+                this["CalcVer"] = value;
+            }
+        }
     }
 }

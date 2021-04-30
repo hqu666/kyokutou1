@@ -71,6 +71,7 @@ namespace WpfApp1.ViewModels {
 		public double CalcWindowWidth = 180;
 		public double CalcWindowHeight = 250;
 
+		public int CalcVer { get; set; }
 		/// <summary>
 		/// 演算子の優先順位で計算"
 		/// </summary>
@@ -153,10 +154,6 @@ namespace WpfApp1.ViewModels {
 				CalcTextDLogTitol = Properties.Settings.Default.CalcTextDLogTitol;      //setting.Value.ValueXml.InnerText;
 				CalcWindowWidthStr = Properties.Settings.Default.CalcWindowWidthStr;
 				CalcWindowHeightStr = Properties.Settings.Default.CalcWindowHeightStr;
-				IsPO = Properties.Settings.Default.IsPO;
-				dbMsg += ",数式入力=" + IsPO;
-				IsPO = true;
-				CalcResult = Properties.Settings.Default.CalcResult;
 				//パラメータの初期値
 				if (CalcTextFontSize == null || CalcTextFontSize.Equals("")) {
 					CalcTextFontSize = "18";
@@ -193,11 +190,16 @@ namespace WpfApp1.ViewModels {
 				if (CalcResult == null || CalcResult.Equals("")) {
 					CalcResult = "0123456789";
 				}
-				dbMsg += ",IsPO＝" + IsPO;
-				//if (Properties.Settings.Default.IsPO == null) {
-				//	IsPO =false;
-				//	dbMsg += ">>IsPO=" + IsPO;
-				//}
+				CalcVer = Properties.Settings.Default.CalcVer;
+				dbMsg += ",摘要Ver=" + CalcVer;
+				if (CalcVer < 0) {
+					CalcVer = 0;
+					dbMsg += ">>" + CalcVer;
+				}
+				IsPO = Properties.Settings.Default.IsPO;
+				dbMsg += ",数式入力=" + IsPO;
+	//			IsPO = true;
+				CalcResult = Properties.Settings.Default.CalcResult;
 				RaisePropertyChanged();
 
 				GsGlist = new List<Product>();
@@ -225,19 +227,19 @@ namespace WpfApp1.ViewModels {
 
 				/// XamDataGridに初期値を書き込むj
 				XDGDatas = new ObservableCollection<Product> {
-				new Product { Name="LEDシーリング", Price=4980, Tax=10 },
-				new Product { Name="歯磨き粉", Price=298, Tax=10 },
-				new Product { Name="おにぎり", Price=124, Tax=8 },
-				new Product { Name="緑茶", Price=800, Tax=8 }
-			};
+					new Product { Name="LEDシーリング", Price=4980, Tax=10 },
+					new Product { Name="歯磨き粉", Price=298, Tax=10 },
+					new Product { Name="おにぎり", Price=124, Tax=8 },
+					new Product { Name="緑茶", Price=800, Tax=8 }
+				};
 
 				/// 基底DataGridに初期値を書き込むj
 				DGDatas = new ObservableCollection<Product> {
-				new Product { Name="化粧品", Price=1900, Tax=10 },
-				new Product { Name="洗剤", Price=500, Tax=10 },
-				new Product { Name="パン", Price=800, Tax=8 },
-				new Product { Name="牛乳", Price=800, Tax=8 }
-			};
+					new Product { Name="化粧品", Price=1900, Tax=10 },
+					new Product { Name="洗剤", Price=500, Tax=10 },
+					new Product { Name="パン", Price=800, Tax=8 },
+					new Product { Name="牛乳", Price=800, Tax=8 }
+				};
 				RaisePropertyChanged();
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {

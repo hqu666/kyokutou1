@@ -10,7 +10,7 @@
 	  mc:Ignorable="d" 
 	  FontSize="14" 
 	  WindowStartupLocation="CenterScreen"
-	  Topmost="true" Height="800" Width="1200"
+	  Topmost="true" Height="Auto" Width="Auto"
       Title="電卓dllの組み込み" SizeToContent="WidthAndHeight">
 
 	<Grid Margin="0,0,0,0" >
@@ -18,11 +18,12 @@
 			<ColumnDefinition Width="10" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="10" />
-			<ColumnDefinition Width="Auto" />
+			<!--<ColumnDefinition Width="10" />
+			<ColumnDefinition Width="Auto" />-->
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions >
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -41,7 +42,7 @@
 
 		<StackPanel Orientation="Horizontal"
 							Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
-							Margin="0,5,5,5">
+							Margin="0,5,5,5"  Background="AliceBlue">
 			<Label  Content="フォントサイズ" 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
@@ -89,23 +90,36 @@
 					/>
 			<TextBox 	x:Name="CalcDLogHight" 
 						Text="{Binding CalcWindowHeightStr,Mode=TwoWay}"
-						Margin="5,5,5,5" VerticalAlignment="Center" TextChanged="CalcDLogHight_TextChanged"
+						Margin="5,5,5,5" VerticalAlignment="Center" 
+						TextChanged="CalcDLogHight_TextChanged"
 						/>
 			<Label  Content="] " 
 					Margin="5,5,5,5" VerticalAlignment="Center"  
 					/>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal"
+							Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
+							Margin="0,5,5,5"  Background="AliceBlue">
+			<ComboBox  x:Name="CalcVerComb" 
+				SelectedIndex="{Binding CalcVer,Mode=TwoWay}" 
+				SelectionChanged="CalcVerComb_SelectionChanged"
+				>
+				<ComboBoxItem IsSelected="True">Ver1:電卓処理のみ</ComboBoxItem>
+				<ComboBoxItem>Var2:三角関数まで</ComboBoxItem>
+			</ComboBox>
 			<CheckBox x:Name="IsPoCK" 
 					IsChecked="{Binding IsPo,Mode=TwoWay}"
 					Content="「数式入力」で起動する"
-					Margin="5,5,5,5" VerticalAlignment="Center" Click="IsPoCK_Click"  
+					Margin="5,5,5,5" VerticalAlignment="Center" 
+					Click="IsPoCK_Click"  
 					/>
-
 		</StackPanel>
+
 		<Label  Content="TextBoxに専用ボタンで" 
-						Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"  
+						Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"  
 							/>
 		<StackPanel Orientation="Horizontal"
-							Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+							Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
 							Margin="0,5,5,5">
 			<!--電卓で計算した結果-->
 			<TextBox x:Name="Bt2Tbox"
@@ -121,14 +135,16 @@
 						ViewTitle="{Binding ElementName=CalcTextDLogTitol}"
 						ShowX="{Binding ElementName=CalcTextShowX}"
 						ShowY="{Binding ElementName=CalcTextShowY}"
-						/>
+						CalcVer="{Binding ElementName=CalcVerComb}"
+						IsPO="{Binding ElementName=IsPoCK}"
+					/>
 		</StackPanel>
 
 		<!--<Label  Content="GcSpreadGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
-						Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
+						Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
 		<sg:GcSpreadGrid  Name="MyGsGrid"
-						Grid.Row="4" Grid.Column="1"
+						Grid.Row="5" Grid.Column="1"
 						RowCount="1" ColumnCount="1"
 						DefaultColumnWidth="120" 
 						ShowResizeTip="Both" 
@@ -142,14 +158,14 @@
 		</sg:GcSpreadGrid>-->
 
 		<!--<Label  Content="XamDataGridにContextMenuで(intのフィールドには小数点以下を四捨五入した整数が入ります)" 
-						Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
+						Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="4" VerticalAlignment="Center"  
 							/>
 		<Label  Content="①標準コンテキストメニューを残す(セルをクリックで選択してから、少しずらして右クリックして下さい)" 
-						Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" 
+						Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" 
 							/>
 	
 	<igWPF:XamDataGrid Name="MyXDG" 
-                  Grid.Row="8" Grid.Column="1"
+                  Grid.Row="10" Grid.Column="1"
 				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
 				  >
 			<igWPF:XamDataGrid.FieldLayoutSettings>
@@ -167,10 +183,10 @@
 		</igWPF:XamDataGrid>-->
 	
 	<!--<Label  Content="②コンテキストメニュー無し(セルを左クリックで選択してから右クリックして下さい)" 
-						Grid.Row="7" Grid.Column="4" VerticalAlignment="Center"
+						Grid.Row="9" Grid.Column="4" VerticalAlignment="Center"
 							/>
 	<igWPF:XamDataGrid Name="MyXDG2" 
-                  Grid.Row="8" Grid.Column="4"
+                  Grid.Row="10" Grid.Column="4"
 				  DataSource="{Binding XDGDatas, Mode=TwoWay}" 
 				  >
 			<igWPF:XamDataGrid.Resources>
@@ -199,10 +215,10 @@
 		</igWPF:XamDataGrid>-->
 
 		<Label  Content="DataGrid(TextBlock)にContextMenuで" 
-						Grid.Row="11" Grid.Column="1" VerticalAlignment="Center"  
+						Grid.Row="12" Grid.Column="1" VerticalAlignment="Center"  
 							/>
 		<DataGrid Name="MyDG"
-                  Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2"
+                  Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2"
                   ItemsSource="{Binding DGDatas, Mode=OneWay}" 
                   SelectedItem="{Binding SelectedDGData,Mode=TwoWay}"
             >

@@ -171,16 +171,39 @@ namespace WpfApp1.Views {
 			Properties.Settings.Default.CalcWindowHeightStr = TB.Text;
 			Properties.Settings.Default.Save();
 		}
+		private void CalcVerComb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			string TAG = "CalcVerComb_SelectionChanged";
+			string dbMsg = "";
+			try {
+				ComboBox CB = sender as ComboBox;
+				if(CB == null) {
+					dbMsg = "未選択";
+				} else{
+					int SelectedIndex = CB.SelectedIndex;
+					dbMsg = "[" + SelectedIndex +"]";
+					CalcCallBt.CalcVer = SelectedIndex;
+					Properties.Settings.Default.CalcVer = SelectedIndex;
+					Properties.Settings.Default.Save();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
 		private void IsPoCK_Click(object sender, RoutedEventArgs e) {
 			string TAG = "IsPoCK_Click";
 			string dbMsg = "";
 			try {
 				CheckBox CB = sender as CheckBox;
-				bool isCK= (bool)CB.IsChecked;
-				dbMsg = "IsPO=" + isCK;
-				CalcCallBt.IsPO = isCK;
-				Properties.Settings.Default.IsPO = isCK;
-				Properties.Settings.Default.Save();
+				if (CB == null) {
+					dbMsg = "未選択";
+				} else {
+					bool isCK = (bool)CB.IsChecked;
+					dbMsg = "IsPO=" + isCK;
+					CalcCallBt.IsPO = isCK;
+					Properties.Settings.Default.IsPO = isCK;
+					Properties.Settings.Default.Save();
+				}
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);

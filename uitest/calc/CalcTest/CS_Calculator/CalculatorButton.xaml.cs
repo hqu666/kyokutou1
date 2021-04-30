@@ -64,6 +64,13 @@ namespace CS_Calculator
 		public static readonly DependencyProperty ViewTitleProperty =
 			DependencyProperty.Register("ViewTitle", typeof(string), typeof(CalculatorButton), new PropertyMetadata(default(string)));
 
+		public int CalcVer {
+			get { return (int)GetValue(CalcVerProperty); }
+			set { SetValue(CalcVerProperty, value); }
+		}
+		public static readonly DependencyProperty CalcVerProperty =
+			DependencyProperty.Register("CalcVer", typeof(int), typeof(CalculatorButton), new PropertyMetadata(default(int)));
+
 		/// <summary>
 		/// 数式入力
 		/// </summary>
@@ -196,6 +203,7 @@ namespace CS_Calculator
 				calculatorControl = new CS_CalculatorControl();
 				calculatorControl.TargetTextBox = this.TargetTextBox;
 				calculatorControl.OperatKey = this.OperatKey;
+				calculatorControl.CalcVer = this.CalcVer;
 				calculatorControl.IsPO = this.IsPO;
 
 				double number;
@@ -210,9 +218,16 @@ namespace CS_Calculator
 					MessageShowWPF(msgStr, titolStr, MessageBoxButton.OK, MessageBoxImage.Error);
 					return;
 				}
-				if (TargetTextBox != null) {
-					ViewTitle = "TextBox:" + TargetTextBox.Name;
+				dbMsg += ",ViewTitle=" + ViewTitle;
+				if(ViewTitle.StartsWith("System.Windows.Controls")) {
+					ViewTitle = null;
 				}
+				if (ViewTitle == null || ViewTitle.Equals("")) {
+					ViewTitle = "電卓";
+				}
+				//if (TargetTextBox != null) {
+				//	ViewTitle = "TextBox:" + TargetTextBox.Name;
+				//}
 				Point pt = TargetTextBox.PointToScreen(new Point(0.0d, 0.0d));
 				//表示位置
 				if (0 == ShowX){

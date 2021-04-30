@@ -6,7 +6,6 @@
            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
           xmlns:local="clr-namespace:CS_Calculator"
              mc:Ignorable="d" 
-			 FocusManager.FocusedElement="{Binding ElementName=CalcProcess}"
 			 Unloaded="UserControl_Unloaded" 
 			PreviewKeyDown="UserControl_PreviewKeyDown"
 			 KeyDown="UserControl_KeyDown"
@@ -116,7 +115,9 @@
 		<!--https://social.msdn.microsoft.com/Forums/aspnet/ja-JP/2c1a9456-c824-4531-a3ed-d0b294961a43/datagriditemitem?forum=wpfja-->
 	</UserControl.Resources>
 
-	<Grid>
+	<Grid 
+			FocusManager.FocusedElement="{Binding ElementName=NowOperations}"
+		>
 		<Grid.RowDefinitions >
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -221,6 +222,7 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<Grid Name="FunctionGrid"
+				Visibility="Collapsed"
 				Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
@@ -307,10 +309,11 @@
 				</ToggleButton>
 			</Grid>
 			<!--Content="C&#xa;BackSpace"-->
-			<Button x:Name="ClearAllBt" Content="C" FontSize="18"
+			<Button x:Name="ClearAllBt" Content="CA" FontSize="18"
 					Grid.Row="1" Grid.Column="0"
+					Background="#19FD0303"
 					Template="{StaticResource Calcbutton}"
-					Click="ClearAllBt_Click">
+					Click="ClearAllBt_Click" >
 			</Button>
 			<!--Command="{Binding ClearClick}"-->
 			<Button x:Name="SlashBt" Content="/" 
