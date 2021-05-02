@@ -581,7 +581,6 @@ namespace CS_Calculator{
 					inFunctionStr=inFunctionStr.Remove(inFunctionStr.Length-1,1);
 					dbMsg += ">>" + inFunctionStr;
 				}
-
 				string beforeStr = inFunctionStr;
 				string remStr = inFunctionStr;
 				while (0< beforeStr.Length ||0 < remStr.Length) {
@@ -599,18 +598,25 @@ namespace CS_Calculator{
 						dbMsg += ">>" + inFunctionStr;
 					}
 
-					int funcStart = -1;
 					string funkName = "";
 					beforeStr = "";
-					foreach (string fName in MyFunctions) {
-						funcStart = inFunctionStr.LastIndexOf(fName);
-						if(-1< funcStart) {
-							funkName = fName;
-							beforeStr = inFunctionStr.Substring(0, funcStart);
+					int rCount = - 1;
+					//末尾から関数とパラメータを読み出す
+					for ( rCount = inFunctionStr.Length - 1; 0<= rCount; rCount--) {
+						string checkStrs = inFunctionStr.Substring(rCount);
+			//			dbMsg += "\r\n" + checkStrs;
+						foreach (string fName in MyFunctions) { 
+							if(checkStrs.Contains(fName)) {
+								funkName = fName;
+								beforeStr = inFunctionStr.Substring(0, rCount);
+								break;
+							}
+						}
+						if(!funkName.Equals("")) {
 							break;
 						}
 					}
-					dbMsg += ",計算対象" + funkName;
+					dbMsg += "[" + rCount + "から]計算対象" + funkName;
 					int parenStart = inFunctionStr.LastIndexOf(ParenStr);
 					//ParenStr無しで-1で先頭から最後までが代入される
 					remStr = inFunctionStr.Substring(parenStart+1);
@@ -626,9 +632,10 @@ namespace CS_Calculator{
 					dbMsg += "," + beforeStr + "　と　" + valStr + "　と　" + remStr;
 					try {
 						System.Data.DataTable dt = new System.Data.DataTable();
-						var pVal = dt.Compute(valStr, "");
+						var pVal = dt.Compute(valStr, "");			//パラメータが演算なら計算結果にする
 						double secVal = 0;
 						if (double.TryParse(pVal.ToString(), out secVal)) {
+							dbMsg += "," + funkName + "," +  valStr + "=" + secVal;
 							double fRes = 0;
 							if (funkName.Equals(PowerStr)) {
 								fRes = Math.Pow(secVal, 2);
