@@ -260,7 +260,7 @@ namespace CS_Calculator
 	//			calculatorControl.OperatKey = this.OperatKey;
 				Nullable<bool> dialogResult = CalcWindow.ShowDialog();
 				dbMsg += ",dialogResult=" + dialogResult;
-
+				this.OperatKey = 0;             //呼出し後、演算子キーを初期化
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
