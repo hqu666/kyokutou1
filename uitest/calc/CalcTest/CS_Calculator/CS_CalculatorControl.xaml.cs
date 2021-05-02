@@ -711,11 +711,28 @@ namespace CS_Calculator{
 					}
 					dbMsg += ":" + iOperater + iValStr;
 					if (!iOperater.Equals("")) {
+						string bStr = NowOperations.Text;           //ここまでの読み取り
+						dbMsg += ",以前は=" + bStr;
+						string bEnd = "";
+						if(0< bStr.Length) {
+							bEnd = bStr.Substring(bStr.Length - 1);
+							dbMsg += "の=" + bEnd;
+						}
+						double JudgeVal = 0;
 						NowOperations.Text += iOperater;
 						if (iOperater.EndsWith(ParenStr)) {
 							dbMsg += ">>Paren側";
 							iParenCount++;
-							if (1 < valsCount) {
+							if (bEnd.Equals(ParenthesisStr) ) {
+								dbMsg += ">>範囲終了に連結";
+								PFAOStr += iOperater;
+							} else if (  -1 < OpraterIndex(bEnd, true)) {
+								dbMsg += ">>演算子に連結";
+								PFAOStr += iOperater;
+							} else	if (double.TryParse(bEnd, out JudgeVal)) {
+								dbMsg += ">>数値"+ bEnd + "に連結";
+								PFAOStr += "*" + iOperater;
+							} else if (1 < valsCount) {
 								if (BeforeVals[valsCount - 2].Value != null) {
 									dbMsg += ">>数値に連結";
 									PFAOStr += "*" + iOperater;
@@ -732,17 +749,11 @@ namespace CS_Calculator{
 						} else if(iOperater.Equals(ParenthesisStr)){
 							dbMsg += ">>Parenthesis側";
 							ParenthesisCount++;
-							double JudgeVal = 0;
 							if (double.TryParse(iValStr, out JudgeVal)) {
 								PFAOStr += ")*";
 							} else {
 								PFAOStr += iOperater;
 							}
-							//if (iValStr == null && !iValStr.Equals("")) {
-							//	PFAOStr += iOperater;
-							//}else{
-							//	PFAOStr += ")*";
-							//}
 						} else {
 							PFAOStr += iOperater;
 						}
@@ -781,6 +792,7 @@ namespace CS_Calculator{
 						}
 						MyLog(TAG, dbMsg);
 					}else if(isFunc) {
+						MyLog(TAG, dbMsg);
 						FunctionCalc(PFAOStr);
 					} else {
 						try {
