@@ -2062,9 +2062,9 @@ namespace CS_Calculator{
 						case Key.Divide:
 							Key2ButtonClickerAsync(SlashBt);
 							break;
-						case Key.Enter:
-							Key2ButtonClickerAsync(EnterBt);
-							break;
+						//case Key.Enter:
+						//	Key2ButtonClickerAsync(EnterBt);
+						//	break;
 						case Key.M:
 							if (keyboardModifiers == ModifierKeys.Control) {
 								Key2ButtonClickerAsync(MemorySaveBt);
@@ -2100,6 +2100,9 @@ namespace CS_Calculator{
 							break;
 						case Key.Delete:
 							Key2ButtonClickerAsync(ClearAllBt);
+							break;
+						case Key.Enter:
+							Key2ButtonClickerAsync(EnterBt);
 							break;
 					}
 				}
