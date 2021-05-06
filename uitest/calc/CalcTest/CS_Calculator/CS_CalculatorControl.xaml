@@ -242,7 +242,7 @@
 					FontSize="10" 
 					Grid.Row="0" Grid.Column="0"
 					Margin="2" 
-					SelectionChanged="MemoryComb_SelectionChanged" 
+					SelectionChanged="MemoryComb_SelectionChanged" MouseLeftButtonUp="MemoryComb_MouseLeftButtonUp" MouseRightButtonUp="MemoryComb_MouseRightButtonUp" 
 					>
 					<ComboBox.ContextMenu>
 						<ContextMenu>

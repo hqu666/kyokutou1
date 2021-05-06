@@ -317,11 +317,12 @@ namespace CS_Calculator{
 					dbMsg += ",=" + NextOperation;
 					//正規の入力処理					ProcessedFunc(NextOperation);　を通さず
 					BeforeOperation = NextOperation;
+					NowOperations.Text += NextOperation;
 				} else if (OperatKey == Key.D8) {
 					NextOperation = ParenStr;
 					ParenFunc();
 				}
-				NowOperations.Text += NextOperation;
+	//			NowOperations.Text += NextOperation;
 				dbMsg += ",渡された入力=" + NowOperations.Text;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -1653,8 +1654,6 @@ namespace CS_Calculator{
 						BeforeInput.Value = null;
 						dbMsg += ">>前の値を格納=" + BeforeInput.Operater + " : " + BeforeInput.Value;
 						BeforeVals.Add(BeforeInput);
-
-						//			NowOperations.Text += BeforeOperation;
 						NowInput.Value = null;
 						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 						BeforeVals.Add(NowInput);
@@ -1673,11 +1672,9 @@ namespace CS_Calculator{
 					OnPropertyChanged("ResultStr");
 					InputStr = "";
 				}
-
 				ProgressRefresh();
 				if (NextOperation.Equals(ParenthesisStr)) {
 					BeforeOperation = "";
-					//				NowOperations.Text += NextOperation;
 				} else if (NextOperation.EndsWith(ParenStr)) {
 					BeforeOperation = "";           //BeforeOperation = NextOperation;	だと関数が二重書込みされる
 					NowOperations.Text += NextOperation;
@@ -2359,6 +2356,44 @@ namespace CS_Calculator{
 			}
 		}
 
+		private int MemoryCombSelectIndex= -1;
+
+		private void MemoryComb_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+			string TAG = "MemoryComb_MouseLeftButtonDown";
+			string dbMsg = "";
+			try {
+				ComboBox cb = (ComboBox)sender;
+				if (cb == null) {
+					dbMsg += "senderを拾えない";
+					cb = MemoryComb;       // (ComboBox)sender;
+				}
+				MemoryCombSelectIndex = cb.SelectedIndex;
+				dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void MemoryComb_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+			string TAG = "MemoryComb_MouseRightButtonUp";
+			string dbMsg = "";
+			try {
+				ComboBox cb = (ComboBox)sender;
+				if (cb == null) {
+					dbMsg += "senderを拾えない";
+					cb = MemoryComb;       // (ComboBox)sender;
+				}
+				MemoryCombSelectIndex = cb.SelectedIndex;
+				dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
+
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 		/// <summary>
 		/// メモリコンボボックスで選択したアイテムを入力枠にコピーする
 		/// </summary>
@@ -2421,10 +2456,10 @@ namespace CS_Calculator{
 			string TAG = "MemoryItemDeleat";
 			string dbMsg = "";
 			try {
-				MenuItem mi = (MenuItem)sender;
+				dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
 				ComboBox cb = (ComboBox)MemoryComb;
 				//先頭は-1？？
-				if(0<cb.SelectedIndex) {
+				if(-1<MemoryCombSelectIndex) {
 					string titolStr = "電卓：メモリーから削除"; ;
 					String msgStr = "[" + (cb.SelectedIndex + 1) + "]" + cb.SelectedValue + "をメモリから削除します。";
 					MessageBoxResult res = MessageShowWPF(msgStr, titolStr, MessageBoxButton.YesNo, MessageBoxImage.Information);
@@ -2541,7 +2576,6 @@ namespace CS_Calculator{
 			public string Operater { get; set; }
 			public string Value { get; set; }
 		}
-		//20210428 			public double? Value { get; set; }
 	}
 
 }
