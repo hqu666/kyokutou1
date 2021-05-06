@@ -15,6 +15,7 @@ using System.Windows.Interop;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Automation.Peers;
 //using GsSGCell = GrapeCity.Windows.SpreadGrid.Cell;
 //using XDGCell = Infragistics.Windows.DataPresenter.Cell;
 
@@ -171,6 +172,12 @@ namespace CS_Calculator{
 		/// 最初の入力か
 		/// </summary>
 		private bool IsBegin = true;
+
+		/// <summary>
+		/// 数式として完結し、値を返せる状態か
+		/// </summary>
+		private bool IsCompletion = false;
+
 		/// <summary>
 		/// 編集値の変更か
 		/// </summary>
@@ -280,7 +287,7 @@ namespace CS_Calculator{
 				//フィールド値を渡されていたら、数値検証して最初の値＝最初の計算結果として変数化
 				if (!InputStr.Equals("")) {
 					double frastVal;
-					if (double.TryParse(InputStr, out frastVal)) {       //-1 == OpraterIndex(inParenStr)
+					if (double.TryParse(InputStr, out frastVal)) {   
 						dbMsg += ">>数値=" + frastVal;
 						ProcessVal = frastVal;
 						CalcResult.Content = ProcessVal.ToString();
@@ -304,8 +311,7 @@ namespace CS_Calculator{
 							break;
 						case Key.Subtract:			//87
 						case Key.OemMinus:      //143
-							isMinus = true;
-		//					NextOperation = SubtractStr;
+							isMinus = true;			//-はNextOperation = SubtractStrで演算子とせず、負数の扱いにする
 							break;
 						case Key.Divide:				//89
 							NextOperation = DivideStr;
@@ -320,9 +326,8 @@ namespace CS_Calculator{
 					NowOperations.Text += NextOperation;
 				} else if (OperatKey == Key.D8) {
 					NextOperation = ParenStr;
-					ParenFunc();
+					ParenFunc();					//NowOperations.Text:経過の書込みも行う
 				}
-	//			NowOperations.Text += NextOperation;
 				dbMsg += ",渡された入力=" + NowOperations.Text;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
@@ -455,10 +460,11 @@ namespace CS_Calculator{
 			string TAG = "EnterFunc";
 			string dbMsg = "";
 			try {
-	//			BeforeOperation = "";			//ここで空白にすると二項しかない時点で演算子が消える
-				dbMsg += "最終入力" + InputStr;
-				if (InputStr.Equals("")) {
-					dbMsg += "処理する入力が無い";
+				//			BeforeOperation = "";			//ここで空白にすると二項しかない時点で演算子が消える
+				dbMsg += "、完結" + IsCompletion;
+				dbMsg += "、最終入力" + InputStr;
+				if (IsCompletion) {                              //InputStr.Equals("")
+				//	dbMsg += "処理する入力が無い";
 					MyLog(TAG, dbMsg);
 					MyCallBack();
 				} else if (IsBegin) {
@@ -472,6 +478,8 @@ namespace CS_Calculator{
 					dbMsg += ",優先範囲" + i + "/" + ParenCount;
 					ParenthesisFunc();
 				}
+				//		IsCompletion = true;				//もう一回Enterクリックで終了
+				dbMsg += ">>完結" + IsCompletion;
 				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
@@ -789,6 +797,7 @@ namespace CS_Calculator{
 						dbMsg += ">>関数を含む:";
 					}
 				}
+
 				if (IsPO) {
 					dbMsg += ">>数式入力:";
 					if (PFAOStr.Equals("")) {
@@ -1404,6 +1413,10 @@ namespace CS_Calculator{
 			}
 		}
 
+		/// <summary>
+		/// 演算子入力
+		/// </summary>
+		/// <param name="NextOperation"></param>
 		private void FuncInput(string NextOperation) {
 			string TAG = "FuncInput";
 			string dbMsg = "";
@@ -1433,7 +1446,6 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		///累乗 ^n
@@ -1545,19 +1557,18 @@ namespace CS_Calculator{
 			string TAG = "ProcessedFunc";
 			string dbMsg = "";
 			try {
-				//			bool isWithInput=false;			//入力値に続いて入力された
 				dbMsg += ",渡された演算子=" + NextOperation;
+				if (NextOperation.Equals("")) {
+			//		IsCompletion = true;                //もう一回Enterクリックで終了
+					dbMsg += "＞＞次のEnterで呼び出し元に戻る";
+				}else{
+					IsCompletion = false; 
+				}
 				BeforeVal NowInput = new BeforeVal();
 				dbMsg += ",現在の入力値=" + InputStr;
-				//if(InputStr !=null && !InputStr.Equals("")) {
-				//	isWithInput = true;
-				//}
 				NowInput.Operater = NextOperation;
 				dbMsg += ",前の演算子=" + BeforeOperation;
 				bool isReCalk = false;
-				//if (0==BeforeVals.Count && NextOperation.EndsWith(ParenStr)) {
-				//	dbMsg += "最初が関数の場合";
-				//} else 
 				if (!InputStr.Equals("")) {
 					if (isMinus) {
 						dbMsg += ">>負数化";
@@ -1571,9 +1582,6 @@ namespace CS_Calculator{
 							InputStr = "";
 							isMinus = false;
 							isReCalk = true;
-							//MyLog(TAG, dbMsg);
-							////演算子が有れば演算
-							//ReCalk();
 						} else {
 							dbMsg += ">>数値化できず";
 						}
@@ -1685,12 +1693,10 @@ namespace CS_Calculator{
 						NowOperations.Text += NextOperation;
 					} else {
 						dbMsg += "＞＞四則演算子からの入力開始を無視";
-						//if(isWithInput) {
-						//	NowOperations.Text += NextOperation;
-						//}
 					}
 				}
 				dbMsg += ",BeforeOperation=" + BeforeOperation;
+
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -1890,7 +1896,12 @@ namespace CS_Calculator{
 		}
 		private void EnterBt_Click(object sender, RoutedEventArgs e)
 		{
+			string TAG = "EnterBt_Click";
+			string dbMsg = ",IsCompletion=" + IsCompletion;
+			MyLog(TAG, dbMsg);
+
 			EnterFunc();
+			IsCompletion = true;                //もう一回Enterクリックで終了
 		}
 		private void ClearBt_Click(object sender, RoutedEventArgs e)
 		{
@@ -2067,9 +2078,11 @@ namespace CS_Calculator{
 								Key2ButtonClickerAsync(MemorySaveBt);
 							}
 							break;
+						default:
+							break;
 					}
 				}
-		//		MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -2098,39 +2111,64 @@ namespace CS_Calculator{
 						case Key.Delete:
 							Key2ButtonClickerAsync(ClearAllBt);
 							break;
-						case Key.Enter:
-							Key2ButtonClickerAsync(EnterBt);
+				//		case Key.Return:
+				////		case Key.Enter:		もキーコード6
+				//			Key2ButtonClickerAsync(EnterBt);
+				//			break;
+						default:
 							break;
 					}
 				}
-	//			MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+
+		private void EnterBt_KeyDown(object sender, KeyEventArgs e) {
+			string TAG = "EnterBt_KeyDown";
+			string dbMsg = "";
+			try {
+				Key key = e.Key;
+				dbMsg += "key=" + key.ToString();
+				if (e.Key == Key.Return) {
+					Key2ButtonClickerAsync(EnterBt);
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
 
 		public Button TargetBt;
 		/// <summary>
 		/// キーボード押下に相当するボタンのクリック
 		/// </summary>
 		/// <param name="targetBt"></param>
-		private async Task Key2ButtonClickerAsync(Button targetBt)
-		{
+		private async void Key2ButtonClickerAsync(Button targetBt) {        // async Taskは呼び出し元に干渉する
 			string TAG = "Key2ButtonClicker";
 			string dbMsg = "";
 			try {
 				dbMsg += ",targetBt=" + targetBt.Name;
 				TargetBt = targetBt;
+
+					//クリック表示
 				typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[] { true });
-				targetBt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 				await Task.Delay(100);
 				typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[] { false });
+				//ここまで
+				typeof(System.Windows.Controls.Primitives.ButtonBase).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt, new object[0]);
+//				targetBt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+				//で動作はするがクリック表示にならないのでtypeof
 
-				////以下でも動作はするがクリック表示にならない
+				//targetBt.RaiseEvent(new RoutedEventArgs(Button.ClickEvent)); および
+				//		typeof(System.Windows.Controls.Primitives.ButtonBase).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(targetBt,new object[0]);では表示に反映されない
+				////以下でも動作はするがクリック表示にならない:IInvokeProviderも参照できない
 				//var provider = new ButtonAutomationPeer(targetBt) as IInvokeProvider;
 				//provider.Invoke();
 				//もしくは	ClearBt_Click(new object(), new RoutedEventArgs());
-	//			MyLog(TAG, dbMsg);
+				MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -2431,10 +2469,6 @@ namespace CS_Calculator{
 						InputStr = selectStr;		// cb.SelectedItem.ToString();
 						dbMsg += "選択値=" + InputStr;
 						NowOperations.Text += selectStr;
-						//if(BeforeOperation != null && !BeforeOperation.Equals("")) {
-						//	ProcessedFunc("");
-						//}
-						//		EnterFunc();
 					}
 				} else{
 					dbMsg += "選択されていない";
@@ -2576,6 +2610,7 @@ namespace CS_Calculator{
 			public string Operater { get; set; }
 			public string Value { get; set; }
 		}
+
 	}
 
 }

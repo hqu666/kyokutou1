@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-           xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-          xmlns:local="clr-namespace:CS_Calculator"
+			xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			xmlns:local="clr-namespace:CS_Calculator"
              mc:Ignorable="d" 
-			 Unloaded="UserControl_Unloaded" 
+			Unloaded="UserControl_Unloaded" 
 			PreviewKeyDown="UserControl_PreviewKeyDown"
-			 KeyDown="UserControl_KeyDown"
+			KeyDown="UserControl_KeyDown"
 	>
+
 	<UserControl.Resources>
 		<Style  TargetType="Button" x:Name="button_bace">
 			<Setter Property="FontSize" Value="18" />
@@ -222,11 +223,11 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<Grid Name="FunctionGrid"
-				Visibility="Collapsed"
 				Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
 				>
+				<!--Visibility="Collapsed"-->
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="40*" />
 					<ColumnDefinition Width="40*" />
@@ -402,8 +403,14 @@
 			<Button x:Name="EnterBt" Content="Enter"  FontSize="11"
 					Grid.Row="4" Grid.Column="3" Grid.RowSpan="2"
 					Template="{StaticResource Calcbutton}"
-				Click="EnterBt_Click"  />
-			<!--Command="{Binding PlusClick}"-->
+					Click="EnterBt_Click" KeyDown="EnterBt_KeyDown" 
+					/>
+			<!--<Button.InputBindings>
+					<KeyBinding Gesture="Enter" Command="{Binding EnterFunc}"/>
+				</Button.InputBindings>
+			</Button>-->
+			<!--					
+			Command="{Binding PlusClick}"-->
 		</Grid>
 	</Grid>
 
