@@ -278,7 +278,9 @@
                     TextBlock.Foreground="Black"
 					Background= "LightYellow"
 					VerticalAlignment="Top" Margin="1,1,1,0" MinHeight="14"
-					Loaded="FunkBt_Loaded"
+					Loaded="FunkBt_Loaded" 
+					ContextMenuClosing="FunkBt_ContextMenuClosing" 
+					KeyDown="FunkBt_KeyDown" 
 				>
 					<ToggleButton.ContextMenu>
 						<ContextMenu>
@@ -403,9 +405,13 @@
 			<Button x:Name="EnterBt" Content="Enter"  FontSize="11"
 					Grid.Row="4" Grid.Column="3" Grid.RowSpan="2"
 					Template="{StaticResource Calcbutton}"
-					Click="EnterBt_Click" KeyDown="EnterBt_KeyDown" 
+					Click="EnterBt_Click" 
+					KeyDown="EnterBt_KeyDown" ForceCursor="True" 
 					/>
-			<!--<Button.InputBindings>
+			<!--
+								IsDefault="True"
+
+			<Button.InputBindings>
 					<KeyBinding Gesture="Enter" Command="{Binding EnterFunc}"/>
 				</Button.InputBindings>
 			</Button>-->

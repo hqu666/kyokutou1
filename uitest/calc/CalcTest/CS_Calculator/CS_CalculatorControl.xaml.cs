@@ -2125,6 +2125,11 @@ namespace CS_Calculator{
 			}
 		}
 
+		/// <summary>
+		/// Enterキーイベントが二重発生するのでPreviewKeyDownハンドラから分離
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EnterBt_KeyDown(object sender, KeyEventArgs e) {
 			string TAG = "EnterBt_KeyDown";
 			string dbMsg = "";
@@ -2132,6 +2137,7 @@ namespace CS_Calculator{
 				Key key = e.Key;
 				dbMsg += "key=" + key.ToString();
 				if (e.Key == Key.Return) {
+					this.EnterBt.Focus();
 					Key2ButtonClickerAsync(EnterBt);
 				}
 				MyLog(TAG, dbMsg);
@@ -2139,7 +2145,6 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		public Button TargetBt;
 		/// <summary>
@@ -2516,7 +2521,7 @@ namespace CS_Calculator{
 			string TAG = "FunkBt_Loaded";
 			string dbMsg = "";
 			try {
-				var btn = (ToggleButton)sender;
+				ToggleButton btn = (ToggleButton)sender;
 
 				btn.SetBinding(ToggleButton.IsCheckedProperty, new Binding("IsOpen") { Source=btn.ContextMenu });
 				btn.ContextMenu.PlacementTarget = btn;
@@ -2526,6 +2531,78 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
+		private void FunkBt_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e) {
+			string TAG = "FunkBt_FocusableChanged";
+			string dbMsg = "";
+			try {
+				dbMsg += ",FunkBt=" + FunkBt.IsFocused;
+				if (FunkBt.IsFocused) {
+					FunkBt.Focusable = false;
+					dbMsg += ">>" + FunkBt.IsFocused;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void FunkBt_KeyDown(object sender, KeyEventArgs e) {
+			string TAG = "FunkBt_KeyDown";
+			string dbMsg = "";
+			try {
+				dbMsg += ",FunkBt=" + FunkBt.IsFocused;
+				if (FunkBt.IsFocused) {
+					this.MoveFocus(new TraversalRequest(FocusNavigationDirection.Last));
+					dbMsg += ">>" + FunkBt.IsFocused;
+					dbMsg += ",EnterBt=" + EnterBt.IsFocused;
+
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		private void FunkBt_ContextMenuClosing(object sender, ContextMenuEventArgs e) {
+			string TAG = "FunkBt_ContextMenuClosing";
+			string dbMsg = "";
+			try {
+				dbMsg += ",FunkBt=" + FunkBt.IsFocused;
+				if (FunkBt.IsFocused) {
+					this.MoveFocus(new TraversalRequest(FocusNavigationDirection.Last));
+					dbMsg += ">>" + FunkBt.IsFocused;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		/// <summary>
+		/// メニュー選択後発生,最後のエレメント（Enterボタン）にフォーカスを移す
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void FunkBt_LostFocus(object sender, RoutedEventArgs e) {
+			string TAG = "FunkBt_LostFocus";
+			string dbMsg = "";
+			try {
+				dbMsg += ",FunkBt=" + FunkBt.IsFocused;
+				if (FunkBt.IsFocused) {
+					FunkBt.MoveFocus(new TraversalRequest(FocusNavigationDirection.Last));
+					dbMsg += ">>" + FunkBt.IsFocused;
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+		}
+
+		//FunkBt_Checkedでフォーカスを外すと動作が止まる 
+		//発生せず FunkBt_MouseUp、
+		//ループ発生		FunkBt_LostFocus
+
+
 		/// <summary>
 		/// マウス右クリック
 		/// </summary>
