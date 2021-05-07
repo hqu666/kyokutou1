@@ -259,20 +259,25 @@ namespace CS_Calculator{
 				if (CalcVer==null) {
 					dbMsg += "未設定";
 					CalcVer = 0;
-				} 
-				if(CalcVer==0) {
+				}
+				dbMsg += ",FunctionGrid.Visibility=" + FunctionGrid.Visibility;
+				dbMsg += ",Height=" + FunctionGrid.Height;
+				if (CalcVer==0) {
 					dbMsg += "電卓処理まで" ;
 					IsPO = false;
 					FunctionGrid.Visibility = Visibility.Collapsed;
-					//			FunctionGrid.Height = 0;
+					FunctionGrid.Height = 0;
 				} else if (CalcVer == 1) {
 					dbMsg += "三角関数まで";
 					FunctionGrid.Visibility = Visibility.Visible;
+					FunctionGrid.Height = 16;
 					//計算の優先順位は電卓処理から
 					IsPO = SetOperationPriority(IsPO);
 					//起動時はメモリコンボを非表示
 					MemoryComb.Visibility = Visibility.Hidden;
 				}
+				dbMsg += ">Visibility>" + FunctionGrid.Visibility;
+				dbMsg += ">Height>" + FunctionGrid.Height;
 				dbMsg += ",数式入力=" + IsPO;
 				if (TargetTextBox != null) {
 					dbMsg += ",TextBoxから";
@@ -1549,7 +1554,6 @@ namespace CS_Calculator{
 			}
 		}
 
-
 		/// <summary>
 		/// 演算子キーが押された時点で前の演算を処理して、値の入力を待つ
 		/// </summary>
@@ -1701,7 +1705,6 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
 
 		/// <summary>
 		/// 優先範囲開始の設定
@@ -2205,15 +2208,15 @@ namespace CS_Calculator{
 		/// </summary>
 		private void CorpProgress(){
 			CalcProgress.Visibility = Visibility.Collapsed;
-			FunctionGrid.Visibility = Visibility.Visible;
 			KeyGrid.Visibility = Visibility.Visible;
-			if (CalcVer == null) {
-				FunctionGrid.Visibility = Visibility.Collapsed;
-			} else if (CalcVer == 0) {
-				FunctionGrid.Visibility = Visibility.Collapsed;
-			} else if (CalcVer == 1) {
-				FunctionGrid.Visibility = Visibility.Visible;
-			}
+			//	FunctionGrid.Visibility = Visibility.Visible;
+			//if (CalcVer == null) {
+			//	FunctionGrid.Visibility = Visibility.Collapsed;
+			//} else if (CalcVer == 0) {
+			//	FunctionGrid.Visibility = Visibility.Collapsed;
+			//} else if (CalcVer == 1) {
+			//	FunctionGrid.Visibility = Visibility.Visible;
+			//}
 			CorpBt.Content = "▼";
 			EnterBt.Focus();
 		}
@@ -2602,7 +2605,6 @@ namespace CS_Calculator{
 		//発生せず FunkBt_MouseUp、
 		//ループ発生		FunkBt_LostFocus
 
-
 		/// <summary>
 		/// マウス右クリック
 		/// </summary>
@@ -2617,8 +2619,7 @@ namespace CS_Calculator{
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-
-
+		
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) {
 			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
