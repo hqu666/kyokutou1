@@ -152,7 +152,11 @@ namespace WpfApp1.ViewModels {
 				CalcTexWidth = Properties.Settings.Default.CalcTexWidth;
 				CalcTextShowX = Properties.Settings.Default.CalcTextShowX;
 				CalcTextShowY = Properties.Settings.Default.CalcTextShowY;
+				CalcTextDLogTitol = "電卓";
+#if DEBUG
 				CalcTextDLogTitol = Properties.Settings.Default.CalcTextDLogTitol;      //setting.Value.ValueXml.InnerText;
+#endif
+				dbMsg += ",CalcTextDLogTitol=" + CalcTextDLogTitol;
 				CalcWindowWidthStr = Properties.Settings.Default.CalcWindowWidthStr;
 				CalcWindowHeightStr = Properties.Settings.Default.CalcWindowHeightStr;
 				//パラメータの初期値
@@ -163,7 +167,6 @@ namespace WpfApp1.ViewModels {
 				if (CalcTextDLogTitol == null || CalcTextFontSize.Equals("")) {
 					CalcTextDLogTitol = "電卓を表示するフィールドから";
 				}
-				dbMsg += ",CalcTextDLogTitol=" + CalcTextDLogTitol;
 				if (CalcTexWidth == null || CalcTextDLogTitol.Equals("")) {
 					CalcTexWidth = "200";
 				}
@@ -216,10 +219,10 @@ namespace WpfApp1.ViewModels {
 				RaisePropertyChanged();
 
 				GsGlist = new List<Product>();
-				GsGlist.Add(new Product() { Name = "みるきーくいん", Price = 2080, Tax = 8 });
-				GsGlist.Add(new Product() { Name = "徳陽ほうじ茶", Price = 298, Tax = 10 });
-				GsGlist.Add(new Product() { Name = "バスサイズ石鹸", Price = 140, Tax = 10 });
-				GsGlist.Add(new Product() { Name = "５袋ラーメン", Price = 298, Tax = 8 });
+				GsGlist.Add(new Product() { Name = "みるきーくいん", Price = 2080, Tax = 8 , Quantity=1 });
+				GsGlist.Add(new Product() { Name = "徳陽ほうじ茶", Price = 298, Tax = 10, Quantity = 1 });
+				GsGlist.Add(new Product() { Name = "バスサイズ石鹸", Price = 140, Tax = 10, Quantity = 1 });
+				GsGlist.Add(new Product() { Name = "５袋ラーメン", Price = 298, Tax = 8, Quantity = 1 });
 
 				/* 動的生成例：
 				 * https://docs.grapecity.com/help/spread-wpf-2/GrapeCity.WPF.SpreadGrid~GrapeCity.Windows.SpreadGrid.BindingDataField~Binding.html
@@ -240,18 +243,18 @@ namespace WpfApp1.ViewModels {
 
 				/// XamDataGridに初期値を書き込むj
 				XDGDatas = new ObservableCollection<Product> {
-					new Product { Name="LEDシーリング", Price=4980, Tax=10 },
-					new Product { Name="歯磨き粉", Price=298, Tax=10 },
-					new Product { Name="おにぎり", Price=124, Tax=8 },
-					new Product { Name="緑茶", Price=800, Tax=8 }
+					new Product { Name="LEDシーリング", Price=4980, Tax=10 , Quantity=1 },
+					new Product { Name="歯磨き粉", Price=298, Tax=10 , Quantity=1 },
+					new Product { Name="おにぎり", Price=124, Tax=8 , Quantity=1 },
+					new Product { Name="緑茶", Price=800, Tax=8 , Quantity=1 }
 				};
 
 				/// 基底DataGridに初期値を書き込むj
 				DGDatas = new ObservableCollection<Product> {
-					new Product { Name="化粧品", Price=1900, Tax=10 },
-					new Product { Name="洗剤", Price=500, Tax=10 },
-					new Product { Name="パン", Price=800, Tax=8 },
-					new Product { Name="牛乳", Price=800, Tax=8 }
+					new Product { Name="化粧品", Price=1900, Tax=10 , Quantity=1 },
+					new Product { Name="洗剤", Price=298, Tax=10 , Quantity=1 },
+					new Product { Name="パン", Price=128, Tax=8 , Quantity=1 },
+					new Product { Name="牛乳", Price=120, Tax=8 , Quantity=1 }
 				};
 				RaisePropertyChanged();
 				MyLog(TAG, dbMsg);
@@ -260,8 +263,12 @@ namespace WpfApp1.ViewModels {
 			}
 		}
 
+
+		/// <summary>
+		/// Spredのテスト
+		/// </summary>
 		#region MyGsGridContextMenuClick	　GcSpreadGridのコンテキストメニューから電卓を呼び出す
-		private ViewModelCommand _MyGsGridContextMenuClick;
+	//	private ViewModelCommand _MyGsGridContextMenuClick;
 
 		//public ViewModelCommand MyGsGridContextMenuClick {
 		//	get {
@@ -352,6 +359,9 @@ namespace WpfApp1.ViewModels {
 		//}
 		#endregion
 
+		/// <summary>
+		/// XamDataGrid
+		/// </summary>
 		/*
 		#region XDGContextMenuClick	　XamDataGridのコンテキストメニューから電卓を呼び出す
 		private ViewModelCommand _XDGContextMenuClick;
@@ -550,7 +560,7 @@ namespace WpfApp1.ViewModels {
 				#endregion
 		*/
 
-		#region DGContextMenuClick	　規定DataGridのコンテキストメニューから電卓を呼び出す
+		#region DGContextMenuClick	　基底のDataGridのコンテキストメニューから電卓を呼び出す
 		private ViewModelCommand _DGContextMenuClick;
 
 		public ViewModelCommand DGContextMenuClick {
@@ -561,6 +571,7 @@ namespace WpfApp1.ViewModels {
 				return _DGContextMenuClick;
 			}
 		}
+
 		/// <summary>
 		/// 基底DataGridのコンテキストメニューから電卓を呼び出す
 		/// </summary>
@@ -585,13 +596,17 @@ namespace WpfApp1.ViewModels {
 					CS_CalculatorControl calculatorControl = new CS_CalculatorControl();
 					calculatorControl.TargetTextBlock = targetTextBlock;
 					calculatorControl.InputStr = targetTextBlock.Text;
-
+					dbMsg += ",CalcVer=" + CalcVer;
+					calculatorControl.CalcVer = CalcVer;
+					dbMsg += ",IsPO=" + IsPO;
+					calculatorControl.IsPO = IsPO;
 					//Windowを生成；タイトルの初期値は書き戻し先のフィールド名
 					Window CalcWindow = new Window {
-						Title = targetTextBlock.Name,
+						Title = CalcTextDLogTitol,	//targetTextBlock.Name,
 						Content = calculatorControl,
 						ResizeMode = ResizeMode.NoResize
 					};
+					dbMsg += ",Title=" + CalcWindow.Title;
 					Point pt = targetTextBlock.PointToScreen(new Point(0.0d, 0.0d));
 					//表示位置
 					Double ShowX = 0;
@@ -626,9 +641,10 @@ namespace WpfApp1.ViewModels {
 					string ViewTitle = "データグリッド" + DG.Name + "の" + (rowIndex + 1) + "行目" + (columnIndex + 1) + "列目";
 
 					dbMsg += ",ViewTitol=" + ViewTitle;
-
 					if (!ViewTitle.Equals("")) {
+#if DEBUG
 						CalcWindow.Title = ViewTitle;
+#endif
 					}
 					calculatorControl.CalcWindow = CalcWindow;
 					calculatorControl.InputStr = result.ToString();
@@ -652,7 +668,7 @@ namespace WpfApp1.ViewModels {
 				MyErrorLog(TAG, dbMsg, er);
 			}
 		}
-		#endregion
+#endregion
 
 		////////////////////////////////////////////////////////////////
 		public static void MyLog(string TAG, string dbMsg) {

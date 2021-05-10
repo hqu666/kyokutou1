@@ -519,6 +519,31 @@ namespace CS_Calculator{
 		}
 
 		/// <summary>
+		/// 指定した文字列がいくつあるか
+		/// https://kan-kikuchi.hatenablog.com/entry/CountOf
+		/// </summary>
+		public static int CountOf(string target, params string[] strArray) {
+			int count = 0;
+			string TAG = "CountOf";
+			string dbMsg = "";
+			try {
+				dbMsg += target+" 中の" + strArray;
+				foreach (string str in strArray) {
+				int index = target.IndexOf(str, 0);
+					while (index != -1) {
+						count++;
+						index = target.IndexOf(str, index + str.Length);
+						dbMsg += "[" + count + "]" + index;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return count;
+		}
+
+		/// <summary>
 		/// 演算本体
 		/// 計算結果に次の演算を行う
 		/// </summary>
@@ -783,17 +808,23 @@ namespace CS_Calculator{
 					PFAOStr += iValStr;
 				}
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
-				deficitParenthesis = iParenCount - ParenthesisCount;
-				dbMsg += "：)不足＝"+ deficitParenthesis;
+				//deficitParenthesis = iParenCount - ParenthesisCount;
+				//dbMsg += "：)不足＝"+ deficitParenthesis;
 				dbMsg += "入力状況" + PFAOStr;
-				if(PFAOStr.EndsWith(iOperater) && !PFAOStr.Equals(iValStr)) {
+				if (PFAOStr.EndsWith(iOperater) && !PFAOStr.Equals(iValStr)) {
 					int eLength = PFAOStr.Length - iOperater.Length;
-					PFAOStr=PFAOStr.Remove(eLength, iOperater.Length);
+					PFAOStr = PFAOStr.Remove(eLength, iOperater.Length);
 					dbMsg += ">演算子で終わった>" + PFAOStr;
 				}
+				iParenCount = CountOf(PFAOStr,ParenStr);
+				ParenthesisCount = CountOf(PFAOStr, ParenthesisStr);
+				dbMsg += "\r\n再確認；優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
+				deficitParenthesis = iParenCount - ParenthesisCount;
+				dbMsg += "：)不足＝" + deficitParenthesis;
 				for (int tCount = 0; tCount < deficitParenthesis; tCount++) {
 					PFAOStr += ParenthesisStr;
 				}
+				PFAOStr = PFAOStr.Replace(")(",")*(");
 				dbMsg += ">優先範囲終端補完後>" + PFAOStr;
 				bool isFunc = false;
 				foreach (string fName in MyFunctions) {
@@ -817,6 +848,7 @@ namespace CS_Calculator{
 						MyLog(TAG, dbMsg);
 						FunctionCalc(PFAOStr);
 					} else {
+						MyLog(TAG, dbMsg);
 						try {
 							//式を計算する .NET5?
 							System.Data.DataTable dt = new System.Data.DataTable();
@@ -2639,8 +2671,8 @@ namespace CS_Calculator{
 		}
 
 		public string ValsLog(IEnumerable<BeforeVal> testVals) {
-#if DEBUG
 			string retStr = "";
+#if DEBUG
 			//入力値が侵食されていない事を確認する
 			foreach (BeforeVal iVal in testVals) {
 				string iOperater = iVal.Operater;

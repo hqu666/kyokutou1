@@ -222,103 +222,96 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
-
-			<!--<StackPanel x:Name="FunctionPanel"
-								Grid.Row="0" 
-								Grid.Column="0"  
-								Grid.ColumnSpan="4"
-								>-->
-				<Grid Name="FunctionGrid"
-						Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
-						HorizontalAlignment="Stretch"
-						VerticalAlignment="Stretch"
-						Visibility="Visible"
-						Height="16"
+			<Grid Name="FunctionGrid"
+					Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch"
+					Visibility="Visible"
+					Height="16"
+					>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="40*" />
+					<ColumnDefinition Width="40*" />
+					<ColumnDefinition Width="40*" />
+					<ColumnDefinition Width="40*" />
+					<ColumnDefinition Width="40*" />
+					<!--	<ColumnDefinition Width="40*" />-->
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions >
+					<RowDefinition Height="16" />
+				</Grid.RowDefinitions>
+				<ComboBox x:Name="MemoryComb" 
+						FontSize="10" 
+						Grid.Row="0" Grid.Column="0"
+						Margin="2" 
+						SelectionChanged="MemoryComb_SelectionChanged" MouseLeftButtonUp="MemoryComb_MouseLeftButtonUp" MouseRightButtonUp="MemoryComb_MouseRightButtonUp" 
 						>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="40*" />
-						<ColumnDefinition Width="40*" />
-						<ColumnDefinition Width="40*" />
-						<ColumnDefinition Width="40*" />
-						<ColumnDefinition Width="40*" />
-						<!--	<ColumnDefinition Width="40*" />-->
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions >
-						<RowDefinition Height="16" />
-					</Grid.RowDefinitions>
-					<ComboBox x:Name="MemoryComb" 
-							FontSize="10" 
-							Grid.Row="0" Grid.Column="0"
-							Margin="2" 
-							SelectionChanged="MemoryComb_SelectionChanged" MouseLeftButtonUp="MemoryComb_MouseLeftButtonUp" MouseRightButtonUp="MemoryComb_MouseRightButtonUp" 
-							>
-						<ComboBox.ContextMenu>
-							<ContextMenu>
-								<MenuItem Header="削除" Click="MemoryItemDeleat"/>
-							</ContextMenu>
-						</ComboBox.ContextMenu>
-					</ComboBox>
-					<Button x:Name="MemorySaveBt" Content="MS" 
-					FontSize="9" 
-					Grid.Row="0" Grid.Column="1"
-					Template="{StaticResource FuncButton}" Click="MemorySaveBt_Click" 
+					<ComboBox.ContextMenu>
+						<ContextMenu>
+							<MenuItem Header="削除" Click="MemoryItemDeleat"/>
+						</ContextMenu>
+					</ComboBox.ContextMenu>
+				</ComboBox>
+				<Button x:Name="MemorySaveBt" Content="MS" 
+				FontSize="9" 
+				Grid.Row="0" Grid.Column="1"
+				Template="{StaticResource FuncButton}" Click="MemorySaveBt_Click" 
+				/>
+				<Button x:Name="ParenBt" Content="("  
+				Grid.Row="0" Grid.Column="2" 
+				FontSize="7" 
+				Template="{StaticResource FuncButton}" 
+				Click="ParenBt_Click"
 					/>
-					<Button x:Name="ParenBt" Content="("  
-					Grid.Row="0" Grid.Column="2" 
-					FontSize="7" 
-					Template="{StaticResource FuncButton}" 
-					Click="ParenBt_Click"
-						/>
-					<Button x:Name="ParenthesisBt" Content=")" 
-					Grid.Row="0" Grid.Column="3" 
-					FontSize="7" 
-					Template="{StaticResource FuncButton}" 
-					Click="ParenthesisBt_Click"
-						/>
-					<ToggleButton 
-					x:Name="FunkBt" 
-					Grid.Row="0" Grid.Column="4" 
-					FontSize="7" 
-					BorderThickness="1"
-					BorderBrush="DarkGray"
-					Padding="0"
-					TextBlock.Foreground="Black"
-					Background= "LightYellow"
-					VerticalAlignment="Top" Margin="1,1,1,0" MinHeight="14"
-					Loaded="FunkBt_Loaded" 
-					ContextMenuClosing="FunkBt_ContextMenuClosing" 
-					KeyDown="FunkBt_KeyDown" 
-				>
-						<ToggleButton.ContextMenu>
-							<ContextMenu>
-								<MenuItem x:Name="PFAOMenu" Header="数式入力" Click="ChangeToPO"/>
-								<MenuItem x:Name="PCOMenu" Header="電卓処理に戻す" Click="ChangeToCalculator"/>
-								<Separator x:Name="TBMenuSeparator" />
-								<MenuItem  x:Name="TBMenuFunc" Header="関数">
-									<MenuItem  Header="X²  :Pow" Click="PowerFunc"/>
-									<MenuItem Header="²√ｘ ;Squrt" Click="SqrtFunc"/>
-									<MenuItem Header="三角関数">
-										<MenuItem  Header="sin  :Sin" Click="SinFunc"/>
-										<MenuItem Header="cos ;Cos" Click="CosFunc"/>
-										<MenuItem  Header="tan  :Tan" Click="TanFunc"/>
-										<MenuItem  Header="sin⁻¹ :Asin" Click="AsinrFunc"/>
-										<MenuItem Header="cos⁻¹ ;Acos" Click="AcosFunc"/>
-										<MenuItem  Header="tan⁻¹  :Atan" Click="AtanFunc"/>
-									</MenuItem>
-									<MenuItem Header="定数">
-										<MenuItem Header="π      ;PI" Click="PIFunc"/>
-									</MenuItem>
+				<Button x:Name="ParenthesisBt" Content=")" 
+				Grid.Row="0" Grid.Column="3" 
+				FontSize="7" 
+				Template="{StaticResource FuncButton}" 
+				Click="ParenthesisBt_Click"
+					/>
+				<ToggleButton 
+				x:Name="FunkBt" 
+				Grid.Row="0" Grid.Column="4" 
+				FontSize="7" 
+				BorderThickness="1"
+				BorderBrush="DarkGray"
+				Padding="0"
+				TextBlock.Foreground="Black"
+				Background= "LightYellow"
+				VerticalAlignment="Top" Margin="1,1,1,0" MinHeight="14"
+				Loaded="FunkBt_Loaded" 
+				ContextMenuClosing="FunkBt_ContextMenuClosing" 
+				KeyDown="FunkBt_KeyDown" 
+			>
+					<ToggleButton.ContextMenu>
+						<ContextMenu>
+							<MenuItem x:Name="PFAOMenu" Header="数式入力" Click="ChangeToPO"/>
+							<MenuItem x:Name="PCOMenu" Header="電卓処理に戻す" Click="ChangeToCalculator"/>
+							<Separator x:Name="TBMenuSeparator" />
+							<MenuItem  x:Name="TBMenuFunc" Header="関数">
+								<MenuItem  Header="X²  :Pow" Click="PowerFunc"/>
+								<MenuItem Header="²√ｘ ;Squrt" Click="SqrtFunc"/>
+								<MenuItem Header="三角関数">
+									<MenuItem  Header="sin  :Sin" Click="SinFunc"/>
+									<MenuItem Header="cos ;Cos" Click="CosFunc"/>
+									<MenuItem  Header="tan  :Tan" Click="TanFunc"/>
+									<MenuItem  Header="sin⁻¹ :Asin" Click="AsinrFunc"/>
+									<MenuItem Header="cos⁻¹ ;Acos" Click="AcosFunc"/>
+									<MenuItem  Header="tan⁻¹  :Atan" Click="AtanFunc"/>
 								</MenuItem>
-							</ContextMenu>
-						</ToggleButton.ContextMenu>
-						<WrapPanel Margin="0,0">
-							<TextBlock Text="func"/>
-							<Border Width="1"/>
-							<Path Width="6" Height="4" Stretch="Fill" Fill="Black" Data="F1 M0,0 L10,0 L5,10 Z "/>
-						</WrapPanel>
-					</ToggleButton>
-				</Grid>
-			<!--</StackPanel>-->
+								<MenuItem Header="定数">
+									<MenuItem Header="π      ;PI" Click="PIFunc"/>
+								</MenuItem>
+							</MenuItem>
+						</ContextMenu>
+					</ToggleButton.ContextMenu>
+					<WrapPanel Margin="0,0">
+						<TextBlock Text="func"/>
+						<Border Width="1"/>
+						<Path Width="6" Height="4" Stretch="Fill" Fill="Black" Data="F1 M0,0 L10,0 L5,10 Z "/>
+					</WrapPanel>
+				</ToggleButton>
+			</Grid>
 			<!--Content="C&#xa;BackSpace"-->
 			<Button x:Name="ClearAllBt" Content="CA" FontSize="18"
 					Grid.Row="1" Grid.Column="0"

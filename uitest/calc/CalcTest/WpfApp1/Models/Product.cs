@@ -50,6 +50,19 @@ namespace WpfApp1.Models
 			}
 		}
 
+		private int _Quantity;
+		/// <summary>
+		/// 数量
+		/// </summary>
+		public int Quantity {
+			get => _Quantity;
+			set {
+				if (_Quantity == value)
+					return;
+				_Quantity = value;
+			}
+		}
+
 
 	}
 }
