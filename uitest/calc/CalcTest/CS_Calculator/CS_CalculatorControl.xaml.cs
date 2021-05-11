@@ -1588,9 +1588,13 @@ namespace CS_Calculator{
 				bool isReCalk = false;
 				if (!InputStr.Equals("")) {
 					if (isMinus) {
-						dbMsg += ">>負数化";
-						NowInput.Operater = null;
-						InputStr = SubtractStr + InputStr;
+						if(InputStr.StartsWith(SubtractStr)) {
+							dbMsg += ">>負数が渡された";
+						} else {
+							dbMsg += ">>負数化";
+							NowInput.Operater = null;
+							InputStr = SubtractStr + InputStr;
+						}
 						double secVal = 0;
 						if (double.TryParse(InputStr, out secVal)) {
 							//残りが負数を含む数値なら演算子無しと判定
@@ -1875,17 +1879,31 @@ namespace CS_Calculator{
 		/// 減算
 		/// </summary>
 		private void MinusBt_Click(object sender, RoutedEventArgs e) {
-			if (BeforeOperation != null) {
-				if (BeforeOperation.Equals(SubtractStr) && InputStr.Equals("")) {
-					MyLog("MinusBt_Click", SubtractStr + "重複");
-					return;
+			string TAG = "MinusBt_Click";
+			string dbMsg = "";
+			try {
+				dbMsg += ",ここまでの入力=" + NowOperations.Text + "[" + BeforeVals.Count + "件目]配列格納=" + ValsLog(BeforeVals) + "=" + ProcessVal + ":前の演算子" + BeforeOperation + "\r\n";
+				if (BeforeOperation != null) {
+					if (BeforeOperation.Equals(SubtractStr) && InputStr.Equals("")) {
+						dbMsg += "重複 " ;
+						MyLog(TAG, dbMsg);
+						return;
+					}
 				}
+				if(InputStr.Equals("")){
+					dbMsg += "負数 ";
+					isMinus = true;
+					NumInput(SubtractStr);
+				}else{
+					dbMsg += "減算 ";
+					MinusFunc();
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
 			}
-			MinusFunc();
 		}
-		/// <summary>
-		/// 積算
-		/// </summary>
+
 		private void AsteriskBt_Click(object sender, RoutedEventArgs e) {
 			if (BeforeOperation != null) {
 				if (BeforeOperation.Equals(MultiplyStr) && InputStr.Equals("")) {
@@ -2397,41 +2415,41 @@ namespace CS_Calculator{
 
 		private int MemoryCombSelectIndex = -1;
 
-		private void MemoryComb_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-			string TAG = "MemoryComb_MouseLeftButtonDown";
-			string dbMsg = "";
-			try {
-				ComboBox cb = (ComboBox)sender;
-				if (cb == null) {
-					dbMsg += "senderを拾えない";
-					cb = MemoryComb;       // (ComboBox)sender;
-				}
-				MemoryCombSelectIndex = cb.SelectedIndex;
-				dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
+		//private void MemoryComb_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+		//	string TAG = "MemoryComb_MouseLeftButtonDown";
+		//	string dbMsg = "";
+		//	try {
+		//		ComboBox cb = (ComboBox)sender;
+		//		if (cb == null) {
+		//			dbMsg += "senderを拾えない";
+		//			cb = MemoryComb;       // (ComboBox)sender;
+		//		}
+		//		MemoryCombSelectIndex = cb.SelectedIndex;
+		//		dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
 
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
-		private void MemoryComb_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-			string TAG = "MemoryComb_MouseRightButtonUp";
-			string dbMsg = "";
-			try {
-				ComboBox cb = (ComboBox)sender;
-				if (cb == null) {
-					dbMsg += "senderを拾えない";
-					cb = MemoryComb;       // (ComboBox)sender;
-				}
-				MemoryCombSelectIndex = cb.SelectedIndex;
-				dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
+		//private void MemoryComb_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+		//	string TAG = "MemoryComb_MouseRightButtonUp";
+		//	string dbMsg = "";
+		//	try {
+		//		ComboBox cb = (ComboBox)sender;
+		//		if (cb == null) {
+		//			dbMsg += "senderを拾えない";
+		//			cb = MemoryComb;       // (ComboBox)sender;
+		//		}
+		//		MemoryCombSelectIndex = cb.SelectedIndex;
+		//		dbMsg += "selectedIndex=" + MemoryCombSelectIndex;
 
-				MyLog(TAG, dbMsg);
-			} catch (Exception er) {
-				MyErrorLog(TAG, dbMsg, er);
-			}
-		}
+		//		MyLog(TAG, dbMsg);
+		//	} catch (Exception er) {
+		//		MyErrorLog(TAG, dbMsg, er);
+		//	}
+		//}
 
 		/// <summary>
 		/// メモリコンボボックスで選択したアイテムを入力枠にコピーする
@@ -2493,9 +2511,9 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				//		e.Handled = true;				//上書きさせる
-				ComboBox cb = MemoryComb;       // (ComboBox)sender;
-				dbMsg += "[" + cb.SelectedIndex + "]";
-				if(-1 < cb.SelectedIndex) {
+			//	ComboBox cb = MemoryComb;       // (ComboBox)sender;
+				dbMsg += "[" + MemoryComb.SelectedIndex + "]";
+				if(-1 < MemoryComb.SelectedIndex) {
 					MemoryComb.SelectedIndex = -1;
 					dbMsg += ">>" + MemoryComb.SelectedIndex;
 				}
@@ -2591,16 +2609,21 @@ namespace CS_Calculator{
 				ComboBox cb = (ComboBox)MemoryComb;
 				MemoryCombSelectIndex = cb.SelectedIndex;
 				dbMsg += ">>=" + MemoryCombSelectIndex;
-				int iCount = 0;
-				foreach (ItemsControl rItem in cb.Items) {
-					iCount++;
-					dbMsg += "[" + iCount + "]";
-					dbMsg += "Name=" + rItem.Name;
-					dbMsg += "IsFocused=" + rItem.IsFocused;
-					if (rItem.IsFocused) {
-						MemoryCombSelectIndex = iCount;
-					}
-				}
+				//int iCount = 0;
+				//for(iCount = 0; iCount < cb.Items.Count; iCount++) {
+				//	dbMsg += "[" + iCount + "]";
+				//	ComboBoxItem sItem = cb.Items[iCount];
+				//}
+
+				//foreach (ItemsControl rItem in cb.Items) {
+				//	iCount++;
+				//	dbMsg += "[" + iCount + "]";
+				//	dbMsg += "Name=" + rItem.Name;
+				//	dbMsg += "IsFocused=" + rItem.IsFocused;
+				//	if (rItem.IsFocused) {
+				//		MemoryCombSelectIndex = iCount;
+				//	}
+				//}
 				dbMsg += ">>[" + MemoryCombSelectIndex + "]" + cb.SelectedItem;
 				dbMsg += "[" + cb.SelectedIndex + "]" + cb.SelectedItem;
 				if (-1 < cb.SelectedIndex) {
