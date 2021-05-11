@@ -244,11 +244,23 @@
 						FontSize="10" 
 						Grid.Row="0" Grid.Column="0"
 						Margin="2" 
-						SelectionChanged="MemoryComb_SelectionChanged" MouseLeftButtonUp="MemoryComb_MouseLeftButtonUp" MouseRightButtonUp="MemoryComb_MouseRightButtonUp" 
+						SelectionChanged="MemoryComb_SelectionChanged" 
+						DropDownOpened="MemoryComb_DropDownOpened" 
 						>
+					<!--MouseRightButtonUp="MemoryComb_MouseRightButtonUp" が有ると
+						MouseLeftButtonUp="MemoryComb_MouseLeftButtonUp" 
+						MouseRightButtonDown="MemoryComb_MouseRightButtonDown"
+							ContextMenuOpening="MemoryComb_ContextMenuOpening"
+						FocusableChanged="MemoryComb_FocusableChanged"
+												Checked="MemoryContext_Delete_Checked" 
+			-->
+
 					<ComboBox.ContextMenu>
-						<ContextMenu>
-							<MenuItem Header="削除" Click="MemoryItemDeleat"/>
+						<ContextMenu x:Name="MemoryContext">
+							<MenuItem x:Name="MemoryContext_Delete"
+											Header="削除" 
+											Click="MemoryContext_Delete_Click" 
+									/>
 						</ContextMenu>
 					</ComboBox.ContextMenu>
 				</ComboBox>
