@@ -1596,7 +1596,11 @@ namespace CS_Calculator{
 							NowInput.Operater = null;
 							InputStr = SubtractStr + InputStr;
 						}
-						if(BeforeOperation.Equals(SubtractStr)) {
+						if (NextOperation.Equals(SubtractStr)) {
+							dbMsg += "；渡された演算子;" + NextOperation + "の消去";
+							NextOperation = null;
+						}
+						if (BeforeOperation.Equals(SubtractStr)) {
 							dbMsg += "；前回演算子;"+ BeforeOperation + "の重複阻止";
 							BeforeOperation = null;
 						}
@@ -1612,9 +1616,10 @@ namespace CS_Calculator{
 							NowInput.Operater = BeforeOperation;
 						}else{
 							dbMsg += "=開始行";
-							NowInput.Operater = null;
+							NowInput.Operater = "";
 							BeforeOperation = NextOperation;
 						}
+						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 						BeforeVals.Add(NowInput);
 						InputStr = "";
 						isReCalk = true;
@@ -1675,21 +1680,30 @@ namespace CS_Calculator{
 						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 						BeforeVals.Add(NowInput);
 						isReCalk = true;
+					} else if (NextOperation.Equals(ParenStr)) {
+						dbMsg += ",値に続く優先開始";
+						NowInput = new BeforeVal();
+						NowInput.Operater = NextOperation;
+						NowInput.Value = null;
+						dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+						BeforeVals.Add(NowInput);
+						isReCalk = false;
 					}
 				} else if (NextOperation.Equals(ParenthesisStr)) {
 					dbMsg += ",値無しの優先終了";
-					NowInput.Value = null;
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
 					isReCalk = true;
 				} else if (NextOperation.Equals(ParenStr)) {
-					dbMsg += ",優先開始";
+					dbMsg += ",値無しの優先開始";
 					NowInput.Value = null;
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
 					InputStr = "";
+					NowOperations.Text += NextOperation;
+					NextOperation = "";
 				} else if (NextOperation.EndsWith(ParenStr)) {
-					dbMsg += ",関数の場合";
+					dbMsg += ",値無しの関数の場合";
 					if (BeforeOperation.Equals("")) {
 						dbMsg += "::前の値無し；関数から始まる式";
 						dbMsg += ">>今回の値を格納=" + NowInput.Operater + " : " + NowInput.Value;
@@ -1721,9 +1735,9 @@ namespace CS_Calculator{
 				ProgressRefresh();
 				if (NextOperation.Equals(ParenthesisStr)) {
 					BeforeOperation = "";
-				} else if (NextOperation.EndsWith(ParenStr)) {
-					BeforeOperation = "";           //BeforeOperation = NextOperation;	だと関数が二重書込みされる
-					NowOperations.Text += NextOperation;
+				//} else if (NextOperation.EndsWith(ParenStr)) {
+				//	BeforeOperation = "";           //BeforeOperation = NextOperation;	だと関数が二重書込みされる
+				//	NowOperations.Text += NextOperation;
 				} else {
 					if (0 < BeforeVals.Count) {
 						BeforeOperation = NextOperation;
