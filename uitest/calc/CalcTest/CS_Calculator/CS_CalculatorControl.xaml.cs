@@ -1596,10 +1596,12 @@ namespace CS_Calculator{
 							NowInput.Operater = null;
 							InputStr = SubtractStr + InputStr;
 						}
+						if(BeforeOperation.Equals(SubtractStr)) {
+							dbMsg += "；前回演算子;"+ BeforeOperation + "の重複阻止";
+							BeforeOperation = null;
+						}
 						isMinus = false;
 					}
-
-					//		else {
 					double secVal = 0;
 					if (double.TryParse(InputStr, out secVal)) {
 						//残りが負数を含む数値なら演算子無しと判定
