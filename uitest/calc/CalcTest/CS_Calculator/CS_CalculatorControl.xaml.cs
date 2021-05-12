@@ -1586,6 +1586,7 @@ namespace CS_Calculator{
 				NowInput.Operater = NextOperation;
 				dbMsg += ",前の演算子=" + BeforeOperation;
 				bool isReCalk = false;
+				//数値が有れば格納
 				if (!InputStr.Equals("")) {
 					if (isMinus) {
 						if(InputStr.StartsWith(SubtractStr)) {
@@ -1595,19 +1596,31 @@ namespace CS_Calculator{
 							NowInput.Operater = null;
 							InputStr = SubtractStr + InputStr;
 						}
-						double secVal = 0;
-						if (double.TryParse(InputStr, out secVal)) {
-							//残りが負数を含む数値なら演算子無しと判定
-							NowInput.Value = InputStr;
-							BeforeVals.Add(NowInput);
-							InputStr = "";
-							isMinus = false;
-							isReCalk = true;
-						} else {
-							dbMsg += ">>数値化できず";
+						isMinus = false;
+					}
+
+					//		else {
+					double secVal = 0;
+					if (double.TryParse(InputStr, out secVal)) {
+						//残りが負数を含む数値なら演算子無しと判定
+						NowInput.Value = InputStr;
+						int BeforeValsCount =BeforeVals.Count;
+						dbMsg += "経過配列[" + BeforeValsCount + "]";
+						if (0< BeforeValsCount) {
+							NowInput.Operater = BeforeOperation;
+						}else{
+							dbMsg += "=開始行";
+							NowInput.Operater = null;
+							BeforeOperation = NextOperation;
 						}
+						BeforeVals.Add(NowInput);
+						InputStr = "";
+						isReCalk = true;
 					} else {
-						string bInputOperater = "";
+						dbMsg += ">>数値化できず";
+					}
+/*
+					string bInputOperater = "";
 						string bInputValue = null;
 						int bIndex = BeforeVals.Count - 1;
 						dbMsg += ",前の格納[" + bIndex + "]";
@@ -1648,7 +1661,9 @@ namespace CS_Calculator{
 								isReCalk = true;
 							}
 						}
-					}
+				//	}
+				*/
+
 					if (NextOperation.Equals(ParenthesisStr)) {
 						dbMsg += ",値に続く優先終了";
 						//BeforeValを作り直さないとBeforeValsの前の格納値を上書きする
@@ -2099,7 +2114,7 @@ namespace CS_Calculator{
 							break;
 					}
 				}
-				MyLog(TAG, dbMsg);
+		//		MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -2662,7 +2677,7 @@ namespace CS_Calculator{
 				btn.SetBinding(ToggleButton.IsCheckedProperty, new Binding("IsOpen") { Source = btn.ContextMenu });
 				btn.ContextMenu.PlacementTarget = btn;
 				btn.ContextMenu.Placement = PlacementMode.Bottom;
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}

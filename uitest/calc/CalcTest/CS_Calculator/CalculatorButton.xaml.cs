@@ -183,7 +183,7 @@ namespace CS_Calculator
 						}
 						break;
 				}
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
