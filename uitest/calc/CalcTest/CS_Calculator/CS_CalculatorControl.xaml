@@ -311,9 +311,9 @@
 									<MenuItem Header="cos⁻¹ ;Acos" Click="AcosFunc"/>
 									<MenuItem  Header="tan⁻¹  :Atan" Click="AtanFunc"/>
 								</MenuItem>
-								<MenuItem Header="定数">
-									<MenuItem Header="π      ;PI" Click="PIFunc"/>
-								</MenuItem>
+							</MenuItem>
+							<MenuItem Header="定数">
+								<MenuItem Header="π      ;PI" Click="PIFunc"/>
 							</MenuItem>
 						</ContextMenu>
 					</ToggleButton.ContextMenu>

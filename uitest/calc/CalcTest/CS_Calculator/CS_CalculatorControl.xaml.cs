@@ -527,7 +527,7 @@ namespace CS_Calculator{
 						dbMsg += "[" + count + "]" + index;
 					}
 				}
-				MyLog(TAG, dbMsg);
+	//			MyLog(TAG, dbMsg);
 			} catch (Exception er) {
 				MyErrorLog(TAG, dbMsg, er);
 			}
@@ -600,7 +600,7 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			try {
 				string valStr = "0";
-				dbMsg += "," + inFunctionStr;
+				dbMsg += "渡された数式は" + inFunctionStr;
 				if (inFunctionStr.Contains("*)")) {
 					inFunctionStr = inFunctionStr.Replace("*)", ")*");
 					dbMsg += ">>" + inFunctionStr;
@@ -646,12 +646,17 @@ namespace CS_Calculator{
 							break;
 						}
 					}
-					dbMsg += "[" + rCount + "から]計算対象" + funkName;
+					dbMsg += "[" + rCount + "から]関数は　" + funkName;
+					int funcEnd = rCount + funkName.Length;
+					dbMsg += "の" + funcEnd + "文字";
 					int parenStart = inFunctionStr.LastIndexOf(ParenStr);
 					//ParenStr無しで-1で先頭から最後までが代入される
 					remStr = inFunctionStr.Substring(parenStart + 1);
 					int parenEnd = remStr.IndexOf(ParenthesisStr);
 					dbMsg += "," + parenStart + "～" + parenEnd;
+					if (funcEnd < parenStart) {						
+						beforeStr = inFunctionStr.Substring(0, parenStart); //
+					}
 					if (-1 < parenEnd) {
 						valStr = remStr.Substring(0, parenEnd);
 						remStr = remStr.Substring(parenEnd + 1);
@@ -667,33 +672,38 @@ namespace CS_Calculator{
 						if (double.TryParse(pVal.ToString(), out secVal)) {
 							dbMsg += "," + funkName + "," + valStr + "=" + secVal;
 							double fRes = 0;
-							if (funkName.Equals(PowerStr)) {
-								fRes = Math.Pow(secVal, 2);
-							} else if (funkName.Equals(SqrtStr)) {
-								fRes = Math.Sqrt(secVal);
-							} else if (funkName.Equals(SinStr)) {
-								fRes = Math.Sin(secVal);
-							} else if (funkName.Equals(CosStr)) {
-								fRes = Math.Cos(secVal);
-							} else if (funkName.Equals(TanStr)) {
-								fRes = Math.Tan(secVal);
-							} else if (funkName.Equals(AsinStr)) {
-								fRes = Math.Asin(secVal);
-							} else if (funkName.Equals(AcosStr)) {
-								fRes = Math.Acos(secVal);
-							} else if (funkName.Equals(AtanStr)) {
-								fRes = Math.Atan(secVal);
-							} else if (funkName.Equals("")) {
-								dbMsg += ">>関数無し";
-								fRes = secVal;
+							if (funcEnd < parenStart) {
+								dbMsg += ">>関数内計算有り";
+								valStr = secVal.ToString();
+							} else {
+								if (funkName.Equals(PowerStr)) {
+									fRes = Math.Pow(secVal, 2);
+								} else if (funkName.Equals(SqrtStr)) {
+									fRes = Math.Sqrt(secVal);
+								} else if (funkName.Equals(SinStr)) {
+									fRes = Math.Sin(secVal);
+								} else if (funkName.Equals(CosStr)) {
+									fRes = Math.Cos(secVal);
+								} else if (funkName.Equals(TanStr)) {
+									fRes = Math.Tan(secVal);
+								} else if (funkName.Equals(AsinStr)) {
+									fRes = Math.Asin(secVal);
+								} else if (funkName.Equals(AcosStr)) {
+									fRes = Math.Acos(secVal);
+								} else if (funkName.Equals(AtanStr)) {
+									fRes = Math.Atan(secVal);
+								} else if (funkName.Equals("")) {
+									dbMsg += ">>関数無し";
+									fRes = secVal;
+								}
+								valStr = fRes.ToString();
 							}
-							valStr = fRes.ToString();
 						}
 					} catch (Exception er) {
 						MyErrorLog(TAG, dbMsg, er);
 					}
 					inFunctionStr = beforeStr + valStr + remStr;
-					dbMsg += "結果::" + inFunctionStr;
+					dbMsg += "::結果::" + inFunctionStr;
 				}
 				CalcResult.Content = valStr.ToString();
 				ProcessVal = double.Parse((string)CalcResult.Content);
@@ -741,6 +751,7 @@ namespace CS_Calculator{
 					} else {
 						foreach (string iConst in MyConstants) {
 							if (iValStr.Equals(PiStr)) {
+								dbMsg += "::πを変換::";
 								iValStr = Math.PI.ToString();
 							}
 						}
@@ -1275,8 +1286,8 @@ namespace CS_Calculator{
 			string dbMsg = "";
 			bool retBool = false;
 			try {
-				dbMsg += ",検査対象=" + valueStr;
-				foreach (string vName in MyFunctions) {
+				dbMsg += ",検査対象=" + valueStr;           //MyConstants
+				foreach (string vName in MyConstants) {
 					if (valueStr.Contains(vName)) {
 						dbMsg += ">>定数:" + vName + "を含む:";
 						retBool = true;
@@ -1296,6 +1307,31 @@ namespace CS_Calculator{
 			}
 			return retBool;
 		}
+
+		/// <summary>
+		/// 定数か
+		/// </summary>
+		/// <param name="valueStr"></param>
+		/// <returns></returns>
+		private bool IsMyValueOnly(string valueStr) {
+			string TAG = "IsMyValueOnly";
+			string dbMsg = "";
+			bool retBool = false;
+			try {
+				dbMsg += ",検査対象=" + valueStr;           //MyConstants
+				foreach (string vName in MyConstants) {
+					if (valueStr.Contains(vName)) {
+						dbMsg += ">>定数:" + vName + "を含む:";
+						retBool = true;
+					}
+				}
+				MyLog(TAG, dbMsg);
+			} catch (Exception er) {
+				MyErrorLog(TAG, dbMsg, er);
+			}
+			return retBool;
+		}
+
 
 		/// <summary>
 		/// DataGridをクリック：直接編集開始
@@ -1357,7 +1393,7 @@ namespace CS_Calculator{
 					if (0 == selectedIndex) {
 						dbMsg += "先頭行の演算子";
 						ProgressEdit(selectedIndex, fieldName, null);
-					} else if (IsMyOperater(eValue)) {
+					} else if (IsMyOperater(eValue) || eValue.Equals("")) {
 						dbMsg += ",問題無し";
 						ProgressEdit(selectedIndex, fieldName, eValue);
 					} else {
@@ -1588,33 +1624,14 @@ namespace CS_Calculator{
 				bool isReCalk = false;
 				//数値が有れば格納
 				if (!InputStr.Equals("")) {
-					if (isMinus) {
-						if(InputStr.StartsWith(SubtractStr)) {
-							dbMsg += ">>負数が渡された";
-						} else {
-							dbMsg += ">>負数化";
-							NowInput.Operater = null;
-							InputStr = SubtractStr + InputStr;
-						}
-						if (NextOperation.Equals(SubtractStr)) {
-							dbMsg += "；渡された演算子;" + NextOperation + "の消去";
-							NextOperation = null;
-						}
-						if (BeforeOperation.Equals(SubtractStr)) {
-							dbMsg += "；前回演算子;"+ BeforeOperation + "の重複阻止";
-							BeforeOperation = null;
-						}
-						isMinus = false;
-					}
-					double secVal = 0;
-					if (double.TryParse(InputStr, out secVal)) {
-						//残りが負数を含む数値なら演算子無しと判定
+					if(IsMyValueOnly(InputStr)) {
+						dbMsg += ">>定数が渡された";
 						NowInput.Value = InputStr;
-						int BeforeValsCount =BeforeVals.Count;
+						int BeforeValsCount = BeforeVals.Count;
 						dbMsg += "経過配列[" + BeforeValsCount + "]";
-						if (0< BeforeValsCount) {
+						if (0 < BeforeValsCount) {
 							NowInput.Operater = BeforeOperation;
-						}else{
+						} else {
 							dbMsg += "=開始行";
 							NowInput.Operater = "";
 							BeforeOperation = NextOperation;
@@ -1623,53 +1640,90 @@ namespace CS_Calculator{
 						BeforeVals.Add(NowInput);
 						InputStr = "";
 						isReCalk = true;
-					} else {
-						dbMsg += ">>数値化できず";
-					}
-/*
-					string bInputOperater = "";
-						string bInputValue = null;
-						int bIndex = BeforeVals.Count - 1;
-						dbMsg += ",前の格納[" + bIndex + "]";
-						if (-1 < bIndex) {
-							BeforeVal bInput = BeforeVals[bIndex];
-							bInputOperater = bInput.Operater;
-							bInputValue = bInput.Value;
-							dbMsg += bInputOperater + bInputValue;
-						} else {
-							dbMsg += "未格納";
+					} else{
+						if (isMinus) {
+							if (InputStr.StartsWith(SubtractStr)) {
+								dbMsg += ">>負数が渡された";
+							} else {
+								dbMsg += ">>負数化";
+								NowInput.Operater = null;
+								InputStr = SubtractStr + InputStr;
+							}
+							if (NextOperation.Equals(SubtractStr)) {
+								dbMsg += "；渡された演算子;" + NextOperation + "の消去";
+								NextOperation = null;
+							}
+							if (BeforeOperation.Equals(SubtractStr)) {
+								dbMsg += "；前回演算子;" + BeforeOperation + "の重複阻止";
+								BeforeOperation = null;
+							}
+							isMinus = false;
 						}
-						if (bInputOperater == null) {
-							bInputOperater = "";
-						}
-						if (bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
-							dbMsg += "値に続く関数、優先範囲の開始";
-							BeforeVals[bIndex].Value = InputStr;
-							dbMsg += ",>>" + BeforeVals[bIndex].Operater + BeforeVals[bIndex].Value;
+						double secVal = 0;
+						if (double.TryParse(InputStr, out secVal)) {
+							//残りが負数を含む数値なら演算子無しと判定
+							NowInput.Value = InputStr;
+							int BeforeValsCount = BeforeVals.Count;
+							dbMsg += "経過配列[" + BeforeValsCount + "]";
+							if (0 < BeforeValsCount) {
+								NowInput.Operater = BeforeOperation;
+							} else {
+								dbMsg += "=開始行";
+								NowInput.Operater = "";
+								BeforeOperation = NextOperation;
+							}
+							dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
+							BeforeVals.Add(NowInput);
 							InputStr = "";
 							isReCalk = true;
 						} else {
-							//演算値が有れば配列格納
-							NowInput.Operater = BeforeOperation;
-							NowInput.Value = InputStr;
-							dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
-							BeforeVals.Add(NowInput);
-							InputStr = "";              //0428
-							dbMsg += ",演算前=" + ProcessVal;
-							if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
-								double pVal;
-								string bStr = BeforeVals[BeforeVals.Count - 1].Value;
-								if (double.TryParse(bStr, out pVal)) {       //-1 == OpraterIndex(inParenStr)
-																			 //演算子が無ければそのまま格納
-									ProcessVal = pVal;
-								}
-								IsBegin = false;
-							} else {
-								isReCalk = true;
-							}
+							dbMsg += ">>数値化できず";
 						}
-				//	}
-				*/
+						/*
+											string bInputOperater = "";
+												string bInputValue = null;
+												int bIndex = BeforeVals.Count - 1;
+												dbMsg += ",前の格納[" + bIndex + "]";
+												if (-1 < bIndex) {
+													BeforeVal bInput = BeforeVals[bIndex];
+													bInputOperater = bInput.Operater;
+													bInputValue = bInput.Value;
+													dbMsg += bInputOperater + bInputValue;
+												} else {
+													dbMsg += "未格納";
+												}
+												if (bInputOperater == null) {
+													bInputOperater = "";
+												}
+												if (bInputOperater.EndsWith(ParenStr) && bInputValue == null && 1 < bIndex) {
+													dbMsg += "値に続く関数、優先範囲の開始";
+													BeforeVals[bIndex].Value = InputStr;
+													dbMsg += ",>>" + BeforeVals[bIndex].Operater + BeforeVals[bIndex].Value;
+													InputStr = "";
+													isReCalk = true;
+												} else {
+													//演算値が有れば配列格納
+													NowInput.Operater = BeforeOperation;
+													NowInput.Value = InputStr;
+													dbMsg += ",直前入力：格納=" + NowInput.Operater + " : " + NowInput.Value;
+													BeforeVals.Add(NowInput);
+													InputStr = "";              //0428
+													dbMsg += ",演算前=" + ProcessVal;
+													if (BeforeOperation.Equals("") || BeforeVals.Count < 1) {
+														double pVal;
+														string bStr = BeforeVals[BeforeVals.Count - 1].Value;
+														if (double.TryParse(bStr, out pVal)) {       //-1 == OpraterIndex(inParenStr)
+																									 //演算子が無ければそのまま格納
+															ProcessVal = pVal;
+														}
+														IsBegin = false;
+													} else {
+														isReCalk = true;
+													}
+												}
+										//	}
+										*/
+					}
 
 					if (NextOperation.Equals(ParenthesisStr)) {
 						dbMsg += ",値に続く優先終了";
@@ -1696,6 +1750,14 @@ namespace CS_Calculator{
 					isReCalk = true;
 				} else if (NextOperation.Equals(ParenStr)) {
 					dbMsg += ",値無しの優先開始";
+					if(!BeforeOperation.Equals("")) {
+						NowInput.Operater = BeforeOperation;
+						NowInput.Value = null;
+						dbMsg += ",前の演算子格納=" + NowInput.Operater + " : " + NowInput.Value;
+						BeforeVals.Add(NowInput);
+						NowInput = new BeforeVal();
+					}
+					NowInput.Operater = NextOperation;
 					NowInput.Value = null;
 					dbMsg += ",格納=" + NowInput.Operater + " : " + NowInput.Value;
 					BeforeVals.Add(NowInput);
@@ -2554,7 +2616,6 @@ namespace CS_Calculator{
 			}
 		}
 
-
 		/// <summary>
 		/// メモリーから記録されたアイテムを削除する
 		/// </summary>
@@ -2599,7 +2660,7 @@ namespace CS_Calculator{
 			}
 		}
 
-		//private void MemoryComb_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e) {
+//private void MemoryComb_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e) {
 		//	string TAG = "MemoryComb_FocusableChanged";
 		//	string dbMsg = "";
 		//	try {
@@ -2676,8 +2737,6 @@ namespace CS_Calculator{
 			}
 		}
 		// MemoryComb_ContextMenuOpeningメニューを開く前に発生する
-
-
 
 		/// <summary>
 		/// 機能メニュートグルボタン
