@@ -699,6 +699,7 @@ namespace CS_Calculator{
 								valStr = fRes.ToString();
 							}
 						}
+						//桁落ち桁あふれ対策
 						if (valStr.EndsWith("00000000001") ||
 							valStr.EndsWith("99999999999")
 							) {
@@ -756,6 +757,7 @@ namespace CS_Calculator{
 						iOperater = "";
 					}
 					iValStr = iVal.Value;
+					string oregVal = iValStr;                   //定数をそのまま保持
 					if (iValStr == null) {
 						iValStr = "";
 					} else {
@@ -815,7 +817,7 @@ namespace CS_Calculator{
 							PFAOStr += iOperater;
 						}
 					}
-					NowOperations.Text += iValStr;
+					NowOperations.Text += oregVal;
 					PFAOStr += iValStr;
 				}
 				dbMsg += "\r\n優先範囲開始=" + iParenCount + "件:終了 = " + ParenthesisCount + "件";
