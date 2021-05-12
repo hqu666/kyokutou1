@@ -699,6 +699,16 @@ namespace CS_Calculator{
 								valStr = fRes.ToString();
 							}
 						}
+						if (valStr.EndsWith("00000000001") ||
+							valStr.EndsWith("99999999999")
+							) {
+							dbMsg += ",valStr=" + valStr;
+							double rVal = double.Parse(valStr);
+							secVal = Math.Round(rVal, 5, MidpointRounding.AwayFromZero);
+							valStr = secVal.ToString();
+							//	valStr = valStr.Substring(0, 5);
+							dbMsg += ">>" + valStr;
+						}
 					} catch (Exception er) {
 						MyErrorLog(TAG, dbMsg, er);
 					}
